@@ -22,6 +22,9 @@ node_modules/
 # Generated
 *.backup
 coverage/
+openapi/
+src/generated/
+docs/
 
 # Output
 dist/

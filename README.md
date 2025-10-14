@@ -1,4 +1,4 @@
-# Nvisy SDK
+# Nvisy Javascript/Typescript SDK
 
 [![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
 [![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk/actions/workflows/build.yml)
@@ -16,11 +16,21 @@ npm install @nvisy/sdk
 ## Usage
 
 ```typescript
-import { NvisyClient } from '@nvisy/sdk'
+import { NvisyClient, ClientBuilder } from '@nvisy/sdk'
 
+// Option 1: Direct constructor
 const client = new NvisyClient({
   apiKey: 'your-api-key'
 })
+
+// Option 2: Builder pattern
+const client = ClientBuilder.create()
+  .apiKey('your-api-key')
+  .baseUrl('https://api.nvisy.com')
+  .timeout(30000)
+  .maxRetries(3)
+  .header('Custom-Header', 'value')
+  .build()
 ```
 
 ## Configuration

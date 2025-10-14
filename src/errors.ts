@@ -1,123 +1,257 @@
 /**
- * Base error class for all Nvisy SDK errors
+ * Abstract base error class for all Nvisy SDK errors
  */
-export class NvisyError extends Error {
-  public readonly name: string;
-  public readonly statusCode?: number;
-  public readonly requestId?: string;
+export abstract class NvisyError extends Error {
+	public readonly name: string;
 
-  constructor(message: string, statusCode?: number, requestId?: string) {
-    super(message);
-    this.name = this.constructor.name;
-    this.statusCode = statusCode;
-    this.requestId = requestId;
+	constructor(message: string) {
+		super(message);
+		this.name = this.constructor.name;
 
-    // Maintains proper stack trace for where our error was thrown (only available on V8)
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    }
-  }
+		// Maintains proper stack trace for where our error was thrown (only available on V8)
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, this.constructor);
+		}
+	}
+
+	/**
+	 * Convert error to JSON representation
+	 */
+	toJSON() {
+		return {
+			name: this.name,
+			message: this.message,
+			stack: this.stack,
+		};
+	}
 }
 
 /**
- * Authentication error - thrown when API key is invalid or missing
+ * Client-side error - thrown when client configuration or setup is invalid
  */
-export class AuthenticationError extends NvisyError {
-  constructor(message = "Invalid or missing API key", requestId?: string) {
-    super(message, 401, requestId);
-  }
+export class NvisyClientError extends NvisyError {
+	/** Field that caused the error (for validation errors) */
+	public readonly field?: string;
+	/** Additional context about what's wrong */
+	public readonly context?: string;
+
+	constructor(message: string, options?: { field?: string; context?: string }) {
+		super(message);
+		this.field = options?.field;
+		this.context = options?.context;
+	}
+
+	/**
+	 * Create error for missing API key
+	 */
+	static missingApiKey(): NvisyClientError {
+		return new NvisyClientError("API key is required", {
+			field: "apiKey",
+			context: "API key must be provided in configuration",
+		});
+	}
+
+	/**
+	 * Create error for invalid configuration field
+	 */
+	static invalidConfig(field: string, reason: string): NvisyClientError {
+		return new NvisyClientError(
+			`Invalid configuration for ${field}: ${reason}`,
+			{
+				field,
+				context: reason,
+			},
+		);
+	}
+
+	/**
+	 * Convert error to JSON representation
+	 */
+	toJSON() {
+		return {
+			...super.toJSON(),
+			field: this.field,
+			context: this.context,
+		};
+	}
 }
 
 /**
- * Authorization error - thrown when user lacks permission for requested resource
+ * Request error - thrown when request cannot be made or fails
  */
-export class AuthorizationError extends NvisyError {
-  constructor(message = "Insufficient permissions", requestId?: string) {
-    super(message, 403, requestId);
-  }
+export class NvisyRequestError extends NvisyError {
+	/** Original error that caused this request error */
+	public readonly cause?: Error;
+
+	constructor(message: string, cause?: Error) {
+		super(message);
+		this.cause = cause;
+	}
+
+	/**
+	 * Create error for network/connection issues
+	 */
+	static network(message: string, cause?: Error): NvisyRequestError {
+		return new NvisyRequestError(message, cause);
+	}
+
+	/**
+	 * Create error for request timeout
+	 */
+	static timeout(timeout: number): NvisyRequestError {
+		return new NvisyRequestError(`Request timed out after ${timeout}ms`);
+	}
+
+	/**
+	 * Create error for aborted request
+	 */
+	static aborted(): NvisyRequestError {
+		return new NvisyRequestError("Request was aborted");
+	}
+
+	/**
+	 * Convert error to JSON representation
+	 */
+	toJSON() {
+		return {
+			...super.toJSON(),
+			cause: this.cause?.message,
+		};
+	}
 }
 
 /**
- * Validation error - thrown when request parameters are invalid
+ * Response error - thrown when server responds with an error
  */
-export class ValidationError extends NvisyError {
-  constructor(message = "Invalid request parameters", requestId?: string) {
-    super(message, 400, requestId);
-  }
+export class NvisyResponseError extends NvisyError {
+	/** Error name from server response */
+	public readonly errName?: string;
+	/** Error message from server response */
+	public readonly errMessage?: string;
+	/** HTTP status code */
+	public readonly statusCode?: number;
+	/** Request ID for debugging */
+	public readonly requestId?: string;
+	/** Original HTTP response */
+	public readonly response?: Response;
+
+	constructor(
+		message: string,
+		options?: {
+			errName?: string;
+			errMessage?: string;
+			statusCode?: number;
+			requestId?: string;
+			response?: Response;
+		},
+	) {
+		super(message);
+		this.errName = options?.errName;
+		this.errMessage = options?.errMessage;
+		this.statusCode = options?.statusCode;
+		this.requestId = options?.requestId;
+		this.response = options?.response;
+	}
+
+	/**
+	 * Create error from HTTP response
+	 */
+	static fromResponse(
+		response: Response,
+		message?: string,
+		requestId?: string,
+		serverError?: { name?: string; message?: string },
+	): NvisyResponseError {
+		const errorMessage =
+			message || `HTTP ${response.status}: ${response.statusText}`;
+
+		return new NvisyResponseError(errorMessage, {
+			errName: serverError?.name,
+			errMessage: serverError?.message,
+			statusCode: response.status,
+			requestId,
+			response,
+		});
+	}
+
+	/**
+	 * Check if error is a client error (4xx)
+	 */
+	isClientError(): boolean {
+		return this.statusCode
+			? this.statusCode >= 400 && this.statusCode < 500
+			: false;
+	}
+
+	/**
+	 * Check if error is a server error (5xx)
+	 */
+	isServerError(): boolean {
+		return this.statusCode ? this.statusCode >= 500 : false;
+	}
+
+	/**
+	 * Check if error is retryable based on HTTP status
+	 */
+	isRetryable(): boolean {
+		if (!this.statusCode) return false;
+
+		// Retry on server errors and specific client errors
+		return (
+			this.statusCode >= 500 || // Server errors
+			this.statusCode === 408 || // Request timeout
+			this.statusCode === 429 // Rate limited
+		);
+	}
+
+	/**
+	 * Convert error to JSON representation
+	 */
+	toJSON() {
+		return {
+			...super.toJSON(),
+			errName: this.errName,
+			errMessage: this.errMessage,
+			statusCode: this.statusCode,
+			requestId: this.requestId,
+		};
+	}
 }
 
 /**
- * Not found error - thrown when requested resource doesn't exist
+ * Utility functions
  */
-export class NotFoundError extends NvisyError {
-  constructor(message = "Resource not found", requestId?: string) {
-    super(message, 404, requestId);
-  }
+
+/**
+ * Check if an error is a Nvisy SDK error
+ */
+export function isNvisyError(error: unknown): error is NvisyError {
+	return error instanceof NvisyError;
 }
 
 /**
- * Rate limit error - thrown when API rate limits are exceeded
+ * Extract error message from unknown error
  */
-export class RateLimitError extends NvisyError {
-  constructor(message = "Rate limit exceeded", requestId?: string) {
-    super(message, 429, requestId);
-  }
+export function getErrorMessage(error: unknown): string {
+	if (error instanceof Error) {
+		return error.message;
+	}
+	if (typeof error === "string") {
+		return error;
+	}
+	return "An unknown error occurred";
 }
 
 /**
- * Server error - thrown when server returns 5xx status codes
+ * Create a NvisyError from an unknown error
  */
-export class ServerError extends NvisyError {
-  constructor(message = "Internal server error", statusCode = 500, requestId?: string) {
-    super(message, statusCode, requestId);
-  }
-}
+export function createNvisyError(error: unknown, message?: string): NvisyError {
+	if (error instanceof NvisyError) {
+		return error;
+	}
 
-/**
- * Network error - thrown when network/connection issues occur
- */
-export class NetworkError extends NvisyError {
-  public readonly code?: string;
+	const errorMessage = message || getErrorMessage(error);
+	const cause = error instanceof Error ? error : undefined;
 
-  constructor(message = "Network error occurred", code?: string) {
-    super(message);
-    this.code = code;
-  }
-}
-
-/**
- * Timeout error - thrown when request times out
- */
-export class TimeoutError extends NvisyError {
-  public readonly timeout: number;
-
-  constructor(timeout: number, message = `Request timed out after ${timeout}ms`) {
-    super(message);
-    this.timeout = timeout;
-  }
-}
-
-/**
- * Factory function to create appropriate error from HTTP response
- */
-export function createErrorFromResponse(status: number, data: any, requestId?: string): NvisyError {
-  const message = data?.message || data?.error || "An error occurred";
-
-  switch (status) {
-    case 400:
-      return new ValidationError(message, requestId);
-    case 401:
-      return new AuthenticationError(message, requestId);
-    case 403:
-      return new AuthorizationError(message, requestId);
-    case 404:
-      return new NotFoundError(message, requestId);
-    case 429:
-      return new RateLimitError(message, requestId);
-    default:
-      if (status >= 500) {
-        return new ServerError(message, status, requestId);
-      }
-      return new NvisyError(message, status, requestId);
-  }
+	return new NvisyRequestError(errorMessage, cause);
 }
