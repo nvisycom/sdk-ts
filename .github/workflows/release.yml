@@ -1,0 +1,175 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  validate:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Extract version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+            TAG="v${VERSION}"
+          else
+            TAG="${{ github.ref_name }}"
+            VERSION="${TAG#v}"
+          fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "Releasing version: ${VERSION}"
+
+      - name: Validate version format
+        run: |
+          if ! echo "${{ steps.version.outputs.version }}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9-]+(\.[0-9]+)?)?$'; then
+            echo "Invalid version format: ${{ steps.version.outputs.version }}"
+            exit 1
+          fi
+
+      - name: Check if tag exists (for manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if git rev-parse "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "Tag ${{ steps.version.outputs.tag }} already exists"
+            exit 1
+          fi
+
+  test:
+    name: Test & Build
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting and formatting checks
+        run: npm run check
+
+      - name: Run type checking
+        run: npm run typecheck
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Build package
+        run: npm run build
+
+      - name: Verify build artifacts
+        run: |
+          ls -la dist/
+          test -f dist/index.js
+          test -f dist/index.cjs
+          test -f dist/index.d.ts
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-${{ needs.validate.outputs.version }}
+          path: dist/
+          retention-days: 30
+
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    needs: [validate, test]
+    environment: release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-${{ needs.validate.outputs.version }}
+          path: dist/
+
+      - name: Update package.json version
+        run: npm version ${{ needs.validate.outputs.version }} --no-git-tag-version
+
+      - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.validate.outputs.tag }}
+          release_name: Release ${{ needs.validate.outputs.tag }}
+          body: |
+            ## What's Changed
+
+            Release ${{ needs.validate.outputs.version }} of the Nvisy SDK.
+
+            ### Installation
+            ```bash
+            npm install @nvisy/sdk@${{ needs.validate.outputs.version }}
+            ```
+
+            ### Documentation
+            See the [README](https://github.com/nvisycom/sdk#readme) for usage instructions.
+
+            **Full Changelog**: https://github.com/nvisycom/sdk/compare/v${{ needs.validate.outputs.version }}...HEAD
+          draft: false
+          prerelease: ${{ contains(needs.validate.outputs.version, '-') }}
+
+  notify:
+    name: Notify Release
+    runs-on: ubuntu-latest
+    needs: [validate, publish]
+    if: success()
+    steps:
+      - name: Notify success
+        run: |
+          echo "🎉 Successfully released @nvisy/sdk@${{ needs.validate.outputs.version }}"
+          echo "📦 NPM: https://www.npmjs.com/package/@nvisy/sdk/v/${{ needs.validate.outputs.version }}"
+          echo "🏷️ GitHub: https://github.com/nvisycom/sdk/releases/tag/${{ needs.validate.outputs.tag }}"
