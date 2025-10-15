@@ -1,4 +1,4 @@
-# JavaScript & TypeScript SDK
+# Nvisy.com SDK for Node.JS
 
 [![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
 [![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk/actions/workflows/build.yml)
@@ -9,9 +9,9 @@ Official JavaScript & TypeScript SDK for the Nvisy document redaction platform.
 
 ## Features
 
-- Modern ES2022+ JavaScript with native private fields
+- Modern ES2022+ JavaScript target
 - Full TypeScript support with strict typing
-- Flexible configuration with constructor or builder pattern
+- Flexible configuration via a config object or builder pattern
 - Built-in environment variable support
 - Automatic retry logic with smart error handling
 - Individual module exports for optimal bundling
@@ -83,11 +83,6 @@ Set these environment variables:
 | `NVISY_BASE_URL`    | Custom API endpoint URL          | No       |
 | `NVISY_TIMEOUT`     | Request timeout in milliseconds  | No       |
 | `NVISY_MAX_RETRIES` | Maximum number of retry attempts | No       |
-
-## Requirements
-
-- Node.js 20.0.0 or higher
-- TypeScript 5.9.0 or higher (for development)
 
 ## Changelog
 
