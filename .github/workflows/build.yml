@@ -1,10 +1,33 @@
 name: Build
 
+env:
+  NODE_VERSION: "22"
+
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - "main"
+      - "develop"
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - "tsup.config.ts"
+      - "biome.json"
+      - "vitest.config.ts"
+      - ".github/workflows/build.yml"
   pull_request:
-    branches: [main, develop]
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - "tsup.config.ts"
+      - "biome.json"
+      - "vitest.config.ts"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
 
 jobs:
   lint:
@@ -17,7 +40,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
@@ -53,7 +76,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: matrix.node-version == 22
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
@@ -70,7 +93,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
@@ -79,14 +102,17 @@ jobs:
       - name: Build package
         run: npm run build
 
-      - name: Check build artifacts
+      - name: Verify build artifacts
         run: |
           ls -la dist/
-          file dist/index.js
-          file dist/index.d.ts
+          test -f dist/index.js
+          test -f dist/index.d.ts
+          test -f dist/client.js
+          test -f dist/builder.js
+          test -f dist/errors.js
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
@@ -104,7 +130,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
           registry-url: "https://registry.npmjs.org"
 

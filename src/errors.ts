@@ -276,7 +276,13 @@ export class ApiError extends ClientError {
 		return {
 			name: this.name,
 			message: this.message,
-			context: `statusCode: ${this.statusCode}${this.requestId ? `, requestId: ${this.requestId}` : ""}${this.errorResponse ? `, errorResponse: ${JSON.stringify(this.errorResponse)}` : ""}`,
+			context: `statusCode: ${this.statusCode}${
+				this.requestId ? `, requestId: ${this.requestId}` : ""
+			}${
+				this.errorResponse
+					? `, errorResponse: ${JSON.stringify(this.errorResponse)}`
+					: ""
+			}`,
 		};
 	}
 }

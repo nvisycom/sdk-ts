@@ -1,6 +1,6 @@
 {
 	"name": "@nvisy/sdk",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "Official TypeScript SDK for Nvisy document redaction platform",
 	"keywords": [
 		"nvisy",
@@ -46,7 +46,9 @@
 	"files": [
 		"dist",
 		"README.md",
-		"LICENSE.txt"
+		"LICENSE.txt",
+		"CHANGELOG.md",
+		"CONTRIBUTING.md"
 	],
 	"scripts": {
 		"build": "tsup",

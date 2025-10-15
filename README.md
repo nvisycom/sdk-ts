@@ -16,21 +16,21 @@ npm install @nvisy/sdk
 ## Usage
 
 ```typescript
-import { NvisyClient, ClientBuilder } from '@nvisy/sdk'
+import { ClientBuilder, NvisyClient } from "@nvisy/sdk";
 
 // Option 1: Direct constructor
 const client = new NvisyClient({
-  apiKey: 'your-api-key'
-})
+  apiKey: "your-api-key",
+});
 
 // Option 2: Builder pattern
 const client = ClientBuilder.create()
-  .apiKey('your-api-key')
-  .baseUrl('https://api.nvisy.com')
+  .apiKey("your-api-key")
+  .baseUrl("https://api.nvisy.com")
   .timeout(30000)
   .maxRetries(3)
-  .header('Custom-Header', 'value')
-  .build()
+  .header("Custom-Header", "value")
+  .build();
 ```
 
 ## Configuration

@@ -1,6 +1,7 @@
 # Contributing to Nvisy SDK
 
-Thank you for your interest in contributing to the Nvisy SDK. This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to the Nvisy SDK. This document
+provides guidelines and instructions for contributing to the project.
 
 ## Getting Started
 
@@ -157,4 +158,5 @@ make publish    # Publish to npm (requires proper permissions)
 
 ## License
 
-By contributing to this project, you agree that your contributions will be licensed under the MIT License.
+By contributing to this project, you agree that your contributions will be
+licensed under the MIT License.
