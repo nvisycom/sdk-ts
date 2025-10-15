@@ -1,0 +1,92 @@
+{
+	"name": "@nvisy/sdk",
+	"version": "0.1.0",
+	"description": "Official TypeScript SDK for Nvisy document redaction platform",
+	"keywords": [
+		"nvisy",
+		"document",
+		"redaction",
+		"sdk",
+		"api",
+		"typescript",
+		"client"
+	],
+	"homepage": "https://github.com/nvisycom/sdk#readme",
+	"bugs": {
+		"url": "https://github.com/nvisycom/sdk/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nvisycom/sdk.git"
+	},
+	"license": "MIT",
+	"author": "Nvisy <support@nvisy.com>",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./client": {
+			"types": "./dist/client.d.ts",
+			"import": "./dist/client.js"
+		},
+		"./builder": {
+			"types": "./dist/builder.d.ts",
+			"import": "./dist/builder.js"
+		},
+		"./errors": {
+			"types": "./dist/errors.d.ts",
+			"import": "./dist/errors.js"
+		}
+	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE.txt",
+		"CHANGELOG.md",
+		"CONTRIBUTING.md"
+	],
+	"scripts": {
+		"build": "tsup",
+		"build:watch": "tsup --watch",
+		"dev": "tsup --watch",
+		"test": "vitest",
+		"test:watch": "vitest --watch",
+		"test:coverage": "vitest --coverage",
+		"test:ui": "vitest --ui",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write .",
+		"format": "biome format --write .",
+		"format:check": "biome format .",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"typecheck": "tsc --noEmit",
+		"clean": "rimraf dist",
+		"prepublishOnly": "npm run clean && npm run build && npm run test",
+		"release": "npm run prepublishOnly && npm publish"
+	},
+	"dependencies": {
+		"openapi-fetch": "^0.14.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.6",
+		"@types/node": "^24.7.2",
+		"@vitest/coverage-v8": "^3.2.4",
+		"@vitest/ui": "^3.2.4",
+		"openapi-typescript": "^7.9.1",
+		"rimraf": "^6.0.1",
+		"tsup": "^8.0.1",
+		"typescript": "^5.9.3",
+		"vitest": "^3.2.4"
+	},
+	"engines": {
+		"node": ">=20.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}
