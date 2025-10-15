@@ -118,7 +118,15 @@ jobs:
           path: dist/
 
       - name: Update package.json version
-        run: npm version ${{ needs.validate.outputs.version }} --no-git-tag-version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          TARGET_VERSION="${{ needs.validate.outputs.version }}"
+          if [ "$CURRENT_VERSION" != "$TARGET_VERSION" ]; then
+            echo "Updating version from $CURRENT_VERSION to $TARGET_VERSION"
+            npm version $TARGET_VERSION --no-git-tag-version
+          else
+            echo "Version $TARGET_VERSION is already set in package.json"
+          fi
 
       - name: Publish to NPM
         env:
