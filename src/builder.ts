@@ -1,5 +1,6 @@
 import { Client } from "./client.js";
 import type { ClientConfig } from "./config.js";
+import { loadConfigFromEnv } from "./config.js";
 import { ConfigError } from "./errors.js";
 
 /**
@@ -16,8 +17,36 @@ export class ClientBuilder {
 	/**
 	 * Create a ClientBuilder instance with an API key
 	 */
-	static withApiKey(apiKey: string): ClientBuilder {
+	static fromApiKey(apiKey: string): ClientBuilder {
 		return new ClientBuilder().withApiKey(apiKey);
+	}
+
+	/**
+	 * Create a ClientBuilder instance from environment variables
+	 */
+	static fromEnvironment(): ClientBuilder {
+		const envConfig = loadConfigFromEnv();
+
+		if (!envConfig.apiKey) {
+			throw ConfigError.missingApiKey();
+		}
+
+		const builder = new ClientBuilder().withApiKey(envConfig.apiKey);
+
+		if (envConfig.baseUrl) {
+			builder.withBaseUrl(envConfig.baseUrl);
+		}
+		if (envConfig.timeout) {
+			builder.withTimeout(envConfig.timeout);
+		}
+		if (envConfig.maxRetries !== undefined) {
+			builder.withMaxRetries(envConfig.maxRetries);
+		}
+		if (envConfig.headers) {
+			builder.withHeaders(envConfig.headers);
+		}
+
+		return builder;
 	}
 
 	/**
@@ -113,7 +142,7 @@ export class ClientBuilder {
 	 */
 	build(): Client {
 		if (!this.#config.apiKey) {
-			throw ConfigError.missingField("apiKey");
+			throw ConfigError.missingApiKey();
 		}
 
 		return new Client(this.#config as ClientConfig);

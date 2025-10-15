@@ -1,11 +1,11 @@
-# Nvisy.com JavaScript & TypeScript SDK
+# JavaScript & TypeScript SDK
 
 [![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
 [![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk/actions/workflows/build.yml)
-[![license](https://img.shields.io/github/license/nvisycom/sdk?color=000000&style=flat-square)](https://github.com/nvisycom/sdk/blob/main/LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D20.0.0-000000?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![typescript](https://img.shields.io/badge/TypeScript-5.9+-000000?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-Official TypeScript SDK for the Nvisy document redaction platform.
+Official JavaScript & TypeScript SDK for the Nvisy document redaction platform.
 
 ## Features
 
@@ -42,13 +42,20 @@ const client = new Client({
 ```typescript
 import { ClientBuilder } from "@nvisy/sdk";
 
-const client = ClientBuilder
-  .withApiKey("your-api-key")
+const client = ClientBuilder.fromApiKey("your-api-key")
   .withBaseUrl("https://api.nvisy.com")
   .withTimeout(60000)
   .withMaxRetries(5)
   .withHeader("X-Custom-Header", "value")
   .build();
+```
+
+### From Environment Variables
+
+```typescript
+import { ClientBuilder } from "@nvisy/sdk";
+
+const client = Client.fromEnvironment();
 ```
 
 ## Configuration
@@ -74,11 +81,8 @@ const client = ClientBuilder
 | `NVISY_TIMEOUT`     | Request timeout in milliseconds  |
 | `NVISY_MAX_RETRIES` | Maximum number of retry attempts |
 
-Load configuration from environment variables:
-
-```typescript
-const client = Client.fromEnvironment();
-```
+Both `Client.fromEnvironment()` and `ClientBuilder.fromEnvironment()` are
+available for loading configuration from environment variables.
 
 ## Requirements
 

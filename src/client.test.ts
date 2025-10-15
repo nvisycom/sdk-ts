@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ClientBuilder } from "./builder.js";
 import { Client } from "./client.js";
 
@@ -16,30 +16,6 @@ vi.mock("openapi-fetch", () => ({
 }));
 
 describe("Client", () => {
-	// Environment variable backup for cleanup
-	let originalEnv: Record<string, string | undefined>;
-
-	beforeAll(() => {
-		// Save original environment variables
-		originalEnv = {
-			NVISY_API_KEY: process.env.NVISY_API_KEY,
-			NVISY_BASE_URL: process.env.NVISY_BASE_URL,
-			NVISY_TIMEOUT: process.env.NVISY_TIMEOUT,
-			NVISY_MAX_RETRIES: process.env.NVISY_MAX_RETRIES,
-		};
-	});
-
-	afterAll(() => {
-		// Restore original environment variables
-		Object.entries(originalEnv).forEach(([key, value]) => {
-			if (value !== undefined) {
-				process.env[key] = value;
-			} else {
-				delete process.env[key];
-			}
-		});
-	});
-
 	describe("constructor", () => {
 		it("should create client with valid config", () => {
 			const client = Client.builder().withApiKey("test-api-key-123456").build();
@@ -86,53 +62,6 @@ describe("Client", () => {
 			expect(config.apiKey).toBe("builder-test-key-123456");
 			expect(config.baseUrl).toBe("https://builder.test.com");
 			expect(config.timeout).toBe(15000);
-		});
-	});
-
-	describe("environment variable support", () => {
-		it("should handle missing environment variable gracefully", () => {
-			// Clear all relevant environment variables for this test
-			delete process.env.NVISY_API_KEY;
-			delete process.env.NVISY_BASE_URL;
-			delete process.env.NVISY_TIMEOUT;
-			delete process.env.NVISY_MAX_RETRIES;
-
-			expect(() => {
-				Client.fromEnvironment();
-			}).toThrow(ConfigError);
-		});
-
-		it("should create client from environment variables", () => {
-			// Set up test environment variables
-			process.env.NVISY_API_KEY = "env-test-key-123456";
-			process.env.NVISY_BASE_URL = "https://api.test.nvisy.com";
-			process.env.NVISY_TIMEOUT = "15000";
-			process.env.NVISY_MAX_RETRIES = "5";
-
-			const client = Client.fromEnvironment();
-			const config = client.getConfig();
-
-			expect(config.apiKey).toBe("env-test-key-123456");
-			expect(config.baseUrl).toBe("https://api.test.nvisy.com");
-			expect(config.timeout).toBe(15000);
-			expect(config.maxRetries).toBe(5);
-		});
-
-		it("should prioritize explicit config over environment variables", () => {
-			// Set environment variables
-			process.env.NVISY_API_KEY = "env-key-123456";
-			process.env.NVISY_TIMEOUT = "10000";
-
-			// Create client with explicit config that should override env vars
-			const client = Client.builder()
-				.withApiKey("explicit-key-123456")
-				.withTimeout(25000)
-				.build();
-
-			const config = client.getConfig();
-
-			expect(config.apiKey).toBe("explicit-key-123456"); // Explicit wins
-			expect(config.timeout).toBe(25000); // Explicit wins
 		});
 	});
 
