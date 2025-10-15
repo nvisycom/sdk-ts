@@ -2,6 +2,7 @@ import createClient from "openapi-fetch";
 import { ClientBuilder } from "./builder.js";
 import {
 	type ClientConfig,
+	loadConfigFromEnv,
 	type ResolvedClientConfig,
 	resolveConfig,
 } from "./config.js";
@@ -56,12 +57,27 @@ export class Client {
 	 * Create a client from environment variables
 	 */
 	static fromEnvironment(): Client {
-		const apiKey = process.env.NVISY_API_KEY;
-		if (!apiKey) {
-			throw ConfigError.missingField("apiKey");
+		const envConfig = loadConfigFromEnv();
+		if (!envConfig.apiKey) {
+			throw ConfigError.missingApiKey();
 		}
 
-		return new Client({ apiKey });
+		const builder = new ClientBuilder().withApiKey(envConfig.apiKey);
+
+		if (envConfig.baseUrl) {
+			builder.withBaseUrl(envConfig.baseUrl);
+		}
+		if (envConfig.timeout) {
+			builder.withTimeout(envConfig.timeout);
+		}
+		if (envConfig.maxRetries !== undefined) {
+			builder.withMaxRetries(envConfig.maxRetries);
+		}
+		if (envConfig.headers) {
+			builder.withHeaders(envConfig.headers);
+		}
+
+		return builder.build();
 	}
 
 	/**

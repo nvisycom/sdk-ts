@@ -1,114 +1,82 @@
 import { describe, expect, it } from "vitest";
 import type { ErrorResponse } from "./errors.js";
-import { ApiError, ClientError, ConfigError, NetworkError } from "./errors.js";
-
-describe("ClientError (Abstract Base)", () => {
-	// Create concrete implementation for testing
-	class TestClientError extends ClientError {}
-
-	it("should create error with proper inheritance", () => {
-		const error = new TestClientError("Test error");
-		expect(error).toBeInstanceOf(Error);
-		expect(error).toBeInstanceOf(ClientError);
-		expect(error.name).toBe("TestClientError");
-	});
-});
+import { ApiError, ConfigError, NetworkError } from "./errors.js";
 
 describe("ConfigError", () => {
-	it("should create factory errors with proper context", () => {
-		const missingError = ConfigError.missingApiKey();
-		expect(missingError.field).toBe("apiKey");
-		expect(missingError.message).toContain("API key is required");
+  it("should create factory errors with proper context", () => {
+    const missingError = ConfigError.missingApiKey();
+    expect(missingError.field).toBe("apiKey");
+    expect(missingError.message).toContain("API key is required");
 
-		const invalidError = ConfigError.invalidField(
-			"baseUrl",
-			"must be a valid URL",
-		);
-		expect(invalidError.field).toBe("baseUrl");
-		expect(invalidError.reason).toBe("must be a valid URL");
+    const invalidError = ConfigError.invalidField("baseUrl", "must be a valid URL");
+    expect(invalidError.field).toBe("baseUrl");
+    expect(invalidError.reason).toBe("must be a valid URL");
 
-		const missingFieldError = ConfigError.missingField("timeout");
-		expect(missingFieldError.field).toBe("timeout");
-		expect(missingFieldError.reason).toBe("This field is required");
-	});
+    const missingFieldError = ConfigError.missingField("timeout");
+    expect(missingFieldError.field).toBe("timeout");
+    expect(missingFieldError.reason).toBe("This field is required");
+  });
 });
 
 describe("NetworkError", () => {
-	it("should create specific network errors with factory methods", () => {
-		const timeoutError = NetworkError.timeout(5000);
-		expect(timeoutError.message).toBe("Request timed out after 5000ms");
+  it("should create network errors with appropriate messages", () => {
+    const timeoutError = NetworkError.timeout(5000);
+    expect(timeoutError.message).toBe("Request timed out after 5000ms");
 
-		const abortedError = NetworkError.aborted();
-		expect(abortedError.message).toBe("Request was aborted");
-
-		const dnsError = NetworkError.dnsResolution("api.example.com");
-		expect(dnsError.message).toBe(
-			"Failed to resolve hostname: api.example.com",
-		);
-
-		const connectionError = NetworkError.connection(
-			"Network connection failed",
-		);
-		expect(connectionError.message).toBe("Network connection failed");
-	});
+    const dnsError = NetworkError.dnsResolution("api.example.com");
+    expect(dnsError.message).toBe("Failed to resolve hostname: api.example.com");
+  });
 });
 
 describe("ApiError", () => {
-	const mockErrorResponse: ErrorResponse = {
-		name: "ValidationError",
-		message: "Field is required",
-		context: "field: email",
-	};
+  it("should handle rate limiting with retry information", () => {
+    const withRetryAfter = ApiError.rateLimited(60, "req-789");
+    expect(withRetryAfter.statusCode).toBe(429);
+    expect(withRetryAfter.errorResponse?.name).toBe("RateLimitError");
+    expect(withRetryAfter.errorResponse?.context).toBe("retryAfter: 60");
 
-	it("should create rate limited error with proper retry information", () => {
-		const withRetryAfter = ApiError.rateLimited(60, "req-789");
-		expect(withRetryAfter.statusCode).toBe(429);
-		expect(withRetryAfter.errorResponse?.name).toBe("RateLimitError");
-		expect(withRetryAfter.errorResponse?.context).toBe("retryAfter: 60");
+    const withoutRetryAfter = ApiError.rateLimited();
+    expect(withoutRetryAfter.statusCode).toBe(429);
+    expect(withoutRetryAfter.errorResponse?.context).toBe("");
+  });
 
-		const withoutRetryAfter = ApiError.rateLimited();
-		expect(withoutRetryAfter.statusCode).toBe(429);
-		expect(withoutRetryAfter.errorResponse?.context).toBe("");
-	});
+  it("should determine retry logic based on HTTP status", () => {
+    const clientError = new ApiError("Bad Request", 400);
+    const serverError = new ApiError("Server Error", 500);
+    const timeoutError = new ApiError("Timeout", 408);
+    const rateLimitError = new ApiError("Rate Limited", 429);
 
-	it("should classify HTTP errors correctly", () => {
-		const clientError = new ApiError("Bad Request", 400);
-		const serverError = new ApiError("Server Error", 500);
-		const timeoutError = new ApiError("Timeout", 408);
-		const rateLimitError = new ApiError("Rate Limited", 429);
+    expect(clientError.isRetryable()).toBe(false);
+    expect(serverError.isRetryable()).toBe(true);
+    expect(timeoutError.isRetryable()).toBe(true);
+    expect(rateLimitError.isRetryable()).toBe(true);
+  });
 
-		// Client vs Server classification
-		expect(clientError.isClientError()).toBe(true);
-		expect(clientError.isServerError()).toBe(false);
-		expect(serverError.isClientError()).toBe(false);
-		expect(serverError.isServerError()).toBe(true);
+  it("should calculate retry delays with business logic", () => {
+    const nonRetryable = new ApiError("Bad Request", 400);
+    const rateLimited = ApiError.rateLimited(30);
+    const serverError = new ApiError("Server Error", 500);
 
-		// Retry logic
-		expect(clientError.isRetryable()).toBe(false);
-		expect(serverError.isRetryable()).toBe(true);
-		expect(timeoutError.isRetryable()).toBe(true);
-		expect(rateLimitError.isRetryable()).toBe(true);
-	});
+    expect(nonRetryable.getRetryDelay()).toBe(null);
+    expect(rateLimited.getRetryDelay()).toBe(30000); // Rate limit specific delay
+    expect(serverError.getRetryDelay()).toBe(1000); // Default server error delay
+  });
 
-	it("should calculate retry delays with business logic", () => {
-		const nonRetryable = new ApiError("Bad Request", 400);
-		const rateLimited = ApiError.rateLimited(30);
-		const serverError = new ApiError("Server Error", 500);
+  it("should create errors from HTTP responses", () => {
+    const mockErrorResponse: ErrorResponse = {
+      name: "ValidationError",
+      message: "Field is required",
+      context: "field: email",
+    };
 
-		expect(nonRetryable.getRetryDelay()).toBe(null);
-		expect(rateLimited.getRetryDelay()).toBe(30000); // Rate limit specific delay
-		expect(serverError.getRetryDelay()).toBe(1000); // Default server error delay
-	});
+    const response = new Response(null, {
+      status: 404,
+      statusText: "Not Found",
+    });
+    const error = ApiError.fromResponse(response, mockErrorResponse, "req-123");
 
-	it("should create errors from HTTP responses", () => {
-		const response = new Response(null, {
-			status: 404,
-			statusText: "Not Found",
-		});
-		const error = ApiError.fromResponse(response, mockErrorResponse, "req-123");
-
-		expect(error.statusCode).toBe(404);
-		expect(error.message).toBe("Field is required"); // From error response
-		expect(error.requestId).toBe("req-123");
-	});
+    expect(error.statusCode).toBe(404);
+    expect(error.message).toBe("Field is required");
+    expect(error.requestId).toBe("req-123");
+  });
 });

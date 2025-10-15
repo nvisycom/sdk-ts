@@ -1,9 +1,4 @@
-# Makefile for Nvisy SDK
-# This file contains build automation tasks for the TypeScript SDK including:
-# - Cleaning build artifacts
-# - Downloading OpenAPI specifications
-# - Generating documentation
-# - Pre-build development workflow commands
+# Makefile for Nvisy.com JavaScript & TypeScript SDK
 
 ifneq (,$(wildcard ./.env))
 	include .env

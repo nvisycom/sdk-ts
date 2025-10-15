@@ -1,4 +1,4 @@
-# Nvisy TypeScript SDK
+# Nvisy.com JavaScript & TypeScript SDK
 
 [![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
 [![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk/actions/workflows/build.yml)
@@ -31,9 +31,9 @@ import { Client } from "@nvisy/sdk";
 
 const client = new Client({
   apiKey: "your-api-key",
-  baseUrl: "https://api.nvisy.com", // optional
-  timeout: 30000, // optional
-  maxRetries: 3, // optional
+  baseUrl: "https://api.nvisy.com",
+  timeout: 30000,
+  maxRetries: 3,
 });
 ```
 
@@ -74,7 +74,7 @@ const client = ClientBuilder
 | `NVISY_TIMEOUT`     | Request timeout in milliseconds  |
 | `NVISY_MAX_RETRIES` | Maximum number of retry attempts |
 
-Load configuration from environment:
+Load configuration from environment variables:
 
 ```typescript
 const client = Client.fromEnvironment();
@@ -84,14 +84,6 @@ const client = Client.fromEnvironment();
 
 - Node.js 20.0.0 or higher
 - TypeScript 5.9.0 or higher (for development)
-
-## Error Handling
-
-The SDK provides structured error types:
-
-- `ConfigError` - Invalid configuration
-- `NetworkError` - Network-related issues (timeout, connection, DNS)
-- `ApiError` - HTTP API errors with retry logic
 
 ## Changelog
 

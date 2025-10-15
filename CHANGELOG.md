@@ -16,7 +16,7 @@ and this project adheres to
 
 ### Removed
 
-## [1.0.0] - 2024-10-15
+## [1.0.0] - 2025-10-15
 
 ### Added
 
