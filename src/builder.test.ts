@@ -92,7 +92,7 @@ describe("ClientBuilder", () => {
 				.withMaxRetries(5)
 				.withHeaders({ "X-Custom": "test" })
 				.withHeader("X-Another", "value")
-				.withAdditionalHeaders({ "X-More": "data" })
+				.withHeaders({ "X-More": "data" })
 				.build();
 
 			expect(client).toBeInstanceOf(Client);

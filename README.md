@@ -50,12 +50,12 @@ Use the fluent builder API for more readable configuration:
 import { Client } from "@nvisy/sdk";
 
 const client = Client.builder()
-  .withApiKey("your-api-key")
-  .withBaseUrl("https://api.nvisy.com")
-  .withTimeout(60000)
-  .withMaxRetries(5)
-  .withHeader("X-Custom-Header", "value")
-  .withAdditionalHeaders({ "X-Another": "header" }) // Add multiple headers
+  .withApiKey("your-api-key") // Required: 10+ chars, alphanumeric with _ and -
+  .withBaseUrl("https://api.nvisy.com") // Optional: API endpoint (default shown)
+  .withTimeout(60000) // Optional: 1000-300000ms (default: 30000)
+  .withMaxRetries(5) // Optional: 0-10 attempts (default: 3)
+  .withHeader("X-Custom-Header", "value") // Optional: single custom header
+  .withHeaders({ "X-Another": "header" }) // Optional: multiple custom headers
   .build();
 ```
 

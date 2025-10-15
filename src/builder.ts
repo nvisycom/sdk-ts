@@ -100,15 +100,6 @@ export class ClientBuilder {
 	}
 
 	/**
-	 * Set custom headers (replaces existing headers)
-	 */
-	withHeaders(headers: Record<string, string>): this {
-		this.#validateHeadersObject(headers);
-		this.#config.headers = { ...headers };
-		return this;
-	}
-
-	/**
 	 * Add a single custom header (merges with existing headers)
 	 */
 	withHeader(name: string, value: string): this {
@@ -123,9 +114,9 @@ export class ClientBuilder {
 	}
 
 	/**
-	 * Add multiple custom headers (merges with existing headers)
+	 * Set custom headers (merges with existing headers)
 	 */
-	withAdditionalHeaders(headers: Record<string, string>): this {
+	withHeaders(headers: Record<string, string>): this {
 		if (!headers || typeof headers !== "object" || Array.isArray(headers)) {
 			throw ConfigError.invalidField("headers", "must be a valid object");
 		}
@@ -199,19 +190,6 @@ export class ClientBuilder {
 				"baseUrl",
 				`protocol must be one of: ${allowedProtocols.join(", ")}`,
 			);
-		}
-	}
-
-	/**
-	 * Validate headers object
-	 */
-	#validateHeadersObject(headers: Record<string, string>): void {
-		if (!headers || typeof headers !== "object" || Array.isArray(headers)) {
-			throw ConfigError.invalidField("headers", "must be a valid object");
-		}
-
-		for (const [name, value] of Object.entries(headers)) {
-			this.#validateSingleHeader(name, value);
 		}
 	}
 
