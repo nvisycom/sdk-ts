@@ -16,7 +16,7 @@ and this project adheres to
 
 ### Removed
 
-## [1.0.0] - 2025-10-15
+## [0.1.0] - 2025-10-15
 
 ### Added
 
@@ -26,29 +26,16 @@ and this project adheres to
 - Comprehensive error handling with `ClientError` and other error classes
 - Configuration management with environment variable support
 - TypeScript support with full type definitions
-- Multiple export paths for individual modules (`./client`, `./builder`,
-  `./errors`)
-- Environment variable configuration support (`NVISY_API_KEY`, `NVISY_BASE_URL`,
-  etc.)
-- Request timeout and retry configuration
+- Multiple export paths for individual modules
 - Custom header support with validation
 
 ### Features
 
 - Fluent API for client configuration
 - Built-in validation for all configuration options
-- OpenAPI integration with `openapi-fetch`
 - Comprehensive test coverage
 - Modern ES2022+ JavaScript target
 - Tree-shakeable ESM builds
-
-### Configuration Options
-
-- API key authentication (required)
-- Base URL customization
-- Request timeout configuration (1000-300000ms)
-- Retry attempt limits (0-10 retries)
-- Custom headers with reserved header protection
 
 ### Error Handling
 
@@ -58,5 +45,5 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/nvisycom/sdk/releases/tag/v1.0.0
+[Unreleased]: https://github.com/nvisycom/sdk/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/nvisycom/sdk/releases/tag/v0.1.0
