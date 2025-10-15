@@ -2,7 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
 	// Entry and format configuration
-	entry: ["src/index.ts"],
+	entry: ["src/index.ts", "src/client.ts", "src/builder.ts", "src/errors.ts"],
 	format: ["esm"],
 
 	// Output configuration

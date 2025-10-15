@@ -26,6 +26,18 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js"
+		},
+		"./client": {
+			"types": "./dist/client.d.ts",
+			"import": "./dist/client.js"
+		},
+		"./builder": {
+			"types": "./dist/builder.d.ts",
+			"import": "./dist/builder.js"
+		},
+		"./errors": {
+			"types": "./dist/errors.d.ts",
+			"import": "./dist/errors.js"
 		}
 	},
 	"main": "./dist/index.js",

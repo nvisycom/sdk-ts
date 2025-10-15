@@ -1,7 +1,21 @@
 /**
+ * Error response structure from server
+ */
+export interface ErrorResponse {
+	/** Error code (e.g., "VALIDATION_ERROR", "RATE_LIMIT_EXCEEDED") */
+	code?: string;
+	/** Error type/name */
+	name?: string;
+	/** Human-readable error message */
+	message?: string;
+	/** Additional error details or context */
+	details?: unknown;
+}
+
+/**
  * Abstract base error class for all Nvisy SDK errors
  */
-export abstract class NvisyError extends Error {
+export abstract class ClientError extends Error {
 	public readonly name: string;
 
 	constructor(message: string) {
@@ -17,70 +31,88 @@ export abstract class NvisyError extends Error {
 	/**
 	 * Convert error to JSON representation
 	 */
-	toJSON() {
+	toJSON(): ErrorResponse {
 		return {
 			name: this.name,
 			message: this.message,
-			stack: this.stack,
 		};
 	}
 }
 
 /**
- * Client-side error - thrown when client configuration or setup is invalid
+ * Configuration error - thrown when client configuration is invalid
  */
-export class NvisyClientError extends NvisyError {
+export class ConfigError extends ClientError {
 	/** Field that caused the error (for validation errors) */
 	public readonly field?: string;
-	/** Additional context about what's wrong */
-	public readonly context?: string;
+	/** Reason why the configuration is invalid */
+	public readonly reason?: string;
 
-	constructor(message: string, options?: { field?: string; context?: string }) {
+	constructor(
+		message: string,
+		options?: {
+			field?: string;
+			reason?: string;
+		},
+	) {
 		super(message);
 		this.field = options?.field;
-		this.context = options?.context;
+		this.reason = options?.reason;
 	}
 
 	/**
 	 * Create error for missing API key
 	 */
-	static missingApiKey(): NvisyClientError {
-		return new NvisyClientError("API key is required", {
+	static missingApiKey(): ConfigError {
+		return new ConfigError("API key is required", {
 			field: "apiKey",
-			context: "API key must be provided in configuration",
+			reason: "API key must be provided in configuration",
 		});
 	}
 
 	/**
 	 * Create error for invalid configuration field
 	 */
-	static invalidConfig(field: string, reason: string): NvisyClientError {
-		return new NvisyClientError(
-			`Invalid configuration for ${field}: ${reason}`,
-			{
-				field,
-				context: reason,
-			},
-		);
+	static invalidField(field: string, reason: string): ConfigError {
+		return new ConfigError(`Invalid configuration for ${field}: ${reason}`, {
+			field,
+			reason,
+		});
+	}
+
+	/**
+	 * Create error for missing required field
+	 */
+	static missingField(field: string): ConfigError {
+		return new ConfigError(`Missing required configuration field: ${field}`, {
+			field,
+			reason: "This field is required",
+		});
 	}
 
 	/**
 	 * Convert error to JSON representation
 	 */
-	toJSON() {
+	toJSON(): ErrorResponse {
 		return {
-			...super.toJSON(),
-			field: this.field,
-			context: this.context,
+			name: this.name,
+			message: this.message,
+			details:
+				this.field || this.reason
+					? {
+							field: this.field,
+							reason: this.reason,
+						}
+					: undefined,
 		};
 	}
 }
 
 /**
- * Request error - thrown when request cannot be made or fails
+ * Network error - thrown when network requests fail
  */
-export class NvisyRequestError extends NvisyError {
-	/** Original error that caused this request error */
+export class NetworkError extends ClientError {
+	/** Original error that caused this network error */
 	public readonly cause?: Error;
 
 	constructor(message: string, cause?: Error) {
@@ -91,66 +123,70 @@ export class NvisyRequestError extends NvisyError {
 	/**
 	 * Create error for network/connection issues
 	 */
-	static network(message: string, cause?: Error): NvisyRequestError {
-		return new NvisyRequestError(message, cause);
+	static connection(message: string, cause?: Error): NetworkError {
+		return new NetworkError(message, cause);
 	}
 
 	/**
 	 * Create error for request timeout
 	 */
-	static timeout(timeout: number): NvisyRequestError {
-		return new NvisyRequestError(`Request timed out after ${timeout}ms`);
+	static timeout(timeoutMs: number): NetworkError {
+		return new NetworkError(`Request timed out after ${timeoutMs}ms`);
 	}
 
 	/**
 	 * Create error for aborted request
 	 */
-	static aborted(): NvisyRequestError {
-		return new NvisyRequestError("Request was aborted");
+	static aborted(): NetworkError {
+		return new NetworkError("Request was aborted");
+	}
+
+	/**
+	 * Create error for DNS resolution failure
+	 */
+	static dnsResolution(hostname: string): NetworkError {
+		return new NetworkError(`Failed to resolve hostname: ${hostname}`);
 	}
 
 	/**
 	 * Convert error to JSON representation
 	 */
-	toJSON() {
+	toJSON(): ErrorResponse {
 		return {
-			...super.toJSON(),
-			cause: this.cause?.message,
+			name: this.name,
+			message: this.message,
+			details: this.cause
+				? {
+						cause: this.cause.message,
+					}
+				: undefined,
 		};
 	}
 }
 
 /**
- * Response error - thrown when server responds with an error
+ * API error - thrown when server responds with an error
  */
-export class NvisyResponseError extends NvisyError {
-	/** Error name from server response */
-	public readonly errName?: string;
-	/** Error message from server response */
-	public readonly errMessage?: string;
+export class ApiError extends ClientError {
+	/** Error response from server */
+	public readonly errorResponse?: ErrorResponse;
 	/** HTTP status code */
-	public readonly statusCode?: number;
+	public readonly statusCode: number;
 	/** Request ID for debugging */
 	public readonly requestId?: string;
-	/** Original HTTP response */
-	public readonly response?: Response;
 
 	constructor(
 		message: string,
+		statusCode: number,
 		options?: {
-			errName?: string;
-			errMessage?: string;
-			statusCode?: number;
+			errorResponse?: ErrorResponse;
 			requestId?: string;
-			response?: Response;
 		},
 	) {
 		super(message);
-		this.errName = options?.errName;
-		this.errMessage = options?.errMessage;
-		this.statusCode = options?.statusCode;
+		this.statusCode = statusCode;
+		this.errorResponse = options?.errorResponse;
 		this.requestId = options?.requestId;
-		this.response = options?.response;
 	}
 
 	/**
@@ -158,19 +194,34 @@ export class NvisyResponseError extends NvisyError {
 	 */
 	static fromResponse(
 		response: Response,
-		message?: string,
+		errorData?: ErrorResponse,
 		requestId?: string,
-		serverError?: { name?: string; message?: string },
-	): NvisyResponseError {
-		const errorMessage =
-			message || `HTTP ${response.status}: ${response.statusText}`;
+	): ApiError {
+		const message =
+			errorData?.message || `HTTP ${response.status}: ${response.statusText}`;
 
-		return new NvisyResponseError(errorMessage, {
-			errName: serverError?.name,
-			errMessage: serverError?.message,
-			statusCode: response.status,
+		return new ApiError(message, response.status, {
+			errorResponse: errorData,
 			requestId,
-			response,
+		});
+	}
+
+	/**
+	 * Create error for rate limiting
+	 */
+	static rateLimited(retryAfter?: number, requestId?: string): ApiError {
+		const message = retryAfter
+			? `Rate limited. Retry after ${retryAfter} seconds`
+			: "Rate limited";
+
+		return new ApiError(message, 429, {
+			requestId,
+			errorResponse: {
+				code: "RATE_LIMIT_EXCEEDED",
+				name: "RateLimitError",
+				message,
+				details: retryAfter ? { retryAfter } : undefined,
+			},
 		});
 	}
 
@@ -205,53 +256,41 @@ export class NvisyResponseError extends NvisyError {
 	}
 
 	/**
+	 * Get retry delay in milliseconds (returns null if not retryable)
+	 */
+	getRetryDelay(): number | null {
+		if (!this.isRetryable()) return null;
+
+		// For rate limiting, check if we have retry-after info
+		if (this.statusCode === 429 && this.errorResponse?.details) {
+			const details = this.errorResponse.details as Record<string, unknown>;
+			const retryAfter = details?.retryAfter;
+			if (typeof retryAfter === "number") {
+				return retryAfter * 1000; // Convert seconds to milliseconds
+			}
+		}
+
+		// Default delays based on error type
+		if (this.statusCode >= 500) {
+			return 1000; // 1 second for server errors
+		}
+
+		return 1000; // Default 1 second
+	}
+
+	/**
 	 * Convert error to JSON representation
 	 */
-	toJSON() {
+	toJSON(): ErrorResponse {
 		return {
-			...super.toJSON(),
-			errName: this.errName,
-			errMessage: this.errMessage,
-			statusCode: this.statusCode,
-			requestId: this.requestId,
+			code: this.errorResponse?.code,
+			name: this.name,
+			message: this.message,
+			details: {
+				statusCode: this.statusCode,
+				...(this.requestId && { requestId: this.requestId }),
+				...(this.errorResponse && { errorResponse: this.errorResponse }),
+			},
 		};
 	}
-}
-
-/**
- * Utility functions
- */
-
-/**
- * Check if an error is a Nvisy SDK error
- */
-export function isNvisyError(error: unknown): error is NvisyError {
-	return error instanceof NvisyError;
-}
-
-/**
- * Extract error message from unknown error
- */
-export function getErrorMessage(error: unknown): string {
-	if (error instanceof Error) {
-		return error.message;
-	}
-	if (typeof error === "string") {
-		return error;
-	}
-	return "An unknown error occurred";
-}
-
-/**
- * Create a NvisyError from an unknown error
- */
-export function createNvisyError(error: unknown, message?: string): NvisyError {
-	if (error instanceof NvisyError) {
-		return error;
-	}
-
-	const errorMessage = message || getErrorMessage(error);
-	const cause = error instanceof Error ? error : undefined;
-
-	return new NvisyRequestError(errorMessage, cause);
 }

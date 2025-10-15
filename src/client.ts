@@ -1,55 +1,153 @@
 import createClient from "openapi-fetch";
-import { NvisyClientConfig, mergeConfig } from "./config.js";
-import { NvisyClientError } from "./errors.js";
-import { ClientBuilder } from "./client-builder.js";
+import {
+	type ClientConfig,
+	type ResolvedClientConfig,
+	resolveConfig,
+} from "./config.js";
+import { ConfigError } from "./errors.js";
+import { ClientBuilder } from "./builder.js";
 
 /**
  * Main client class for interacting with the Nvisy document redaction API
  */
-export class NvisyClient {
-	private readonly config: Required<NvisyClientConfig>;
-	private readonly client: ReturnType<typeof createClient>;
+export class Client {
+	#config: ResolvedClientConfig;
+	#openApiClient: ReturnType<typeof createClient>;
 
 	/**
 	 * Create a new Nvisy client instance
 	 */
-	constructor(config: NvisyClientConfig) {
-		if (!config.apiKey) {
-			throw NvisyClientError.missingApiKey();
+	constructor(userConfig: ClientConfig) {
+		try {
+			// Validate configuration first
+			this.#validateConfig(userConfig);
+			// Resolve configuration with defaults
+			this.#config = resolveConfig(userConfig);
+		} catch (error) {
+			if (error instanceof ConfigError) {
+				throw error;
+			}
+			throw ConfigError.invalidField(
+				"config",
+				`Configuration error: ${String(error)}`,
+			);
 		}
 
-		// Merge user config with defaults
-		this.config = mergeConfig(config);
-
-		// Create openapi-fetch client
-		this.client = createClient({
-			baseUrl: this.config.baseUrl,
+		// Create openapi-fetch client with proper headers
+		this.#openApiClient = createClient({
+			baseUrl: this.#config.baseUrl,
 			headers: {
-				Authorization: `Bearer ${this.config.apiKey}`,
-				"User-Agent": "@nvisy/sdk",
-				...this.config.headers,
+				Authorization: `Bearer ${this.#config.apiKey}`,
+				"Content-Type": "application/json",
+				"User-Agent": this.#buildUserAgent(),
+				...this.#config.headers,
 			},
 		});
 	}
 
 	/**
-	 * Get the current configuration
-	 */
-	getConfig(): Required<NvisyClientConfig> {
-		return { ...this.config };
-	}
-
-	/**
-	 * Get the underlying openapi-fetch client for direct access
-	 */
-	getClient() {
-		return this.client;
-	}
-
-	/**
-	 * Create a new ClientBuilder instance for fluent API construction
+	 * Create a new ClientBuilder for fluent configuration
 	 */
 	static builder(): ClientBuilder {
-		return ClientBuilder.create();
+		return new ClientBuilder();
+	}
+
+	/**
+	 * Create a client from environment variables
+	 */
+	static fromEnvironment(): Client {
+		const apiKey = process.env.NVISY_API_KEY;
+		if (!apiKey) {
+			throw ConfigError.missingField("apiKey");
+		}
+
+		return new Client({ apiKey });
+	}
+
+	/**
+	 * Get the current configuration (readonly copy)
+	 */
+	getConfig(): Readonly<ResolvedClientConfig> {
+		return Object.freeze({ ...this.#config });
+	}
+
+	/**
+	 * Get the underlying openapi-fetch client for advanced usage
+	 */
+	getOpenApiClient(): ReturnType<typeof createClient> {
+		return this.#openApiClient;
+	}
+
+	/**
+	 * Validate configuration by reusing ClientBuilder validation
+	 */
+	#validateConfig(config: ClientConfig): void {
+		const builder = new ClientBuilder().withApiKey(config.apiKey);
+
+		if (config.baseUrl !== undefined) {
+			builder.withBaseUrl(config.baseUrl);
+		}
+
+		if (config.timeout !== undefined) {
+			builder.withTimeout(config.timeout);
+		}
+
+		if (config.maxRetries !== undefined) {
+			builder.withMaxRetries(config.maxRetries);
+		}
+
+		if (config.headers !== undefined) {
+			builder.withHeaders(config.headers);
+		}
+	}
+
+	/**
+	 * Build user agent string
+	 */
+	#buildUserAgent(): string {
+		// In a real implementation, this would import from package.json
+		const sdkVersion = "1.0.0";
+		const nodeVersion = process.version;
+		const platform = process.platform;
+
+		return `@nvisy/sdk/${sdkVersion} (${platform}; Node.js ${nodeVersion})`;
+	}
+
+	/**
+	 * Create a new client with modified configuration
+	 */
+	withConfig(configChanges: Partial<ClientConfig>): Client {
+		const newConfig: ClientConfig = {
+			apiKey: this.#config.apiKey,
+			baseUrl: this.#config.baseUrl,
+			timeout: this.#config.timeout,
+			maxRetries: this.#config.maxRetries,
+			headers: this.#config.headers,
+			...configChanges,
+		};
+		return new Client(newConfig);
+	}
+
+	/**
+	 * Create a new client with additional headers
+	 */
+	withHeaders(additionalHeaders: Record<string, string>): Client {
+		return this.withConfig({
+			headers: { ...this.#config.headers, ...additionalHeaders },
+		});
+	}
+
+	/**
+	 * Create a new client with a different timeout
+	 */
+	withTimeout(timeoutMs: number): Client {
+		return this.withConfig({ timeout: timeoutMs });
+	}
+
+	/**
+	 * Create a new client with different retry settings
+	 */
+	withMaxRetries(maxRetries: number): Client {
+		return this.withConfig({ maxRetries });
 	}
 }
