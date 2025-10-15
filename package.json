@@ -57,7 +57,7 @@
 		"test:coverage": "vitest --coverage",
 		"test:ui": "vitest --ui",
 		"lint": "biome lint .",
-		"lint:fix": "biome lint --apply .",
+		"lint:fix": "biome lint --write .",
 		"format": "biome format --write .",
 		"format:check": "biome format .",
 		"check": "biome check .",
