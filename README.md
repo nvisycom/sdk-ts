@@ -26,63 +26,79 @@ npm install @nvisy/sdk
 
 ### Direct Configuration
 
+Create a client by passing configuration options directly to the constructor:
+
 ```typescript
 import { Client } from "@nvisy/sdk";
 
 const client = new Client({
-  apiKey: "your-api-key",
-  baseUrl: "https://api.nvisy.com",
-  timeout: 30000,
-  maxRetries: 3,
+  apiKey: "your-api-key", // Required: 10+ chars, alphanumeric with _ and -
+  baseUrl: "https://api.nvisy.com", // Optional: API endpoint (default shown)
+  timeout: 30000, // Optional: 1000-300000ms (default: 30000)
+  maxRetries: 3, // Optional: 0-10 attempts (default: 3)
+  headers: { // Optional: custom headers
+    "X-Custom-Header": "value",
+  },
 });
 ```
 
 ### Builder Pattern
 
-```typescript
-import { ClientBuilder } from "@nvisy/sdk";
+Use the fluent builder API for more readable configuration:
 
-const client = ClientBuilder.fromApiKey("your-api-key")
+```typescript
+import { Client } from "@nvisy/sdk";
+
+const client = Client.builder()
+  .withApiKey("your-api-key")
   .withBaseUrl("https://api.nvisy.com")
   .withTimeout(60000)
   .withMaxRetries(5)
   .withHeader("X-Custom-Header", "value")
+  .withAdditionalHeaders({ "X-Another": "header" }) // Add multiple headers
   .build();
 ```
 
 ### From Environment Variables
 
-```typescript
-import { ClientBuilder } from "@nvisy/sdk";
+Load configuration from environment variables:
 
+```typescript
+import { Client, ClientBuilder } from "@nvisy/sdk";
+
+// Using builder pattern from environment (allows additional configuration)
+const client = ClientBuilder.fromEnvironment()
+  .withTimeout(60000) // Override or add to env config
+  .build();
+
+// Or using Client directly
 const client = Client.fromEnvironment();
 ```
 
-## Configuration
+Set these environment variables:
 
-### Required
+| Variable            | Description                      | Required |
+| ------------------- | -------------------------------- | -------- |
+| `NVISY_API_KEY`     | API key for authentication       | Yes      |
+| `NVISY_BASE_URL`    | Custom API endpoint URL          | No       |
+| `NVISY_TIMEOUT`     | Request timeout in milliseconds  | No       |
+| `NVISY_MAX_RETRIES` | Maximum number of retry attempts | No       |
 
-- `apiKey` - Your Nvisy API key (10+ characters, alphanumeric with `_` and `-`)
+### Configuration Reference
 
-### Optional
+#### Required Options
 
-- `baseUrl` - API endpoint URL (default: `https://api.nvisy.com`)
-- `timeout` - Request timeout in milliseconds (1000-300000, default: 30000)
-- `maxRetries` - Maximum retry attempts (0-10, default: 3)
-- `headers` - Custom HTTP headers (cannot override `authorization`,
+- **`apiKey`**: Your Nvisy API key (minimum 10 characters, alphanumeric with `_`
+  and `-`)
+
+#### Optional Options
+
+- **`baseUrl`**: API endpoint URL (default: `https://api.nvisy.com`)
+- **`timeout`**: Request timeout in milliseconds (range: 1000-300000,
+  default: 30000)
+- **`maxRetries`**: Maximum retry attempts (range: 0-10, default: 3)
+- **`headers`**: Custom HTTP headers object (cannot override `authorization`,
   `content-type`, `user-agent`)
-
-### Environment Variables
-
-| Variable            | Description                      |
-| ------------------- | -------------------------------- |
-| `NVISY_API_KEY`     | API key for authentication       |
-| `NVISY_BASE_URL`    | Custom API endpoint URL          |
-| `NVISY_TIMEOUT`     | Request timeout in milliseconds  |
-| `NVISY_MAX_RETRIES` | Maximum number of retry attempts |
-
-Both `Client.fromEnvironment()` and `ClientBuilder.fromEnvironment()` are
-available for loading configuration from environment variables.
 
 ## Requirements
 
