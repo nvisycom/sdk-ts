@@ -1,7 +1,7 @@
-import { Client } from "./client.js";
-import type { ClientConfig } from "./config.js";
-import { loadConfigFromEnv } from "./config.js";
-import { ConfigError } from "./errors.js";
+import { Client } from "@/client.js";
+import type { ClientConfig } from "@/config.js";
+import { loadConfigFromEnv } from "@/config.js";
+import { ConfigError } from "@/errors.js";
 
 /**
  * Reserved headers that cannot be overridden

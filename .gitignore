@@ -9,12 +9,6 @@ Thumbs.db
 .fleet/
 .zed/
 
-# Rust
-debug/
-target/
-**/*.rs.bk
-*.pdb
-
 # Javascript
 test-results/
 node_modules/

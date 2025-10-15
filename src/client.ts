@@ -1,11 +1,12 @@
 import createClient from "openapi-fetch";
-import { ClientBuilder } from "./builder.js";
+import { ClientBuilder } from "@/builder.js";
 import {
 	type ClientConfig,
 	type ResolvedClientConfig,
 	resolveConfig,
-} from "./config.js";
-import { ConfigError } from "./errors.js";
+} from "@/config.js";
+import { ConfigError } from "@/errors.js";
+import { StatusService } from "@/services/status.js";
 
 /**
  * Main client class for interacting with the Nvisy document redaction API
@@ -13,6 +14,7 @@ import { ConfigError } from "./errors.js";
 export class Client {
 	#config: ResolvedClientConfig;
 	#openApiClient: ReturnType<typeof createClient>;
+	#status: StatusService;
 
 	/**
 	 * Create a new Nvisy client instance
@@ -43,6 +45,9 @@ export class Client {
 				...this.#config.headers,
 			},
 		});
+
+		// Initialize services
+		this.#status = new StatusService(this);
 	}
 
 	/**
@@ -71,6 +76,13 @@ export class Client {
 	 */
 	getOpenApiClient(): ReturnType<typeof createClient> {
 		return this.#openApiClient;
+	}
+
+	/**
+	 * Get the status service for health checks and API status
+	 */
+	get status(): StatusService {
+		return this.#status;
 	}
 
 	/**

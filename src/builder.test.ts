@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { ClientBuilder } from "./builder.js";
-import { Client } from "./client.js";
-import { ConfigError } from "./errors.js";
+import { ClientBuilder } from "@/builder.js";
+import { Client } from "@/client.js";
+import { ConfigError } from "@/errors.js";
 
 describe("ClientBuilder", () => {
 	const validApiKey = "test-api-key-123456";

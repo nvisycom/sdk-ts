@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { ClientBuilder } from "./builder.js";
-import { Client } from "./client.js";
-
-import { ConfigError } from "./errors.js";
+import { ClientBuilder } from "@/builder.js";
+import { Client } from "@/client.js";
+import { ConfigError } from "@/errors.js";
+import { StatusService } from "@/services/status.js";
 
 // Mock openapi-fetch
 vi.mock("openapi-fetch", () => ({
@@ -46,6 +46,14 @@ describe("Client", () => {
 		it("should create builder instance", () => {
 			const builder = Client.builder();
 			expect(builder).toBeInstanceOf(ClientBuilder);
+		});
+	});
+
+	describe("service getters", () => {
+		it("should provide access to status service", () => {
+			const client = Client.builder().withApiKey("test-api-key-123456").build();
+
+			expect(client.status).toBeInstanceOf(StatusService);
 		});
 	});
 
