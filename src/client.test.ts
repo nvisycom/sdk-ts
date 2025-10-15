@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { Client } from "./client.js";
+import { describe, expect, it, vi } from "vitest";
 import { ClientBuilder } from "./builder.js";
-import { ConfigError } from "./errors.js";
+import { Client } from "./client.js";
 import type { ClientConfig } from "./config.js";
+import { ConfigError } from "./errors.js";
 
 // Mock openapi-fetch
 vi.mock("openapi-fetch", () => ({

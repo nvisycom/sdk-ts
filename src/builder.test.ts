@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { ClientBuilder } from "./builder.js";
 import { Client } from "./client.js";
 import { ConfigError } from "./errors.js";

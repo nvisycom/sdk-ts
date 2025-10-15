@@ -1,11 +1,11 @@
 import createClient from "openapi-fetch";
+import { ClientBuilder } from "./builder.js";
 import {
 	type ClientConfig,
 	type ResolvedClientConfig,
 	resolveConfig,
 } from "./config.js";
 import { ConfigError } from "./errors.js";
-import { ClientBuilder } from "./builder.js";
 
 /**
  * Main client class for interacting with the Nvisy document redaction API

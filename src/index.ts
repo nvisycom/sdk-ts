@@ -1,18 +1,15 @@
 // Main client classes
-export { Client } from "./client.js";
+
 export { ClientBuilder } from "./builder.js";
+export { Client } from "./client.js";
 
 // Configuration
 export type { ClientConfig, ResolvedClientConfig } from "./config.js";
 export {
-	resolveConfig,
-	loadConfigFromEnv,
 	getEnvironmentVariables,
+	loadConfigFromEnv,
+	resolveConfig,
 } from "./config.js";
-
-// Error handling
-export { ClientError, ConfigError, NetworkError, ApiError } from "./errors.js";
 export type { ErrorResponse } from "./errors.js";
-
-// Convenience aliases
-export { Client as NvisyClient } from "./client.js";
+// Error handling
+export { ApiError, ClientError, ConfigError, NetworkError } from "./errors.js";

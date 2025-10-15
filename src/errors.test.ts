@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { ClientError, ConfigError, NetworkError, ApiError } from "./errors.js";
+import { describe, expect, it } from "vitest";
 import type { ErrorResponse } from "./errors.js";
+import { ApiError, ClientError, ConfigError, NetworkError } from "./errors.js";
 
 describe("ClientError (Abstract Base)", () => {
 	// Create concrete implementation for testing
@@ -55,21 +55,20 @@ describe("NetworkError", () => {
 
 describe("ApiError", () => {
 	const mockErrorResponse: ErrorResponse = {
-		code: "VALIDATION_ERROR",
 		name: "ValidationError",
 		message: "Field is required",
-		details: { field: "email" },
+		context: "field: email",
 	};
 
 	it("should create rate limited error with proper retry information", () => {
 		const withRetryAfter = ApiError.rateLimited(60, "req-789");
 		expect(withRetryAfter.statusCode).toBe(429);
-		expect(withRetryAfter.errorResponse?.code).toBe("RATE_LIMIT_EXCEEDED");
-		expect(withRetryAfter.errorResponse?.details).toEqual({ retryAfter: 60 });
+		expect(withRetryAfter.errorResponse?.name).toBe("RateLimitError");
+		expect(withRetryAfter.errorResponse?.context).toBe("retryAfter: 60");
 
 		const withoutRetryAfter = ApiError.rateLimited();
 		expect(withoutRetryAfter.statusCode).toBe(429);
-		expect(withoutRetryAfter.errorResponse?.details).toBeUndefined();
+		expect(withoutRetryAfter.errorResponse?.context).toBe("");
 	});
 
 	it("should classify HTTP errors correctly", () => {

@@ -1,6 +1,6 @@
 import { Client } from "./client.js";
-import { ConfigError } from "./errors.js";
 import type { ClientConfig } from "./config.js";
+import { ConfigError } from "./errors.js";
 
 /**
  * Reserved headers that cannot be overridden
@@ -56,7 +56,7 @@ export class ClientBuilder {
 	 * Set the request timeout in milliseconds
 	 */
 	withTimeout(timeoutMs: number): this {
-		this.#validateInteger("timeout", timeoutMs, 1, 300_000);
+		this.#validateInteger("timeout", timeoutMs, 1000, 300_000);
 		this.#config.timeout = timeoutMs;
 		return this;
 	}

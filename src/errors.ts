@@ -2,14 +2,12 @@
  * Error response structure from server
  */
 export interface ErrorResponse {
-	/** Error code (e.g., "VALIDATION_ERROR", "RATE_LIMIT_EXCEEDED") */
-	code?: string;
 	/** Error type/name */
-	name?: string;
+	name: string;
 	/** Human-readable error message */
-	message?: string;
-	/** Additional error details or context */
-	details?: unknown;
+	message: string;
+	/** Additional error context */
+	context: string;
 }
 
 /**
@@ -35,6 +33,7 @@ export abstract class ClientError extends Error {
 		return {
 			name: this.name,
 			message: this.message,
+			context: "",
 		};
 	}
 }
@@ -97,13 +96,10 @@ export class ConfigError extends ClientError {
 		return {
 			name: this.name,
 			message: this.message,
-			details:
+			context:
 				this.field || this.reason
-					? {
-							field: this.field,
-							reason: this.reason,
-						}
-					: undefined,
+					? `field: ${this.field}, reason: ${this.reason}`
+					: "",
 		};
 	}
 }
@@ -155,11 +151,7 @@ export class NetworkError extends ClientError {
 		return {
 			name: this.name,
 			message: this.message,
-			details: this.cause
-				? {
-						cause: this.cause.message,
-					}
-				: undefined,
+			context: this.cause ? `cause: ${this.cause.message}` : "",
 		};
 	}
 }
@@ -217,10 +209,9 @@ export class ApiError extends ClientError {
 		return new ApiError(message, 429, {
 			requestId,
 			errorResponse: {
-				code: "RATE_LIMIT_EXCEEDED",
 				name: "RateLimitError",
 				message,
-				details: retryAfter ? { retryAfter } : undefined,
+				context: retryAfter ? `retryAfter: ${retryAfter}` : "",
 			},
 		});
 	}
@@ -262,10 +253,10 @@ export class ApiError extends ClientError {
 		if (!this.isRetryable()) return null;
 
 		// For rate limiting, check if we have retry-after info
-		if (this.statusCode === 429 && this.errorResponse?.details) {
-			const details = this.errorResponse.details as Record<string, unknown>;
-			const retryAfter = details?.retryAfter;
-			if (typeof retryAfter === "number") {
+		if (this.statusCode === 429 && this.errorResponse?.context) {
+			const match = this.errorResponse.context.match(/retryAfter: (\d+)/);
+			if (match) {
+				const retryAfter = parseInt(match[1], 10);
 				return retryAfter * 1000; // Convert seconds to milliseconds
 			}
 		}
@@ -283,14 +274,9 @@ export class ApiError extends ClientError {
 	 */
 	toJSON(): ErrorResponse {
 		return {
-			code: this.errorResponse?.code,
 			name: this.name,
 			message: this.message,
-			details: {
-				statusCode: this.statusCode,
-				...(this.requestId && { requestId: this.requestId }),
-				...(this.errorResponse && { errorResponse: this.errorResponse }),
-			},
+			context: `statusCode: ${this.statusCode}${this.requestId ? `, requestId: ${this.requestId}` : ""}${this.errorResponse ? `, errorResponse: ${JSON.stringify(this.errorResponse)}` : ""}`,
 		};
 	}
 }
