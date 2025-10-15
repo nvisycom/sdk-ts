@@ -94,7 +94,7 @@ export class ClientBuilder {
 	 * Set the maximum number of retry attempts
 	 */
 	withMaxRetries(maxRetries: number): this {
-		this.#validateInteger("maxRetries", maxRetries, 0, 10);
+		this.#validateInteger("maxRetries", maxRetries, 0, 5);
 		this.#config.maxRetries = maxRetries;
 		return this;
 	}

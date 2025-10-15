@@ -35,7 +35,7 @@ const client = new Client({
   apiKey: "your-api-key", // Required: 10+ chars, alphanumeric with _ and -
   baseUrl: "https://api.nvisy.com", // Optional: API endpoint (default shown)
   timeout: 30000, // Optional: 1000-300000ms (default: 30000)
-  maxRetries: 3, // Optional: 0-10 attempts (default: 3)
+  maxRetries: 3, // Optional: 0-5 attempts (default: 3)
   headers: { // Optional: custom headers
     "X-Custom-Header": "value",
   },
@@ -53,7 +53,7 @@ const client = Client.builder()
   .withApiKey("your-api-key") // Required: 10+ chars, alphanumeric with _ and -
   .withBaseUrl("https://api.nvisy.com") // Optional: API endpoint (default shown)
   .withTimeout(60000) // Optional: 1000-300000ms (default: 30000)
-  .withMaxRetries(5) // Optional: 0-10 attempts (default: 3)
+  .withMaxRetries(5) // Optional: 0-5 attempts (default: 3)
   .withHeader("X-Custom-Header", "value") // Optional: single custom header
   .withHeaders({ "X-Another": "header" }) // Optional: multiple custom headers
   .build();
@@ -83,22 +83,6 @@ Set these environment variables:
 | `NVISY_BASE_URL`    | Custom API endpoint URL          | No       |
 | `NVISY_TIMEOUT`     | Request timeout in milliseconds  | No       |
 | `NVISY_MAX_RETRIES` | Maximum number of retry attempts | No       |
-
-### Configuration Reference
-
-#### Required Options
-
-- **`apiKey`**: Your Nvisy API key (minimum 10 characters, alphanumeric with `_`
-  and `-`)
-
-#### Optional Options
-
-- **`baseUrl`**: API endpoint URL (default: `https://api.nvisy.com`)
-- **`timeout`**: Request timeout in milliseconds (range: 1000-300000,
-  default: 30000)
-- **`maxRetries`**: Maximum retry attempts (range: 0-10, default: 3)
-- **`headers`**: Custom HTTP headers object (cannot override `authorization`,
-  `content-type`, `user-agent`)
 
 ## Requirements
 
