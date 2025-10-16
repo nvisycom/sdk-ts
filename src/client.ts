@@ -1,11 +1,15 @@
 import createClient from "openapi-fetch";
-import { ClientBuilder } from "./builder.js";
+import { ClientBuilder } from "@/builder.js";
 import {
 	type ClientConfig,
 	type ResolvedClientConfig,
 	resolveConfig,
-} from "./config.js";
-import { ConfigError } from "./errors.js";
+} from "@/config.js";
+import { ConfigError } from "@/errors.js";
+import { DocumentsService } from "@/services/documents.js";
+import { IntegrationsService } from "@/services/integrations.js";
+import { MembersService } from "@/services/members.js";
+import { StatusService } from "@/services/status.js";
 
 /**
  * Main client class for interacting with the Nvisy document redaction API
@@ -13,16 +17,19 @@ import { ConfigError } from "./errors.js";
 export class Client {
 	#config: ResolvedClientConfig;
 	#openApiClient: ReturnType<typeof createClient>;
+	#status: StatusService;
+	#documents: DocumentsService;
+	#integrations: IntegrationsService;
+	#members: MembersService;
 
 	/**
 	 * Create a new Nvisy client instance
 	 */
 	constructor(userConfig: ClientConfig) {
 		try {
-			// Validate configuration first
-			this.#validateConfig(userConfig);
-			// Resolve configuration with defaults
-			this.#config = resolveConfig(userConfig);
+			// Validate and resolve configuration
+			ClientBuilder.fromConfig(userConfig); // Validates input
+			this.#config = resolveConfig(userConfig); // Resolves with env vars and defaults
 		} catch (error) {
 			if (error instanceof ConfigError) {
 				throw error;
@@ -39,10 +46,16 @@ export class Client {
 			headers: {
 				Authorization: `Bearer ${this.#config.apiKey}`,
 				"Content-Type": "application/json",
-				"User-Agent": this.#buildUserAgent(),
+				"User-Agent": this.#config.userAgent,
 				...this.#config.headers,
 			},
 		});
+
+		// Initialize services
+		this.#status = new StatusService(this);
+		this.#documents = new DocumentsService(this);
+		this.#integrations = new IntegrationsService(this);
+		this.#members = new MembersService(this);
 	}
 
 	/**
@@ -60,6 +73,13 @@ export class Client {
 	}
 
 	/**
+	 * Create a client from a configuration object
+	 */
+	static fromConfig(config: ClientConfig): Client {
+		return ClientBuilder.fromConfig(config).build();
+	}
+
+	/**
 	 * Get the current configuration (readonly copy)
 	 */
 	getConfig(): Readonly<ResolvedClientConfig> {
@@ -74,75 +94,30 @@ export class Client {
 	}
 
 	/**
-	 * Validate configuration by reusing ClientBuilder validation
+	 * Get the status service for health checks and API status
 	 */
-	#validateConfig(config: ClientConfig): void {
-		const builder = new ClientBuilder().withApiKey(config.apiKey);
-
-		if (config.baseUrl !== undefined) {
-			builder.withBaseUrl(config.baseUrl);
-		}
-
-		if (config.timeout !== undefined) {
-			builder.withTimeout(config.timeout);
-		}
-
-		if (config.maxRetries !== undefined) {
-			builder.withMaxRetries(config.maxRetries);
-		}
-
-		if (config.headers !== undefined) {
-			builder.withHeaders(config.headers);
-		}
+	get status(): StatusService {
+		return this.#status;
 	}
 
 	/**
-	 * Build user agent string
+	 * Get the documents service for document operations
 	 */
-	#buildUserAgent(): string {
-		// In a real implementation, this would import from package.json
-		const sdkVersion = "1.0.0";
-		const nodeVersion = process.version;
-		const platform = process.platform;
-
-		return `@nvisy/sdk/${sdkVersion} (${platform}; Node.js ${nodeVersion})`;
+	get documents(): DocumentsService {
+		return this.#documents;
 	}
 
 	/**
-	 * Create a new client with modified configuration
+	 * Get the integrations service for integration operations
 	 */
-	withConfig(configChanges: Partial<ClientConfig>): Client {
-		const newConfig: ClientConfig = {
-			apiKey: this.#config.apiKey,
-			baseUrl: this.#config.baseUrl,
-			timeout: this.#config.timeout,
-			maxRetries: this.#config.maxRetries,
-			headers: this.#config.headers,
-			...configChanges,
-		};
-		return new Client(newConfig);
+	get integrations(): IntegrationsService {
+		return this.#integrations;
 	}
 
 	/**
-	 * Create a new client with additional headers
+	 * Get the members service for member operations
 	 */
-	withHeaders(additionalHeaders: Record<string, string>): Client {
-		return this.withConfig({
-			headers: { ...this.#config.headers, ...additionalHeaders },
-		});
-	}
-
-	/**
-	 * Create a new client with a different timeout
-	 */
-	withTimeout(timeoutMs: number): Client {
-		return this.withConfig({ timeout: timeoutMs });
-	}
-
-	/**
-	 * Create a new client with different retry settings
-	 */
-	withMaxRetries(maxRetries: number): Client {
-		return this.withConfig({ maxRetries });
+	get members(): MembersService {
+		return this.#members;
 	}
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { ErrorResponse } from "./errors.js";
-import { ApiError, ConfigError, NetworkError } from "./errors.js";
+import type { ErrorResponse } from "@/errors.js";
+import { ApiError, ConfigError, NetworkError } from "@/errors.js";
 
 describe("ConfigError", () => {
 	it("should create factory errors with proper context", () => {
