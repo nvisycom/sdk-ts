@@ -29,6 +29,12 @@ export interface ClientConfig {
 	 * Custom headers to include with requests
 	 */
 	headers?: Record<string, string>;
+
+	/**
+	 * Custom user agent string
+	 * @default Generated automatically
+	 */
+	userAgent?: string;
 }
 
 /**
@@ -40,10 +46,11 @@ export type ResolvedClientConfig = Required<ClientConfig>;
  * Environment variable names for configuration
  */
 const ENV_VARS = {
-	API_KEY: "NVISY_API_KEY",
+	API_TOKEN: "NVISY_API_TOKEN",
 	BASE_URL: "NVISY_BASE_URL",
-	TIMEOUT: "NVISY_TIMEOUT",
+	MAX_TIMEOUT: "NVISY_MAX_TIMEOUT",
 	MAX_RETRIES: "NVISY_MAX_RETRIES",
+	USER_AGENT: "NVISY_USER_AGENT",
 } as const;
 
 /**
@@ -54,6 +61,7 @@ const DEFAULTS = {
 	timeout: 30_000,
 	maxRetries: 3,
 	headers: {},
+	userAgent: buildUserAgent(),
 } as const;
 
 /**
@@ -62,7 +70,7 @@ const DEFAULTS = {
 export function loadConfigFromEnv(): Partial<ClientConfig> {
 	const config: Partial<ClientConfig> = {};
 
-	const apiKey = process.env[ENV_VARS.API_KEY];
+	const apiKey = process.env[ENV_VARS.API_TOKEN];
 	if (apiKey) {
 		config.apiKey = apiKey;
 	}
@@ -72,7 +80,7 @@ export function loadConfigFromEnv(): Partial<ClientConfig> {
 		config.baseUrl = baseUrl;
 	}
 
-	const timeout = process.env[ENV_VARS.TIMEOUT];
+	const timeout = process.env[ENV_VARS.MAX_TIMEOUT];
 	if (timeout) {
 		const timeoutMs = parseInt(timeout, 10);
 		if (!Number.isNaN(timeoutMs)) {
@@ -86,6 +94,11 @@ export function loadConfigFromEnv(): Partial<ClientConfig> {
 		if (!Number.isNaN(retries)) {
 			config.maxRetries = retries;
 		}
+	}
+
+	const userAgent = process.env[ENV_VARS.USER_AGENT];
+	if (userAgent) {
+		config.userAgent = userAgent;
 	}
 
 	return config;
@@ -104,6 +117,7 @@ export function resolveConfig(userConfig: ClientConfig): ResolvedClientConfig {
 		timeout: mergedConfig.timeout ?? DEFAULTS.timeout,
 		maxRetries: mergedConfig.maxRetries ?? DEFAULTS.maxRetries,
 		headers: { ...DEFAULTS.headers, ...mergedConfig.headers },
+		userAgent: mergedConfig.userAgent || DEFAULTS.userAgent,
 	};
 }
 
@@ -112,4 +126,16 @@ export function resolveConfig(userConfig: ClientConfig): ResolvedClientConfig {
  */
 export function getEnvironmentVariables(): Record<string, string> {
 	return { ...ENV_VARS };
+}
+
+/**
+ * Build user agent string
+ */
+export function buildUserAgent(): string {
+	// In a real implementation, this would import from package.json
+	const sdkVersion = "1.0.0";
+	const nodeVersion = process.version;
+	const platform = process.platform;
+
+	return `@nvisy/sdk/${sdkVersion} (${platform}; Node.js ${nodeVersion})`;
 }

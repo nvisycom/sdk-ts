@@ -45,8 +45,45 @@ export class ClientBuilder {
 		if (envConfig.headers) {
 			builder.withHeaders(envConfig.headers);
 		}
+		if (envConfig.userAgent) {
+			builder.withUserAgent(envConfig.userAgent);
+		}
 
 		return builder;
+	}
+
+	/**
+	 * Create a ClientBuilder instance from a configuration object
+	 */
+	static fromConfig(config: ClientConfig): ClientBuilder {
+		const builder = new ClientBuilder().withApiKey(config.apiKey);
+
+		if (config.baseUrl) {
+			builder.withBaseUrl(config.baseUrl);
+		}
+		if (config.timeout !== undefined) {
+			builder.withTimeout(config.timeout);
+		}
+		if (config.maxRetries !== undefined) {
+			builder.withMaxRetries(config.maxRetries);
+		}
+		if (config.headers) {
+			builder.withHeaders(config.headers);
+		}
+		if (config.userAgent) {
+			builder.withUserAgent(config.userAgent);
+		}
+
+		return builder;
+	}
+
+	/**
+	 * Set a custom user agent string
+	 */
+	withUserAgent(userAgent: string): this {
+		this.#validateString("userAgent", userAgent);
+		this.#config.userAgent = userAgent;
+		return this;
 	}
 
 	/**

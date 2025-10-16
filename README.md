@@ -2,10 +2,10 @@
 
 [![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
 [![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk/actions/workflows/build.yml)
-[![node](https://img.shields.io/badge/node-%3E%3D20.0.0-000000?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![node](https://img.shields.io/badge/Node.JS-20.0+-000000?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![typescript](https://img.shields.io/badge/TypeScript-5.9+-000000?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-Official JavaScript & TypeScript SDK for the Nvisy document redaction platform.
+Official Node.JS SDK for the Nvisy document redaction platform.
 
 ## Features
 
@@ -36,6 +36,7 @@ const client = new Client({
   baseUrl: "https://api.nvisy.com", // Optional: API endpoint (default shown)
   timeout: 30000, // Optional: 1000-300000ms (default: 30000)
   maxRetries: 3, // Optional: 0-5 attempts (default: 3)
+  userAgent: "MyApp/1.0.0", // Optional: custom user agent
   headers: { // Optional: custom headers
     "X-Custom-Header": "value",
   },
@@ -54,6 +55,7 @@ const client = Client.builder()
   .withBaseUrl("https://api.nvisy.com") // Optional: API endpoint (default shown)
   .withTimeout(60000) // Optional: 1000-300000ms (default: 30000)
   .withMaxRetries(5) // Optional: 0-5 attempts (default: 3)
+  .withUserAgent("MyApp/1.0.0") // Optional: custom user agent
   .withHeader("X-Custom-Header", "value") // Optional: single custom header
   .withHeaders({ "X-Another": "header" }) // Optional: multiple custom headers
   .build();
@@ -79,10 +81,20 @@ Set these environment variables:
 
 | Variable            | Description                      | Required |
 | ------------------- | -------------------------------- | -------- |
-| `NVISY_API_KEY`     | API key for authentication       | Yes      |
+| `NVISY_API_TOKEN`   | API key for authentication       | Yes      |
 | `NVISY_BASE_URL`    | Custom API endpoint URL          | No       |
-| `NVISY_TIMEOUT`     | Request timeout in milliseconds  | No       |
+| `NVISY_MAX_TIMEOUT` | Request timeout in milliseconds  | No       |
 | `NVISY_MAX_RETRIES` | Maximum number of retry attempts | No       |
+| `NVISY_USER_AGENT`  | Custom user agent string        | No       |
+
+## Services
+
+The SDK provides access to the following services:
+
+- **Documents** - Document upload, management, and processing
+- **Members** - Team member invitation and management  
+- **Integrations** - Third-party service integrations
+- **Status** - API health and status monitoring
 
 ## Changelog
 

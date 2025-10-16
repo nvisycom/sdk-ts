@@ -1,5 +1,4 @@
 // Main client classes
-
 export { ClientBuilder } from "@/builder.js";
 export { Client } from "@/client.js";
 // Configuration
@@ -10,9 +9,33 @@ export {
 	resolveConfig,
 } from "@/config.js";
 // Data types
-export type { HealthStatus } from "@/datatypes/index.js";
+export type {
+	Document,
+	DocumentListParams,
+	DocumentListResponse,
+	DocumentStatus,
+	DocumentUploadRequest,
+	HealthStatus,
+	Integration,
+	IntegrationCreateRequest,
+	IntegrationListParams,
+	IntegrationListResponse,
+	IntegrationProvider,
+	IntegrationStatus,
+	Member,
+	MemberInviteRequest,
+	MemberListParams,
+	MemberListResponse,
+	MemberRole,
+	MemberStatus,
+} from "@/datatypes/index.js";
 export type { ErrorResponse } from "@/errors.js";
 // Error handling
 export { ApiError, ClientError, ConfigError, NetworkError } from "@/errors.js";
 // Services
-export { StatusService } from "@/services/index.js";
+export {
+	DocumentsService,
+	IntegrationsService,
+	MembersService,
+	StatusService,
+} from "@/services/index.js";

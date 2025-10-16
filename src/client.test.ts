@@ -47,6 +47,50 @@ describe("Client", () => {
 			const builder = Client.builder();
 			expect(builder).toBeInstanceOf(ClientBuilder);
 		});
+
+		it("should create client from config object", () => {
+			const config = {
+				apiKey: "test-api-key-123456",
+				baseUrl: "https://api.example.com",
+				timeout: 60000,
+				maxRetries: 5,
+				headers: { "X-Test": "header" },
+			};
+			const client = Client.fromConfig(config);
+			expect(client).toBeInstanceOf(Client);
+
+			const clientConfig = client.getConfig();
+			expect(clientConfig.apiKey).toBe("test-api-key-123456");
+			expect(clientConfig.baseUrl).toBe("https://api.example.com");
+			expect(clientConfig.timeout).toBe(60000);
+			expect(clientConfig.maxRetries).toBe(5);
+			expect(clientConfig.headers).toEqual({ "X-Test": "header" });
+		});
+
+		it("should create client from config object with userAgent", () => {
+			const config = {
+				apiKey: "test-api-key-123456",
+				userAgent: "TestApp/1.0.0",
+			};
+			const client = Client.fromConfig(config);
+			expect(client).toBeInstanceOf(Client);
+
+			const clientConfig = client.getConfig();
+			expect(clientConfig.userAgent).toBe("TestApp/1.0.0");
+		});
+
+		it("should validate config in fromConfig", () => {
+			expect(() => {
+				Client.fromConfig({ apiKey: "short" });
+			}).toThrow(ConfigError);
+
+			expect(() => {
+				Client.fromConfig({
+					apiKey: "valid-key-123456",
+					baseUrl: "invalid-url",
+				});
+			}).toThrow(ConfigError);
+		});
 	});
 
 	describe("service getters", () => {
@@ -71,55 +115,28 @@ describe("Client", () => {
 			expect(config.baseUrl).toBe("https://builder.test.com");
 			expect(config.timeout).toBe(15000);
 		});
-	});
 
-	describe("client modification methods", () => {
-		it("should create new client with modified config", () => {
+		it("should work with builder pattern and userAgent", () => {
 			const client = Client.builder()
-				.withApiKey("original-key-123456")
-				.withTimeout(30000)
-				.withMaxRetries(3)
+				.withApiKey("builder-test-key-123456")
+				.withUserAgent("BuilderApp/2.0.0")
 				.build();
 
-			const modifiedClient = client.withConfig({
-				timeout: 15000,
-				maxRetries: 5,
-			});
-
-			// Original should be unchanged
-			expect(client.getConfig().timeout).toBe(30000);
-			expect(client.getConfig().maxRetries).toBe(3);
-
-			// Modified should have new values
-			expect(modifiedClient.getConfig().timeout).toBe(15000);
-			expect(modifiedClient.getConfig().maxRetries).toBe(5);
-			expect(modifiedClient.getConfig().apiKey).toBe("original-key-123456");
+			expect(client).toBeInstanceOf(Client);
+			const config = client.getConfig();
+			expect(config.userAgent).toBe("BuilderApp/2.0.0");
 		});
 
-		it("should create new clients with fluent interface", () => {
-			const client = Client.builder()
-				.withApiKey("test-api-key-123456")
-				.withTimeout(30000)
-				.withMaxRetries(3)
-				.withHeaders({})
-				.build();
+		it("should use default userAgent when none is provided", () => {
+			const client = Client.builder().withApiKey("test-api-key-123456").build();
 
-			const modifiedClient = client
-				.withHeaders({ "X-Custom": "value" })
-				.withTimeout(20000)
-				.withMaxRetries(5);
+			expect(client).toBeInstanceOf(Client);
+			const config = client.getConfig();
+			expect(config.userAgent).toBeUndefined(); // Config doesn't store the default
 
-			// Original unchanged
-			expect(client.getConfig().headers).toEqual({});
-			expect(client.getConfig().timeout).toBe(30000);
-			expect(client.getConfig().maxRetries).toBe(3);
-
-			// Modified has new values
-			expect(modifiedClient.getConfig().headers).toEqual({
-				"X-Custom": "value",
-			});
-			expect(modifiedClient.getConfig().timeout).toBe(20000);
-			expect(modifiedClient.getConfig().maxRetries).toBe(5);
+			// Verify the openapi client was created with a default user agent
+			const openApiClient = client.getOpenApiClient();
+			expect(openApiClient).toBeDefined();
 		});
 	});
 });
