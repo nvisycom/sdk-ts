@@ -74,15 +74,4 @@ export class IntegrationsService {
 	async delete(_integrationId: string): Promise<void> {
 		throw new Error("Not implemented");
 	}
-
-	/**
-	 * Test an integration connection
-	 * @param integrationId - Integration ID
-	 * @returns Promise that resolves with test result
-	 */
-	async test(
-		_integrationId: string,
-	): Promise<{ success: boolean; message?: string }> {
-		throw new Error("Not implemented");
-	}
 }

@@ -132,10 +132,9 @@ export function getEnvironmentVariables(): Record<string, string> {
  * Build user agent string
  */
 export function buildUserAgent(): string {
-	// In a real implementation, this would import from package.json
-	const sdkVersion = "1.0.0";
+	// TODO: Consider importing from package.json dynamically
+	const sdkVersion = "0.2.0";
 	const nodeVersion = process.version;
 	const platform = process.platform;
-
 	return `@nvisy/sdk/${sdkVersion} (${platform}; Node.js ${nodeVersion})`;
 }
