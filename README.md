@@ -1,11 +1,11 @@
 # Nvisy.com SDK for TypeScript/JavaScript
 
 [![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
-[![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk/actions/workflows/build.yml)
+[![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk-ts/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk-ts/actions/workflows/build.yml)
 [![node](https://img.shields.io/badge/Node.JS-20.0+-000000?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![typescript](https://img.shields.io/badge/TypeScript-5.9+-000000?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-Official Node.JS SDK for the Nvisy document redaction platform.
+Official TypeScript SDK for the Nvisy AI-powered document processing platform. Transform documents into usable data and apply intelligent edits with ease.
 
 ## Features
 
@@ -91,7 +91,7 @@ Set these environment variables:
 
 The SDK provides access to the following services:
 
-- **Documents** - Document upload, management, and processing
+- **Documents** - Document upload, management, extraction, and editing
 - **Members** - Team member invitation and management
 - **Integrations** - Third-party service integrations
 - **Status** - API health and status monitoring
@@ -111,5 +111,5 @@ MIT License - see [LICENSE.txt](LICENSE.txt) for details.
 ## Support
 
 - Documentation: [docs.nvisy.com](https://docs.nvisy.com)
-- Issues: [GitHub Issues](https://github.com/nvisycom/sdk/issues)
+- Issues: [GitHub Issues](https://github.com/nvisycom/sdk-ts/issues)
 - Email: [support@nvisy.com](mailto:support@nvisy.com)

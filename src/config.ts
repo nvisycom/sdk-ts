@@ -1,3 +1,8 @@
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const packageJson = require("../package.json") as { version: string };
+
 /**
  * Configuration options for the Nvisy client
  */
@@ -132,8 +137,7 @@ export function getEnvironmentVariables(): Record<string, string> {
  * Build user agent string
  */
 export function buildUserAgent(): string {
-  // TODO: Consider importing from package.json dynamically
-  const sdkVersion = "0.2.0";
+  const sdkVersion = packageJson.version;
   const nodeVersion = process.version || "unknown";
   const platform = process.platform || "unknown";
   return `@nvisy/sdk v. ${sdkVersion} (${platform}; Node.js ${nodeVersion})`;

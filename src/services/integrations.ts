@@ -1,77 +1,114 @@
-import type { Client } from "@/client.js";
+import type { ApiClient } from "@/client.js";
+import { unwrap } from "@/errors.js";
 import type {
-	Integration,
-	IntegrationCreateRequest,
-	IntegrationListParams,
-	IntegrationListResponse,
-} from "@/datatypes/integration.js";
+  Integration,
+  CreateProjectIntegration,
+  UpdateProjectIntegration,
+  UpdateIntegrationCredentials,
+  Pagination,
+} from "@/datatypes/index.js";
 
 /**
  * Service for handling integration operations
  */
 export class IntegrationsService {
-	#client: Client;
+  #api: ApiClient;
 
-	constructor(client: Client) {
-		this.#client = client;
-	}
+  constructor(api: ApiClient) {
+    this.#api = api;
+  }
 
-	/**
-	 * Get the underlying client instance
-	 * @internal
-	 */
-	get client(): Client {
-		return this.#client;
-	}
+  /**
+   * List integrations for a project
+   * @param projectId - Project ID
+   * @param pagination - Pagination parameters
+   * @returns Promise that resolves with the list of integrations
+   * @throws {ApiError} if the request fails
+   */
+  async list(projectId: string, pagination?: Pagination): Promise<Integration[]> {
+    const result = await this.#api.GET("/projects/{project_id}/integrations/", {
+      params: { path: { projectId } },
+      body: pagination ?? {},
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * Create a new integration
-	 * @param request - Integration creation request
-	 * @returns Promise that resolves with the created integration
-	 */
-	async create(_request: IntegrationCreateRequest): Promise<Integration> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Get integration details by ID
+   * @param projectId - Project ID
+   * @param integrationId - Integration ID
+   * @returns Promise that resolves with the integration details
+   * @throws {ApiError} if the request fails
+   */
+  async get(projectId: string, integrationId: string): Promise<Integration> {
+    const result = await this.#api.GET("/projects/{project_id}/integrations/{integration_id}/", {
+      params: { path: { projectId, integrationId } },
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * Get integration details by ID
-	 * @param integrationId - Integration ID
-	 * @returns Promise that resolves with the integration details
-	 */
-	async get(_integrationId: string): Promise<Integration> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Create a new integration
+   * @param projectId - Project ID
+   * @param integration - Integration creation request
+   * @returns Promise that resolves with the created integration
+   * @throws {ApiError} if the request fails
+   */
+  async create(projectId: string, integration: CreateProjectIntegration): Promise<Integration> {
+    const result = await this.#api.POST("/projects/{project_id}/integrations/", {
+      params: { path: { projectId } },
+      body: integration,
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * List integrations with optional filtering
-	 * @param params - Query parameters for filtering and pagination
-	 * @returns Promise that resolves with the integration list
-	 */
-	async list(
-		_params?: IntegrationListParams,
-	): Promise<IntegrationListResponse> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Update an existing integration
+   * @param projectId - Project ID
+   * @param integrationId - Integration ID
+   * @param updates - Integration update request
+   * @returns Promise that resolves with the updated integration
+   * @throws {ApiError} if the request fails
+   */
+  async update(projectId: string, integrationId: string, updates: UpdateProjectIntegration): Promise<Integration> {
+    const result = await this.#api.PUT("/projects/{project_id}/integrations/{integration_id}/", {
+      params: { path: { projectId, integrationId } },
+      body: updates,
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * Update an existing integration
-	 * @param integrationId - Integration ID
-	 * @param updates - Partial integration data to update
-	 * @returns Promise that resolves with the updated integration
-	 */
-	async update(
-		_integrationId: string,
-		_updates: Partial<Integration>,
-	): Promise<Integration> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Update integration credentials
+   * @param projectId - Project ID
+   * @param integrationId - Integration ID
+   * @param credentials - New credentials
+   * @returns Promise that resolves with the updated integration
+   * @throws {ApiError} if the request fails
+   */
+  async updateCredentials(
+    projectId: string,
+    integrationId: string,
+    credentials: UpdateIntegrationCredentials,
+  ): Promise<Integration> {
+    const result = await this.#api.PATCH("/projects/{project_id}/integrations/{integration_id}/credentials/", {
+      params: { path: { projectId, integrationId } },
+      body: credentials,
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * Delete an integration
-	 * @param integrationId - Integration ID
-	 * @returns Promise that resolves when the integration is deleted
-	 */
-	async delete(_integrationId: string): Promise<void> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Delete an integration
+   * @param projectId - Project ID
+   * @param integrationId - Integration ID
+   * @returns Promise that resolves when the integration is deleted
+   * @throws {ApiError} if the request fails
+   */
+  async delete(projectId: string, integrationId: string): Promise<void> {
+    const result = await this.#api.DELETE("/projects/{project_id}/integrations/{integration_id}/", {
+      params: { path: { projectId, integrationId } },
+    });
+    unwrap(result);
+  }
 }

@@ -1,27 +1,17 @@
-// Document types
-export type {
-	Document,
-	DocumentListParams,
-	DocumentListResponse,
-	DocumentStatus,
-	DocumentUploadRequest,
-} from "@/datatypes/document.js";
-// Integration types
-export type {
-	Integration,
-	IntegrationCreateRequest,
-	IntegrationListParams,
-	IntegrationListResponse,
-	IntegrationProvider,
-	IntegrationStatus,
-} from "@/datatypes/integration.js";
-// Member types
-export type {
-	Member,
-	MemberInviteRequest,
-	MemberListParams,
-	MemberListResponse,
-	MemberRole,
-	MemberStatus,
-} from "@/datatypes/member.js";
-export type { HealthStatus } from "@/datatypes/status.js";
+// Re-export all schema types
+export type * from "@/datatypes/account.js";
+export type * from "@/datatypes/api-token.js";
+export type * from "@/datatypes/auth.js";
+export type * from "@/datatypes/comment.js";
+export type * from "@/datatypes/document.js";
+export type * from "@/datatypes/error.js";
+export type * from "@/datatypes/file.js";
+export type * from "@/datatypes/integration.js";
+export type * from "@/datatypes/invite.js";
+export type * from "@/datatypes/member.js";
+export type * from "@/datatypes/pagination.js";
+export type * from "@/datatypes/pipeline.js";
+export type * from "@/datatypes/project.js";
+export type * from "@/datatypes/status.js";
+export type * from "@/datatypes/template.js";
+export type * from "@/datatypes/webhook.js";

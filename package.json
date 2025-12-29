@@ -1,96 +1,96 @@
 {
-	"name": "@nvisy/sdk",
-	"version": "0.2.0",
-	"description": "Official TypeScript SDK for Nvisy document redaction platform",
-	"type": "module",
-	"private": false,
-	"keywords": [
-		"nvisy",
-		"document",
-		"redaction",
-		"anonymization",
-		"privacy",
-		"ocr",
-		"sdk",
-		"api",
-		"typescript",
-		"client"
-	],
-	"author": "Nvisy <support@nvisy.com>",
-	"license": "MIT",
-	"homepage": "https://github.com/nvisycom/sdk#readme",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/nvisycom/sdk.git"
-	},
-	"bugs": {
-		"url": "https://github.com/nvisycom/sdk/issues"
-	},
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
-		},
-		"./client": {
-			"types": "./dist/client.d.ts",
-			"import": "./dist/client.js"
-		},
-		"./builder": {
-			"types": "./dist/builder.d.ts",
-			"import": "./dist/builder.js"
-		},
-		"./errors": {
-			"types": "./dist/errors.d.ts",
-			"import": "./dist/errors.js"
-		}
-	},
-	"files": [
-		"dist",
-		"README.md",
-		"LICENSE.txt",
-		"CHANGELOG.md",
-		"CONTRIBUTING.md"
-	],
-	"scripts": {
-		"build": "tsup",
-		"build:watch": "tsup --watch",
-		"dev": "tsup --watch",
-		"test": "vitest",
-		"test:watch": "vitest --watch",
-		"test:coverage": "vitest --coverage",
-		"test:ui": "vitest --ui",
-		"lint": "biome lint .",
-		"lint:fix": "biome lint --write .",
-		"format": "biome format --write .",
-		"format:check": "biome format .",
-		"check": "biome check .",
-		"check:fix": "biome check --write .",
-		"typecheck": "tsc --noEmit",
-		"clean": "rimraf dist",
-		"prepublishOnly": "npm run clean && npm run build && npm run test",
-		"release": "npm run prepublishOnly && npm publish"
-	},
-	"dependencies": {
-		"openapi-fetch": "^0.15.0"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.2.6",
-		"@types/node": "^24.7.2",
-		"@vitest/coverage-v8": "^3.2.4",
-		"@vitest/ui": "^3.2.4",
-		"openapi-typescript": "^7.10.1",
-		"rimraf": "^6.0.1",
-		"tsup": "^8.0.1",
-		"typescript": "^5.9.3",
-		"vitest": "^3.2.4"
-	},
-	"engines": {
-		"node": ">=20.0.0"
-	},
-	"publishConfig": {
-		"access": "public"
-	}
+  "name": "@nvisy/sdk",
+  "version": "0.2.0",
+  "description": "Official TypeScript SDK for Nvisy document processing platform",
+  "type": "module",
+  "private": false,
+  "keywords": [
+    "nvisy",
+    "document",
+    "privacy",
+    "sdk",
+    "api",
+    "typescript",
+    "client"
+  ],
+  "author": "Nvisy <support@nvisy.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/nvisycom/sdk-ts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nvisycom/sdk-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nvisycom/sdk-ts/issues"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    },
+    "./builder": {
+      "types": "./dist/builder.d.ts",
+      "import": "./dist/builder.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "import": "./dist/errors.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.txt",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build && npm run test",
+    "release": "npm run prepublishOnly && npm publish",
+    "generate": "openapi-typescript https://api.nvisy.com/openapi.json -o ./src/schema/api.d.ts",
+    "generate:local": "openapi-typescript http://127.0.0.1:8080/api/openapi.json -o ./src/schema/api.d.ts",
+    "generate:clean": "rimraf ./src/schema/"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.15.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.6",
+    "@types/node": "^24.7.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "openapi-typescript": "^7.10.1",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

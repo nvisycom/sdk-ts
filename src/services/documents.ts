@@ -1,71 +1,85 @@
-import type { Client } from "@/client.js";
-import type {
-	Document,
-	DocumentListParams,
-	DocumentListResponse,
-	DocumentUploadRequest,
-} from "@/datatypes/document.js";
+import type { ApiClient } from "@/client.js";
+import { unwrap } from "@/errors.js";
+import type { Document, CreateDocument, UpdateDocument, Pagination } from "@/datatypes/index.js";
 
 /**
  * Service for handling document operations
  */
 export class DocumentsService {
-	#client: Client;
+  #api: ApiClient;
 
-	constructor(client: Client) {
-		this.#client = client;
-	}
+  constructor(api: ApiClient) {
+    this.#api = api;
+  }
 
-	/**
-	 * Get the underlying client instance
-	 * @internal
-	 */
-	get client(): Client {
-		return this.#client;
-	}
+  /**
+   * List documents in a project
+   * @param projectId - Project ID
+   * @param pagination - Pagination parameters
+   * @returns Promise that resolves with the list of documents
+   * @throws {ApiError} if the request fails
+   */
+  async list(projectId: string, pagination?: Pagination): Promise<Document[]> {
+    const result = await this.#api.GET("/projects/{project_id}/documents", {
+      params: { path: { projectId } },
+      body: pagination ?? {},
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * Upload a new document
-	 * @param request - Document upload request
-	 * @returns Promise that resolves with the created document
-	 */
-	async upload(_request: DocumentUploadRequest): Promise<Document> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Get document details by ID
+   * @param documentId - Document ID
+   * @returns Promise that resolves with the document details
+   * @throws {ApiError} if the request fails
+   */
+  async get(documentId: string): Promise<Document> {
+    const result = await this.#api.GET("/documents/{document_id}", {
+      params: { path: { documentId } },
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * Get document details by ID
-	 * @param documentId - Document ID
-	 * @returns Promise that resolves with the document details
-	 */
-	async get(_documentId: string): Promise<Document> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Create a new document
+   * @param projectId - Project ID
+   * @param document - Document creation request
+   * @returns Promise that resolves with the created document
+   * @throws {ApiError} if the request fails
+   */
+  async create(projectId: string, document: CreateDocument): Promise<Document> {
+    const result = await this.#api.POST("/projects/{project_id}/documents", {
+      params: { path: { projectId } },
+      body: document,
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * List documents with optional filtering
-	 * @param params - Query parameters for filtering and pagination
-	 * @returns Promise that resolves with the document list
-	 */
-	async list(_params?: DocumentListParams): Promise<DocumentListResponse> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Update an existing document
+   * @param documentId - Document ID
+   * @param updates - Document update request
+   * @returns Promise that resolves with the updated document
+   * @throws {ApiError} if the request fails
+   */
+  async update(documentId: string, updates: UpdateDocument): Promise<Document> {
+    const result = await this.#api.PATCH("/documents/{document_id}", {
+      params: { path: { documentId } },
+      body: updates,
+    });
+    return unwrap(result);
+  }
 
-	/**
-	 * Delete a document
-	 * @param documentId - Document ID
-	 * @returns Promise that resolves when the document is deleted
-	 */
-	async delete(_documentId: string): Promise<void> {
-		throw new Error("Not implemented");
-	}
-
-	/**
-	 * Download document content
-	 * @param documentId - Document ID
-	 * @returns Promise that resolves with the document blob
-	 */
-	async download(_documentId: string): Promise<Blob> {
-		throw new Error("Not implemented");
-	}
+  /**
+   * Delete a document
+   * @param documentId - Document ID
+   * @returns Promise that resolves when the document is deleted
+   * @throws {ApiError} if the request fails
+   */
+  async delete(documentId: string): Promise<void> {
+    const result = await this.#api.DELETE("/documents/{document_id}", {
+      params: { path: { documentId } },
+    });
+    unwrap(result);
+  }
 }

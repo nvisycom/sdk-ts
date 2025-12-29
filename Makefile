@@ -5,13 +5,6 @@ ifneq (,$(wildcard ./.env))
 	export
 endif
 
-# Environment variables with defaults
-OPENAPI_ENDPOINT ?= https://api.nvisy.com/openapi.yaml
-OPENAPI_OUTPUT_DIR ?= openapi
-OPENAPI_FILENAME ?= nvisy-api.yaml
-GENERATED_TYPES_DIR ?= src/generated
-NODE_ENV ?= development
-
 # Make-level logger (evaluated by make; does not invoke the shell)
 define make-log
 $(info [$(shell date '+%Y-%m-%d %H:%M:%S')] [MAKE] [$(MAKECMDGOALS)] $(1))
@@ -22,7 +15,8 @@ endef
 help:
 	$(call make-log,Available targets:)
 	@echo "  clean   - Remove build artifacts and temporary files"
-	@echo "  openapi - Download OpenAPI specification and generate types"
+	@echo "  generate - Generate TypeScript types from OpenAPI specification"
+	@echo "  generate-local - Generate TypeScript types from local API server"
 
 # Clean build artifacts and temporary files
 .PHONY: clean
@@ -32,23 +26,23 @@ clean:
 	@rm -rf node_modules/.cache/
 	@rm -rf coverage/
 	@rm -rf .nyc_output/
-	@rm -rf $(OPENAPI_OUTPUT_DIR)/
-	@rm -rf $(GENERATED_TYPES_DIR)/
 	@rm -rf docs/
 	$(call make-log,Clean complete)
 
-# Download OpenAPI specification and generate types
-.PHONY: openapi
-openapi:
-	$(call make-log,Creating output directory...)
-	@mkdir -p $(OPENAPI_OUTPUT_DIR)/
-	@mkdir -p $(GENERATED_TYPES_DIR)/
-	$(call make-log,Downloading OpenAPI specification from $(OPENAPI_ENDPOINT)...)
-	@curl -f -o $(OPENAPI_OUTPUT_DIR)/$(OPENAPI_FILENAME) $(OPENAPI_ENDPOINT) || \
-		($(call make-log,Failed to download OpenAPI specification) && exit 1)
-	$(call make-log,OpenAPI specification downloaded to $(OPENAPI_OUTPUT_DIR)/$(OPENAPI_FILENAME))
-	$(call make-log,Generating TypeScript types...)
-	@npx openapi-typescript $(OPENAPI_OUTPUT_DIR)/$(OPENAPI_FILENAME) \
-		--output $(GENERATED_TYPES_DIR)/types.ts || \
-		($(call make-log,Type generation failed, continuing...) && true)
-	$(call make-log,OpenAPI download and type generation complete)
+# Generate TypeScript types from OpenAPI specification
+.PHONY: generate
+generate:
+	$(call make-log,Cleaning existing schema...)
+	@npm run generate:clean
+	$(call make-log,Generating TypeScript types from OpenAPI specification...)
+	@npm run generate
+	$(call make-log,Type generation complete)
+
+# Generate TypeScript types from local API server
+.PHONY: generate-local
+generate-local:
+	$(call make-log,Cleaning existing schema...)
+	@npm run generate:clean
+	$(call make-log,Generating TypeScript types from local API server...)
+	@npm run generate:local
+	$(call make-log,Type generation complete)
