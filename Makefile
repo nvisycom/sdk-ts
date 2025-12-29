@@ -1,4 +1,4 @@
-# Makefile for Nvisy.com SDK for Node.JS
+# Makefile for Nvisy.com SDK for TypeScript/JavaScript
 
 ifneq (,$(wildcard ./.env))
 	include .env

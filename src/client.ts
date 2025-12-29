@@ -2,8 +2,8 @@ import createClient from "openapi-fetch";
 import { ClientBuilder } from "@/builder.js";
 import {
 	type ClientConfig,
-	type ResolvedClientConfig,
 	resolveConfig,
+	type ResolvedClientConfig,
 } from "@/config.js";
 import { ConfigError } from "@/errors.js";
 import { DocumentsService } from "@/services/documents.js";
@@ -28,8 +28,8 @@ export class Client {
 	constructor(userConfig: ClientConfig) {
 		try {
 			// Validate and resolve configuration
-			ClientBuilder.fromConfig(userConfig); // Validates input
-			this.#config = resolveConfig(userConfig); // Resolves with env vars and defaults
+			ClientBuilder.fromConfig(userConfig);
+			this.#config = resolveConfig(userConfig);
 		} catch (error) {
 			if (error instanceof ConfigError) {
 				throw error;
@@ -61,8 +61,12 @@ export class Client {
 	/**
 	 * Create a new ClientBuilder for fluent configuration
 	 */
-	static builder(): ClientBuilder {
-		return new ClientBuilder();
+	static builder(apiKey?: string): ClientBuilder {
+		if (apiKey) {
+			return new ClientBuilder().withApiKey(apiKey);
+		} else {
+			return new ClientBuilder();
+		}
 	}
 
 	/**

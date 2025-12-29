@@ -1,4 +1,4 @@
-# Nvisy.com SDK for Node.JS
+# Nvisy.com SDK for TypeScript/JavaScript
 
 [![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
 [![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk/actions/workflows/build.yml)
@@ -85,14 +85,14 @@ Set these environment variables:
 | `NVISY_BASE_URL`    | Custom API endpoint URL          | No       |
 | `NVISY_MAX_TIMEOUT` | Request timeout in milliseconds  | No       |
 | `NVISY_MAX_RETRIES` | Maximum number of retry attempts | No       |
-| `NVISY_USER_AGENT`  | Custom user agent string        | No       |
+| `NVISY_USER_AGENT`  | Custom user agent string         | No       |
 
 ## Services
 
 The SDK provides access to the following services:
 
 - **Documents** - Document upload, management, and processing
-- **Members** - Team member invitation and management  
+- **Members** - Team member invitation and management
 - **Integrations** - Third-party service integrations
 - **Status** - API health and status monitoring
 
