@@ -40,14 +40,8 @@ export default defineConfig({
 			},
 		},
 
-		// Test execution configuration
-		pool: "threads", // Use worker threads for parallel test execution
-		poolOptions: {
-			threads: {
-				minThreads: 1,
-				maxThreads: 4,
-			},
-		},
+		// Test execution configuration (Vitest 4+)
+		maxWorkers: 4,
 
 		// Test timeout configuration
 		testTimeout: 10000, // 10 seconds per test
