@@ -6,7 +6,6 @@ Thumbs.db
 .vs/
 .vscode/
 .idea/
-.fleet/
 .zed/
 
 # Javascript
@@ -37,3 +36,4 @@ logs/
 # Other
 .ignore*/
 LLM.md
+.claude/
