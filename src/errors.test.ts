@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ErrorResponse } from "./errors.js";
-import { ApiError, ConfigError, NetworkError } from "./errors.js";
+import { ApiError, ConfigError, NetworkError } from "@/errors.js";
 
 describe("ConfigError", () => {
 	it("should create factory errors with proper context", () => {
@@ -34,22 +33,45 @@ describe("NetworkError", () => {
 });
 
 describe("ApiError", () => {
-	it("should handle rate limiting with retry information", () => {
-		const withRetryAfter = ApiError.rateLimited(60, "req-789");
-		expect(withRetryAfter.statusCode).toBe(429);
-		expect(withRetryAfter.errorResponse?.name).toBe("RateLimitError");
-		expect(withRetryAfter.errorResponse?.context).toBe("retryAfter: 60");
+	it("should create ApiError from ErrorResponse", () => {
+		const error = new ApiError(
+			{
+				name: "ValidationError",
+				message: "Field is required",
+				resource: "account",
+				suggestion: "Please provide a valid email",
+				validationErrors: [
+					{ field: "email", code: "required", message: "Email is required" },
+				],
+			},
+			400,
+		);
 
-		const withoutRetryAfter = ApiError.rateLimited();
-		expect(withoutRetryAfter.statusCode).toBe(429);
-		expect(withoutRetryAfter.errorResponse?.context).toBe("");
+		expect(error.name).toBe("ValidationError");
+		expect(error.message).toBe("Field is required");
+		expect(error.resource).toBe("account");
+		expect(error.suggestion).toBe("Please provide a valid email");
+		expect(error.validationErrors).toHaveLength(1);
+		expect(error.statusCode).toBe(400);
 	});
 
 	it("should determine retry logic based on HTTP status", () => {
-		const clientError = new ApiError("Bad Request", 400);
-		const serverError = new ApiError("Server Error", 500);
-		const timeoutError = new ApiError("Timeout", 408);
-		const rateLimitError = new ApiError("Rate Limited", 429);
+		const clientError = new ApiError(
+			{ name: "BadRequest", message: "Bad Request" },
+			400,
+		);
+		const serverError = new ApiError(
+			{ name: "ServerError", message: "Server Error" },
+			500,
+		);
+		const timeoutError = new ApiError(
+			{ name: "Timeout", message: "Timeout" },
+			408,
+		);
+		const rateLimitError = new ApiError(
+			{ name: "RateLimit", message: "Rate Limited" },
+			429,
+		);
 
 		expect(clientError.isRetryable()).toBe(false);
 		expect(serverError.isRetryable()).toBe(true);
@@ -57,31 +79,37 @@ describe("ApiError", () => {
 		expect(rateLimitError.isRetryable()).toBe(true);
 	});
 
-	it("should calculate retry delays with business logic", () => {
-		const nonRetryable = new ApiError("Bad Request", 400);
-		const rateLimited = ApiError.rateLimited(30);
-		const serverError = new ApiError("Server Error", 500);
+	it("should correctly identify client vs server errors", () => {
+		const clientError = new ApiError(
+			{ name: "NotFound", message: "Not Found" },
+			404,
+		);
+		const serverError = new ApiError(
+			{ name: "ServerError", message: "Internal Server Error" },
+			500,
+		);
 
-		expect(nonRetryable.getRetryDelay()).toBe(null);
-		expect(rateLimited.getRetryDelay()).toBe(30000); // Rate limit specific delay
-		expect(serverError.getRetryDelay()).toBe(1000); // Default server error delay
+		expect(clientError.isClientError()).toBe(true);
+		expect(clientError.isServerError()).toBe(false);
+		expect(serverError.isClientError()).toBe(false);
+		expect(serverError.isServerError()).toBe(true);
 	});
 
-	it("should create errors from HTTP responses", () => {
-		const mockErrorResponse: ErrorResponse = {
-			name: "ValidationError",
-			message: "Field is required",
-			context: "field: email",
-		};
+	it("should serialize to JSON matching ErrorResponse", () => {
+		const error = new ApiError(
+			{
+				name: "ValidationError",
+				message: "Invalid input",
+				resource: "document",
+				suggestion: "Check your input",
+			},
+			422,
+		);
 
-		const response = new Response(null, {
-			status: 404,
-			statusText: "Not Found",
-		});
-		const error = ApiError.fromResponse(response, mockErrorResponse, "req-123");
-
-		expect(error.statusCode).toBe(404);
-		expect(error.message).toBe("Field is required");
-		expect(error.requestId).toBe("req-123");
+		const json = error.toJSON();
+		expect(json.name).toBe("ValidationError");
+		expect(json.message).toBe("Invalid input");
+		expect(json.resource).toBe("document");
+		expect(json.suggestion).toBe("Check your input");
 	});
 });

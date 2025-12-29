@@ -1,27 +1,31 @@
 {
 	"name": "@nvisy/sdk",
-	"version": "0.1.0",
-	"description": "Official TypeScript SDK for Nvisy document redaction platform",
+	"version": "0.2.0",
+	"description": "Official TypeScript SDK for Nvisy document processing platform",
+	"type": "module",
+	"private": false,
 	"keywords": [
 		"nvisy",
 		"document",
-		"redaction",
+		"privacy",
 		"sdk",
 		"api",
 		"typescript",
 		"client"
 	],
-	"homepage": "https://github.com/nvisycom/sdk#readme",
-	"bugs": {
-		"url": "https://github.com/nvisycom/sdk/issues"
-	},
+	"author": "Nvisy <support@nvisy.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/nvisycom/sdk-ts#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/nvisycom/sdk.git"
+		"url": "git+https://github.com/nvisycom/sdk-ts.git"
 	},
-	"license": "MIT",
-	"author": "Nvisy <support@nvisy.com>",
-	"type": "module",
+	"bugs": {
+		"url": "https://github.com/nvisycom/sdk-ts/issues"
+	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
@@ -40,9 +44,6 @@
 			"import": "./dist/errors.js"
 		}
 	},
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
 	"files": [
 		"dist",
 		"README.md",
@@ -67,7 +68,10 @@
 		"typecheck": "tsc --noEmit",
 		"clean": "rimraf dist",
 		"prepublishOnly": "npm run clean && npm run build && npm run test",
-		"release": "npm run prepublishOnly && npm publish"
+		"release": "npm run prepublishOnly && npm publish",
+		"generate": "openapi-typescript https://api.nvisy.com/openapi.json -o ./src/schema/api.d.ts",
+		"generate:local": "openapi-typescript http://127.0.0.1:8080/api/openapi.json -o ./src/schema/api.d.ts",
+		"generate:clean": "rimraf ./src/schema/"
 	},
 	"dependencies": {
 		"openapi-fetch": "^0.15.0"

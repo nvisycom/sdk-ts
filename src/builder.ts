@@ -1,7 +1,7 @@
-import { Client } from "./client.js";
-import type { ClientConfig } from "./config.js";
-import { loadConfigFromEnv } from "./config.js";
-import { ConfigError } from "./errors.js";
+import { Client } from "@/client.js";
+import type { ClientConfig } from "@/config.js";
+import { loadConfigFromEnv } from "@/config.js";
+import { ConfigError } from "@/errors.js";
 
 /**
  * Reserved headers that cannot be overridden
@@ -22,6 +22,14 @@ export class ClientBuilder {
 	}
 
 	/**
+	 * Set the API key for testing purposes
+	 * @internal
+	 */
+	static fromTestingApiKey(): ClientBuilder {
+		return ClientBuilder.fromApiKey("test-key-123");
+	}
+
+	/**
 	 * Create a ClientBuilder instance from environment variables
 	 */
 	static fromEnvironment(): ClientBuilder {
@@ -36,17 +44,42 @@ export class ClientBuilder {
 		if (envConfig.baseUrl) {
 			builder.withBaseUrl(envConfig.baseUrl);
 		}
-		if (envConfig.timeout) {
-			builder.withTimeout(envConfig.timeout);
-		}
-		if (envConfig.maxRetries !== undefined) {
-			builder.withMaxRetries(envConfig.maxRetries);
-		}
 		if (envConfig.headers) {
 			builder.withHeaders(envConfig.headers);
 		}
+		if (envConfig.userAgent) {
+			builder.withUserAgent(envConfig.userAgent);
+		}
 
 		return builder;
+	}
+
+	/**
+	 * Create a ClientBuilder instance from a configuration object
+	 */
+	static fromConfig(config: ClientConfig): ClientBuilder {
+		const builder = new ClientBuilder().withApiKey(config.apiKey);
+
+		if (config.baseUrl) {
+			builder.withBaseUrl(config.baseUrl);
+		}
+		if (config.headers) {
+			builder.withHeaders(config.headers);
+		}
+		if (config.userAgent) {
+			builder.withUserAgent(config.userAgent);
+		}
+
+		return builder;
+	}
+
+	/**
+	 * Set a custom user agent string
+	 */
+	withUserAgent(userAgent: string): this {
+		this.#validateString("userAgent", userAgent);
+		this.#config.userAgent = userAgent;
+		return this;
 	}
 
 	/**
@@ -78,24 +111,6 @@ export class ClientBuilder {
 		this.#validateString("baseUrl", baseUrl);
 		this.#validateUrl(baseUrl);
 		this.#config.baseUrl = baseUrl;
-		return this;
-	}
-
-	/**
-	 * Set the request timeout in milliseconds
-	 */
-	withTimeout(timeoutMs: number): this {
-		this.#validateInteger("timeout", timeoutMs, 1000, 300_000);
-		this.#config.timeout = timeoutMs;
-		return this;
-	}
-
-	/**
-	 * Set the maximum number of retry attempts
-	 */
-	withMaxRetries(maxRetries: number): this {
-		this.#validateInteger("maxRetries", maxRetries, 0, 5);
-		this.#config.maxRetries = maxRetries;
 		return this;
 	}
 
@@ -152,24 +167,6 @@ export class ClientBuilder {
 	#validateString(fieldName: string, value: string): void {
 		if (!value || typeof value !== "string" || value.trim().length === 0) {
 			throw ConfigError.invalidField(fieldName, "must be a non-empty string");
-		}
-	}
-
-	/**
-	 * Validate integer field with range
-	 */
-	#validateInteger(
-		fieldName: string,
-		value: number,
-		min: number,
-		max: number,
-	): void {
-		if (!Number.isInteger(value) || value < min) {
-			throw ConfigError.invalidField(fieldName, `must be an integer >= ${min}`);
-		}
-
-		if (value > max) {
-			throw ConfigError.invalidField(fieldName, `must not exceed ${max}`);
 		}
 	}
 

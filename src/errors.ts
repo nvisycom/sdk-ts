@@ -1,24 +1,48 @@
+import type { ErrorResponse } from "@/datatypes/index.js";
+
+// Re-export ErrorResponse type for convenience
+export type { ErrorResponse } from "@/datatypes/index.js";
+
 /**
- * Error response structure from server
+ * Helper to unwrap openapi-fetch response and throw ApiError on error
  */
-export interface ErrorResponse {
-	/** Error type/name */
-	name: string;
-	/** Human-readable error message */
-	message: string;
-	/** Additional error context */
-	context: string;
+export function unwrap<T>(result: {
+	data?: T;
+	error?: ErrorResponse;
+	response: Response;
+}): T {
+	if (result.error) {
+		throw new ApiError(result.error, result.response.status);
+	}
+	return result.data as T;
 }
 
 /**
- * Abstract base error class for all Nvisy SDK errors
+ * API error - thrown when server responds with an error
+ * Extends the schema's ErrorResponse with additional context
  */
-export abstract class ClientError extends Error {
+export class ApiError extends Error implements ErrorResponse {
+	/** The error name/type identifier */
 	public readonly name: string;
+	/** User-friendly error message safe for client display */
+	public readonly message: string;
+	/** The resource that the error relates to */
+	public readonly resource?: string | null;
+	/** Helpful suggestion for resolving the error */
+	public readonly suggestion?: string | null;
+	/** Validation error details for field-specific errors */
+	public readonly validationErrors?: ErrorResponse["validationErrors"];
+	/** HTTP status code */
+	public readonly statusCode: number;
 
-	constructor(message: string) {
-		super(message);
-		this.name = this.constructor.name;
+	constructor(response: ErrorResponse, statusCode: number) {
+		super(response.message);
+		this.name = response.name;
+		this.message = response.message;
+		this.resource = response.resource;
+		this.suggestion = response.suggestion;
+		this.validationErrors = response.validationErrors;
+		this.statusCode = statusCode;
 
 		// Maintains proper stack trace for where our error was thrown (only available on V8)
 		if (Error.captureStackTrace) {
@@ -27,14 +51,57 @@ export abstract class ClientError extends Error {
 	}
 
 	/**
-	 * Convert error to JSON representation
+	 * Check if error is a client error (4xx)
+	 */
+	isClientError(): boolean {
+		return this.statusCode >= 400 && this.statusCode < 500;
+	}
+
+	/**
+	 * Check if error is a server error (5xx)
+	 */
+	isServerError(): boolean {
+		return this.statusCode >= 500;
+	}
+
+	/**
+	 * Check if error is retryable based on HTTP status
+	 */
+	isRetryable(): boolean {
+		return (
+			this.statusCode >= 500 || // Server errors
+			this.statusCode === 408 || // Request timeout
+			this.statusCode === 429 // Rate limited
+		);
+	}
+
+	/**
+	 * Convert error to ErrorResponse
 	 */
 	toJSON(): ErrorResponse {
 		return {
 			name: this.name,
 			message: this.message,
-			context: "",
+			resource: this.resource,
+			suggestion: this.suggestion,
+			validationErrors: this.validationErrors,
 		};
+	}
+}
+
+/**
+ * Abstract base error class for SDK configuration errors
+ */
+export abstract class ClientError extends Error {
+	public readonly name: string;
+
+	constructor(message: string) {
+		super(message);
+		this.name = this.constructor.name;
+
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, this.constructor);
+		}
 	}
 }
 
@@ -88,20 +155,6 @@ export class ConfigError extends ClientError {
 			reason: "This field is required",
 		});
 	}
-
-	/**
-	 * Convert error to JSON representation
-	 */
-	toJSON(): ErrorResponse {
-		return {
-			name: this.name,
-			message: this.message,
-			context:
-				this.field || this.reason
-					? `field: ${this.field}, reason: ${this.reason}`
-					: "",
-		};
-	}
 }
 
 /**
@@ -142,147 +195,5 @@ export class NetworkError extends ClientError {
 	 */
 	static dnsResolution(hostname: string): NetworkError {
 		return new NetworkError(`Failed to resolve hostname: ${hostname}`);
-	}
-
-	/**
-	 * Convert error to JSON representation
-	 */
-	toJSON(): ErrorResponse {
-		return {
-			name: this.name,
-			message: this.message,
-			context: this.cause ? `cause: ${this.cause.message}` : "",
-		};
-	}
-}
-
-/**
- * API error - thrown when server responds with an error
- */
-export class ApiError extends ClientError {
-	/** Error response from server */
-	public readonly errorResponse?: ErrorResponse;
-	/** HTTP status code */
-	public readonly statusCode: number;
-	/** Request ID for debugging */
-	public readonly requestId?: string;
-
-	constructor(
-		message: string,
-		statusCode: number,
-		options?: {
-			errorResponse?: ErrorResponse;
-			requestId?: string;
-		},
-	) {
-		super(message);
-		this.statusCode = statusCode;
-		this.errorResponse = options?.errorResponse;
-		this.requestId = options?.requestId;
-	}
-
-	/**
-	 * Create error from HTTP response
-	 */
-	static fromResponse(
-		response: Response,
-		errorData?: ErrorResponse,
-		requestId?: string,
-	): ApiError {
-		const message =
-			errorData?.message || `HTTP ${response.status}: ${response.statusText}`;
-
-		return new ApiError(message, response.status, {
-			errorResponse: errorData,
-			requestId,
-		});
-	}
-
-	/**
-	 * Create error for rate limiting
-	 */
-	static rateLimited(retryAfter?: number, requestId?: string): ApiError {
-		const message = retryAfter
-			? `Rate limited. Retry after ${retryAfter} seconds`
-			: "Rate limited";
-
-		return new ApiError(message, 429, {
-			requestId,
-			errorResponse: {
-				name: "RateLimitError",
-				message,
-				context: retryAfter ? `retryAfter: ${retryAfter}` : "",
-			},
-		});
-	}
-
-	/**
-	 * Check if error is a client error (4xx)
-	 */
-	isClientError(): boolean {
-		return this.statusCode
-			? this.statusCode >= 400 && this.statusCode < 500
-			: false;
-	}
-
-	/**
-	 * Check if error is a server error (5xx)
-	 */
-	isServerError(): boolean {
-		return this.statusCode ? this.statusCode >= 500 : false;
-	}
-
-	/**
-	 * Check if error is retryable based on HTTP status
-	 */
-	isRetryable(): boolean {
-		if (!this.statusCode) return false;
-
-		// Retry on server errors and specific client errors
-		return (
-			this.statusCode >= 500 || // Server errors
-			this.statusCode === 408 || // Request timeout
-			this.statusCode === 429 // Rate limited
-		);
-	}
-
-	/**
-	 * Get retry delay in milliseconds (returns null if not retryable)
-	 */
-	getRetryDelay(): number | null {
-		if (!this.isRetryable()) return null;
-
-		// For rate limiting, check if we have retry-after info
-		if (this.statusCode === 429 && this.errorResponse?.context) {
-			const match = this.errorResponse.context.match(/retryAfter: (\d+)/);
-			if (match) {
-				const retryAfter = parseInt(match[1], 10);
-				return retryAfter * 1000; // Convert seconds to milliseconds
-			}
-		}
-
-		// Default delays based on error type
-		if (this.statusCode >= 500) {
-			return 1000; // 1 second for server errors
-		}
-
-		return 1000; // Default 1 second
-	}
-
-	/**
-	 * Convert error to JSON representation
-	 */
-	toJSON(): ErrorResponse {
-		return {
-			name: this.name,
-			message: this.message,
-			context: `statusCode: ${this.statusCode}${
-				this.requestId ? `, requestId: ${this.requestId}` : ""
-			}${
-				this.errorResponse
-					? `, errorResponse: ${JSON.stringify(this.errorResponse)}`
-					: ""
-			}`,
-		};
 	}
 }

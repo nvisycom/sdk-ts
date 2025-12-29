@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { ClientBuilder } from "./builder.js";
-import { Client } from "./client.js";
-import { ConfigError } from "./errors.js";
+import { ClientBuilder } from "@/builder.js";
+import { Client } from "@/client.js";
+import { ConfigError } from "@/errors.js";
 
 describe("ClientBuilder", () => {
 	const validApiKey = "test-api-key-123456";
@@ -12,10 +12,9 @@ describe("ClientBuilder", () => {
 	beforeAll(() => {
 		// Save original environment variables
 		originalEnv = {
-			NVISY_API_KEY: process.env.NVISY_API_KEY,
+			NVISY_API_TOKEN: process.env.NVISY_API_TOKEN,
 			NVISY_BASE_URL: process.env.NVISY_BASE_URL,
-			NVISY_TIMEOUT: process.env.NVISY_TIMEOUT,
-			NVISY_MAX_RETRIES: process.env.NVISY_MAX_RETRIES,
+			NVISY_USER_AGENT: process.env.NVISY_USER_AGENT,
 		};
 	});
 
@@ -42,6 +41,42 @@ describe("ClientBuilder", () => {
 				ConfigError,
 			);
 		});
+
+		it("should create builder from config object", () => {
+			const config = {
+				apiKey: validApiKey,
+				baseUrl: "https://api.example.com",
+				headers: { "X-Test": "header" },
+			};
+			const builder = ClientBuilder.fromConfig(config);
+			expect(builder).toBeInstanceOf(ClientBuilder);
+
+			const clientConfig = builder.getConfig();
+			expect(clientConfig.apiKey).toBe(validApiKey);
+			expect(clientConfig.baseUrl).toBe("https://api.example.com");
+			expect(clientConfig.headers).toEqual({ "X-Test": "header" });
+		});
+
+		it("should create builder from config object with userAgent", () => {
+			const config = {
+				apiKey: validApiKey,
+				userAgent: "TestApp/1.0.0",
+			};
+			const builder = ClientBuilder.fromConfig(config);
+			expect(builder).toBeInstanceOf(ClientBuilder);
+
+			const clientConfig = builder.getConfig();
+			expect(clientConfig.userAgent).toBe("TestApp/1.0.0");
+		});
+
+		it("should validate API key in fromConfig method", () => {
+			expect(() => ClientBuilder.fromConfig({ apiKey: "short" })).toThrow(
+				ConfigError,
+			);
+			expect(() =>
+				ClientBuilder.fromConfig({ apiKey: "invalid chars!" }),
+			).toThrow(ConfigError);
+		});
 	});
 
 	describe("validation", () => {
@@ -53,12 +88,6 @@ describe("ClientBuilder", () => {
 			expect(() => builder.withBaseUrl("ftp://invalid-protocol.com")).toThrow(
 				ConfigError,
 			);
-
-			// Range validations
-			expect(() => builder.withTimeout(500)).toThrow(ConfigError);
-			expect(() => builder.withTimeout(400_000)).toThrow(ConfigError);
-			expect(() => builder.withMaxRetries(-1)).toThrow(ConfigError);
-			expect(() => builder.withMaxRetries(15)).toThrow(ConfigError);
 
 			// Header validation
 			expect(() => builder.withHeaders({ "": "value" })).toThrow(ConfigError);
@@ -77,7 +106,6 @@ describe("ClientBuilder", () => {
 		it("should build client with valid configuration", () => {
 			const client = ClientBuilder.fromApiKey(validApiKey)
 				.withBaseUrl("https://custom.api.com")
-				.withTimeout(15000)
 				.build();
 
 			expect(client).toBeInstanceOf(Client);
@@ -88,8 +116,6 @@ describe("ClientBuilder", () => {
 		it("should support method chaining", () => {
 			const client = ClientBuilder.fromApiKey(validApiKey)
 				.withBaseUrl("https://api.example.com")
-				.withTimeout(20000)
-				.withMaxRetries(5)
 				.withHeaders({ "X-Custom": "test" })
 				.withHeader("X-Another", "value")
 				.withHeaders({ "X-More": "data" })
@@ -97,15 +123,31 @@ describe("ClientBuilder", () => {
 
 			expect(client).toBeInstanceOf(Client);
 		});
+
+		it("should support withUserAgent method", () => {
+			const builder =
+				ClientBuilder.fromApiKey(validApiKey).withUserAgent(
+					"MyCustomApp/2.0.0",
+				);
+
+			const config = builder.getConfig();
+			expect(config.userAgent).toBe("MyCustomApp/2.0.0");
+		});
+
+		it("should validate userAgent string", () => {
+			const builder = ClientBuilder.fromApiKey(validApiKey);
+
+			expect(() => builder.withUserAgent("")).toThrow(ConfigError);
+			expect(() => builder.withUserAgent("   ")).toThrow(ConfigError);
+		});
 	});
 
 	describe("environment variable support", () => {
 		it("should handle missing environment variable gracefully", () => {
 			// Clear all relevant environment variables for this test
-			delete process.env.NVISY_API_KEY;
+			delete process.env.NVISY_API_TOKEN;
 			delete process.env.NVISY_BASE_URL;
-			delete process.env.NVISY_TIMEOUT;
-			delete process.env.NVISY_MAX_RETRIES;
+			delete process.env.NVISY_USER_AGENT;
 
 			expect(() => {
 				ClientBuilder.fromEnvironment();
@@ -114,36 +156,32 @@ describe("ClientBuilder", () => {
 
 		it("should create builder from environment variables", () => {
 			// Set up test environment variables
-			process.env.NVISY_API_KEY = "env-test-key-123456";
+			process.env.NVISY_API_TOKEN = "env-test-key-123456";
 			process.env.NVISY_BASE_URL = "https://api.test.nvisy.com";
-			process.env.NVISY_TIMEOUT = "15000";
-			process.env.NVISY_MAX_RETRIES = "5";
+			process.env.NVISY_USER_AGENT = "EnvApp/1.0.0";
 
 			const client = ClientBuilder.fromEnvironment().build();
 			const config = client.getConfig();
 
 			expect(config.apiKey).toBe("env-test-key-123456");
 			expect(config.baseUrl).toBe("https://api.test.nvisy.com");
-			expect(config.timeout).toBe(15000);
-			expect(config.maxRetries).toBe(5);
+			expect(config.userAgent).toBe("EnvApp/1.0.0");
 		});
 
 		it("should support additional configuration after fromEnvironment", () => {
 			// Set minimal environment
-			process.env.NVISY_API_KEY = "env-key-123456";
+			process.env.NVISY_API_TOKEN = "env-key-123456";
 			delete process.env.NVISY_BASE_URL;
-			delete process.env.NVISY_TIMEOUT;
+			delete process.env.NVISY_USER_AGENT;
 
 			const client = ClientBuilder.fromEnvironment()
 				.withBaseUrl("https://override.example.com")
-				.withTimeout(25000)
 				.withHeaders({ "X-Custom": "test" })
 				.build();
 
 			const config = client.getConfig();
 			expect(config.apiKey).toBe("env-key-123456");
 			expect(config.baseUrl).toBe("https://override.example.com");
-			expect(config.timeout).toBe(25000);
 			expect(config.headers).toEqual({ "X-Custom": "test" });
 		});
 	});

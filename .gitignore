@@ -6,14 +6,7 @@ Thumbs.db
 .vs/
 .vscode/
 .idea/
-.fleet/
 .zed/
-
-# Rust
-debug/
-target/
-**/*.rs.bk
-*.pdb
 
 # Javascript
 test-results/
@@ -43,3 +36,4 @@ logs/
 # Other
 .ignore*/
 LLM.md
+.claude/

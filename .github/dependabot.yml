@@ -16,6 +16,14 @@ updates:
       prefix-development: "chore(deps-dev)"
     rebase-strategy: "auto"
     versioning-strategy: "increase"
+    # Group patch and minor updates together to reduce PR noise
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   # Version updates for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -30,3 +38,8 @@ updates:
       - "chore"
     commit-message:
       prefix: "chore(actions)"
+    # Group all GitHub Actions updates together to reduce PR noise
+    groups:
+      github-actions:
+        patterns:
+          - "*"
