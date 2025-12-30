@@ -3,9 +3,9 @@ import { ApiError, ConfigError, NetworkError } from "@/errors.js";
 
 describe("ConfigError", () => {
 	it("should create factory errors with proper context", () => {
-		const missingError = ConfigError.missingApiKey();
-		expect(missingError.field).toBe("apiKey");
-		expect(missingError.message).toContain("API key is required");
+		const missingError = ConfigError.missingApiToken();
+		expect(missingError.field).toBe("apiToken");
+		expect(missingError.message).toContain("API token is required");
 
 		const invalidError = ConfigError.invalidField(
 			"baseUrl",
@@ -22,13 +22,11 @@ describe("ConfigError", () => {
 
 describe("NetworkError", () => {
 	it("should create network errors with appropriate messages", () => {
-		const timeoutError = NetworkError.timeout(5000);
-		expect(timeoutError.message).toBe("Request timed out after 5000ms");
+		const connectionError = NetworkError.connection("Connection refused");
+		expect(connectionError.message).toBe("Connection refused");
 
-		const dnsError = NetworkError.dnsResolution("api.example.com");
-		expect(dnsError.message).toBe(
-			"Failed to resolve hostname: api.example.com",
-		);
+		const abortedError = NetworkError.aborted();
+		expect(abortedError.message).toBe("Request was aborted");
 	});
 });
 

@@ -11,3 +11,6 @@ export type DownloadMultipleFilesRequest =
 export type DownloadArchivedFilesRequest =
 	Schemas["DownloadArchivedFilesRequest"];
 export type ArchiveFormat = Schemas["ArchiveFormat"];
+export type ListFilesQuery = Schemas["ListFilesQuery"];
+export type FileFormat = Schemas["FileFormat"];
+export type FileSortField = Schemas["FileSortField"];

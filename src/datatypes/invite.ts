@@ -9,3 +9,6 @@ export type GenerateInviteCode = Schemas["GenerateInviteCode"];
 export type InviteCode = Schemas["InviteCode"];
 export type InviteStatus = Schemas["InviteStatus"];
 export type InviteExpiration = Schemas["InviteExpiration"];
+export type ListInvitesQuery = Schemas["ListInvitesQuery"];
+export type InviteSortField = Schemas["InviteSortField"];
+export type SortOrder = Schemas["SortOrder"];

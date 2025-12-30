@@ -9,7 +9,6 @@ Official TypeScript SDK for the Nvisy AI-powered document processing platform. T
 
 - Modern ES2022+ JavaScript target
 - Full TypeScript support with strict typing
-- Flexible configuration via a config object or builder pattern
 - Built-in environment variable support
 - Individual module exports for optimal bundling
 
@@ -21,15 +20,26 @@ npm install @nvisy/sdk
 
 ## Usage
 
-### Direct Configuration
+### Basic Usage
 
-Create a client by passing configuration options directly to the constructor:
+Create a client with your API token:
+
+```typescript
+import { Client } from "@nvisy/sdk";
+
+const client = new Client({ apiToken: "your-api-token" });
+
+const account = await client.account.get();
+const projects = await client.projects.list();
+```
+
+### Configuration Options
 
 ```typescript
 import { Client } from "@nvisy/sdk";
 
 const client = new Client({
-  apiKey: "your-api-key", // Required: 10+ chars, alphanumeric with _ and -
+  apiToken: "your-api-token", // Required
   baseUrl: "https://api.nvisy.com", // Optional: API endpoint (default shown)
   userAgent: "MyApp/1.0.0", // Optional: custom user agent
   headers: { // Optional: custom headers
@@ -37,50 +47,6 @@ const client = new Client({
   },
 });
 ```
-
-### Builder Pattern
-
-Use the fluent builder API for more readable configuration:
-
-```typescript
-import { Client } from "@nvisy/sdk";
-
-const client = Client.builder()
-  .withApiKey("your-api-key") // Required: 10+ chars, alphanumeric with _ and -
-  .withBaseUrl("https://api.nvisy.com") // Optional: API endpoint (default shown)
-  .withUserAgent("MyApp/1.0.0") // Optional: custom user agent
-  .withHeader("X-Custom-Header", "value") // Optional: single custom header
-  .withHeaders({ "X-Another": "header" }) // Optional: multiple custom headers
-  .build();
-```
-
-### From Environment Variables
-
-Load configuration from environment variables:
-
-```typescript
-import { Client, ClientBuilder } from "@nvisy/sdk";
-
-// Using builder pattern from environment (allows additional configuration)
-const client = ClientBuilder.fromEnvironment()
-  .withHeader("X-Custom", "value") // Override or add to env config
-  .build();
-
-// Or using Client directly
-const client = Client.fromEnvironment();
-```
-
-Set these environment variables:
-
-| Variable           | Description                | Required |
-| ------------------ | -------------------------- | -------- |
-| `NVISY_API_TOKEN`  | API key for authentication | Yes      |
-| `NVISY_BASE_URL`   | Custom API endpoint URL    | No       |
-| `NVISY_USER_AGENT` | Custom user agent string   | No       |
-
-## Services
-
-The SDK provides full API coverage with services for all endpoints including account management, projects, documents, files, members, invites, integrations, pipelines, templates, webhooks, comments, and status monitoring.
 
 ## Changelog
 

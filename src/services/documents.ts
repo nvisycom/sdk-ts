@@ -5,7 +5,6 @@ import type {
 	Pagination,
 	UpdateDocument,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling document operations
@@ -18,18 +17,20 @@ export class DocumentsService {
 	}
 
 	/**
-	 * List documents in a project
-	 * @param projectId - Project ID
-	 * @param pagination - Pagination parameters
+	 * List documents in a workspace
+	 * @param workspaceId - Workspace ID
+	 * @param query - Optional query parameters (offset, limit)
 	 * @returns Promise that resolves with the list of documents
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(projectId: string, pagination?: Pagination): Promise<Document[]> {
-		const result = await this.#api.GET("/projects/{project_id}/documents", {
-			params: { path: { projectId } },
-			body: pagination ?? {},
-		});
-		return unwrap(result);
+	async list(workspaceId: string, query?: Pagination): Promise<Document[]> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspace_id}/documents",
+			{
+				params: { path: { workspaceId }, query },
+			},
+		);
+		return data!;
 	}
 
 	/**
@@ -39,25 +40,31 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(documentId: string): Promise<Document> {
-		const result = await this.#api.GET("/documents/{document_id}", {
+		const { data } = await this.#api.GET("/documents/{document_id}", {
 			params: { path: { documentId } },
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
 	 * Create a new document
-	 * @param projectId - Project ID
+	 * @param workspaceId - Workspace ID
 	 * @param document - Document creation request
 	 * @returns Promise that resolves with the created document
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(projectId: string, document: CreateDocument): Promise<Document> {
-		const result = await this.#api.POST("/projects/{project_id}/documents", {
-			params: { path: { projectId } },
-			body: document,
-		});
-		return unwrap(result);
+	async create(
+		workspaceId: string,
+		document: CreateDocument,
+	): Promise<Document> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspace_id}/documents",
+			{
+				params: { path: { workspaceId } },
+				body: document,
+			},
+		);
+		return data!;
 	}
 
 	/**
@@ -68,11 +75,11 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async update(documentId: string, updates: UpdateDocument): Promise<Document> {
-		const result = await this.#api.PATCH("/documents/{document_id}", {
+		const { data } = await this.#api.PATCH("/documents/{document_id}", {
 			params: { path: { documentId } },
 			body: updates,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -82,9 +89,8 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(documentId: string): Promise<void> {
-		const result = await this.#api.DELETE("/documents/{document_id}", {
+		await this.#api.DELETE("/documents/{document_id}", {
 			params: { path: { documentId } },
 		});
-		unwrap(result);
 	}
 }

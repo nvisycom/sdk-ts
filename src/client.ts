@@ -1,194 +1,305 @@
+/**
+ * @fileoverview Main client for the Nvisy SDK.
+ *
+ * This module exports the {@link Client} class, which is the primary entry point
+ * for interacting with the Nvisy document processing API.
+ *
+ * @module client
+ *
+ * @example
+ * ```typescript
+ * const client = new Client({ apiToken: "your-api-token" });
+ * const account = await client.account.get();
+ * ```
+ */
+
 import createClient, { type Client as OpenApiClient } from "openapi-fetch";
-import { ClientBuilder } from "@/builder.js";
-import {
-	type ClientConfig,
-	type ResolvedClientConfig,
-	resolveConfig,
-} from "@/config.js";
+import { type ClientConfig, DEFAULTS } from "@/config.js";
 import { ConfigError } from "@/errors.js";
+import { errorMiddleware } from "@/middleware/index.js";
 import type { paths } from "@/schema/api.js";
 import {
 	AccountService,
 	ApiTokensService,
+	AuthService,
 	CommentsService,
 	DocumentsService,
 	FilesService,
 	IntegrationsService,
 	InvitesService,
 	MembersService,
-	PipelinesService,
-	ProjectsService,
 	StatusService,
-	TemplatesService,
 	WebhooksService,
+	WorkspacesService,
 } from "@/services/index.js";
 
-/** Typed openapi-fetch client for the Nvisy API */
+/**
+ * Typed openapi-fetch client for the Nvisy API.
+ *
+ * This type represents the low-level HTTP client configured with the Nvisy API schema.
+ * It's exposed via {@link Client.api} for advanced use cases requiring direct API access.
+ */
 export type ApiClient = OpenApiClient<paths>;
 
 /**
- * Main client class for interacting with the Nvisy document redaction API
+ * Internal configuration state for the client with all fields resolved.
+ *
+ * @internal
+ */
+type ResolvedConfig = Required<ClientConfig>;
+
+/**
+ * Main client class for interacting with the Nvisy document processing API.
+ *
+ * @example
+ * ```typescript
+ * const client = new Client({ apiToken: "your-api-token" });
+ * const account = await client.account.get();
+ * const workspaces = await client.workspaces.list();
+ * ```
  */
 export class Client {
-	#config: ResolvedClientConfig;
-	#api: ApiClient;
+	/**
+	 * The resolved client configuration with defaults applied.
+	 * @internal
+	 */
+	readonly #config: ResolvedConfig;
 
 	/**
-	 * Create a new Nvisy client instance
+	 * The underlying openapi-fetch client instance.
+	 * @internal
 	 */
-	constructor(userConfig: ClientConfig) {
-		try {
-			// Validate and resolve configuration
-			ClientBuilder.fromConfig(userConfig);
-			this.#config = resolveConfig(userConfig);
-		} catch (error) {
-			if (error instanceof ConfigError) {
-				throw error;
-			}
+	readonly #api: ApiClient;
+
+	/**
+	 * Creates a new Nvisy client instance.
+	 *
+	 * @param config - Configuration options with required `apiToken`
+	 * @throws {ConfigError} If the API token is invalid
+	 *
+	 * @example
+	 * ```typescript
+	 * const client = new Client({
+	 *   apiToken: "your-api-token",
+	 *   baseUrl: "https://custom.api.nvisy.com",
+	 * });
+	 * const account = await client.account.get();
+	 * ```
+	 */
+	constructor(config: ClientConfig) {
+		const validatedToken = this.#validateApiToken(config.apiToken);
+
+		this.#config = {
+			apiToken: validatedToken,
+			baseUrl: config.baseUrl ?? DEFAULTS.BASE_URL,
+			headers: config.headers ?? {},
+			userAgent: config.userAgent ?? DEFAULTS.USER_AGENT,
+		};
+
+		this.#api = this.#createApiClient();
+	}
+
+	/**
+	 * Creates and configures the underlying openapi-fetch client.
+	 *
+	 * @returns A configured ApiClient instance
+	 * @internal
+	 */
+	#createApiClient(): ApiClient {
+		const headers: Record<string, string> = {
+			"Content-Type": "application/json",
+			"User-Agent": this.#config.userAgent,
+			Authorization: `Bearer ${this.#config.apiToken}`,
+			...this.#config.headers,
+		};
+
+		const api = createClient<paths>({
+			baseUrl: this.#config.baseUrl,
+			headers,
+		});
+
+		api.use(errorMiddleware);
+		return api;
+	}
+
+	/**
+	 * Validates an API token format.
+	 *
+	 * @param apiToken - The API token to validate
+	 * @returns The trimmed API token if valid
+	 * @throws {ConfigError} If the API token is invalid
+	 * @internal
+	 */
+	#validateApiToken(apiToken: string): string {
+		if (typeof apiToken !== "string" || apiToken.trim().length === 0) {
+			throw ConfigError.invalidField("apiToken", "must be a non-empty string");
+		}
+
+		const trimmedToken = apiToken.trim();
+		if (trimmedToken.length < 10) {
 			throw ConfigError.invalidField(
-				"config",
-				`Configuration error: ${String(error)}`,
+				"apiToken",
+				"must be at least 10 characters",
 			);
 		}
 
-		// Create openapi-fetch client with proper headers
-		this.#api = createClient<paths>({
-			baseUrl: this.#config.baseUrl,
-			headers: {
-				Authorization: `Bearer ${this.#config.apiKey}`,
-				"Content-Type": "application/json",
-				"User-Agent": this.#config.userAgent,
-				...this.#config.headers,
-			},
-		});
-	}
-
-	/**
-	 * Create a new ClientBuilder for fluent configuration
-	 */
-	static builder(apiKey?: string): ClientBuilder {
-		if (apiKey) {
-			return new ClientBuilder().withApiKey(apiKey);
+		if (!/^[a-zA-Z0-9_-]+$/.test(trimmedToken)) {
+			throw ConfigError.invalidField("apiToken", "contains invalid characters");
 		}
-		return new ClientBuilder();
+
+		return trimmedToken;
 	}
 
 	/**
-	 * Create a client from environment variables
+	 * Creates a new client with a different API token.
+	 *
+	 * Returns a new client instance with the new token. The original client
+	 * remains unchanged. All other configuration (base URL, headers, etc.)
+	 * is preserved in the new client.
+	 *
+	 * @param apiToken - The new API token
+	 * @returns A new Client instance with the new token
+	 * @throws {ConfigError} If the API token is invalid
+	 *
+	 * @example
+	 * ```typescript
+	 * const client = new Client({ apiToken: "original-token" });
+	 * const newClient = client.withApiToken("new-token");
+	 *
+	 * // newClient uses the new token
+	 * // client still uses the original token
+	 * ```
 	 */
-	static fromEnvironment(): Client {
-		return ClientBuilder.fromEnvironment().build();
+	withApiToken(apiToken: string): Client {
+		return new Client({ ...this.#config, apiToken });
 	}
 
 	/**
-	 * Create a client from a configuration object
+	 * The base URL used for API requests.
+	 *
+	 * @returns The configured base URL
 	 */
-	static fromConfig(config: ClientConfig): Client {
-		return ClientBuilder.fromConfig(config).build();
+	get baseUrl(): string {
+		return this.#config.baseUrl;
 	}
 
 	/**
-	 * Get the current configuration (readonly copy)
-	 */
-	getConfig(): Readonly<ResolvedClientConfig> {
-		return Object.freeze({ ...this.#config });
-	}
-
-	/**
-	 * Get the typed openapi-fetch client for API calls
+	 * The underlying openapi-fetch client for direct API access.
+	 *
+	 * Use this for advanced scenarios where you need direct access to the
+	 * HTTP client, such as calling endpoints not covered by the service classes.
+	 *
+	 * @returns The configured ApiClient instance
 	 */
 	get api(): ApiClient {
 		return this.#api;
 	}
 
 	/**
-	 * Account service for managing the authenticated user's account
+	 * Service for authentication operations (login, signup, logout).
+	 *
+	 * @returns The AuthService instance
 	 */
-	get account(): AccountService {
-		return new AccountService(this.#api);
+	get auth(): AuthService {
+		return new AuthService(this.#api);
 	}
 
 	/**
-	 * API tokens service for managing API tokens
-	 */
-	get apiTokens(): ApiTokensService {
-		return new ApiTokensService(this.#api);
-	}
-
-	/**
-	 * Comments service for managing file comments
-	 */
-	get comments(): CommentsService {
-		return new CommentsService(this.#api);
-	}
-
-	/**
-	 * Documents service for document operations
-	 */
-	get documents(): DocumentsService {
-		return new DocumentsService(this.#api);
-	}
-
-	/**
-	 * Files service for file operations
-	 */
-	get files(): FilesService {
-		return new FilesService(this.#api);
-	}
-
-	/**
-	 * Integrations service for integration operations
-	 */
-	get integrations(): IntegrationsService {
-		return new IntegrationsService(this.#api);
-	}
-
-	/**
-	 * Invites service for managing project invitations
-	 */
-	get invites(): InvitesService {
-		return new InvitesService(this.#api);
-	}
-
-	/**
-	 * Members service for member operations
-	 */
-	get members(): MembersService {
-		return new MembersService(this.#api);
-	}
-
-	/**
-	 * Pipelines service for pipeline operations
-	 */
-	get pipelines(): PipelinesService {
-		return new PipelinesService(this.#api);
-	}
-
-	/**
-	 * Projects service for project operations
-	 */
-	get projects(): ProjectsService {
-		return new ProjectsService(this.#api);
-	}
-
-	/**
-	 * Status service for health checks and API status
+	 * Service for API status and health checks.
+	 *
+	 * @returns The StatusService instance
 	 */
 	get status(): StatusService {
 		return new StatusService(this.#api);
 	}
 
 	/**
-	 * Templates service for template operations
+	 * Service for managing the authenticated user's account.
+	 *
+	 * @returns The AccountService instance
 	 */
-	get templates(): TemplatesService {
-		return new TemplatesService(this.#api);
+	get account(): AccountService {
+		return new AccountService(this.#api);
 	}
 
 	/**
-	 * Webhooks service for webhook operations
+	 * Service for managing API tokens.
+	 *
+	 * @returns The ApiTokensService instance
+	 */
+	get apiTokens(): ApiTokensService {
+		return new ApiTokensService(this.#api);
+	}
+
+	/**
+	 * Service for managing file comments.
+	 *
+	 * @returns The CommentsService instance
+	 */
+	get comments(): CommentsService {
+		return new CommentsService(this.#api);
+	}
+
+	/**
+	 * Service for document operations.
+	 *
+	 * @returns The DocumentsService instance
+	 */
+	get documents(): DocumentsService {
+		return new DocumentsService(this.#api);
+	}
+
+	/**
+	 * Service for file operations (upload, download, delete).
+	 *
+	 * @returns The FilesService instance
+	 */
+	get files(): FilesService {
+		return new FilesService(this.#api);
+	}
+
+	/**
+	 * Service for managing integrations.
+	 *
+	 * @returns The IntegrationsService instance
+	 */
+	get integrations(): IntegrationsService {
+		return new IntegrationsService(this.#api);
+	}
+
+	/**
+	 * Service for managing workspace invitations.
+	 *
+	 * @returns The InvitesService instance
+	 */
+	get invites(): InvitesService {
+		return new InvitesService(this.#api);
+	}
+
+	/**
+	 * Service for managing workspace members.
+	 *
+	 * @returns The MembersService instance
+	 */
+	get members(): MembersService {
+		return new MembersService(this.#api);
+	}
+
+	/**
+	 * Service for managing webhooks.
+	 *
+	 * @returns The WebhooksService instance
 	 */
 	get webhooks(): WebhooksService {
 		return new WebhooksService(this.#api);
+	}
+
+	/**
+	 * Service for managing workspaces.
+	 *
+	 * @returns The WorkspacesService instance
+	 */
+	get workspaces(): WorkspacesService {
+		return new WorkspacesService(this.#api);
 	}
 }
