@@ -5,7 +5,6 @@ import type {
 	Pagination,
 	UpdateDocument,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling document operations
@@ -25,11 +24,11 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async list(projectId: string, pagination?: Pagination): Promise<Document[]> {
-		const result = await this.#api.GET("/projects/{project_id}/documents", {
+		const { data } = await this.#api.GET("/projects/{project_id}/documents", {
 			params: { path: { projectId } },
 			body: pagination ?? {},
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -39,10 +38,10 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(documentId: string): Promise<Document> {
-		const result = await this.#api.GET("/documents/{document_id}", {
+		const { data } = await this.#api.GET("/documents/{document_id}", {
 			params: { path: { documentId } },
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -53,11 +52,11 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async create(projectId: string, document: CreateDocument): Promise<Document> {
-		const result = await this.#api.POST("/projects/{project_id}/documents", {
+		const { data } = await this.#api.POST("/projects/{project_id}/documents", {
 			params: { path: { projectId } },
 			body: document,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -68,11 +67,11 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async update(documentId: string, updates: UpdateDocument): Promise<Document> {
-		const result = await this.#api.PATCH("/documents/{document_id}", {
+		const { data } = await this.#api.PATCH("/documents/{document_id}", {
 			params: { path: { documentId } },
 			body: updates,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -82,9 +81,8 @@ export class DocumentsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(documentId: string): Promise<void> {
-		const result = await this.#api.DELETE("/documents/{document_id}", {
+		await this.#api.DELETE("/documents/{document_id}", {
 			params: { path: { documentId } },
 		});
-		unwrap(result);
 	}
 }

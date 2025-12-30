@@ -5,7 +5,6 @@ import type {
 	CreateApiToken,
 	UpdateApiToken,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling API token operations
@@ -27,10 +26,10 @@ export class ApiTokensService {
 		offset?: number;
 		limit?: number;
 	}): Promise<ApiToken[]> {
-		const result = await this.#api.GET("/api-tokens/", {
+		const { data } = await this.#api.GET("/api-tokens/", {
 			params: { query: options },
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -40,13 +39,13 @@ export class ApiTokensService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(accessToken: string): Promise<ApiToken> {
-		const result = await this.#api.GET(
+		const { data } = await this.#api.GET(
 			"/api-tokens/{access_token}/" as "/api-tokens/{access_token}/",
 			{
 				params: { path: { access_token: accessToken } as never },
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -56,10 +55,10 @@ export class ApiTokensService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async create(token: CreateApiToken): Promise<ApiTokenWithSecret> {
-		const result = await this.#api.POST("/api-tokens/", {
+		const { data } = await this.#api.POST("/api-tokens/", {
 			body: token,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -73,14 +72,14 @@ export class ApiTokensService {
 		accessToken: string,
 		updates: UpdateApiToken,
 	): Promise<ApiToken> {
-		const result = await this.#api.PATCH(
+		const { data } = await this.#api.PATCH(
 			"/api-tokens/{access_token}/" as "/api-tokens/{access_token}/",
 			{
 				params: { path: { access_token: accessToken } as never },
 				body: updates,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -90,12 +89,11 @@ export class ApiTokensService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async revoke(accessToken: string): Promise<void> {
-		const result = await this.#api.DELETE(
+		await this.#api.DELETE(
 			"/api-tokens/{access_token}/" as "/api-tokens/{access_token}/",
 			{
 				params: { path: { access_token: accessToken } as never },
 			},
 		);
-		unwrap(result);
 	}
 }

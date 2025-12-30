@@ -5,7 +5,6 @@ import type {
 	File,
 	UpdateFile,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling file operations
@@ -25,17 +24,14 @@ export class FilesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async download(projectId: string, fileId: string): Promise<Response> {
-		const result = await this.#api.GET(
+		const { response } = await this.#api.GET(
 			"/projects/{project_id}/files/{file_id}",
 			{
 				params: { path: { projectId, fileId } },
 				parseAs: "stream",
 			},
 		);
-		if (result.error) {
-			unwrap(result);
-		}
-		return result.response;
+		return response;
 	}
 
 	/**
@@ -51,14 +47,14 @@ export class FilesService {
 		fileId: string,
 		updates: UpdateFile,
 	): Promise<File> {
-		const result = await this.#api.PATCH(
+		const { data } = await this.#api.PATCH(
 			"/projects/{project_id}/files/{file_id}",
 			{
 				params: { path: { projectId, fileId, version: "v1" } },
 				body: updates,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -69,13 +65,9 @@ export class FilesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(projectId: string, fileId: string): Promise<void> {
-		const result = await this.#api.DELETE(
-			"/projects/{project_id}/files/{file_id}",
-			{
-				params: { path: { projectId, fileId, version: "v1" } },
-			},
-		);
-		unwrap(result);
+		await this.#api.DELETE("/projects/{project_id}/files/{file_id}", {
+			params: { path: { projectId, fileId, version: "v1" } },
+		});
 	}
 
 	/**
@@ -89,7 +81,7 @@ export class FilesService {
 		projectId: string,
 		request: DownloadMultipleFilesRequest,
 	): Promise<Response> {
-		const result = await this.#api.POST(
+		const { response } = await this.#api.POST(
 			"/projects/{project_id}/files/download",
 			{
 				params: { path: { projectId } },
@@ -97,10 +89,7 @@ export class FilesService {
 				parseAs: "stream",
 			},
 		);
-		if (result.error) {
-			unwrap(result);
-		}
-		return result.response;
+		return response;
 	}
 
 	/**
@@ -114,7 +103,7 @@ export class FilesService {
 		projectId: string,
 		request: DownloadArchivedFilesRequest,
 	): Promise<Response> {
-		const result = await this.#api.POST(
+		const { response } = await this.#api.POST(
 			"/projects/{project_id}/files/archive",
 			{
 				params: { path: { projectId } },
@@ -122,9 +111,6 @@ export class FilesService {
 				parseAs: "stream",
 			},
 		);
-		if (result.error) {
-			unwrap(result);
-		}
-		return result.response;
+		return response;
 	}
 }

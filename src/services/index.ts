@@ -1,5 +1,6 @@
 export { AccountService } from "@/services/account.js";
 export { ApiTokensService } from "@/services/api-tokens.js";
+export { AuthService } from "@/services/auth.js";
 export { CommentsService } from "@/services/comments.js";
 export { DocumentsService } from "@/services/documents.js";
 export { FilesService } from "@/services/files.js";

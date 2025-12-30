@@ -8,7 +8,6 @@ import type {
 	Pagination,
 	ReplyInvite,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling project invitation operations
@@ -28,11 +27,11 @@ export class InvitesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async list(projectId: string, pagination?: Pagination): Promise<Invite[]> {
-		const result = await this.#api.GET("/projects/{project_id}/invites/", {
+		const { data } = await this.#api.GET("/projects/{project_id}/invites/", {
 			params: { path: { projectId } },
 			body: pagination ?? {},
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -43,11 +42,11 @@ export class InvitesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async send(projectId: string, invite: CreateInvite): Promise<Invite> {
-		const result = await this.#api.POST("/projects/{project_id}/invites/", {
+		const { data } = await this.#api.POST("/projects/{project_id}/invites/", {
 			params: { path: { projectId } },
 			body: invite,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -58,13 +57,9 @@ export class InvitesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async cancel(projectId: string, inviteId: string): Promise<void> {
-		const result = await this.#api.DELETE(
-			"/projects/{project_id}/invites/{invite_id}/",
-			{
-				params: { path: { projectId, inviteId } },
-			},
-		);
-		unwrap(result);
+		await this.#api.DELETE("/projects/{project_id}/invites/{invite_id}/", {
+			params: { path: { projectId, inviteId } },
+		});
 	}
 
 	/**
@@ -80,14 +75,14 @@ export class InvitesService {
 		inviteId: string,
 		reply: ReplyInvite,
 	): Promise<Invite> {
-		const result = await this.#api.PATCH(
+		const { data } = await this.#api.PATCH(
 			"/projects/{project_id}/invites/{invite_id}/reply/",
 			{
 				params: { path: { projectId, inviteId } },
 				body: reply,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -101,14 +96,14 @@ export class InvitesService {
 		projectId: string,
 		options: GenerateInviteCode,
 	): Promise<InviteCode> {
-		const result = await this.#api.POST(
+		const { data } = await this.#api.POST(
 			"/projects/{project_id}/invites/code/",
 			{
 				params: { path: { projectId } },
 				body: options,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -118,9 +113,9 @@ export class InvitesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async joinWithCode(inviteCode: string): Promise<Member> {
-		const result = await this.#api.POST("/invites/{invite_code}/join/", {
+		const { data } = await this.#api.POST("/invites/{invite_code}/join/", {
 			params: { path: { inviteCode } },
 		});
-		return unwrap(result);
+		return data!;
 	}
 }

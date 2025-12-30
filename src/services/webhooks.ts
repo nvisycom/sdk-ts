@@ -5,7 +5,6 @@ import type {
 	Webhook,
 	WebhookWithSecret,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling webhook operations
@@ -24,10 +23,10 @@ export class WebhooksService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async list(projectId: string): Promise<Webhook[]> {
-		const result = await this.#api.GET("/projects/{project_id}/webhooks/", {
+		const { data } = await this.#api.GET("/projects/{project_id}/webhooks/", {
 			params: { path: { projectId } },
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -38,13 +37,13 @@ export class WebhooksService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(projectId: string, webhookId: string): Promise<Webhook> {
-		const result = await this.#api.GET(
+		const { data } = await this.#api.GET(
 			"/projects/{project_id}/webhooks/{webhook_id}/",
 			{
 				params: { path: { projectId, webhookId } },
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -58,11 +57,11 @@ export class WebhooksService {
 		projectId: string,
 		webhook: CreateWebhook,
 	): Promise<WebhookWithSecret> {
-		const result = await this.#api.POST("/projects/{project_id}/webhooks/", {
+		const { data } = await this.#api.POST("/projects/{project_id}/webhooks/", {
 			params: { path: { projectId } },
 			body: webhook,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -78,14 +77,14 @@ export class WebhooksService {
 		webhookId: string,
 		updates: UpdateWebhook,
 	): Promise<Webhook> {
-		const result = await this.#api.PUT(
+		const { data } = await this.#api.PUT(
 			"/projects/{project_id}/webhooks/{webhook_id}/",
 			{
 				params: { path: { projectId, webhookId } },
 				body: updates,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -96,12 +95,8 @@ export class WebhooksService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(projectId: string, webhookId: string): Promise<void> {
-		const result = await this.#api.DELETE(
-			"/projects/{project_id}/webhooks/{webhook_id}/",
-			{
-				params: { path: { projectId, webhookId } },
-			},
-		);
-		unwrap(result);
+		await this.#api.DELETE("/projects/{project_id}/webhooks/{webhook_id}/", {
+			params: { path: { projectId, webhookId } },
+		});
 	}
 }

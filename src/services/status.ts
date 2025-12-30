@@ -17,11 +17,11 @@ export class StatusService {
 	 * @returns Promise that resolves with the API health status
 	 */
 	async health(options?: CheckHealth): Promise<MonitorStatus> {
-		const result = await this.#api.GET("/health", {
+		const { data, error } = await this.#api.GET("/health", {
 			params: { path: { version: "v1" } },
 			body: options ?? {},
 		});
 		// Health endpoint returns MonitorStatus for both 200 and 503
-		return (result.data ?? result.error) as MonitorStatus;
+		return (data ?? error) as MonitorStatus;
 	}
 }

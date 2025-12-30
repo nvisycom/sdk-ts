@@ -6,7 +6,6 @@ import type {
 	UpdateIntegrationCredentials,
 	UpdateProjectIntegration,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling integration operations
@@ -29,11 +28,14 @@ export class IntegrationsService {
 		projectId: string,
 		pagination?: Pagination,
 	): Promise<Integration[]> {
-		const result = await this.#api.GET("/projects/{project_id}/integrations/", {
-			params: { path: { projectId } },
-			body: pagination ?? {},
-		});
-		return unwrap(result);
+		const { data } = await this.#api.GET(
+			"/projects/{project_id}/integrations/",
+			{
+				params: { path: { projectId } },
+				body: pagination ?? {},
+			},
+		);
+		return data!;
 	}
 
 	/**
@@ -44,13 +46,13 @@ export class IntegrationsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(projectId: string, integrationId: string): Promise<Integration> {
-		const result = await this.#api.GET(
+		const { data } = await this.#api.GET(
 			"/projects/{project_id}/integrations/{integration_id}/",
 			{
 				params: { path: { projectId, integrationId } },
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -64,14 +66,14 @@ export class IntegrationsService {
 		projectId: string,
 		integration: CreateProjectIntegration,
 	): Promise<Integration> {
-		const result = await this.#api.POST(
+		const { data } = await this.#api.POST(
 			"/projects/{project_id}/integrations/",
 			{
 				params: { path: { projectId } },
 				body: integration,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -87,14 +89,14 @@ export class IntegrationsService {
 		integrationId: string,
 		updates: UpdateProjectIntegration,
 	): Promise<Integration> {
-		const result = await this.#api.PUT(
+		const { data } = await this.#api.PUT(
 			"/projects/{project_id}/integrations/{integration_id}/",
 			{
 				params: { path: { projectId, integrationId } },
 				body: updates,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -110,14 +112,14 @@ export class IntegrationsService {
 		integrationId: string,
 		credentials: UpdateIntegrationCredentials,
 	): Promise<Integration> {
-		const result = await this.#api.PATCH(
+		const { data } = await this.#api.PATCH(
 			"/projects/{project_id}/integrations/{integration_id}/credentials/",
 			{
 				params: { path: { projectId, integrationId } },
 				body: credentials,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -128,12 +130,11 @@ export class IntegrationsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(projectId: string, integrationId: string): Promise<void> {
-		const result = await this.#api.DELETE(
+		await this.#api.DELETE(
 			"/projects/{project_id}/integrations/{integration_id}/",
 			{
 				params: { path: { projectId, integrationId } },
 			},
 		);
-		unwrap(result);
 	}
 }

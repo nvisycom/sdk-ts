@@ -1,6 +1,5 @@
 import type { ApiClient } from "@/client.js";
 import type { CreatePipeline, Pipeline } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling pipeline operations
@@ -19,10 +18,10 @@ export class PipelinesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async list(projectId: string): Promise<Pipeline[]> {
-		const result = await this.#api.GET("/projects/{project_id}/pipelines", {
+		const { data } = await this.#api.GET("/projects/{project_id}/pipelines", {
 			params: { path: { projectId } },
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -33,13 +32,13 @@ export class PipelinesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(projectId: string, pipelineId: string): Promise<Pipeline> {
-		const result = await this.#api.GET(
+		const { data } = await this.#api.GET(
 			"/projects/{project_id}/pipelines/{pipeline_id}",
 			{
 				params: { path: { projectId, pipelineId } },
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -50,11 +49,11 @@ export class PipelinesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async create(projectId: string, pipeline: CreatePipeline): Promise<Pipeline> {
-		const result = await this.#api.POST("/projects/{project_id}/pipelines", {
+		const { data } = await this.#api.POST("/projects/{project_id}/pipelines", {
 			params: { path: { projectId } },
 			body: pipeline,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -70,14 +69,14 @@ export class PipelinesService {
 		pipelineId: string,
 		updates: CreatePipeline,
 	): Promise<Pipeline> {
-		const result = await this.#api.PUT(
+		const { data } = await this.#api.PUT(
 			"/projects/{project_id}/pipelines/{pipeline_id}",
 			{
 				params: { path: { projectId, pipelineId } },
 				body: updates,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -88,12 +87,8 @@ export class PipelinesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(projectId: string, pipelineId: string): Promise<void> {
-		const result = await this.#api.DELETE(
-			"/projects/{project_id}/pipelines/{pipeline_id}",
-			{
-				params: { path: { projectId, pipelineId } },
-			},
-		);
-		unwrap(result);
+		await this.#api.DELETE("/projects/{project_id}/pipelines/{pipeline_id}", {
+			params: { path: { projectId, pipelineId } },
+		});
 	}
 }

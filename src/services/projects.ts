@@ -5,7 +5,6 @@ import type {
 	Project,
 	UpdateProject,
 } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling project operations
@@ -24,10 +23,10 @@ export class ProjectsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async list(pagination?: Pagination): Promise<Project[]> {
-		const result = await this.#api.GET("/projects/", {
+		const { data } = await this.#api.GET("/projects/", {
 			body: pagination ?? {},
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -37,10 +36,10 @@ export class ProjectsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(projectId: string): Promise<Project> {
-		const result = await this.#api.GET("/projects/{project_id}/", {
+		const { data } = await this.#api.GET("/projects/{project_id}/", {
 			params: { path: { projectId } },
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -50,10 +49,10 @@ export class ProjectsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async create(project: CreateProject): Promise<Project> {
-		const result = await this.#api.POST("/projects/", {
+		const { data } = await this.#api.POST("/projects/", {
 			body: project,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -64,11 +63,11 @@ export class ProjectsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async update(projectId: string, updates: UpdateProject): Promise<Project> {
-		const result = await this.#api.PATCH("/projects/{project_id}/", {
+		const { data } = await this.#api.PATCH("/projects/{project_id}/", {
 			params: { path: { projectId } },
 			body: updates,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -78,9 +77,8 @@ export class ProjectsService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(projectId: string): Promise<void> {
-		const result = await this.#api.DELETE("/projects/{project_id}/", {
+		await this.#api.DELETE("/projects/{project_id}/", {
 			params: { path: { projectId } },
 		});
-		unwrap(result);
 	}
 }

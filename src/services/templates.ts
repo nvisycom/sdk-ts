@@ -1,6 +1,5 @@
 import type { ApiClient } from "@/client.js";
 import type { CreateTemplate, Template } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling template operations
@@ -19,10 +18,10 @@ export class TemplatesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async list(projectId: string): Promise<Template[]> {
-		const result = await this.#api.GET("/projects/{project_id}/templates", {
+		const { data } = await this.#api.GET("/projects/{project_id}/templates", {
 			params: { path: { projectId } },
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -33,13 +32,13 @@ export class TemplatesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(projectId: string, templateId: string): Promise<Template> {
-		const result = await this.#api.GET(
+		const { data } = await this.#api.GET(
 			"/projects/{project_id}/templates/{template_id}",
 			{
 				params: { path: { projectId, templateId } },
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -50,11 +49,11 @@ export class TemplatesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async create(projectId: string, template: CreateTemplate): Promise<Template> {
-		const result = await this.#api.POST("/projects/{project_id}/templates", {
+		const { data } = await this.#api.POST("/projects/{project_id}/templates", {
 			params: { path: { projectId } },
 			body: template,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -70,14 +69,14 @@ export class TemplatesService {
 		templateId: string,
 		updates: CreateTemplate,
 	): Promise<Template> {
-		const result = await this.#api.PUT(
+		const { data } = await this.#api.PUT(
 			"/projects/{project_id}/templates/{template_id}",
 			{
 				params: { path: { projectId, templateId } },
 				body: updates,
 			},
 		);
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -88,12 +87,8 @@ export class TemplatesService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(projectId: string, templateId: string): Promise<void> {
-		const result = await this.#api.DELETE(
-			"/projects/{project_id}/templates/{template_id}",
-			{
-				params: { path: { projectId, templateId } },
-			},
-		);
-		unwrap(result);
+		await this.#api.DELETE("/projects/{project_id}/templates/{template_id}", {
+			params: { path: { projectId, templateId } },
+		});
 	}
 }

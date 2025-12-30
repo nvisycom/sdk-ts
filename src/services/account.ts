@@ -1,6 +1,5 @@
 import type { ApiClient } from "@/client.js";
 import type { Account, UpdateAccount } from "@/datatypes/index.js";
-import { unwrap } from "@/errors.js";
 
 /**
  * Service for handling account operations
@@ -18,8 +17,8 @@ export class AccountService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async get(): Promise<Account> {
-		const result = await this.#api.GET("/account");
-		return unwrap(result);
+		const { data } = await this.#api.GET("/account");
+		return data!;
 	}
 
 	/**
@@ -29,10 +28,10 @@ export class AccountService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async update(updates: UpdateAccount): Promise<Account> {
-		const result = await this.#api.PATCH("/account", {
+		const { data } = await this.#api.PATCH("/account", {
 			body: updates,
 		});
-		return unwrap(result);
+		return data!;
 	}
 
 	/**
@@ -41,7 +40,6 @@ export class AccountService {
 	 * @throws {ApiError} if the request fails
 	 */
 	async delete(): Promise<void> {
-		const result = await this.#api.DELETE("/account");
-		unwrap(result);
+		await this.#api.DELETE("/account");
 	}
 }
