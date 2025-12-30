@@ -1,98 +1,133 @@
-import { createRequire } from "node:module";
-
-const require = createRequire(import.meta.url);
-const packageJson = require("../package.json") as { version: string };
+/**
+ * @fileoverview Configuration types and constants for the Nvisy SDK.
+ *
+ * This module provides configuration interfaces, default values, and environment
+ * variable names used throughout the SDK. It also exports utility functions for
+ * building request metadata like user agent strings.
+ *
+ * @module config
+ */
 
 /**
- * Configuration options for the Nvisy client
+ * Configuration options for creating a Nvisy client.
+ *
+ * The `apiToken` field is required for authentication. All other fields are optional
+ * and will use sensible defaults when omitted.
+ *
+ * @example
+ * ```typescript
+ * const config: ClientConfig = {
+ *   apiToken: "your-api-token",
+ *   baseUrl: "https://api.nvisy.com",
+ *   headers: { "X-Custom-Header": "value" },
+ * };
+ * const client = new Client(config);
+ * ```
  */
 export interface ClientConfig {
-	/**
-	 * API key for authentication
-	 */
-	apiKey: string;
+  /**
+   * API token for authentication.
+   *
+   * Tokens can be obtained from the Nvisy dashboard or via the auth endpoints.
+   */
+  apiToken: string;
 
-	/**
-	 * Base URL for the Nvisy API
-	 * @default "https://api.nvisy.com"
-	 */
-	baseUrl?: string;
+  /**
+   * Base URL for the Nvisy API.
+   *
+   * @default "https://api.nvisy.com"
+   */
+  baseUrl?: string;
 
-	/**
-	 * Custom headers to include with requests
-	 */
-	headers?: Record<string, string>;
+  /**
+   * Custom headers to include with every request.
+   *
+   * These headers are merged with the default headers (Content-Type, User-Agent,
+   * and Authorization). Custom headers take precedence over defaults if there
+   * are conflicts.
+   */
+  headers?: Record<string, string>;
 
-	/**
-	 * Custom user agent string
-	 * @default Generated automatically
-	 */
-	userAgent?: string;
+  /**
+   * Custom user agent string to identify your application.
+   *
+   * @default Auto-generated string in format: "@nvisy/sdk v.{version} ({platform}; Node.js {nodeVersion})"
+   */
+  userAgent?: string;
 }
 
 /**
- * Internal fully-resolved configuration
- */
-export type ResolvedClientConfig = Required<ClientConfig>;
-
-/**
- * Environment variable names for configuration
- */
-export const ENV_VARS = {
-	API_TOKEN: "NVISY_API_TOKEN",
-	BASE_URL: "NVISY_BASE_URL",
-	USER_AGENT: "NVISY_USER_AGENT",
-} as const;
-
-/**
- * Default configuration values
+ * Default configuration values used when options are not explicitly provided.
+ *
+ * @internal
  */
 export const DEFAULTS = {
-	baseUrl: "https://api.nvisy.com",
+  /**
+   * Default base URL for the Nvisy API.
+   */
+  BASE_URL: "https://api.nvisy.com",
 } as const;
 
 /**
- * Load configuration from environment variables
+ * Environment variable names recognized by the SDK.
+ *
+ * These variables are read by {@link Client.fromEnvironment} to configure
+ * the client without hardcoding sensitive values in source code.
+ *
+ * @example
+ * ```bash
+ * export NVISY_API_TOKEN="your-api-token"
+ * export NVISY_BASE_URL="https://api.nvisy.com"
+ * export NVISY_USER_AGENT="my-app/1.0.0"
+ * ```
  */
-export function loadConfigFromEnv(): Partial<ClientConfig> {
-	const config: Partial<ClientConfig> = {};
+export const ENV_VARS = {
+  /**
+   * Environment variable for the API token.
+   * Required when using {@link Client.fromEnvironment}.
+   */
+  API_TOKEN: "NVISY_API_TOKEN",
 
-	const apiKey = process.env[ENV_VARS.API_TOKEN];
-	if (apiKey) {
-		config.apiKey = apiKey;
-	}
+  /**
+   * Environment variable for the base URL.
+   * Optional; defaults to {@link DEFAULTS.BASE_URL} if not set.
+   */
+  BASE_URL: "NVISY_BASE_URL",
 
-	const baseUrl = process.env[ENV_VARS.BASE_URL];
-	if (baseUrl) {
-		config.baseUrl = baseUrl;
-	}
-
-	const userAgent = process.env[ENV_VARS.USER_AGENT];
-	if (userAgent) {
-		config.userAgent = userAgent;
-	}
-
-	return config;
-}
+  /**
+   * Environment variable for a custom user agent string.
+   * Optional; defaults to auto-generated value if not set.
+   */
+  USER_AGENT: "NVISY_USER_AGENT",
+} as const;
 
 /**
- * Resolve configuration with defaults
+ * Current SDK version.
+ *
+ * Used in the default user agent string and for version tracking.
+ *
+ * @internal
  */
-export function resolveConfig(config: ClientConfig): ResolvedClientConfig {
-	return {
-		apiKey: config.apiKey,
-		baseUrl: config.baseUrl || DEFAULTS.baseUrl,
-		headers: config.headers || {},
-		userAgent: config.userAgent || buildUserAgent(),
-	};
-}
+export const VERSION = "0.2.0";
 
 /**
- * Build user agent string
+ * Builds the default user agent string for SDK requests.
+ *
+ * The user agent includes the SDK version, platform, and Node.js version
+ * to help with debugging and analytics on the server side.
+ *
+ * @returns A formatted user agent string
+ *
+ * @example
+ * ```typescript
+ * const userAgent = buildUserAgent();
+ * // Returns: "@nvisy/sdk v.0.2.0 (darwin; Node.js v20.10.0)"
+ * ```
+ *
+ * @internal
  */
 export function buildUserAgent(): string {
-	const sdkVersion = packageJson.version;
-	const nodeVersion = process.version || "unknown";
-	const platform = process.platform || "unknown";
-	return `@nvisy/sdk v. ${sdkVersion} (${platform}; Node.js ${nodeVersion})`;
+  const nodeVersion = process.version || "unknown";
+  const platform = process.platform || "unknown";
+  return `@nvisy/sdk v.${VERSION} (${platform}; Node.js ${nodeVersion})`;
 }
