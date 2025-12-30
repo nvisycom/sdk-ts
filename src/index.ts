@@ -1,21 +1,15 @@
-// Main client classes
-export { ClientBuilder } from "@/builder.js";
+// Client
 export type { ApiClient } from "@/client.js";
 export { Client } from "@/client.js";
 
 // Configuration
-export type { ClientConfig, ResolvedClientConfig } from "@/config.js";
-export {
-	DEFAULTS,
-	ENV_VARS,
-	loadConfigFromEnv,
-	resolveConfig,
-} from "@/config.js";
+export type { ClientConfig } from "@/config.js";
+export { buildUserAgent, DEFAULTS, ENV_VARS, VERSION } from "@/config.js";
 
-// Data types - re-export all from datatypes
+// Data types
 export type * from "@/datatypes/index.js";
 
-// Error handling
+// Errors
 export type { ErrorResponse } from "@/errors.js";
 export { ApiError, ClientError, ConfigError, NetworkError } from "@/errors.js";
 
@@ -23,6 +17,7 @@ export { ApiError, ClientError, ConfigError, NetworkError } from "@/errors.js";
 export {
 	AccountService,
 	ApiTokensService,
+	AuthService,
 	CommentsService,
 	DocumentsService,
 	FilesService,
