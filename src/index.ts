@@ -24,9 +24,7 @@ export {
 	IntegrationsService,
 	InvitesService,
 	MembersService,
-	PipelinesService,
-	ProjectsService,
 	StatusService,
-	TemplatesService,
 	WebhooksService,
+	WorkspacesService,
 } from "@/services/index.js";

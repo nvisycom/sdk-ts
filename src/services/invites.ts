@@ -10,7 +10,7 @@ import type {
 } from "@/datatypes/index.js";
 
 /**
- * Service for handling project invitation operations
+ * Service for handling workspace invitation operations
  */
 export class InvitesService {
 	#api: ApiClient;
@@ -20,86 +20,83 @@ export class InvitesService {
 	}
 
 	/**
-	 * List all invitations for a project
-	 * @param projectId - Project ID
-	 * @param pagination - Pagination parameters
+	 * List all invitations for a workspace
+	 * @param workspaceId - Workspace ID
+	 * @param pagination - Optional pagination parameters
 	 * @returns Promise that resolves with the list of invitations
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(projectId: string, pagination?: Pagination): Promise<Invite[]> {
-		const { data } = await this.#api.GET("/projects/{project_id}/invites/", {
-			params: { path: { projectId } },
-			body: pagination ?? {},
-		});
-		return data!;
-	}
-
-	/**
-	 * Send an invitation to join a project
-	 * @param projectId - Project ID
-	 * @param invite - Invitation request
-	 * @returns Promise that resolves with the created invitation
-	 * @throws {ApiError} if the request fails
-	 */
-	async send(projectId: string, invite: CreateInvite): Promise<Invite> {
-		const { data } = await this.#api.POST("/projects/{project_id}/invites/", {
-			params: { path: { projectId } },
-			body: invite,
-		});
-		return data!;
-	}
-
-	/**
-	 * Cancel a pending invitation
-	 * @param projectId - Project ID
-	 * @param inviteId - Invite ID
-	 * @returns Promise that resolves when the invitation is canceled
-	 * @throws {ApiError} if the request fails
-	 */
-	async cancel(projectId: string, inviteId: string): Promise<void> {
-		await this.#api.DELETE("/projects/{project_id}/invites/{invite_id}/", {
-			params: { path: { projectId, inviteId } },
-		});
-	}
-
-	/**
-	 * Reply to an invitation (accept or decline)
-	 * @param projectId - Project ID
-	 * @param inviteId - Invite ID
-	 * @param reply - Reply request
-	 * @returns Promise that resolves with the updated invitation
-	 * @throws {ApiError} if the request fails
-	 */
-	async reply(
-		projectId: string,
-		inviteId: string,
-		reply: ReplyInvite,
-	): Promise<Invite> {
-		const { data } = await this.#api.PATCH(
-			"/projects/{project_id}/invites/{invite_id}/reply/",
+	async list(workspaceId: string, pagination?: Pagination): Promise<Invite[]> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspace_id}/invites/",
 			{
-				params: { path: { projectId, inviteId } },
-				body: reply,
+				params: { path: { workspaceId } },
+				body: pagination ?? {},
 			},
 		);
 		return data!;
 	}
 
 	/**
-	 * Generate a shareable invite code for a project
-	 * @param projectId - Project ID
+	 * Send an invitation to join a workspace
+	 * @param workspaceId - Workspace ID
+	 * @param invite - Invitation request
+	 * @returns Promise that resolves with the created invitation
+	 * @throws {ApiError} if the request fails
+	 */
+	async send(workspaceId: string, invite: CreateInvite): Promise<Invite> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspace_id}/invites/",
+			{
+				params: { path: { workspaceId } },
+				body: invite,
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Cancel a pending invitation
+	 * @param inviteId - Invite ID
+	 * @returns Promise that resolves when the invitation is canceled
+	 * @throws {ApiError} if the request fails
+	 */
+	async cancel(inviteId: string): Promise<void> {
+		await this.#api.DELETE("/invites/{invite_id}/", {
+			params: { path: { inviteId } },
+		});
+	}
+
+	/**
+	 * Reply to an invitation (accept or decline)
+	 * @param inviteId - Invite ID
+	 * @param reply - Reply request
+	 * @returns Promise that resolves with the updated invitation
+	 * @throws {ApiError} if the request fails
+	 */
+	async reply(inviteId: string, reply: ReplyInvite): Promise<Invite> {
+		const { data } = await this.#api.PATCH("/invites/{invite_id}/reply/", {
+			params: { path: { inviteId } },
+			body: reply,
+		});
+		return data!;
+	}
+
+	/**
+	 * Generate a shareable invite code for a workspace
+	 * @param workspaceId - Workspace ID
 	 * @param options - Invite code generation options
 	 * @returns Promise that resolves with the generated invite code
 	 * @throws {ApiError} if the request fails
 	 */
 	async generateCode(
-		projectId: string,
+		workspaceId: string,
 		options: GenerateInviteCode,
 	): Promise<InviteCode> {
 		const { data } = await this.#api.POST(
-			"/projects/{project_id}/invites/code/",
+			"/workspaces/{workspace_id}/invites/code/",
 			{
-				params: { path: { projectId } },
+				params: { path: { workspaceId } },
 				body: options,
 			},
 		);
@@ -107,7 +104,7 @@ export class InvitesService {
 	}
 
 	/**
-	 * Join a project using an invite code
+	 * Join a workspace using an invite code
 	 * @param inviteCode - The invite code
 	 * @returns Promise that resolves with the member details
 	 * @throws {ApiError} if the request fails

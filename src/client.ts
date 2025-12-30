@@ -28,11 +28,9 @@ import {
 	IntegrationsService,
 	InvitesService,
 	MembersService,
-	PipelinesService,
-	ProjectsService,
 	StatusService,
-	TemplatesService,
 	WebhooksService,
+	WorkspacesService,
 } from "@/services/index.js";
 
 /**
@@ -57,7 +55,7 @@ type ResolvedConfig = Required<ClientConfig>;
  * ```typescript
  * const client = new Client({ apiToken: "your-api-token" });
  * const account = await client.account.get();
- * const projects = await client.projects.list();
+ * const workspaces = await client.workspaces.list();
  * ```
  */
 export class Client {
@@ -270,7 +268,7 @@ export class Client {
 	}
 
 	/**
-	 * Service for managing project invitations.
+	 * Service for managing workspace invitations.
 	 *
 	 * @returns The InvitesService instance
 	 */
@@ -279,39 +277,12 @@ export class Client {
 	}
 
 	/**
-	 * Service for managing project members.
+	 * Service for managing workspace members.
 	 *
 	 * @returns The MembersService instance
 	 */
 	get members(): MembersService {
 		return new MembersService(this.#api);
-	}
-
-	/**
-	 * Service for managing processing pipelines.
-	 *
-	 * @returns The PipelinesService instance
-	 */
-	get pipelines(): PipelinesService {
-		return new PipelinesService(this.#api);
-	}
-
-	/**
-	 * Service for managing projects.
-	 *
-	 * @returns The ProjectsService instance
-	 */
-	get projects(): ProjectsService {
-		return new ProjectsService(this.#api);
-	}
-
-	/**
-	 * Service for managing processing templates.
-	 *
-	 * @returns The TemplatesService instance
-	 */
-	get templates(): TemplatesService {
-		return new TemplatesService(this.#api);
 	}
 
 	/**
@@ -321,5 +292,14 @@ export class Client {
 	 */
 	get webhooks(): WebhooksService {
 		return new WebhooksService(this.#api);
+	}
+
+	/**
+	 * Service for managing workspaces.
+	 *
+	 * @returns The WorkspacesService instance
+	 */
+	get workspaces(): WorkspacesService {
+		return new WorkspacesService(this.#api);
 	}
 }

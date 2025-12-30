@@ -67,7 +67,7 @@
 		"release": "npm run prepublishOnly && npm publish",
 		"generate": "openapi-typescript https://api.nvisy.com/openapi.json -o ./src/schema/api.d.ts",
 		"generate:local": "openapi-typescript http://127.0.0.1:8080/api/openapi.json -o ./src/schema/api.d.ts",
-		"generate:clean": "rimraf ./src/schema/"
+		"generate:clean": "rimraf ./src/schema/api.d.ts"
 	},
 	"dependencies": {
 		"openapi-fetch": "^0.15.0"

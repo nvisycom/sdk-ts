@@ -58,7 +58,7 @@ describe("Client", () => {
 			expect(client.auth).toBeDefined();
 			expect(client.status).toBeDefined();
 			expect(client.account).toBeDefined();
-			expect(client.projects).toBeDefined();
+			expect(client.workspaces).toBeDefined();
 			expect(client.apiTokens).toBeDefined();
 			expect(client.documents).toBeDefined();
 			expect(client.files).toBeDefined();
@@ -66,8 +66,6 @@ describe("Client", () => {
 			expect(client.integrations).toBeDefined();
 			expect(client.invites).toBeDefined();
 			expect(client.members).toBeDefined();
-			expect(client.pipelines).toBeDefined();
-			expect(client.templates).toBeDefined();
 			expect(client.webhooks).toBeDefined();
 		});
 	});

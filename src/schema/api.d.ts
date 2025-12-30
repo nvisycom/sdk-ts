@@ -535,7 +535,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/projects/": {
+	"/workspaces/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -543,8 +543,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List projects
-		 * @description Returns all projects the authenticated user is a member of.
+		 * List workspaces
+		 * @description Returns all workspaces the authenticated user is a member of.
 		 */
 		get: {
 			parameters: {
@@ -570,7 +570,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Project"][];
+						"application/json": components["schemas"]["Workspace"][];
 					};
 				};
 				/**
@@ -592,8 +592,8 @@ export interface paths {
 		};
 		put?: never;
 		/**
-		 * Create project
-		 * @description Creates a new project. The creator is automatically added as an admin member.
+		 * Create workspace
+		 * @description Creates a new workspace. The creator is automatically added as an owner.
 		 */
 		post: {
 			parameters: {
@@ -603,17 +603,17 @@ export interface paths {
 				cookie?: never;
 			};
 			/**
-			 * @description Request payload for creating a new project.
+			 * @description Request payload for creating a new workspace.
 			 *
-			 *      Creates a new project with the specified configuration. The creator is
-			 *      automatically added as an admin member of the project.
+			 *      Creates a new workspace with the specified configuration. The creator is
+			 *      automatically added as an owner of the workspace.
 			 *
 			 *      # Example
 			 *
 			 *      ```json
 			 *      {
-			 *        "displayName": "My Project",
-			 *        "description": "A sample project",
+			 *        "displayName": "My Workspace",
+			 *        "description": "A sample workspace",
 			 *        "keepForSec": 86400,
 			 *        "autoCleanup": true
 			 *      }
@@ -621,17 +621,17 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateProject"];
+					"application/json": components["schemas"]["CreateWorkspace"];
 				};
 			};
 			responses: {
-				/** @description Project response. */
+				/** @description Workspace response. */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Project"];
+						"application/json": components["schemas"]["Workspace"];
 					};
 				};
 				/**
@@ -672,7 +672,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/": {
+	"/workspaces/{workspace_id}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -680,28 +680,28 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get project
-		 * @description Returns details for a specific project.
+		 * Get workspace
+		 * @description Returns details for a specific workspace.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Project response. */
+				/** @description Workspace response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Project"];
+						"application/json": components["schemas"]["Workspace"];
 					};
 				};
 				/**
@@ -754,16 +754,16 @@ export interface paths {
 		put?: never;
 		post?: never;
 		/**
-		 * Delete project
-		 * @description Soft-deletes a project. Data is retained for potential recovery.
+		 * Delete workspace
+		 * @description Soft-deletes a workspace. Data is retained for potential recovery.
 		 */
 		delete: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -826,21 +826,21 @@ export interface paths {
 		options?: never;
 		head?: never;
 		/**
-		 * Update project
-		 * @description Updates an existing project's configuration. Only provided fields are updated.
+		 * Update workspace
+		 * @description Updates an existing workspace's configuration. Only provided fields are updated.
 		 */
 		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			/**
-			 * @description Request payload to update an existing project.
+			 * @description Request payload to update an existing workspace.
 			 *
 			 *      All fields are optional; only provided fields will be updated.
 			 *
@@ -848,24 +848,24 @@ export interface paths {
 			 *
 			 *      ```json
 			 *      {
-			 *        "displayName": "Updated Project Name",
+			 *        "displayName": "Updated Workspace Name",
 			 *        "enableComments": true
 			 *      }
 			 *      ```
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateProject"];
+					"application/json": components["schemas"]["UpdateWorkspace"];
 				};
 			};
 			responses: {
-				/** @description Project response. */
+				/** @description Workspace response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Project"];
+						"application/json": components["schemas"]["Workspace"];
 					};
 				};
 				/**
@@ -917,7 +917,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/projects/{project_id}/integrations/": {
+	"/workspaces/{workspace_id}/integrations/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -926,15 +926,18 @@ export interface paths {
 		};
 		/**
 		 * List integrations
-		 * @description Returns all configured integrations for the project.
+		 * @description Returns all configured integrations for the workspace.
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/** @description Filter by integration type. */
+					integrationType?: components["schemas"]["IntegrationType"] | null;
+				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -993,26 +996,26 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create integration
-		 * @description Creates a new integration with an external service for the project.
+		 * @description Creates a new integration with an external service for the workspace.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for creating a new project integration. */
+			/** @description Request payload for creating a new workspace integration. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateProjectIntegration"];
+					"application/json": components["schemas"]["CreateIntegration"];
 				};
 			};
 			responses: {
-				/** @description Project integration response. */
+				/** @description Workspace integration response. */
 				201: {
 					headers: {
 						[name: string]: unknown;
@@ -1089,7 +1092,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/integrations/{integration_id}/": {
+	"/integrations/{integration_id}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1098,15 +1101,13 @@ export interface paths {
 		};
 		/**
 		 * Get integration
-		 * @description Returns details for a specific project integration.
+		 * @description Returns details for a specific workspace integration.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the integration. */
 					integrationId: string;
 				};
@@ -1114,7 +1115,7 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Project integration response. */
+				/** @description Workspace integration response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -1179,21 +1180,19 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the integration. */
 					integrationId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for updating an existing project integration. */
+			/** @description Request payload for updating an existing workspace integration. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateProjectIntegration"];
+					"application/json": components["schemas"]["UpdateIntegration"];
 				};
 			};
 			responses: {
-				/** @description Project integration response. */
+				/** @description Workspace integration response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -1282,15 +1281,13 @@ export interface paths {
 		post?: never;
 		/**
 		 * Delete integration
-		 * @description Permanently removes the integration from the project.
+		 * @description Permanently removes the integration from the workspace.
 		 */
 		delete: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the integration. */
 					integrationId: string;
 				};
@@ -1357,7 +1354,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/integrations/{integration_id}/credentials/": {
+	"/integrations/{integration_id}/credentials/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1379,8 +1376,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the integration. */
 					integrationId: string;
 				};
@@ -1393,7 +1388,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Project integration response. */
+				/** @description Workspace integration response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -1466,7 +1461,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/projects/{project_id}/invites/": {
+	"/workspaces/{workspace_id}/invites/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1475,15 +1470,22 @@ export interface paths {
 		};
 		/**
 		 * List invitations
-		 * @description Returns a paginated list of project invitations with their current status.
+		 * @description Returns a paginated list of workspace invitations with their current status.
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/** @description Filter by invited role. */
+					role?: components["schemas"]["WorkspaceRole"] | null;
+					/** @description Sort by field. */
+					sortBy?: components["schemas"]["InviteSortField"] | null;
+					/** @description Sort order (asc or desc). */
+					order?: components["schemas"]["SortOrder"] | null;
+				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1542,19 +1544,19 @@ export interface paths {
 		put?: never;
 		/**
 		 * Send invitation
-		 * @description Sends an invitation to join a project to the specified email address.
+		 * @description Sends an invitation to join a workspace to the specified email address.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for creating a new project invite. */
+			/** @description Request payload for creating a new workspace invite. */
 			requestBody: {
 				content: {
 					"application/json": components["schemas"]["CreateInvite"];
@@ -1562,7 +1564,7 @@ export interface paths {
 			};
 			responses: {
 				/**
-				 * @description Project invite with complete information.
+				 * @description Workspace invite with complete information.
 				 *
 				 *      This response includes all the essential information about an
 				 *      invitation, including the unique invite ID that can be used to track or cancel
@@ -1644,194 +1646,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/invites/{invite_id}/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		/**
-		 * Cancel invitation
-		 * @description Permanently cancels a pending invitation. The invitee will no longer be able to accept it.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the invite. */
-					inviteId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/projects/{project_id}/invites/{invite_id}/reply/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		/**
-		 * Reply to invitation
-		 * @description Allows the invitee to accept or decline a project invitation.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the invite. */
-					inviteId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to respond to a project invitation. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["ReplyInvite"];
-				};
-			};
-			responses: {
-				/**
-				 * @description Project invite with complete information.
-				 *
-				 *      This response includes all the essential information about an
-				 *      invitation, including the unique invite ID that can be used to track or cancel
-				 *      the invitation later.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Invite"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/projects/{project_id}/invites/code/": {
+	"/workspaces/{workspace_id}/invites/code/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1842,19 +1657,19 @@ export interface paths {
 		put?: never;
 		/**
 		 * Generate invite code
-		 * @description Creates a shareable invite code that can be used by anyone to join the project.
+		 * @description Creates a shareable invite code that can be used by anyone to join the workspace.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request to generate a shareable invite code for a project. */
+			/** @description Request to generate a shareable invite code for a workspace. */
 			requestBody: {
 				content: {
 					"application/json": components["schemas"]["GenerateInviteCode"];
@@ -1923,6 +1738,189 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/invites/{invite_id}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/**
+		 * Cancel invitation
+		 * @description Permanently cancels a pending invitation. The invitee will no longer be able to accept it.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the invite. */
+					inviteId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/invites/{invite_id}/reply/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/**
+		 * Reply to invitation
+		 * @description Allows the invitee to accept or decline a workspace invitation.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the invite. */
+					inviteId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to respond to a workspace invitation. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["ReplyInvite"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Workspace invite with complete information.
+				 *
+				 *      This response includes all the essential information about an
+				 *      invitation, including the unique invite ID that can be used to track or cancel
+				 *      the invitation later.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Invite"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		trace?: never;
+	};
 	"/invites/{invite_code}/join/": {
 		parameters: {
 			query?: never;
@@ -1934,21 +1932,21 @@ export interface paths {
 		put?: never;
 		/**
 		 * Join via invite code
-		 * @description Joins a project using a valid invite code. The user becomes a member with the role specified in the code.
+		 * @description Joins a workspace using a valid invite code. The user becomes a member with the role specified in the code.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description The invite code to use for joining the project. */
+					/** @description The invite code to use for joining the workspace. */
 					inviteCode: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Represents a project member. */
+				/** @description Represents a workspace member. */
 				201: {
 					headers: {
 						[name: string]: unknown;
@@ -2025,7 +2023,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/members/": {
+	"/workspaces/{workspace_id}/members/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2034,15 +2032,24 @@ export interface paths {
 		};
 		/**
 		 * List members
-		 * @description Returns a paginated list of project members with their roles and status.
+		 * @description Returns a paginated list of workspace members with their roles and status.
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/** @description Filter by workspace role. */
+					role?: components["schemas"]["WorkspaceRole"] | null;
+					/** @description Filter by 2FA status. */
+					has2fa?: boolean | null;
+					/** @description Sort by field. */
+					sortBy?: components["schemas"]["MemberSortField"] | null;
+					/** @description Sort order (asc or desc). */
+					order?: components["schemas"]["SortOrder"] | null;
+				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2121,7 +2128,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/members/leave": {
+	"/workspaces/{workspace_id}/members/leave": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2131,16 +2138,16 @@ export interface paths {
 		get?: never;
 		put?: never;
 		/**
-		 * Leave project
-		 * @description Allows a member to voluntarily leave a project.
+		 * Leave workspace
+		 * @description Allows a member to voluntarily leave a workspace.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2206,7 +2213,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/members/{account_id}/": {
+	"/workspaces/{workspace_id}/members/{account_id}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2215,15 +2222,15 @@ export interface paths {
 		};
 		/**
 		 * Get member
-		 * @description Returns detailed information about a specific project member.
+		 * @description Returns detailed information about a specific workspace member.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 					/** @description Unique identifier of the member account. */
 					accountId: string;
 				};
@@ -2231,7 +2238,7 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Represents a project member. */
+				/** @description Represents a workspace member. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -2291,15 +2298,15 @@ export interface paths {
 		post?: never;
 		/**
 		 * Remove member
-		 * @description Permanently removes a member from the project. Cannot remove admins or yourself.
+		 * @description Permanently removes a member from the workspace. Cannot remove owners or yourself.
 		 */
 		delete: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 					/** @description Unique identifier of the member account. */
 					accountId: string;
 				};
@@ -2381,7 +2388,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/members/{account_id}/role": {
+	"/workspaces/{workspace_id}/members/{account_id}/role": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2396,15 +2403,15 @@ export interface paths {
 		head?: never;
 		/**
 		 * Update member role
-		 * @description Updates a project member's role. Cannot update your own role or demote admins.
+		 * @description Updates a workspace member's role. Cannot update your own role or demote owners.
 		 */
 		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 					/** @description Unique identifier of the member account. */
 					accountId: string;
 				};
@@ -2417,7 +2424,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Represents a project member. */
+				/** @description Represents a workspace member. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -2490,807 +2497,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/projects/{project_id}/pipelines": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List pipelines
-		 * @description Returns all configured pipelines for the project.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Pipeline"][];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create pipeline
-		 * @description Creates a new processing pipeline configuration for the project.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request body for creating a project pipeline. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreatePipeline"];
-				};
-			};
-			responses: {
-				/** @description Represents a project pipeline. */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Pipeline"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/projects/{project_id}/pipelines/{pipeline_id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get pipeline
-		 * @description Returns details of a specific pipeline configuration.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Represents a project pipeline. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Pipeline"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		/**
-		 * Update pipeline
-		 * @description Updates an existing pipeline configuration.
-		 */
-		put: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request body for creating a project pipeline. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreatePipeline"];
-				};
-			};
-			responses: {
-				/** @description Represents a project pipeline. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Pipeline"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		post?: never;
-		/**
-		 * Delete pipeline
-		 * @description Permanently removes a pipeline from the project.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/projects/{project_id}/templates": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List templates
-		 * @description Returns all configured templates for the project.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Template"][];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create template
-		 * @description Creates a new reusable template for the project.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request body for creating a project template. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateTemplate"];
-				};
-			};
-			responses: {
-				/** @description Represents a project template. */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Template"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/projects/{project_id}/templates/{template_id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get template
-		 * @description Returns details of a specific template configuration.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the template. */
-					templateId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Represents a project template. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Template"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		/**
-		 * Update template
-		 * @description Updates an existing template configuration.
-		 */
-		put: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the template. */
-					templateId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request body for creating a project template. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateTemplate"];
-				};
-			};
-			responses: {
-				/** @description Represents a project template. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Template"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		post?: never;
-		/**
-		 * Delete template
-		 * @description Permanently removes a template from the project.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the template. */
-					templateId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/projects/{project_id}/webhooks/": {
+	"/workspaces/{workspace_id}/webhooks/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3299,15 +2506,15 @@ export interface paths {
 		};
 		/**
 		 * List webhooks
-		 * @description Returns all configured webhooks for the project without secrets.
+		 * @description Returns all configured webhooks for the workspace without secrets.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3363,19 +2570,19 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for creating a new project webhook. */
+			/** @description Request payload for creating a new workspace webhook. */
 			requestBody: {
 				content: {
 					"application/json": components["schemas"]["CreateWebhook"];
 				};
 			};
 			responses: {
-				/** @description Project webhook response with secret (returned only at creation). */
+				/** @description Workspace webhook response with secret (returned only at creation). */
 				201: {
 					headers: {
 						[name: string]: unknown;
@@ -3437,7 +2644,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/webhooks/{webhook_id}/": {
+	"/webhooks/{webhook_id}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3453,8 +2660,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the webhook. */
 					webhookId: string;
 				};
@@ -3462,7 +2667,7 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Project webhook response. */
+				/** @description Workspace webhook response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -3527,21 +2732,19 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the webhook. */
 					webhookId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for updating an existing project webhook. */
+			/** @description Request payload for updating an existing workspace webhook. */
 			requestBody: {
 				content: {
 					"application/json": components["schemas"]["UpdateWebhook"];
 				};
 			};
 			responses: {
-				/** @description Project webhook response. */
+				/** @description Workspace webhook response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -3615,15 +2818,13 @@ export interface paths {
 		post?: never;
 		/**
 		 * Delete webhook
-		 * @description Permanently removes the webhook from the project.
+		 * @description Permanently removes the webhook from the workspace.
 		 */
 		delete: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the webhook. */
 					webhookId: string;
 				};
@@ -3690,7 +2891,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/ws/": {
+	"/workspaces/{workspace_id}/ws/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3698,16 +2899,16 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Connect to project WebSocket
-		 * @description Establishes a WebSocket connection for real-time project events and collaboration.
+		 * Connect to workspace WebSocket
+		 * @description Establishes a WebSocket connection for real-time workspace events and collaboration.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3775,7 +2976,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/files/": {
+	"/workspaces/{workspace_id}/files/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3793,8 +2994,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3866,262 +3067,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/files/{file_id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Download file
-		 * @description Downloads a file by ID. Returns the file content as a binary stream.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		/**
-		 * Delete file
-		 * @description Soft deletes a file by setting a deleted timestamp. The file can be recovered within the retention period.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
-					/** @description The API version string (e.g., "v1", "v2"). */
-					version: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		/**
-		 * Update file
-		 * @description Updates file metadata such as display name or processing priority.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
-					/** @description The API version string (e.g., "v1", "v2"). */
-					version: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to update file metadata. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UpdateFile"];
-				};
-			};
-			responses: {
-				/** @description Represents an uploaded file. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["File"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/projects/{project_id}/files/download": {
+	"/workspaces/{workspace_id}/files/download": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4139,8 +3085,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -4226,7 +3172,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/files/archive": {
+	"/workspaces/{workspace_id}/files/archive": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4237,15 +3183,15 @@ export interface paths {
 		put?: never;
 		/**
 		 * Download archived files
-		 * @description Downloads all or specific project files as a compressed archive. Supports zip and tar.gz formats.
+		 * @description Downloads all or specific workspace files as a compressed archive. Supports zip and tar.gz formats.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -4331,7 +3277,252 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/documents": {
+	"/files/{file_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Download file
+		 * @description Downloads a file by ID. Returns the file content as a binary stream.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the file. */
+					fileId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		/**
+		 * Delete file
+		 * @description Soft deletes a file by setting a deleted timestamp. The file can be recovered within the retention period.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the file. */
+					fileId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		/**
+		 * Update file
+		 * @description Updates file metadata such as display name or processing priority.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the file. */
+					fileId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to update file metadata. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateFile"];
+				};
+			};
+			responses: {
+				/** @description Represents an uploaded file. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["File"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		trace?: never;
+	};
+	"/workspaces/{workspace_id}/documents": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4340,15 +3531,15 @@ export interface paths {
 		};
 		/**
 		 * List documents
-		 * @description Lists all documents in a project with pagination.
+		 * @description Lists all documents in a workspace with pagination.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -4414,8 +3605,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -4735,7 +3926,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/projects/{project_id}/files/{file_id}/comments": {
+	"/files/{file_id}/comments": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4751,8 +3942,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 				};
@@ -4820,8 +4009,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 				};
@@ -4830,7 +4017,7 @@ export interface paths {
 			/** @description Request payload for creating a new document comment. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateDocumentComment"];
+					"application/json": components["schemas"]["CreateComment"];
 				};
 			};
 			responses: {
@@ -4896,7 +4083,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/projects/{project_id}/files/{file_id}/comments/{comment_id}": {
+	"/files/{file_id}/comments/{comment_id}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4915,8 +4102,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 					/** @description Unique identifier of the comment. */
@@ -4991,8 +4176,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the project. */
-					projectId: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 					/** @description Unique identifier of the comment. */
@@ -5003,7 +4186,7 @@ export interface paths {
 			/** @description Request payload to update a document comment. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateDocumentComment"];
+					"application/json": components["schemas"]["UpdateComment"];
 				};
 			};
 			responses: {
@@ -5555,26 +4738,26 @@ export interface components {
 			name?: string | null;
 		};
 		/**
-		 * @description Request payload for creating a new project.
+		 * @description Request payload for creating a new workspace.
 		 *
-		 *      Creates a new project with the specified configuration. The creator is
-		 *      automatically added as an admin member of the project.
+		 *      Creates a new workspace with the specified configuration. The creator is
+		 *      automatically added as an owner of the workspace.
 		 *
 		 *      # Example
 		 *
 		 *      ```json
 		 *      {
-		 *        "displayName": "My Project",
-		 *        "description": "A sample project",
+		 *        "displayName": "My Workspace",
+		 *        "description": "A sample workspace",
 		 *        "keepForSec": 86400,
 		 *        "autoCleanup": true
 		 *      }
 		 *      ```
 		 */
-		CreateProject: {
-			/** @description Optional description of the project (max 200 characters). */
+		CreateWorkspace: {
+			/** @description Optional description of the workspace (max 200 characters). */
 			description?: string | null;
-			/** @description Display name of the project (3-100 characters). */
+			/** @description Display name of the workspace (3-100 characters). */
 			displayName: string;
 			/**
 			 * Format: int32
@@ -5587,27 +4770,27 @@ export interface components {
 			requireApproval?: boolean | null;
 			/**
 			 * Format: int32
-			 * @description Maximum number of members allowed in the project (1-1000).
+			 * @description Maximum number of members allowed in the workspace (1-1000).
 			 */
 			maxMembers?: number | null;
 			/**
 			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the project (1024-1048576 MB).
+			 * @description Maximum storage size in megabytes allowed for the workspace (1024-1048576 MB).
 			 */
 			maxStorage?: number | null;
-			/** @description Whether comments are enabled for this project. */
+			/** @description Whether comments are enabled for this workspace. */
 			enableComments?: boolean | null;
 		};
-		/** @description Project response. */
-		Project: {
-			/** @description Description of the project. */
+		/** @description Workspace response. */
+		Workspace: {
+			/** @description Description of the workspace. */
 			description?: string | null;
 			/**
 			 * Format: uuid
-			 * @description ID of the project.
+			 * @description ID of the workspace.
 			 */
-			projectId: string;
-			/** @description Display name of the project. */
+			workspaceId: string;
+			/** @description Display name of the workspace. */
 			displayName: string;
 			/**
 			 * Format: int32
@@ -5620,46 +4803,46 @@ export interface components {
 			requireApproval: boolean;
 			/**
 			 * Format: int32
-			 * @description Maximum number of members allowed in the project.
+			 * @description Maximum number of members allowed in the workspace.
 			 */
 			maxMembers?: number | null;
 			/**
 			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the project.
+			 * @description Maximum storage size in megabytes allowed for the workspace.
 			 */
 			maxStorage?: number | null;
-			/** @description Whether comments are enabled for this project. */
+			/** @description Whether comments are enabled for this workspace. */
 			enableComments: boolean;
-			/** @description Role of the member in the project. */
-			memberRole: components["schemas"]["ProjectRole"];
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the project was created.
+			 * @description Timestamp when the workspace was created.
 			 */
 			createdAt: string;
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the project was last updated.
+			 * @description Timestamp when the workspace was last updated.
 			 */
 			updatedAt: string;
 		};
 		/**
-		 * @description Defines the role and permission level of a project member.
+		 * @description Defines the role and permission level of a workspace member.
 		 *
-		 *      This enumeration corresponds to the `PROJECT_ROLE` PostgreSQL enum and provides
-		 *      hierarchical access control for project members with clearly defined capabilities.
+		 *      This enumeration corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
+		 *      hierarchical access control for workspace members with clearly defined capabilities.
 		 */
-		ProjectRole: "admin" | "editor" | "viewer";
-		/** @description Path parameters for project-level operations. */
-		ProjectPathParams: {
+		WorkspaceRole: "owner" | "member" | "guest";
+		/** @description Path parameters for workspace-level operations. */
+		WorkspacePathParams: {
 			/**
 			 * Format: uuid
-			 * @description Unique identifier of the project.
+			 * @description Unique identifier of the workspace.
 			 */
-			projectId: string;
+			workspaceId: string;
 		};
 		/**
-		 * @description Request payload to update an existing project.
+		 * @description Request payload to update an existing workspace.
 		 *
 		 *      All fields are optional; only provided fields will be updated.
 		 *
@@ -5667,15 +4850,15 @@ export interface components {
 		 *
 		 *      ```json
 		 *      {
-		 *        "displayName": "Updated Project Name",
+		 *        "displayName": "Updated Workspace Name",
 		 *        "enableComments": true
 		 *      }
 		 *      ```
 		 */
-		UpdateProject: {
-			/** @description New description for the project (max 500 characters). */
+		UpdateWorkspace: {
+			/** @description New description for the workspace (max 500 characters). */
 			description?: string | null;
-			/** @description New display name for the project (3-100 characters). */
+			/** @description New display name for the workspace (3-100 characters). */
 			displayName?: string | null;
 			/**
 			 * Format: int32
@@ -5688,19 +4871,19 @@ export interface components {
 			requireApproval?: boolean | null;
 			/**
 			 * Format: int32
-			 * @description Maximum number of members allowed in the project (1-1000).
+			 * @description Maximum number of members allowed in the workspace (1-1000).
 			 */
 			maxMembers?: number | null;
 			/**
 			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the project (1-1048576 MB).
+			 * @description Maximum storage size in megabytes allowed for the workspace (1-1048576 MB).
 			 */
 			maxStorage?: number | null;
-			/** @description Whether comments are enabled for this project. */
+			/** @description Whether comments are enabled for this workspace. */
 			enableComments?: boolean | null;
 		};
-		/** @description Request payload for creating a new project integration. */
-		CreateProjectIntegration: {
+		/** @description Request payload for creating a new workspace integration. */
+		CreateIntegration: {
 			/** @description Detailed description of the integration's purpose (1-500 characters). */
 			description: string;
 			/** @description Human-readable name for the integration (1-100 characters). */
@@ -5715,13 +4898,13 @@ export interface components {
 			isActive?: boolean | null;
 		};
 		/**
-		 * @description Defines the type/category of a project integration.
+		 * @description Defines the type/category of a workspace integration.
 		 *
 		 *      This enumeration corresponds to the `INTEGRATION_TYPE` PostgreSQL enum and is used
-		 *      to categorize different types of third-party integrations that can be connected to projects.
+		 *      to categorize different types of third-party integrations that can be connected to workspaces.
 		 */
 		IntegrationType: "webhook" | "storage" | "other";
-		/** @description Project integration response. */
+		/** @description Workspace integration response. */
 		Integration: {
 			/** @description Detailed description of the integration's purpose and functionality. */
 			description: string;
@@ -5732,9 +4915,9 @@ export interface components {
 			integrationId: string;
 			/**
 			 * Format: uuid
-			 * @description Reference to the project this integration belongs to.
+			 * @description Reference to the workspace this integration belongs to.
 			 */
-			projectId: string;
+			workspaceId: string;
 			/** @description Human-readable name for the integration. */
 			integrationName: string;
 			/** @description Type of third-party service this integration connects to. */
@@ -5767,27 +4950,32 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
-		 * @description Defines the operational status of a project integration.
+		 * @description Defines the operational status of a workspace integration.
 		 *
 		 *      This enumeration corresponds to the `INTEGRATION_STATUS` PostgreSQL enum and is used
 		 *      to manage integration states from initial setup through active execution and error handling.
 		 */
 		IntegrationStatus: "pending" | "executing" | "failed";
-		/** @description Path parameters for project integration operations. */
+		/** @description Query parameters for listing workspace integrations. */
+		ListIntegrationsQuery: {
+			/** @description Filter by integration type. */
+			integrationType?: components["schemas"]["IntegrationType"] | null;
+		};
+		/**
+		 * @description Path parameters for integration operations (integration ID only).
+		 *
+		 *      Since integration IDs are globally unique UUIDs, workspace context can be
+		 *      derived from the integration record itself for authorization purposes.
+		 */
 		IntegrationPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the project.
-			 */
-			projectId: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the integration.
 			 */
 			integrationId: string;
 		};
-		/** @description Request payload for updating an existing project integration. */
-		UpdateProjectIntegration: {
+		/** @description Request payload for updating an existing workspace integration. */
+		UpdateIntegration: {
 			/** @description Updated description of the integration's purpose (1-500 characters). */
 			description?: string | null;
 			/** @description Updated human-readable name for the integration (1-100 characters). */
@@ -5806,7 +4994,7 @@ export interface components {
 			/** @description Updated authentication credentials for the external service. */
 			credentials: unknown;
 		};
-		/** @description Request payload for creating a new project invite. */
+		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
 			/**
 			 * Format: email
@@ -5815,9 +5003,9 @@ export interface components {
 			inviteeEmail: string;
 			/**
 			 * @description Role the invitee will have if they accept the invitation.
-			 * @default viewer
+			 * @default guest
 			 */
-			invitedRole: components["schemas"]["ProjectRole"];
+			invitedRole: components["schemas"]["WorkspaceRole"];
 			/**
 			 * @description When the invitation expires.
 			 * @default in7Days
@@ -5827,7 +5015,7 @@ export interface components {
 		/** @description Expiration options for invite codes. */
 		InviteExpiration: "never" | "in24Hours" | "in7Days" | "in30Days";
 		/**
-		 * @description Project invite with complete information.
+		 * @description Workspace invite with complete information.
 		 *
 		 *      This response includes all the essential information about an
 		 *      invitation, including the unique invite ID that can be used to track or cancel
@@ -5841,16 +5029,16 @@ export interface components {
 			inviteId: string;
 			/**
 			 * Format: uuid
-			 * @description ID of the project the invitation is for.
+			 * @description ID of the workspace the invitation is for.
 			 */
-			projectId: string;
+			workspaceId: string;
 			/**
 			 * Format: uuid
 			 * @description Account ID if the invitee has an account.
 			 */
 			inviteeId?: string | null;
 			/** @description Role the invitee will have if they accept. */
-			invitedRole: components["schemas"]["ProjectRole"];
+			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Current status of the invitation. */
 			inviteStatus: components["schemas"]["InviteStatus"];
 			/**
@@ -5870,10 +5058,10 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
-		 * @description Defines the current status of a project invitation.
+		 * @description Defines the current status of a workspace invitation.
 		 *
 		 *      This enumeration corresponds to the `INVITE_STATUS` PostgreSQL enum and is used
-		 *      to track the lifecycle of project invitations from creation to resolution.
+		 *      to track the lifecycle of workspace invitations from creation to resolution.
 		 */
 		InviteStatus:
 			| "pending"
@@ -5882,31 +5070,26 @@ export interface components {
 			| "canceled"
 			| "expired"
 			| "revoked";
-		/** @description Path parameters for project invite operations. */
-		InvitePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the project.
-			 */
-			projectId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invite.
-			 */
-			inviteId: string;
+		/** @description Query parameters for listing workspace invites. */
+		ListInvitesQuery: {
+			/** @description Filter by invited role. */
+			role?: components["schemas"]["WorkspaceRole"] | null;
+			/** @description Sort by field. */
+			sortBy?: components["schemas"]["InviteSortField"] | null;
+			/** @description Sort order (asc or desc). */
+			order?: components["schemas"]["SortOrder"] | null;
 		};
-		/** @description Request to respond to a project invitation. */
-		ReplyInvite: {
-			/** @description Whether to accept or decline the invitation. */
-			acceptInvite: boolean;
-		};
-		/** @description Request to generate a shareable invite code for a project. */
+		/** @description Fields to sort invites by. */
+		InviteSortField: "email" | "date";
+		/** @description Sort order direction. */
+		SortOrder: "asc" | "desc";
+		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
 			/**
 			 * @description Role to assign when someone joins via this invite code.
-			 * @default viewer
+			 * @default guest
 			 */
-			role: components["schemas"]["ProjectRole"];
+			role: components["schemas"]["WorkspaceRole"];
 			/**
 			 * @description When the invite code expires.
 			 * @default in7Days
@@ -5919,49 +5102,80 @@ export interface components {
 			inviteCode: string;
 			/**
 			 * Format: uuid
-			 * @description ID of the project this invite code is for.
+			 * @description ID of the workspace this invite code is for.
 			 */
-			projectId: string;
+			workspaceId: string;
 			/** @description Role assigned when someone joins via this code. */
-			role: components["schemas"]["ProjectRole"];
+			role: components["schemas"]["WorkspaceRole"];
 			/**
 			 * Format: date-time
 			 * @description When the invite code expires.
 			 */
 			expiresAt: string;
 		};
+		/**
+		 * @description Path parameters for invite operations (invite ID only).
+		 *
+		 *      Since invite IDs are globally unique UUIDs, workspace context can be
+		 *      derived from the invite record itself for authorization purposes.
+		 */
+		InvitePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the invite.
+			 */
+			inviteId: string;
+		};
+		/** @description Request to respond to a workspace invitation. */
+		ReplyInvite: {
+			/** @description Whether to accept or decline the invitation. */
+			acceptInvite: boolean;
+		};
 		/** @description Path parameters for joining via invite code. */
 		InviteCodePathParams: {
-			/** @description The invite code to use for joining the project. */
+			/** @description The invite code to use for joining the workspace. */
 			inviteCode: string;
 		};
-		/** @description Represents a project member. */
+		/** @description Represents a workspace member. */
 		Member: {
 			/**
 			 * Format: uuid
 			 * @description Account ID of the member.
 			 */
 			accountId: string;
-			/** @description Role of the member in the project. */
-			memberRole: components["schemas"]["ProjectRole"];
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the member joined the project.
+			 * @description Timestamp when the member joined the workspace.
 			 */
 			createdAt: string;
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the member last accessed the project.
+			 * @description Timestamp when the member last accessed the workspace.
 			 */
 			lastAccessedAt?: string | null;
 		};
-		/** @description Path parameters for project member operations. */
+		/** @description Query parameters for listing workspace members. */
+		ListMembersQuery: {
+			/** @description Filter by workspace role. */
+			role?: components["schemas"]["WorkspaceRole"] | null;
+			/** @description Filter by 2FA status. */
+			has2fa?: boolean | null;
+			/** @description Sort by field. */
+			sortBy?: components["schemas"]["MemberSortField"] | null;
+			/** @description Sort order (asc or desc). */
+			order?: components["schemas"]["SortOrder"] | null;
+		};
+		/** @description Fields to sort members by. */
+		MemberSortField: "name" | "date";
+		/** @description Path parameters for workspace member operations. */
 		MemberPathParams: {
 			/**
 			 * Format: uuid
-			 * @description Unique identifier of the project.
+			 * @description Unique identifier of the workspace.
 			 */
-			projectId: string;
+			workspaceId: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the member account.
@@ -5971,172 +5185,9 @@ export interface components {
 		/** @description Request to update a member's role. */
 		UpdateMemberRole: {
 			/** @description New role for the member. */
-			role: components["schemas"]["ProjectRole"];
+			role: components["schemas"]["WorkspaceRole"];
 		};
-		/** @description Represents a project pipeline. */
-		Pipeline: {
-			/** @description Pipeline description. */
-			description?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Unique pipeline identifier.
-			 */
-			pipelineId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the project this pipeline belongs to.
-			 */
-			projectId: string;
-			/** @description Pipeline name. */
-			name: string;
-			/** @description Pipeline configuration as JSON. */
-			configuration: unknown;
-			/** @description Whether the pipeline is enabled. */
-			enabled: boolean;
-			/** @description Pipeline triggers configuration. */
-			triggers?: unknown;
-			/** @description Current status of the pipeline. */
-			status: string;
-			/**
-			 * Format: date-time
-			 * @description Last execution timestamp.
-			 */
-			lastExecution?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Next scheduled execution timestamp.
-			 */
-			nextExecution?: string | null;
-			/**
-			 * Format: int64
-			 * @description Number of successful executions.
-			 */
-			successCount: number;
-			/**
-			 * Format: int64
-			 * @description Number of failed executions.
-			 */
-			failureCount: number;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was last updated.
-			 */
-			updatedAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was soft-deleted.
-			 */
-			deletedAt?: string | null;
-		};
-		/** @description Request body for creating a project pipeline. */
-		CreatePipeline: {
-			/** @description Pipeline description. */
-			description?: string | null;
-			/** @description Pipeline name. */
-			name: string;
-			/** @description Pipeline configuration as JSON. */
-			configuration: unknown;
-			/** @description Whether the pipeline is enabled. */
-			enabled?: boolean | null;
-			/** @description Pipeline triggers configuration. */
-			triggers?: unknown;
-		};
-		/** @description Path parameters for project pipeline operations. */
-		PipelinePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the project.
-			 */
-			projectId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline.
-			 */
-			pipelineId: string;
-		};
-		/** @description Represents a project template. */
-		Template: {
-			/** @description Template description. */
-			description?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Unique template identifier.
-			 */
-			templateId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the project this template belongs to.
-			 */
-			projectId: string;
-			/** @description Template name. */
-			name: string;
-			/** @description Template content or configuration as JSON. */
-			content: unknown;
-			/** @description Template category. */
-			category?: string | null;
-			/** @description Template tags for organization. */
-			tags?: string[] | null;
-			/** @description Whether the template is active/available for use. */
-			active: boolean;
-			/** @description Template version. */
-			version?: string | null;
-			/**
-			 * Format: int64
-			 * @description Number of times this template has been used.
-			 */
-			usageCount: number;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the template was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the template was last updated.
-			 */
-			updatedAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the template was soft-deleted.
-			 */
-			deletedAt?: string | null;
-		};
-		/** @description Request body for creating a project template. */
-		CreateTemplate: {
-			/** @description Template description. */
-			description?: string | null;
-			/** @description Template name. */
-			name: string;
-			/** @description Template content or configuration as JSON. */
-			content: unknown;
-			/** @description Template category. */
-			category?: string | null;
-			/** @description Template tags for organization. */
-			tags?: string[] | null;
-			/** @description Whether the template is active/available for use. */
-			active?: boolean | null;
-			/** @description Template version. */
-			version?: string | null;
-		};
-		/** @description Path parameters for project template operations. */
-		TemplatePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the project.
-			 */
-			projectId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the template.
-			 */
-			templateId: string;
-		};
-		/** @description Request payload for creating a new project webhook. */
+		/** @description Request payload for creating a new workspace webhook. */
 		CreateWebhook: {
 			/**
 			 * @description Detailed description of the webhook's purpose (max 500 characters).
@@ -6162,7 +5213,7 @@ export interface components {
 			 */
 			maxFailures?: number | null;
 		};
-		/** @description Project webhook response with secret (returned only at creation). */
+		/** @description Workspace webhook response with secret (returned only at creation). */
 		WebhookWithSecret: {
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
@@ -6173,9 +5224,9 @@ export interface components {
 			webhookId: string;
 			/**
 			 * Format: uuid
-			 * @description Reference to the project this webhook belongs to.
+			 * @description Reference to the workspace this webhook belongs to.
 			 */
-			projectId: string;
+			workspaceId: string;
 			/** @description Human-readable name for the webhook. */
 			displayName: string;
 			/** @description The URL to send webhook payloads to. */
@@ -6230,13 +5281,13 @@ export interface components {
 			secret?: string | null;
 		};
 		/**
-		 * @description Defines the operational status of a project webhook.
+		 * @description Defines the operational status of a workspace webhook.
 		 *
 		 *      This enumeration corresponds to the `WEBHOOK_STATUS` PostgreSQL enum and is used
 		 *      to manage webhook states from active operation through pausing and disabling.
 		 */
 		WebhookStatus: "active" | "paused" | "disabled";
-		/** @description Project webhook response. */
+		/** @description Workspace webhook response. */
 		Webhook: {
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
@@ -6247,9 +5298,9 @@ export interface components {
 			webhookId: string;
 			/**
 			 * Format: uuid
-			 * @description Reference to the project this webhook belongs to.
+			 * @description Reference to the workspace this webhook belongs to.
 			 */
-			projectId: string;
+			workspaceId: string;
 			/** @description Human-readable name for the webhook. */
 			displayName: string;
 			/** @description The URL to send webhook payloads to. */
@@ -6301,20 +5352,20 @@ export interface components {
 			 */
 			updatedAt: string;
 		};
-		/** @description Path parameters for project webhook operations. */
+		/**
+		 * @description Path parameters for webhook operations (webhook ID only).
+		 *
+		 *      Since webhook IDs are globally unique UUIDs, workspace context can be
+		 *      derived from the webhook record itself for authorization purposes.
+		 */
 		WebhookPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the project.
-			 */
-			projectId: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the webhook.
 			 */
 			webhookId: string;
 		};
-		/** @description Request payload for updating an existing project webhook. */
+		/** @description Request payload for updating an existing workspace webhook. */
 		UpdateWebhook: {
 			/** @description Updated description of the webhook's purpose (max 500 characters). */
 			description?: string | null;
@@ -6378,23 +5429,35 @@ export interface components {
 			| "failed"
 			| "canceled"
 			| "skipped";
-		/** @description Path parameters for file operations. */
-		FilePathParams: {
+		/** @description Request to download multiple files. */
+		DownloadMultipleFilesRequest: {
+			/** @description File IDs to download (1-100 files). */
+			fileIds: string[];
+		};
+		/** @description Request to download files as an archive. */
+		DownloadArchivedFilesRequest: {
 			/**
-			 * Format: uuid
-			 * @description Unique identifier of the project.
+			 * @description Archive format (defaults to tar).
+			 * @default tar
 			 */
-			projectId: string;
+			format: components["schemas"]["ArchiveFormat"];
+			/** @description Optional specific file IDs (if None, downloads all workspace files). */
+			fileIds?: string[] | null;
+		};
+		/** @description Archive format options for file downloads. */
+		ArchiveFormat: "tar" | "zip";
+		/**
+		 * @description Path parameters for file operations (file ID only).
+		 *
+		 *      Since file IDs are globally unique UUIDs, workspace context can be
+		 *      derived from the file record itself for authorization purposes.
+		 */
+		FilePathParams: {
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the file.
 			 */
 			fileId: string;
-		};
-		/** @description Path parameters for version extraction. */
-		VersionParams: {
-			/** @description The API version string (e.g., "v1", "v2"). */
-			version: string;
 		};
 		/** @description Request to update file metadata. */
 		UpdateFile: {
@@ -6424,23 +5487,6 @@ export interface components {
 		 *      to specify how document content should be segmented for knowledge extraction.
 		 */
 		ContentSegmentation: "none" | "semantic" | "fixed";
-		/** @description Request to download multiple files. */
-		DownloadMultipleFilesRequest: {
-			/** @description File IDs to download (1-100 files). */
-			fileIds: string[];
-		};
-		/** @description Request to download files as an archive. */
-		DownloadArchivedFilesRequest: {
-			/**
-			 * @description Archive format (defaults to tar).
-			 * @default tar
-			 */
-			format: components["schemas"]["ArchiveFormat"];
-			/** @description Optional specific file IDs (if None, downloads all project files). */
-			fileIds?: string[] | null;
-		};
-		/** @description Archive format options for file downloads. */
-		ArchiveFormat: "tar" | "zip";
 		/** @description Request payload for creating a new document. */
 		CreateDocument: {
 			/**
@@ -6478,9 +5524,9 @@ export interface components {
 			documentId: string;
 			/**
 			 * Format: uuid
-			 * @description ID of the project that the document belongs to.
+			 * @description ID of the workspace that the document belongs to.
 			 */
-			projectId: string;
+			workspaceId: string;
 			/**
 			 * Format: uuid
 			 * @description ID of the account that owns the document.
@@ -6546,7 +5592,7 @@ export interface components {
 			requiresApproval?: boolean | null;
 		};
 		/** @description Request payload for creating a new document comment. */
-		CreateDocumentComment: {
+		CreateComment: {
 			/** @description Comment text content. */
 			content: string;
 			/**
@@ -6602,13 +5648,13 @@ export interface components {
 			 */
 			updatedAt: string;
 		};
-		/** @description Path parameters for file comment operations. */
+		/**
+		 * @description Path parameters for file comment operations (file ID only).
+		 *
+		 *      Since file IDs are globally unique UUIDs, workspace context can be
+		 *      derived from the file record itself for authorization purposes.
+		 */
 		FileCommentPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the project.
-			 */
-			projectId: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the file.
@@ -6621,7 +5667,7 @@ export interface components {
 			commentId: string;
 		};
 		/** @description Request payload to update a document comment. */
-		UpdateDocumentComment: {
+		UpdateComment: {
 			/** @description Updated comment content. */
 			content?: string | null;
 		};
@@ -6672,6 +5718,11 @@ export interface components {
 			password: string;
 			/** @description Whether to remember the device for extended session. */
 			rememberMe: boolean;
+		};
+		/** @description Path parameters for version extraction. */
+		VersionParams: {
+			/** @description The API version string (e.g., "v1", "v2"). */
+			version: string;
 		};
 		/** @description Request payload for monitoring status endpoint. */
 		CheckHealth: {

@@ -17,86 +17,79 @@ export class WebhooksService {
 	}
 
 	/**
-	 * List all webhooks in a project
-	 * @param projectId - Project ID
+	 * List all webhooks in a workspace
+	 * @param workspaceId - Workspace ID
 	 * @returns Promise that resolves with the list of webhooks
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(projectId: string): Promise<Webhook[]> {
-		const { data } = await this.#api.GET("/projects/{project_id}/webhooks/", {
-			params: { path: { projectId } },
-		});
+	async list(workspaceId: string): Promise<Webhook[]> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspace_id}/webhooks/",
+			{
+				params: { path: { workspaceId } },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Get a specific webhook by ID
-	 * @param projectId - Project ID
 	 * @param webhookId - Webhook ID
 	 * @returns Promise that resolves with the webhook details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(projectId: string, webhookId: string): Promise<Webhook> {
-		const { data } = await this.#api.GET(
-			"/projects/{project_id}/webhooks/{webhook_id}/",
-			{
-				params: { path: { projectId, webhookId } },
-			},
-		);
-		return data!;
-	}
-
-	/**
-	 * Create a new webhook
-	 * @param projectId - Project ID
-	 * @param webhook - Webhook creation request
-	 * @returns Promise that resolves with the created webhook (includes secret, shown only once)
-	 * @throws {ApiError} if the request fails
-	 */
-	async create(
-		projectId: string,
-		webhook: CreateWebhook,
-	): Promise<WebhookWithSecret> {
-		const { data } = await this.#api.POST("/projects/{project_id}/webhooks/", {
-			params: { path: { projectId } },
-			body: webhook,
+	async get(webhookId: string): Promise<Webhook> {
+		const { data } = await this.#api.GET("/webhooks/{webhook_id}/", {
+			params: { path: { webhookId } },
 		});
 		return data!;
 	}
 
 	/**
-	 * Update an existing webhook
-	 * @param projectId - Project ID
-	 * @param webhookId - Webhook ID
-	 * @param updates - Webhook update request
-	 * @returns Promise that resolves with the updated webhook
+	 * Create a new webhook
+	 * @param workspaceId - Workspace ID
+	 * @param webhook - Webhook creation request
+	 * @returns Promise that resolves with the created webhook (includes secret, shown only once)
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(
-		projectId: string,
-		webhookId: string,
-		updates: UpdateWebhook,
-	): Promise<Webhook> {
-		const { data } = await this.#api.PUT(
-			"/projects/{project_id}/webhooks/{webhook_id}/",
+	async create(
+		workspaceId: string,
+		webhook: CreateWebhook,
+	): Promise<WebhookWithSecret> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspace_id}/webhooks/",
 			{
-				params: { path: { projectId, webhookId } },
-				body: updates,
+				params: { path: { workspaceId } },
+				body: webhook,
 			},
 		);
 		return data!;
 	}
 
 	/**
+	 * Update an existing webhook
+	 * @param webhookId - Webhook ID
+	 * @param updates - Webhook update request
+	 * @returns Promise that resolves with the updated webhook
+	 * @throws {ApiError} if the request fails
+	 */
+	async update(webhookId: string, updates: UpdateWebhook): Promise<Webhook> {
+		const { data } = await this.#api.PUT("/webhooks/{webhook_id}/", {
+			params: { path: { webhookId } },
+			body: updates,
+		});
+		return data!;
+	}
+
+	/**
 	 * Delete a webhook
-	 * @param projectId - Project ID
 	 * @param webhookId - Webhook ID
 	 * @returns Promise that resolves when the webhook is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(projectId: string, webhookId: string): Promise<void> {
-		await this.#api.DELETE("/projects/{project_id}/webhooks/{webhook_id}/", {
-			params: { path: { projectId, webhookId } },
+	async delete(webhookId: string): Promise<void> {
+		await this.#api.DELETE("/webhooks/{webhook_id}/", {
+			params: { path: { webhookId } },
 		});
 	}
 }

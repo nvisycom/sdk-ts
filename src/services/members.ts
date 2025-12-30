@@ -16,32 +16,35 @@ export class MembersService {
 	}
 
 	/**
-	 * List members of a project
-	 * @param projectId - Project ID
-	 * @param pagination - Pagination parameters
+	 * List members of a workspace
+	 * @param workspaceId - Workspace ID
+	 * @param pagination - Optional pagination parameters
 	 * @returns Promise that resolves with the list of members
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(projectId: string, pagination?: Pagination): Promise<Member[]> {
-		const { data } = await this.#api.GET("/projects/{project_id}/members/", {
-			params: { path: { projectId } },
-			body: pagination ?? {},
-		});
+	async list(workspaceId: string, pagination?: Pagination): Promise<Member[]> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspace_id}/members/",
+			{
+				params: { path: { workspaceId } },
+				body: pagination ?? {},
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Get member details by account ID
-	 * @param projectId - Project ID
+	 * @param workspaceId - Workspace ID
 	 * @param accountId - Account ID
 	 * @returns Promise that resolves with the member details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(projectId: string, accountId: string): Promise<Member> {
+	async get(workspaceId: string, accountId: string): Promise<Member> {
 		const { data } = await this.#api.GET(
-			"/projects/{project_id}/members/{account_id}/",
+			"/workspaces/{workspace_id}/members/{account_id}/",
 			{
-				params: { path: { projectId, accountId } },
+				params: { path: { workspaceId, accountId } },
 			},
 		);
 		return data!;
@@ -49,21 +52,21 @@ export class MembersService {
 
 	/**
 	 * Update a member's role
-	 * @param projectId - Project ID
+	 * @param workspaceId - Workspace ID
 	 * @param accountId - Account ID
 	 * @param role - New role for the member
 	 * @returns Promise that resolves with the updated member
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateRole(
-		projectId: string,
+		workspaceId: string,
 		accountId: string,
 		role: UpdateMemberRole,
 	): Promise<Member> {
 		const { data } = await this.#api.PATCH(
-			"/projects/{project_id}/members/{account_id}/role",
+			"/workspaces/{workspace_id}/members/{account_id}/role",
 			{
-				params: { path: { projectId, accountId } },
+				params: { path: { workspaceId, accountId } },
 				body: role,
 			},
 		);
@@ -71,27 +74,27 @@ export class MembersService {
 	}
 
 	/**
-	 * Remove a member from a project
-	 * @param projectId - Project ID
+	 * Remove a member from a workspace
+	 * @param workspaceId - Workspace ID
 	 * @param accountId - Account ID
 	 * @returns Promise that resolves when the member is removed
 	 * @throws {ApiError} if the request fails
 	 */
-	async remove(projectId: string, accountId: string): Promise<void> {
-		await this.#api.DELETE("/projects/{project_id}/members/{account_id}/", {
-			params: { path: { projectId, accountId } },
+	async remove(workspaceId: string, accountId: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspace_id}/members/{account_id}/", {
+			params: { path: { workspaceId, accountId } },
 		});
 	}
 
 	/**
-	 * Leave a project
-	 * @param projectId - Project ID
+	 * Leave a workspace
+	 * @param workspaceId - Workspace ID
 	 * @returns Promise that resolves when the member has left
 	 * @throws {ApiError} if the request fails
 	 */
-	async leave(projectId: string): Promise<void> {
-		await this.#api.POST("/projects/{project_id}/members/leave", {
-			params: { path: { projectId } },
+	async leave(workspaceId: string): Promise<void> {
+		await this.#api.POST("/workspaces/{workspace_id}/members/leave", {
+			params: { path: { workspaceId } },
 		});
 	}
 }

@@ -18,73 +18,60 @@ export class FilesService {
 
 	/**
 	 * Download a file by ID
-	 * @param projectId - Project ID
 	 * @param fileId - File ID
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */
-	async download(projectId: string, fileId: string): Promise<Response> {
-		const { response } = await this.#api.GET(
-			"/projects/{project_id}/files/{file_id}",
-			{
-				params: { path: { projectId, fileId } },
-				parseAs: "stream",
-			},
-		);
+	async download(fileId: string): Promise<Response> {
+		const { response } = await this.#api.GET("/files/{file_id}", {
+			params: { path: { fileId } },
+			parseAs: "stream",
+		});
 		return response;
 	}
 
 	/**
 	 * Update a file's metadata
-	 * @param projectId - Project ID
 	 * @param fileId - File ID
 	 * @param updates - File update request
 	 * @returns Promise that resolves with the updated file
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(
-		projectId: string,
-		fileId: string,
-		updates: UpdateFile,
-	): Promise<File> {
-		const { data } = await this.#api.PATCH(
-			"/projects/{project_id}/files/{file_id}",
-			{
-				params: { path: { projectId, fileId, version: "v1" } },
-				body: updates,
-			},
-		);
+	async update(fileId: string, updates: UpdateFile): Promise<File> {
+		const { data } = await this.#api.PATCH("/files/{file_id}", {
+			params: { path: { fileId } },
+			body: updates,
+		});
 		return data!;
 	}
 
 	/**
 	 * Delete a file
-	 * @param projectId - Project ID
 	 * @param fileId - File ID
 	 * @returns Promise that resolves when the file is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(projectId: string, fileId: string): Promise<void> {
-		await this.#api.DELETE("/projects/{project_id}/files/{file_id}", {
-			params: { path: { projectId, fileId, version: "v1" } },
+	async delete(fileId: string): Promise<void> {
+		await this.#api.DELETE("/files/{file_id}", {
+			params: { path: { fileId } },
 		});
 	}
 
 	/**
 	 * Download multiple files
-	 * @param projectId - Project ID
+	 * @param workspaceId - Workspace ID
 	 * @param request - Download request with file IDs
 	 * @returns Promise that resolves with the download response
 	 * @throws {ApiError} if the request fails
 	 */
 	async downloadMultiple(
-		projectId: string,
+		workspaceId: string,
 		request: DownloadMultipleFilesRequest,
 	): Promise<Response> {
 		const { response } = await this.#api.POST(
-			"/projects/{project_id}/files/download",
+			"/workspaces/{workspace_id}/files/download",
 			{
-				params: { path: { projectId } },
+				params: { path: { workspaceId } },
 				body: request,
 				parseAs: "stream",
 			},
@@ -94,19 +81,19 @@ export class FilesService {
 
 	/**
 	 * Download files as an archive
-	 * @param projectId - Project ID
+	 * @param workspaceId - Workspace ID
 	 * @param request - Archive download request
 	 * @returns Promise that resolves with the archive response
 	 * @throws {ApiError} if the request fails
 	 */
 	async downloadArchive(
-		projectId: string,
+		workspaceId: string,
 		request: DownloadArchivedFilesRequest,
 	): Promise<Response> {
 		const { response } = await this.#api.POST(
-			"/projects/{project_id}/files/archive",
+			"/workspaces/{workspace_id}/files/archive",
 			{
-				params: { path: { projectId } },
+				params: { path: { workspaceId } },
 				body: request,
 				parseAs: "stream",
 			},
