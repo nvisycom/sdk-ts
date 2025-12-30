@@ -13,7 +13,6 @@ and this project adheres to
 ### Added
 
 - Generated OpenAPI schema types for type-safe API calls
-- `AuthService` for login, signup, and logout operations
 - `Client.withApiToken()` method to create a new client with a different token
 - Error middleware for automatic API error handling
 - Full API coverage with services for all endpoints
@@ -23,17 +22,15 @@ and this project adheres to
 
 - Client now requires `apiToken` in configuration
 - Refactored all services to use `openapi-fetch` for type-safe API calls
+- Improved error handling with `ApiError`
 - Services now throw `ApiError` automatically via middleware
 - Datatypes now re-export schema types with convenient aliases
 - Services are created on-demand via Client getters
-- Improved error handling with `ApiError`, `ConfigError`, and `NetworkError`
 
 ### Removed
 
 - `ClientBuilder` class and `Client.builder()` method
 - `Client.fromEnvironment()` method
-- `Client.fromAuthenticated()` method
-- `AuthClientConfig` interface
 - Environment variable support (`NVISY_API_TOKEN`, `NVISY_BASE_URL`, `NVISY_USER_AGENT`)
 - Manual type definitions in datatypes (now use schema re-exports)
 

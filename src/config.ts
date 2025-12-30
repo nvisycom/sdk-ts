@@ -31,48 +31,48 @@ export const VERSION = "0.2.0";
  * ```
  */
 export interface ClientConfig {
-  /**
-   * API token for authentication.
-   *
-   * Tokens can be obtained from the Nvisy dashboard or via the auth endpoints.
-   */
-  apiToken: string;
+	/**
+	 * API token for authentication.
+	 *
+	 * Tokens can be obtained from the Nvisy dashboard or via the auth endpoints.
+	 */
+	apiToken: string;
 
-  /**
-   * Base URL for the Nvisy API.
-   *
-   * @default "https://api.nvisy.com"
-   */
-  baseUrl?: string;
+	/**
+	 * Base URL for the Nvisy API.
+	 *
+	 * @default "https://api.nvisy.com"
+	 */
+	baseUrl?: string;
 
-  /**
-   * Custom headers to include with every request.
-   *
-   * These headers are merged with the default headers (Content-Type, User-Agent,
-   * and Authorization). Custom headers take precedence over defaults if there
-   * are conflicts.
-   */
-  headers?: Record<string, string>;
+	/**
+	 * Custom headers to include with every request.
+	 *
+	 * These headers are merged with the default headers (Content-Type, User-Agent,
+	 * and Authorization). Custom headers take precedence over defaults if there
+	 * are conflicts.
+	 */
+	headers?: Record<string, string>;
 
-  /**
-   * Custom user agent string to identify your application.
-   *
-   * @default "@nvisy/sdk v.{version}"
-   */
-  userAgent?: string;
+	/**
+	 * Custom user agent string to identify your application.
+	 *
+	 * @default "@nvisy/sdk v.{version}"
+	 */
+	userAgent?: string;
 }
 
 /**
  * Default configuration values used when options are not explicitly provided.
  */
 export const DEFAULTS = {
-  /**
-   * Default base URL for the Nvisy API.
-   */
-  BASE_URL: "https://api.nvisy.com",
+	/**
+	 * Default base URL for the Nvisy API.
+	 */
+	BASE_URL: "https://api.nvisy.com",
 
-  /**
-   * Default user agent string.
-   */
-  USER_AGENT: `@nvisy/sdk v.${VERSION}`,
+	/**
+	 * Default user agent string.
+	 */
+	USER_AGENT: `@nvisy/sdk v.${VERSION}`,
 } as const;
