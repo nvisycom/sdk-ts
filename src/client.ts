@@ -195,6 +195,30 @@ export class Client {
   }
 
   /**
+   * Creates a new client with a different API token.
+   *
+   * Returns a new client instance with the new token. The original client
+   * remains unchanged. All other configuration (base URL, headers, etc.)
+   * is preserved in the new client.
+   *
+   * @param apiToken - The new API token
+   * @returns A new Client instance with the new token
+   * @throws {ConfigError} If the API token is invalid
+   *
+   * @example
+   * ```typescript
+   * const client = new Client({ apiToken: "original-token" });
+   * const newClient = client.withApiToken("new-token");
+   *
+   * // newClient uses the new token
+   * // client still uses the original token
+   * ```
+   */
+  withApiToken(apiToken: string): Client {
+    return new Client({ ...this.#config, apiToken });
+  }
+
+  /**
    * The base URL used for API requests.
    *
    * @returns The configured base URL

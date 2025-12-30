@@ -102,4 +102,27 @@ describe("Client", () => {
       expect(client.api).toBeDefined();
     });
   });
+
+  describe("withApiToken", () => {
+    it("should create new client with different token", () => {
+      const client = new Client({ apiToken: "original-token-123" });
+      const newClient = client.withApiToken("new-token-456789");
+      expect(newClient).toBeInstanceOf(Client);
+      expect(newClient).not.toBe(client);
+    });
+
+    it("should preserve config in new client", () => {
+      const client = new Client({
+        apiToken: "original-token-123",
+        baseUrl: "https://custom.api.com",
+      });
+      const newClient = client.withApiToken("new-token-456789");
+      expect(newClient.baseUrl).toBe("https://custom.api.com");
+    });
+
+    it("should throw for invalid token", () => {
+      const client = new Client({ apiToken: "valid-api-token-123" });
+      expect(() => client.withApiToken("short")).toThrow(ConfigError);
+    });
+  });
 });
