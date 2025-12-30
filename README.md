@@ -48,53 +48,6 @@ const client = new Client({
 });
 ```
 
-## Services
-
-The SDK provides full API coverage with services for all endpoints:
-
-| Service        | Description                       |
-| -------------- | --------------------------------- |
-| `account`      | User account management           |
-| `apiTokens`    | API token management              |
-| `auth`         | Login, signup, and logout         |
-| `comments`     | File comments                     |
-| `documents`    | Document processing               |
-| `files`        | File upload, download, delete     |
-| `integrations` | External integrations             |
-| `invites`      | Project invitation management     |
-| `members`      | Project member management         |
-| `pipelines`    | Processing pipeline configuration |
-| `projects`     | Project operations                |
-| `status`       | API health and status checks      |
-| `templates`    | Processing template management    |
-| `webhooks`     | Webhook configuration             |
-
-## Error Handling
-
-The SDK provides structured error types for different failure scenarios:
-
-```typescript
-import { Client, ApiError, ConfigError, NetworkError } from "@nvisy/sdk";
-
-try {
-  const client = Client.fromEnvironment();
-  const account = await client.account.get();
-} catch (error) {
-  if (error instanceof ApiError) {
-    // API returned an error response
-    console.log(`API Error: ${error.message}`);
-    console.log(`Status: ${error.statusCode}`);
-    console.log(`Retryable: ${error.isRetryable()}`);
-  } else if (error instanceof ConfigError) {
-    // Configuration is invalid
-    console.log(`Config Error: ${error.field} - ${error.reason}`);
-  } else if (error instanceof NetworkError) {
-    // Network request failed
-    console.log(`Network Error: ${error.message}`);
-  }
-}
-```
-
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes and version history.
