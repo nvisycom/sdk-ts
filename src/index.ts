@@ -16,6 +16,8 @@ export { ApiError, ClientError, ConfigError, NetworkError } from "@/errors.js";
 // Services
 export {
 	AccountService,
+	ActivitiesService,
+	AnnotationsService,
 	ApiTokensService,
 	AuthService,
 	CommentsService,
@@ -24,6 +26,8 @@ export {
 	IntegrationsService,
 	InvitesService,
 	MembersService,
+	NotificationsService,
+	RunsService,
 	StatusService,
 	WebhooksService,
 	WorkspacesService,

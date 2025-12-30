@@ -1478,6 +1478,183 @@ export interface paths {
 		};
 		trace?: never;
 	};
+	"/workspaces/{workspace_id}/runs/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List workspace integration runs
+		 * @description Returns all integration runs for a workspace.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["IntegrationRun"][];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/runs/{run_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get integration run
+		 * @description Returns details for a specific integration run.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the integration run. */
+					runId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for an integration run. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["IntegrationRun"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/workspaces/{workspace_id}/invites/": {
 		parameters: {
 			query?: never;
@@ -4394,6 +4571,611 @@ export interface paths {
 		};
 		trace?: never;
 	};
+	"/files/{file_id}/annotations/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List annotations
+		 * @description Returns all annotations for a file.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
+				header?: never;
+				path: {
+					/** @description Unique identifier of the file. */
+					fileId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Annotation"][];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Create annotation
+		 * @description Creates a new annotation on a file.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the file. */
+					fileId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to create an annotation. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreateAnnotation"];
+				};
+			};
+			responses: {
+				/** @description Response type for a document annotation. */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Annotation"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/annotations/{annotation_id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get annotation
+		 * @description Returns a specific annotation.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the annotation. */
+					annotationId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for a document annotation. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Annotation"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		/**
+		 * Delete annotation
+		 * @description Deletes an annotation. Only the owner can delete their annotations.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the annotation. */
+					annotationId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		/**
+		 * Update annotation
+		 * @description Updates an annotation. Only the owner can update their annotations.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the annotation. */
+					annotationId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to update an annotation. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateAnnotation"];
+				};
+			};
+			responses: {
+				/** @description Response type for a document annotation. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Annotation"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		trace?: never;
+	};
+	"/workspaces/{workspace_id}/activities/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List workspace activities
+		 * @description Returns all activity log entries for a workspace.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Activity"][];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/notifications/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List notifications
+		 * @description Returns all notifications for the authenticated account and marks them as read.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Notification"][];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/auth/login": {
 		parameters: {
 			query?: never;
@@ -5125,6 +5907,72 @@ export interface components {
 			/** @description Updated authentication credentials for the external service. */
 			credentials: unknown;
 		};
+		/** @description Response type for an integration run. */
+		IntegrationRun: {
+			/**
+			 * Format: uuid
+			 * @description Unique run identifier.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Workspace ID.
+			 */
+			workspaceId: string;
+			/**
+			 * Format: uuid
+			 * @description Integration ID (if associated with an integration).
+			 */
+			integrationId?: string | null;
+			/**
+			 * Format: uuid
+			 * @description Account that triggered the run.
+			 */
+			accountId?: string | null;
+			/** @description Run name. */
+			runName: string;
+			/** @description Run type. */
+			runType: string;
+			/** @description Current status. */
+			status: components["schemas"]["IntegrationStatus"];
+			/**
+			 * Format: date-time
+			 * @description When the run started.
+			 */
+			startedAt?: string | null;
+			/**
+			 * Format: date-time
+			 * @description When the run completed.
+			 */
+			completedAt?: string | null;
+			/**
+			 * Format: int32
+			 * @description Duration in milliseconds.
+			 */
+			durationMs?: number | null;
+			/** @description Result summary. */
+			resultSummary?: string | null;
+			/** @description Error details for failed runs. */
+			errorDetails?: unknown;
+			/**
+			 * Format: date-time
+			 * @description When the run was created.
+			 */
+			createdAt: string;
+		};
+		/**
+		 * @description Path parameters for integration run operations (run ID only).
+		 *
+		 *      Since run IDs are globally unique UUIDs, workspace context can be
+		 *      derived from the run record itself for authorization purposes.
+		 */
+		IntegrationRunPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the integration run.
+			 */
+			runId: string;
+		};
 		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
 			/**
@@ -5815,6 +6663,207 @@ export interface components {
 			/** @description Updated comment content. */
 			content?: string | null;
 		};
+		/** @description Request to create an annotation. */
+		CreateAnnotation: {
+			/** @description Annotation content. */
+			content: string;
+			/**
+			 * @description Annotation type (note, highlight, comment, etc.).
+			 * @default note
+			 */
+			annotationType: string;
+			/** @description Additional metadata (position, selection range, etc.). */
+			metadata?: unknown;
+		};
+		/** @description Response type for a document annotation. */
+		Annotation: {
+			/**
+			 * Format: uuid
+			 * @description Unique annotation identifier.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description File this annotation belongs to.
+			 */
+			fileId: string;
+			/**
+			 * Format: uuid
+			 * @description Account that created the annotation.
+			 */
+			accountId: string;
+			/** @description Annotation content. */
+			content: string;
+			/** @description Annotation type. */
+			annotationType: string;
+			/** @description Additional metadata (position, selection, etc.). */
+			metadata?: unknown;
+			/**
+			 * Format: date-time
+			 * @description When the annotation was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the annotation was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description Path parameters for annotation operations (annotation ID only).
+		 *
+		 *      Since annotation IDs are globally unique UUIDs, file/workspace context can be
+		 *      derived from the annotation record itself for authorization purposes.
+		 */
+		AnnotationPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the annotation.
+			 */
+			annotationId: string;
+		};
+		/** @description Request to update an annotation. */
+		UpdateAnnotation: {
+			/** @description Updated content. */
+			content?: string | null;
+			/** @description Updated annotation type. */
+			annotationType?: string | null;
+			/** @description Updated metadata. */
+			metadata?: unknown;
+		};
+		/** @description Response type for a workspace activity. */
+		Activity: {
+			/** @description Human-readable description. */
+			description: string;
+			/**
+			 * Format: int64
+			 * @description Unique activity identifier.
+			 */
+			id: number;
+			/**
+			 * Format: uuid
+			 * @description Workspace ID.
+			 */
+			workspaceId: string;
+			/**
+			 * Format: uuid
+			 * @description Account that performed the activity.
+			 */
+			accountId?: string | null;
+			/** @description Type of activity. */
+			activityType: components["schemas"]["ActivityType"];
+			/** @description Additional metadata. */
+			metadata?: unknown;
+			/**
+			 * Format: date-time
+			 * @description When the activity occurred.
+			 */
+			createdAt: string;
+		};
+		/**
+		 * @description Defines the type of activity performed in a workspace for audit logging.
+		 *
+		 *      This enumeration corresponds to the `ACTIVITY_TYPE` PostgreSQL enum and is used
+		 *      to categorize different types of activities that occur within workspaces for comprehensive
+		 *      audit trail and activity tracking.
+		 */
+		ActivityType:
+			| "workspace:created"
+			| "workspace:updated"
+			| "workspace:deleted"
+			| "workspace:archived"
+			| "workspace:restored"
+			| "workspace:settings_changed"
+			| "workspace:exported"
+			| "workspace:imported"
+			| "member:added"
+			| "member:kicked"
+			| "member:updated"
+			| "member:invited"
+			| "member:invite_accepted"
+			| "member:invite_declined"
+			| "member:invite_canceled"
+			| "integration:created"
+			| "integration:updated"
+			| "integration:deleted"
+			| "integration:enabled"
+			| "integration:disabled"
+			| "integration:synced"
+			| "integration:succeeded"
+			| "integration:failed"
+			| "webhook:created"
+			| "webhook:updated"
+			| "webhook:deleted"
+			| "webhook:enabled"
+			| "webhook:disabled"
+			| "webhook:triggered"
+			| "webhook:succeeded"
+			| "webhook:failed"
+			| "document:created"
+			| "document:updated"
+			| "document:deleted"
+			| "document:processed"
+			| "document:uploaded"
+			| "document:downloaded"
+			| "document:verified"
+			| "comment:added"
+			| "comment:updated"
+			| "comment:deleted"
+			| "custom";
+		/** @description Response type for an account notification. */
+		Notification: {
+			/** @description Notification title. */
+			title: string;
+			/**
+			 * Format: uuid
+			 * @description Unique notification identifier.
+			 */
+			id: string;
+			/** @description Notification type. */
+			notifyType: components["schemas"]["NotificationType"];
+			/** @description Notification message. */
+			message: string;
+			/** @description Whether the notification has been read. */
+			isRead: boolean;
+			/**
+			 * Format: date-time
+			 * @description When the notification was read.
+			 */
+			readAt?: string | null;
+			/**
+			 * Format: uuid
+			 * @description Related entity ID.
+			 */
+			relatedId?: string | null;
+			/** @description Related entity type. */
+			relatedType?: string | null;
+			/** @description Additional metadata. */
+			metadata?: unknown;
+			/**
+			 * Format: date-time
+			 * @description When the notification was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the notification expires.
+			 */
+			expiresAt?: string | null;
+		};
+		/**
+		 * @description Defines the type of notification sent to a user.
+		 *
+		 *      This enumeration corresponds to the `NOTIFICATION_TYPE` PostgreSQL enum and is used
+		 *      for various user notifications including mentions, replies, and system announcements.
+		 */
+		NotificationType:
+			| "comment_mention"
+			| "comment_reply"
+			| "document_upload"
+			| "document_download"
+			| "document_verify"
+			| "workspace_invite"
+			| "system_announcement";
 		/** @description Request payload for login. */
 		Login: {
 			/**

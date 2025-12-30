@@ -1,4 +1,6 @@
 export { AccountService } from "@/services/account.js";
+export { ActivitiesService } from "@/services/activities.js";
+export { AnnotationsService } from "@/services/annotations.js";
 export { ApiTokensService } from "@/services/api-tokens.js";
 export { AuthService } from "@/services/auth.js";
 export { CommentsService } from "@/services/comments.js";
@@ -7,6 +9,8 @@ export { FilesService } from "@/services/files.js";
 export { IntegrationsService } from "@/services/integrations.js";
 export { InvitesService } from "@/services/invites.js";
 export { MembersService } from "@/services/members.js";
+export { NotificationsService } from "@/services/notifications.js";
+export { RunsService } from "@/services/runs.js";
 export { StatusService } from "@/services/status.js";
 export { WebhooksService } from "@/services/webhooks.js";
 export { WorkspacesService } from "@/services/workspaces.js";

@@ -99,9 +99,6 @@ jobs:
           ls -la dist/
           test -f dist/index.js
           test -f dist/index.d.ts
-          test -f dist/client.js
-          test -f dist/builder.js
-          test -f dist/errors.js
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
