@@ -18,13 +18,13 @@ export class WorkspacesService {
 
 	/**
 	 * List all workspaces
-	 * @param pagination - Pagination parameters
+	 * @param query - Optional query parameters (offset, limit)
 	 * @returns Promise that resolves with the list of workspaces
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(pagination?: Pagination): Promise<Workspace[]> {
+	async list(query?: Pagination): Promise<Workspace[]> {
 		const { data } = await this.#api.GET("/workspaces/", {
-			body: pagination ?? {},
+			params: { query },
 		});
 		return data!;
 	}

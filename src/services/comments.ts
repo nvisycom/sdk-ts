@@ -14,14 +14,13 @@ export class CommentsService {
 	/**
 	 * List all comments on a file
 	 * @param fileId - File ID
-	 * @param pagination - Pagination parameters
+	 * @param query - Optional query parameters (offset, limit)
 	 * @returns Promise that resolves with the list of comments
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(fileId: string, pagination?: Pagination): Promise<Comment[]> {
+	async list(fileId: string, query?: Pagination): Promise<Comment[]> {
 		const { data } = await this.#api.GET("/files/{file_id}/comments", {
-			params: { path: { fileId } },
-			body: pagination ?? {},
+			params: { path: { fileId }, query },
 		});
 		return data!;
 	}

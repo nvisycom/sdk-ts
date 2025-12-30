@@ -19,19 +19,15 @@ export class DocumentsService {
 	/**
 	 * List documents in a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param pagination - Pagination parameters
+	 * @param query - Optional query parameters (offset, limit)
 	 * @returns Promise that resolves with the list of documents
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
-		workspaceId: string,
-		pagination?: Pagination,
-	): Promise<Document[]> {
+	async list(workspaceId: string, query?: Pagination): Promise<Document[]> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/documents",
 			{
-				params: { path: { workspaceId } },
-				body: pagination ?? {},
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;

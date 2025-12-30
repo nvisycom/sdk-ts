@@ -3,6 +3,8 @@ import type {
 	DownloadArchivedFilesRequest,
 	DownloadMultipleFilesRequest,
 	File,
+	ListFilesQuery,
+	Pagination,
 	UpdateFile,
 } from "@/datatypes/index.js";
 
@@ -14,6 +16,23 @@ export class FilesService {
 
 	constructor(api: ApiClient) {
 		this.#api = api;
+	}
+
+	/**
+	 * List files in a workspace
+	 * @param workspaceId - Workspace ID
+	 * @param query - Optional query parameters (formats, sortBy, order, offset, limit)
+	 * @returns Promise that resolves with the list of files
+	 * @throws {ApiError} if the request fails
+	 */
+	async list(
+		workspaceId: string,
+		query?: ListFilesQuery & Pagination,
+	): Promise<File[]> {
+		const { data } = await this.#api.GET("/workspaces/{workspace_id}/files/", {
+			params: { path: { workspaceId }, query },
+		});
+		return data!;
 	}
 
 	/**

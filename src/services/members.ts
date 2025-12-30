@@ -1,5 +1,6 @@
 import type { ApiClient } from "@/client.js";
 import type {
+	ListMembersQuery,
 	Member,
 	Pagination,
 	UpdateMemberRole,
@@ -18,16 +19,18 @@ export class MembersService {
 	/**
 	 * List members of a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param pagination - Optional pagination parameters
+	 * @param query - Optional query parameters (role, has2fa, sortBy, order, offset, limit)
 	 * @returns Promise that resolves with the list of members
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(workspaceId: string, pagination?: Pagination): Promise<Member[]> {
+	async list(
+		workspaceId: string,
+		query?: ListMembersQuery & Pagination,
+	): Promise<Member[]> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/members/",
 			{
-				params: { path: { workspaceId } },
-				body: pagination ?? {},
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;

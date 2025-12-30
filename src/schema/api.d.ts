@@ -548,22 +548,31 @@ export interface paths {
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
 				header?: never;
 				path?: never;
 				cookie?: never;
 			};
-			/**
-			 * @description Pagination parameters with performance and security validation.
-			 *
-			 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-			 *      large datasets by specifying how many records to skip and how many to fetch.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["Pagination"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				200: {
 					headers: {
@@ -933,6 +942,24 @@ export interface paths {
 				query?: {
 					/** @description Filter by integration type. */
 					integrationType?: components["schemas"]["IntegrationType"] | null;
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
 				};
 				header?: never;
 				path: {
@@ -941,17 +968,7 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Pagination parameters with performance and security validation.
-			 *
-			 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-			 *      large datasets by specifying how many records to skip and how many to fetch.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["Pagination"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				200: {
 					headers: {
@@ -1481,6 +1498,24 @@ export interface paths {
 					sortBy?: components["schemas"]["InviteSortField"] | null;
 					/** @description Sort order (asc or desc). */
 					order?: components["schemas"]["SortOrder"] | null;
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
 				};
 				header?: never;
 				path: {
@@ -1489,17 +1524,7 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Pagination parameters with performance and security validation.
-			 *
-			 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-			 *      large datasets by specifying how many records to skip and how many to fetch.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["Pagination"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				200: {
 					headers: {
@@ -2045,6 +2070,24 @@ export interface paths {
 					sortBy?: components["schemas"]["MemberSortField"] | null;
 					/** @description Sort order (asc or desc). */
 					order?: components["schemas"]["SortOrder"] | null;
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
 				};
 				header?: never;
 				path: {
@@ -2053,17 +2096,7 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Pagination parameters with performance and security validation.
-			 *
-			 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-			 *      large datasets by specifying how many records to skip and how many to fetch.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["Pagination"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				200: {
 					headers: {
@@ -2983,7 +3016,87 @@ export interface paths {
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
+		/**
+		 * List files
+		 * @description Lists all files in a workspace with optional filtering by format and sorting.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/** @description Filter by file formats. */
+					formats?: components["schemas"]["FileFormat"][] | null;
+					/** @description Sort by field. */
+					sortBy?: components["schemas"]["FileSortField"] | null;
+					/** @description Sort order (asc or desc). */
+					order?: components["schemas"]["SortOrder"] | null;
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["File"][];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		put?: never;
 		/**
 		 * Upload files
@@ -3535,7 +3648,26 @@ export interface paths {
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
@@ -3543,17 +3675,7 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Pagination parameters with performance and security validation.
-			 *
-			 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-			 *      large datasets by specifying how many records to skip and how many to fetch.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["Pagination"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				200: {
 					headers: {
@@ -3939,7 +4061,26 @@ export interface paths {
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/**
+					 * @description The number of records to skip before starting to return results.
+					 *
+					 *      For performance reasons, this is limited to prevent expensive deep
+					 *      pagination queries. Consider using cursor-based pagination for
+					 *      better performance when dealing with large datasets.
+					 *
+					 *      **Performance Impact**: High offsets require the database to scan
+					 *      and skip many records, which can be slow for large tables.
+					 */
+					offset?: number | null;
+					/**
+					 * @description The maximum number of records to return in a single request.
+					 *
+					 *      This is balanced between usability and performance. Very large limits
+					 *      can cause memory pressure and slow response times.
+					 */
+					limit?: number | null;
+				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
@@ -3947,17 +4088,7 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Pagination parameters with performance and security validation.
-			 *
-			 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-			 *      large datasets by specifying how many records to skip and how many to fetch.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["Pagination"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				200: {
 					headers: {
@@ -5388,6 +5519,19 @@ export interface components {
 			 */
 			maxFailures?: number | null;
 		};
+		/** @description Query parameters for listing files. */
+		ListFilesQuery: {
+			/** @description Filter by file formats. */
+			formats?: components["schemas"]["FileFormat"][] | null;
+			/** @description Sort by field. */
+			sortBy?: components["schemas"]["FileSortField"] | null;
+			/** @description Sort order (asc or desc). */
+			order?: components["schemas"]["SortOrder"] | null;
+		};
+		/** @description File format categories for filtering. */
+		FileFormat: "pdf" | "doc" | "txt" | "md" | "csv" | "json" | "png" | "jpeg";
+		/** @description Fields to sort files by. */
+		FileSortField: "name" | "date" | "size";
 		/** @description Represents an uploaded file. */
 		File: {
 			/**

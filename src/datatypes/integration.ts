@@ -9,3 +9,4 @@ export type UpdateIntegrationCredentials =
 	Schemas["UpdateIntegrationCredentials"];
 export type IntegrationType = Schemas["IntegrationType"];
 export type IntegrationStatus = Schemas["IntegrationStatus"];
+export type ListIntegrationsQuery = Schemas["ListIntegrationsQuery"];

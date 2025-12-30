@@ -4,6 +4,7 @@ import type {
 	GenerateInviteCode,
 	Invite,
 	InviteCode,
+	ListInvitesQuery,
 	Member,
 	Pagination,
 	ReplyInvite,
@@ -22,16 +23,18 @@ export class InvitesService {
 	/**
 	 * List all invitations for a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param pagination - Optional pagination parameters
+	 * @param query - Optional query parameters (role, sortBy, order, offset, limit)
 	 * @returns Promise that resolves with the list of invitations
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(workspaceId: string, pagination?: Pagination): Promise<Invite[]> {
+	async list(
+		workspaceId: string,
+		query?: ListInvitesQuery & Pagination,
+	): Promise<Invite[]> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/invites/",
 			{
-				params: { path: { workspaceId } },
-				body: pagination ?? {},
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;

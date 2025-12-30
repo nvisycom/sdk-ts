@@ -2,6 +2,7 @@ import type { ApiClient } from "@/client.js";
 import type {
 	CreateIntegration,
 	Integration,
+	ListIntegrationsQuery,
 	Pagination,
 	UpdateIntegration,
 	UpdateIntegrationCredentials,
@@ -20,19 +21,18 @@ export class IntegrationsService {
 	/**
 	 * List integrations for a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param pagination - Optional pagination parameters
+	 * @param query - Optional query parameters (integrationType, offset, limit)
 	 * @returns Promise that resolves with the list of integrations
 	 * @throws {ApiError} if the request fails
 	 */
 	async list(
 		workspaceId: string,
-		pagination?: Pagination,
+		query?: ListIntegrationsQuery & Pagination,
 	): Promise<Integration[]> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/integrations/",
 			{
-				params: { path: { workspaceId } },
-				body: pagination ?? {},
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
