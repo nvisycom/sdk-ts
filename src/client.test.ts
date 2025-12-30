@@ -1,6 +1,6 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Client } from "@/client.js";
-import { DEFAULTS, ENV_VARS } from "@/config.js";
+import { DEFAULTS } from "@/config.js";
 import { ConfigError } from "@/errors.js";
 
 vi.mock("openapi-fetch", () => ({
@@ -10,32 +10,6 @@ vi.mock("openapi-fetch", () => ({
 }));
 
 describe("Client", () => {
-  describe("fromEnvironment", () => {
-    const originalEnv = { ...process.env };
-
-    afterEach(() => {
-      process.env = { ...originalEnv };
-    });
-
-    it("should create client from environment", () => {
-      process.env[ENV_VARS.API_TOKEN] = "env-api-key-12345";
-      const client = Client.fromEnvironment();
-      expect(client).toBeInstanceOf(Client);
-    });
-
-    it("should use NVISY_BASE_URL if set", () => {
-      process.env[ENV_VARS.API_TOKEN] = "env-api-key-12345";
-      process.env[ENV_VARS.BASE_URL] = "https://custom.env.com";
-      const client = Client.fromEnvironment();
-      expect(client.baseUrl).toBe("https://custom.env.com");
-    });
-
-    it("should throw if NVISY_API_TOKEN is not set", () => {
-      delete process.env[ENV_VARS.API_TOKEN];
-      expect(() => Client.fromEnvironment()).toThrow(ConfigError);
-    });
-  });
-
   describe("constructor", () => {
     it("should create client with API token", () => {
       const client = new Client({ apiToken: "valid-api-key-123" });

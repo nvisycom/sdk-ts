@@ -4,7 +4,7 @@ export { Client } from "@/client.js";
 
 // Configuration
 export type { ClientConfig } from "@/config.js";
-export { buildUserAgent, DEFAULTS, ENV_VARS, VERSION } from "@/config.js";
+export { DEFAULTS, VERSION } from "@/config.js";
 
 // Data types
 export type * from "@/datatypes/index.js";
@@ -15,18 +15,18 @@ export { ApiError, ClientError, ConfigError, NetworkError } from "@/errors.js";
 
 // Services
 export {
-	AccountService,
-	ApiTokensService,
-	AuthService,
-	CommentsService,
-	DocumentsService,
-	FilesService,
-	IntegrationsService,
-	InvitesService,
-	MembersService,
-	PipelinesService,
-	ProjectsService,
-	StatusService,
-	TemplatesService,
-	WebhooksService,
+  AccountService,
+  ApiTokensService,
+  AuthService,
+  CommentsService,
+  DocumentsService,
+  FilesService,
+  IntegrationsService,
+  InvitesService,
+  MembersService,
+  PipelinesService,
+  ProjectsService,
+  StatusService,
+  TemplatesService,
+  WebhooksService,
 } from "@/services/index.js";

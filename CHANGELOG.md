@@ -13,10 +13,8 @@ and this project adheres to
 ### Added
 
 - Generated OpenAPI schema types for type-safe API calls
-- `Client.fromEnvironment()` static method for creating clients from
-  environment variables
 - `AuthService` for login, signup, and logout operations
-- `userAgent` configuration option and `NVISY_USER_AGENT` environment variable
+- `Client.withApiToken()` method to create a new client with a different token
 - Error middleware for automatic API error handling
 - Full API coverage with services for all endpoints
 - Comprehensive JSDoc documentation for all public APIs
@@ -28,16 +26,15 @@ and this project adheres to
 - Services now throw `ApiError` automatically via middleware
 - Datatypes now re-export schema types with convenient aliases
 - Services are created on-demand via Client getters
-- Environment variable `NVISY_API_KEY` renamed to `NVISY_API_TOKEN`
 - Improved error handling with `ApiError`, `ConfigError`, and `NetworkError`
 
 ### Removed
 
-- `ClientBuilder` class
-- `Client.builder()` method
-- `Client.withApiToken()` method
+- `ClientBuilder` class and `Client.builder()` method
+- `Client.fromEnvironment()` method
 - `Client.fromAuthenticated()` method
 - `AuthClientConfig` interface
+- Environment variable support (`NVISY_API_TOKEN`, `NVISY_BASE_URL`, `NVISY_USER_AGENT`)
 - Manual type definitions in datatypes (now use schema re-exports)
 
 ## [0.1.0] - 2025-10-15

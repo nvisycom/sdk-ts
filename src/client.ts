@@ -8,17 +8,13 @@
  *
  * @example
  * ```typescript
- * // Create client with API token
  * const client = new Client({ apiToken: "your-api-token" });
  * const account = await client.account.get();
- *
- * // Or create from environment variables
- * const client = Client.fromEnvironment();
  * ```
  */
 
 import createClient, { type Client as OpenApiClient } from "openapi-fetch";
-import { buildUserAgent, type ClientConfig, DEFAULTS, ENV_VARS } from "@/config.js";
+import { type ClientConfig, DEFAULTS } from "@/config.js";
 import { ConfigError } from "@/errors.js";
 import { errorMiddleware } from "@/middleware/index.js";
 import type { paths } from "@/schema/api.js";
@@ -57,17 +53,10 @@ type ResolvedConfig = Required<ClientConfig>;
 /**
  * Main client class for interacting with the Nvisy document processing API.
  *
- * Create a client by providing an API token directly or by using
- * {@link fromEnvironment} to read configuration from environment variables.
- *
  * @example
  * ```typescript
- * // Create client with API token
  * const client = new Client({ apiToken: "your-api-token" });
  * const account = await client.account.get();
- *
- * // Create client from environment variables
- * const client = Client.fromEnvironment();
  * const projects = await client.projects.list();
  * ```
  */
@@ -83,40 +72,6 @@ export class Client {
    * @internal
    */
   readonly #api: ApiClient;
-
-  /**
-   * Creates a client from environment variables.
-   *
-   * This factory method reads configuration from environment variables:
-   * - `NVISY_API_TOKEN` (required): The API token for authentication
-   * - `NVISY_BASE_URL` (optional): Custom base URL for the API
-   * - `NVISY_USER_AGENT` (optional): Custom user agent string
-   *
-   * @returns A Client instance
-   * @throws {ConfigError} If `NVISY_API_TOKEN` environment variable is not set
-   *
-   * @example
-   * ```typescript
-   * // Set environment variables:
-   * // NVISY_API_TOKEN=your-api-token
-   * // NVISY_BASE_URL=https://api.nvisy.com (optional)
-   *
-   * const client = Client.fromEnvironment();
-   * const account = await client.account.get();
-   * ```
-   */
-  static fromEnvironment(): Client {
-    const apiToken = process.env[ENV_VARS.API_TOKEN];
-    if (!apiToken) {
-      throw ConfigError.missingField(ENV_VARS.API_TOKEN);
-    }
-
-    return new Client({
-      apiToken,
-      baseUrl: process.env[ENV_VARS.BASE_URL],
-      userAgent: process.env[ENV_VARS.USER_AGENT],
-    });
-  }
 
   /**
    * Creates a new Nvisy client instance.
@@ -140,7 +95,7 @@ export class Client {
       apiToken: validatedToken,
       baseUrl: config.baseUrl ?? DEFAULTS.BASE_URL,
       headers: config.headers ?? {},
-      userAgent: config.userAgent ?? buildUserAgent(),
+      userAgent: config.userAgent ?? DEFAULTS.USER_AGENT,
     };
 
     this.#api = this.#createApiClient();

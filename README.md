@@ -48,23 +48,6 @@ const client = new Client({
 });
 ```
 
-### Environment Variables
-
-Load configuration from environment variables using `Client.fromEnvironment()`:
-
-| Variable           | Description                  | Required |
-| ------------------ | ---------------------------- | -------- |
-| `NVISY_API_TOKEN`  | API token for authentication | Yes      |
-| `NVISY_BASE_URL`   | Custom API endpoint URL      | No       |
-| `NVISY_USER_AGENT` | Custom user agent string     | No       |
-
-```typescript
-import { Client } from "@nvisy/sdk";
-
-// Requires NVISY_API_TOKEN to be set
-const client = Client.fromEnvironment();
-```
-
 ## Services
 
 The SDK provides full API coverage with services for all endpoints:
