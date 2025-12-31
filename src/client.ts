@@ -23,6 +23,8 @@ import {
 import type { paths } from "@/schema/api.js";
 import {
 	Account,
+	Activities,
+	Annotations,
 	ApiTokens,
 	Auth,
 	Comments,
@@ -31,6 +33,8 @@ import {
 	Integrations,
 	Invites,
 	Members,
+	Notifications,
+	Runs,
 	Status,
 	Webhooks,
 	Workspaces,
@@ -222,6 +226,20 @@ export class Nvisy {
 	}
 
 	/**
+	 * Service for viewing workspace activities.
+	 */
+	get activities(): Activities {
+		return new Activities(this.#api);
+	}
+
+	/**
+	 * Service for managing file annotations.
+	 */
+	get annotations(): Annotations {
+		return new Annotations(this.#api);
+	}
+
+	/**
 	 * Service for managing API tokens.
 	 */
 	get apiTokens(): ApiTokens {
@@ -268,6 +286,20 @@ export class Nvisy {
 	 */
 	get members(): Members {
 		return new Members(this.#api);
+	}
+
+	/**
+	 * Service for managing notifications.
+	 */
+	get notifications(): Notifications {
+		return new Notifications(this.#api);
+	}
+
+	/**
+	 * Service for managing processing runs.
+	 */
+	get runs(): Runs {
+		return new Runs(this.#api);
 	}
 
 	/**
