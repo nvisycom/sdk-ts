@@ -10,13 +10,13 @@
  * @example
  * ```typescript
  * import { login, signup } from "@nvisy/sdk/auth";
- * import { Client } from "@nvisy/sdk";
+ * import { Nvisy } from "@nvisy/sdk";
  *
  * // Login to get a token
  * const token = await login({ email: "user@example.com", password: "..." });
  *
  * // Create authenticated client
- * const client = new Client({ apiToken: token.accessToken });
+ * const nvisy = new Nvisy({ apiToken: token.accessToken });
  * ```
  */
 
@@ -64,14 +64,14 @@ function createAuthClient(config?: AuthConfig) {
  * @example
  * ```typescript
  * import { login } from "@nvisy/sdk/auth";
- * import { Client } from "@nvisy/sdk";
+ * import { Nvisy } from "@nvisy/sdk";
  *
  * const token = await login({
  *   email: "user@example.com",
  *   password: "your-password",
  * });
  *
- * const client = new Client({ apiToken: token.accessToken });
+ * const nvisy = new Nvisy({ apiToken: token.accessToken });
  * ```
  */
 export async function login(
@@ -99,7 +99,7 @@ export async function login(
  * @example
  * ```typescript
  * import { signup } from "@nvisy/sdk/auth";
- * import { Client } from "@nvisy/sdk";
+ * import { Nvisy } from "@nvisy/sdk";
  *
  * const token = await signup({
  *   name: "John Doe",
@@ -107,7 +107,7 @@ export async function login(
  *   password: "secure-password",
  * });
  *
- * const client = new Client({ apiToken: token.accessToken });
+ * const nvisy = new Nvisy({ apiToken: token.accessToken });
  * ```
  */
 export async function signup(

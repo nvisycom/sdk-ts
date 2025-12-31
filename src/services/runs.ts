@@ -4,7 +4,7 @@ import type { IntegrationRun, Pagination } from "@/datatypes/index.js";
 /**
  * Service for handling integration run operations
  */
-export class RunsService {
+export class Runs {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

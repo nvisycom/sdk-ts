@@ -9,7 +9,7 @@ import type {
 /**
  * Service for handling member operations
  */
-export class MembersService {
+export class Members {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

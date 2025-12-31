@@ -9,7 +9,7 @@ import type {
 /**
  * Service for handling document operations
  */
-export class DocumentsService {
+export class Documents {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

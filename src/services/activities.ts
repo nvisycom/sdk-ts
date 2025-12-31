@@ -4,7 +4,7 @@ import type { Activity, Pagination } from "@/datatypes/index.js";
 /**
  * Service for handling workspace activity operations
  */
-export class ActivitiesService {
+export class Activities {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

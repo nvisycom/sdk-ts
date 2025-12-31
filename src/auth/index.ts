@@ -9,7 +9,7 @@
  * @example
  * ```typescript
  * import { login, signup } from "@nvisy/sdk/auth";
- * import { Client } from "@nvisy/sdk";
+ * import { Nvisy } from "@nvisy/sdk";
  *
  * // Login with existing account
  * const token = await login({
@@ -25,7 +25,7 @@
  * });
  *
  * // Create authenticated client
- * const client = new Client({ apiToken: token.accessToken });
+ * const nvisy = new Nvisy({ apiToken: token.accessToken });
  * ```
  */
 

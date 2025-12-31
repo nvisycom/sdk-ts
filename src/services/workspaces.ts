@@ -9,7 +9,7 @@ import type {
 /**
  * Service for handling workspace operations
  */
-export class WorkspacesService {
+export class Workspaces {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

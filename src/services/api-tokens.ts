@@ -9,7 +9,7 @@ import type {
 /**
  * Service for handling API token operations
  */
-export class ApiTokensService {
+export class ApiTokens {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

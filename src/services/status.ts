@@ -4,7 +4,7 @@ import type { CheckHealth, MonitorStatus } from "@/datatypes/index.js";
 /**
  * Service for handling status and health check operations
  */
-export class StatusService {
+export class Status {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

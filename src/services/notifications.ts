@@ -8,7 +8,7 @@ import type {
 /**
  * Service for handling account notification operations
  */
-export class NotificationsService {
+export class Notifications {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

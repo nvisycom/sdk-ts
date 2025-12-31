@@ -11,7 +11,7 @@ import type {
 /**
  * Service for handling file operations
  */
-export class FilesService {
+export class Files {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

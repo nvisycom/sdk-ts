@@ -9,7 +9,7 @@ import type {
 /**
  * Service for handling webhook operations
  */
-export class WebhooksService {
+export class Webhooks {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

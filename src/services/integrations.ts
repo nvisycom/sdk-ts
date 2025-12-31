@@ -11,7 +11,7 @@ import type {
 /**
  * Service for handling integration operations
  */
-export class IntegrationsService {
+export class Integrations {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

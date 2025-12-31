@@ -13,7 +13,7 @@ import type {
 /**
  * Service for handling workspace invitation operations
  */
-export class InvitesService {
+export class Invites {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

@@ -9,7 +9,7 @@ import type {
 /**
  * Service for handling file comment operations
  */
-export class CommentsService {
+export class Comments {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {

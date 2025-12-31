@@ -1,38 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { ApiError, ConfigError, NetworkError } from "@/errors.js";
+import { NvisyApiError, NvisyError } from "@/errors.js";
 
-describe("ConfigError", () => {
-	it("should create factory errors with proper context", () => {
-		const missingError = ConfigError.missingApiToken();
-		expect(missingError.field).toBe("apiToken");
-		expect(missingError.message).toContain("API token is required");
-
-		const invalidError = ConfigError.invalidField(
-			"baseUrl",
-			"must be a valid URL",
-		);
-		expect(invalidError.field).toBe("baseUrl");
-		expect(invalidError.reason).toBe("must be a valid URL");
-
-		const missingFieldError = ConfigError.missingField("timeout");
-		expect(missingFieldError.field).toBe("timeout");
-		expect(missingFieldError.reason).toBe("This field is required");
+describe("NvisyError", () => {
+	it("should create error with message", () => {
+		const error = new NvisyError("Something went wrong");
+		expect(error.message).toBe("Something went wrong");
+		expect(error.name).toBe("NvisyError");
+		expect(error).toBeInstanceOf(Error);
 	});
 });
 
-describe("NetworkError", () => {
-	it("should create network errors with appropriate messages", () => {
-		const connectionError = NetworkError.connection("Connection refused");
-		expect(connectionError.message).toBe("Connection refused");
-
-		const abortedError = NetworkError.aborted();
-		expect(abortedError.message).toBe("Request was aborted");
-	});
-});
-
-describe("ApiError", () => {
-	it("should create ApiError from ErrorResponse", () => {
-		const error = new ApiError(
+describe("NvisyApiError", () => {
+	it("should create NvisyApiError from ErrorResponse", () => {
+		const error = new NvisyApiError(
 			{
 				name: "ValidationError",
 				message: "Field is required",
@@ -51,22 +31,23 @@ describe("ApiError", () => {
 		expect(error.suggestion).toBe("Please provide a valid email");
 		expect(error.validation).toHaveLength(1);
 		expect(error.statusCode).toBe(400);
+		expect(error).toBeInstanceOf(NvisyError);
 	});
 
 	it("should determine retry logic based on HTTP status", () => {
-		const clientError = new ApiError(
+		const clientError = new NvisyApiError(
 			{ name: "BadRequest", message: "Bad Request" },
 			400,
 		);
-		const serverError = new ApiError(
+		const serverError = new NvisyApiError(
 			{ name: "ServerError", message: "Server Error" },
 			500,
 		);
-		const timeoutError = new ApiError(
+		const timeoutError = new NvisyApiError(
 			{ name: "Timeout", message: "Timeout" },
 			408,
 		);
-		const rateLimitError = new ApiError(
+		const rateLimitError = new NvisyApiError(
 			{ name: "RateLimit", message: "Rate Limited" },
 			429,
 		);
@@ -78,11 +59,11 @@ describe("ApiError", () => {
 	});
 
 	it("should correctly identify client vs server errors", () => {
-		const clientError = new ApiError(
+		const clientError = new NvisyApiError(
 			{ name: "NotFound", message: "Not Found" },
 			404,
 		);
-		const serverError = new ApiError(
+		const serverError = new NvisyApiError(
 			{ name: "ServerError", message: "Internal Server Error" },
 			500,
 		);
@@ -94,7 +75,7 @@ describe("ApiError", () => {
 	});
 
 	it("should serialize to JSON matching ErrorResponse", () => {
-		const error = new ApiError(
+		const error = new NvisyApiError(
 			{
 				name: "ValidationError",
 				message: "Invalid input",

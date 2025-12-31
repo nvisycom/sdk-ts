@@ -9,7 +9,7 @@ import type {
 /**
  * Service for handling file annotation operations
  */
-export class AnnotationsService {
+export class Annotations {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
