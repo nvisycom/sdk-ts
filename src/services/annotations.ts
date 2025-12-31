@@ -23,7 +23,10 @@ export class AnnotationsService {
 	 * @returns Promise that resolves with the list of annotations
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(fileId: string, query?: Pagination): Promise<Annotation[]> {
+	async listAnnotations(
+		fileId: string,
+		query?: Pagination,
+	): Promise<Annotation[]> {
 		const { data } = await this.#api.GET("/files/{file_id}/annotations/", {
 			params: { path: { file_id: fileId }, query },
 		});
@@ -36,7 +39,7 @@ export class AnnotationsService {
 	 * @returns Promise that resolves with the annotation details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(annotationId: string): Promise<Annotation> {
+	async getAnnotation(annotationId: string): Promise<Annotation> {
 		const { data } = await this.#api.GET("/annotations/{annotation_id}", {
 			params: { path: { annotation_id: annotationId } },
 		});
@@ -50,7 +53,7 @@ export class AnnotationsService {
 	 * @returns Promise that resolves with the created annotation
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(
+	async createAnnotation(
 		fileId: string,
 		annotation: CreateAnnotation,
 	): Promise<Annotation> {
@@ -68,7 +71,7 @@ export class AnnotationsService {
 	 * @returns Promise that resolves with the updated annotation
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(
+	async updateAnnotation(
 		annotationId: string,
 		updates: UpdateAnnotation,
 	): Promise<Annotation> {
@@ -85,7 +88,7 @@ export class AnnotationsService {
 	 * @returns Promise that resolves when the annotation is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(annotationId: string): Promise<void> {
+	async deleteAnnotation(annotationId: string): Promise<void> {
 		await this.#api.DELETE("/annotations/{annotation_id}", {
 			params: { path: { annotation_id: annotationId } },
 		});

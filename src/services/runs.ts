@@ -18,7 +18,7 @@ export class RunsService {
 	 * @returns Promise that resolves with the list of integration runs
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
+	async listRuns(
 		workspaceId: string,
 		query?: Pagination,
 	): Promise<IntegrationRun[]> {
@@ -34,7 +34,7 @@ export class RunsService {
 	 * @returns Promise that resolves with the integration run details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(runId: string): Promise<IntegrationRun> {
+	async getRun(runId: string): Promise<IntegrationRun> {
 		const { data } = await this.#api.GET("/runs/{run_id}", {
 			params: { path: { run_id: runId } },
 		});

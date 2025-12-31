@@ -22,7 +22,7 @@ export class WorkspacesService {
 	 * @returns Promise that resolves with the list of workspaces
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(query?: Pagination): Promise<Workspace[]> {
+	async listWorkspaces(query?: Pagination): Promise<Workspace[]> {
 		const { data } = await this.#api.GET("/workspaces/", {
 			params: { query },
 		});
@@ -35,7 +35,7 @@ export class WorkspacesService {
 	 * @returns Promise that resolves with the workspace details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(workspaceId: string): Promise<Workspace> {
+	async getWorkspace(workspaceId: string): Promise<Workspace> {
 		const { data } = await this.#api.GET("/workspaces/{workspace_id}/", {
 			params: { path: { workspace_id: workspaceId } },
 		});
@@ -48,7 +48,7 @@ export class WorkspacesService {
 	 * @returns Promise that resolves with the created workspace
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(workspace: CreateWorkspace): Promise<Workspace> {
+	async createWorkspace(workspace: CreateWorkspace): Promise<Workspace> {
 		const { data } = await this.#api.POST("/workspaces/", {
 			body: workspace,
 		});
@@ -62,7 +62,7 @@ export class WorkspacesService {
 	 * @returns Promise that resolves with the updated workspace
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(
+	async updateWorkspace(
 		workspaceId: string,
 		updates: UpdateWorkspace,
 	): Promise<Workspace> {
@@ -79,7 +79,7 @@ export class WorkspacesService {
 	 * @returns Promise that resolves when the workspace is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(workspaceId: string): Promise<void> {
+	async deleteWorkspace(workspaceId: string): Promise<void> {
 		await this.#api.DELETE("/workspaces/{workspace_id}/", {
 			params: { path: { workspace_id: workspaceId } },
 		});

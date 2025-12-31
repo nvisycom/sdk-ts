@@ -22,7 +22,7 @@ export class ApiTokensService {
 	 * @returns Promise that resolves with the list of API tokens
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(options?: {
+	async listApiTokens(options?: {
 		offset?: number;
 		limit?: number;
 	}): Promise<ApiToken[]> {
@@ -38,7 +38,7 @@ export class ApiTokensService {
 	 * @returns Promise that resolves with the API token details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(tokenId: string): Promise<ApiToken> {
+	async getApiToken(tokenId: string): Promise<ApiToken> {
 		const { data } = await this.#api.GET("/api-tokens/{token_id}/", {
 			params: { path: { token_id: tokenId } },
 		});
@@ -51,7 +51,7 @@ export class ApiTokensService {
 	 * @returns Promise that resolves with the created token (includes JWT, shown only once)
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(token: CreateApiToken): Promise<ApiTokenWithJWT> {
+	async createApiToken(token: CreateApiToken): Promise<ApiTokenWithJWT> {
 		const { data } = await this.#api.POST("/api-tokens/", {
 			body: token,
 		});
@@ -65,7 +65,10 @@ export class ApiTokensService {
 	 * @returns Promise that resolves with the updated token
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(tokenId: string, updates: UpdateApiToken): Promise<ApiToken> {
+	async updateApiToken(
+		tokenId: string,
+		updates: UpdateApiToken,
+	): Promise<ApiToken> {
 		const { data } = await this.#api.PATCH("/api-tokens/{token_id}/", {
 			params: { path: { token_id: tokenId } },
 			body: updates,
@@ -79,7 +82,7 @@ export class ApiTokensService {
 	 * @returns Promise that resolves when the token is revoked
 	 * @throws {ApiError} if the request fails
 	 */
-	async revoke(tokenId: string): Promise<void> {
+	async revokeApiToken(tokenId: string): Promise<void> {
 		await this.#api.DELETE("/api-tokens/{token_id}/", {
 			params: { path: { token_id: tokenId } },
 		});

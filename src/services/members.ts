@@ -23,7 +23,7 @@ export class MembersService {
 	 * @returns Promise that resolves with the list of members
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
+	async listMembers(
 		workspaceId: string,
 		query?: ListMembersQuery & Pagination,
 	): Promise<Member[]> {
@@ -43,7 +43,7 @@ export class MembersService {
 	 * @returns Promise that resolves with the member details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(workspaceId: string, accountId: string): Promise<Member> {
+	async getMember(workspaceId: string, accountId: string): Promise<Member> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/members/{account_id}/",
 			{
@@ -63,7 +63,7 @@ export class MembersService {
 	 * @returns Promise that resolves with the updated member
 	 * @throws {ApiError} if the request fails
 	 */
-	async updateRole(
+	async updateMemberRole(
 		workspaceId: string,
 		accountId: string,
 		role: UpdateMemberRole,
@@ -87,7 +87,7 @@ export class MembersService {
 	 * @returns Promise that resolves when the member is removed
 	 * @throws {ApiError} if the request fails
 	 */
-	async remove(workspaceId: string, accountId: string): Promise<void> {
+	async removeMember(workspaceId: string, accountId: string): Promise<void> {
 		await this.#api.DELETE("/workspaces/{workspace_id}/members/{account_id}/", {
 			params: { path: { workspace_id: workspaceId, account_id: accountId } },
 		});
@@ -99,7 +99,7 @@ export class MembersService {
 	 * @returns Promise that resolves when the member has left
 	 * @throws {ApiError} if the request fails
 	 */
-	async leave(workspaceId: string): Promise<void> {
+	async leaveWorkspace(workspaceId: string): Promise<void> {
 		await this.#api.POST("/workspaces/{workspace_id}/members/leave", {
 			params: { path: { workspace_id: workspaceId } },
 		});

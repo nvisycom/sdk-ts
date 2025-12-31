@@ -27,7 +27,7 @@ export class InvitesService {
 	 * @returns Promise that resolves with the list of invitations
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
+	async listInvites(
 		workspaceId: string,
 		query?: ListInvitesQuery & Pagination,
 	): Promise<Invite[]> {
@@ -47,7 +47,7 @@ export class InvitesService {
 	 * @returns Promise that resolves with the created invitation
 	 * @throws {ApiError} if the request fails
 	 */
-	async send(workspaceId: string, invite: CreateInvite): Promise<Invite> {
+	async sendInvite(workspaceId: string, invite: CreateInvite): Promise<Invite> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspace_id}/invites/",
 			{
@@ -64,7 +64,7 @@ export class InvitesService {
 	 * @returns Promise that resolves when the invitation is canceled
 	 * @throws {ApiError} if the request fails
 	 */
-	async cancel(inviteId: string): Promise<void> {
+	async cancelInvite(inviteId: string): Promise<void> {
 		await this.#api.DELETE("/invites/{invite_id}/", {
 			params: { path: { invite_id: inviteId } },
 		});
@@ -77,7 +77,7 @@ export class InvitesService {
 	 * @returns Promise that resolves with the updated invitation
 	 * @throws {ApiError} if the request fails
 	 */
-	async reply(inviteId: string, reply: ReplyInvite): Promise<Invite> {
+	async replyToInvite(inviteId: string, reply: ReplyInvite): Promise<Invite> {
 		const { data } = await this.#api.PATCH("/invites/{invite_id}/reply/", {
 			params: { path: { invite_id: inviteId } },
 			body: reply,
@@ -92,7 +92,7 @@ export class InvitesService {
 	 * @returns Promise that resolves with the generated invite code
 	 * @throws {ApiError} if the request fails
 	 */
-	async generateCode(
+	async generateInviteCode(
 		workspaceId: string,
 		options: GenerateInviteCode,
 	): Promise<InviteCode> {
@@ -112,7 +112,7 @@ export class InvitesService {
 	 * @returns Promise that resolves with the member details
 	 * @throws {ApiError} if the request fails
 	 */
-	async joinWithCode(inviteCode: string): Promise<Member> {
+	async joinWithInviteCode(inviteCode: string): Promise<Member> {
 		const { data } = await this.#api.POST("/invites/{invite_code}/join/", {
 			params: { path: { invite_code: inviteCode } },
 		});

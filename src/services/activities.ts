@@ -18,7 +18,10 @@ export class ActivitiesService {
 	 * @returns Promise that resolves with the list of activities
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(workspaceId: string, query?: Pagination): Promise<Activity[]> {
+	async listActivities(
+		workspaceId: string,
+		query?: Pagination,
+	): Promise<Activity[]> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/activities/",
 			{

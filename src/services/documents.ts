@@ -23,7 +23,10 @@ export class DocumentsService {
 	 * @returns Promise that resolves with the list of documents
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(workspaceId: string, query?: Pagination): Promise<Document[]> {
+	async listDocuments(
+		workspaceId: string,
+		query?: Pagination,
+	): Promise<Document[]> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/documents",
 			{
@@ -39,7 +42,7 @@ export class DocumentsService {
 	 * @returns Promise that resolves with the document details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(documentId: string): Promise<Document> {
+	async getDocument(documentId: string): Promise<Document> {
 		const { data } = await this.#api.GET("/documents/{document_id}", {
 			params: { path: { document_id: documentId } },
 		});
@@ -53,7 +56,7 @@ export class DocumentsService {
 	 * @returns Promise that resolves with the created document
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(
+	async createDocument(
 		workspaceId: string,
 		document: CreateDocument,
 	): Promise<Document> {
@@ -74,7 +77,10 @@ export class DocumentsService {
 	 * @returns Promise that resolves with the updated document
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(documentId: string, updates: UpdateDocument): Promise<Document> {
+	async updateDocument(
+		documentId: string,
+		updates: UpdateDocument,
+	): Promise<Document> {
 		const { data } = await this.#api.PATCH("/documents/{document_id}", {
 			params: { path: { document_id: documentId } },
 			body: updates,
@@ -88,7 +94,7 @@ export class DocumentsService {
 	 * @returns Promise that resolves when the document is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(documentId: string): Promise<void> {
+	async deleteDocument(documentId: string): Promise<void> {
 		await this.#api.DELETE("/documents/{document_id}", {
 			params: { path: { document_id: documentId } },
 		});

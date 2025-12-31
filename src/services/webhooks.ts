@@ -22,7 +22,7 @@ export class WebhooksService {
 	 * @returns Promise that resolves with the list of webhooks
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(workspaceId: string): Promise<Webhook[]> {
+	async listWebhooks(workspaceId: string): Promise<Webhook[]> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/webhooks/",
 			{
@@ -38,7 +38,7 @@ export class WebhooksService {
 	 * @returns Promise that resolves with the webhook details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(webhookId: string): Promise<Webhook> {
+	async getWebhook(webhookId: string): Promise<Webhook> {
 		const { data } = await this.#api.GET("/webhooks/{webhook_id}/", {
 			params: { path: { webhook_id: webhookId } },
 		});
@@ -52,7 +52,7 @@ export class WebhooksService {
 	 * @returns Promise that resolves with the created webhook (includes secret, shown only once)
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(
+	async createWebhook(
 		workspaceId: string,
 		webhook: CreateWebhook,
 	): Promise<WebhookWithSecret> {
@@ -73,7 +73,10 @@ export class WebhooksService {
 	 * @returns Promise that resolves with the updated webhook
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(webhookId: string, updates: UpdateWebhook): Promise<Webhook> {
+	async updateWebhook(
+		webhookId: string,
+		updates: UpdateWebhook,
+	): Promise<Webhook> {
 		const { data } = await this.#api.PUT("/webhooks/{webhook_id}/", {
 			params: { path: { webhook_id: webhookId } },
 			body: updates,
@@ -87,7 +90,7 @@ export class WebhooksService {
 	 * @returns Promise that resolves when the webhook is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(webhookId: string): Promise<void> {
+	async deleteWebhook(webhookId: string): Promise<void> {
 		await this.#api.DELETE("/webhooks/{webhook_id}/", {
 			params: { path: { webhook_id: webhookId } },
 		});

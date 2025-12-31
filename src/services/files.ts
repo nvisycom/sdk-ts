@@ -25,7 +25,7 @@ export class FilesService {
 	 * @returns Promise that resolves with the list of files
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
+	async listFiles(
 		workspaceId: string,
 		query?: ListFilesQuery & Pagination,
 	): Promise<File[]> {
@@ -41,7 +41,7 @@ export class FilesService {
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */
-	async download(fileId: string): Promise<Response> {
+	async downloadFile(fileId: string): Promise<Response> {
 		const { response } = await this.#api.GET("/files/{file_id}", {
 			params: { path: { file_id: fileId } },
 			parseAs: "stream",
@@ -56,7 +56,7 @@ export class FilesService {
 	 * @returns Promise that resolves with the updated file
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(fileId: string, updates: UpdateFile): Promise<File> {
+	async updateFile(fileId: string, updates: UpdateFile): Promise<File> {
 		const { data } = await this.#api.PATCH("/files/{file_id}", {
 			params: { path: { file_id: fileId } },
 			body: updates,
@@ -70,7 +70,7 @@ export class FilesService {
 	 * @returns Promise that resolves when the file is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(fileId: string): Promise<void> {
+	async deleteFile(fileId: string): Promise<void> {
 		await this.#api.DELETE("/files/{file_id}", {
 			params: { path: { file_id: fileId } },
 		});
@@ -83,7 +83,7 @@ export class FilesService {
 	 * @returns Promise that resolves with the download response
 	 * @throws {ApiError} if the request fails
 	 */
-	async downloadMultiple(
+	async downloadMultipleFiles(
 		workspaceId: string,
 		request: DownloadMultipleFilesRequest,
 	): Promise<Response> {
@@ -105,7 +105,7 @@ export class FilesService {
 	 * @returns Promise that resolves with the archive response
 	 * @throws {ApiError} if the request fails
 	 */
-	async downloadArchive(
+	async downloadFilesArchive(
 		workspaceId: string,
 		request: DownloadArchivedFilesRequest,
 	): Promise<Response> {

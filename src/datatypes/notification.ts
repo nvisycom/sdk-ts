@@ -4,3 +4,4 @@ type Schemas = components["schemas"];
 
 export type Notification = Schemas["Notification"];
 export type NotificationType = Schemas["NotificationType"];
+export type UnreadStatus = Schemas["UnreadStatus"];

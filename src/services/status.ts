@@ -16,7 +16,7 @@ export class StatusService {
 	 * @param options - Health check options
 	 * @returns Promise that resolves with the API health status
 	 */
-	async health(options?: CheckHealth): Promise<MonitorStatus> {
+	async checkHealth(options?: CheckHealth): Promise<MonitorStatus> {
 		const { data, error } = await this.#api.GET("/health", {
 			params: { path: { version: "v1" } },
 			body: options ?? {},

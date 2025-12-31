@@ -17,7 +17,7 @@ export class AuthService {
 	 * @returns Promise that resolves with the auth response containing access token
 	 * @throws {ApiError} if the request fails
 	 */
-	async login(credentials: Login): Promise<AuthToken> {
+	async loginAccount(credentials: Login): Promise<AuthToken> {
 		const { data } = await this.#api.POST("/auth/login", {
 			body: credentials,
 		});
@@ -30,7 +30,7 @@ export class AuthService {
 	 * @returns Promise that resolves with the auth response containing access token
 	 * @throws {ApiError} if the request fails
 	 */
-	async signup(details: Signup): Promise<AuthToken> {
+	async signupAccount(details: Signup): Promise<AuthToken> {
 		const { data } = await this.#api.POST("/auth/signup", {
 			body: details,
 		});
@@ -42,7 +42,7 @@ export class AuthService {
 	 * @returns Promise that resolves when logout is complete
 	 * @throws {ApiError} if the request fails
 	 */
-	async logout(): Promise<void> {
+	async logoutAccount(): Promise<void> {
 		await this.#api.POST("/auth/logout");
 	}
 }

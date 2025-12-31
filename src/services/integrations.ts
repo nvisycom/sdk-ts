@@ -25,7 +25,7 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the list of integrations
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
+	async listIntegrations(
 		workspaceId: string,
 		query?: ListIntegrationsQuery & Pagination,
 	): Promise<Integration[]> {
@@ -44,7 +44,7 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the integration details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(integrationId: string): Promise<Integration> {
+	async getIntegration(integrationId: string): Promise<Integration> {
 		const { data } = await this.#api.GET("/integrations/{integration_id}/", {
 			params: { path: { integration_id: integrationId } },
 		});
@@ -58,7 +58,7 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the created integration
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(
+	async createIntegration(
 		workspaceId: string,
 		integration: CreateIntegration,
 	): Promise<Integration> {
@@ -79,7 +79,7 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the updated integration
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(
+	async updateIntegration(
 		integrationId: string,
 		updates: UpdateIntegration,
 	): Promise<Integration> {
@@ -97,7 +97,7 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the updated integration
 	 * @throws {ApiError} if the request fails
 	 */
-	async updateCredentials(
+	async updateIntegrationCredentials(
 		integrationId: string,
 		credentials: UpdateIntegrationCredentials,
 	): Promise<Integration> {
@@ -117,7 +117,7 @@ export class IntegrationsService {
 	 * @returns Promise that resolves when the integration is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(integrationId: string): Promise<void> {
+	async deleteIntegration(integrationId: string): Promise<void> {
 		await this.#api.DELETE("/integrations/{integration_id}/", {
 			params: { path: { integration_id: integrationId } },
 		});

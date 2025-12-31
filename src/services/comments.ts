@@ -23,7 +23,7 @@ export class CommentsService {
 	 * @returns Promise that resolves with the list of comments
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(fileId: string, query?: Pagination): Promise<Comment[]> {
+	async listComments(fileId: string, query?: Pagination): Promise<Comment[]> {
 		const { data } = await this.#api.GET("/files/{file_id}/comments", {
 			params: { path: { file_id: fileId }, query },
 		});
@@ -37,7 +37,10 @@ export class CommentsService {
 	 * @returns Promise that resolves with the created comment
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(fileId: string, comment: CreateComment): Promise<Comment> {
+	async createComment(
+		fileId: string,
+		comment: CreateComment,
+	): Promise<Comment> {
 		const { data } = await this.#api.POST("/files/{file_id}/comments", {
 			params: { path: { file_id: fileId } },
 			body: comment,
@@ -53,7 +56,7 @@ export class CommentsService {
 	 * @returns Promise that resolves with the updated comment
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(
+	async updateComment(
 		fileId: string,
 		commentId: string,
 		updates: UpdateComment,
@@ -75,7 +78,7 @@ export class CommentsService {
 	 * @returns Promise that resolves when the comment is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(fileId: string, commentId: string): Promise<void> {
+	async deleteComment(fileId: string, commentId: string): Promise<void> {
 		await this.#api.DELETE("/files/{file_id}/comments/{comment_id}", {
 			params: { path: { file_id: fileId, comment_id: commentId } },
 		});

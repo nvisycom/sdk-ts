@@ -5185,6 +5185,60 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/notifications/unread": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get unread notifications count
+		 * @description Returns the number of unread notifications for the authenticated account.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for unread notifications status. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["UnreadStatus"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/auth/login": {
 		parameters: {
 			query?: never;
@@ -5682,11 +5736,6 @@ export interface components {
 			requireApproval?: boolean | null;
 			/**
 			 * Format: int32
-			 * @description Maximum number of members allowed in the workspace (1-1000).
-			 */
-			maxMembers?: number | null;
-			/**
-			 * Format: int32
 			 * @description Maximum storage size in megabytes allowed for the workspace (1024-1048576 MB).
 			 */
 			maxStorage?: number | null;
@@ -5715,16 +5764,16 @@ export interface components {
 			requireApproval: boolean;
 			/**
 			 * Format: int32
-			 * @description Maximum number of members allowed in the workspace.
-			 */
-			maxMembers?: number | null;
-			/**
-			 * Format: int32
 			 * @description Maximum storage size in megabytes allowed for the workspace.
 			 */
 			maxStorage?: number | null;
 			/** @description Whether comments are enabled for this workspace. */
 			enableComments: boolean;
+			/**
+			 * Format: uuid
+			 * @description ID of the account that created the workspace.
+			 */
+			createdBy: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
 			/**
@@ -5783,11 +5832,6 @@ export interface components {
 			requireApproval?: boolean | null;
 			/**
 			 * Format: int32
-			 * @description Maximum number of members allowed in the workspace (1-1000).
-			 */
-			maxMembers?: number | null;
-			/**
-			 * Format: int32
 			 * @description Maximum storage size in megabytes allowed for the workspace (1-1048576 MB).
 			 */
 			maxStorage?: number | null;
@@ -5834,8 +5878,6 @@ export interface components {
 			integrationName: string;
 			/** @description Type of third-party service this integration connects to. */
 			integrationType: components["schemas"]["IntegrationType"];
-			/** @description Structured configuration and service-specific metadata. */
-			metadata: unknown;
 			/** @description Whether the integration is currently active and enabled. */
 			isActive: boolean;
 			/**
@@ -6015,6 +6057,8 @@ export interface components {
 			 * @description Account ID if the invitee has an account.
 			 */
 			inviteeId?: string | null;
+			/** @description Invite token (only included for open invitations without invitee_id). */
+			inviteToken?: string | null;
 			/** @description Email address of the invitee (if they have an account). */
 			emailAddress?: string | null;
 			/** @description Role the invitee will have if they accept. */
@@ -6701,8 +6745,6 @@ export interface components {
 			content: string;
 			/** @description Annotation type. */
 			annotationType: string;
-			/** @description Additional metadata (position, selection, etc.). */
-			metadata?: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the annotation was created.
@@ -6757,8 +6799,6 @@ export interface components {
 			accountId?: string | null;
 			/** @description Type of activity. */
 			activityType: components["schemas"]["ActivityType"];
-			/** @description Additional metadata. */
-			metadata?: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the activity occurred.
@@ -6842,8 +6882,6 @@ export interface components {
 			relatedId?: string | null;
 			/** @description Related entity type. */
 			relatedType?: string | null;
-			/** @description Additional metadata. */
-			metadata?: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the notification was created.
@@ -6869,6 +6907,14 @@ export interface components {
 			| "document_verify"
 			| "workspace_invite"
 			| "system_announcement";
+		/** @description Response type for unread notifications status. */
+		UnreadStatus: {
+			/**
+			 * Format: int64
+			 * @description Number of unread notifications.
+			 */
+			unreadCount: number;
+		};
 		/** @description Request payload for login. */
 		Login: {
 			/**
