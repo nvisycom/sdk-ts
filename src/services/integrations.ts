@@ -32,7 +32,7 @@ export class IntegrationsService {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/integrations/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspace_id: workspaceId }, query },
 			},
 		);
 		return data!;
@@ -46,7 +46,7 @@ export class IntegrationsService {
 	 */
 	async get(integrationId: string): Promise<Integration> {
 		const { data } = await this.#api.GET("/integrations/{integration_id}/", {
-			params: { path: { integrationId } },
+			params: { path: { integration_id: integrationId } },
 		});
 		return data!;
 	}
@@ -65,7 +65,7 @@ export class IntegrationsService {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspace_id}/integrations/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 				body: integration,
 			},
 		);
@@ -84,7 +84,7 @@ export class IntegrationsService {
 		updates: UpdateIntegration,
 	): Promise<Integration> {
 		const { data } = await this.#api.PUT("/integrations/{integration_id}/", {
-			params: { path: { integrationId } },
+			params: { path: { integration_id: integrationId } },
 			body: updates,
 		});
 		return data!;
@@ -104,7 +104,7 @@ export class IntegrationsService {
 		const { data } = await this.#api.PATCH(
 			"/integrations/{integration_id}/credentials/",
 			{
-				params: { path: { integrationId } },
+				params: { path: { integration_id: integrationId } },
 				body: credentials,
 			},
 		);
@@ -119,7 +119,7 @@ export class IntegrationsService {
 	 */
 	async delete(integrationId: string): Promise<void> {
 		await this.#api.DELETE("/integrations/{integration_id}/", {
-			params: { path: { integrationId } },
+			params: { path: { integration_id: integrationId } },
 		});
 	}
 }

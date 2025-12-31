@@ -264,7 +264,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create API token
-		 * @description Creates a new API token. The full token is only shown once upon creation.
+		 * @description Creates a new API token. The JWT token is only shown once upon creation.
 		 */
 		post: {
 			parameters: {
@@ -280,13 +280,13 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response when creating a new API token (includes actual tokens, shown only once). */
+				/** @description API token with JWT token string (only returned on creation). */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiTokenWithSecret"];
+						"application/json": components["schemas"]["ApiTokenWithJWT"];
 					};
 				};
 				/**
@@ -327,7 +327,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/api-tokens/{access_token}/": {
+	"/api-tokens/{token_id}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -342,7 +342,10 @@ export interface paths {
 			parameters: {
 				query?: never;
 				header?: never;
-				path?: never;
+				path: {
+					/** @description Unique identifier of the API token. */
+					token_id: string;
+				};
 				cookie?: never;
 			};
 			requestBody?: never;
@@ -398,7 +401,10 @@ export interface paths {
 			parameters: {
 				query?: never;
 				header?: never;
-				path?: never;
+				path: {
+					/** @description Unique identifier of the API token. */
+					token_id: string;
+				};
 				cookie?: never;
 			};
 			requestBody?: never;
@@ -461,13 +467,16 @@ export interface paths {
 		head?: never;
 		/**
 		 * Update API token
-		 * @description Updates an existing API token's name or description.
+		 * @description Updates an existing API token's name.
 		 */
 		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
-				path?: never;
+				path: {
+					/** @description Unique identifier of the API token. */
+					token_id: string;
+				};
 				cookie?: never;
 			};
 			/** @description Request to update an existing API token. */
@@ -698,7 +707,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -772,7 +781,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -844,7 +853,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -964,7 +973,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -1021,7 +1030,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -1126,7 +1135,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integrationId: string;
+					integration_id: string;
 				};
 				cookie?: never;
 			};
@@ -1198,7 +1207,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integrationId: string;
+					integration_id: string;
 				};
 				cookie?: never;
 			};
@@ -1306,7 +1315,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integrationId: string;
+					integration_id: string;
 				};
 				cookie?: never;
 			};
@@ -1394,7 +1403,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integrationId: string;
+					integration_id: string;
 				};
 				cookie?: never;
 			};
@@ -1514,7 +1523,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -1585,7 +1594,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration run. */
-					runId: string;
+					run_id: string;
 				};
 				cookie?: never;
 			};
@@ -1697,7 +1706,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -1754,7 +1763,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -1867,7 +1876,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -1960,7 +1969,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the invite. */
-					inviteId: string;
+					invite_id: string;
 				};
 				cookie?: never;
 			};
@@ -2048,7 +2057,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the invite. */
-					inviteId: string;
+					invite_id: string;
 				};
 				cookie?: never;
 			};
@@ -2142,7 +2151,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description The invite code to use for joining the workspace. */
-					inviteCode: string;
+					invite_code: string;
 				};
 				cookie?: never;
 			};
@@ -2269,7 +2278,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -2357,7 +2366,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -2440,9 +2449,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 					/** @description Unique identifier of the member account. */
-					accountId: string;
+					account_id: string;
 				};
 				cookie?: never;
 			};
@@ -2516,9 +2525,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 					/** @description Unique identifier of the member account. */
-					accountId: string;
+					account_id: string;
 				};
 				cookie?: never;
 			};
@@ -2621,9 +2630,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 					/** @description Unique identifier of the member account. */
-					accountId: string;
+					account_id: string;
 				};
 				cookie?: never;
 			};
@@ -2724,7 +2733,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -2781,7 +2790,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -2871,7 +2880,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the webhook. */
-					webhookId: string;
+					webhook_id: string;
 				};
 				cookie?: never;
 			};
@@ -2943,7 +2952,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the webhook. */
-					webhookId: string;
+					webhook_id: string;
 				};
 				cookie?: never;
 			};
@@ -3036,7 +3045,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the webhook. */
-					webhookId: string;
+					webhook_id: string;
 				};
 				cookie?: never;
 			};
@@ -3118,7 +3127,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -3228,7 +3237,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -3285,7 +3294,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -3376,7 +3385,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -3481,7 +3490,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -3584,7 +3593,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 				};
 				cookie?: never;
 			};
@@ -3656,7 +3665,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 				};
 				cookie?: never;
 			};
@@ -3728,7 +3737,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 				};
 				cookie?: never;
 			};
@@ -3848,7 +3857,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -3905,7 +3914,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -3995,7 +4004,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the document. */
-					documentId: string;
+					document_id: string;
 				};
 				cookie?: never;
 			};
@@ -4069,7 +4078,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the document. */
-					documentId: string;
+					document_id: string;
 				};
 				cookie?: never;
 			};
@@ -4141,7 +4150,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the document. */
-					documentId: string;
+					document_id: string;
 				};
 				cookie?: never;
 			};
@@ -4261,7 +4270,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 				};
 				cookie?: never;
 			};
@@ -4318,7 +4327,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 				};
 				cookie?: never;
 			};
@@ -4411,9 +4420,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 					/** @description Unique identifier of the comment. */
-					commentId: string;
+					comment_id: string;
 				};
 				cookie?: never;
 			};
@@ -4485,9 +4494,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 					/** @description Unique identifier of the comment. */
-					commentId: string;
+					comment_id: string;
 				};
 				cookie?: never;
 			};
@@ -4607,7 +4616,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 				};
 				cookie?: never;
 			};
@@ -4679,7 +4688,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					fileId: string;
+					file_id: string;
 				};
 				cookie?: never;
 			};
@@ -4784,7 +4793,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the annotation. */
-					annotationId: string;
+					annotation_id: string;
 				};
 				cookie?: never;
 			};
@@ -4858,7 +4867,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the annotation. */
-					annotationId: string;
+					annotation_id: string;
 				};
 				cookie?: never;
 			};
@@ -4930,7 +4939,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the annotation. */
-					annotationId: string;
+					annotation_id: string;
 				};
 				cookie?: never;
 			};
@@ -5050,7 +5059,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					workspace_id: string;
 				};
 				cookie?: never;
 			};
@@ -5234,7 +5243,7 @@ export interface paths {
 				 *      response, including the error name, message, HTTP status code, resource
 				 *      information, and user-friendly messages.
 				 */
-				404: {
+				401: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -5483,9 +5492,7 @@ export interface components {
 			/** @description Helpful suggestion for resolving the error (optional) */
 			suggestion?: string | null;
 			/** @description Validation error details for field-specific errors */
-			validationErrors?:
-				| components["schemas"]["ValidationErrorDetail"][]
-				| null;
+			validation?: components["schemas"]["ValidationErrorDetail"][] | null;
 		};
 		/** @description Validation error details for field-specific errors. */
 		ValidationErrorDetail: {
@@ -5516,8 +5523,6 @@ export interface components {
 		};
 		/** @description Request to create a new API token. */
 		CreateApiToken: {
-			/** @description Optional description for the API token (max 500 characters). */
-			description?: string | null;
 			/** @description Human-readable name for the API token (1-100 characters). */
 			name: string;
 			/**
@@ -5528,14 +5533,13 @@ export interface components {
 		};
 		/** @description Expiration options for API tokens. */
 		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
-		/** @description Response when creating a new API token (includes actual tokens, shown only once). */
-		ApiTokenWithSecret: {
-			/** @description Description of the API token. */
-			description?: string | null;
-			/** @description Shortened access token identifier for display. */
-			accessTokenPreview: string;
-			/** @description Shortened refresh token identifier for display. */
-			refreshTokenPreview: string;
+		/** @description API token with JWT token string (only returned on creation). */
+		ApiTokenWithJWT: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
 			/**
 			 * Format: uuid
 			 * @description Reference to the account this token belongs to.
@@ -5545,8 +5549,6 @@ export interface components {
 			name: string;
 			/** @description Type of token (web, mobile, api, etc.). */
 			sessionType: components["schemas"]["ApiTokenType"];
-			/** @description Whether the token has expired. */
-			isExpired: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of token creation.
@@ -5554,24 +5556,11 @@ export interface components {
 			issuedAt: string;
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the token expires and becomes invalid.
+			 * @description Timestamp when the token expires (None = never expires).
 			 */
-			expiredAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of most recent token activity.
-			 */
-			lastUsedAt?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Full access token (only shown once at creation).
-			 */
-			accessToken: string;
-			/**
-			 * Format: uuid
-			 * @description Full refresh token (only shown once at creation).
-			 */
-			refreshToken: string;
+			expiredAt?: string | null;
+			/** @description The JWT token string (only shown once on creation). */
+			token: string;
 		};
 		/**
 		 * @description Defines the type of API token for authentication and tracking purposes.
@@ -5610,12 +5599,11 @@ export interface components {
 		};
 		/** @description API token response structure. */
 		ApiToken: {
-			/** @description Description of the API token. */
-			description?: string | null;
-			/** @description Shortened access token identifier for display. */
-			accessTokenPreview: string;
-			/** @description Shortened refresh token identifier for display. */
-			refreshTokenPreview: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
 			/**
 			 * Format: uuid
 			 * @description Reference to the account this token belongs to.
@@ -5634,19 +5622,30 @@ export interface components {
 			issuedAt: string;
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the token expires and becomes invalid.
+			 * @description Timestamp when the token expires (None = never expires).
 			 */
-			expiredAt: string;
+			expiredAt?: string | null;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of most recent token activity.
 			 */
 			lastUsedAt?: string | null;
 		};
+		/**
+		 * @description Path parameters for API token operations.
+		 *
+		 *      Since token IDs are globally unique UUIDs, account context is verified
+		 *      by comparing with the authenticated user's account ID.
+		 */
+		TokenPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the API token.
+			 */
+			token_id: string;
+		};
 		/** @description Request to update an existing API token. */
 		UpdateApiToken: {
-			/** @description Updated description for the API token (max 500 characters). */
-			description?: string | null;
 			/** @description Updated name for the API token (1-100 characters). */
 			name?: string | null;
 		};
@@ -5752,7 +5751,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
-			workspaceId: string;
+			workspace_id: string;
 		};
 		/**
 		 * @description Request payload to update an existing workspace.
@@ -5885,7 +5884,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the integration.
 			 */
-			integrationId: string;
+			integration_id: string;
 		};
 		/** @description Request payload for updating an existing workspace integration. */
 		UpdateIntegration: {
@@ -5971,7 +5970,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the integration run.
 			 */
-			runId: string;
+			run_id: string;
 		};
 		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
@@ -6016,6 +6015,8 @@ export interface components {
 			 * @description Account ID if the invitee has an account.
 			 */
 			inviteeId?: string | null;
+			/** @description Email address of the invitee (if they have an account). */
+			emailAddress?: string | null;
 			/** @description Role the invitee will have if they accept. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Current status of the invitation. */
@@ -6103,7 +6104,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the invite.
 			 */
-			inviteId: string;
+			invite_id: string;
 		};
 		/** @description Request to respond to a workspace invitation. */
 		ReplyInvite: {
@@ -6113,7 +6114,7 @@ export interface components {
 		/** @description Path parameters for joining via invite code. */
 		InviteCodePathParams: {
 			/** @description The invite code to use for joining the workspace. */
-			inviteCode: string;
+			invite_code: string;
 		};
 		/** @description Represents a workspace member. */
 		Member: {
@@ -6122,6 +6123,10 @@ export interface components {
 			 * @description Account ID of the member.
 			 */
 			accountId: string;
+			/** @description Email address of the member. */
+			emailAddress: string;
+			/** @description Display name of the member. */
+			displayName: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
 			/**
@@ -6154,12 +6159,12 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
-			workspaceId: string;
+			workspace_id: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the member account.
 			 */
-			accountId: string;
+			account_id: string;
 		};
 		/** @description Request to update a member's role. */
 		UpdateMemberRole: {
@@ -6342,7 +6347,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the webhook.
 			 */
-			webhookId: string;
+			webhook_id: string;
 		};
 		/** @description Request payload for updating an existing workspace webhook. */
 		UpdateWebhook: {
@@ -6449,7 +6454,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the file.
 			 */
-			fileId: string;
+			file_id: string;
 		};
 		/** @description Request to update file metadata. */
 		UpdateFile: {
@@ -6561,7 +6566,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the document.
 			 */
-			documentId: string;
+			document_id: string;
 		};
 		/** @description Request payload for updating a document. */
 		UpdateDocument: {
@@ -6651,12 +6656,12 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the file.
 			 */
-			fileId: string;
+			file_id: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the comment.
 			 */
-			commentId: string;
+			comment_id: string;
 		};
 		/** @description Request payload to update a document comment. */
 		UpdateComment: {
@@ -6720,7 +6725,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the annotation.
 			 */
-			annotationId: string;
+			annotation_id: string;
 		};
 		/** @description Request to update an annotation. */
 		UpdateAnnotation: {
@@ -6878,6 +6883,13 @@ export interface components {
 		};
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
+			/** @description The JWT API token for authentication. */
+			apiToken: string;
+			/**
+			 * Format: uuid
+			 * @description ID of the token.
+			 */
+			tokenId: string;
 			/**
 			 * Format: uuid
 			 * @description ID of the account.

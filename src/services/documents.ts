@@ -27,7 +27,7 @@ export class DocumentsService {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/documents",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspace_id: workspaceId }, query },
 			},
 		);
 		return data!;
@@ -41,7 +41,7 @@ export class DocumentsService {
 	 */
 	async get(documentId: string): Promise<Document> {
 		const { data } = await this.#api.GET("/documents/{document_id}", {
-			params: { path: { documentId } },
+			params: { path: { document_id: documentId } },
 		});
 		return data!;
 	}
@@ -60,7 +60,7 @@ export class DocumentsService {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspace_id}/documents",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 				body: document,
 			},
 		);
@@ -76,7 +76,7 @@ export class DocumentsService {
 	 */
 	async update(documentId: string, updates: UpdateDocument): Promise<Document> {
 		const { data } = await this.#api.PATCH("/documents/{document_id}", {
-			params: { path: { documentId } },
+			params: { path: { document_id: documentId } },
 			body: updates,
 		});
 		return data!;
@@ -90,7 +90,7 @@ export class DocumentsService {
 	 */
 	async delete(documentId: string): Promise<void> {
 		await this.#api.DELETE("/documents/{document_id}", {
-			params: { path: { documentId } },
+			params: { path: { document_id: documentId } },
 		});
 	}
 }

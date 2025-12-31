@@ -26,7 +26,7 @@ export class WebhooksService {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/webhooks/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 			},
 		);
 		return data!;
@@ -40,7 +40,7 @@ export class WebhooksService {
 	 */
 	async get(webhookId: string): Promise<Webhook> {
 		const { data } = await this.#api.GET("/webhooks/{webhook_id}/", {
-			params: { path: { webhookId } },
+			params: { path: { webhook_id: webhookId } },
 		});
 		return data!;
 	}
@@ -59,7 +59,7 @@ export class WebhooksService {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspace_id}/webhooks/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 				body: webhook,
 			},
 		);
@@ -75,7 +75,7 @@ export class WebhooksService {
 	 */
 	async update(webhookId: string, updates: UpdateWebhook): Promise<Webhook> {
 		const { data } = await this.#api.PUT("/webhooks/{webhook_id}/", {
-			params: { path: { webhookId } },
+			params: { path: { webhook_id: webhookId } },
 			body: updates,
 		});
 		return data!;
@@ -89,7 +89,7 @@ export class WebhooksService {
 	 */
 	async delete(webhookId: string): Promise<void> {
 		await this.#api.DELETE("/webhooks/{webhook_id}/", {
-			params: { path: { webhookId } },
+			params: { path: { webhook_id: webhookId } },
 		});
 	}
 }

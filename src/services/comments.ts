@@ -1,5 +1,10 @@
 import type { ApiClient } from "@/client.js";
-import type { Comment, CreateComment, Pagination } from "@/datatypes/index.js";
+import type {
+	Comment,
+	CreateComment,
+	Pagination,
+	UpdateComment,
+} from "@/datatypes/index.js";
 
 /**
  * Service for handling file comment operations
@@ -20,7 +25,7 @@ export class CommentsService {
 	 */
 	async list(fileId: string, query?: Pagination): Promise<Comment[]> {
 		const { data } = await this.#api.GET("/files/{file_id}/comments", {
-			params: { path: { fileId }, query },
+			params: { path: { file_id: fileId }, query },
 		});
 		return data!;
 	}
@@ -34,9 +39,32 @@ export class CommentsService {
 	 */
 	async create(fileId: string, comment: CreateComment): Promise<Comment> {
 		const { data } = await this.#api.POST("/files/{file_id}/comments", {
-			params: { path: { fileId } },
+			params: { path: { file_id: fileId } },
 			body: comment,
 		});
+		return data!;
+	}
+
+	/**
+	 * Update a comment
+	 * @param fileId - File ID
+	 * @param commentId - Comment ID
+	 * @param updates - Comment update request
+	 * @returns Promise that resolves with the updated comment
+	 * @throws {ApiError} if the request fails
+	 */
+	async update(
+		fileId: string,
+		commentId: string,
+		updates: UpdateComment,
+	): Promise<Comment> {
+		const { data } = await this.#api.PATCH(
+			"/files/{file_id}/comments/{comment_id}",
+			{
+				params: { path: { file_id: fileId, comment_id: commentId } },
+				body: updates,
+			},
+		);
 		return data!;
 	}
 
@@ -49,7 +77,7 @@ export class CommentsService {
 	 */
 	async delete(fileId: string, commentId: string): Promise<void> {
 		await this.#api.DELETE("/files/{file_id}/comments/{comment_id}", {
-			params: { path: { fileId, commentId } },
+			params: { path: { file_id: fileId, comment_id: commentId } },
 		});
 	}
 }

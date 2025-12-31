@@ -18,36 +18,6 @@ import type { ErrorResponse } from "@/datatypes/index.js";
 export type { ErrorResponse } from "@/datatypes/index.js";
 
 /**
- * Unwraps an openapi-fetch response, throwing an {@link ApiError} if the request failed.
- *
- * This is a convenience function for handling the response pattern from openapi-fetch.
- * If the response contains an error, it throws an ApiError. Otherwise, it returns the data.
- *
- * @typeParam T - The expected data type on success
- * @param result - The openapi-fetch response object
- * @returns The response data
- * @throws {ApiError} If the response contains an error
- *
- * @example
- * ```typescript
- * const result = await api.GET("/account");
- * const account = unwrap(result); // Throws ApiError if result.error exists
- * ```
- *
- * @internal
- */
-export function unwrap<T>(result: {
-	data?: T;
-	error?: ErrorResponse;
-	response: Response;
-}): T {
-	if (result.error) {
-		throw new ApiError(result.error, result.response.status);
-	}
-	return result.data as T;
-}
-
-/**
  * Error thrown when the Nvisy API returns an error response.
  *
  * This error class wraps the API's {@link ErrorResponse} format and adds
@@ -96,7 +66,7 @@ export class ApiError extends Error implements ErrorResponse {
 	 * Field-specific validation errors.
 	 * Present when the error is due to invalid input data.
 	 */
-	public readonly validationErrors?: ErrorResponse["validationErrors"];
+	public readonly validation?: ErrorResponse["validation"];
 
 	/**
 	 * HTTP status code of the response (e.g., 400, 404, 500).
@@ -115,7 +85,7 @@ export class ApiError extends Error implements ErrorResponse {
 		this.message = response.message;
 		this.resource = response.resource;
 		this.suggestion = response.suggestion;
-		this.validationErrors = response.validationErrors;
+		this.validation = response.validation;
 		this.statusCode = statusCode;
 
 		// Maintains proper stack trace for where our error was thrown (only available on V8)
@@ -177,7 +147,7 @@ export class ApiError extends Error implements ErrorResponse {
 			message: this.message,
 			resource: this.resource,
 			suggestion: this.suggestion,
-			validationErrors: this.validationErrors,
+			validation: this.validation,
 		};
 	}
 }

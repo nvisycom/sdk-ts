@@ -30,7 +30,7 @@ export class FilesService {
 		query?: ListFilesQuery & Pagination,
 	): Promise<File[]> {
 		const { data } = await this.#api.GET("/workspaces/{workspace_id}/files/", {
-			params: { path: { workspaceId }, query },
+			params: { path: { workspace_id: workspaceId }, query },
 		});
 		return data!;
 	}
@@ -43,7 +43,7 @@ export class FilesService {
 	 */
 	async download(fileId: string): Promise<Response> {
 		const { response } = await this.#api.GET("/files/{file_id}", {
-			params: { path: { fileId } },
+			params: { path: { file_id: fileId } },
 			parseAs: "stream",
 		});
 		return response;
@@ -58,7 +58,7 @@ export class FilesService {
 	 */
 	async update(fileId: string, updates: UpdateFile): Promise<File> {
 		const { data } = await this.#api.PATCH("/files/{file_id}", {
-			params: { path: { fileId } },
+			params: { path: { file_id: fileId } },
 			body: updates,
 		});
 		return data!;
@@ -72,7 +72,7 @@ export class FilesService {
 	 */
 	async delete(fileId: string): Promise<void> {
 		await this.#api.DELETE("/files/{file_id}", {
-			params: { path: { fileId } },
+			params: { path: { file_id: fileId } },
 		});
 	}
 
@@ -90,7 +90,7 @@ export class FilesService {
 		const { response } = await this.#api.POST(
 			"/workspaces/{workspace_id}/files/download",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 				body: request,
 				parseAs: "stream",
 			},
@@ -112,7 +112,7 @@ export class FilesService {
 		const { response } = await this.#api.POST(
 			"/workspaces/{workspace_id}/files/archive",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 				body: request,
 				parseAs: "stream",
 			},

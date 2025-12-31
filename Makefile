@@ -36,6 +36,10 @@ generate:
 	@npm run generate:clean
 	$(call make-log,Generating TypeScript types from OpenAPI specification...)
 	@npm run generate
+	$(call make-log,Formatting generated files...)
+	@npm run format
+	$(call make-log,Building project...)
+	@npm run build
 	$(call make-log,Type generation complete)
 
 # Generate TypeScript types from local API server
@@ -45,4 +49,8 @@ generate-local:
 	@npm run generate:clean
 	$(call make-log,Generating TypeScript types from local API server...)
 	@npm run generate:local
+	$(call make-log,Formatting generated files...)
+	@npm run format
+	$(call make-log,Building project...)
+	@npm run build
 	$(call make-log,Type generation complete)

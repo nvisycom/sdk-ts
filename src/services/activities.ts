@@ -22,7 +22,7 @@ export class ActivitiesService {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/activities/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspace_id: workspaceId }, query },
 			},
 		);
 		return data!;

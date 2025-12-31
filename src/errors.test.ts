@@ -38,7 +38,7 @@ describe("ApiError", () => {
 				message: "Field is required",
 				resource: "account",
 				suggestion: "Please provide a valid email",
-				validationErrors: [
+				validation: [
 					{ field: "email", code: "required", message: "Email is required" },
 				],
 			},
@@ -49,7 +49,7 @@ describe("ApiError", () => {
 		expect(error.message).toBe("Field is required");
 		expect(error.resource).toBe("account");
 		expect(error.suggestion).toBe("Please provide a valid email");
-		expect(error.validationErrors).toHaveLength(1);
+		expect(error.validation).toHaveLength(1);
 		expect(error.statusCode).toBe(400);
 	});
 

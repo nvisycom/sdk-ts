@@ -143,7 +143,7 @@ export class Client {
 			);
 		}
 
-		if (!/^[a-zA-Z0-9_-]+$/.test(trimmedToken)) {
+		if (!/^[a-zA-Z0-9_.\-]+$/.test(trimmedToken)) {
 			throw ConfigError.invalidField("apiToken", "contains invalid characters");
 		}
 

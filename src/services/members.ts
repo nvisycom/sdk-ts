@@ -30,7 +30,7 @@ export class MembersService {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/members/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspace_id: workspaceId }, query },
 			},
 		);
 		return data!;
@@ -47,7 +47,9 @@ export class MembersService {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/members/{account_id}/",
 			{
-				params: { path: { workspaceId, accountId } },
+				params: {
+					path: { workspace_id: workspaceId, account_id: accountId },
+				},
 			},
 		);
 		return data!;
@@ -69,7 +71,9 @@ export class MembersService {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspace_id}/members/{account_id}/role",
 			{
-				params: { path: { workspaceId, accountId } },
+				params: {
+					path: { workspace_id: workspaceId, account_id: accountId },
+				},
 				body: role,
 			},
 		);
@@ -85,7 +89,7 @@ export class MembersService {
 	 */
 	async remove(workspaceId: string, accountId: string): Promise<void> {
 		await this.#api.DELETE("/workspaces/{workspace_id}/members/{account_id}/", {
-			params: { path: { workspaceId, accountId } },
+			params: { path: { workspace_id: workspaceId, account_id: accountId } },
 		});
 	}
 
@@ -97,7 +101,7 @@ export class MembersService {
 	 */
 	async leave(workspaceId: string): Promise<void> {
 		await this.#api.POST("/workspaces/{workspace_id}/members/leave", {
-			params: { path: { workspaceId } },
+			params: { path: { workspace_id: workspaceId } },
 		});
 	}
 }

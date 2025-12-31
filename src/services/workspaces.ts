@@ -37,7 +37,7 @@ export class WorkspacesService {
 	 */
 	async get(workspaceId: string): Promise<Workspace> {
 		const { data } = await this.#api.GET("/workspaces/{workspace_id}/", {
-			params: { path: { workspaceId } },
+			params: { path: { workspace_id: workspaceId } },
 		});
 		return data!;
 	}
@@ -67,7 +67,7 @@ export class WorkspacesService {
 		updates: UpdateWorkspace,
 	): Promise<Workspace> {
 		const { data } = await this.#api.PATCH("/workspaces/{workspace_id}/", {
-			params: { path: { workspaceId } },
+			params: { path: { workspace_id: workspaceId } },
 			body: updates,
 		});
 		return data!;
@@ -81,7 +81,7 @@ export class WorkspacesService {
 	 */
 	async delete(workspaceId: string): Promise<void> {
 		await this.#api.DELETE("/workspaces/{workspace_id}/", {
-			params: { path: { workspaceId } },
+			params: { path: { workspace_id: workspaceId } },
 		});
 	}
 }

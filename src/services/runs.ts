@@ -23,7 +23,7 @@ export class RunsService {
 		query?: Pagination,
 	): Promise<IntegrationRun[]> {
 		const { data } = await this.#api.GET("/workspaces/{workspace_id}/runs/", {
-			params: { path: { workspaceId }, query },
+			params: { path: { workspace_id: workspaceId }, query },
 		});
 		return data!;
 	}
@@ -36,7 +36,7 @@ export class RunsService {
 	 */
 	async get(runId: string): Promise<IntegrationRun> {
 		const { data } = await this.#api.GET("/runs/{run_id}", {
-			params: { path: { runId } },
+			params: { path: { run_id: runId } },
 		});
 		return data!;
 	}

@@ -34,7 +34,7 @@ export class InvitesService {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspace_id}/invites/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspace_id: workspaceId }, query },
 			},
 		);
 		return data!;
@@ -51,7 +51,7 @@ export class InvitesService {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspace_id}/invites/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 				body: invite,
 			},
 		);
@@ -66,7 +66,7 @@ export class InvitesService {
 	 */
 	async cancel(inviteId: string): Promise<void> {
 		await this.#api.DELETE("/invites/{invite_id}/", {
-			params: { path: { inviteId } },
+			params: { path: { invite_id: inviteId } },
 		});
 	}
 
@@ -79,7 +79,7 @@ export class InvitesService {
 	 */
 	async reply(inviteId: string, reply: ReplyInvite): Promise<Invite> {
 		const { data } = await this.#api.PATCH("/invites/{invite_id}/reply/", {
-			params: { path: { inviteId } },
+			params: { path: { invite_id: inviteId } },
 			body: reply,
 		});
 		return data!;
@@ -99,7 +99,7 @@ export class InvitesService {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspace_id}/invites/code/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspace_id: workspaceId } },
 				body: options,
 			},
 		);
@@ -114,7 +114,7 @@ export class InvitesService {
 	 */
 	async joinWithCode(inviteCode: string): Promise<Member> {
 		const { data } = await this.#api.POST("/invites/{invite_code}/join/", {
-			params: { path: { inviteCode } },
+			params: { path: { invite_code: inviteCode } },
 		});
 		return data!;
 	}

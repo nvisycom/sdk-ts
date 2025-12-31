@@ -36,4 +36,13 @@ export class AuthService {
 		});
 		return data!;
 	}
+
+	/**
+	 * Logout and invalidate the current access token
+	 * @returns Promise that resolves when logout is complete
+	 * @throws {ApiError} if the request fails
+	 */
+	async logout(): Promise<void> {
+		await this.#api.POST("/auth/logout");
+	}
 }

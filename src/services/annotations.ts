@@ -25,7 +25,7 @@ export class AnnotationsService {
 	 */
 	async list(fileId: string, query?: Pagination): Promise<Annotation[]> {
 		const { data } = await this.#api.GET("/files/{file_id}/annotations/", {
-			params: { path: { fileId }, query },
+			params: { path: { file_id: fileId }, query },
 		});
 		return data!;
 	}
@@ -38,7 +38,7 @@ export class AnnotationsService {
 	 */
 	async get(annotationId: string): Promise<Annotation> {
 		const { data } = await this.#api.GET("/annotations/{annotation_id}", {
-			params: { path: { annotationId } },
+			params: { path: { annotation_id: annotationId } },
 		});
 		return data!;
 	}
@@ -55,7 +55,7 @@ export class AnnotationsService {
 		annotation: CreateAnnotation,
 	): Promise<Annotation> {
 		const { data } = await this.#api.POST("/files/{file_id}/annotations/", {
-			params: { path: { fileId } },
+			params: { path: { file_id: fileId } },
 			body: annotation,
 		});
 		return data!;
@@ -73,7 +73,7 @@ export class AnnotationsService {
 		updates: UpdateAnnotation,
 	): Promise<Annotation> {
 		const { data } = await this.#api.PATCH("/annotations/{annotation_id}", {
-			params: { path: { annotationId } },
+			params: { path: { annotation_id: annotationId } },
 			body: updates,
 		});
 		return data!;
@@ -87,7 +87,7 @@ export class AnnotationsService {
 	 */
 	async delete(annotationId: string): Promise<void> {
 		await this.#api.DELETE("/annotations/{annotation_id}", {
-			params: { path: { annotationId } },
+			params: { path: { annotation_id: annotationId } },
 		});
 	}
 }
