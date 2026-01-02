@@ -935,6 +935,154 @@ export interface paths {
 		};
 		trace?: never;
 	};
+	"/workspaces/{workspace_id}/notifications": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get notification settings
+		 * @description Returns the notification settings for the authenticated user in a workspace.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspace_id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response for notification settings within a workspace. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["NotificationSettings"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/**
+		 * Update notification settings
+		 * @description Updates the notification settings for the authenticated user in a workspace.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspace_id: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload for updating notification settings. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateNotificationSettings"];
+				};
+			};
+			responses: {
+				/** @description Response for notification settings within a workspace. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["NotificationSettings"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		trace?: never;
+	};
 	"/workspaces/{workspace_id}/integrations/": {
 		parameters: {
 			query?: never;
@@ -2639,7 +2787,7 @@ export interface paths {
 			/** @description Request to update a member's role. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateMemberRole"];
+					"application/json": components["schemas"]["UpdateMember"];
 				};
 			};
 			responses: {
@@ -2782,7 +2930,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create webhook
-		 * @description Creates a new webhook. The secret is only shown once at creation.
+		 * @description Creates a new webhook for the workspace.
 		 */
 		post: {
 			parameters: {
@@ -2801,13 +2949,13 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Workspace webhook response with secret (returned only at creation). */
+				/** @description Workspace webhook response. */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WebhookWithSecret"];
+						"application/json": components["schemas"]["Webhook"];
 					};
 				};
 				/**
@@ -3105,6 +3253,98 @@ export interface paths {
 				};
 			};
 		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/webhooks/{webhook_id}/test/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Test webhook
+		 * @description Sends a test payload to the webhook endpoint and returns the result.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the webhook. */
+					webhook_id: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload for testing a webhook. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["TestWebhook"];
+				};
+			};
+			responses: {
+				/** @description Result of a webhook delivery attempt. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WebhookResult"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
 		options?: never;
 		head?: never;
 		patch?: never;
@@ -5572,18 +5812,15 @@ export interface components {
 			emailAddress?: string | null;
 			/** @description New password (will be hashed before storage). */
 			password?: string | null;
-			/** @description Company or organization name. */
+			/** @description Company or organization name (empty string clears the value). */
 			companyName?: string | null;
 		};
 		/** @description Request to create a new API token. */
 		CreateApiToken: {
 			/** @description Human-readable name for the API token (1-100 characters). */
 			name: string;
-			/**
-			 * @description When the token expires.
-			 * @default in7Days
-			 */
-			expires: components["schemas"]["TokenExpiration"];
+			/** @description When the token expires. */
+			expiresIn: components["schemas"]["TokenExpiration"];
 		};
 		/** @description Expiration options for API tokens. */
 		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
@@ -5725,20 +5962,10 @@ export interface components {
 			description?: string | null;
 			/** @description Display name of the workspace (3-100 characters). */
 			displayName: string;
-			/**
-			 * Format: int32
-			 * @description Duration in seconds to keep the original files (60-604800 seconds).
-			 */
-			keepForSec?: number | null;
 			/** @description Whether to automatically delete processed files after expiration. */
 			autoCleanup?: boolean | null;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean | null;
-			/**
-			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the workspace (1024-1048576 MB).
-			 */
-			maxStorage?: number | null;
 			/** @description Whether comments are enabled for this workspace. */
 			enableComments?: boolean | null;
 		};
@@ -5753,20 +5980,12 @@ export interface components {
 			workspaceId: string;
 			/** @description Display name of the workspace. */
 			displayName: string;
-			/**
-			 * Format: int32
-			 * @description Duration in seconds to keep the original files (optional).
-			 */
-			keepForSec?: number | null;
+			/** @description Tags associated with the workspace. */
+			tags: string[];
 			/** @description Whether to automatically delete processed files after expiration. */
 			autoCleanup: boolean;
 			/** @description Whether approval is required to processed files to be visible. */
 			requireApproval: boolean;
-			/**
-			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the workspace.
-			 */
-			maxStorage?: number | null;
 			/** @description Whether comments are enabled for this workspace. */
 			enableComments: boolean;
 			/**
@@ -5793,7 +6012,7 @@ export interface components {
 		 *      This enumeration corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
 		 *      hierarchical access control for workspace members with clearly defined capabilities.
 		 */
-		WorkspaceRole: "owner" | "member" | "guest";
+		WorkspaceRole: "owner" | "admin" | "member" | "guest";
 		/** @description Path parameters for workspace-level operations. */
 		WorkspacePathParams: {
 			/**
@@ -5821,22 +6040,52 @@ export interface components {
 			description?: string | null;
 			/** @description New display name for the workspace (3-100 characters). */
 			displayName?: string | null;
-			/**
-			 * Format: int32
-			 * @description New duration in seconds to keep original files (60-604800 seconds).
-			 */
-			keepForSec?: number | null;
 			/** @description Whether to automatically delete processed files after expiration. */
 			autoCleanup?: boolean | null;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean | null;
-			/**
-			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the workspace (1-1048576 MB).
-			 */
-			maxStorage?: number | null;
 			/** @description Whether comments are enabled for this workspace. */
 			enableComments?: boolean | null;
+		};
+		/** @description Response for notification settings within a workspace. */
+		NotificationSettings: {
+			/** @description Whether to send email notifications. */
+			notifyViaEmail: boolean;
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
+		};
+		/**
+		 * @description Defines the type of notification event sent to a user.
+		 *
+		 *      This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and is used
+		 *      for various user notifications including mentions, replies, and system announcements.
+		 */
+		NotificationEvent:
+			| "comment:mention"
+			| "comment:reply"
+			| "document:uploaded"
+			| "document:downloaded"
+			| "document:verified"
+			| "member:invited"
+			| "member:joined"
+			| "integration:synced"
+			| "integration:desynced"
+			| "system:announcement"
+			| "system:report";
+		/** @description Request payload for updating notification settings. */
+		UpdateNotificationSettings: {
+			/** @description Whether to send email notifications. */
+			notifyViaEmail?: boolean | null;
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp?:
+				| components["schemas"]["NotificationEvent"][]
+				| null;
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail?:
+				| components["schemas"]["NotificationEvent"][]
+				| null;
 		};
 		/** @description Request payload for creating a new workspace integration. */
 		CreateIntegration: {
@@ -5976,6 +6225,8 @@ export interface components {
 			runType: string;
 			/** @description Current status. */
 			status: components["schemas"]["IntegrationStatus"];
+			/** @description Run metadata, results, and error details. */
+			metadata: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the run started.
@@ -5986,15 +6237,6 @@ export interface components {
 			 * @description When the run completed.
 			 */
 			completedAt?: string | null;
-			/**
-			 * Format: int32
-			 * @description Duration in milliseconds.
-			 */
-			durationMs?: number | null;
-			/** @description Result summary. */
-			resultSummary?: string | null;
-			/** @description Error details for failed runs. */
-			errorDetails?: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the run was created.
@@ -6021,19 +6263,13 @@ export interface components {
 			 * @description Email address of the person to invite.
 			 */
 			inviteeEmail: string;
-			/**
-			 * @description Role the invitee will have if they accept the invitation.
-			 * @default guest
-			 */
+			/** @description Role the invitee will have if they accept the invitation. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
-			/**
-			 * @description When the invitation expires.
-			 * @default in7Days
-			 */
-			expires: components["schemas"]["InviteExpiration"];
+			/** @description When the invitation expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
 		};
 		/** @description Expiration options for invite codes. */
-		InviteExpiration: "never" | "in24Hours" | "in7Days" | "in30Days";
+		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
 		/**
 		 * @description Workspace invite with complete information.
 		 *
@@ -6052,15 +6288,10 @@ export interface components {
 			 * @description ID of the workspace the invitation is for.
 			 */
 			workspaceId: string;
-			/**
-			 * Format: uuid
-			 * @description Account ID if the invitee has an account.
-			 */
-			inviteeId?: string | null;
-			/** @description Invite token (only included for open invitations without invitee_id). */
+			/** @description Email address of the invitee (null for open invite codes). */
+			inviteeEmail?: string | null;
+			/** @description Invite token (only included for open invitations without invitee_email). */
 			inviteToken?: string | null;
-			/** @description Email address of the invitee (if they have an account). */
-			emailAddress?: string | null;
 			/** @description Role the invitee will have if they accept. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Current status of the invitation. */
@@ -6109,16 +6340,10 @@ export interface components {
 		SortOrder: "asc" | "desc";
 		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
-			/**
-			 * @description Role to assign when someone joins via this invite code.
-			 * @default guest
-			 */
-			role: components["schemas"]["WorkspaceRole"];
-			/**
-			 * @description When the invite code expires.
-			 * @default in7Days
-			 */
-			expires: components["schemas"]["InviteExpiration"];
+			/** @description Role to assign when someone joins via this invite code. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description When the invite code expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
 		};
 		/** @description Response containing a generated shareable invite code. */
 		InviteCode: {
@@ -6173,16 +6398,13 @@ export interface components {
 			displayName: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
+			/** @description Whether the member has two-factor authentication enabled. */
+			has2fa: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the member joined the workspace.
 			 */
 			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the member last accessed the workspace.
-			 */
-			lastAccessedAt?: string | null;
 		};
 		/** @description Query parameters for listing workspace members. */
 		ListMembersQuery: {
@@ -6211,16 +6433,13 @@ export interface components {
 			account_id: string;
 		};
 		/** @description Request to update a member's role. */
-		UpdateMemberRole: {
+		UpdateMember: {
 			/** @description New role for the member. */
 			role: components["schemas"]["WorkspaceRole"];
 		};
 		/** @description Request payload for creating a new workspace webhook. */
 		CreateWebhook: {
-			/**
-			 * @description Detailed description of the webhook's purpose (max 500 characters).
-			 * @default
-			 */
+			/** @description Detailed description of the webhook's purpose (max 500 characters). */
 			description: string;
 			/** @description Human-readable name for the webhook (1-100 characters). */
 			displayName: string;
@@ -6229,85 +6448,36 @@ export interface components {
 			 * @description The URL to send webhook payloads to.
 			 */
 			url: string;
-			/** @description Optional secret for signing webhook payloads (max 256 characters). */
-			secret?: string | null;
 			/** @description List of event types this webhook should receive. */
-			events: string[];
+			events: components["schemas"]["WebhookEvent"][];
 			/** @description Optional custom headers to include in webhook requests. */
-			headers?: unknown;
-			/**
-			 * Format: int32
-			 * @description Maximum number of consecutive failures before disabling (1-100).
-			 */
-			maxFailures?: number | null;
+			headers: {
+				[key: string]: string;
+			};
+			/** @description Initial status of the webhook (active or paused). */
+			status?: components["schemas"]["WebhookStatus"] | null;
 		};
-		/** @description Workspace webhook response with secret (returned only at creation). */
-		WebhookWithSecret: {
-			/** @description Detailed description of the webhook's purpose. */
-			description: string;
-			/**
-			 * Format: uuid
-			 * @description Unique webhook identifier.
-			 */
-			webhookId: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the workspace this webhook belongs to.
-			 */
-			workspaceId: string;
-			/** @description Human-readable name for the webhook. */
-			displayName: string;
-			/** @description The URL to send webhook payloads to. */
-			url: string;
-			/** @description List of event types this webhook receives. */
-			events: string[];
-			/** @description Custom headers included in webhook requests. */
-			headers: unknown;
-			/** @description Current status of the webhook. */
-			status: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: int32
-			 * @description Number of consecutive delivery failures.
-			 */
-			failureCount: number;
-			/**
-			 * Format: int32
-			 * @description Maximum failures before automatic disabling.
-			 */
-			maxFailures: number;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent webhook trigger.
-			 */
-			lastTriggeredAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent successful delivery.
-			 */
-			lastSuccessAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent failed delivery.
-			 */
-			lastFailureAt?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Account that originally created this webhook.
-			 */
-			createdBy: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was first created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was last modified.
-			 */
-			updatedAt: string;
-			/** @description Secret for signing webhook payloads (only shown once at creation). */
-			secret?: string | null;
-		};
+		/**
+		 * @description Defines the types of events that can trigger webhook delivery.
+		 *
+		 *      This enumeration corresponds to the `WEBHOOK_EVENT` PostgreSQL enum and is used
+		 *      to configure which events a webhook should receive notifications for.
+		 */
+		WebhookEvent:
+			| "document:created"
+			| "document:updated"
+			| "document:deleted"
+			| "file:created"
+			| "file:updated"
+			| "file:deleted"
+			| "member:added"
+			| "member:deleted"
+			| "member:updated"
+			| "integration:created"
+			| "integration:updated"
+			| "integration:deleted"
+			| "integration:synced"
+			| "integration:desynced";
 		/**
 		 * @description Defines the operational status of a workspace webhook.
 		 *
@@ -6334,36 +6504,18 @@ export interface components {
 			/** @description The URL to send webhook payloads to. */
 			url: string;
 			/** @description List of event types this webhook receives. */
-			events: string[];
+			events: components["schemas"]["WebhookEvent"][];
 			/** @description Custom headers included in webhook requests. */
-			headers: unknown;
+			headers: {
+				[key: string]: string;
+			};
 			/** @description Current status of the webhook. */
 			status: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: int32
-			 * @description Number of consecutive delivery failures.
-			 */
-			failureCount: number;
-			/**
-			 * Format: int32
-			 * @description Maximum failures before automatic disabling.
-			 */
-			maxFailures: number;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of the most recent webhook trigger.
 			 */
 			lastTriggeredAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent successful delivery.
-			 */
-			lastSuccessAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent failed delivery.
-			 */
-			lastFailureAt?: string | null;
 			/**
 			 * Format: uuid
 			 * @description Account that originally created this webhook.
@@ -6404,17 +6556,39 @@ export interface components {
 			 * @description Updated URL to send webhook payloads to.
 			 */
 			url?: string | null;
-			/** @description Updated secret for signing webhook payloads (max 256 characters). */
-			secret?: string | null;
 			/** @description Updated list of event types this webhook should receive. */
-			events?: string[] | null;
+			events?: components["schemas"]["WebhookEvent"][] | null;
 			/** @description Updated custom headers to include in webhook requests. */
-			headers?: unknown;
+			headers?: {
+				[key: string]: string;
+			} | null;
+			/** @description Updated status (active or paused). Ignored if webhook is currently disabled. */
+			status?: components["schemas"]["WebhookStatus"] | null;
+		};
+		/** @description Request payload for testing a webhook. */
+		TestWebhook: {
 			/**
-			 * Format: int32
-			 * @description Updated maximum number of consecutive failures before disabling (1-100).
+			 * @description Optional custom payload to send in the test request.
+			 *      If not provided, a default test payload will be used.
 			 */
-			maxFailures?: number | null;
+			payload?: unknown;
+		};
+		/** @description Result of a webhook delivery attempt. */
+		WebhookResult: {
+			/** @description Whether the webhook delivery was successful (2xx status code). */
+			success: boolean;
+			/**
+			 * Format: uint16
+			 * @description HTTP status code returned by the webhook endpoint.
+			 */
+			statusCode?: number | null;
+			/**
+			 * Format: int64
+			 * @description Time taken to receive a response in milliseconds.
+			 */
+			responseTimeMs?: number | null;
+			/** @description Error message if the delivery failed. */
+			errorMessage?: string | null;
 		};
 		/** @description Query parameters for listing files. */
 		ListFilesQuery: {
@@ -6477,10 +6651,7 @@ export interface components {
 		};
 		/** @description Request to download files as an archive. */
 		DownloadArchivedFilesRequest: {
-			/**
-			 * @description Archive format (defaults to tar).
-			 * @default tar
-			 */
+			/** @description Archive format. */
 			format: components["schemas"]["ArchiveFormat"];
 			/** @description Optional specific file IDs (if None, downloads all workspace files). */
 			fileIds?: string[] | null;
@@ -6530,18 +6701,12 @@ export interface components {
 		ContentSegmentation: "none" | "semantic" | "fixed";
 		/** @description Request payload for creating a new document. */
 		CreateDocument: {
-			/**
-			 * @description Description of the document.
-			 * @default null
-			 */
-			description: string | null;
+			/** @description Description of the document. */
+			description?: string | null;
 			/** @description Display name of the document. */
 			displayName: string;
-			/**
-			 * @description Tags for document classification.
-			 * @default []
-			 */
-			tags: string[];
+			/** @description Tags for document classification. */
+			tags?: string[] | null;
 			/** @description Document category. */
 			category?: string | null;
 			/**
@@ -6639,15 +6804,13 @@ export interface components {
 			/**
 			 * Format: uuid
 			 * @description Parent comment ID for threaded replies.
-			 * @default null
 			 */
-			parentCommentId: string | null;
+			parentCommentId?: string | null;
 			/**
 			 * Format: uuid
 			 * @description Account being replied to (@mention).
-			 * @default null
 			 */
-			replyToAccountId: string | null;
+			replyToAccountId?: string | null;
 		};
 		/** @description Represents a document comment. */
 		Comment: {
@@ -6816,40 +6979,25 @@ export interface components {
 			| "workspace:created"
 			| "workspace:updated"
 			| "workspace:deleted"
-			| "workspace:archived"
-			| "workspace:restored"
-			| "workspace:settings_changed"
 			| "workspace:exported"
 			| "workspace:imported"
-			| "member:added"
-			| "member:kicked"
+			| "member:deleted"
 			| "member:updated"
-			| "member:invited"
-			| "member:invite_accepted"
-			| "member:invite_declined"
-			| "member:invite_canceled"
+			| "invite:created"
+			| "invite:accepted"
+			| "invite:declined"
+			| "invite:canceled"
 			| "integration:created"
 			| "integration:updated"
 			| "integration:deleted"
-			| "integration:enabled"
-			| "integration:disabled"
 			| "integration:synced"
-			| "integration:succeeded"
-			| "integration:failed"
 			| "webhook:created"
 			| "webhook:updated"
 			| "webhook:deleted"
-			| "webhook:enabled"
-			| "webhook:disabled"
 			| "webhook:triggered"
-			| "webhook:succeeded"
-			| "webhook:failed"
 			| "document:created"
 			| "document:updated"
 			| "document:deleted"
-			| "document:processed"
-			| "document:uploaded"
-			| "document:downloaded"
 			| "document:verified"
 			| "comment:added"
 			| "comment:updated"
@@ -6865,7 +7013,7 @@ export interface components {
 			 */
 			id: string;
 			/** @description Notification type. */
-			notifyType: components["schemas"]["NotificationType"];
+			notifyType: components["schemas"]["NotificationEvent"];
 			/** @description Notification message. */
 			message: string;
 			/** @description Whether the notification has been read. */
@@ -6893,20 +7041,6 @@ export interface components {
 			 */
 			expiresAt?: string | null;
 		};
-		/**
-		 * @description Defines the type of notification sent to a user.
-		 *
-		 *      This enumeration corresponds to the `NOTIFICATION_TYPE` PostgreSQL enum and is used
-		 *      for various user notifications including mentions, replies, and system announcements.
-		 */
-		NotificationType:
-			| "comment_mention"
-			| "comment_reply"
-			| "document_upload"
-			| "document_download"
-			| "document_verify"
-			| "workspace_invite"
-			| "system_announcement";
 		/** @description Response type for unread notifications status. */
 		UnreadStatus: {
 			/**
@@ -6933,18 +7067,14 @@ export interface components {
 			apiToken: string;
 			/**
 			 * Format: uuid
+			 * @description ID of the authenticated account.
+			 */
+			accountId: string;
+			/**
+			 * Format: uuid
 			 * @description ID of the token.
 			 */
 			tokenId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the account.
-			 */
-			accountId: string;
-			/** @description Display name. */
-			displayName: string;
-			/** @description Email address. */
-			emailAddress: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the token was issued.

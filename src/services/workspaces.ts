@@ -1,7 +1,9 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateWorkspace,
+	NotificationSettings,
 	Pagination,
+	UpdateNotificationSettings,
 	UpdateWorkspace,
 	Workspace,
 } from "@/datatypes/index.js";
@@ -83,5 +85,44 @@ export class Workspaces {
 		await this.#api.DELETE("/workspaces/{workspace_id}/", {
 			params: { path: { workspace_id: workspaceId } },
 		});
+	}
+
+	/**
+	 * Get notification settings for the authenticated user in a workspace
+	 * @param workspaceId - Workspace ID
+	 * @returns Promise that resolves with the notification settings
+	 * @throws {ApiError} if the request fails
+	 */
+	async getNotificationSettings(
+		workspaceId: string,
+	): Promise<NotificationSettings> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspace_id}/notifications",
+			{
+				params: { path: { workspace_id: workspaceId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Update notification settings for the authenticated user in a workspace
+	 * @param workspaceId - Workspace ID
+	 * @param settings - Notification settings update request
+	 * @returns Promise that resolves with the updated notification settings
+	 * @throws {ApiError} if the request fails
+	 */
+	async updateNotificationSettings(
+		workspaceId: string,
+		settings: UpdateNotificationSettings,
+	): Promise<NotificationSettings> {
+		const { data } = await this.#api.PATCH(
+			"/workspaces/{workspace_id}/notifications",
+			{
+				params: { path: { workspace_id: workspaceId } },
+				body: settings,
+			},
+		);
+		return data!;
 	}
 }

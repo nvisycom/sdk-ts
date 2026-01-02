@@ -1,9 +1,10 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateWebhook,
+	TestWebhook,
 	UpdateWebhook,
 	Webhook,
-	WebhookWithSecret,
+	WebhookResult,
 } from "@/datatypes/index.js";
 
 /**
@@ -49,13 +50,13 @@ export class Webhooks {
 	 * Create a new webhook
 	 * @param workspaceId - Workspace ID
 	 * @param webhook - Webhook creation request
-	 * @returns Promise that resolves with the created webhook (includes secret, shown only once)
+	 * @returns Promise that resolves with the created webhook
 	 * @throws {ApiError} if the request fails
 	 */
 	async createWebhook(
 		workspaceId: string,
 		webhook: CreateWebhook,
-	): Promise<WebhookWithSecret> {
+	): Promise<Webhook> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspace_id}/webhooks/",
 			{
@@ -94,5 +95,23 @@ export class Webhooks {
 		await this.#api.DELETE("/webhooks/{webhook_id}/", {
 			params: { path: { webhook_id: webhookId } },
 		});
+	}
+
+	/**
+	 * Test a webhook by sending a test payload
+	 * @param webhookId - Webhook ID
+	 * @param options - Test webhook options
+	 * @returns Promise that resolves with the test result
+	 * @throws {ApiError} if the request fails
+	 */
+	async testWebhook(
+		webhookId: string,
+		options?: TestWebhook,
+	): Promise<WebhookResult> {
+		const { data } = await this.#api.POST("/webhooks/{webhook_id}/test/", {
+			params: { path: { webhook_id: webhookId } },
+			body: options ?? {},
+		});
+		return data!;
 	}
 }

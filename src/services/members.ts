@@ -3,7 +3,7 @@ import type {
 	ListMembersQuery,
 	Member,
 	Pagination,
-	UpdateMemberRole,
+	UpdateMember,
 } from "@/datatypes/index.js";
 
 /**
@@ -59,14 +59,14 @@ export class Members {
 	 * Update a member's role
 	 * @param workspaceId - Workspace ID
 	 * @param accountId - Account ID
-	 * @param role - New role for the member
+	 * @param updates - New role for the member
 	 * @returns Promise that resolves with the updated member
 	 * @throws {ApiError} if the request fails
 	 */
-	async updateMemberRole(
+	async updateMember(
 		workspaceId: string,
 		accountId: string,
-		role: UpdateMemberRole,
+		updates: UpdateMember,
 	): Promise<Member> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspace_id}/members/{account_id}/role",
@@ -74,7 +74,7 @@ export class Members {
 				params: {
 					path: { workspace_id: workspaceId, account_id: accountId },
 				},
-				body: role,
+				body: updates,
 			},
 		);
 		return data!;
