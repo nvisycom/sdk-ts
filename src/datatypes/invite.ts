@@ -12,3 +12,4 @@ export type InviteExpiration = Schemas["InviteExpiration"];
 export type ListInvitesQuery = Schemas["ListInvitesQuery"];
 export type InviteSortField = Schemas["InviteSortField"];
 export type SortOrder = Schemas["SortOrder"];
+export type InvitePreview = Schemas["InvitePreview"];

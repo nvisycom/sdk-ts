@@ -24,6 +24,17 @@ export function createLoggingMiddleware(): Middleware {
 				`[nvisy] ${request.method} ${url.pathname} ${response.status} (${duration}ms)`,
 			);
 
+			if (!response.ok) {
+				const cloned = response.clone();
+				try {
+					const body = await cloned.json();
+					console.error("[nvisy] Response:", JSON.stringify(body, null, 2));
+				} catch {
+					const text = await cloned.text();
+					if (text) console.error("[nvisy] Response:", text);
+				}
+			}
+
 			return response;
 		},
 

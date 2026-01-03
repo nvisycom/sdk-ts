@@ -625,17 +625,6 @@ export interface paths {
 			 *
 			 *      Creates a new workspace with the specified configuration. The creator is
 			 *      automatically added as an owner of the workspace.
-			 *
-			 *      # Example
-			 *
-			 *      ```json
-			 *      {
-			 *        "displayName": "My Workspace",
-			 *        "description": "A sample workspace",
-			 *        "keepForSec": 86400,
-			 *        "autoCleanup": true
-			 *      }
-			 *      ```
 			 */
 			requestBody: {
 				content: {
@@ -861,15 +850,6 @@ export interface paths {
 			 * @description Request payload to update an existing workspace.
 			 *
 			 *      All fields are optional; only provided fields will be updated.
-			 *
-			 *      # Example
-			 *
-			 *      ```json
-			 *      {
-			 *        "displayName": "Updated Workspace Name",
-			 *        "enableComments": true
-			 *      }
-			 *      ```
 			 */
 			requestBody: {
 				content: {
@@ -2106,100 +2086,11 @@ export interface paths {
 		};
 		get?: never;
 		put?: never;
-		post?: never;
-		/**
-		 * Cancel invitation
-		 * @description Permanently cancels a pending invitation. The invitee will no longer be able to accept it.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the invite. */
-					invite_id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/invites/{invite_id}/reply/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
 		/**
 		 * Reply to invitation
 		 * @description Allows the invitee to accept or decline a workspace invitation.
 		 */
-		patch: {
+		post: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -2278,22 +2169,93 @@ export interface paths {
 				};
 			};
 		};
+		/**
+		 * Cancel invitation
+		 * @description Permanently cancels a pending invitation. The invitee will no longer be able to accept it.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the invite. */
+					invite_id: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
-	"/invites/{invite_code}/join/": {
+	"/invites/code/{invite_code}/": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
-		put?: never;
 		/**
-		 * Join via invite code
-		 * @description Joins a workspace using a valid invite code. The user becomes a member with the role specified in the code.
+		 * Preview invite
+		 * @description Returns workspace information for an invite code, allowing users to preview the workspace before joining. Does not require authentication.
 		 */
-		post: {
+		get: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -2305,6 +2267,81 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Preview of an invite with workspace details for display before joining.
+				 *
+				 *      This is a public-facing response that shows workspace information
+				 *      to help users decide whether to join via an invite code.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["InvitePreview"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Reply to invite code
+		 * @description Accepts or declines a workspace invite code. If accepted (the default when no body is provided), the user becomes a member with the role specified in the code. If declined, no action is taken.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The invite code to use for joining the workspace. */
+					invite_code: string;
+				};
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["ReplyInvite"] | null;
+				};
+			};
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Member"] | null;
+					};
+				};
 				/** @description Represents a workspace member. */
 				201: {
 					headers: {
@@ -5945,25 +5982,12 @@ export interface components {
 		 *
 		 *      Creates a new workspace with the specified configuration. The creator is
 		 *      automatically added as an owner of the workspace.
-		 *
-		 *      # Example
-		 *
-		 *      ```json
-		 *      {
-		 *        "displayName": "My Workspace",
-		 *        "description": "A sample workspace",
-		 *        "keepForSec": 86400,
-		 *        "autoCleanup": true
-		 *      }
-		 *      ```
 		 */
 		CreateWorkspace: {
 			/** @description Optional description of the workspace (max 200 characters). */
 			description?: string | null;
 			/** @description Display name of the workspace (3-100 characters). */
 			displayName: string;
-			/** @description Whether to automatically delete processed files after expiration. */
-			autoCleanup?: boolean | null;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean | null;
 			/** @description Whether comments are enabled for this workspace. */
@@ -5982,8 +6006,6 @@ export interface components {
 			displayName: string;
 			/** @description Tags associated with the workspace. */
 			tags: string[];
-			/** @description Whether to automatically delete processed files after expiration. */
-			autoCleanup: boolean;
 			/** @description Whether approval is required to processed files to be visible. */
 			requireApproval: boolean;
 			/** @description Whether comments are enabled for this workspace. */
@@ -6025,23 +6047,12 @@ export interface components {
 		 * @description Request payload to update an existing workspace.
 		 *
 		 *      All fields are optional; only provided fields will be updated.
-		 *
-		 *      # Example
-		 *
-		 *      ```json
-		 *      {
-		 *        "displayName": "Updated Workspace Name",
-		 *        "enableComments": true
-		 *      }
-		 *      ```
 		 */
 		UpdateWorkspace: {
 			/** @description New description for the workspace (max 500 characters). */
 			description?: string | null;
 			/** @description New display name for the workspace (3-100 characters). */
 			displayName?: string | null;
-			/** @description Whether to automatically delete processed files after expiration. */
-			autoCleanup?: boolean | null;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean | null;
 			/** @description Whether comments are enabled for this workspace. */
@@ -6103,12 +6114,19 @@ export interface components {
 			isActive?: boolean | null;
 		};
 		/**
-		 * @description Defines the type/category of a workspace integration.
+		 * @description Defines the functional category of a workspace integration.
 		 *
 		 *      This enumeration corresponds to the `INTEGRATION_TYPE` PostgreSQL enum and is used
 		 *      to categorize different types of third-party integrations that can be connected to workspaces.
 		 */
-		IntegrationType: "webhook" | "storage" | "other";
+		IntegrationType:
+			| "storage"
+			| "communication"
+			| "business"
+			| "analytics"
+			| "automation"
+			| "developer"
+			| "industry";
 		/** @description Workspace integration response. */
 		Integration: {
 			/** @description Detailed description of the integration's purpose and functionality. */
@@ -6385,6 +6403,37 @@ export interface components {
 			/** @description The invite code to use for joining the workspace. */
 			invite_code: string;
 		};
+		/**
+		 * @description Preview of an invite with workspace details for display before joining.
+		 *
+		 *      This is a public-facing response that shows workspace information
+		 *      to help users decide whether to join via an invite code.
+		 */
+		InvitePreview: {
+			/** @description Description of the workspace. */
+			description?: string | null;
+			/**
+			 * Format: uuid
+			 * @description ID of the workspace.
+			 */
+			workspaceId: string;
+			/** @description Display name of the workspace. */
+			displayName: string;
+			/** @description Tags associated with the workspace. */
+			tags: string[];
+			/** @description Role the user will have if they join. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invite expires.
+			 */
+			expiresAt: string;
+		};
 		/** @description Represents a workspace member. */
 		Member: {
 			/**
@@ -6575,20 +6624,16 @@ export interface components {
 		};
 		/** @description Result of a webhook delivery attempt. */
 		WebhookResult: {
-			/** @description Whether the webhook delivery was successful (2xx status code). */
-			success: boolean;
 			/**
 			 * Format: uint16
 			 * @description HTTP status code returned by the webhook endpoint.
 			 */
-			statusCode?: number | null;
+			statusCode: number;
 			/**
 			 * Format: int64
 			 * @description Time taken to receive a response in milliseconds.
 			 */
-			responseTimeMs?: number | null;
-			/** @description Error message if the delivery failed. */
-			errorMessage?: string | null;
+			responseTimeMs: number;
 		};
 		/** @description Query parameters for listing files. */
 		ListFilesQuery: {
@@ -6607,28 +6652,37 @@ export interface components {
 		File: {
 			/**
 			 * Format: uuid
-			 * @description Unique file identifier
+			 * @description Unique file identifier.
 			 */
 			fileId: string;
-			/** @description Display name */
+			/** @description Display name. */
 			displayName: string;
 			/**
 			 * Format: int64
-			 * @description File size in bytes
+			 * @description File size in bytes.
 			 */
 			fileSize: number;
-			/** @description Processing status */
+			/** @description Processing status. */
 			status: components["schemas"]["ProcessingStatus"];
 			/**
 			 * Format: int32
-			 * @description Processing priority (optional)
+			 * @description Processing priority (1-10).
 			 */
-			processingPriority?: number | null;
+			processingPriority: number;
+			/** @description Classification tags. */
+			tags: string[];
+			/** @description Knowledge extraction settings. */
+			fileKnowledge: components["schemas"]["FileKnowledge"];
 			/**
 			 * Format: date-time
-			 * @description Update timestamp (optional)
+			 * @description Creation timestamp.
 			 */
-			updatedAt?: string | null;
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Last update timestamp.
+			 */
+			updatedAt: string;
 		};
 		/**
 		 * @description Defines the current processing status of a file in the processing pipeline.
@@ -6644,6 +6698,22 @@ export interface components {
 			| "failed"
 			| "canceled"
 			| "skipped";
+		/** @description Knowledge-related fields for file responses. */
+		FileKnowledge: {
+			/** @description Whether the file is indexed for knowledge extraction. */
+			isIndexed: boolean;
+			/** @description Content segmentation strategy. */
+			contentSegmentation: components["schemas"]["ContentSegmentation"];
+			/** @description Whether visual elements are supported. */
+			visualSupport: boolean;
+		};
+		/**
+		 * @description Defines the content segmentation strategy for document processing.
+		 *
+		 *      This enumeration corresponds to the `CONTENT_SEGMENTATION` PostgreSQL enum and is used
+		 *      to specify how document content should be segmented for knowledge extraction.
+		 */
+		ContentSegmentation: "none" | "semantic" | "fixed";
 		/** @description Request to download multiple files. */
 		DownloadMultipleFilesRequest: {
 			/** @description File IDs to download (1-100 files). */
@@ -6692,13 +6762,6 @@ export interface components {
 			/** @description Whether visual elements are supported for knowledge extraction. */
 			visualSupport?: boolean | null;
 		};
-		/**
-		 * @description Defines the content segmentation strategy for document processing.
-		 *
-		 *      This enumeration corresponds to the `CONTENT_SEGMENTATION` PostgreSQL enum and is used
-		 *      to specify how document content should be segmented for knowledge extraction.
-		 */
-		ContentSegmentation: "none" | "semantic" | "fixed";
 		/** @description Request payload for creating a new document. */
 		CreateDocument: {
 			/** @description Description of the document. */
@@ -6707,17 +6770,6 @@ export interface components {
 			displayName: string;
 			/** @description Tags for document classification. */
 			tags?: string[] | null;
-			/** @description Document category. */
-			category?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Optional expiration date.
-			 */
-			expiresAt?: string | null;
-			/** @description Whether the document is private. */
-			isPrivate?: boolean | null;
-			/** @description Whether approval is required. */
-			requiresApproval?: boolean | null;
 		};
 		/** @description Represents a document with full details. */
 		Document: {
@@ -6744,13 +6796,6 @@ export interface components {
 			tags: string[];
 			/** @description Document status. */
 			status: components["schemas"]["DocumentStatus"];
-			/**
-			 * Format: int64
-			 * @description File size in bytes.
-			 */
-			fileSize?: number | null;
-			/** @description MIME type of the document. */
-			mimeType?: string | null;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the document was created.
@@ -6785,17 +6830,6 @@ export interface components {
 			displayName?: string | null;
 			/** @description Updated tags (must be alphanumeric). */
 			tags?: string[] | null;
-			/** @description Updated category. */
-			category?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Updated expiration date.
-			 */
-			expiresAt?: string | null;
-			/** @description Updated private status. */
-			isPrivate?: boolean | null;
-			/** @description Updated approval requirement. */
-			requiresApproval?: boolean | null;
 		};
 		/** @description Request payload for creating a new document comment. */
 		CreateComment: {
@@ -6880,13 +6914,20 @@ export interface components {
 			/** @description Annotation content. */
 			content: string;
 			/**
-			 * @description Annotation type (note, highlight, comment, etc.).
+			 * @description Annotation type (note, highlight, comment).
 			 * @default note
 			 */
-			annotationType: string;
+			annotationType: components["schemas"]["AnnotationType"];
 			/** @description Additional metadata (position, selection range, etc.). */
 			metadata?: unknown;
 		};
+		/**
+		 * @description Defines the type of annotation for document content.
+		 *
+		 *      This enumeration corresponds to the `ANNOTATION_TYPE` PostgreSQL enum and is used
+		 *      to classify different types of annotations users can create on documents.
+		 */
+		AnnotationType: "note" | "highlight" | "comment";
 		/** @description Response type for a document annotation. */
 		Annotation: {
 			/**
@@ -6907,7 +6948,7 @@ export interface components {
 			/** @description Annotation content. */
 			content: string;
 			/** @description Annotation type. */
-			annotationType: string;
+			annotationType: components["schemas"]["AnnotationType"];
 			/**
 			 * Format: date-time
 			 * @description When the annotation was created.
@@ -6937,7 +6978,7 @@ export interface components {
 			/** @description Updated content. */
 			content?: string | null;
 			/** @description Updated annotation type. */
-			annotationType?: string | null;
+			annotationType?: components["schemas"]["AnnotationType"] | null;
 			/** @description Updated metadata. */
 			metadata?: unknown;
 		};

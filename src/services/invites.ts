@@ -4,6 +4,7 @@ import type {
 	GenerateInviteCode,
 	Invite,
 	InviteCode,
+	InvitePreview,
 	ListInvitesQuery,
 	Member,
 	Pagination,
@@ -78,7 +79,7 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async replyToInvite(inviteId: string, reply: ReplyInvite): Promise<Invite> {
-		const { data } = await this.#api.PATCH("/invites/{invite_id}/reply/", {
+		const { data } = await this.#api.POST("/invites/{invite_id}/", {
 			params: { path: { invite_id: inviteId } },
 			body: reply,
 		});
@@ -107,13 +108,31 @@ export class Invites {
 	}
 
 	/**
-	 * Join a workspace using an invite code
+	 * Reply to an invite code (accept or decline)
 	 * @param inviteCode - The invite code
-	 * @returns Promise that resolves with the member details
+	 * @param reply - Optional reply request (defaults to accept if not provided)
+	 * @returns Promise that resolves with the member details if accepted, null if declined
 	 * @throws {ApiError} if the request fails
 	 */
-	async joinWithInviteCode(inviteCode: string): Promise<Member> {
-		const { data } = await this.#api.POST("/invites/{invite_code}/join/", {
+	async replyToInviteCode(
+		inviteCode: string,
+		reply?: ReplyInvite | null,
+	): Promise<Member | null> {
+		const { data } = await this.#api.POST("/invites/code/{invite_code}/", {
+			params: { path: { invite_code: inviteCode } },
+			body: reply ?? null,
+		});
+		return data!;
+	}
+
+	/**
+	 * Preview an invite code without joining
+	 * @param inviteCode - The invite code
+	 * @returns Promise that resolves with the invite preview details
+	 * @throws {ApiError} if the request fails
+	 */
+	async previewInvite(inviteCode: string): Promise<InvitePreview> {
+		const { data } = await this.#api.GET("/invites/code/{invite_code}/", {
 			params: { path: { invite_code: inviteCode } },
 		});
 		return data!;

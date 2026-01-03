@@ -19,6 +19,37 @@ export class Files {
 	}
 
 	/**
+	 * Upload one or more files to a workspace
+	 * @param workspaceId - Workspace ID
+	 * @param files - File or array of files to upload
+	 * @returns Promise that resolves with the uploaded file metadata
+	 * @throws {ApiError} if the request fails
+	 */
+	async uploadFiles(
+		workspaceId: string,
+		files: Blob | Blob[],
+	): Promise<File[]> {
+		const formData = new FormData();
+		const fileArray = Array.isArray(files) ? files : [files];
+
+		for (const file of fileArray) {
+			const name = file instanceof File ? file.name : "file";
+			formData.append("files", file, name);
+		}
+
+		const { data } = await this.#api.POST("/workspaces/{workspace_id}/files/", {
+			params: { path: { workspace_id: workspaceId } },
+			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
+			body: formData as unknown as unknown[],
+			bodySerializer: (formData) => formData,
+			// Remove Content-Type so browser sets multipart/form-data with boundary.
+			headers: { "Content-Type": null } as unknown as HeadersInit,
+		});
+
+		return data!;
+	}
+
+	/**
 	 * List files in a workspace
 	 * @param workspaceId - Workspace ID
 	 * @param query - Optional query parameters (formats, sortBy, order, offset, limit)
