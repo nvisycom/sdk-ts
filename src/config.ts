@@ -12,7 +12,7 @@
  *
  * Used in the default user agent string and for version tracking.
  */
-export const VERSION = "0.2.0";
+export const VERSION = "0.3.0";
 
 /**
  * Configuration options for creating a Nvisy client.
@@ -60,6 +60,15 @@ export interface ClientConfig {
 	 * @default "@nvisy/sdk v.{version}"
 	 */
 	userAgent?: string;
+
+	/**
+	 * Enable logging for requests and responses.
+	 *
+	 * When enabled, logs request method, URL, status, and timing to console.
+	 *
+	 * @default false
+	 */
+	withLogging?: boolean;
 }
 
 /**

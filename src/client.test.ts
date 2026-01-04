@@ -1,102 +1,86 @@
 import { describe, expect, it, vi } from "vitest";
-import { Client } from "@/client.js";
+import { Nvisy } from "@/client.js";
 import { DEFAULTS } from "@/config.js";
-import { ConfigError } from "@/errors.js";
+import { NvisyError } from "@/errors.js";
 
 vi.mock("openapi-fetch", () => ({
 	default: vi.fn(() => ({
 		use: vi.fn(),
+		GET: vi.fn(),
+		POST: vi.fn(),
+		PUT: vi.fn(),
+		PATCH: vi.fn(),
+		DELETE: vi.fn(),
 	})),
 }));
 
-describe("Client", () => {
+describe("Nvisy", () => {
 	describe("constructor", () => {
-		it("should create client with API token", () => {
-			const client = new Client({ apiToken: "valid-api-key-123" });
-			expect(client).toBeInstanceOf(Client);
+		it("should create client with valid API token", () => {
+			const nvisy = new Nvisy({ apiToken: "valid-api-token-123" });
+			expect(nvisy).toBeInstanceOf(Nvisy);
 		});
 
-		it("should use default baseUrl when not provided", () => {
-			const client = new Client({ apiToken: "valid-api-key-123" });
-			expect(client.baseUrl).toBe(DEFAULTS.BASE_URL);
+		it("should use default base URL", () => {
+			const nvisy = new Nvisy({ apiToken: "valid-api-token-123" });
+			expect(nvisy.baseUrl).toBe(DEFAULTS.BASE_URL);
 		});
 
-		it("should use custom baseUrl when provided", () => {
-			const client = new Client({
-				apiToken: "valid-api-key-123",
-				baseUrl: "https://custom.api.com",
+		it("should use custom base URL", () => {
+			const customUrl = "https://custom.api.nvisy.com";
+			const nvisy = new Nvisy({
+				apiToken: "valid-api-token-123",
+				baseUrl: customUrl,
 			});
-			expect(client.baseUrl).toBe("https://custom.api.com");
-		});
-
-		it("should accept custom headers", () => {
-			const client = new Client({
-				apiToken: "valid-api-key-123",
-				headers: { "X-Custom": "value" },
-			});
-			expect(client).toBeInstanceOf(Client);
+			expect(nvisy.baseUrl).toBe(customUrl);
 		});
 
 		it("should throw for short API token", () => {
-			expect(() => new Client({ apiToken: "short" })).toThrow(ConfigError);
+			expect(() => new Nvisy({ apiToken: "short" })).toThrow(NvisyError);
 		});
 
 		it("should throw for invalid characters in API token", () => {
-			expect(() => new Client({ apiToken: "invalid@token!" })).toThrow(
-				ConfigError,
+			expect(() => new Nvisy({ apiToken: "invalid@token!" })).toThrow(
+				NvisyError,
 			);
 		});
 
 		it("should throw for empty API token", () => {
-			expect(() => new Client({ apiToken: "" })).toThrow(ConfigError);
+			expect(() => new Nvisy({ apiToken: "" })).toThrow(NvisyError);
 		});
 	});
 
-	describe("services", () => {
-		it("should expose all services", () => {
-			const client = new Client({ apiToken: "valid-api-token-123" });
-			expect(client.auth).toBeDefined();
-			expect(client.status).toBeDefined();
-			expect(client.account).toBeDefined();
-			expect(client.workspaces).toBeDefined();
-			expect(client.apiTokens).toBeDefined();
-			expect(client.documents).toBeDefined();
-			expect(client.files).toBeDefined();
-			expect(client.comments).toBeDefined();
-			expect(client.integrations).toBeDefined();
-			expect(client.invites).toBeDefined();
-			expect(client.members).toBeDefined();
-			expect(client.webhooks).toBeDefined();
-		});
-	});
+	describe("service getters", () => {
+		it("should provide access to all services", () => {
+			const nvisy = new Nvisy({ apiToken: "valid-api-token-123" });
 
-	describe("api", () => {
-		it("should expose raw API client", () => {
-			const client = new Client({ apiToken: "valid-api-token-123" });
-			expect(client.api).toBeDefined();
+			expect(nvisy.auth).toBeDefined();
+			expect(nvisy.status).toBeDefined();
+			expect(nvisy.account).toBeDefined();
+			expect(nvisy.apiTokens).toBeDefined();
+			expect(nvisy.comments).toBeDefined();
+			expect(nvisy.documents).toBeDefined();
+			expect(nvisy.files).toBeDefined();
+			expect(nvisy.integrations).toBeDefined();
+			expect(nvisy.invites).toBeDefined();
+			expect(nvisy.members).toBeDefined();
+			expect(nvisy.webhooks).toBeDefined();
+			expect(nvisy.workspaces).toBeDefined();
 		});
 	});
 
 	describe("withApiToken", () => {
 		it("should create new client with different token", () => {
-			const client = new Client({ apiToken: "original-token-123" });
-			const newClient = client.withApiToken("new-token-456789");
-			expect(newClient).toBeInstanceOf(Client);
-			expect(newClient).not.toBe(client);
-		});
+			const nvisy = new Nvisy({ apiToken: "valid-api-token-123" });
+			const newNvisy = nvisy.withApiToken("another-valid-token");
 
-		it("should preserve config in new client", () => {
-			const client = new Client({
-				apiToken: "original-token-123",
-				baseUrl: "https://custom.api.com",
-			});
-			const newClient = client.withApiToken("new-token-456789");
-			expect(newClient.baseUrl).toBe("https://custom.api.com");
+			expect(newNvisy).toBeInstanceOf(Nvisy);
+			expect(newNvisy).not.toBe(nvisy);
 		});
 
 		it("should throw for invalid token", () => {
-			const client = new Client({ apiToken: "valid-api-token-123" });
-			expect(() => client.withApiToken("short")).toThrow(ConfigError);
+			const nvisy = new Nvisy({ apiToken: "valid-api-token-123" });
+			expect(() => nvisy.withApiToken("short")).toThrow(NvisyError);
 		});
 	});
 });

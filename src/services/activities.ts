@@ -1,10 +1,10 @@
 import type { ApiClient } from "@/client.js";
-import type { Activity, Pagination } from "@/datatypes/index.js";
+import type { ActivitiesPage, CursorPagination } from "@/datatypes/index.js";
 
 /**
  * Service for handling workspace activity operations
  */
-export class ActivitiesService {
+export class Activities {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -14,13 +14,16 @@ export class ActivitiesService {
 	/**
 	 * List activities for a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (offset, limit)
-	 * @returns Promise that resolves with the list of activities
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of activities
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(workspaceId: string, query?: Pagination): Promise<Activity[]> {
+	async listActivities(
+		workspaceId: string,
+		query?: CursorPagination,
+	): Promise<ActivitiesPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/activities/",
+			"/workspaces/{workspaceId}/activities/",
 			{
 				params: { path: { workspaceId }, query },
 			},

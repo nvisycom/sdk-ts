@@ -1,10 +1,13 @@
 import type { ApiClient } from "@/client.js";
-import type { Account, UpdateAccount } from "@/datatypes/index.js";
+import type {
+	Account as AccountData,
+	UpdateAccount,
+} from "@/datatypes/index.js";
 
 /**
  * Service for handling account operations
  */
-export class AccountService {
+export class Account {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -16,7 +19,7 @@ export class AccountService {
 	 * @returns Promise that resolves with the account details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(): Promise<Account> {
+	async getAccount(): Promise<AccountData> {
 		const { data } = await this.#api.GET("/account");
 		return data!;
 	}
@@ -27,7 +30,7 @@ export class AccountService {
 	 * @returns Promise that resolves with the updated account
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(updates: UpdateAccount): Promise<Account> {
+	async updateAccount(updates: UpdateAccount): Promise<AccountData> {
 		const { data } = await this.#api.PATCH("/account", {
 			body: updates,
 		});
@@ -39,7 +42,7 @@ export class AccountService {
 	 * @returns Promise that resolves when the account is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(): Promise<void> {
+	async deleteAccount(): Promise<void> {
 		await this.#api.DELETE("/account");
 	}
 }

@@ -1,19 +1,21 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateInvite,
+	CursorPagination,
 	GenerateInviteCode,
 	Invite,
 	InviteCode,
-	ListInvitesQuery,
+	InvitePreview,
+	InvitesPage,
+	ListInvites,
 	Member,
-	Pagination,
 	ReplyInvite,
 } from "@/datatypes/index.js";
 
 /**
  * Service for handling workspace invitation operations
  */
-export class InvitesService {
+export class Invites {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -23,20 +25,17 @@ export class InvitesService {
 	/**
 	 * List all invitations for a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (role, sortBy, order, offset, limit)
-	 * @returns Promise that resolves with the list of invitations
+	 * @param query - Optional query parameters (role, sortBy, order, limit, after)
+	 * @returns Promise that resolves with a paginated list of invitations
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
+	async listInvites(
 		workspaceId: string,
-		query?: ListInvitesQuery & Pagination,
-	): Promise<Invite[]> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/invites/",
-			{
-				params: { path: { workspaceId }, query },
-			},
-		);
+		query?: ListInvites & CursorPagination,
+	): Promise<InvitesPage> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/invites/", {
+			params: { path: { workspaceId }, query },
+		});
 		return data!;
 	}
 
@@ -47,9 +46,9 @@ export class InvitesService {
 	 * @returns Promise that resolves with the created invitation
 	 * @throws {ApiError} if the request fails
 	 */
-	async send(workspaceId: string, invite: CreateInvite): Promise<Invite> {
+	async sendInvite(workspaceId: string, invite: CreateInvite): Promise<Invite> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/invites/",
+			"/workspaces/{workspaceId}/invites/",
 			{
 				params: { path: { workspaceId } },
 				body: invite,
@@ -64,8 +63,8 @@ export class InvitesService {
 	 * @returns Promise that resolves when the invitation is canceled
 	 * @throws {ApiError} if the request fails
 	 */
-	async cancel(inviteId: string): Promise<void> {
-		await this.#api.DELETE("/invites/{invite_id}/", {
+	async cancelInvite(inviteId: string): Promise<void> {
+		await this.#api.DELETE("/invites/{inviteId}/", {
 			params: { path: { inviteId } },
 		});
 	}
@@ -77,8 +76,8 @@ export class InvitesService {
 	 * @returns Promise that resolves with the updated invitation
 	 * @throws {ApiError} if the request fails
 	 */
-	async reply(inviteId: string, reply: ReplyInvite): Promise<Invite> {
-		const { data } = await this.#api.PATCH("/invites/{invite_id}/reply/", {
+	async replyToInvite(inviteId: string, reply: ReplyInvite): Promise<Invite> {
+		const { data } = await this.#api.POST("/invites/{inviteId}/", {
 			params: { path: { inviteId } },
 			body: reply,
 		});
@@ -92,12 +91,12 @@ export class InvitesService {
 	 * @returns Promise that resolves with the generated invite code
 	 * @throws {ApiError} if the request fails
 	 */
-	async generateCode(
+	async generateInviteCode(
 		workspaceId: string,
 		options: GenerateInviteCode,
 	): Promise<InviteCode> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/invites/code/",
+			"/workspaces/{workspaceId}/invites/code/",
 			{
 				params: { path: { workspaceId } },
 				body: options,
@@ -107,13 +106,31 @@ export class InvitesService {
 	}
 
 	/**
-	 * Join a workspace using an invite code
+	 * Reply to an invite code (accept or decline)
 	 * @param inviteCode - The invite code
-	 * @returns Promise that resolves with the member details
+	 * @param reply - Optional reply request (defaults to accept if not provided)
+	 * @returns Promise that resolves with the member details if accepted, null if declined
 	 * @throws {ApiError} if the request fails
 	 */
-	async joinWithCode(inviteCode: string): Promise<Member> {
-		const { data } = await this.#api.POST("/invites/{invite_code}/join/", {
+	async replyToInviteCode(
+		inviteCode: string,
+		reply?: ReplyInvite | null,
+	): Promise<Member | null> {
+		const { data } = await this.#api.POST("/invites/code/{inviteCode}/", {
+			params: { path: { inviteCode } },
+			body: reply ?? null,
+		});
+		return data!;
+	}
+
+	/**
+	 * Preview an invite code without joining
+	 * @param inviteCode - The invite code
+	 * @returns Promise that resolves with the invite preview details
+	 * @throws {ApiError} if the request fails
+	 */
+	async previewInvite(inviteCode: string): Promise<InvitePreview> {
+		const { data } = await this.#api.GET("/invites/code/{inviteCode}/", {
 			params: { path: { inviteCode } },
 		});
 		return data!;

@@ -1,15 +1,16 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateDocument,
+	CursorPagination,
 	Document,
-	Pagination,
+	DocumentsPage,
 	UpdateDocument,
 } from "@/datatypes/index.js";
 
 /**
  * Service for handling document operations
  */
-export class DocumentsService {
+export class Documents {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -19,13 +20,16 @@ export class DocumentsService {
 	/**
 	 * List documents in a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (offset, limit)
-	 * @returns Promise that resolves with the list of documents
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of documents
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(workspaceId: string, query?: Pagination): Promise<Document[]> {
+	async listDocuments(
+		workspaceId: string,
+		query?: CursorPagination,
+	): Promise<DocumentsPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/documents",
+			"/workspaces/{workspaceId}/documents",
 			{
 				params: { path: { workspaceId }, query },
 			},
@@ -39,8 +43,8 @@ export class DocumentsService {
 	 * @returns Promise that resolves with the document details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(documentId: string): Promise<Document> {
-		const { data } = await this.#api.GET("/documents/{document_id}", {
+	async getDocument(documentId: string): Promise<Document> {
+		const { data } = await this.#api.GET("/documents/{documentId}", {
 			params: { path: { documentId } },
 		});
 		return data!;
@@ -53,12 +57,12 @@ export class DocumentsService {
 	 * @returns Promise that resolves with the created document
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(
+	async createDocument(
 		workspaceId: string,
 		document: CreateDocument,
 	): Promise<Document> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/documents",
+			"/workspaces/{workspaceId}/documents",
 			{
 				params: { path: { workspaceId } },
 				body: document,
@@ -74,8 +78,11 @@ export class DocumentsService {
 	 * @returns Promise that resolves with the updated document
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(documentId: string, updates: UpdateDocument): Promise<Document> {
-		const { data } = await this.#api.PATCH("/documents/{document_id}", {
+	async updateDocument(
+		documentId: string,
+		updates: UpdateDocument,
+	): Promise<Document> {
+		const { data } = await this.#api.PATCH("/documents/{documentId}", {
 			params: { path: { documentId } },
 			body: updates,
 		});
@@ -88,8 +95,8 @@ export class DocumentsService {
 	 * @returns Promise that resolves when the document is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(documentId: string): Promise<void> {
-		await this.#api.DELETE("/documents/{document_id}", {
+	async deleteDocument(documentId: string): Promise<void> {
+		await this.#api.DELETE("/documents/{documentId}", {
 			params: { path: { documentId } },
 		});
 	}
