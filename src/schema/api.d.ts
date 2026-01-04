@@ -3624,125 +3624,18 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/files/download": {
+	"/workspaces/{workspaceId}/files/batch": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
-		put?: never;
-		/**
-		 * Download multiple files
-		 * @description Downloads multiple files as a zip archive. Provide a list of file IDs to include in the archive.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to download multiple files. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["DownloadMultipleFiles"];
-				};
-			};
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/files/archive": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
 		/**
 		 * Download archived files
 		 * @description Downloads all or specific workspace files as a compressed archive. Supports zip and tar.gz formats.
 		 */
-		post: {
+		get: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -3755,7 +3648,7 @@ export interface paths {
 			/** @description Request to download files as an archive. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["DownloadArchivedFiles"];
+					"application/json": components["schemas"]["DownloadFiles"];
 				};
 			};
 			responses: {
@@ -3828,7 +3721,98 @@ export interface paths {
 				};
 			};
 		};
-		delete?: never;
+		put?: never;
+		post?: never;
+		/**
+		 * Delete multiple files
+		 * @description Soft deletes multiple files by setting deleted timestamps. Files can be recovered within the retention period.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to delete multiple files. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["DeleteFiles"];
+				};
+			};
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		options?: never;
 		head?: never;
 		patch?: never;
@@ -6743,7 +6727,7 @@ export interface components {
 			 * Format: int64
 			 * @description File size in bytes.
 			 */
-			fileSize: number;
+			fileSize?: number | null;
 			/** @description Processing status. */
 			status: components["schemas"]["ProcessingStatus"];
 			/**
@@ -6796,13 +6780,8 @@ export interface components {
 		 *      to specify how document content should be segmented for knowledge extraction.
 		 */
 		ContentSegmentation: "none" | "semantic" | "fixed";
-		/** @description Request to download multiple files. */
-		DownloadMultipleFiles: {
-			/** @description File IDs to download (1-100 files). */
-			fileIds: string[];
-		};
 		/** @description Request to download files as an archive. */
-		DownloadArchivedFiles: {
+		DownloadFiles: {
 			/** @description Archive format. */
 			format: components["schemas"]["ArchiveFormat"];
 			/** @description Optional specific file IDs (if None, downloads all workspace files). */
@@ -6810,6 +6789,11 @@ export interface components {
 		};
 		/** @description Archive format options for file downloads. */
 		ArchiveFormat: "tar" | "zip";
+		/** @description Request to delete multiple files. */
+		DeleteFiles: {
+			/** @description File IDs to delete (1-100 files). */
+			fileIds: string[];
+		};
 		/**
 		 * @description Path parameters for file operations (file ID only).
 		 *

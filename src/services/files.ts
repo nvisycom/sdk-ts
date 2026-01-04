@@ -1,8 +1,8 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
-	DownloadArchivedFiles,
-	DownloadMultipleFiles,
+	DeleteFiles,
+	DownloadFiles,
 	File,
 	FilesPage,
 	ListFiles,
@@ -109,18 +109,18 @@ export class Files {
 	}
 
 	/**
-	 * Download multiple files
+	 * Download files as an archive
 	 * @param workspaceId - Workspace ID
-	 * @param request - Download request with file IDs
-	 * @returns Promise that resolves with the download response
+	 * @param request - Download request with format and optional file IDs
+	 * @returns Promise that resolves with the archive response
 	 * @throws {ApiError} if the request fails
 	 */
-	async downloadMultipleFiles(
+	async downloadFiles(
 		workspaceId: string,
-		request: DownloadMultipleFiles,
+		request: DownloadFiles,
 	): Promise<Response> {
-		const { response } = await this.#api.POST(
-			"/workspaces/{workspaceId}/files/download",
+		const { response } = await this.#api.GET(
+			"/workspaces/{workspaceId}/files/batch",
 			{
 				params: { path: { workspaceId } },
 				body: request,
@@ -131,24 +131,16 @@ export class Files {
 	}
 
 	/**
-	 * Download files as an archive
+	 * Delete multiple files
 	 * @param workspaceId - Workspace ID
-	 * @param request - Archive download request
-	 * @returns Promise that resolves with the archive response
+	 * @param request - Delete request with file IDs
+	 * @returns Promise that resolves when the files are deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async downloadFilesArchive(
-		workspaceId: string,
-		request: DownloadArchivedFiles,
-	): Promise<Response> {
-		const { response } = await this.#api.POST(
-			"/workspaces/{workspaceId}/files/archive",
-			{
-				params: { path: { workspaceId } },
-				body: request,
-				parseAs: "stream",
-			},
-		);
-		return response;
+	async deleteFiles(workspaceId: string, request: DeleteFiles): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceId}/files/batch", {
+			params: { path: { workspaceId } },
+			body: request,
+		});
 	}
 }
