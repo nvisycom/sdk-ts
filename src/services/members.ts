@@ -1,8 +1,9 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	ListMembersQuery,
+	CursorPagination,
+	ListMembers,
 	Member,
-	Pagination,
+	MembersPage,
 	UpdateMember,
 } from "@/datatypes/index.js";
 
@@ -19,20 +20,17 @@ export class Members {
 	/**
 	 * List members of a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (role, has2fa, sortBy, order, offset, limit)
-	 * @returns Promise that resolves with the list of members
+	 * @param query - Optional query parameters (role, has2fa, sortBy, order, limit, after)
+	 * @returns Promise that resolves with a paginated list of members
 	 * @throws {ApiError} if the request fails
 	 */
 	async listMembers(
 		workspaceId: string,
-		query?: ListMembersQuery & Pagination,
-	): Promise<Member[]> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/members/",
-			{
-				params: { path: { workspace_id: workspaceId }, query },
-			},
-		);
+		query?: ListMembers & CursorPagination,
+	): Promise<MembersPage> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/members/", {
+			params: { path: { workspaceId }, query },
+		});
 		return data!;
 	}
 
@@ -45,10 +43,10 @@ export class Members {
 	 */
 	async getMember(workspaceId: string, accountId: string): Promise<Member> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/members/{account_id}/",
+			"/workspaces/{workspaceId}/members/{accountId}/",
 			{
 				params: {
-					path: { workspace_id: workspaceId, account_id: accountId },
+					path: { workspaceId, accountId },
 				},
 			},
 		);
@@ -69,10 +67,10 @@ export class Members {
 		updates: UpdateMember,
 	): Promise<Member> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspace_id}/members/{account_id}/role",
+			"/workspaces/{workspaceId}/members/{accountId}/role",
 			{
 				params: {
-					path: { workspace_id: workspaceId, account_id: accountId },
+					path: { workspaceId, accountId },
 				},
 				body: updates,
 			},
@@ -88,8 +86,8 @@ export class Members {
 	 * @throws {ApiError} if the request fails
 	 */
 	async removeMember(workspaceId: string, accountId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspace_id}/members/{account_id}/", {
-			params: { path: { workspace_id: workspaceId, account_id: accountId } },
+		await this.#api.DELETE("/workspaces/{workspaceId}/members/{accountId}/", {
+			params: { path: { workspaceId, accountId } },
 		});
 	}
 
@@ -100,8 +98,8 @@ export class Members {
 	 * @throws {ApiError} if the request fails
 	 */
 	async leaveWorkspace(workspaceId: string): Promise<void> {
-		await this.#api.POST("/workspaces/{workspace_id}/members/leave", {
-			params: { path: { workspace_id: workspaceId } },
+		await this.#api.POST("/workspaces/{workspaceId}/members/leave", {
+			params: { path: { workspaceId } },
 		});
 	}
 }

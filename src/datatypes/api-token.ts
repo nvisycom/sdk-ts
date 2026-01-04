@@ -8,3 +8,4 @@ export type ApiTokenType = Schemas["ApiTokenType"];
 export type CreateApiToken = Schemas["CreateApiToken"];
 export type UpdateApiToken = Schemas["UpdateApiToken"];
 export type TokenExpiration = Schemas["TokenExpiration"];
+export type ApiTokensPage = Schemas["ApiTokensPage"];

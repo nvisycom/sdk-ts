@@ -1,10 +1,12 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateWebhook,
+	CursorPagination,
 	TestWebhook,
 	UpdateWebhook,
 	Webhook,
 	WebhookResult,
+	WebhooksPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -20,14 +22,18 @@ export class Webhooks {
 	/**
 	 * List all webhooks in a workspace
 	 * @param workspaceId - Workspace ID
-	 * @returns Promise that resolves with the list of webhooks
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of webhooks
 	 * @throws {ApiError} if the request fails
 	 */
-	async listWebhooks(workspaceId: string): Promise<Webhook[]> {
+	async listWebhooks(
+		workspaceId: string,
+		query?: CursorPagination,
+	): Promise<WebhooksPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/webhooks/",
+			"/workspaces/{workspaceId}/webhooks/",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -40,8 +46,8 @@ export class Webhooks {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getWebhook(webhookId: string): Promise<Webhook> {
-		const { data } = await this.#api.GET("/webhooks/{webhook_id}/", {
-			params: { path: { webhook_id: webhookId } },
+		const { data } = await this.#api.GET("/webhooks/{webhookId}/", {
+			params: { path: { webhookId } },
 		});
 		return data!;
 	}
@@ -58,9 +64,9 @@ export class Webhooks {
 		webhook: CreateWebhook,
 	): Promise<Webhook> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/webhooks/",
+			"/workspaces/{workspaceId}/webhooks/",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: webhook,
 			},
 		);
@@ -78,8 +84,8 @@ export class Webhooks {
 		webhookId: string,
 		updates: UpdateWebhook,
 	): Promise<Webhook> {
-		const { data } = await this.#api.PUT("/webhooks/{webhook_id}/", {
-			params: { path: { webhook_id: webhookId } },
+		const { data } = await this.#api.PUT("/webhooks/{webhookId}/", {
+			params: { path: { webhookId } },
 			body: updates,
 		});
 		return data!;
@@ -92,8 +98,8 @@ export class Webhooks {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteWebhook(webhookId: string): Promise<void> {
-		await this.#api.DELETE("/webhooks/{webhook_id}/", {
-			params: { path: { webhook_id: webhookId } },
+		await this.#api.DELETE("/webhooks/{webhookId}/", {
+			params: { path: { webhookId } },
 		});
 	}
 
@@ -108,8 +114,8 @@ export class Webhooks {
 		webhookId: string,
 		options?: TestWebhook,
 	): Promise<WebhookResult> {
-		const { data } = await this.#api.POST("/webhooks/{webhook_id}/test/", {
-			params: { path: { webhook_id: webhookId } },
+		const { data } = await this.#api.POST("/webhooks/{webhookId}/test/", {
+			params: { path: { webhookId } },
 			body: options ?? {},
 		});
 		return data!;

@@ -1,13 +1,14 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateInvite,
+	CursorPagination,
 	GenerateInviteCode,
 	Invite,
 	InviteCode,
 	InvitePreview,
-	ListInvitesQuery,
+	InvitesPage,
+	ListInvites,
 	Member,
-	Pagination,
 	ReplyInvite,
 } from "@/datatypes/index.js";
 
@@ -24,20 +25,17 @@ export class Invites {
 	/**
 	 * List all invitations for a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (role, sortBy, order, offset, limit)
-	 * @returns Promise that resolves with the list of invitations
+	 * @param query - Optional query parameters (role, sortBy, order, limit, after)
+	 * @returns Promise that resolves with a paginated list of invitations
 	 * @throws {ApiError} if the request fails
 	 */
 	async listInvites(
 		workspaceId: string,
-		query?: ListInvitesQuery & Pagination,
-	): Promise<Invite[]> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/invites/",
-			{
-				params: { path: { workspace_id: workspaceId }, query },
-			},
-		);
+		query?: ListInvites & CursorPagination,
+	): Promise<InvitesPage> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/invites/", {
+			params: { path: { workspaceId }, query },
+		});
 		return data!;
 	}
 
@@ -50,9 +48,9 @@ export class Invites {
 	 */
 	async sendInvite(workspaceId: string, invite: CreateInvite): Promise<Invite> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/invites/",
+			"/workspaces/{workspaceId}/invites/",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: invite,
 			},
 		);
@@ -66,8 +64,8 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async cancelInvite(inviteId: string): Promise<void> {
-		await this.#api.DELETE("/invites/{invite_id}/", {
-			params: { path: { invite_id: inviteId } },
+		await this.#api.DELETE("/invites/{inviteId}/", {
+			params: { path: { inviteId } },
 		});
 	}
 
@@ -79,8 +77,8 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async replyToInvite(inviteId: string, reply: ReplyInvite): Promise<Invite> {
-		const { data } = await this.#api.POST("/invites/{invite_id}/", {
-			params: { path: { invite_id: inviteId } },
+		const { data } = await this.#api.POST("/invites/{inviteId}/", {
+			params: { path: { inviteId } },
 			body: reply,
 		});
 		return data!;
@@ -98,9 +96,9 @@ export class Invites {
 		options: GenerateInviteCode,
 	): Promise<InviteCode> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/invites/code/",
+			"/workspaces/{workspaceId}/invites/code/",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: options,
 			},
 		);
@@ -118,8 +116,8 @@ export class Invites {
 		inviteCode: string,
 		reply?: ReplyInvite | null,
 	): Promise<Member | null> {
-		const { data } = await this.#api.POST("/invites/code/{invite_code}/", {
-			params: { path: { invite_code: inviteCode } },
+		const { data } = await this.#api.POST("/invites/code/{inviteCode}/", {
+			params: { path: { inviteCode } },
 			body: reply ?? null,
 		});
 		return data!;
@@ -132,8 +130,8 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async previewInvite(inviteCode: string): Promise<InvitePreview> {
-		const { data } = await this.#api.GET("/invites/code/{invite_code}/", {
-			params: { path: { invite_code: inviteCode } },
+		const { data } = await this.#api.GET("/invites/code/{inviteCode}/", {
+			params: { path: { inviteCode } },
 		});
 		return data!;
 	}

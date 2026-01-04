@@ -9,3 +9,4 @@ export type TestWebhook = Schemas["TestWebhook"];
 export type WebhookResult = Schemas["WebhookResult"];
 export type WebhookStatus = Schemas["WebhookStatus"];
 export type WebhookEvent = Schemas["WebhookEvent"];
+export type WebhooksPage = Schemas["WebhooksPage"];

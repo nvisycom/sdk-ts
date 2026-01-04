@@ -1,8 +1,9 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	Annotation,
+	AnnotationsPage,
 	CreateAnnotation,
-	Pagination,
+	CursorPagination,
 	UpdateAnnotation,
 } from "@/datatypes/index.js";
 
@@ -19,16 +20,16 @@ export class Annotations {
 	/**
 	 * List annotations for a file
 	 * @param fileId - File ID
-	 * @param query - Optional query parameters (offset, limit)
-	 * @returns Promise that resolves with the list of annotations
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of annotations
 	 * @throws {ApiError} if the request fails
 	 */
 	async listAnnotations(
 		fileId: string,
-		query?: Pagination,
-	): Promise<Annotation[]> {
-		const { data } = await this.#api.GET("/files/{file_id}/annotations/", {
-			params: { path: { file_id: fileId }, query },
+		query?: CursorPagination,
+	): Promise<AnnotationsPage> {
+		const { data } = await this.#api.GET("/files/{fileId}/annotations/", {
+			params: { path: { fileId }, query },
 		});
 		return data!;
 	}
@@ -40,8 +41,8 @@ export class Annotations {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getAnnotation(annotationId: string): Promise<Annotation> {
-		const { data } = await this.#api.GET("/annotations/{annotation_id}", {
-			params: { path: { annotation_id: annotationId } },
+		const { data } = await this.#api.GET("/annotations/{annotationId}", {
+			params: { path: { annotationId } },
 		});
 		return data!;
 	}
@@ -57,8 +58,8 @@ export class Annotations {
 		fileId: string,
 		annotation: CreateAnnotation,
 	): Promise<Annotation> {
-		const { data } = await this.#api.POST("/files/{file_id}/annotations/", {
-			params: { path: { file_id: fileId } },
+		const { data } = await this.#api.POST("/files/{fileId}/annotations/", {
+			params: { path: { fileId } },
 			body: annotation,
 		});
 		return data!;
@@ -75,8 +76,8 @@ export class Annotations {
 		annotationId: string,
 		updates: UpdateAnnotation,
 	): Promise<Annotation> {
-		const { data } = await this.#api.PATCH("/annotations/{annotation_id}", {
-			params: { path: { annotation_id: annotationId } },
+		const { data } = await this.#api.PATCH("/annotations/{annotationId}", {
+			params: { path: { annotationId } },
 			body: updates,
 		});
 		return data!;
@@ -89,8 +90,8 @@ export class Annotations {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteAnnotation(annotationId: string): Promise<void> {
-		await this.#api.DELETE("/annotations/{annotation_id}", {
-			params: { path: { annotation_id: annotationId } },
+		await this.#api.DELETE("/annotations/{annotationId}", {
+			params: { path: { annotationId } },
 		});
 	}
 }

@@ -196,24 +196,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path?: never;
@@ -221,12 +210,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiToken"][];
+						"application/json": components["schemas"]["ApiTokensPage"];
 					};
 				};
 				/**
@@ -327,7 +323,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/api-tokens/{token_id}/": {
+	"/api-tokens/{tokenId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -344,7 +340,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the API token. */
-					token_id: string;
+					tokenId: string;
 				};
 				cookie?: never;
 			};
@@ -403,7 +399,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the API token. */
-					token_id: string;
+					tokenId: string;
 				};
 				cookie?: never;
 			};
@@ -475,7 +471,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the API token. */
-					token_id: string;
+					tokenId: string;
 				};
 				cookie?: never;
 			};
@@ -558,24 +554,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path?: never;
@@ -583,12 +568,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Workspace"][];
+						"application/json": components["schemas"]["WorkspacesPage"];
 					};
 				};
 				/**
@@ -679,7 +671,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/": {
+	"/workspaces/{workspaceId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -696,7 +688,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -770,7 +762,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -842,7 +834,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -915,7 +907,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/notifications": {
+	"/workspaces/{workspaceId}/notifications": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -932,7 +924,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -994,7 +986,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1063,7 +1055,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/integrations/": {
+	"/workspaces/{workspaceId}/integrations/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1077,42 +1069,36 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Filter by integration type. */
-					integrationType?: components["schemas"]["IntegrationType"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Integration"][];
+						"application/json": components["schemas"]["IntegrationsPage"];
 					};
 				};
 				/**
@@ -1158,7 +1144,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1246,7 +1232,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/integrations/{integration_id}/": {
+	"/integrations/{integrationId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1263,7 +1249,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integration_id: string;
+					integrationId: string;
 				};
 				cookie?: never;
 			};
@@ -1335,7 +1321,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integration_id: string;
+					integrationId: string;
 				};
 				cookie?: never;
 			};
@@ -1443,7 +1429,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integration_id: string;
+					integrationId: string;
 				};
 				cookie?: never;
 			};
@@ -1508,7 +1494,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/integrations/{integration_id}/credentials/": {
+	"/integrations/{integrationId}/credentials/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1531,7 +1517,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration. */
-					integration_id: string;
+					integrationId: string;
 				};
 				cookie?: never;
 			};
@@ -1615,7 +1601,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/runs/": {
+	"/workspaces/{workspaceId}/runs/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1629,40 +1615,36 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["IntegrationRun"][];
+						"application/json": components["schemas"]["IntegrationRunsPage"];
 					};
 				};
 				/**
@@ -1705,7 +1687,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/runs/{run_id}": {
+	"/runs/{runId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1722,7 +1704,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the integration run. */
-					run_id: string;
+					runId: string;
 				};
 				cookie?: never;
 			};
@@ -1792,7 +1774,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/invites/": {
+	"/workspaces/{workspaceId}/invites/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1812,40 +1794,36 @@ export interface paths {
 					sortBy?: components["schemas"]["InviteSortField"] | null;
 					/** @description Sort order (asc or desc). */
 					order?: components["schemas"]["SortOrder"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Invite"][];
+						"application/json": components["schemas"]["InvitesPage"];
 					};
 				};
 				/**
@@ -1891,7 +1869,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1985,7 +1963,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/invites/code/": {
+	"/workspaces/{workspaceId}/invites/code/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2004,7 +1982,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2077,7 +2055,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/invites/{invite_id}/": {
+	"/invites/{inviteId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2096,7 +2074,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the invite. */
-					invite_id: string;
+					inviteId: string;
 				};
 				cookie?: never;
 			};
@@ -2179,7 +2157,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the invite. */
-					invite_id: string;
+					inviteId: string;
 				};
 				cookie?: never;
 			};
@@ -2244,7 +2222,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/invites/code/{invite_code}/": {
+	"/invites/code/{inviteCode}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2261,7 +2239,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description The invite code to use for joining the workspace. */
-					invite_code: string;
+					inviteCode: string;
 				};
 				cookie?: never;
 			};
@@ -2324,7 +2302,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description The invite code to use for joining the workspace. */
-					invite_code: string;
+					inviteCode: string;
 				};
 				cookie?: never;
 			};
@@ -2419,7 +2397,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/": {
+	"/workspaces/{workspaceId}/members/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2441,40 +2419,36 @@ export interface paths {
 					sortBy?: components["schemas"]["MemberSortField"] | null;
 					/** @description Sort order (asc or desc). */
 					order?: components["schemas"]["SortOrder"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"][];
+						"application/json": components["schemas"]["MembersPage"];
 					};
 				};
 				/**
@@ -2532,7 +2506,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/leave": {
+	"/workspaces/{workspaceId}/members/leave": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2551,7 +2525,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2617,7 +2591,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/{account_id}/": {
+	"/workspaces/{workspaceId}/members/{accountId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2634,9 +2608,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 					/** @description Unique identifier of the member account. */
-					account_id: string;
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -2710,9 +2684,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 					/** @description Unique identifier of the member account. */
-					account_id: string;
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -2792,7 +2766,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/{account_id}/role": {
+	"/workspaces/{workspaceId}/members/{accountId}/role": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2815,9 +2789,9 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 					/** @description Unique identifier of the member account. */
-					account_id: string;
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -2901,7 +2875,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/webhooks/": {
+	"/workspaces/{workspaceId}/webhooks/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2914,22 +2888,37 @@ export interface paths {
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
+				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Webhook"][];
+						"application/json": components["schemas"]["WebhooksPage"];
 					};
 				};
 				/**
@@ -2975,7 +2964,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3048,7 +3037,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/webhooks/{webhook_id}/": {
+	"/webhooks/{webhookId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3065,7 +3054,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the webhook. */
-					webhook_id: string;
+					webhookId: string;
 				};
 				cookie?: never;
 			};
@@ -3137,7 +3126,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the webhook. */
-					webhook_id: string;
+					webhookId: string;
 				};
 				cookie?: never;
 			};
@@ -3230,7 +3219,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the webhook. */
-					webhook_id: string;
+					webhookId: string;
 				};
 				cookie?: never;
 			};
@@ -3295,7 +3284,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/webhooks/{webhook_id}/test/": {
+	"/webhooks/{webhookId}/test/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3314,7 +3303,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the webhook. */
-					webhook_id: string;
+					webhookId: string;
 				};
 				cookie?: never;
 			};
@@ -3387,7 +3376,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/ws/": {
+	"/workspaces/{workspaceId}/ws/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3404,7 +3393,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3472,7 +3461,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/files/": {
+	"/workspaces/{workspaceId}/files/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3481,51 +3470,43 @@ export interface paths {
 		};
 		/**
 		 * List files
-		 * @description Lists all files in a workspace with optional filtering by format and sorting.
+		 * @description Lists files in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages.
 		 */
 		get: {
 			parameters: {
 				query?: {
 					/** @description Filter by file formats. */
 					formats?: components["schemas"]["FileFormat"][] | null;
-					/** @description Sort by field. */
-					sortBy?: components["schemas"]["FileSortField"] | null;
-					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["SortOrder"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["File"][];
+						"application/json": components["schemas"]["FilesPage"];
 					};
 				};
 				/**
@@ -3571,7 +3552,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3643,7 +3624,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/files/download": {
+	"/workspaces/{workspaceId}/files/download": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3662,14 +3643,14 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			/** @description Request to download multiple files. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["DownloadMultipleFilesRequest"];
+					"application/json": components["schemas"]["DownloadMultipleFiles"];
 				};
 			};
 			responses: {
@@ -3748,7 +3729,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/files/archive": {
+	"/workspaces/{workspaceId}/files/archive": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3767,14 +3748,14 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			/** @description Request to download files as an archive. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["DownloadArchivedFilesRequest"];
+					"application/json": components["schemas"]["DownloadArchivedFiles"];
 				};
 			};
 			responses: {
@@ -3853,7 +3834,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/files/{file_id}": {
+	"/files/{fileId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3870,7 +3851,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					file_id: string;
+					fileId: string;
 				};
 				cookie?: never;
 			};
@@ -3942,7 +3923,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					file_id: string;
+					fileId: string;
 				};
 				cookie?: never;
 			};
@@ -4014,7 +3995,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					file_id: string;
+					fileId: string;
 				};
 				cookie?: never;
 			};
@@ -4098,7 +4079,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/documents": {
+	"/workspaces/{workspaceId}/documents": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4112,40 +4093,36 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Document"][];
+						"application/json": components["schemas"]["DocumentsPage"];
 					};
 				};
 				/**
@@ -4191,7 +4168,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -4264,7 +4241,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/documents/{document_id}": {
+	"/documents/{documentId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4281,7 +4258,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the document. */
-					document_id: string;
+					documentId: string;
 				};
 				cookie?: never;
 			};
@@ -4355,7 +4332,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the document. */
-					document_id: string;
+					documentId: string;
 				};
 				cookie?: never;
 			};
@@ -4427,7 +4404,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the document. */
-					document_id: string;
+					documentId: string;
 				};
 				cookie?: never;
 			};
@@ -4511,7 +4488,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/files/{file_id}/comments": {
+	"/files/{fileId}/comments": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4525,40 +4502,36 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					file_id: string;
+					fileId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Comment"][];
+						"application/json": components["schemas"]["CommentsPage"];
 					};
 				};
 				/**
@@ -4604,7 +4577,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					file_id: string;
+					fileId: string;
 				};
 				cookie?: never;
 			};
@@ -4677,7 +4650,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/files/{file_id}/comments/{comment_id}": {
+	"/comments/{commentId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4696,17 +4669,15 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the file. */
-					file_id: string;
 					/** @description Unique identifier of the comment. */
-					comment_id: string;
+					commentId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
 				/** @description Comment deleted. */
-				200: {
+				204: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -4770,10 +4741,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the file. */
-					file_id: string;
 					/** @description Unique identifier of the comment. */
-					comment_id: string;
+					commentId: string;
 				};
 				cookie?: never;
 			};
@@ -4857,7 +4826,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/files/{file_id}/annotations/": {
+	"/files/{fileId}/annotations/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4871,40 +4840,36 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					file_id: string;
+					fileId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Annotation"][];
+						"application/json": components["schemas"]["AnnotationsPage"];
 					};
 				};
 				/**
@@ -4965,7 +4930,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the file. */
-					file_id: string;
+					fileId: string;
 				};
 				cookie?: never;
 			};
@@ -5053,7 +5018,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/annotations/{annotation_id}": {
+	"/annotations/{annotationId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5070,7 +5035,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the annotation. */
-					annotation_id: string;
+					annotationId: string;
 				};
 				cookie?: never;
 			};
@@ -5144,7 +5109,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the annotation. */
-					annotation_id: string;
+					annotationId: string;
 				};
 				cookie?: never;
 			};
@@ -5216,7 +5181,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Unique identifier of the annotation. */
-					annotation_id: string;
+					annotationId: string;
 				};
 				cookie?: never;
 			};
@@ -5300,7 +5265,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/activities/": {
+	"/workspaces/{workspaceId}/activities/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5314,40 +5279,36 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
-					workspace_id: string;
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Activity"][];
+						"application/json": components["schemas"]["ActivitysPage"];
 					};
 				};
 				/**
@@ -5404,24 +5365,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path?: never;
@@ -5429,12 +5379,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Notification"][];
+						"application/json": components["schemas"]["NotificationsPage"];
 					};
 				};
 				/**
@@ -5898,32 +5855,42 @@ export interface components {
 		 */
 		ApiTokenType: "web" | "mobile" | "api" | "desktop";
 		/**
-		 * @description Pagination parameters with performance and security validation.
+		 * @description Cursor-based pagination query parameters.
 		 *
-		 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-		 *      large datasets by specifying how many records to skip and how many to fetch.
+		 *      This is the preferred pagination method for API endpoints. It provides:
+		 *      - Consistent performance regardless of page depth
+		 *      - Stable results even when items are added/removed
+		 *      - Efficient "load more" / infinite scroll patterns
 		 */
-		Pagination: {
+		CursorPagination: {
 			/**
 			 * Format: uint32
-			 * @description The number of records to skip before starting to return results.
-			 *
-			 *      For performance reasons, this is limited to prevent expensive deep
-			 *      pagination queries. Consider using cursor-based pagination for
-			 *      better performance when dealing with large datasets.
-			 *
-			 *      **Performance Impact**: High offsets require the database to scan
-			 *      and skip many records, which can be slow for large tables.
-			 */
-			offset?: number | null;
-			/**
-			 * Format: uint32
-			 * @description The maximum number of records to return in a single request.
-			 *
-			 *      This is balanced between usability and performance. Very large limits
-			 *      can cause memory pressure and slow response times.
+			 * @description The maximum number of records to return (1-100, default: 20).
 			 */
 			limit?: number | null;
+			/**
+			 * @description Cursor pointing to the last item of the previous page.
+			 *      Obtain this from the `nextCursor` field in the response.
+			 */
+			after?: string | null;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		ApiTokensPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["ApiToken"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/** @description API token response structure. */
 		ApiToken: {
@@ -5970,7 +5937,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the API token.
 			 */
-			token_id: string;
+			tokenId: string;
 		};
 		/** @description Request to update an existing API token. */
 		UpdateApiToken: {
@@ -6035,13 +6002,31 @@ export interface components {
 		 *      hierarchical access control for workspace members with clearly defined capabilities.
 		 */
 		WorkspaceRole: "owner" | "admin" | "member" | "guest";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		WorkspacesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Workspace"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Path parameters for workspace-level operations. */
 		WorkspacePathParams: {
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
-			workspace_id: string;
+			workspaceId: string;
 		};
 		/**
 		 * @description Request payload to update an existing workspace.
@@ -6177,10 +6162,23 @@ export interface components {
 		 *      to manage integration states from initial setup through active execution and error handling.
 		 */
 		IntegrationStatus: "pending" | "executing" | "failed";
-		/** @description Query parameters for listing workspace integrations. */
-		ListIntegrationsQuery: {
-			/** @description Filter by integration type. */
-			integrationType?: components["schemas"]["IntegrationType"] | null;
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		IntegrationsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Integration"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/**
 		 * @description Path parameters for integration operations (integration ID only).
@@ -6193,7 +6191,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the integration.
 			 */
-			integration_id: string;
+			integrationId: string;
 		};
 		/** @description Request payload for updating an existing workspace integration. */
 		UpdateIntegration: {
@@ -6214,6 +6212,24 @@ export interface components {
 		UpdateIntegrationCredentials: {
 			/** @description Updated authentication credentials for the external service. */
 			credentials: unknown;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		IntegrationRunsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["IntegrationRun"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/** @description Response type for an integration run. */
 		IntegrationRun: {
@@ -6272,7 +6288,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the integration run.
 			 */
-			run_id: string;
+			runId: string;
 		};
 		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
@@ -6344,7 +6360,7 @@ export interface components {
 			| "expired"
 			| "revoked";
 		/** @description Query parameters for listing workspace invites. */
-		ListInvitesQuery: {
+		ListInvites: {
 			/** @description Filter by invited role. */
 			role?: components["schemas"]["WorkspaceRole"] | null;
 			/** @description Sort by field. */
@@ -6352,10 +6368,28 @@ export interface components {
 			/** @description Sort order (asc or desc). */
 			order?: components["schemas"]["SortOrder"] | null;
 		};
-		/** @description Fields to sort invites by. */
+		/** @description Fields available for sorting workspace invites. */
 		InviteSortField: "email" | "date";
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		InvitesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Invite"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
 			/** @description Role to assign when someone joins via this invite code. */
@@ -6391,7 +6425,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the invite.
 			 */
-			invite_id: string;
+			inviteId: string;
 		};
 		/** @description Request to respond to a workspace invitation. */
 		ReplyInvite: {
@@ -6401,7 +6435,7 @@ export interface components {
 		/** @description Path parameters for joining via invite code. */
 		InviteCodePathParams: {
 			/** @description The invite code to use for joining the workspace. */
-			invite_code: string;
+			inviteCode: string;
 		};
 		/**
 		 * @description Preview of an invite with workspace details for display before joining.
@@ -6456,7 +6490,7 @@ export interface components {
 			createdAt: string;
 		};
 		/** @description Query parameters for listing workspace members. */
-		ListMembersQuery: {
+		ListMembers: {
 			/** @description Filter by workspace role. */
 			role?: components["schemas"]["WorkspaceRole"] | null;
 			/** @description Filter by 2FA status. */
@@ -6466,20 +6500,38 @@ export interface components {
 			/** @description Sort order (asc or desc). */
 			order?: components["schemas"]["SortOrder"] | null;
 		};
-		/** @description Fields to sort members by. */
+		/** @description Fields available for sorting workspace members. */
 		MemberSortField: "name" | "date";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		MembersPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Member"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Path parameters for workspace member operations. */
 		MemberPathParams: {
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
-			workspace_id: string;
+			workspaceId: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the member account.
 			 */
-			account_id: string;
+			accountId: string;
 		};
 		/** @description Request to update a member's role. */
 		UpdateMember: {
@@ -6582,6 +6634,24 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		WebhooksPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Webhook"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
+		/**
 		 * @description Path parameters for webhook operations (webhook ID only).
 		 *
 		 *      Since webhook IDs are globally unique UUIDs, workspace context can be
@@ -6592,7 +6662,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the webhook.
 			 */
-			webhook_id: string;
+			webhookId: string;
 		};
 		/** @description Request payload for updating an existing workspace webhook. */
 		UpdateWebhook: {
@@ -6636,18 +6706,30 @@ export interface components {
 			responseTimeMs: number;
 		};
 		/** @description Query parameters for listing files. */
-		ListFilesQuery: {
+		ListFiles: {
 			/** @description Filter by file formats. */
 			formats?: components["schemas"]["FileFormat"][] | null;
-			/** @description Sort by field. */
-			sortBy?: components["schemas"]["FileSortField"] | null;
-			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["SortOrder"] | null;
 		};
 		/** @description File format categories for filtering. */
 		FileFormat: "pdf" | "doc" | "txt" | "md" | "csv" | "json" | "png" | "jpeg";
-		/** @description Fields to sort files by. */
-		FileSortField: "name" | "date" | "size";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		FilesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["File"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Represents an uploaded file. */
 		File: {
 			/**
@@ -6715,12 +6797,12 @@ export interface components {
 		 */
 		ContentSegmentation: "none" | "semantic" | "fixed";
 		/** @description Request to download multiple files. */
-		DownloadMultipleFilesRequest: {
+		DownloadMultipleFiles: {
 			/** @description File IDs to download (1-100 files). */
 			fileIds: string[];
 		};
 		/** @description Request to download files as an archive. */
-		DownloadArchivedFilesRequest: {
+		DownloadArchivedFiles: {
 			/** @description Archive format. */
 			format: components["schemas"]["ArchiveFormat"];
 			/** @description Optional specific file IDs (if None, downloads all workspace files). */
@@ -6739,7 +6821,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the file.
 			 */
-			file_id: string;
+			fileId: string;
 		};
 		/** @description Request to update file metadata. */
 		UpdateFile: {
@@ -6794,8 +6876,6 @@ export interface components {
 			displayName: string;
 			/** @description Tags associated with the document. */
 			tags: string[];
-			/** @description Document status. */
-			status: components["schemas"]["DocumentStatus"];
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the document was created.
@@ -6808,19 +6888,30 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
-		 * @description Defines the current status of a document in its lifecycle.
+		 * @description Generic paginated response wrapper.
 		 *
-		 *      This enumeration corresponds to the `DOCUMENT_STATUS` PostgreSQL enum and is used
-		 *      to track document states from creation through processing, completion, and archival.
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
 		 */
-		DocumentStatus: "draft" | "processing" | "ready" | "archived";
+		DocumentsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Document"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Path parameters for document operations. */
 		DocumentPathParams: {
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the document.
 			 */
-			document_id: string;
+			documentId: string;
 		};
 		/** @description Request payload for updating a document. */
 		UpdateDocument: {
@@ -6887,22 +6978,35 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
-		 * @description Path parameters for file comment operations (file ID only).
+		 * @description Generic paginated response wrapper.
 		 *
-		 *      Since file IDs are globally unique UUIDs, workspace context can be
-		 *      derived from the file record itself for authorization purposes.
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
 		 */
-		FileCommentPathParams: {
+		CommentsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Comment"][];
 			/**
-			 * Format: uuid
-			 * @description Unique identifier of the file.
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
 			 */
-			file_id: string;
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
+		/**
+		 * @description Path parameters for comment operations (comment ID only).
+		 *
+		 *      Since comment IDs are globally unique UUIDs, file/workspace context can be
+		 *      derived from the comment record itself for authorization purposes.
+		 */
+		CommentPathParams: {
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the comment.
 			 */
-			comment_id: string;
+			commentId: string;
 		};
 		/** @description Request payload to update a document comment. */
 		UpdateComment: {
@@ -6927,7 +7031,7 @@ export interface components {
 		 *      This enumeration corresponds to the `ANNOTATION_TYPE` PostgreSQL enum and is used
 		 *      to classify different types of annotations users can create on documents.
 		 */
-		AnnotationType: "note" | "highlight" | "comment";
+		AnnotationType: "note" | "highlight";
 		/** @description Response type for a document annotation. */
 		Annotation: {
 			/**
@@ -6961,6 +7065,24 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		AnnotationsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Annotation"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
+		/**
 		 * @description Path parameters for annotation operations (annotation ID only).
 		 *
 		 *      Since annotation IDs are globally unique UUIDs, file/workspace context can be
@@ -6971,7 +7093,7 @@ export interface components {
 			 * Format: uuid
 			 * @description Unique identifier of the annotation.
 			 */
-			annotation_id: string;
+			annotationId: string;
 		};
 		/** @description Request to update an annotation. */
 		UpdateAnnotation: {
@@ -6982,15 +7104,33 @@ export interface components {
 			/** @description Updated metadata. */
 			metadata?: unknown;
 		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		ActivitysPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Activity"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Response type for a workspace activity. */
 		Activity: {
 			/** @description Human-readable description. */
 			description: string;
 			/**
-			 * Format: int64
+			 * Format: uuid
 			 * @description Unique activity identifier.
 			 */
-			id: number;
+			id: string;
 			/**
 			 * Format: uuid
 			 * @description Workspace ID.
@@ -7044,6 +7184,24 @@ export interface components {
 			| "comment:updated"
 			| "comment:deleted"
 			| "custom";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		NotificationsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Notification"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Response type for an account notification. */
 		Notification: {
 			/** @description Notification title. */

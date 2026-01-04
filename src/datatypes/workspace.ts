@@ -6,3 +6,4 @@ export type Workspace = Schemas["Workspace"];
 export type CreateWorkspace = Schemas["CreateWorkspace"];
 export type UpdateWorkspace = Schemas["UpdateWorkspace"];
 export type WorkspaceRole = Schemas["WorkspaceRole"];
+export type WorkspacesPage = Schemas["WorkspacesPage"];

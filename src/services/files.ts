@@ -1,10 +1,11 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	DownloadArchivedFilesRequest,
-	DownloadMultipleFilesRequest,
+	CursorPagination,
+	DownloadArchivedFiles,
+	DownloadMultipleFiles,
 	File,
-	ListFilesQuery,
-	Pagination,
+	FilesPage,
+	ListFiles,
 	UpdateFile,
 } from "@/datatypes/index.js";
 
@@ -37,8 +38,8 @@ export class Files {
 			formData.append("files", file, name);
 		}
 
-		const { data } = await this.#api.POST("/workspaces/{workspace_id}/files/", {
-			params: { path: { workspace_id: workspaceId } },
+		const { data } = await this.#api.POST("/workspaces/{workspaceId}/files/", {
+			params: { path: { workspaceId } },
 			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
 			body: formData as unknown as unknown[],
 			bodySerializer: (formData) => formData,
@@ -52,16 +53,16 @@ export class Files {
 	/**
 	 * List files in a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (formats, sortBy, order, offset, limit)
-	 * @returns Promise that resolves with the list of files
+	 * @param query - Optional query parameters (formats, limit, after)
+	 * @returns Promise that resolves with a paginated list of files
 	 * @throws {ApiError} if the request fails
 	 */
 	async listFiles(
 		workspaceId: string,
-		query?: ListFilesQuery & Pagination,
-	): Promise<File[]> {
-		const { data } = await this.#api.GET("/workspaces/{workspace_id}/files/", {
-			params: { path: { workspace_id: workspaceId }, query },
+		query?: ListFiles & CursorPagination,
+	): Promise<FilesPage> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/files/", {
+			params: { path: { workspaceId }, query },
 		});
 		return data!;
 	}
@@ -73,8 +74,8 @@ export class Files {
 	 * @throws {ApiError} if the request fails
 	 */
 	async downloadFile(fileId: string): Promise<Response> {
-		const { response } = await this.#api.GET("/files/{file_id}", {
-			params: { path: { file_id: fileId } },
+		const { response } = await this.#api.GET("/files/{fileId}", {
+			params: { path: { fileId } },
 			parseAs: "stream",
 		});
 		return response;
@@ -88,8 +89,8 @@ export class Files {
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateFile(fileId: string, updates: UpdateFile): Promise<File> {
-		const { data } = await this.#api.PATCH("/files/{file_id}", {
-			params: { path: { file_id: fileId } },
+		const { data } = await this.#api.PATCH("/files/{fileId}", {
+			params: { path: { fileId } },
 			body: updates,
 		});
 		return data!;
@@ -102,8 +103,8 @@ export class Files {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteFile(fileId: string): Promise<void> {
-		await this.#api.DELETE("/files/{file_id}", {
-			params: { path: { file_id: fileId } },
+		await this.#api.DELETE("/files/{fileId}", {
+			params: { path: { fileId } },
 		});
 	}
 
@@ -116,12 +117,12 @@ export class Files {
 	 */
 	async downloadMultipleFiles(
 		workspaceId: string,
-		request: DownloadMultipleFilesRequest,
+		request: DownloadMultipleFiles,
 	): Promise<Response> {
 		const { response } = await this.#api.POST(
-			"/workspaces/{workspace_id}/files/download",
+			"/workspaces/{workspaceId}/files/download",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: request,
 				parseAs: "stream",
 			},
@@ -138,12 +139,12 @@ export class Files {
 	 */
 	async downloadFilesArchive(
 		workspaceId: string,
-		request: DownloadArchivedFilesRequest,
+		request: DownloadArchivedFiles,
 	): Promise<Response> {
 		const { response } = await this.#api.POST(
-			"/workspaces/{workspace_id}/files/archive",
+			"/workspaces/{workspaceId}/files/archive",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: request,
 				parseAs: "stream",
 			},

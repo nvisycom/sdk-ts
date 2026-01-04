@@ -1,9 +1,9 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateIntegration,
+	CursorPagination,
 	Integration,
-	ListIntegrationsQuery,
-	Pagination,
+	IntegrationsPage,
 	UpdateIntegration,
 	UpdateIntegrationCredentials,
 } from "@/datatypes/index.js";
@@ -21,18 +21,18 @@ export class Integrations {
 	/**
 	 * List integrations for a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (integrationType, offset, limit)
-	 * @returns Promise that resolves with the list of integrations
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of integrations
 	 * @throws {ApiError} if the request fails
 	 */
 	async listIntegrations(
 		workspaceId: string,
-		query?: ListIntegrationsQuery & Pagination,
-	): Promise<Integration[]> {
+		query?: CursorPagination,
+	): Promise<IntegrationsPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/integrations/",
+			"/workspaces/{workspaceId}/integrations/",
 			{
-				params: { path: { workspace_id: workspaceId }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -45,8 +45,8 @@ export class Integrations {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getIntegration(integrationId: string): Promise<Integration> {
-		const { data } = await this.#api.GET("/integrations/{integration_id}/", {
-			params: { path: { integration_id: integrationId } },
+		const { data } = await this.#api.GET("/integrations/{integrationId}/", {
+			params: { path: { integrationId } },
 		});
 		return data!;
 	}
@@ -63,9 +63,9 @@ export class Integrations {
 		integration: CreateIntegration,
 	): Promise<Integration> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/integrations/",
+			"/workspaces/{workspaceId}/integrations/",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: integration,
 			},
 		);
@@ -83,8 +83,8 @@ export class Integrations {
 		integrationId: string,
 		updates: UpdateIntegration,
 	): Promise<Integration> {
-		const { data } = await this.#api.PUT("/integrations/{integration_id}/", {
-			params: { path: { integration_id: integrationId } },
+		const { data } = await this.#api.PUT("/integrations/{integrationId}/", {
+			params: { path: { integrationId } },
 			body: updates,
 		});
 		return data!;
@@ -102,9 +102,9 @@ export class Integrations {
 		credentials: UpdateIntegrationCredentials,
 	): Promise<Integration> {
 		const { data } = await this.#api.PATCH(
-			"/integrations/{integration_id}/credentials/",
+			"/integrations/{integrationId}/credentials/",
 			{
-				params: { path: { integration_id: integrationId } },
+				params: { path: { integrationId } },
 				body: credentials,
 			},
 		);
@@ -118,8 +118,8 @@ export class Integrations {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteIntegration(integrationId: string): Promise<void> {
-		await this.#api.DELETE("/integrations/{integration_id}/", {
-			params: { path: { integration_id: integrationId } },
+		await this.#api.DELETE("/integrations/{integrationId}/", {
+			params: { path: { integrationId } },
 		});
 	}
 }

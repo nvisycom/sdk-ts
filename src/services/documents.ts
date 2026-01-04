@@ -1,8 +1,9 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateDocument,
+	CursorPagination,
 	Document,
-	Pagination,
+	DocumentsPage,
 	UpdateDocument,
 } from "@/datatypes/index.js";
 
@@ -19,18 +20,18 @@ export class Documents {
 	/**
 	 * List documents in a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (offset, limit)
-	 * @returns Promise that resolves with the list of documents
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of documents
 	 * @throws {ApiError} if the request fails
 	 */
 	async listDocuments(
 		workspaceId: string,
-		query?: Pagination,
-	): Promise<Document[]> {
+		query?: CursorPagination,
+	): Promise<DocumentsPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/documents",
+			"/workspaces/{workspaceId}/documents",
 			{
-				params: { path: { workspace_id: workspaceId }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -43,8 +44,8 @@ export class Documents {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getDocument(documentId: string): Promise<Document> {
-		const { data } = await this.#api.GET("/documents/{document_id}", {
-			params: { path: { document_id: documentId } },
+		const { data } = await this.#api.GET("/documents/{documentId}", {
+			params: { path: { documentId } },
 		});
 		return data!;
 	}
@@ -61,9 +62,9 @@ export class Documents {
 		document: CreateDocument,
 	): Promise<Document> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/documents",
+			"/workspaces/{workspaceId}/documents",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: document,
 			},
 		);
@@ -81,8 +82,8 @@ export class Documents {
 		documentId: string,
 		updates: UpdateDocument,
 	): Promise<Document> {
-		const { data } = await this.#api.PATCH("/documents/{document_id}", {
-			params: { path: { document_id: documentId } },
+		const { data } = await this.#api.PATCH("/documents/{documentId}", {
+			params: { path: { documentId } },
 			body: updates,
 		});
 		return data!;
@@ -95,8 +96,8 @@ export class Documents {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteDocument(documentId: string): Promise<void> {
-		await this.#api.DELETE("/documents/{document_id}", {
-			params: { path: { document_id: documentId } },
+		await this.#api.DELETE("/documents/{documentId}", {
+			params: { path: { documentId } },
 		});
 	}
 }

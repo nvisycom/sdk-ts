@@ -1,7 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	Notification,
-	Pagination,
+	CursorPagination,
+	NotificationsPage,
 	UnreadStatus,
 } from "@/datatypes/index.js";
 
@@ -17,11 +17,13 @@ export class Notifications {
 
 	/**
 	 * List notifications for the authenticated account
-	 * @param query - Optional query parameters (offset, limit)
-	 * @returns Promise that resolves with the list of notifications
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of notifications
 	 * @throws {ApiError} if the request fails
 	 */
-	async listNotifications(query?: Pagination): Promise<Notification[]> {
+	async listNotifications(
+		query?: CursorPagination,
+	): Promise<NotificationsPage> {
 		const { data } = await this.#api.GET("/notifications/", {
 			params: { query },
 		});

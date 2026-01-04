@@ -1,11 +1,12 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateWorkspace,
+	CursorPagination,
 	NotificationSettings,
-	Pagination,
 	UpdateNotificationSettings,
 	UpdateWorkspace,
 	Workspace,
+	WorkspacesPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -20,11 +21,11 @@ export class Workspaces {
 
 	/**
 	 * List all workspaces
-	 * @param query - Optional query parameters (offset, limit)
-	 * @returns Promise that resolves with the list of workspaces
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of workspaces
 	 * @throws {ApiError} if the request fails
 	 */
-	async listWorkspaces(query?: Pagination): Promise<Workspace[]> {
+	async listWorkspaces(query?: CursorPagination): Promise<WorkspacesPage> {
 		const { data } = await this.#api.GET("/workspaces/", {
 			params: { query },
 		});
@@ -38,8 +39,8 @@ export class Workspaces {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getWorkspace(workspaceId: string): Promise<Workspace> {
-		const { data } = await this.#api.GET("/workspaces/{workspace_id}/", {
-			params: { path: { workspace_id: workspaceId } },
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/", {
+			params: { path: { workspaceId } },
 		});
 		return data!;
 	}
@@ -68,8 +69,8 @@ export class Workspaces {
 		workspaceId: string,
 		updates: UpdateWorkspace,
 	): Promise<Workspace> {
-		const { data } = await this.#api.PATCH("/workspaces/{workspace_id}/", {
-			params: { path: { workspace_id: workspaceId } },
+		const { data } = await this.#api.PATCH("/workspaces/{workspaceId}/", {
+			params: { path: { workspaceId } },
 			body: updates,
 		});
 		return data!;
@@ -82,8 +83,8 @@ export class Workspaces {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteWorkspace(workspaceId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspace_id}/", {
-			params: { path: { workspace_id: workspaceId } },
+		await this.#api.DELETE("/workspaces/{workspaceId}/", {
+			params: { path: { workspaceId } },
 		});
 	}
 
@@ -97,9 +98,9 @@ export class Workspaces {
 		workspaceId: string,
 	): Promise<NotificationSettings> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/notifications",
+			"/workspaces/{workspaceId}/notifications",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 			},
 		);
 		return data!;
@@ -117,9 +118,9 @@ export class Workspaces {
 		settings: UpdateNotificationSettings,
 	): Promise<NotificationSettings> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspace_id}/notifications",
+			"/workspaces/{workspaceId}/notifications",
 			{
-				params: { path: { workspace_id: workspaceId } },
+				params: { path: { workspaceId } },
 				body: settings,
 			},
 		);

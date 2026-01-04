@@ -8,12 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
-## [0.3.0] - 2025-06-30
+## [0.3.0] - 2026-01-04
 
 ### Added
 
 - Logging middleware (`withLogging: true` in config) for request/response
   logging
+- Page types for all paginated responses: `ActivitiesPage`, `AnnotationsPage`,
+  `ApiTokensPage`, `CommentsPage`, `DocumentsPage`, `FilesPage`,
+  `IntegrationsPage`, `IntegrationRunsPage`, `InvitesPage`, `MembersPage`,
+  `NotificationsPage`, `WebhooksPage`, `WorkspacesPage`
 
 ### Changed
 
@@ -24,13 +28,28 @@ and this project adheres to
   `listWorkspaces`)
 - Renamed `ClientError` to `NvisyError` and `ApiError` to `NvisyApiError`
 - `NvisyApiError` now extends `NvisyError`
-- Updated SDK to match latest API schema changes
+- **BREAKING**: API path parameters now use camelCase (`workspaceId` instead of
+  `workspace_id`)
+- **BREAKING**: Pagination changed from offset-based to cursor-based
+  - Query params: `offset`/`limit` → `limit`/`after`
+  - Pagination type: `Pagination` → `CursorPagination`
+- **BREAKING**: All list methods now return paginated response objects instead
+  of arrays
+  - Return type: `Promise<T[]>` → `Promise<TPage>` (e.g., `WorkspacesPage`)
+  - Response structure: `{ items: T[], total?: number, nextCursor?: string }`
+- **BREAKING**: Comments service methods simplified
+  - `updateComment(fileId, commentId, ...)` → `updateComment(commentId, ...)`
+  - `deleteComment(fileId, commentId)` → `deleteComment(commentId)`
+- Renamed query types to match schema (dropped `Query` suffix)
+- Renamed request types (dropped `Request` suffix)
 
 ### Removed
 
 - `ConfigError` and `NetworkError` classes (use `NvisyError` instead)
 - Re-exports of datatypes and services from main entry point (use
   `@nvisy/sdk/datatypes` and `@nvisy/sdk/services`)
+- `DocumentStatus` type (removed from API)
+- `ListIntegrationsQuery` type (integration type filter removed)
 
 ## [0.2.0] - 2025-06-15
 

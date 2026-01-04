@@ -1,8 +1,10 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	ApiToken,
+	ApiTokensPage,
 	ApiTokenWithJWT,
 	CreateApiToken,
+	CursorPagination,
 	UpdateApiToken,
 } from "@/datatypes/index.js";
 
@@ -18,16 +20,13 @@ export class ApiTokens {
 
 	/**
 	 * List all API tokens for the authenticated account
-	 * @param options - Pagination options
-	 * @returns Promise that resolves with the list of API tokens
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of API tokens
 	 * @throws {ApiError} if the request fails
 	 */
-	async listApiTokens(options?: {
-		offset?: number;
-		limit?: number;
-	}): Promise<ApiToken[]> {
+	async listApiTokens(query?: CursorPagination): Promise<ApiTokensPage> {
 		const { data } = await this.#api.GET("/api-tokens/", {
-			params: { query: options },
+			params: { query },
 		});
 		return data!;
 	}
@@ -39,8 +38,8 @@ export class ApiTokens {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getApiToken(tokenId: string): Promise<ApiToken> {
-		const { data } = await this.#api.GET("/api-tokens/{token_id}/", {
-			params: { path: { token_id: tokenId } },
+		const { data } = await this.#api.GET("/api-tokens/{tokenId}/", {
+			params: { path: { tokenId } },
 		});
 		return data!;
 	}
@@ -69,8 +68,8 @@ export class ApiTokens {
 		tokenId: string,
 		updates: UpdateApiToken,
 	): Promise<ApiToken> {
-		const { data } = await this.#api.PATCH("/api-tokens/{token_id}/", {
-			params: { path: { token_id: tokenId } },
+		const { data } = await this.#api.PATCH("/api-tokens/{tokenId}/", {
+			params: { path: { tokenId } },
 			body: updates,
 		});
 		return data!;
@@ -83,8 +82,8 @@ export class ApiTokens {
 	 * @throws {ApiError} if the request fails
 	 */
 	async revokeApiToken(tokenId: string): Promise<void> {
-		await this.#api.DELETE("/api-tokens/{token_id}/", {
-			params: { path: { token_id: tokenId } },
+		await this.#api.DELETE("/api-tokens/{tokenId}/", {
+			params: { path: { tokenId } },
 		});
 	}
 }
