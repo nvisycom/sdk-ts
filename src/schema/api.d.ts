@@ -5977,10 +5977,8 @@ export interface components {
 			accountId: string;
 			/** @description Human-readable name for the API token. */
 			name: string;
-			/** @description Type of token (web, mobile, api, etc.). */
+			/** @description Type of token (web, api, etc.). */
 			sessionType: components["schemas"]["ApiTokenType"];
-			/** @description Whether the token has expired. */
-			isExpired: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of token creation.
@@ -6671,6 +6669,13 @@ export interface components {
 			 * @description Reference to the workspace this webhook belongs to.
 			 */
 			workspaceId: string;
+			/** @description Origin type of the webhook (provided or integration). */
+			webhookType: components["schemas"]["WebhookType"];
+			/**
+			 * Format: uuid
+			 * @description Reference to integration (present for integration type webhooks).
+			 */
+			integrationId?: string | null;
 			/** @description Human-readable name for the webhook. */
 			displayName: string;
 			/** @description The URL to send webhook payloads to. */
@@ -6704,6 +6709,13 @@ export interface components {
 			 */
 			updatedAt: string;
 		};
+		/**
+		 * @description Defines the origin type of a workspace webhook.
+		 *
+		 *      This enumeration corresponds to the `WEBHOOK_TYPE` PostgreSQL enum and is used
+		 *      to distinguish between user-created webhooks and those created by integrations.
+		 */
+		WebhookType: "provided" | "integration";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
