@@ -1,43 +1,50 @@
 /**
  * @fileoverview Main client for the Nvisy SDK.
  *
- * This module exports the {@link Client} class, which is the primary entry point
+ * This module exports the {@link Nvisy} class, which is the primary entry point
  * for interacting with the Nvisy document processing API.
  *
  * @module client
  *
  * @example
  * ```typescript
- * const client = new Client({ apiToken: "your-api-token" });
- * const account = await client.account.get();
+ * const nvisy = new Nvisy({ apiToken: "your-api-token" });
+ * const account = await nvisy.account.getAccount();
  * ```
  */
 
 import createClient, { type Client as OpenApiClient } from "openapi-fetch";
 import { type ClientConfig, DEFAULTS } from "@/config.js";
-import { ConfigError } from "@/errors.js";
-import { errorMiddleware } from "@/middleware/index.js";
+import { NvisyError } from "@/errors.js";
+import {
+	createLoggingMiddleware,
+	errorMiddleware,
+} from "@/middleware/index.js";
 import type { paths } from "@/schema/api.js";
 import {
-	AccountService,
-	ApiTokensService,
-	AuthService,
-	CommentsService,
-	DocumentsService,
-	FilesService,
-	IntegrationsService,
-	InvitesService,
-	MembersService,
-	StatusService,
-	WebhooksService,
-	WorkspacesService,
+	Account,
+	Activities,
+	Annotations,
+	ApiTokens,
+	Auth,
+	Comments,
+	Documents,
+	Files,
+	Integrations,
+	Invites,
+	Members,
+	Notifications,
+	Runs,
+	Status,
+	Webhooks,
+	Workspaces,
 } from "@/services/index.js";
 
 /**
  * Typed openapi-fetch client for the Nvisy API.
  *
  * This type represents the low-level HTTP client configured with the Nvisy API schema.
- * It's exposed via {@link Client.api} for advanced use cases requiring direct API access.
+ * It's exposed via {@link Nvisy.api} for advanced use cases requiring direct API access.
  */
 export type ApiClient = OpenApiClient<paths>;
 
@@ -53,12 +60,12 @@ type ResolvedConfig = Required<ClientConfig>;
  *
  * @example
  * ```typescript
- * const client = new Client({ apiToken: "your-api-token" });
- * const account = await client.account.get();
- * const workspaces = await client.workspaces.list();
+ * const nvisy = new Nvisy({ apiToken: "your-api-token" });
+ * const account = await nvisy.account.getAccount();
+ * const workspaces = await nvisy.workspaces.listWorkspaces();
  * ```
  */
-export class Client {
+export class Nvisy {
 	/**
 	 * The resolved client configuration with defaults applied.
 	 * @internal
@@ -75,15 +82,15 @@ export class Client {
 	 * Creates a new Nvisy client instance.
 	 *
 	 * @param config - Configuration options with required `apiToken`
-	 * @throws {ConfigError} If the API token is invalid
+	 * @throws {NvisyError} If the API token is invalid
 	 *
 	 * @example
 	 * ```typescript
-	 * const client = new Client({
+	 * const nvisy = new Nvisy({
 	 *   apiToken: "your-api-token",
 	 *   baseUrl: "https://custom.api.nvisy.com",
 	 * });
-	 * const account = await client.account.get();
+	 * const account = await nvisy.account.getAccount();
 	 * ```
 	 */
 	constructor(config: ClientConfig) {
@@ -94,6 +101,7 @@ export class Client {
 			baseUrl: config.baseUrl ?? DEFAULTS.BASE_URL,
 			headers: config.headers ?? {},
 			userAgent: config.userAgent ?? DEFAULTS.USER_AGENT,
+			withLogging: config.withLogging ?? false,
 		};
 
 		this.#api = this.#createApiClient();
@@ -118,6 +126,10 @@ export class Client {
 			headers,
 		});
 
+		if (this.#config.withLogging) {
+			api.use(createLoggingMiddleware());
+		}
+
 		api.use(errorMiddleware);
 		return api;
 	}
@@ -127,24 +139,21 @@ export class Client {
 	 *
 	 * @param apiToken - The API token to validate
 	 * @returns The trimmed API token if valid
-	 * @throws {ConfigError} If the API token is invalid
+	 * @throws {NvisyError} If the API token is invalid
 	 * @internal
 	 */
 	#validateApiToken(apiToken: string): string {
 		if (typeof apiToken !== "string" || apiToken.trim().length === 0) {
-			throw ConfigError.invalidField("apiToken", "must be a non-empty string");
+			throw new NvisyError("API token must be a non-empty string");
 		}
 
 		const trimmedToken = apiToken.trim();
 		if (trimmedToken.length < 10) {
-			throw ConfigError.invalidField(
-				"apiToken",
-				"must be at least 10 characters",
-			);
+			throw new NvisyError("API token must be at least 10 characters");
 		}
 
-		if (!/^[a-zA-Z0-9_-]+$/.test(trimmedToken)) {
-			throw ConfigError.invalidField("apiToken", "contains invalid characters");
+		if (!/^[a-zA-Z0-9_.\-]+$/.test(trimmedToken)) {
+			throw new NvisyError("API token contains invalid characters");
 		}
 
 		return trimmedToken;
@@ -158,20 +167,20 @@ export class Client {
 	 * is preserved in the new client.
 	 *
 	 * @param apiToken - The new API token
-	 * @returns A new Client instance with the new token
-	 * @throws {ConfigError} If the API token is invalid
+	 * @returns A new Nvisy instance with the new token
+	 * @throws {NvisyError} If the API token is invalid
 	 *
 	 * @example
 	 * ```typescript
-	 * const client = new Client({ apiToken: "original-token" });
-	 * const newClient = client.withApiToken("new-token");
+	 * const nvisy = new Nvisy({ apiToken: "original-token" });
+	 * const newNvisy = nvisy.withApiToken("new-token");
 	 *
-	 * // newClient uses the new token
-	 * // client still uses the original token
+	 * // newNvisy uses the new token
+	 * // nvisy still uses the original token
 	 * ```
 	 */
-	withApiToken(apiToken: string): Client {
-		return new Client({ ...this.#config, apiToken });
+	withApiToken(apiToken: string): Nvisy {
+		return new Nvisy({ ...this.#config, apiToken });
 	}
 
 	/**
@@ -197,109 +206,113 @@ export class Client {
 
 	/**
 	 * Service for authentication operations (login, signup, logout).
-	 *
-	 * @returns The AuthService instance
 	 */
-	get auth(): AuthService {
-		return new AuthService(this.#api);
+	get auth(): Auth {
+		return new Auth(this.#api);
 	}
 
 	/**
 	 * Service for API status and health checks.
-	 *
-	 * @returns The StatusService instance
 	 */
-	get status(): StatusService {
-		return new StatusService(this.#api);
+	get status(): Status {
+		return new Status(this.#api);
 	}
 
 	/**
 	 * Service for managing the authenticated user's account.
-	 *
-	 * @returns The AccountService instance
 	 */
-	get account(): AccountService {
-		return new AccountService(this.#api);
+	get account(): Account {
+		return new Account(this.#api);
+	}
+
+	/**
+	 * Service for viewing workspace activities.
+	 */
+	get activities(): Activities {
+		return new Activities(this.#api);
+	}
+
+	/**
+	 * Service for managing file annotations.
+	 */
+	get annotations(): Annotations {
+		return new Annotations(this.#api);
 	}
 
 	/**
 	 * Service for managing API tokens.
-	 *
-	 * @returns The ApiTokensService instance
 	 */
-	get apiTokens(): ApiTokensService {
-		return new ApiTokensService(this.#api);
+	get apiTokens(): ApiTokens {
+		return new ApiTokens(this.#api);
 	}
 
 	/**
 	 * Service for managing file comments.
-	 *
-	 * @returns The CommentsService instance
 	 */
-	get comments(): CommentsService {
-		return new CommentsService(this.#api);
+	get comments(): Comments {
+		return new Comments(this.#api);
 	}
 
 	/**
 	 * Service for document operations.
-	 *
-	 * @returns The DocumentsService instance
 	 */
-	get documents(): DocumentsService {
-		return new DocumentsService(this.#api);
+	get documents(): Documents {
+		return new Documents(this.#api);
 	}
 
 	/**
 	 * Service for file operations (upload, download, delete).
-	 *
-	 * @returns The FilesService instance
 	 */
-	get files(): FilesService {
-		return new FilesService(this.#api);
+	get files(): Files {
+		return new Files(this.#api);
 	}
 
 	/**
 	 * Service for managing integrations.
-	 *
-	 * @returns The IntegrationsService instance
 	 */
-	get integrations(): IntegrationsService {
-		return new IntegrationsService(this.#api);
+	get integrations(): Integrations {
+		return new Integrations(this.#api);
 	}
 
 	/**
 	 * Service for managing workspace invitations.
-	 *
-	 * @returns The InvitesService instance
 	 */
-	get invites(): InvitesService {
-		return new InvitesService(this.#api);
+	get invites(): Invites {
+		return new Invites(this.#api);
 	}
 
 	/**
 	 * Service for managing workspace members.
-	 *
-	 * @returns The MembersService instance
 	 */
-	get members(): MembersService {
-		return new MembersService(this.#api);
+	get members(): Members {
+		return new Members(this.#api);
+	}
+
+	/**
+	 * Service for managing notifications.
+	 */
+	get notifications(): Notifications {
+		return new Notifications(this.#api);
+	}
+
+	/**
+	 * Service for managing processing runs.
+	 */
+	get runs(): Runs {
+		return new Runs(this.#api);
 	}
 
 	/**
 	 * Service for managing webhooks.
-	 *
-	 * @returns The WebhooksService instance
 	 */
-	get webhooks(): WebhooksService {
-		return new WebhooksService(this.#api);
+	get webhooks(): Webhooks {
+		return new Webhooks(this.#api);
 	}
 
 	/**
 	 * Service for managing workspaces.
-	 *
-	 * @returns The WorkspacesService instance
 	 */
-	get workspaces(): WorkspacesService {
-		return new WorkspacesService(this.#api);
+	get workspaces(): Workspaces {
+		return new Workspaces(this.#api);
 	}
 }

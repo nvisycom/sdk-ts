@@ -1,9 +1,9 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CreateIntegration,
+	CursorPagination,
 	Integration,
-	ListIntegrationsQuery,
-	Pagination,
+	IntegrationsPage,
 	UpdateIntegration,
 	UpdateIntegrationCredentials,
 } from "@/datatypes/index.js";
@@ -11,7 +11,7 @@ import type {
 /**
  * Service for handling integration operations
  */
-export class IntegrationsService {
+export class Integrations {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -21,16 +21,16 @@ export class IntegrationsService {
 	/**
 	 * List integrations for a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (integrationType, offset, limit)
-	 * @returns Promise that resolves with the list of integrations
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of integrations
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(
+	async listIntegrations(
 		workspaceId: string,
-		query?: ListIntegrationsQuery & Pagination,
-	): Promise<Integration[]> {
+		query?: CursorPagination,
+	): Promise<IntegrationsPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspace_id}/integrations/",
+			"/workspaces/{workspaceId}/integrations/",
 			{
 				params: { path: { workspaceId }, query },
 			},
@@ -44,8 +44,8 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the integration details
 	 * @throws {ApiError} if the request fails
 	 */
-	async get(integrationId: string): Promise<Integration> {
-		const { data } = await this.#api.GET("/integrations/{integration_id}/", {
+	async getIntegration(integrationId: string): Promise<Integration> {
+		const { data } = await this.#api.GET("/integrations/{integrationId}/", {
 			params: { path: { integrationId } },
 		});
 		return data!;
@@ -58,12 +58,12 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the created integration
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(
+	async createIntegration(
 		workspaceId: string,
 		integration: CreateIntegration,
 	): Promise<Integration> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspace_id}/integrations/",
+			"/workspaces/{workspaceId}/integrations/",
 			{
 				params: { path: { workspaceId } },
 				body: integration,
@@ -79,11 +79,11 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the updated integration
 	 * @throws {ApiError} if the request fails
 	 */
-	async update(
+	async updateIntegration(
 		integrationId: string,
 		updates: UpdateIntegration,
 	): Promise<Integration> {
-		const { data } = await this.#api.PUT("/integrations/{integration_id}/", {
+		const { data } = await this.#api.PUT("/integrations/{integrationId}/", {
 			params: { path: { integrationId } },
 			body: updates,
 		});
@@ -97,12 +97,12 @@ export class IntegrationsService {
 	 * @returns Promise that resolves with the updated integration
 	 * @throws {ApiError} if the request fails
 	 */
-	async updateCredentials(
+	async updateIntegrationCredentials(
 		integrationId: string,
 		credentials: UpdateIntegrationCredentials,
 	): Promise<Integration> {
 		const { data } = await this.#api.PATCH(
-			"/integrations/{integration_id}/credentials/",
+			"/integrations/{integrationId}/credentials/",
 			{
 				params: { path: { integrationId } },
 				body: credentials,
@@ -117,8 +117,8 @@ export class IntegrationsService {
 	 * @returns Promise that resolves when the integration is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(integrationId: string): Promise<void> {
-		await this.#api.DELETE("/integrations/{integration_id}/", {
+	async deleteIntegration(integrationId: string): Promise<void> {
+		await this.#api.DELETE("/integrations/{integrationId}/", {
 			params: { path: { integrationId } },
 		});
 	}

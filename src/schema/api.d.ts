@@ -196,24 +196,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path?: never;
@@ -221,12 +210,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiToken"][];
+						"application/json": components["schemas"]["ApiTokensPage"];
 					};
 				};
 				/**
@@ -264,7 +260,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create API token
-		 * @description Creates a new API token. The full token is only shown once upon creation.
+		 * @description Creates a new API token. The JWT token is only shown once upon creation.
 		 */
 		post: {
 			parameters: {
@@ -280,13 +276,13 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response when creating a new API token (includes actual tokens, shown only once). */
+				/** @description API token with JWT token string (only returned on creation). */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiTokenWithSecret"];
+						"application/json": components["schemas"]["ApiTokenWithJWT"];
 					};
 				};
 				/**
@@ -327,7 +323,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/api-tokens/{access_token}/": {
+	"/api-tokens/{tokenId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -342,7 +338,10 @@ export interface paths {
 			parameters: {
 				query?: never;
 				header?: never;
-				path?: never;
+				path: {
+					/** @description Unique identifier of the API token. */
+					tokenId: string;
+				};
 				cookie?: never;
 			};
 			requestBody?: never;
@@ -398,7 +397,10 @@ export interface paths {
 			parameters: {
 				query?: never;
 				header?: never;
-				path?: never;
+				path: {
+					/** @description Unique identifier of the API token. */
+					tokenId: string;
+				};
 				cookie?: never;
 			};
 			requestBody?: never;
@@ -461,13 +463,16 @@ export interface paths {
 		head?: never;
 		/**
 		 * Update API token
-		 * @description Updates an existing API token's name or description.
+		 * @description Updates an existing API token's name.
 		 */
 		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
-				path?: never;
+				path: {
+					/** @description Unique identifier of the API token. */
+					tokenId: string;
+				};
 				cookie?: never;
 			};
 			/** @description Request to update an existing API token. */
@@ -549,24 +554,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path?: never;
@@ -574,12 +568,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Workspace"][];
+						"application/json": components["schemas"]["WorkspacesPage"];
 					};
 				};
 				/**
@@ -616,17 +617,6 @@ export interface paths {
 			 *
 			 *      Creates a new workspace with the specified configuration. The creator is
 			 *      automatically added as an owner of the workspace.
-			 *
-			 *      # Example
-			 *
-			 *      ```json
-			 *      {
-			 *        "displayName": "My Workspace",
-			 *        "description": "A sample workspace",
-			 *        "keepForSec": 86400,
-			 *        "autoCleanup": true
-			 *      }
-			 *      ```
 			 */
 			requestBody: {
 				content: {
@@ -681,7 +671,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/": {
+	"/workspaces/{workspaceId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -852,15 +842,6 @@ export interface paths {
 			 * @description Request payload to update an existing workspace.
 			 *
 			 *      All fields are optional; only provided fields will be updated.
-			 *
-			 *      # Example
-			 *
-			 *      ```json
-			 *      {
-			 *        "displayName": "Updated Workspace Name",
-			 *        "enableComments": true
-			 *      }
-			 *      ```
 			 */
 			requestBody: {
 				content: {
@@ -926,7 +907,155 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/integrations/": {
+	"/workspaces/{workspaceId}/notifications": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get notification settings
+		 * @description Returns the notification settings for the authenticated user in a workspace.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response for notification settings within a workspace. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["NotificationSettings"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/**
+		 * Update notification settings
+		 * @description Updates the notification settings for the authenticated user in a workspace.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload for updating notification settings. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateNotificationSettings"];
+				};
+			};
+			responses: {
+				/** @description Response for notification settings within a workspace. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["NotificationSettings"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/integrations/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -940,26 +1069,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Filter by integration type. */
-					integrationType?: components["schemas"]["IntegrationType"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -970,12 +1086,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Integration"][];
+						"application/json": components["schemas"]["IntegrationsPage"];
 					};
 				};
 				/**
@@ -1109,7 +1232,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/integrations/{integration_id}/": {
+	"/integrations/{integrationId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1371,7 +1494,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/integrations/{integration_id}/credentials/": {
+	"/integrations/{integrationId}/credentials/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1478,7 +1601,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/runs/": {
+	"/workspaces/{workspaceId}/runs/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1492,24 +1615,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -1520,12 +1632,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["IntegrationRun"][];
+						"application/json": components["schemas"]["IntegrationRunsPage"];
 					};
 				};
 				/**
@@ -1568,7 +1687,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/runs/{run_id}": {
+	"/runs/{runId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1655,7 +1774,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/invites/": {
+	"/workspaces/{workspaceId}/invites/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1675,24 +1794,13 @@ export interface paths {
 					sortBy?: components["schemas"]["InviteSortField"] | null;
 					/** @description Sort order (asc or desc). */
 					order?: components["schemas"]["SortOrder"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -1703,12 +1811,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Invite"][];
+						"application/json": components["schemas"]["InvitesPage"];
 					};
 				};
 				/**
@@ -1848,7 +1963,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/invites/code/": {
+	"/workspaces/{workspaceId}/invites/code/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1940,7 +2055,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/invites/{invite_id}/": {
+	"/invites/{inviteId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1949,100 +2064,11 @@ export interface paths {
 		};
 		get?: never;
 		put?: never;
-		post?: never;
-		/**
-		 * Cancel invitation
-		 * @description Permanently cancels a pending invitation. The invitee will no longer be able to accept it.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the invite. */
-					inviteId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/invites/{invite_id}/reply/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
 		/**
 		 * Reply to invitation
 		 * @description Allows the invitee to accept or decline a workspace invitation.
 		 */
-		patch: {
+		post: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -2121,22 +2147,93 @@ export interface paths {
 				};
 			};
 		};
+		/**
+		 * Cancel invitation
+		 * @description Permanently cancels a pending invitation. The invitee will no longer be able to accept it.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the invite. */
+					inviteId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
-	"/invites/{invite_code}/join/": {
+	"/invites/code/{inviteCode}/": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
-		put?: never;
 		/**
-		 * Join via invite code
-		 * @description Joins a workspace using a valid invite code. The user becomes a member with the role specified in the code.
+		 * Preview invite
+		 * @description Returns workspace information for an invite code, allowing users to preview the workspace before joining. Does not require authentication.
 		 */
-		post: {
+		get: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -2148,6 +2245,81 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Preview of an invite with workspace details for display before joining.
+				 *
+				 *      This is a public-facing response that shows workspace information
+				 *      to help users decide whether to join via an invite code.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["InvitePreview"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Reply to invite code
+		 * @description Accepts or declines a workspace invite code. If accepted (the default when no body is provided), the user becomes a member with the role specified in the code. If declined, no action is taken.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The invite code to use for joining the workspace. */
+					inviteCode: string;
+				};
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["ReplyInvite"] | null;
+				};
+			};
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Member"] | null;
+					};
+				};
 				/** @description Represents a workspace member. */
 				201: {
 					headers: {
@@ -2225,7 +2397,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/": {
+	"/workspaces/{workspaceId}/members/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2247,24 +2419,13 @@ export interface paths {
 					sortBy?: components["schemas"]["MemberSortField"] | null;
 					/** @description Sort order (asc or desc). */
 					order?: components["schemas"]["SortOrder"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -2275,12 +2436,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"][];
+						"application/json": components["schemas"]["MembersPage"];
 					};
 				};
 				/**
@@ -2338,7 +2506,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/leave": {
+	"/workspaces/{workspaceId}/members/leave": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2423,7 +2591,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/{account_id}/": {
+	"/workspaces/{workspaceId}/members/{accountId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2598,7 +2766,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/members/{account_id}/role": {
+	"/workspaces/{workspaceId}/members/{accountId}/role": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2630,7 +2798,7 @@ export interface paths {
 			/** @description Request to update a member's role. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateMemberRole"];
+					"application/json": components["schemas"]["UpdateMember"];
 				};
 			};
 			responses: {
@@ -2707,7 +2875,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/webhooks/": {
+	"/workspaces/{workspaceId}/webhooks/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2720,7 +2888,15 @@ export interface paths {
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
+				};
 				header?: never;
 				path: {
 					/** @description Unique identifier of the workspace. */
@@ -2730,12 +2906,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Webhook"][];
+						"application/json": components["schemas"]["WebhooksPage"];
 					};
 				};
 				/**
@@ -2773,7 +2956,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create webhook
-		 * @description Creates a new webhook. The secret is only shown once at creation.
+		 * @description Creates a new webhook for the workspace.
 		 */
 		post: {
 			parameters: {
@@ -2792,13 +2975,13 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Workspace webhook response with secret (returned only at creation). */
+				/** @description Workspace webhook response. */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WebhookWithSecret"];
+						"application/json": components["schemas"]["Webhook"];
 					};
 				};
 				/**
@@ -2854,7 +3037,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/webhooks/{webhook_id}/": {
+	"/webhooks/{webhookId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3101,7 +3284,99 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/ws/": {
+	"/webhooks/{webhookId}/test/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Test webhook
+		 * @description Sends a test payload to the webhook endpoint and returns the result.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the webhook. */
+					webhookId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload for testing a webhook. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["TestWebhook"];
+				};
+			};
+			responses: {
+				/** @description Result of a webhook delivery attempt. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WebhookResult"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/ws/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3186,7 +3461,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/files/": {
+	"/workspaces/{workspaceId}/files/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3195,35 +3470,20 @@ export interface paths {
 		};
 		/**
 		 * List files
-		 * @description Lists all files in a workspace with optional filtering by format and sorting.
+		 * @description Lists files in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages.
 		 */
 		get: {
 			parameters: {
 				query?: {
 					/** @description Filter by file formats. */
 					formats?: components["schemas"]["FileFormat"][] | null;
-					/** @description Sort by field. */
-					sortBy?: components["schemas"]["FileSortField"] | null;
-					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["SortOrder"] | null;
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -3234,12 +3494,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["File"][];
+						"application/json": components["schemas"]["FilesPage"];
 					};
 				};
 				/**
@@ -3357,125 +3624,18 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/files/download": {
+	"/workspaces/{workspaceId}/files/batch": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
-		put?: never;
-		/**
-		 * Download multiple files
-		 * @description Downloads multiple files as a zip archive. Provide a list of file IDs to include in the archive.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to download multiple files. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["DownloadMultipleFilesRequest"];
-				};
-			};
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspace_id}/files/archive": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
 		/**
 		 * Download archived files
 		 * @description Downloads all or specific workspace files as a compressed archive. Supports zip and tar.gz formats.
 		 */
-		post: {
+		get: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -3488,7 +3648,7 @@ export interface paths {
 			/** @description Request to download files as an archive. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["DownloadArchivedFilesRequest"];
+					"application/json": components["schemas"]["DownloadFiles"];
 				};
 			};
 			responses: {
@@ -3561,13 +3721,104 @@ export interface paths {
 				};
 			};
 		};
-		delete?: never;
+		put?: never;
+		post?: never;
+		/**
+		 * Delete multiple files
+		 * @description Soft deletes multiple files by setting deleted timestamps. Files can be recovered within the retention period.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to delete multiple files. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["DeleteFiles"];
+				};
+			};
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		options?: never;
 		head?: never;
 		patch?: never;
 		trace?: never;
 	};
-	"/files/{file_id}": {
+	"/files/{fileId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3575,8 +3826,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Download file
-		 * @description Downloads a file by ID. Returns the file content as a binary stream.
+		 * Get file metadata
+		 * @description Returns file metadata without downloading the file content.
 		 */
 		get: {
 			parameters: {
@@ -3590,12 +3841,14 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
+				/** @description Represents an uploaded file. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content?: never;
+					content: {
+						"application/json": components["schemas"]["File"];
+					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -3812,7 +4065,92 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/documents": {
+	"/files/{fileId}/content": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Download file
+		 * @description Downloads a file by ID. Returns the file content as a binary stream.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the file. */
+					fileId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/documents": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3826,24 +4164,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -3854,12 +4181,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Document"][];
+						"application/json": components["schemas"]["DocumentsPage"];
 					};
 				};
 				/**
@@ -3978,7 +4312,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/documents/{document_id}": {
+	"/documents/{documentId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4225,7 +4559,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/files/{file_id}/comments": {
+	"/files/{fileId}/comments": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4239,24 +4573,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -4267,12 +4590,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Comment"][];
+						"application/json": components["schemas"]["CommentsPage"];
 					};
 				};
 				/**
@@ -4391,7 +4721,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/files/{file_id}/comments/{comment_id}": {
+	"/comments/{commentId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4410,8 +4740,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the file. */
-					fileId: string;
 					/** @description Unique identifier of the comment. */
 					commentId: string;
 				};
@@ -4420,7 +4748,7 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/** @description Comment deleted. */
-				200: {
+				204: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -4484,8 +4812,6 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the file. */
-					fileId: string;
 					/** @description Unique identifier of the comment. */
 					commentId: string;
 				};
@@ -4571,7 +4897,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/files/{file_id}/annotations/": {
+	"/files/{fileId}/annotations/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4585,24 +4911,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -4613,12 +4928,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Annotation"][];
+						"application/json": components["schemas"]["AnnotationsPage"];
 					};
 				};
 				/**
@@ -4767,7 +5089,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/annotations/{annotation_id}": {
+	"/annotations/{annotationId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5014,7 +5336,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspace_id}/activities/": {
+	"/workspaces/{workspaceId}/activities/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5028,24 +5350,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path: {
@@ -5056,12 +5367,19 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Activity"][];
+						"application/json": components["schemas"]["ActivitysPage"];
 					};
 				};
 				/**
@@ -5118,24 +5436,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/**
-					 * @description The number of records to skip before starting to return results.
-					 *
-					 *      For performance reasons, this is limited to prevent expensive deep
-					 *      pagination queries. Consider using cursor-based pagination for
-					 *      better performance when dealing with large datasets.
-					 *
-					 *      **Performance Impact**: High offsets require the database to scan
-					 *      and skip many records, which can be slow for large tables.
-					 */
-					offset?: number | null;
-					/**
-					 * @description The maximum number of records to return in a single request.
-					 *
-					 *      This is balanced between usability and performance. Very large limits
-					 *      can cause memory pressure and slow response times.
-					 */
+					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number | null;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *      Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string | null;
 				};
 				header?: never;
 				path?: never;
@@ -5143,12 +5450,73 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *      Provides a consistent structure for all paginated API responses with
+				 *      cursor-based pagination support. When `next_cursor` is present, there
+				 *      are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Notification"][];
+						"application/json": components["schemas"]["NotificationsPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/notifications/unread": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get unread notifications count
+		 * @description Returns the number of unread notifications for the authenticated account.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for unread notifications status. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["UnreadStatus"];
 					};
 				};
 				/**
@@ -5234,7 +5602,7 @@ export interface paths {
 				 *      response, including the error name, message, HTTP status code, resource
 				 *      information, and user-friendly messages.
 				 */
-				404: {
+				401: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -5483,9 +5851,7 @@ export interface components {
 			/** @description Helpful suggestion for resolving the error (optional) */
 			suggestion?: string | null;
 			/** @description Validation error details for field-specific errors */
-			validationErrors?:
-				| components["schemas"]["ValidationErrorDetail"][]
-				| null;
+			validation?: components["schemas"]["ValidationErrorDetail"][] | null;
 		};
 		/** @description Validation error details for field-specific errors. */
 		ValidationErrorDetail: {
@@ -5511,31 +5877,25 @@ export interface components {
 			emailAddress?: string | null;
 			/** @description New password (will be hashed before storage). */
 			password?: string | null;
-			/** @description Company or organization name. */
+			/** @description Company or organization name (empty string clears the value). */
 			companyName?: string | null;
 		};
 		/** @description Request to create a new API token. */
 		CreateApiToken: {
-			/** @description Optional description for the API token (max 500 characters). */
-			description?: string | null;
 			/** @description Human-readable name for the API token (1-100 characters). */
 			name: string;
-			/**
-			 * @description When the token expires.
-			 * @default in7Days
-			 */
-			expires: components["schemas"]["TokenExpiration"];
+			/** @description When the token expires. */
+			expiresIn: components["schemas"]["TokenExpiration"];
 		};
 		/** @description Expiration options for API tokens. */
 		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
-		/** @description Response when creating a new API token (includes actual tokens, shown only once). */
-		ApiTokenWithSecret: {
-			/** @description Description of the API token. */
-			description?: string | null;
-			/** @description Shortened access token identifier for display. */
-			accessTokenPreview: string;
-			/** @description Shortened refresh token identifier for display. */
-			refreshTokenPreview: string;
+		/** @description API token with JWT token string (only returned on creation). */
+		ApiTokenWithJWT: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
 			/**
 			 * Format: uuid
 			 * @description Reference to the account this token belongs to.
@@ -5545,8 +5905,6 @@ export interface components {
 			name: string;
 			/** @description Type of token (web, mobile, api, etc.). */
 			sessionType: components["schemas"]["ApiTokenType"];
-			/** @description Whether the token has expired. */
-			isExpired: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of token creation.
@@ -5554,24 +5912,11 @@ export interface components {
 			issuedAt: string;
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the token expires and becomes invalid.
+			 * @description Timestamp when the token expires (None = never expires).
 			 */
-			expiredAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of most recent token activity.
-			 */
-			lastUsedAt?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Full access token (only shown once at creation).
-			 */
-			accessToken: string;
-			/**
-			 * Format: uuid
-			 * @description Full refresh token (only shown once at creation).
-			 */
-			refreshToken: string;
+			expiredAt?: string | null;
+			/** @description The JWT token string (only shown once on creation). */
+			token: string;
 		};
 		/**
 		 * @description Defines the type of API token for authentication and tracking purposes.
@@ -5579,43 +5924,52 @@ export interface components {
 		 *      This enumeration corresponds to the `API_TOKEN_TYPE` PostgreSQL enum and is used
 		 *      to categorize different types of authentication tokens based on the client type.
 		 */
-		ApiTokenType: "web" | "mobile" | "api" | "desktop";
+		ApiTokenType: "web" | "api" | "cli";
 		/**
-		 * @description Pagination parameters with performance and security validation.
+		 * @description Cursor-based pagination query parameters.
 		 *
-		 *      `Pagination` allows clients to retrieve data in chunks, which helps manage
-		 *      large datasets by specifying how many records to skip and how many to fetch.
+		 *      This is the preferred pagination method for API endpoints. It provides:
+		 *      - Consistent performance regardless of page depth
+		 *      - Stable results even when items are added/removed
+		 *      - Efficient "load more" / infinite scroll patterns
 		 */
-		Pagination: {
+		CursorPagination: {
 			/**
 			 * Format: uint32
-			 * @description The number of records to skip before starting to return results.
-			 *
-			 *      For performance reasons, this is limited to prevent expensive deep
-			 *      pagination queries. Consider using cursor-based pagination for
-			 *      better performance when dealing with large datasets.
-			 *
-			 *      **Performance Impact**: High offsets require the database to scan
-			 *      and skip many records, which can be slow for large tables.
-			 */
-			offset?: number | null;
-			/**
-			 * Format: uint32
-			 * @description The maximum number of records to return in a single request.
-			 *
-			 *      This is balanced between usability and performance. Very large limits
-			 *      can cause memory pressure and slow response times.
+			 * @description The maximum number of records to return (1-100, default: 20).
 			 */
 			limit?: number | null;
+			/**
+			 * @description Cursor pointing to the last item of the previous page.
+			 *      Obtain this from the `nextCursor` field in the response.
+			 */
+			after?: string | null;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		ApiTokensPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["ApiToken"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/** @description API token response structure. */
 		ApiToken: {
-			/** @description Description of the API token. */
-			description?: string | null;
-			/** @description Shortened access token identifier for display. */
-			accessTokenPreview: string;
-			/** @description Shortened refresh token identifier for display. */
-			refreshTokenPreview: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
 			/**
 			 * Format: uuid
 			 * @description Reference to the account this token belongs to.
@@ -5623,10 +5977,8 @@ export interface components {
 			accountId: string;
 			/** @description Human-readable name for the API token. */
 			name: string;
-			/** @description Type of token (web, mobile, api, etc.). */
+			/** @description Type of token (web, api, etc.). */
 			sessionType: components["schemas"]["ApiTokenType"];
-			/** @description Whether the token has expired. */
-			isExpired: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of token creation.
@@ -5634,19 +5986,30 @@ export interface components {
 			issuedAt: string;
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the token expires and becomes invalid.
+			 * @description Timestamp when the token expires (None = never expires).
 			 */
-			expiredAt: string;
+			expiredAt?: string | null;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of most recent token activity.
 			 */
 			lastUsedAt?: string | null;
 		};
+		/**
+		 * @description Path parameters for API token operations.
+		 *
+		 *      Since token IDs are globally unique UUIDs, account context is verified
+		 *      by comparing with the authenticated user's account ID.
+		 */
+		TokenPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the API token.
+			 */
+			tokenId: string;
+		};
 		/** @description Request to update an existing API token. */
 		UpdateApiToken: {
-			/** @description Updated description for the API token (max 500 characters). */
-			description?: string | null;
 			/** @description Updated name for the API token (1-100 characters). */
 			name?: string | null;
 		};
@@ -5655,42 +6018,14 @@ export interface components {
 		 *
 		 *      Creates a new workspace with the specified configuration. The creator is
 		 *      automatically added as an owner of the workspace.
-		 *
-		 *      # Example
-		 *
-		 *      ```json
-		 *      {
-		 *        "displayName": "My Workspace",
-		 *        "description": "A sample workspace",
-		 *        "keepForSec": 86400,
-		 *        "autoCleanup": true
-		 *      }
-		 *      ```
 		 */
 		CreateWorkspace: {
 			/** @description Optional description of the workspace (max 200 characters). */
 			description?: string | null;
 			/** @description Display name of the workspace (3-100 characters). */
 			displayName: string;
-			/**
-			 * Format: int32
-			 * @description Duration in seconds to keep the original files (60-604800 seconds).
-			 */
-			keepForSec?: number | null;
-			/** @description Whether to automatically delete processed files after expiration. */
-			autoCleanup?: boolean | null;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean | null;
-			/**
-			 * Format: int32
-			 * @description Maximum number of members allowed in the workspace (1-1000).
-			 */
-			maxMembers?: number | null;
-			/**
-			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the workspace (1024-1048576 MB).
-			 */
-			maxStorage?: number | null;
 			/** @description Whether comments are enabled for this workspace. */
 			enableComments?: boolean | null;
 		};
@@ -5705,27 +6040,17 @@ export interface components {
 			workspaceId: string;
 			/** @description Display name of the workspace. */
 			displayName: string;
-			/**
-			 * Format: int32
-			 * @description Duration in seconds to keep the original files (optional).
-			 */
-			keepForSec?: number | null;
-			/** @description Whether to automatically delete processed files after expiration. */
-			autoCleanup: boolean;
+			/** @description Tags associated with the workspace. */
+			tags: string[];
 			/** @description Whether approval is required to processed files to be visible. */
 			requireApproval: boolean;
-			/**
-			 * Format: int32
-			 * @description Maximum number of members allowed in the workspace.
-			 */
-			maxMembers?: number | null;
-			/**
-			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the workspace.
-			 */
-			maxStorage?: number | null;
 			/** @description Whether comments are enabled for this workspace. */
 			enableComments: boolean;
+			/**
+			 * Format: uuid
+			 * @description ID of the account that created the workspace.
+			 */
+			createdBy: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
 			/**
@@ -5745,7 +6070,25 @@ export interface components {
 		 *      This enumeration corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
 		 *      hierarchical access control for workspace members with clearly defined capabilities.
 		 */
-		WorkspaceRole: "owner" | "member" | "guest";
+		WorkspaceRole: "owner" | "admin" | "member" | "guest";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		WorkspacesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Workspace"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Path parameters for workspace-level operations. */
 		WorkspacePathParams: {
 			/**
@@ -5758,42 +6101,56 @@ export interface components {
 		 * @description Request payload to update an existing workspace.
 		 *
 		 *      All fields are optional; only provided fields will be updated.
-		 *
-		 *      # Example
-		 *
-		 *      ```json
-		 *      {
-		 *        "displayName": "Updated Workspace Name",
-		 *        "enableComments": true
-		 *      }
-		 *      ```
 		 */
 		UpdateWorkspace: {
 			/** @description New description for the workspace (max 500 characters). */
 			description?: string | null;
 			/** @description New display name for the workspace (3-100 characters). */
 			displayName?: string | null;
-			/**
-			 * Format: int32
-			 * @description New duration in seconds to keep original files (60-604800 seconds).
-			 */
-			keepForSec?: number | null;
-			/** @description Whether to automatically delete processed files after expiration. */
-			autoCleanup?: boolean | null;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean | null;
-			/**
-			 * Format: int32
-			 * @description Maximum number of members allowed in the workspace (1-1000).
-			 */
-			maxMembers?: number | null;
-			/**
-			 * Format: int32
-			 * @description Maximum storage size in megabytes allowed for the workspace (1-1048576 MB).
-			 */
-			maxStorage?: number | null;
 			/** @description Whether comments are enabled for this workspace. */
 			enableComments?: boolean | null;
+		};
+		/** @description Response for notification settings within a workspace. */
+		NotificationSettings: {
+			/** @description Whether to send email notifications. */
+			notifyViaEmail: boolean;
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
+		};
+		/**
+		 * @description Defines the type of notification event sent to a user.
+		 *
+		 *      This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and is used
+		 *      for various user notifications including mentions, replies, and system announcements.
+		 */
+		NotificationEvent:
+			| "comment:mention"
+			| "comment:reply"
+			| "document:uploaded"
+			| "document:downloaded"
+			| "document:verified"
+			| "member:invited"
+			| "member:joined"
+			| "integration:synced"
+			| "integration:desynced"
+			| "system:announcement"
+			| "system:report";
+		/** @description Request payload for updating notification settings. */
+		UpdateNotificationSettings: {
+			/** @description Whether to send email notifications. */
+			notifyViaEmail?: boolean | null;
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp?:
+				| components["schemas"]["NotificationEvent"][]
+				| null;
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail?:
+				| components["schemas"]["NotificationEvent"][]
+				| null;
 		};
 		/** @description Request payload for creating a new workspace integration. */
 		CreateIntegration: {
@@ -5811,12 +6168,19 @@ export interface components {
 			isActive?: boolean | null;
 		};
 		/**
-		 * @description Defines the type/category of a workspace integration.
+		 * @description Defines the functional category of a workspace integration.
 		 *
 		 *      This enumeration corresponds to the `INTEGRATION_TYPE` PostgreSQL enum and is used
 		 *      to categorize different types of third-party integrations that can be connected to workspaces.
 		 */
-		IntegrationType: "webhook" | "storage" | "other";
+		IntegrationType:
+			| "storage"
+			| "communication"
+			| "business"
+			| "analytics"
+			| "automation"
+			| "developer"
+			| "industry";
 		/** @description Workspace integration response. */
 		Integration: {
 			/** @description Detailed description of the integration's purpose and functionality. */
@@ -5835,8 +6199,6 @@ export interface components {
 			integrationName: string;
 			/** @description Type of third-party service this integration connects to. */
 			integrationType: components["schemas"]["IntegrationType"];
-			/** @description Structured configuration and service-specific metadata. */
-			metadata: unknown;
 			/** @description Whether the integration is currently active and enabled. */
 			isActive: boolean;
 			/**
@@ -5866,13 +6228,26 @@ export interface components {
 		 * @description Defines the operational status of a workspace integration.
 		 *
 		 *      This enumeration corresponds to the `INTEGRATION_STATUS` PostgreSQL enum and is used
-		 *      to manage integration states from initial setup through active execution and error handling.
+		 *      to manage integration states from initial setup through active execution and cancellation.
 		 */
-		IntegrationStatus: "pending" | "executing" | "failed";
-		/** @description Query parameters for listing workspace integrations. */
-		ListIntegrationsQuery: {
-			/** @description Filter by integration type. */
-			integrationType?: components["schemas"]["IntegrationType"] | null;
+		IntegrationStatus: "pending" | "running" | "cancelled";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		IntegrationsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Integration"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/**
 		 * @description Path parameters for integration operations (integration ID only).
@@ -5907,6 +6282,24 @@ export interface components {
 			/** @description Updated authentication credentials for the external service. */
 			credentials: unknown;
 		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		IntegrationRunsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["IntegrationRun"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Response type for an integration run. */
 		IntegrationRun: {
 			/**
@@ -5929,37 +6322,30 @@ export interface components {
 			 * @description Account that triggered the run.
 			 */
 			accountId?: string | null;
-			/** @description Run name. */
-			runName: string;
 			/** @description Run type. */
-			runType: string;
+			runType: components["schemas"]["RunType"];
 			/** @description Current status. */
 			status: components["schemas"]["IntegrationStatus"];
+			/** @description Run metadata, results, and error details. */
+			metadata: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the run started.
 			 */
-			startedAt?: string | null;
+			startedAt: string;
 			/**
 			 * Format: date-time
 			 * @description When the run completed.
 			 */
 			completedAt?: string | null;
-			/**
-			 * Format: int32
-			 * @description Duration in milliseconds.
-			 */
-			durationMs?: number | null;
-			/** @description Result summary. */
-			resultSummary?: string | null;
-			/** @description Error details for failed runs. */
-			errorDetails?: unknown;
-			/**
-			 * Format: date-time
-			 * @description When the run was created.
-			 */
-			createdAt: string;
 		};
+		/**
+		 * @description Defines the type of an integration run.
+		 *
+		 *      This enumeration corresponds to the `RUN_TYPE` PostgreSQL enum and is used
+		 *      to classify how an integration run was triggered.
+		 */
+		RunType: "manual" | "scheduled" | "triggered";
 		/**
 		 * @description Path parameters for integration run operations (run ID only).
 		 *
@@ -5980,19 +6366,13 @@ export interface components {
 			 * @description Email address of the person to invite.
 			 */
 			inviteeEmail: string;
-			/**
-			 * @description Role the invitee will have if they accept the invitation.
-			 * @default guest
-			 */
+			/** @description Role the invitee will have if they accept the invitation. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
-			/**
-			 * @description When the invitation expires.
-			 * @default in7Days
-			 */
-			expires: components["schemas"]["InviteExpiration"];
+			/** @description When the invitation expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
 		};
 		/** @description Expiration options for invite codes. */
-		InviteExpiration: "never" | "in24Hours" | "in7Days" | "in30Days";
+		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
 		/**
 		 * @description Workspace invite with complete information.
 		 *
@@ -6011,11 +6391,10 @@ export interface components {
 			 * @description ID of the workspace the invitation is for.
 			 */
 			workspaceId: string;
-			/**
-			 * Format: uuid
-			 * @description Account ID if the invitee has an account.
-			 */
-			inviteeId?: string | null;
+			/** @description Email address of the invitee (null for open invite codes). */
+			inviteeEmail?: string | null;
+			/** @description Invite token (only included for open invitations without invitee_email). */
+			inviteToken?: string | null;
 			/** @description Role the invitee will have if they accept. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Current status of the invitation. */
@@ -6050,7 +6429,7 @@ export interface components {
 			| "expired"
 			| "revoked";
 		/** @description Query parameters for listing workspace invites. */
-		ListInvitesQuery: {
+		ListInvites: {
 			/** @description Filter by invited role. */
 			role?: components["schemas"]["WorkspaceRole"] | null;
 			/** @description Sort by field. */
@@ -6058,22 +6437,34 @@ export interface components {
 			/** @description Sort order (asc or desc). */
 			order?: components["schemas"]["SortOrder"] | null;
 		};
-		/** @description Fields to sort invites by. */
+		/** @description Fields available for sorting workspace invites. */
 		InviteSortField: "email" | "date";
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		InvitesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Invite"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
-			/**
-			 * @description Role to assign when someone joins via this invite code.
-			 * @default guest
-			 */
-			role: components["schemas"]["WorkspaceRole"];
-			/**
-			 * @description When the invite code expires.
-			 * @default in7Days
-			 */
-			expires: components["schemas"]["InviteExpiration"];
+			/** @description Role to assign when someone joins via this invite code. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description When the invite code expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
 		};
 		/** @description Response containing a generated shareable invite code. */
 		InviteCode: {
@@ -6115,6 +6506,37 @@ export interface components {
 			/** @description The invite code to use for joining the workspace. */
 			inviteCode: string;
 		};
+		/**
+		 * @description Preview of an invite with workspace details for display before joining.
+		 *
+		 *      This is a public-facing response that shows workspace information
+		 *      to help users decide whether to join via an invite code.
+		 */
+		InvitePreview: {
+			/** @description Description of the workspace. */
+			description?: string | null;
+			/**
+			 * Format: uuid
+			 * @description ID of the workspace.
+			 */
+			workspaceId: string;
+			/** @description Display name of the workspace. */
+			displayName: string;
+			/** @description Tags associated with the workspace. */
+			tags: string[];
+			/** @description Role the user will have if they join. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invite expires.
+			 */
+			expiresAt: string;
+		};
 		/** @description Represents a workspace member. */
 		Member: {
 			/**
@@ -6122,21 +6544,22 @@ export interface components {
 			 * @description Account ID of the member.
 			 */
 			accountId: string;
+			/** @description Email address of the member. */
+			emailAddress: string;
+			/** @description Display name of the member. */
+			displayName: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
+			/** @description Whether the member has two-factor authentication enabled. */
+			has2fa: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the member joined the workspace.
 			 */
 			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the member last accessed the workspace.
-			 */
-			lastAccessedAt?: string | null;
 		};
 		/** @description Query parameters for listing workspace members. */
-		ListMembersQuery: {
+		ListMembers: {
 			/** @description Filter by workspace role. */
 			role?: components["schemas"]["WorkspaceRole"] | null;
 			/** @description Filter by 2FA status. */
@@ -6146,8 +6569,26 @@ export interface components {
 			/** @description Sort order (asc or desc). */
 			order?: components["schemas"]["SortOrder"] | null;
 		};
-		/** @description Fields to sort members by. */
+		/** @description Fields available for sorting workspace members. */
 		MemberSortField: "name" | "date";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		MembersPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Member"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Path parameters for workspace member operations. */
 		MemberPathParams: {
 			/**
@@ -6162,16 +6603,13 @@ export interface components {
 			accountId: string;
 		};
 		/** @description Request to update a member's role. */
-		UpdateMemberRole: {
+		UpdateMember: {
 			/** @description New role for the member. */
 			role: components["schemas"]["WorkspaceRole"];
 		};
 		/** @description Request payload for creating a new workspace webhook. */
 		CreateWebhook: {
-			/**
-			 * @description Detailed description of the webhook's purpose (max 500 characters).
-			 * @default
-			 */
+			/** @description Detailed description of the webhook's purpose (max 500 characters). */
 			description: string;
 			/** @description Human-readable name for the webhook (1-100 characters). */
 			displayName: string;
@@ -6180,85 +6618,36 @@ export interface components {
 			 * @description The URL to send webhook payloads to.
 			 */
 			url: string;
-			/** @description Optional secret for signing webhook payloads (max 256 characters). */
-			secret?: string | null;
 			/** @description List of event types this webhook should receive. */
-			events: string[];
+			events: components["schemas"]["WebhookEvent"][];
 			/** @description Optional custom headers to include in webhook requests. */
-			headers?: unknown;
-			/**
-			 * Format: int32
-			 * @description Maximum number of consecutive failures before disabling (1-100).
-			 */
-			maxFailures?: number | null;
+			headers?: {
+				[key: string]: string;
+			} | null;
+			/** @description Initial status of the webhook (active or paused). */
+			status?: components["schemas"]["WebhookStatus"] | null;
 		};
-		/** @description Workspace webhook response with secret (returned only at creation). */
-		WebhookWithSecret: {
-			/** @description Detailed description of the webhook's purpose. */
-			description: string;
-			/**
-			 * Format: uuid
-			 * @description Unique webhook identifier.
-			 */
-			webhookId: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the workspace this webhook belongs to.
-			 */
-			workspaceId: string;
-			/** @description Human-readable name for the webhook. */
-			displayName: string;
-			/** @description The URL to send webhook payloads to. */
-			url: string;
-			/** @description List of event types this webhook receives. */
-			events: string[];
-			/** @description Custom headers included in webhook requests. */
-			headers: unknown;
-			/** @description Current status of the webhook. */
-			status: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: int32
-			 * @description Number of consecutive delivery failures.
-			 */
-			failureCount: number;
-			/**
-			 * Format: int32
-			 * @description Maximum failures before automatic disabling.
-			 */
-			maxFailures: number;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent webhook trigger.
-			 */
-			lastTriggeredAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent successful delivery.
-			 */
-			lastSuccessAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent failed delivery.
-			 */
-			lastFailureAt?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Account that originally created this webhook.
-			 */
-			createdBy: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was first created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was last modified.
-			 */
-			updatedAt: string;
-			/** @description Secret for signing webhook payloads (only shown once at creation). */
-			secret?: string | null;
-		};
+		/**
+		 * @description Defines the types of events that can trigger webhook delivery.
+		 *
+		 *      This enumeration corresponds to the `WEBHOOK_EVENT` PostgreSQL enum and is used
+		 *      to configure which events a webhook should receive notifications for.
+		 */
+		WebhookEvent:
+			| "document:created"
+			| "document:updated"
+			| "document:deleted"
+			| "file:created"
+			| "file:updated"
+			| "file:deleted"
+			| "member:added"
+			| "member:deleted"
+			| "member:updated"
+			| "integration:created"
+			| "integration:updated"
+			| "integration:deleted"
+			| "integration:synced"
+			| "integration:desynced";
 		/**
 		 * @description Defines the operational status of a workspace webhook.
 		 *
@@ -6280,41 +6669,30 @@ export interface components {
 			 * @description Reference to the workspace this webhook belongs to.
 			 */
 			workspaceId: string;
+			/** @description Origin type of the webhook (provided or integration). */
+			webhookType: components["schemas"]["WebhookType"];
+			/**
+			 * Format: uuid
+			 * @description Reference to integration (present for integration type webhooks).
+			 */
+			integrationId?: string | null;
 			/** @description Human-readable name for the webhook. */
 			displayName: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
 			/** @description List of event types this webhook receives. */
-			events: string[];
+			events: components["schemas"]["WebhookEvent"][];
 			/** @description Custom headers included in webhook requests. */
-			headers: unknown;
+			headers: {
+				[key: string]: string;
+			};
 			/** @description Current status of the webhook. */
 			status: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: int32
-			 * @description Number of consecutive delivery failures.
-			 */
-			failureCount: number;
-			/**
-			 * Format: int32
-			 * @description Maximum failures before automatic disabling.
-			 */
-			maxFailures: number;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of the most recent webhook trigger.
 			 */
 			lastTriggeredAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent successful delivery.
-			 */
-			lastSuccessAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent failed delivery.
-			 */
-			lastFailureAt?: string | null;
 			/**
 			 * Format: uuid
 			 * @description Account that originally created this webhook.
@@ -6330,6 +6708,31 @@ export interface components {
 			 * @description Timestamp when this webhook was last modified.
 			 */
 			updatedAt: string;
+		};
+		/**
+		 * @description Defines the origin type of a workspace webhook.
+		 *
+		 *      This enumeration corresponds to the `WEBHOOK_TYPE` PostgreSQL enum and is used
+		 *      to distinguish between user-created webhooks and those created by integrations.
+		 */
+		WebhookType: "provided" | "integration";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		WebhooksPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Webhook"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/**
 		 * @description Path parameters for webhook operations (webhook ID only).
@@ -6355,57 +6758,96 @@ export interface components {
 			 * @description Updated URL to send webhook payloads to.
 			 */
 			url?: string | null;
-			/** @description Updated secret for signing webhook payloads (max 256 characters). */
-			secret?: string | null;
 			/** @description Updated list of event types this webhook should receive. */
-			events?: string[] | null;
+			events?: components["schemas"]["WebhookEvent"][] | null;
 			/** @description Updated custom headers to include in webhook requests. */
-			headers?: unknown;
+			headers?: {
+				[key: string]: string;
+			} | null;
+			/** @description Updated status (active or paused). Ignored if webhook is currently disabled. */
+			status?: components["schemas"]["WebhookStatus"] | null;
+		};
+		/** @description Request payload for testing a webhook. */
+		TestWebhook: {
 			/**
-			 * Format: int32
-			 * @description Updated maximum number of consecutive failures before disabling (1-100).
+			 * @description Optional custom payload to send in the test request.
+			 *      If not provided, a default test payload will be used.
 			 */
-			maxFailures?: number | null;
+			payload?: unknown;
+		};
+		/** @description Result of a webhook delivery attempt. */
+		WebhookResult: {
+			/**
+			 * Format: uint16
+			 * @description HTTP status code returned by the webhook endpoint.
+			 */
+			statusCode: number;
+			/**
+			 * Format: int64
+			 * @description Time taken to receive a response in milliseconds.
+			 */
+			responseTimeMs: number;
 		};
 		/** @description Query parameters for listing files. */
-		ListFilesQuery: {
+		ListFiles: {
 			/** @description Filter by file formats. */
 			formats?: components["schemas"]["FileFormat"][] | null;
-			/** @description Sort by field. */
-			sortBy?: components["schemas"]["FileSortField"] | null;
-			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["SortOrder"] | null;
 		};
 		/** @description File format categories for filtering. */
 		FileFormat: "pdf" | "doc" | "txt" | "md" | "csv" | "json" | "png" | "jpeg";
-		/** @description Fields to sort files by. */
-		FileSortField: "name" | "date" | "size";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		FilesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["File"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Represents an uploaded file. */
 		File: {
 			/**
 			 * Format: uuid
-			 * @description Unique file identifier
+			 * @description Unique file identifier.
 			 */
 			fileId: string;
-			/** @description Display name */
+			/** @description Display name. */
 			displayName: string;
 			/**
 			 * Format: int64
-			 * @description File size in bytes
+			 * @description File size in bytes.
 			 */
 			fileSize: number;
-			/** @description Processing status */
+			/** @description Processing status. */
 			status: components["schemas"]["ProcessingStatus"];
 			/**
 			 * Format: int32
-			 * @description Processing priority (optional)
+			 * @description Processing priority (1-10).
 			 */
-			processingPriority?: number | null;
+			processingPriority: number;
+			/** @description Classification tags. */
+			tags: string[];
+			/** @description Knowledge extraction settings. */
+			fileKnowledge: components["schemas"]["FileKnowledge"];
 			/**
 			 * Format: date-time
-			 * @description Update timestamp (optional)
+			 * @description Creation timestamp.
 			 */
-			updatedAt?: string | null;
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Last update timestamp.
+			 */
+			updatedAt: string;
 		};
 		/**
 		 * @description Defines the current processing status of a file in the processing pipeline.
@@ -6414,30 +6856,37 @@ export interface components {
 		 *      to track the state of files as they progress through various processing stages
 		 *      such as text extraction, OCR, transcription, and analysis.
 		 */
-		ProcessingStatus:
-			| "pending"
-			| "processing"
-			| "completed"
-			| "failed"
-			| "canceled"
-			| "skipped";
-		/** @description Request to download multiple files. */
-		DownloadMultipleFilesRequest: {
-			/** @description File IDs to download (1-100 files). */
-			fileIds: string[];
+		ProcessingStatus: "pending" | "processing" | "ready" | "canceled";
+		/** @description Knowledge-related fields for file responses. */
+		FileKnowledge: {
+			/** @description Whether the file is indexed for knowledge extraction. */
+			isIndexed: boolean;
+			/** @description Content segmentation strategy. */
+			contentSegmentation: components["schemas"]["ContentSegmentation"];
+			/** @description Whether visual elements are supported. */
+			visualSupport: boolean;
 		};
+		/**
+		 * @description Defines the content segmentation strategy for document processing.
+		 *
+		 *      This enumeration corresponds to the `CONTENT_SEGMENTATION` PostgreSQL enum and is used
+		 *      to specify how document content should be segmented for knowledge extraction.
+		 */
+		ContentSegmentation: "none" | "semantic" | "fixed";
 		/** @description Request to download files as an archive. */
-		DownloadArchivedFilesRequest: {
-			/**
-			 * @description Archive format (defaults to tar).
-			 * @default tar
-			 */
+		DownloadFiles: {
+			/** @description Archive format. */
 			format: components["schemas"]["ArchiveFormat"];
 			/** @description Optional specific file IDs (if None, downloads all workspace files). */
 			fileIds?: string[] | null;
 		};
 		/** @description Archive format options for file downloads. */
 		ArchiveFormat: "tar" | "zip";
+		/** @description Request to delete multiple files. */
+		DeleteFiles: {
+			/** @description File IDs to delete (1-100 files). */
+			fileIds: string[];
+		};
 		/**
 		 * @description Path parameters for file operations (file ID only).
 		 *
@@ -6472,38 +6921,14 @@ export interface components {
 			/** @description Whether visual elements are supported for knowledge extraction. */
 			visualSupport?: boolean | null;
 		};
-		/**
-		 * @description Defines the content segmentation strategy for document processing.
-		 *
-		 *      This enumeration corresponds to the `CONTENT_SEGMENTATION` PostgreSQL enum and is used
-		 *      to specify how document content should be segmented for knowledge extraction.
-		 */
-		ContentSegmentation: "none" | "semantic" | "fixed";
 		/** @description Request payload for creating a new document. */
 		CreateDocument: {
-			/**
-			 * @description Description of the document.
-			 * @default null
-			 */
-			description: string | null;
+			/** @description Description of the document. */
+			description?: string | null;
 			/** @description Display name of the document. */
 			displayName: string;
-			/**
-			 * @description Tags for document classification.
-			 * @default []
-			 */
-			tags: string[];
-			/** @description Document category. */
-			category?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Optional expiration date.
-			 */
-			expiresAt?: string | null;
-			/** @description Whether the document is private. */
-			isPrivate?: boolean | null;
-			/** @description Whether approval is required. */
-			requiresApproval?: boolean | null;
+			/** @description Tags for document classification. */
+			tags?: string[] | null;
 		};
 		/** @description Represents a document with full details. */
 		Document: {
@@ -6528,15 +6953,6 @@ export interface components {
 			displayName: string;
 			/** @description Tags associated with the document. */
 			tags: string[];
-			/** @description Document status. */
-			status: components["schemas"]["DocumentStatus"];
-			/**
-			 * Format: int64
-			 * @description File size in bytes.
-			 */
-			fileSize?: number | null;
-			/** @description MIME type of the document. */
-			mimeType?: string | null;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the document was created.
@@ -6549,12 +6965,23 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
-		 * @description Defines the current status of a document in its lifecycle.
+		 * @description Generic paginated response wrapper.
 		 *
-		 *      This enumeration corresponds to the `DOCUMENT_STATUS` PostgreSQL enum and is used
-		 *      to track document states from creation through processing, completion, and archival.
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
 		 */
-		DocumentStatus: "draft" | "processing" | "ready" | "archived";
+		DocumentsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Document"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Path parameters for document operations. */
 		DocumentPathParams: {
 			/**
@@ -6571,17 +6998,6 @@ export interface components {
 			displayName?: string | null;
 			/** @description Updated tags (must be alphanumeric). */
 			tags?: string[] | null;
-			/** @description Updated category. */
-			category?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Updated expiration date.
-			 */
-			expiresAt?: string | null;
-			/** @description Updated private status. */
-			isPrivate?: boolean | null;
-			/** @description Updated approval requirement. */
-			requiresApproval?: boolean | null;
 		};
 		/** @description Request payload for creating a new document comment. */
 		CreateComment: {
@@ -6590,15 +7006,13 @@ export interface components {
 			/**
 			 * Format: uuid
 			 * @description Parent comment ID for threaded replies.
-			 * @default null
 			 */
-			parentCommentId: string | null;
+			parentCommentId?: string | null;
 			/**
 			 * Format: uuid
 			 * @description Account being replied to (@mention).
-			 * @default null
 			 */
-			replyToAccountId: string | null;
+			replyToAccountId?: string | null;
 		};
 		/** @description Represents a document comment. */
 		Comment: {
@@ -6641,17 +7055,30 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
-		 * @description Path parameters for file comment operations (file ID only).
+		 * @description Generic paginated response wrapper.
 		 *
-		 *      Since file IDs are globally unique UUIDs, workspace context can be
-		 *      derived from the file record itself for authorization purposes.
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
 		 */
-		FileCommentPathParams: {
+		CommentsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Comment"][];
 			/**
-			 * Format: uuid
-			 * @description Unique identifier of the file.
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
 			 */
-			fileId: string;
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
+		/**
+		 * @description Path parameters for comment operations (comment ID only).
+		 *
+		 *      Since comment IDs are globally unique UUIDs, file/workspace context can be
+		 *      derived from the comment record itself for authorization purposes.
+		 */
+		CommentPathParams: {
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the comment.
@@ -6668,13 +7095,20 @@ export interface components {
 			/** @description Annotation content. */
 			content: string;
 			/**
-			 * @description Annotation type (note, highlight, comment, etc.).
+			 * @description Annotation type (note, highlight, comment).
 			 * @default note
 			 */
-			annotationType: string;
+			annotationType: components["schemas"]["AnnotationType"];
 			/** @description Additional metadata (position, selection range, etc.). */
 			metadata?: unknown;
 		};
+		/**
+		 * @description Defines the type of annotation for document content.
+		 *
+		 *      This enumeration corresponds to the `ANNOTATION_TYPE` PostgreSQL enum and is used
+		 *      to classify different types of annotations users can create on documents.
+		 */
+		AnnotationType: "note" | "highlight";
 		/** @description Response type for a document annotation. */
 		Annotation: {
 			/**
@@ -6695,9 +7129,7 @@ export interface components {
 			/** @description Annotation content. */
 			content: string;
 			/** @description Annotation type. */
-			annotationType: string;
-			/** @description Additional metadata (position, selection, etc.). */
-			metadata?: unknown;
+			annotationType: components["schemas"]["AnnotationType"];
 			/**
 			 * Format: date-time
 			 * @description When the annotation was created.
@@ -6708,6 +7140,24 @@ export interface components {
 			 * @description When the annotation was last updated.
 			 */
 			updatedAt: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		AnnotationsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Annotation"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/**
 		 * @description Path parameters for annotation operations (annotation ID only).
@@ -6727,19 +7177,37 @@ export interface components {
 			/** @description Updated content. */
 			content?: string | null;
 			/** @description Updated annotation type. */
-			annotationType?: string | null;
+			annotationType?: components["schemas"]["AnnotationType"] | null;
 			/** @description Updated metadata. */
 			metadata?: unknown;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		ActivitysPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Activity"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
 		};
 		/** @description Response type for a workspace activity. */
 		Activity: {
 			/** @description Human-readable description. */
 			description: string;
 			/**
-			 * Format: int64
+			 * Format: uuid
 			 * @description Unique activity identifier.
 			 */
-			id: number;
+			id: string;
 			/**
 			 * Format: uuid
 			 * @description Workspace ID.
@@ -6752,8 +7220,6 @@ export interface components {
 			accountId?: string | null;
 			/** @description Type of activity. */
 			activityType: components["schemas"]["ActivityType"];
-			/** @description Additional metadata. */
-			metadata?: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the activity occurred.
@@ -6771,45 +7237,48 @@ export interface components {
 			| "workspace:created"
 			| "workspace:updated"
 			| "workspace:deleted"
-			| "workspace:archived"
-			| "workspace:restored"
-			| "workspace:settings_changed"
 			| "workspace:exported"
 			| "workspace:imported"
-			| "member:added"
-			| "member:kicked"
+			| "member:deleted"
 			| "member:updated"
-			| "member:invited"
-			| "member:invite_accepted"
-			| "member:invite_declined"
-			| "member:invite_canceled"
+			| "invite:created"
+			| "invite:accepted"
+			| "invite:declined"
+			| "invite:canceled"
 			| "integration:created"
 			| "integration:updated"
 			| "integration:deleted"
-			| "integration:enabled"
-			| "integration:disabled"
 			| "integration:synced"
-			| "integration:succeeded"
-			| "integration:failed"
 			| "webhook:created"
 			| "webhook:updated"
 			| "webhook:deleted"
-			| "webhook:enabled"
-			| "webhook:disabled"
 			| "webhook:triggered"
-			| "webhook:succeeded"
-			| "webhook:failed"
 			| "document:created"
 			| "document:updated"
 			| "document:deleted"
-			| "document:processed"
-			| "document:uploaded"
-			| "document:downloaded"
 			| "document:verified"
 			| "comment:added"
 			| "comment:updated"
 			| "comment:deleted"
 			| "custom";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *      Provides a consistent structure for all paginated API responses with
+		 *      cursor-based pagination support. When `next_cursor` is present, there
+		 *      are more items to fetch.
+		 */
+		NotificationsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Notification"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number | null;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string | null;
+		};
 		/** @description Response type for an account notification. */
 		Notification: {
 			/** @description Notification title. */
@@ -6820,7 +7289,7 @@ export interface components {
 			 */
 			id: string;
 			/** @description Notification type. */
-			notifyType: components["schemas"]["NotificationType"];
+			notifyType: components["schemas"]["NotificationEvent"];
 			/** @description Notification message. */
 			message: string;
 			/** @description Whether the notification has been read. */
@@ -6837,8 +7306,6 @@ export interface components {
 			relatedId?: string | null;
 			/** @description Related entity type. */
 			relatedType?: string | null;
-			/** @description Additional metadata. */
-			metadata?: unknown;
 			/**
 			 * Format: date-time
 			 * @description When the notification was created.
@@ -6850,20 +7317,14 @@ export interface components {
 			 */
 			expiresAt?: string | null;
 		};
-		/**
-		 * @description Defines the type of notification sent to a user.
-		 *
-		 *      This enumeration corresponds to the `NOTIFICATION_TYPE` PostgreSQL enum and is used
-		 *      for various user notifications including mentions, replies, and system announcements.
-		 */
-		NotificationType:
-			| "comment_mention"
-			| "comment_reply"
-			| "document_upload"
-			| "document_download"
-			| "document_verify"
-			| "workspace_invite"
-			| "system_announcement";
+		/** @description Response type for unread notifications status. */
+		UnreadStatus: {
+			/**
+			 * Format: int64
+			 * @description Number of unread notifications.
+			 */
+			unreadCount: number;
+		};
 		/** @description Request payload for login. */
 		Login: {
 			/**
@@ -6878,15 +7339,18 @@ export interface components {
 		};
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
+			/** @description The JWT API token for authentication. */
+			apiToken: string;
 			/**
 			 * Format: uuid
-			 * @description ID of the account.
+			 * @description ID of the authenticated account.
 			 */
 			accountId: string;
-			/** @description Display name. */
-			displayName: string;
-			/** @description Email address. */
-			emailAddress: string;
+			/**
+			 * Format: uuid
+			 * @description ID of the token.
+			 */
+			tokenId: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the token was issued.

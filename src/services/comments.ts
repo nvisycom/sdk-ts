@@ -1,10 +1,16 @@
 import type { ApiClient } from "@/client.js";
-import type { Comment, CreateComment, Pagination } from "@/datatypes/index.js";
+import type {
+	Comment,
+	CommentsPage,
+	CreateComment,
+	CursorPagination,
+	UpdateComment,
+} from "@/datatypes/index.js";
 
 /**
  * Service for handling file comment operations
  */
-export class CommentsService {
+export class Comments {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -14,12 +20,15 @@ export class CommentsService {
 	/**
 	 * List all comments on a file
 	 * @param fileId - File ID
-	 * @param query - Optional query parameters (offset, limit)
-	 * @returns Promise that resolves with the list of comments
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of comments
 	 * @throws {ApiError} if the request fails
 	 */
-	async list(fileId: string, query?: Pagination): Promise<Comment[]> {
-		const { data } = await this.#api.GET("/files/{file_id}/comments", {
+	async listComments(
+		fileId: string,
+		query?: CursorPagination,
+	): Promise<CommentsPage> {
+		const { data } = await this.#api.GET("/files/{fileId}/comments", {
 			params: { path: { fileId }, query },
 		});
 		return data!;
@@ -32,8 +41,11 @@ export class CommentsService {
 	 * @returns Promise that resolves with the created comment
 	 * @throws {ApiError} if the request fails
 	 */
-	async create(fileId: string, comment: CreateComment): Promise<Comment> {
-		const { data } = await this.#api.POST("/files/{file_id}/comments", {
+	async createComment(
+		fileId: string,
+		comment: CreateComment,
+	): Promise<Comment> {
+		const { data } = await this.#api.POST("/files/{fileId}/comments", {
 			params: { path: { fileId } },
 			body: comment,
 		});
@@ -41,15 +53,32 @@ export class CommentsService {
 	}
 
 	/**
+	 * Update a comment
+	 * @param commentId - Comment ID
+	 * @param updates - Comment update request
+	 * @returns Promise that resolves with the updated comment
+	 * @throws {ApiError} if the request fails
+	 */
+	async updateComment(
+		commentId: string,
+		updates: UpdateComment,
+	): Promise<Comment> {
+		const { data } = await this.#api.PATCH("/comments/{commentId}", {
+			params: { path: { commentId } },
+			body: updates,
+		});
+		return data!;
+	}
+
+	/**
 	 * Delete a comment
-	 * @param fileId - File ID
 	 * @param commentId - Comment ID
 	 * @returns Promise that resolves when the comment is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async delete(fileId: string, commentId: string): Promise<void> {
-		await this.#api.DELETE("/files/{file_id}/comments/{comment_id}", {
-			params: { path: { fileId, commentId } },
+	async deleteComment(commentId: string): Promise<void> {
+		await this.#api.DELETE("/comments/{commentId}", {
+			params: { path: { commentId } },
 		});
 	}
 }

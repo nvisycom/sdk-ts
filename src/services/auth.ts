@@ -4,7 +4,7 @@ import type { AuthToken, Login, Signup } from "@/datatypes/index.js";
 /**
  * Service for handling authentication operations
  */
-export class AuthService {
+export class Auth {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -17,7 +17,7 @@ export class AuthService {
 	 * @returns Promise that resolves with the auth response containing access token
 	 * @throws {ApiError} if the request fails
 	 */
-	async login(credentials: Login): Promise<AuthToken> {
+	async loginAccount(credentials: Login): Promise<AuthToken> {
 		const { data } = await this.#api.POST("/auth/login", {
 			body: credentials,
 		});
@@ -26,14 +26,23 @@ export class AuthService {
 
 	/**
 	 * Sign up a new account
-	 * @param details - Signup details
+	 * @param credentials - Signup details
 	 * @returns Promise that resolves with the auth response containing access token
 	 * @throws {ApiError} if the request fails
 	 */
-	async signup(details: Signup): Promise<AuthToken> {
+	async signupAccount(credentials: Signup): Promise<AuthToken> {
 		const { data } = await this.#api.POST("/auth/signup", {
-			body: details,
+			body: credentials,
 		});
 		return data!;
+	}
+
+	/**
+	 * Logout and invalidate the current access token
+	 * @returns Promise that resolves when logout is complete
+	 * @throws {ApiError} if the request fails
+	 */
+	async logoutAccount(): Promise<void> {
+		await this.#api.POST("/auth/logout");
 	}
 }
