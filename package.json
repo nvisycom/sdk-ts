@@ -69,6 +69,8 @@
 		"clean": "rimraf dist",
 		"prepublishOnly": "npm run clean && npm run build && npm run test",
 		"release": "npm run prepublishOnly && npm publish",
+		"generate:check": "curl -sf https://api.nvisy.com/openapi.json -o /dev/null",
+		"generate:check:local": "curl -sf http://127.0.0.1:8080/api/openapi.json -o /dev/null",
 		"generate": "openapi-typescript https://api.nvisy.com/openapi.json -o ./src/schema/api.d.ts",
 		"generate:local": "openapi-typescript http://127.0.0.1:8080/api/openapi.json -o ./src/schema/api.d.ts",
 		"generate:clean": "rimraf ./src/schema/api.d.ts"

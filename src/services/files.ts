@@ -68,13 +68,26 @@ export class Files {
 	}
 
 	/**
+	 * Get file metadata by ID
+	 * @param fileId - File ID
+	 * @returns Promise that resolves with the file metadata
+	 * @throws {ApiError} if the request fails
+	 */
+	async getFile(fileId: string): Promise<File> {
+		const { data } = await this.#api.GET("/files/{fileId}", {
+			params: { path: { fileId } },
+		});
+		return data!;
+	}
+
+	/**
 	 * Download a file by ID
 	 * @param fileId - File ID
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */
 	async downloadFile(fileId: string): Promise<Response> {
-		const { response } = await this.#api.GET("/files/{fileId}", {
+		const { response } = await this.#api.GET("/files/{fileId}/content", {
 			params: { path: { fileId } },
 			parseAs: "stream",
 		});

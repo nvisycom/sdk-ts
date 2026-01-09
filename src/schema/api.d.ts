@@ -3826,8 +3826,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Download file
-		 * @description Downloads a file by ID. Returns the file content as a binary stream.
+		 * Get file metadata
+		 * @description Returns file metadata without downloading the file content.
 		 */
 		get: {
 			parameters: {
@@ -3841,12 +3841,14 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
+				/** @description Represents an uploaded file. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content?: never;
+					content: {
+						"application/json": components["schemas"]["File"];
+					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -4061,6 +4063,91 @@ export interface paths {
 				};
 			};
 		};
+		trace?: never;
+	};
+	"/files/{fileId}/content": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Download file
+		 * @description Downloads a file by ID. Returns the file content as a binary stream.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the file. */
+					fileId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *      This struct contains all the information needed to serialize an error
+				 *      response, including the error name, message, HTTP status code, resource
+				 *      information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
 	"/workspaces/{workspaceId}/documents": {
@@ -5837,7 +5924,7 @@ export interface components {
 		 *      This enumeration corresponds to the `API_TOKEN_TYPE` PostgreSQL enum and is used
 		 *      to categorize different types of authentication tokens based on the client type.
 		 */
-		ApiTokenType: "web" | "mobile" | "api" | "desktop";
+		ApiTokenType: "web" | "api" | "cli";
 		/**
 		 * @description Cursor-based pagination query parameters.
 		 *
@@ -6143,9 +6230,9 @@ export interface components {
 		 * @description Defines the operational status of a workspace integration.
 		 *
 		 *      This enumeration corresponds to the `INTEGRATION_STATUS` PostgreSQL enum and is used
-		 *      to manage integration states from initial setup through active execution and error handling.
+		 *      to manage integration states from initial setup through active execution and cancellation.
 		 */
-		IntegrationStatus: "pending" | "executing" | "failed";
+		IntegrationStatus: "pending" | "running" | "cancelled";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -6237,10 +6324,8 @@ export interface components {
 			 * @description Account that triggered the run.
 			 */
 			accountId?: string | null;
-			/** @description Run name. */
-			runName: string;
 			/** @description Run type. */
-			runType: string;
+			runType: components["schemas"]["RunType"];
 			/** @description Current status. */
 			status: components["schemas"]["IntegrationStatus"];
 			/** @description Run metadata, results, and error details. */
@@ -6249,18 +6334,20 @@ export interface components {
 			 * Format: date-time
 			 * @description When the run started.
 			 */
-			startedAt?: string | null;
+			startedAt: string;
 			/**
 			 * Format: date-time
 			 * @description When the run completed.
 			 */
 			completedAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description When the run was created.
-			 */
-			createdAt: string;
 		};
+		/**
+		 * @description Defines the type of an integration run.
+		 *
+		 *      This enumeration corresponds to the `RUN_TYPE` PostgreSQL enum and is used
+		 *      to classify how an integration run was triggered.
+		 */
+		RunType: "manual" | "scheduled" | "triggered";
 		/**
 		 * @description Path parameters for integration run operations (run ID only).
 		 *
@@ -6536,9 +6623,9 @@ export interface components {
 			/** @description List of event types this webhook should receive. */
 			events: components["schemas"]["WebhookEvent"][];
 			/** @description Optional custom headers to include in webhook requests. */
-			headers: {
+			headers?: {
 				[key: string]: string;
-			};
+			} | null;
 			/** @description Initial status of the webhook (active or paused). */
 			status?: components["schemas"]["WebhookStatus"] | null;
 		};
@@ -6727,7 +6814,7 @@ export interface components {
 			 * Format: int64
 			 * @description File size in bytes.
 			 */
-			fileSize?: number | null;
+			fileSize: number;
 			/** @description Processing status. */
 			status: components["schemas"]["ProcessingStatus"];
 			/**
@@ -6757,13 +6844,7 @@ export interface components {
 		 *      to track the state of files as they progress through various processing stages
 		 *      such as text extraction, OCR, transcription, and analysis.
 		 */
-		ProcessingStatus:
-			| "pending"
-			| "processing"
-			| "completed"
-			| "failed"
-			| "canceled"
-			| "skipped";
+		ProcessingStatus: "pending" | "processing" | "ready" | "canceled";
 		/** @description Knowledge-related fields for file responses. */
 		FileKnowledge: {
 			/** @description Whether the file is indexed for knowledge extraction. */
