@@ -80,8 +80,8 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.11",
-		"@types/node": "^25.0.6",
-		"@vitest/coverage-v8": "^4.0.16",
+		"@types/node": "^25.0.9",
+		"@vitest/coverage-v8": "^4.0.17",
 		"@vitest/ui": "^4.0.16",
 		"openapi-typescript": "^7.10.1",
 		"rimraf": "^6.1.2",
