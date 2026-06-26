@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsdown";
 
 export default defineConfig({
 	// Entry and format configuration
@@ -18,10 +18,7 @@ export default defineConfig({
 
 	// Build behavior
 	minify: false,
-	splitting: false,
 	treeshake: true,
-	bundle: true,
-	skipNodeModulesBundle: true,
 
 	// Platform and target
 	platform: "neutral",
