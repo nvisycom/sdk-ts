@@ -152,7 +152,7 @@ export class Nvisy {
 			throw new NvisyError("API token must be at least 10 characters");
 		}
 
-		if (!/^[a-zA-Z0-9_.\-]+$/.test(trimmedToken)) {
+		if (!/^[a-zA-Z0-9_.-]+$/.test(trimmedToken)) {
 			throw new NvisyError("API token contains invalid characters");
 		}
 

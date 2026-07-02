@@ -55,8 +55,8 @@ export default defineConfig({
 		},
 	},
 
-	// Build configuration for test files
-	esbuild: {
+	// Build configuration for test files (Vitest 4 transforms with oxc)
+	oxc: {
 		target: "es2022",
 	},
 });

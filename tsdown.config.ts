@@ -24,6 +24,8 @@ export default defineConfig({
 	platform: "neutral",
 	target: "es2022",
 
-	// External dependencies
-	external: ["openapi-fetch"],
+	// External dependencies (not bundled)
+	deps: {
+		neverBundle: ["openapi-fetch"],
+	},
 });
