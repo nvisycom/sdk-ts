@@ -14,11 +14,27 @@ endef
 .PHONY: help
 help:
 	$(call make-log,Available targets:)
+	@echo "  build          - Build the package"
+	@echo "  test           - Run tests"
 	@echo "  clean          - Remove build artifacts and temporary files"
 	@echo "  check-remote   - Check connection to production API"
 	@echo "  check-local    - Check connection to local API server"
 	@echo "  generate       - Generate TypeScript types from OpenAPI specification"
 	@echo "  generate-local - Generate TypeScript types from local API server"
+
+# Build the package
+.PHONY: build
+build:
+	$(call make-log,Building...)
+	@npm run build
+	$(call make-log,Build complete)
+
+# Run tests
+.PHONY: test
+test:
+	$(call make-log,Running tests...)
+	@npm run test
+	$(call make-log,Tests complete)
 
 # Clean build artifacts and temporary files
 .PHONY: clean

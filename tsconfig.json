@@ -24,9 +24,8 @@
 		"isolatedModules": true,
 		"skipLibCheck": true,
 
-		"baseUrl": ".",
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": ["./src/*"]
 		}
 	},
 	"include": ["src/**/*"],

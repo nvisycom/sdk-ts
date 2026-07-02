@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
 	"vcs": {
 		"enabled": false,
 		"clientKind": "git",
@@ -7,19 +7,26 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": ["**", "!node_modules", "!dist", "!docs", "!coverage"]
+		"includes": [
+			"**",
+			"!node_modules",
+			"!dist",
+			"!docs",
+			"!coverage",
+			"!.claude"
+		]
 	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab"
 	},
-	"assist": { "actions": { "source": { "recommended": true } } },
+	"assist": { "actions": { "source": { "preset": "recommended" } } },
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true,
+			"preset": "recommended",
 			"style": {
-				"recommended": true,
+				"preset": "recommended",
 				"noNonNullAssertion": "off"
 			}
 		}

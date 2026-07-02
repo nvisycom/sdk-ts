@@ -44,10 +44,6 @@ export class NvisyError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = this.constructor.name;
-
-		if (Error.captureStackTrace) {
-			Error.captureStackTrace(this, this.constructor);
-		}
 	}
 }
 
@@ -121,10 +117,6 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 		this.suggestion = response.suggestion;
 		this.validation = response.validation;
 		this.statusCode = statusCode;
-
-		if (Error.captureStackTrace) {
-			Error.captureStackTrace(this, this.constructor);
-		}
 	}
 
 	/**
