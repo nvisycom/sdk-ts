@@ -1,16 +1,20 @@
-# Nvisy.com SDK for TypeScript/JavaScript
+# Nvisy SDK for TypeScript
 
-[![npm version](https://img.shields.io/npm/v/@nvisy/sdk?color=000000&style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
-[![build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk-ts/build.yml?branch=main&color=000000&style=flat-square)](https://github.com/nvisycom/sdk-ts/actions/workflows/build.yml)
+[![npm](https://img.shields.io/npm/v/@nvisy/sdk?style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
+[![Build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk-ts/build.yml?branch=main&label=build%20%26%20test&style=flat-square)](https://github.com/nvisycom/sdk-ts/actions/workflows/build.yml)
 
-Official TypeScript SDK for the Nvisy AI-powered document processing platform.
+TypeScript client for the [Nvisy](https://nvisy.com/) multimodal redaction platform.
 
-## Features
+Nvisy detects and removes sensitive information across documents, images, and audio.
+It combines deterministic patterns, NER, computer vision, and LLM-driven classification
+into auditable, policy-driven pipelines built for regulated industries such as
+healthcare, legal, government, and financial services.
 
-- Modern ES2022+ JavaScript target
-- Full TypeScript support with strict typing
-- Debug logging for development
-- Individual module exports for optimal bundling
+> [!WARNING]
+> **Active development: API not stable.** This project is under active
+> development. Public APIs, configuration shapes, and on-disk formats may change
+> without notice between releases. Pin a specific version if you depend on this
+> in production.
 
 ## Installation
 
@@ -18,12 +22,21 @@ Official TypeScript SDK for the Nvisy AI-powered document processing platform.
 npm install @nvisy/sdk
 ```
 
-## Usage
+## Quick Start
 
 ```typescript
 import { Nvisy } from "@nvisy/sdk";
 
-const nvisy = new Nvisy({
+const client = new Nvisy({ apiToken: "your-api-token" });
+
+const account = await client.account.getAccount();
+const workspaces = await client.workspaces.listWorkspaces();
+```
+
+The client accepts additional options:
+
+```typescript
+const client = new Nvisy({
   apiToken: "your-api-token", // Required
   baseUrl: "https://api.nvisy.com", // Optional
   userAgent: "MyApp/1.0.0", // Optional
@@ -32,25 +45,35 @@ const nvisy = new Nvisy({
     "X-Custom-Header": "value",
   },
 });
-
-const account = await nvisy.account.getAccount();
-const workspaces = await nvisy.workspaces.listWorkspaces();
 ```
+
+## Features
+
+- Modern ES2022+ JavaScript target
+- Full TypeScript support with strict typing
+- Debug logging for development
+- Individual module exports for optimal bundling
+
+## Deployment
+
+The fastest way to get started is with [Nvisy Cloud](https://nvisy.com).
+
+To run locally, see the [nvisycom/runtime](https://github.com/nvisycom/runtime) and [nvisycom/server](https://github.com/nvisycom/server) repositories.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and contribution guidelines.
 
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes and version history.
 
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
-
 ## License
 
-MIT License - see [LICENSE.txt](LICENSE.txt) for details.
+MIT License, see [LICENSE.txt](LICENSE.txt)
 
 ## Support
 
-- Documentation: [docs.nvisy.com](https://docs.nvisy.com)
-- Issues: [GitHub Issues](https://github.com/nvisycom/sdk-ts/issues)
-- Email: [support@nvisy.com](mailto:support@nvisy.com)
+- **Documentation**: [docs.nvisy.com](https://docs.nvisy.com)
+- **Issues**: [github.com/nvisycom/sdk-ts/issues](https://github.com/nvisycom/sdk-ts/issues)
+- **Email**: [support@nvisy.com](mailto:support@nvisy.com)
