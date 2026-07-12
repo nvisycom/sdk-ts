@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-12
+
 ### Added
 
 - `contexts` service and datatypes (`Context`, `CreateContext`,
@@ -136,7 +138,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/nvisycom/sdk-ts/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/nvisycom/sdk-ts/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/nvisycom/sdk-ts/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/nvisycom/sdk-ts/releases/tag/v0.1.0
