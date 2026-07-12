@@ -36,7 +36,7 @@ export class Notifications {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getUnreadNotificationsStatus(): Promise<UnreadStatus> {
-		const { data } = await this.#api.GET("/notifications/unread");
+		const { data } = await this.#api.GET("/notifications/unread/");
 		return data!;
 	}
 }

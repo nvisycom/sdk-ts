@@ -67,7 +67,7 @@ export class Members {
 		updates: UpdateMember,
 	): Promise<Member> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/members/{accountId}/role",
+			"/workspaces/{workspaceId}/members/{accountId}/",
 			{
 				params: {
 					path: { workspaceId, accountId },
@@ -98,7 +98,7 @@ export class Members {
 	 * @throws {ApiError} if the request fails
 	 */
 	async leaveWorkspace(workspaceId: string): Promise<void> {
-		await this.#api.POST("/workspaces/{workspaceId}/members/leave", {
+		await this.#api.POST("/workspaces/{workspaceId}/members/leave/", {
 			params: { path: { workspaceId } },
 		});
 	}

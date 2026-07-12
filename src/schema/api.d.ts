@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-	"/account": {
+	"/account/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12,7 +12,7 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get account
+		 * Get own account
 		 * @description Returns the authenticated user's account details.
 		 */
 		get: {
@@ -36,9 +36,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -75,9 +75,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -90,9 +90,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -136,9 +136,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -151,9 +151,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -166,9 +166,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				409: {
 					headers: {
@@ -178,8 +178,113 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 			};
 		};
+		trace?: never;
+	};
+	"/accounts/{accountId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get account by ID
+		 * @description Returns an account's details by ID. The requester must share at least one workspace with the target account.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the account. */
+					accountId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Represents an account. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Account"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
 	"/api-tokens/": {
@@ -196,13 +301,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path?: never;
@@ -213,9 +318,9 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
@@ -228,9 +333,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -243,9 +348,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -288,9 +393,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -303,9 +408,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -313,6 +418,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -358,9 +481,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -373,9 +496,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -415,9 +538,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -430,9 +553,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -445,9 +568,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -494,9 +617,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -509,9 +632,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -524,9 +647,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -534,6 +657,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -554,13 +695,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path?: never;
@@ -571,9 +712,9 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
@@ -586,9 +727,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -615,8 +756,8 @@ export interface paths {
 			/**
 			 * @description Request payload for creating a new workspace.
 			 *
-			 *      Creates a new workspace with the specified configuration. The creator is
-			 *      automatically added as an owner of the workspace.
+			 *     Creates a new workspace with the specified configuration. The creator is
+			 *     automatically added as an owner of the workspace.
 			 */
 			requestBody: {
 				content: {
@@ -636,9 +777,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -651,9 +792,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -661,6 +802,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -706,9 +865,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -721,9 +880,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -736,9 +895,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -778,9 +937,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -793,9 +952,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -808,9 +967,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -841,7 +1000,7 @@ export interface paths {
 			/**
 			 * @description Request payload to update an existing workspace.
 			 *
-			 *      All fields are optional; only provided fields will be updated.
+			 *     All fields are optional; only provided fields will be updated.
 			 */
 			requestBody: {
 				content: {
@@ -861,9 +1020,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -876,9 +1035,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -891,9 +1050,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -903,11 +1062,29 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 			};
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/notifications": {
+	"/workspaces/{workspaceId}/notifications/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -942,9 +1119,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -957,9 +1134,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -1009,9 +1186,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -1024,9 +1201,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1039,9 +1216,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -1051,11 +1228,29 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 			};
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/integrations/": {
+	"/workspaces/{workspaceId}/activities/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1063,19 +1258,19 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List integrations
-		 * @description Returns all configured integrations for the workspace.
+		 * List workspace activities
+		 * @description Returns all activity log entries for a workspace.
 		 */
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -1089,24 +1284,24 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["IntegrationsPage"];
+						"application/json": components["schemas"]["ActivitysPage"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1119,9 +1314,97 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/connections/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List connections
+		 * @description Returns all configured connections for the workspace. Only metadata is returned; encrypted credentials are never exposed.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/** @description Filter by provider type. */
+					provider?: string;
+				};
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionsPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1135,8 +1418,8 @@ export interface paths {
 		};
 		put?: never;
 		/**
-		 * Create integration
-		 * @description Creates a new integration with an external service for the workspace.
+		 * Create connection
+		 * @description Creates a new provider connection for the workspace. Connection data is encrypted and stored securely. The response includes connection metadata but never exposes the encrypted credentials.
 		 */
 		post: {
 			parameters: {
@@ -1148,28 +1431,33 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for creating a new workspace integration. */
+			/** @description Request payload for creating a new workspace connection. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateIntegration"];
+					"application/json": components["schemas"]["CreateConnection"];
 				};
 			};
 			responses: {
-				/** @description Workspace integration response. */
+				/**
+				 * @description Response type for a workspace connection.
+				 *
+				 *     Note: The encrypted connection data is never exposed in API responses.
+				 *     Only metadata about the connection is returned.
+				 */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Integration"];
+						"application/json": components["schemas"]["Connection"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -1182,9 +1470,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1197,9 +1485,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1209,19 +1497,22 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				409: {
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -1232,7 +1523,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/integrations/{integrationId}/": {
+	"/connections/{connectionId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1240,36 +1531,41 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get integration
-		 * @description Returns details for a specific workspace integration.
+		 * Get connection
+		 * @description Returns connection metadata without encrypted credentials.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the integration. */
-					integrationId: string;
+					/** @description Unique identifier of the connection. */
+					connectionId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Workspace integration response. */
+				/**
+				 * @description Response type for a workspace connection.
+				 *
+				 *     Note: The encrypted connection data is never exposed in API responses.
+				 *     Only metadata about the connection is returned.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Integration"];
+						"application/json": components["schemas"]["Connection"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1282,9 +1578,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1297,9 +1593,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -1312,41 +1608,46 @@ export interface paths {
 			};
 		};
 		/**
-		 * Update integration
-		 * @description Updates integration configuration such as name or settings.
+		 * Update connection
+		 * @description Updates connection name or encrypted data.
 		 */
 		put: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the integration. */
-					integrationId: string;
+					/** @description Unique identifier of the connection. */
+					connectionId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for updating an existing workspace integration. */
+			/** @description Request payload for updating an existing workspace connection. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateIntegration"];
+					"application/json": components["schemas"]["UpdateConnection"];
 				};
 			};
 			responses: {
-				/** @description Workspace integration response. */
+				/**
+				 * @description Response type for a workspace connection.
+				 *
+				 *     Note: The encrypted connection data is never exposed in API responses.
+				 *     Only metadata about the connection is returned.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Integration"];
+						"application/json": components["schemas"]["Connection"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -1359,9 +1660,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1374,9 +1675,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1389,9 +1690,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -1401,35 +1702,38 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				409: {
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
 		};
 		post?: never;
 		/**
-		 * Delete integration
-		 * @description Permanently removes the integration from the workspace.
+		 * Delete connection
+		 * @description Soft-deletes the connection from the workspace.
 		 */
 		delete: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the integration. */
-					integrationId: string;
+					/** @description Unique identifier of the connection. */
+					connectionId: string;
 				};
 				cookie?: never;
 			};
@@ -1445,9 +1749,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1460,9 +1764,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1475,9 +1779,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -1494,114 +1798,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/integrations/{integrationId}/credentials/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		/**
-		 * Update integration credentials
-		 * @description Updates only the authentication credentials for an integration.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the integration. */
-					integrationId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request payload for updating integration credentials only. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UpdateIntegrationCredentials"];
-				};
-			};
-			responses: {
-				/** @description Workspace integration response. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Integration"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/runs/": {
+	"/workspaces/{workspaceId}/contexts/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1609,19 +1806,19 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List workspace integration runs
-		 * @description Returns all integration runs for a workspace.
+		 * List contexts
+		 * @description Returns all contexts for the workspace.
 		 */
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -1635,24 +1832,24 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["IntegrationRunsPage"];
+						"application/json": components["schemas"]["ContextsPage"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1665,9 +1862,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1680,51 +1877,63 @@ export interface paths {
 			};
 		};
 		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/runs/{runId}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
 		/**
-		 * Get integration run
-		 * @description Returns details for a specific integration run.
+		 * Create context
+		 * @description Creates a structured reference-data context for the workspace.
 		 */
-		get: {
+		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the integration run. */
-					runId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
-			requestBody?: never;
+			/**
+			 * @description Request payload for creating a new workspace context.
+			 *
+			 *     The `definition` is a structured context the redaction engine consumes;
+			 *     its `name`, `description`, and `version` drive the stored columns unless
+			 *     overridden here.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreateContext"];
+				};
+			};
 			responses: {
-				/** @description Response type for an integration run. */
-				200: {
+				/** @description Response type for a workspace context. */
+				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["IntegrationRun"];
+						"application/json": components["schemas"]["Context2"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1737,9 +1946,97 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/contexts/{contextId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get context
+		 * @description Returns a single context.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the context. */
+					contextId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for a workspace context. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Context2"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1752,9 +2049,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -1766,9 +2063,191 @@ export interface paths {
 				};
 			};
 		};
-		put?: never;
+		/**
+		 * Update context
+		 * @description Updates context fields. Replacing the definition replaces the whole body.
+		 */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the context. */
+					contextId: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload for updating an existing workspace context.
+			 *
+			 *     Replacing the `definition` replaces the whole context body.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateContext"];
+				};
+			};
+			responses: {
+				/** @description Response type for a workspace context. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Context2"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
 		post?: never;
-		delete?: never;
+		/**
+		 * Delete context
+		 * @description Soft-deletes the context from the workspace.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the context. */
+					contextId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		options?: never;
 		head?: never;
 		patch?: never;
@@ -1788,19 +2267,19 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Filter by invited role. */
-					role?: components["schemas"]["WorkspaceRole"] | null;
-					/** @description Sort by field. */
-					sortBy?: components["schemas"]["InviteSortField"] | null;
 					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["SortOrder"] | null;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
+					order?: components["schemas"]["SortOrder"];
+					/** @description Filter by invited role. */
+					role?: components["schemas"]["WorkspaceRole"];
+					/** @description Sort by field. */
+					sortBy?: components["schemas"]["InviteSortField"];
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -1814,9 +2293,9 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
@@ -1829,9 +2308,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1844,9 +2323,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1883,9 +2362,9 @@ export interface paths {
 				/**
 				 * @description Workspace invite with complete information.
 				 *
-				 *      This response includes all the essential information about an
-				 *      invitation, including the unique invite ID that can be used to track or cancel
-				 *      the invitation later.
+				 *     This response includes all the essential information about an
+				 *     invitation, including the unique invite ID that can be used to track or cancel
+				 *     the invitation later.
 				 */
 				201: {
 					headers: {
@@ -1898,9 +2377,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -1913,9 +2392,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -1928,9 +2407,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -1943,9 +2422,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				409: {
 					headers: {
@@ -1953,6 +2432,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -2005,9 +2502,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -2020,9 +2517,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2035,9 +2532,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -2045,6 +2542,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -2088,9 +2603,9 @@ export interface paths {
 				/**
 				 * @description Workspace invite with complete information.
 				 *
-				 *      This response includes all the essential information about an
-				 *      invitation, including the unique invite ID that can be used to track or cancel
-				 *      the invitation later.
+				 *     This response includes all the essential information about an
+				 *     invitation, including the unique invite ID that can be used to track or cancel
+				 *     the invitation later.
 				 */
 				200: {
 					headers: {
@@ -2103,9 +2618,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -2118,9 +2633,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2133,9 +2648,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2143,6 +2658,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -2173,9 +2706,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2188,9 +2721,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -2203,9 +2736,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2248,8 +2781,8 @@ export interface paths {
 				/**
 				 * @description Preview of an invite with workspace details for display before joining.
 				 *
-				 *      This is a public-facing response that shows workspace information
-				 *      to help users decide whether to join via an invite code.
+				 *     This is a public-facing response that shows workspace information
+				 *     to help users decide whether to join via an invite code.
 				 */
 				200: {
 					headers: {
@@ -2262,9 +2795,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -2277,9 +2810,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2332,9 +2865,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -2347,9 +2880,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2362,9 +2895,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2377,9 +2910,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				409: {
 					headers: {
@@ -2387,6 +2920,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -2411,21 +2962,21 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Filter by workspace role. */
-					role?: components["schemas"]["WorkspaceRole"] | null;
 					/** @description Filter by 2FA status. */
-					has2fa?: boolean | null;
-					/** @description Sort by field. */
-					sortBy?: components["schemas"]["MemberSortField"] | null;
+					has2fa?: boolean;
 					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["SortOrder"] | null;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
+					order?: components["schemas"]["SortOrder"];
+					/** @description Filter by workspace role. */
+					role?: components["schemas"]["WorkspaceRole"];
+					/** @description Sort by field. */
+					sortBy?: components["schemas"]["MemberSortField"];
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -2439,9 +2990,9 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
@@ -2454,9 +3005,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2469,9 +3020,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -2484,9 +3035,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2506,7 +3057,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/members/leave": {
+	"/workspaces/{workspaceId}/members/leave/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2541,9 +3092,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -2556,9 +3107,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2571,9 +3122,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2607,10 +3158,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
 					/** @description Unique identifier of the member account. */
 					accountId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2628,9 +3179,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2643,9 +3194,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -2658,9 +3209,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2683,10 +3234,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
 					/** @description Unique identifier of the member account. */
 					accountId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2702,9 +3253,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -2717,9 +3268,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2732,9 +3283,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -2747,9 +3298,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2763,22 +3314,6 @@ export interface paths {
 		};
 		options?: never;
 		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/members/{accountId}/role": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
 		/**
 		 * Update member role
 		 * @description Updates a workspace member's role. Cannot update your own role or demote owners.
@@ -2788,10 +3323,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
 					/** @description Unique identifier of the member account. */
 					accountId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2814,9 +3349,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -2829,9 +3364,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2844,9 +3379,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -2859,9 +3394,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -2869,6 +3404,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -2889,13 +3442,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -2909,9 +3462,9 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
@@ -2924,9 +3477,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -2939,9 +3492,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -2956,7 +3509,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create webhook
-		 * @description Creates a new webhook for the workspace.
+		 * @description Creates a new webhook for the workspace. The response includes the signing secret which is used for HMAC-SHA256 verification of webhook payloads. **Important**: The secret is only shown once upon creation and cannot be retrieved again.
 		 */
 		post: {
 			parameters: {
@@ -2975,21 +3528,27 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Workspace webhook response. */
+				/**
+				 * @description Webhook creation response that includes the secret (visible only once).
+				 *
+				 *     The secret is used for HMAC-SHA256 signature verification of webhook payloads.
+				 *     It is only returned when the webhook is first created and cannot be retrieved
+				 *     again. Store it securely.
+				 */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Webhook"];
+						"application/json": components["schemas"]["WebhookCreated"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -3002,9 +3561,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3017,9 +3576,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3027,6 +3586,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -3072,9 +3649,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3087,9 +3664,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3102,9 +3679,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -3149,9 +3726,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -3164,9 +3741,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3179,9 +3756,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3194,9 +3771,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -3204,6 +3781,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -3235,9 +3830,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3250,9 +3845,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3265,9 +3860,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -3323,12 +3918,21 @@ export interface paths {
 						"application/json": components["schemas"]["WebhookResult"];
 					};
 				};
+				/** @description Failed to parse the request body as JSON */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3341,9 +3945,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3356,9 +3960,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -3368,93 +3972,26 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/ws/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Connect to workspace WebSocket
-		 * @description Establishes a WebSocket connection for real-time workspace events and collaboration.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				101: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
+						"text/plain": string;
 					};
 				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
+						"text/plain": string;
 					};
 				};
 			};
 		};
-		put?: never;
-		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;
@@ -3476,14 +4013,16 @@ export interface paths {
 			parameters: {
 				query?: {
 					/** @description Filter by file formats. */
-					formats?: components["schemas"]["FileFormat"][] | null;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
+					formats?: components["schemas"]["FileFormat"][];
+					/** @description Search by file name (case-insensitive, partial match). */
+					search?: string;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -3497,9 +4036,9 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
@@ -3512,9 +4051,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3527,9 +4066,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3574,9 +4113,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -3589,9 +4128,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3604,9 +4143,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3624,201 +4163,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/files/batch": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Download archived files
-		 * @description Downloads all or specific workspace files as a compressed archive. Supports zip and tar.gz formats.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to download files as an archive. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["DownloadFiles"];
-				};
-			};
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		/**
-		 * Delete multiple files
-		 * @description Soft deletes multiple files by setting deleted timestamps. Files can be recovered within the retention period.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to delete multiple files. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["DeleteFiles"];
-				};
-			};
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/files/{fileId}": {
+	"/files/{fileId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3841,7 +4186,7 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Represents an uploaded file. */
+				/** @description Represents a file in responses. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -3853,9 +4198,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3868,9 +4213,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3883,9 +4228,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -3925,9 +4270,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -3940,9 +4285,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -3955,9 +4300,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -3992,7 +4337,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Represents an uploaded file. */
+				/** @description Represents a file in responses. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -4004,9 +4349,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -4019,9 +4364,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4034,9 +4379,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -4049,9 +4394,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -4061,11 +4406,29 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 			};
 		};
 		trace?: never;
 	};
-	"/files/{fileId}/content": {
+	"/files/{fileId}/content/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4098,9 +4461,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4113,9 +4476,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -4128,9 +4491,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -4150,7 +4513,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/documents": {
+	"/workspaces/{workspaceId}/pipelines/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4158,19 +4521,23 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List documents
-		 * @description Lists all documents in a workspace with pagination.
+		 * List pipelines
+		 * @description Returns all pipelines in the workspace with optional filtering by status and name search.
 		 */
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/** @description Search by pipeline name (trigram similarity). */
+					search?: string;
+					/** @description Filter by pipeline status. */
+					status?: components["schemas"]["PipelineStatus"];
 				};
 				header?: never;
 				path: {
@@ -4184,24 +4551,24 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["DocumentsPage"];
+						"application/json": components["schemas"]["PipelineSummarysPage"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4214,9 +4581,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -4230,8 +4597,8 @@ export interface paths {
 		};
 		put?: never;
 		/**
-		 * Create document
-		 * @description Creates a new document container for organizing files.
+		 * Create pipeline
+		 * @description Creates a new pipeline in the workspace. The creator is set as the owner.
 		 */
 		post: {
 			parameters: {
@@ -4243,28 +4610,33 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for creating a new document. */
+			/**
+			 * @description Request payload for creating a new pipeline.
+			 *
+			 *     Creates a new pipeline with the specified name and optional description.
+			 *     The definition can be added later via update.
+			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateDocument"];
+					"application/json": components["schemas"]["CreatePipeline"];
 				};
 			};
 			responses: {
-				/** @description Represents a document with full details. */
+				/** @description Pipeline response. */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Document"];
+						"application/json": components["schemas"]["Pipeline"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -4277,9 +4649,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4292,9 +4664,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -4302,6 +4674,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -4312,7 +4702,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/documents/{documentId}": {
+	"/pipelines/{pipelineId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4320,36 +4710,36 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get document
-		 * @description Returns document details by ID.
+		 * Get pipeline
+		 * @description Returns a pipeline by its unique identifier.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the document. */
-					documentId: string;
+					/** @description Unique identifier of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Represents a document with full details. */
+				/** @description Pipeline response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Document"];
+						"application/json": components["schemas"]["Pipeline"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4362,9 +4752,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -4377,9 +4767,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -4394,22 +4784,22 @@ export interface paths {
 		put?: never;
 		post?: never;
 		/**
-		 * Delete document
-		 * @description Soft-deletes the document and associated files.
+		 * Delete pipeline
+		 * @description Soft-deletes a pipeline. Data is retained for potential recovery.
 		 */
 		delete: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the document. */
-					documentId: string;
+					/** @description Unique identifier of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Document deleted. */
+				/** @description no content */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -4419,9 +4809,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4434,9 +4824,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -4449,9 +4839,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -4466,41 +4856,46 @@ export interface paths {
 		options?: never;
 		head?: never;
 		/**
-		 * Update document
-		 * @description Updates document metadata.
+		 * Update pipeline
+		 * @description Updates an existing pipeline. Only provided fields are updated.
 		 */
 		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the document. */
-					documentId: string;
+					/** @description Unique identifier of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for updating a document. */
+			/**
+			 * @description Request payload to update an existing pipeline.
+			 *
+			 *     All fields are optional; only provided fields will be updated. Supplying a
+			 *     `definition` replaces the whole detection + redaction configuration.
+			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateDocument"];
+					"application/json": components["schemas"]["UpdatePipeline"];
 				};
 			};
 			responses: {
-				/** @description Represents a document with full details. */
+				/** @description Pipeline response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Document"];
+						"application/json": components["schemas"]["Pipeline"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -4513,9 +4908,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4528,9 +4923,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -4543,9 +4938,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -4555,11 +4950,29 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 			};
 		};
 		trace?: never;
 	};
-	"/files/{fileId}/comments": {
+	"/pipelines/{pipelineId}/runs/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4567,24 +4980,24 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List comments
-		 * @description Returns all comments for a file.
+		 * List pipeline runs
+		 * @description Returns all runs for a specific pipeline.
 		 */
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
@@ -4593,24 +5006,24 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["CommentsPage"];
+						"application/json": components["schemas"]["PipelineRunsPage"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4623,9 +5036,24 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -4639,41 +5067,46 @@ export interface paths {
 		};
 		put?: never;
 		/**
-		 * Create comment
-		 * @description Creates a new comment on a file.
+		 * Start a run (detect)
+		 * @description Analyzes a file with the pipeline's configuration and returns the run holding the findings for review. Accepts an Idempotency-Key header.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for creating a new document comment. */
+			/**
+			 * @description Request payload to start a run (detect) over a file.
+			 *
+			 *     Analyzes the file with the pipeline's configuration and returns the run,
+			 *     which holds the findings for review before redaction.
+			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateComment"];
+					"application/json": components["schemas"]["CreatePipelineRun"];
 				};
 			};
 			responses: {
-				/** @description Represents a document comment. */
+				/** @description Response type for a pipeline run. */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Comment"];
+						"application/json": components["schemas"]["PipelineRun"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -4686,9 +5119,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -4701,9 +5134,127 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/runs/{runId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get pipeline run
+		 * @description Returns the run and its status for review.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the pipeline run. */
+					runId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for a pipeline run. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["PipelineRun"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -4715,13 +5266,136 @@ export interface paths {
 				};
 			};
 		};
+		put?: never;
+		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;
 		patch?: never;
 		trace?: never;
 	};
-	"/comments/{commentId}": {
+	"/runs/{runId}/detections/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get run detections
+		 * @description Returns the run's detected findings (the analyzed document) for review.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the pipeline run. */
+					runId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description What detection found in one document.
+				 *
+				 *     The body group plus per-container-part groups (each tagged
+				 *     by modality) plus a snapshot of the recognition [`Scope`] the
+				 *     entities were scored against.
+				 *
+				 *     The scope snapshot travels with the entities so anonymize
+				 *     can rebuild an orchestrator against exactly the vocabulary
+				 *     analyze used. Anything a policy predicate compares against
+				 *     (label catalog, document-level classification labels,
+				 *     asserted languages / jurisdictions) is here.
+				 *
+				 *     `correlation_id` on the persisted scope is always `None`; the
+				 *     anonymize call supplies a fresh id from the passed
+				 *     [`Document`](nvisy_schema::file::Document) so anonymize-side
+				 *     tracing spans are distinct from the analyze-side ones.
+				 *
+				 *     [`Scope`]: elide::recognition::Scope
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["AnalyzedDocument"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/runs/{runId}/redactions/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4730,318 +5404,37 @@ export interface paths {
 		};
 		get?: never;
 		put?: never;
-		post?: never;
 		/**
-		 * Delete comment
-		 * @description Deletes a comment by ID.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the comment. */
-					commentId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Comment deleted. */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		/**
-		 * Update comment
-		 * @description Updates a comment by ID.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the comment. */
-					commentId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request payload to update a document comment. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UpdateComment"];
-				};
-			};
-			responses: {
-				/** @description Represents a document comment. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Comment"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/files/{fileId}/annotations/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List annotations
-		 * @description Returns all annotations for a file.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string | null;
-				};
-				header?: never;
-				path: {
-					/** @description Unique identifier of the file. */
-					fileId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["AnnotationsPage"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create annotation
-		 * @description Creates a new annotation on a file.
+		 * Redact a run
+		 * @description Applies the pipeline's policies to the run's stored analysis, stores the redacted file, and completes the run.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the pipeline run. */
+					runId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request to create an annotation. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateAnnotation"];
-				};
-			};
+			requestBody?: never;
 			responses: {
-				/** @description Response type for a document annotation. */
-				201: {
+				/** @description Response type for a pipeline run. */
+				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Annotation"];
+						"application/json": components["schemas"]["PipelineRun"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -5054,9 +5447,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -5069,11 +5462,26 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -5089,7 +5497,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/annotations/{annotationId}": {
+	"/workspaces/{workspaceId}/policies/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5097,36 +5505,50 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get annotation
-		 * @description Returns a specific annotation.
+		 * List policies
+		 * @description Returns all policies for the workspace.
 		 */
 		get: {
 			parameters: {
-				query?: never;
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the annotation. */
-					annotationId: string;
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Response type for a document annotation. */
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Annotation"];
+						"application/json": components["schemas"]["PolicysPage"];
 					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -5139,9 +5561,181 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Create policy
+		 * @description Creates a structured redaction policy for the workspace.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the workspace. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload for creating a new workspace policy.
+			 *
+			 *     The `definition` is a structured policy the redaction engine consumes;
+			 *     its `name`, `description`, and `version` drive the stored columns unless
+			 *     overridden here.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreatePolicy"];
+				};
+			};
+			responses: {
+				/** @description Response type for a workspace policy. */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Policy2"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/policies/{policyId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get policy
+		 * @description Returns a single policy.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the policy. */
+					policyId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for a workspace policy. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Policy2"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -5154,9 +5748,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -5168,19 +5762,132 @@ export interface paths {
 				};
 			};
 		};
-		put?: never;
+		/**
+		 * Update policy
+		 * @description Updates policy fields. Replacing the definition replaces the whole body.
+		 */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the policy. */
+					policyId: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload for updating an existing workspace policy.
+			 *
+			 *     Replacing the `definition` replaces the whole policy body.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdatePolicy"];
+				};
+			};
+			responses: {
+				/** @description Response type for a workspace policy. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Policy2"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
 		post?: never;
 		/**
-		 * Delete annotation
-		 * @description Deletes an annotation. Only the owner can delete their annotations.
+		 * Delete policy
+		 * @description Soft-deletes the policy from the workspace.
 		 */
 		delete: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the annotation. */
-					annotationId: string;
+					/** @description Unique identifier of the policy. */
+					policyId: string;
 				};
 				cookie?: never;
 			};
@@ -5196,9 +5903,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -5211,9 +5918,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				403: {
 					headers: {
@@ -5226,9 +5933,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				404: {
 					headers: {
@@ -5240,183 +5947,6 @@ export interface paths {
 				};
 			};
 		};
-		options?: never;
-		head?: never;
-		/**
-		 * Update annotation
-		 * @description Updates an annotation. Only the owner can update their annotations.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the annotation. */
-					annotationId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to update an annotation. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UpdateAnnotation"];
-				};
-			};
-			responses: {
-				/** @description Response type for a document annotation. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Annotation"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/activities/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List workspace activities
-		 * @description Returns all activity log entries for a workspace.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string | null;
-				};
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ActivitysPage"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
 		options?: never;
 		head?: never;
 		patch?: never;
@@ -5436,13 +5966,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number | null;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
-					 *      Obtain this from the `nextCursor` field in the response.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					after?: string | null;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path?: never;
@@ -5453,9 +5983,9 @@ export interface paths {
 				/**
 				 * @description Generic paginated response wrapper.
 				 *
-				 *      Provides a consistent structure for all paginated API responses with
-				 *      cursor-based pagination support. When `next_cursor` is present, there
-				 *      are more items to fetch.
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
 				 */
 				200: {
 					headers: {
@@ -5468,9 +5998,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -5490,7 +6020,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/notifications/unread": {
+	"/notifications/unread/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5522,9 +6052,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -5544,7 +6074,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/login": {
+	"/auth/login/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5583,9 +6113,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -5598,9 +6128,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -5608,6 +6138,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -5618,7 +6166,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/signup": {
+	"/auth/signup/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5657,9 +6205,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				400: {
 					headers: {
@@ -5672,9 +6220,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				409: {
 					headers: {
@@ -5682,6 +6230,24 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -5692,7 +6258,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/logout": {
+	"/auth/logout/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5724,9 +6290,9 @@ export interface paths {
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
-				 *      This struct contains all the information needed to serialize an error
-				 *      response, including the error name, message, HTTP status code, resource
-				 *      information, and user-friendly messages.
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
 				 */
 				401: {
 					headers: {
@@ -5744,7 +6310,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/health": {
+	"/health/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5772,22 +6338,22 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description System monitoring status response. */
+				/** @description Response body for `GET /health/`. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["MonitorStatus"];
+						"application/json": components["schemas"]["Health"];
 					};
 				};
-				/** @description System monitoring status response. */
+				/** @description Response body for `GET /health/`. */
 				503: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["MonitorStatus"];
+						"application/json": components["schemas"]["Health"];
 					};
 				};
 			};
@@ -5811,23 +6377,23 @@ export interface components {
 			 * @description Unique identifier of the account.
 			 */
 			accountId: string;
+			/** @description Company name (optional). */
+			companyName?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the account was created.
+			 */
+			createdAt: string;
+			/** @description Display name of the account holder. */
+			displayName: string;
+			/** @description Email address associated with the account. */
+			emailAddress: string;
 			/** @description Whether the account email has been verified. */
 			isActivated: boolean;
 			/** @description Whether the account has administrator privileges. */
 			isAdmin: boolean;
 			/** @description Whether the account is currently suspended. */
 			isSuspended: boolean;
-			/** @description Display name of the account holder. */
-			displayName: string;
-			/** @description Email address associated with the account. */
-			emailAddress: string;
-			/** @description Company name (optional). */
-			companyName?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the account was created.
-			 */
-			createdAt: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the account was last updated.
@@ -5835,1372 +6401,32 @@ export interface components {
 			updatedAt: string;
 		};
 		/**
-		 * @description HTTP error response representation with security-conscious design.
+		 * @description Path parameters for account operations.
 		 *
-		 *      This struct contains all the information needed to serialize an error
-		 *      response, including the error name, message, HTTP status code, resource
-		 *      information, and user-friendly messages.
+		 *     Used when retrieving account information by ID. Access is granted
+		 *     if the requester shares at least one workspace with the target account.
 		 */
-		ErrorResponse: {
-			/** @description The error name/type identifier */
-			name: string;
-			/** @description User-friendly error message safe for client display */
-			message: string;
-			/** @description The resource that the error relates to (optional, set by handler) */
-			resource?: string | null;
-			/** @description Helpful suggestion for resolving the error (optional) */
-			suggestion?: string | null;
-			/** @description Validation error details for field-specific errors */
-			validation?: components["schemas"]["ValidationErrorDetail"][] | null;
-		};
-		/** @description Validation error details for field-specific errors. */
-		ValidationErrorDetail: {
-			/** @description Field name that failed validation */
-			field: string;
-			/** @description Error code for the validation failure */
-			code: string;
-			/** @description Human-readable error message */
-			message: string;
-			/** @description Additional parameters related to the validation error */
-			params?: {
-				[key: string]: unknown;
-			} | null;
-		};
-		/** @description Request payload to update an account. */
-		UpdateAccount: {
-			/** @description New display name (2-100 characters). */
-			displayName?: string | null;
-			/**
-			 * Format: email
-			 * @description New email address (must be valid email format).
-			 */
-			emailAddress?: string | null;
-			/** @description New password (will be hashed before storage). */
-			password?: string | null;
-			/** @description Company or organization name (empty string clears the value). */
-			companyName?: string | null;
-		};
-		/** @description Request to create a new API token. */
-		CreateApiToken: {
-			/** @description Human-readable name for the API token (1-100 characters). */
-			name: string;
-			/** @description When the token expires. */
-			expiresIn: components["schemas"]["TokenExpiration"];
-		};
-		/** @description Expiration options for API tokens. */
-		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
-		/** @description API token with JWT token string (only returned on creation). */
-		ApiTokenWithJWT: {
+		AccountPathParams: {
 			/**
 			 * Format: uuid
-			 * @description Unique identifier for the token.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the account this token belongs to.
+			 * @description Unique identifier of the account.
 			 */
 			accountId: string;
-			/** @description Human-readable name for the API token. */
-			name: string;
-			/** @description Type of token (web, mobile, api, etc.). */
-			sessionType: components["schemas"]["ApiTokenType"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp of token creation.
-			 */
-			issuedAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token expires (None = never expires).
-			 */
-			expiredAt?: string | null;
-			/** @description The JWT token string (only shown once on creation). */
-			token: string;
-		};
-		/**
-		 * @description Defines the type of API token for authentication and tracking purposes.
-		 *
-		 *      This enumeration corresponds to the `API_TOKEN_TYPE` PostgreSQL enum and is used
-		 *      to categorize different types of authentication tokens based on the client type.
-		 */
-		ApiTokenType: "web" | "api" | "cli";
-		/**
-		 * @description Cursor-based pagination query parameters.
-		 *
-		 *      This is the preferred pagination method for API endpoints. It provides:
-		 *      - Consistent performance regardless of page depth
-		 *      - Stable results even when items are added/removed
-		 *      - Efficient "load more" / infinite scroll patterns
-		 */
-		CursorPagination: {
-			/**
-			 * Format: uint32
-			 * @description The maximum number of records to return (1-100, default: 20).
-			 */
-			limit?: number | null;
-			/**
-			 * @description Cursor pointing to the last item of the previous page.
-			 *      Obtain this from the `nextCursor` field in the response.
-			 */
-			after?: string | null;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		ApiTokensPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["ApiToken"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/** @description API token response structure. */
-		ApiToken: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier for the token.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the account this token belongs to.
-			 */
-			accountId: string;
-			/** @description Human-readable name for the API token. */
-			name: string;
-			/** @description Type of token (web, api, etc.). */
-			sessionType: components["schemas"]["ApiTokenType"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp of token creation.
-			 */
-			issuedAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token expires (None = never expires).
-			 */
-			expiredAt?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of most recent token activity.
-			 */
-			lastUsedAt?: string | null;
-		};
-		/**
-		 * @description Path parameters for API token operations.
-		 *
-		 *      Since token IDs are globally unique UUIDs, account context is verified
-		 *      by comparing with the authenticated user's account ID.
-		 */
-		TokenPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the API token.
-			 */
-			tokenId: string;
-		};
-		/** @description Request to update an existing API token. */
-		UpdateApiToken: {
-			/** @description Updated name for the API token (1-100 characters). */
-			name?: string | null;
-		};
-		/**
-		 * @description Request payload for creating a new workspace.
-		 *
-		 *      Creates a new workspace with the specified configuration. The creator is
-		 *      automatically added as an owner of the workspace.
-		 */
-		CreateWorkspace: {
-			/** @description Optional description of the workspace (max 200 characters). */
-			description?: string | null;
-			/** @description Display name of the workspace (3-100 characters). */
-			displayName: string;
-			/** @description Whether approval is required for processed files to be visible. */
-			requireApproval?: boolean | null;
-			/** @description Whether comments are enabled for this workspace. */
-			enableComments?: boolean | null;
-		};
-		/** @description Workspace response. */
-		Workspace: {
-			/** @description Description of the workspace. */
-			description?: string | null;
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace.
-			 */
-			workspaceId: string;
-			/** @description Display name of the workspace. */
-			displayName: string;
-			/** @description Tags associated with the workspace. */
-			tags: string[];
-			/** @description Whether approval is required to processed files to be visible. */
-			requireApproval: boolean;
-			/** @description Whether comments are enabled for this workspace. */
-			enableComments: boolean;
-			/**
-			 * Format: uuid
-			 * @description ID of the account that created the workspace.
-			 */
-			createdBy: string;
-			/** @description Role of the member in the workspace. */
-			memberRole: components["schemas"]["WorkspaceRole"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was last updated.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Defines the role and permission level of a workspace member.
-		 *
-		 *      This enumeration corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
-		 *      hierarchical access control for workspace members with clearly defined capabilities.
-		 */
-		WorkspaceRole: "owner" | "admin" | "member" | "guest";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		WorkspacesPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Workspace"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/** @description Path parameters for workspace-level operations. */
-		WorkspacePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Request payload to update an existing workspace.
-		 *
-		 *      All fields are optional; only provided fields will be updated.
-		 */
-		UpdateWorkspace: {
-			/** @description New description for the workspace (max 500 characters). */
-			description?: string | null;
-			/** @description New display name for the workspace (3-100 characters). */
-			displayName?: string | null;
-			/** @description Whether approval is required for processed files to be visible. */
-			requireApproval?: boolean | null;
-			/** @description Whether comments are enabled for this workspace. */
-			enableComments?: boolean | null;
-		};
-		/** @description Response for notification settings within a workspace. */
-		NotificationSettings: {
-			/** @description Whether to send email notifications. */
-			notifyViaEmail: boolean;
-			/** @description Notification events to receive in-app. */
-			notificationEventsApp: components["schemas"]["NotificationEvent"][];
-			/** @description Notification events to receive via email. */
-			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
-		};
-		/**
-		 * @description Defines the type of notification event sent to a user.
-		 *
-		 *      This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and is used
-		 *      for various user notifications including mentions, replies, and system announcements.
-		 */
-		NotificationEvent:
-			| "comment:mention"
-			| "comment:reply"
-			| "document:uploaded"
-			| "document:downloaded"
-			| "document:verified"
-			| "member:invited"
-			| "member:joined"
-			| "integration:synced"
-			| "integration:desynced"
-			| "system:announcement"
-			| "system:report";
-		/** @description Request payload for updating notification settings. */
-		UpdateNotificationSettings: {
-			/** @description Whether to send email notifications. */
-			notifyViaEmail?: boolean | null;
-			/** @description Notification events to receive in-app. */
-			notificationEventsApp?:
-				| components["schemas"]["NotificationEvent"][]
-				| null;
-			/** @description Notification events to receive via email. */
-			notificationEventsEmail?:
-				| components["schemas"]["NotificationEvent"][]
-				| null;
-		};
-		/** @description Request payload for creating a new workspace integration. */
-		CreateIntegration: {
-			/** @description Detailed description of the integration's purpose (1-500 characters). */
-			description: string;
-			/** @description Human-readable name for the integration (1-100 characters). */
-			integrationName: string;
-			/** @description Type of third-party service this integration connects to. */
-			integrationType: components["schemas"]["IntegrationType"];
-			/** @description Optional structured configuration and service-specific metadata. */
-			metadata?: unknown;
-			/** @description Optional authentication credentials for the external service. */
-			credentials?: unknown;
-			/** @description Whether the integration should be active immediately upon creation. */
-			isActive?: boolean | null;
-		};
-		/**
-		 * @description Defines the functional category of a workspace integration.
-		 *
-		 *      This enumeration corresponds to the `INTEGRATION_TYPE` PostgreSQL enum and is used
-		 *      to categorize different types of third-party integrations that can be connected to workspaces.
-		 */
-		IntegrationType:
-			| "storage"
-			| "communication"
-			| "business"
-			| "analytics"
-			| "automation"
-			| "developer"
-			| "industry";
-		/** @description Workspace integration response. */
-		Integration: {
-			/** @description Detailed description of the integration's purpose and functionality. */
-			description: string;
-			/**
-			 * Format: uuid
-			 * @description Unique integration identifier.
-			 */
-			integrationId: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the workspace this integration belongs to.
-			 */
-			workspaceId: string;
-			/** @description Human-readable name for the integration. */
-			integrationName: string;
-			/** @description Type of third-party service this integration connects to. */
-			integrationType: components["schemas"]["IntegrationType"];
-			/** @description Whether the integration is currently active and enabled. */
-			isActive: boolean;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent successful synchronization.
-			 */
-			lastSyncAt?: string | null;
-			/** @description Current status of synchronization operations. */
-			syncStatus?: components["schemas"]["IntegrationStatus"] | null;
-			/**
-			 * Format: uuid
-			 * @description Account that originally created this integration.
-			 */
-			createdBy: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this integration was first created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this integration was last modified.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Defines the operational status of a workspace integration.
-		 *
-		 *      This enumeration corresponds to the `INTEGRATION_STATUS` PostgreSQL enum and is used
-		 *      to manage integration states from initial setup through active execution and cancellation.
-		 */
-		IntegrationStatus: "pending" | "running" | "cancelled";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		IntegrationsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Integration"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/**
-		 * @description Path parameters for integration operations (integration ID only).
-		 *
-		 *      Since integration IDs are globally unique UUIDs, workspace context can be
-		 *      derived from the integration record itself for authorization purposes.
-		 */
-		IntegrationPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the integration.
-			 */
-			integrationId: string;
-		};
-		/** @description Request payload for updating an existing workspace integration. */
-		UpdateIntegration: {
-			/** @description Updated description of the integration's purpose (1-500 characters). */
-			description?: string | null;
-			/** @description Updated human-readable name for the integration (1-100 characters). */
-			integrationName?: string | null;
-			/** @description Updated type of external service being integrated. */
-			integrationType?: components["schemas"]["IntegrationType"] | null;
-			/** @description Updated configuration and service-specific metadata. */
-			metadata?: unknown;
-			/** @description Updated authentication credentials for the external service. */
-			credentials?: unknown;
-			/** @description Updated active status for the integration. */
-			isActive?: boolean | null;
-		};
-		/** @description Request payload for updating integration credentials only. */
-		UpdateIntegrationCredentials: {
-			/** @description Updated authentication credentials for the external service. */
-			credentials: unknown;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		IntegrationRunsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["IntegrationRun"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/** @description Response type for an integration run. */
-		IntegrationRun: {
-			/**
-			 * Format: uuid
-			 * @description Unique run identifier.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description Workspace ID.
-			 */
-			workspaceId: string;
-			/**
-			 * Format: uuid
-			 * @description Integration ID (if associated with an integration).
-			 */
-			integrationId?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Account that triggered the run.
-			 */
-			accountId?: string | null;
-			/** @description Run type. */
-			runType: components["schemas"]["RunType"];
-			/** @description Current status. */
-			status: components["schemas"]["IntegrationStatus"];
-			/** @description Run metadata, results, and error details. */
-			metadata: unknown;
-			/**
-			 * Format: date-time
-			 * @description When the run started.
-			 */
-			startedAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the run completed.
-			 */
-			completedAt?: string | null;
-		};
-		/**
-		 * @description Defines the type of an integration run.
-		 *
-		 *      This enumeration corresponds to the `RUN_TYPE` PostgreSQL enum and is used
-		 *      to classify how an integration run was triggered.
-		 */
-		RunType: "manual" | "scheduled" | "triggered";
-		/**
-		 * @description Path parameters for integration run operations (run ID only).
-		 *
-		 *      Since run IDs are globally unique UUIDs, workspace context can be
-		 *      derived from the run record itself for authorization purposes.
-		 */
-		IntegrationRunPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the integration run.
-			 */
-			runId: string;
-		};
-		/** @description Request payload for creating a new workspace invite. */
-		CreateInvite: {
-			/**
-			 * Format: email
-			 * @description Email address of the person to invite.
-			 */
-			inviteeEmail: string;
-			/** @description Role the invitee will have if they accept the invitation. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description When the invitation expires. */
-			expiresIn: components["schemas"]["InviteExpiration"];
-		};
-		/** @description Expiration options for invite codes. */
-		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
-		/**
-		 * @description Workspace invite with complete information.
-		 *
-		 *      This response includes all the essential information about an
-		 *      invitation, including the unique invite ID that can be used to track or cancel
-		 *      the invitation later.
-		 */
-		Invite: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invitation.
-			 */
-			inviteId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace the invitation is for.
-			 */
-			workspaceId: string;
-			/** @description Email address of the invitee (null for open invite codes). */
-			inviteeEmail?: string | null;
-			/** @description Invite token (only included for open invitations without invitee_email). */
-			inviteToken?: string | null;
-			/** @description Role the invitee will have if they accept. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description Current status of the invitation. */
-			inviteStatus: components["schemas"]["InviteStatus"];
-			/**
-			 * Format: date-time
-			 * @description When the invitation expires.
-			 */
-			expiresAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation was last updated.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Defines the current status of a workspace invitation.
-		 *
-		 *      This enumeration corresponds to the `INVITE_STATUS` PostgreSQL enum and is used
-		 *      to track the lifecycle of workspace invitations from creation to resolution.
-		 */
-		InviteStatus:
-			| "pending"
-			| "accepted"
-			| "declined"
-			| "canceled"
-			| "expired"
-			| "revoked";
-		/** @description Query parameters for listing workspace invites. */
-		ListInvites: {
-			/** @description Filter by invited role. */
-			role?: components["schemas"]["WorkspaceRole"] | null;
-			/** @description Sort by field. */
-			sortBy?: components["schemas"]["InviteSortField"] | null;
-			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["SortOrder"] | null;
-		};
-		/** @description Fields available for sorting workspace invites. */
-		InviteSortField: "email" | "date";
-		/** @description Sort order direction. */
-		SortOrder: "asc" | "desc";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		InvitesPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Invite"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/** @description Request to generate a shareable invite code for a workspace. */
-		GenerateInviteCode: {
-			/** @description Role to assign when someone joins via this invite code. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description When the invite code expires. */
-			expiresIn: components["schemas"]["InviteExpiration"];
-		};
-		/** @description Response containing a generated shareable invite code. */
-		InviteCode: {
-			/** @description The generated invite code that can be shared. */
-			inviteCode: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace this invite code is for.
-			 */
-			workspaceId: string;
-			/** @description Role assigned when someone joins via this code. */
-			role: components["schemas"]["WorkspaceRole"];
-			/**
-			 * Format: date-time
-			 * @description When the invite code expires.
-			 */
-			expiresAt: string;
-		};
-		/**
-		 * @description Path parameters for invite operations (invite ID only).
-		 *
-		 *      Since invite IDs are globally unique UUIDs, workspace context can be
-		 *      derived from the invite record itself for authorization purposes.
-		 */
-		InvitePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invite.
-			 */
-			inviteId: string;
-		};
-		/** @description Request to respond to a workspace invitation. */
-		ReplyInvite: {
-			/** @description Whether to accept or decline the invitation. */
-			acceptInvite: boolean;
-		};
-		/** @description Path parameters for joining via invite code. */
-		InviteCodePathParams: {
-			/** @description The invite code to use for joining the workspace. */
-			inviteCode: string;
-		};
-		/**
-		 * @description Preview of an invite with workspace details for display before joining.
-		 *
-		 *      This is a public-facing response that shows workspace information
-		 *      to help users decide whether to join via an invite code.
-		 */
-		InvitePreview: {
-			/** @description Description of the workspace. */
-			description?: string | null;
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace.
-			 */
-			workspaceId: string;
-			/** @description Display name of the workspace. */
-			displayName: string;
-			/** @description Tags associated with the workspace. */
-			tags: string[];
-			/** @description Role the user will have if they join. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the invite expires.
-			 */
-			expiresAt: string;
-		};
-		/** @description Represents a workspace member. */
-		Member: {
-			/**
-			 * Format: uuid
-			 * @description Account ID of the member.
-			 */
-			accountId: string;
-			/** @description Email address of the member. */
-			emailAddress: string;
-			/** @description Display name of the member. */
-			displayName: string;
-			/** @description Role of the member in the workspace. */
-			memberRole: components["schemas"]["WorkspaceRole"];
-			/** @description Whether the member has two-factor authentication enabled. */
-			has2fa: boolean;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the member joined the workspace.
-			 */
-			createdAt: string;
-		};
-		/** @description Query parameters for listing workspace members. */
-		ListMembers: {
-			/** @description Filter by workspace role. */
-			role?: components["schemas"]["WorkspaceRole"] | null;
-			/** @description Filter by 2FA status. */
-			has2fa?: boolean | null;
-			/** @description Sort by field. */
-			sortBy?: components["schemas"]["MemberSortField"] | null;
-			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["SortOrder"] | null;
-		};
-		/** @description Fields available for sorting workspace members. */
-		MemberSortField: "name" | "date";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		MembersPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Member"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/** @description Path parameters for workspace member operations. */
-		MemberPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the member account.
-			 */
-			accountId: string;
-		};
-		/** @description Request to update a member's role. */
-		UpdateMember: {
-			/** @description New role for the member. */
-			role: components["schemas"]["WorkspaceRole"];
-		};
-		/** @description Request payload for creating a new workspace webhook. */
-		CreateWebhook: {
-			/** @description Detailed description of the webhook's purpose (max 500 characters). */
-			description: string;
-			/** @description Human-readable name for the webhook (1-100 characters). */
-			displayName: string;
-			/**
-			 * Format: uri
-			 * @description The URL to send webhook payloads to.
-			 */
-			url: string;
-			/** @description List of event types this webhook should receive. */
-			events: components["schemas"]["WebhookEvent"][];
-			/** @description Optional custom headers to include in webhook requests. */
-			headers?: {
-				[key: string]: string;
-			} | null;
-			/** @description Initial status of the webhook (active or paused). */
-			status?: components["schemas"]["WebhookStatus"] | null;
-		};
-		/**
-		 * @description Defines the types of events that can trigger webhook delivery.
-		 *
-		 *      This enumeration corresponds to the `WEBHOOK_EVENT` PostgreSQL enum and is used
-		 *      to configure which events a webhook should receive notifications for.
-		 */
-		WebhookEvent:
-			| "document:created"
-			| "document:updated"
-			| "document:deleted"
-			| "file:created"
-			| "file:updated"
-			| "file:deleted"
-			| "member:added"
-			| "member:deleted"
-			| "member:updated"
-			| "integration:created"
-			| "integration:updated"
-			| "integration:deleted"
-			| "integration:synced"
-			| "integration:desynced";
-		/**
-		 * @description Defines the operational status of a workspace webhook.
-		 *
-		 *      This enumeration corresponds to the `WEBHOOK_STATUS` PostgreSQL enum and is used
-		 *      to manage webhook states from active operation through pausing and disabling.
-		 */
-		WebhookStatus: "active" | "paused" | "disabled";
-		/** @description Workspace webhook response. */
-		Webhook: {
-			/** @description Detailed description of the webhook's purpose. */
-			description: string;
-			/**
-			 * Format: uuid
-			 * @description Unique webhook identifier.
-			 */
-			webhookId: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the workspace this webhook belongs to.
-			 */
-			workspaceId: string;
-			/** @description Origin type of the webhook (provided or integration). */
-			webhookType: components["schemas"]["WebhookType"];
-			/**
-			 * Format: uuid
-			 * @description Reference to integration (present for integration type webhooks).
-			 */
-			integrationId?: string | null;
-			/** @description Human-readable name for the webhook. */
-			displayName: string;
-			/** @description The URL to send webhook payloads to. */
-			url: string;
-			/** @description List of event types this webhook receives. */
-			events: components["schemas"]["WebhookEvent"][];
-			/** @description Custom headers included in webhook requests. */
-			headers: {
-				[key: string]: string;
-			};
-			/** @description Current status of the webhook. */
-			status: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent webhook trigger.
-			 */
-			lastTriggeredAt?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Account that originally created this webhook.
-			 */
-			createdBy: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was first created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was last modified.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Defines the origin type of a workspace webhook.
-		 *
-		 *      This enumeration corresponds to the `WEBHOOK_TYPE` PostgreSQL enum and is used
-		 *      to distinguish between user-created webhooks and those created by integrations.
-		 */
-		WebhookType: "provided" | "integration";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		WebhooksPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Webhook"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/**
-		 * @description Path parameters for webhook operations (webhook ID only).
-		 *
-		 *      Since webhook IDs are globally unique UUIDs, workspace context can be
-		 *      derived from the webhook record itself for authorization purposes.
-		 */
-		WebhookPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the webhook.
-			 */
-			webhookId: string;
-		};
-		/** @description Request payload for updating an existing workspace webhook. */
-		UpdateWebhook: {
-			/** @description Updated description of the webhook's purpose (max 500 characters). */
-			description?: string | null;
-			/** @description Updated human-readable name for the webhook (1-100 characters). */
-			displayName?: string | null;
-			/**
-			 * Format: uri
-			 * @description Updated URL to send webhook payloads to.
-			 */
-			url?: string | null;
-			/** @description Updated list of event types this webhook should receive. */
-			events?: components["schemas"]["WebhookEvent"][] | null;
-			/** @description Updated custom headers to include in webhook requests. */
-			headers?: {
-				[key: string]: string;
-			} | null;
-			/** @description Updated status (active or paused). Ignored if webhook is currently disabled. */
-			status?: components["schemas"]["WebhookStatus"] | null;
-		};
-		/** @description Request payload for testing a webhook. */
-		TestWebhook: {
-			/**
-			 * @description Optional custom payload to send in the test request.
-			 *      If not provided, a default test payload will be used.
-			 */
-			payload?: unknown;
-		};
-		/** @description Result of a webhook delivery attempt. */
-		WebhookResult: {
-			/**
-			 * Format: uint16
-			 * @description HTTP status code returned by the webhook endpoint.
-			 */
-			statusCode: number;
-			/**
-			 * Format: int64
-			 * @description Time taken to receive a response in milliseconds.
-			 */
-			responseTimeMs: number;
-		};
-		/** @description Query parameters for listing files. */
-		ListFiles: {
-			/** @description Filter by file formats. */
-			formats?: components["schemas"]["FileFormat"][] | null;
-		};
-		/** @description File format categories for filtering. */
-		FileFormat: "pdf" | "doc" | "txt" | "md" | "csv" | "json" | "png" | "jpeg";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		FilesPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["File"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/** @description Represents an uploaded file. */
-		File: {
-			/**
-			 * Format: uuid
-			 * @description Unique file identifier.
-			 */
-			fileId: string;
-			/** @description Display name. */
-			displayName: string;
-			/**
-			 * Format: int64
-			 * @description File size in bytes.
-			 */
-			fileSize: number;
-			/** @description Processing status. */
-			status: components["schemas"]["ProcessingStatus"];
-			/**
-			 * Format: int32
-			 * @description Processing priority (1-10).
-			 */
-			processingPriority: number;
-			/** @description Classification tags. */
-			tags: string[];
-			/** @description Knowledge extraction settings. */
-			fileKnowledge: components["schemas"]["FileKnowledge"];
-			/**
-			 * Format: date-time
-			 * @description Creation timestamp.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Last update timestamp.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Defines the current processing status of a file in the processing pipeline.
-		 *
-		 *      This enumeration corresponds to the `PROCESSING_STATUS` PostgreSQL enum and is used
-		 *      to track the state of files as they progress through various processing stages
-		 *      such as text extraction, OCR, transcription, and analysis.
-		 */
-		ProcessingStatus: "pending" | "processing" | "ready" | "canceled";
-		/** @description Knowledge-related fields for file responses. */
-		FileKnowledge: {
-			/** @description Whether the file is indexed for knowledge extraction. */
-			isIndexed: boolean;
-			/** @description Content segmentation strategy. */
-			contentSegmentation: components["schemas"]["ContentSegmentation"];
-			/** @description Whether visual elements are supported. */
-			visualSupport: boolean;
-		};
-		/**
-		 * @description Defines the content segmentation strategy for document processing.
-		 *
-		 *      This enumeration corresponds to the `CONTENT_SEGMENTATION` PostgreSQL enum and is used
-		 *      to specify how document content should be segmented for knowledge extraction.
-		 */
-		ContentSegmentation: "none" | "semantic" | "fixed";
-		/** @description Request to download files as an archive. */
-		DownloadFiles: {
-			/** @description Archive format. */
-			format: components["schemas"]["ArchiveFormat"];
-			/** @description Optional specific file IDs (if None, downloads all workspace files). */
-			fileIds?: string[] | null;
-		};
-		/** @description Archive format options for file downloads. */
-		ArchiveFormat: "tar" | "zip";
-		/** @description Request to delete multiple files. */
-		DeleteFiles: {
-			/** @description File IDs to delete (1-100 files). */
-			fileIds: string[];
-		};
-		/**
-		 * @description Path parameters for file operations (file ID only).
-		 *
-		 *      Since file IDs are globally unique UUIDs, workspace context can be
-		 *      derived from the file record itself for authorization purposes.
-		 */
-		FilePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the file.
-			 */
-			fileId: string;
-		};
-		/** @description Request to update file metadata. */
-		UpdateFile: {
-			/** @description New display name for the file. */
-			displayName?: string | null;
-			/**
-			 * Format: int32
-			 * @description New processing priority (1-10, higher = more priority).
-			 */
-			processingPriority?: number | null;
-			/**
-			 * Format: uuid
-			 * @description Document ID to assign the file to.
-			 */
-			documentId?: string | null;
-			/** @description Whether the file is indexed for knowledge extraction. */
-			isIndexed?: boolean | null;
-			/** @description Content segmentation strategy for knowledge extraction. */
-			contentSegmentation?: components["schemas"]["ContentSegmentation"] | null;
-			/** @description Whether visual elements are supported for knowledge extraction. */
-			visualSupport?: boolean | null;
-		};
-		/** @description Request payload for creating a new document. */
-		CreateDocument: {
-			/** @description Description of the document. */
-			description?: string | null;
-			/** @description Display name of the document. */
-			displayName: string;
-			/** @description Tags for document classification. */
-			tags?: string[] | null;
-		};
-		/** @description Represents a document with full details. */
-		Document: {
-			/** @description Description of the document. */
-			description?: string | null;
-			/**
-			 * Format: uuid
-			 * @description ID of the document.
-			 */
-			documentId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace that the document belongs to.
-			 */
-			workspaceId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the account that owns the document.
-			 */
-			accountId: string;
-			/** @description Display name of the document. */
-			displayName: string;
-			/** @description Tags associated with the document. */
-			tags: string[];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the document was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the document was last updated.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		DocumentsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Document"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/** @description Path parameters for document operations. */
-		DocumentPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the document.
-			 */
-			documentId: string;
-		};
-		/** @description Request payload for updating a document. */
-		UpdateDocument: {
-			/** @description Updated description. */
-			description?: string | null;
-			/** @description Updated display name. */
-			displayName?: string | null;
-			/** @description Updated tags (must be alphanumeric). */
-			tags?: string[] | null;
-		};
-		/** @description Request payload for creating a new document comment. */
-		CreateComment: {
-			/** @description Comment text content. */
-			content: string;
-			/**
-			 * Format: uuid
-			 * @description Parent comment ID for threaded replies.
-			 */
-			parentCommentId?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Account being replied to (@mention).
-			 */
-			replyToAccountId?: string | null;
-		};
-		/** @description Represents a document comment. */
-		Comment: {
-			/**
-			 * Format: uuid
-			 * @description ID of the comment.
-			 */
-			commentId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the file this comment belongs to.
-			 */
-			fileId: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the account that created the comment.
-			 */
-			accountId: string;
-			/**
-			 * Format: uuid
-			 * @description Parent comment ID for threaded replies.
-			 */
-			parentCommentId?: string | null;
-			/**
-			 * Format: uuid
-			 * @description Account being replied to (@mention).
-			 */
-			replyToAccountId?: string | null;
-			/** @description Comment text content. */
-			content?: string | null;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the comment was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the comment was last updated.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		CommentsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Comment"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/**
-		 * @description Path parameters for comment operations (comment ID only).
-		 *
-		 *      Since comment IDs are globally unique UUIDs, file/workspace context can be
-		 *      derived from the comment record itself for authorization purposes.
-		 */
-		CommentPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the comment.
-			 */
-			commentId: string;
-		};
-		/** @description Request payload to update a document comment. */
-		UpdateComment: {
-			/** @description Updated comment content. */
-			content?: string | null;
-		};
-		/** @description Request to create an annotation. */
-		CreateAnnotation: {
-			/** @description Annotation content. */
-			content: string;
-			/**
-			 * @description Annotation type (note, highlight, comment).
-			 * @default note
-			 */
-			annotationType: components["schemas"]["AnnotationType"];
-			/** @description Additional metadata (position, selection range, etc.). */
-			metadata?: unknown;
-		};
-		/**
-		 * @description Defines the type of annotation for document content.
-		 *
-		 *      This enumeration corresponds to the `ANNOTATION_TYPE` PostgreSQL enum and is used
-		 *      to classify different types of annotations users can create on documents.
-		 */
-		AnnotationType: "note" | "highlight";
-		/** @description Response type for a document annotation. */
-		Annotation: {
-			/**
-			 * Format: uuid
-			 * @description Unique annotation identifier.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description File this annotation belongs to.
-			 */
-			fileId: string;
-			/**
-			 * Format: uuid
-			 * @description Account that created the annotation.
-			 */
-			accountId: string;
-			/** @description Annotation content. */
-			content: string;
-			/** @description Annotation type. */
-			annotationType: components["schemas"]["AnnotationType"];
-			/**
-			 * Format: date-time
-			 * @description When the annotation was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the annotation was last updated.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		AnnotationsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Annotation"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
-		};
-		/**
-		 * @description Path parameters for annotation operations (annotation ID only).
-		 *
-		 *      Since annotation IDs are globally unique UUIDs, file/workspace context can be
-		 *      derived from the annotation record itself for authorization purposes.
-		 */
-		AnnotationPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the annotation.
-			 */
-			annotationId: string;
-		};
-		/** @description Request to update an annotation. */
-		UpdateAnnotation: {
-			/** @description Updated content. */
-			content?: string | null;
-			/** @description Updated annotation type. */
-			annotationType?: components["schemas"]["AnnotationType"] | null;
-			/** @description Updated metadata. */
-			metadata?: unknown;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
-		 */
-		ActivitysPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Activity"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
 		};
 		/** @description Response type for a workspace activity. */
 		Activity: {
+			/**
+			 * Format: uuid
+			 * @description Account that performed the activity.
+			 */
+			accountId?: string;
+			/** @description Type of activity. */
+			activityType: components["schemas"]["ActivityType"];
+			/**
+			 * Format: date-time
+			 * @description When the activity occurred.
+			 */
+			createdAt: string;
 			/** @description Human-readable description. */
 			description: string;
 			/**
@@ -7213,25 +6439,13 @@ export interface components {
 			 * @description Workspace ID.
 			 */
 			workspaceId: string;
-			/**
-			 * Format: uuid
-			 * @description Account that performed the activity.
-			 */
-			accountId?: string | null;
-			/** @description Type of activity. */
-			activityType: components["schemas"]["ActivityType"];
-			/**
-			 * Format: date-time
-			 * @description When the activity occurred.
-			 */
-			createdAt: string;
 		};
 		/**
 		 * @description Defines the type of activity performed in a workspace for audit logging.
 		 *
-		 *      This enumeration corresponds to the `ACTIVITY_TYPE` PostgreSQL enum and is used
-		 *      to categorize different types of activities that occur within workspaces for comprehensive
-		 *      audit trail and activity tracking.
+		 *     This enumeration corresponds to the `ACTIVITY_TYPE` PostgreSQL enum and is used
+		 *     to categorize different types of activities that occur within workspaces for comprehensive
+		 *     audit trail and activity tracking.
 		 */
 		ActivityType:
 			| "workspace:created"
@@ -7245,10 +6459,10 @@ export interface components {
 			| "invite:accepted"
 			| "invite:declined"
 			| "invite:canceled"
-			| "integration:created"
-			| "integration:updated"
-			| "integration:deleted"
-			| "integration:synced"
+			| "connection:created"
+			| "connection:updated"
+			| "connection:deleted"
+			| "connection:synced"
 			| "webhook:created"
 			| "webhook:updated"
 			| "webhook:deleted"
@@ -7264,66 +6478,2860 @@ export interface components {
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
-		 *      Provides a consistent structure for all paginated API responses with
-		 *      cursor-based pagination support. When `next_cursor` is present, there
-		 *      are more items to fetch.
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
 		 */
-		NotificationsPage: {
+		ActivitysPage: {
 			/** @description Items in this page. */
-			items: components["schemas"]["Notification"][];
+			items: components["schemas"]["Activity"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
 			/**
 			 * Format: int64
 			 * @description Total count of items matching the query (if requested).
 			 */
-			total?: number | null;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string | null;
+			total?: number;
 		};
-		/** @description Response type for an account notification. */
-		Notification: {
-			/** @description Notification title. */
-			title: string;
+		/** @description Structured address reference. */
+		AddressData: {
+			/** @description City name. */
+			city?: string;
+			/** @description ISO 3166-1 alpha-2 country code. */
+			country?: string;
+			/** @description Additional free-form address fields. */
+			extra?: {
+				[key: string]: string;
+			};
+			/** @description Postal / ZIP code. */
+			postalCode?: string;
+			/** @description State, province, or administrative area. */
+			state?: string;
+			/** @description Street line (e.g. `"123 Main St"`). */
+			street?: string;
+		};
+		/** @description Analytic computation variants. */
+		AnalyticVariant:
+			| ({
+					/** @constant */
+					kind: "embedding";
+			  } & components["schemas"]["EmbeddingData"])
+			| ({
+					/** @constant */
+					kind: "pattern";
+			  } & components["schemas"]["PatternData"]);
+		/**
+		 * @description What detection found in one document.
+		 *
+		 *     The body group plus per-container-part groups (each tagged
+		 *     by modality) plus a snapshot of the recognition [`Scope`] the
+		 *     entities were scored against.
+		 *
+		 *     The scope snapshot travels with the entities so anonymize
+		 *     can rebuild an orchestrator against exactly the vocabulary
+		 *     analyze used. Anything a policy predicate compares against
+		 *     (label catalog, document-level classification labels,
+		 *     asserted languages / jurisdictions) is here.
+		 *
+		 *     `correlation_id` on the persisted scope is always `None`; the
+		 *     anonymize call supplies a fresh id from the passed
+		 *     [`Document`](nvisy_schema::file::Document) so anonymize-side
+		 *     tracing spans are distinct from the analyze-side ones.
+		 *
+		 *     [`Scope`]: elide::recognition::Scope
+		 */
+		AnalyzedDocument: {
+			/**
+			 * @description The body group.
+			 *
+			 *     `None` when no body pipeline produced entities (pre-analyze,
+			 *     or the codec resolved the doc to a modality with no
+			 *     pipeline).
+			 */
+			body?: components["schemas"]["RecognizedGroup"];
+			/**
+			 * @description One entry per container part the orchestrator surfaced.
+			 *
+			 *     Keyed by the container-private part id (e.g. a DOCX zip
+			 *     entry name like `"word/media/image1.png"`); each value
+			 *     carries that part's modality + entities.
+			 */
+			parts?: {
+				[key: string]: components["schemas"]["RecognizedGroup"];
+			};
+			/**
+			 * @description Recognition scope snapshot.
+			 *
+			 *     The resolved label catalog + asserted languages,
+			 *     countries, and document labels. Held so
+			 *     [`Engine::anonymize_document`] can compile against the same
+			 *     vocabulary analyze used without the caller re-passing an
+			 *     `AnalyzerParams`.
+			 *
+			 *     Required on the wire. A missing scope on an incoming
+			 *     [`AnalyzedDocument`] would default to an empty catalog and
+			 *     silently underfire every `TagOneOf` policy predicate;
+			 *     rejecting at deserialize time surfaces the shape mismatch
+			 *     at load, not at apply.
+			 *
+			 *     [`Engine::anonymize_document`]: super::Engine::anonymize_document
+			 */
+			scope: components["schemas"]["Scope"];
+		};
+		/** @description API token response structure. */
+		ApiToken: {
 			/**
 			 * Format: uuid
-			 * @description Unique notification identifier.
+			 * @description Reference to the account this token belongs to.
+			 */
+			accountId: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the token expires (None = never expires).
+			 */
+			expiredAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
 			 */
 			id: string;
-			/** @description Notification type. */
-			notifyType: components["schemas"]["NotificationEvent"];
-			/** @description Notification message. */
-			message: string;
-			/** @description Whether the notification has been read. */
-			isRead: boolean;
 			/**
 			 * Format: date-time
-			 * @description When the notification was read.
+			 * @description Timestamp of token creation.
 			 */
-			readAt?: string | null;
+			issuedAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of most recent token activity.
+			 */
+			lastUsedAt?: string;
+			/** @description Human-readable name for the API token. */
+			name: string;
+			/** @description Type of token (web, api, etc.). */
+			sessionType: components["schemas"]["ApiTokenType"];
+		};
+		/**
+		 * @description Defines the type of API token for authentication and tracking purposes.
+		 *
+		 *     This enumeration corresponds to the `API_TOKEN_TYPE` PostgreSQL enum and is used
+		 *     to categorize different types of authentication tokens based on the client type.
+		 */
+		ApiTokenType: "web" | "api" | "cli";
+		/** @description API token with JWT token string (only returned on creation). */
+		ApiTokenWithJWT: {
 			/**
 			 * Format: uuid
-			 * @description Related entity ID.
+			 * @description Reference to the account this token belongs to.
 			 */
-			relatedId?: string | null;
-			/** @description Related entity type. */
-			relatedType?: string | null;
+			accountId: string;
 			/**
 			 * Format: date-time
-			 * @description When the notification was created.
+			 * @description Timestamp when the token expires (omitted = never expires).
+			 */
+			expiredAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of token creation.
+			 */
+			issuedAt: string;
+			/** @description Human-readable name for the API token. */
+			name: string;
+			/** @description Type of token (web, mobile, api, etc.). */
+			sessionType: components["schemas"]["ApiTokenType"];
+			/** @description The JWT token string (only shown once on creation). */
+			token: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ApiTokensPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["ApiToken"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Response type for a pipeline artifact. */
+		Artifact: {
+			/** @description Type of artifact (input, output, intermediate). */
+			artifactType: components["schemas"]["ArtifactType"];
+			/**
+			 * Format: date-time
+			 * @description When the artifact was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description File storing the artifact data.
+			 */
+			fileId: string;
+			/**
+			 * Format: uuid
+			 * @description Unique artifact identifier.
+			 */
+			id: string;
+			/** @description Extended metadata (checksums, counts, etc.). */
+			metadata: unknown;
+			/**
+			 * Format: uuid
+			 * @description Pipeline run that produced this artifact.
+			 */
+			runId: string;
+		};
+		/**
+		 * @description Classification of pipeline run artifacts.
+		 *
+		 *     This enumeration corresponds to the `ARTIFACT_TYPE` PostgreSQL enum and is used
+		 *     to categorize artifacts produced during pipeline runs.
+		 */
+		ArtifactType: "input" | "output" | "intermediate";
+		/**
+		 * @description Author-supplied rationale for a redaction: the policy it enforces and
+		 *     a reason.
+		 *
+		 *     Where the matched selection rule answers *which rule fired*, an
+		 *     `Attribution` answers *under what authority* — a compliance clause, an
+		 *     internal policy, a data-handling rule. A policy author attaches it to a
+		 *     selection rule (the anonymizer's `because`); the anonymizer records it on
+		 *     the entity's [`Redaction`] event so an audit can trace a change back to
+		 *     the policy that demanded it.
+		 *
+		 *     [`Redaction`]: crate::entity::provenance::EventKind::Redaction
+		 */
+		Attribution: {
+			/** @description Stable policy / rule identifier (e.g. `"gdpr-art-17"`, `"pci-dss-3.4"`). */
+			policy_id: string;
+			/** @description Human-readable reason (e.g. `"right to erasure"`), when given. */
+			reason?: string;
+		};
+		/**
+		 * @description Per-call payload a recognizer inspects for the [`Audio`] modality.
+		 *
+		 *     Carries the encoded audio bytes; an optional filename aids diagnostics
+		 *     and encoding inference (the container format a decoder should expect).
+		 *     The recognizable text — a timestamped transcript — is *not* held here;
+		 *     a speech-to-text [`Enricher`] stamps it onto the call's
+		 *     [`artifacts`], keeping
+		 *     `AudioData` the codec's payload alone.
+		 *
+		 *     [`Audio`]: super::Audio
+		 *     [`Enricher`]: crate::recognition::Enricher
+		 *     [`artifacts`]: crate::recognition::RecognizerContext::artifacts
+		 */
+		AudioData: {
+			/** @description Original filename, when known. */
+			filename?: string;
+		};
+		/**
+		 * @description A [`TimeSpan`] within audio content, with an optional speaker label.
+		 *
+		 *     The time span is the coordinate; ordering and overlap consider only it.
+		 *     The optional [`speaker_id`] is a diarization label,
+		 *     not a coordinate: two utterances from different speakers at the same
+		 *     instant still overlap in time, so the speaker is carried for provenance
+		 *     but excluded from comparison.
+		 *
+		 *     [`speaker_id`]: Self::speaker_id
+		 */
+		AudioLocation: {
+			/** @description Time span the location covers, in the stream's timeline. */
+			span: components["schemas"]["TimeSpan"];
+			/** @description Diarization label of the speaker, when a diarizer assigned one. */
+			speaker_id?: string;
+		};
+		/** @description Operator spec a `redact` audio rule carries. */
+		AudioRedaction:
+			| {
+					/** @constant */
+					kind: "erase";
+			  }
+			| {
+					/** @constant */
+					kind: "keep";
+			  }
+			| {
+					/** @constant */
+					kind: "silence";
+			  }
+			| {
+					/**
+					 * Format: float
+					 * @description Peak amplitude in `0.0..=1.0` of full scale. Default 0.5:
+					 *     audible but not painful, and never clips.
+					 * @default 0.5
+					 */
+					amplitude: number;
+					/**
+					 * Format: float
+					 * @description Tone frequency in Hertz. Default 1 kHz, the broadcast
+					 *     convention.
+					 * @default 1000
+					 */
+					hz: number;
+					/** @constant */
+					kind: "beep";
+					/**
+					 * @description Tone shape. Default sine.
+					 * @default sine
+					 */
+					waveform: components["schemas"]["Waveform"];
+			  };
+		/** @description Payload for the `audit` action. */
+		AuditAction: {
+			/**
+			 * @description Severity hint propagated into the audit entry (e.g.
+			 *     `"low"`, `"medium"`, `"high"`). Free-form for now; downstream
+			 *     review tooling decides how to render or filter.
+			 */
+			severity?: string;
+		};
+		/** @description Response returned after successful authentication (login/signup). */
+		AuthToken: {
+			/**
+			 * Format: uuid
+			 * @description ID of the authenticated account.
+			 */
+			accountId: string;
+			/** @description The JWT API token for authentication. */
+			apiToken: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the token expires.
+			 */
+			expiresAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the token was issued.
+			 */
+			issuedAt: string;
+			/**
+			 * Format: uuid
+			 * @description ID of the token.
+			 */
+			tokenId: string;
+		};
+		/** @description Biometric identity verification variants. */
+		BiometricVariant:
+			| ({
+					/** @constant */
+					kind: "face";
+			  } & components["schemas"]["FaceData"])
+			| ({
+					/** @constant */
+					kind: "voice";
+			  } & components["schemas"]["VoiceData"]);
+		/**
+		 * @description Axis-aligned rectangle, given by its minimum and maximum corners.
+		 *
+		 *     The location type for the image and document modalities: where a
+		 *     detected entity sits within a rendered page. [`min`] is the top-left
+		 *     corner and [`max`] the bottom-right under the usual screen convention
+		 *     (y grows downward), though the box itself is agnostic to coordinate
+		 *     orientation.
+		 *
+		 *     [`min`]: Self::min
+		 *     [`max`]: Self::max
+		 */
+		BoundingBox: {
+			/** @description Maximum corner (bottom-right, conventionally). */
+			max: components["schemas"]["Point"];
+			/** @description Minimum corner (top-left, conventionally). */
+			min: components["schemas"]["Point"];
+		};
+		/** @description Request payload for monitoring status endpoint. */
+		CheckHealth: {
+			/** @description Whether to return cached results if available. */
+			useCache?: boolean;
+		};
+		/**
+		 * @description Color as 8-bit RGB.
+		 *
+		 *     Used by visual redaction (a solid-fill block over an image region) and
+		 *     any other rendering instruction that needs a color.
+		 */
+		Color: {
+			/**
+			 * Format: uint8
+			 * @description Blue channel.
+			 */
+			b: number;
+			/**
+			 * Format: uint8
+			 * @description Green channel.
+			 */
+			g: number;
+			/**
+			 * Format: uint8
+			 * @description Red channel.
+			 */
+			r: number;
+		};
+		/** @description Health of a single service component. */
+		ComponentHealth: {
+			/**
+			 * Format: uint64
+			 * @description How long the health check took, when measured.
+			 */
+			latency?: number;
+			/** @description Component name (e.g. `"postgres"`, `"nats"`). */
+			name: string;
+			/** @description Status of this component. */
+			status: components["schemas"]["HealthStatus"];
+		};
+		/**
+		 * Format: float
+		 * @description Confidence score in the closed range `0.0..=1.0`.
+		 *
+		 *     Carried by every provenance [`Event`] (the `before`/`after` of a
+		 *     recognition, fusion, or calibration) and by the effective confidence
+		 *     of an [`Entity`]. The newtype enforces the range at construction so
+		 *     no downstream code has to defend against values outside `[0, 1]`.
+		 *
+		 *     Distinct from [`ConfidenceThreshold`] so the two cannot be confused
+		 *     at a call site: a score is *produced* by detection, a threshold is a
+		 *     *cutoff* configured to filter scores. Compare the two with
+		 *     [`ConfidenceThreshold::passes`].
+		 *
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		Confidence: number;
+		/**
+		 * Format: float
+		 * @description Minimum-confidence cutoff in the closed range `0.0..=1.0`.
+		 *
+		 *     A [`Confidence`] at or above the threshold *passes*; below it is
+		 *     filtered out. Kept a separate type from [`Confidence`] so a cutoff
+		 *     can never be passed where a score is expected, or vice versa.
+		 *
+		 *     [`Confidence`]: crate::primitive::Confidence
+		 */
+		ConfidenceThreshold: number;
+		/**
+		 * @description Response type for a workspace connection.
+		 *
+		 *     Note: The encrypted connection data is never exposed in API responses.
+		 *     Only metadata about the connection is returned.
+		 */
+		Connection: {
+			/**
+			 * Format: uuid
+			 * @description Account that created this connection.
+			 */
+			accountId: string;
+			/**
+			 * Format: date-time
+			 * @description When the connection was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Unique connection identifier.
+			 */
+			id: string;
+			/** @description Human-readable connection name. */
+			name: string;
+			/** @description Provider type (e.g., "openai", "postgres", "s3"). */
+			provider: string;
+			/**
+			 * Format: date-time
+			 * @description When the connection was last updated.
+			 */
+			updatedAt: string;
+			/**
+			 * Format: uuid
+			 * @description Workspace this connection belongs to.
+			 */
+			workspaceId: string;
+		};
+		/** @description Path parameters for connection operations. */
+		ConnectionPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the connection.
+			 */
+			connectionId: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ConnectionsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Connection"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Query parameters for listing connections. */
+		ConnectionsQuery: {
+			/** @description Filter by provider type. */
+			provider?: string;
+		};
+		/** @description A persistent, reusable collection of reference data for detection. */
+		Context: {
+			/** @description Optional longer description. */
+			description?: string;
+			/** @description Reference-data entries. */
+			entries: components["schemas"]["ContextEntry"][];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for this context.
+			 */
+			id: string;
+			/** @description Human-readable label for this context. */
+			name: string;
+			/** @description Context version. */
+			version: string;
+		};
+		/** @description Response type for a workspace context. */
+		Context2: {
+			/**
+			 * Format: uuid
+			 * @description Account that created this context.
+			 */
+			accountId: string;
+			/**
+			 * Format: date-time
+			 * @description When the context was created.
+			 */
+			createdAt: string;
+			/** @description The structured context body consumed by the engine. */
+			definition: components["schemas"]["Context"];
+			/** @description Context description. */
+			description?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique context identifier.
+			 */
+			id: string;
+			/** @description Human-readable context name. */
+			name: string;
+			/**
+			 * Format: date-time
+			 * @description When the context was last updated.
+			 */
+			updatedAt: string;
+			/** @description Semver of the context body. */
+			version: string;
+			/**
+			 * Format: uuid
+			 * @description Workspace this context belongs to.
+			 */
+			workspaceId: string;
+		};
+		/**
+		 * @description A single reference-data entry within a [`Context`].
+		 *
+		 *     [`Context`]: super::Context
+		 */
+		ContextEntry: {
+			/** @description When this entry was created. */
+			createdAt: string;
+			/** @description When this entry should stop being used. */
+			expiresAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for this entry.
+			 */
+			id: string;
+			/** @description Human-readable label. */
+			label?: string;
+		} & (
+			| {
+					data: components["schemas"]["BiometricVariant"];
+					/** @constant */
+					domain: "biometric";
+			  }
+			| {
+					data: components["schemas"]["GeospatialVariant"];
+					/** @constant */
+					domain: "geospatial";
+			  }
+			| {
+					data: components["schemas"]["AnalyticVariant"];
+					/** @constant */
+					domain: "analytic";
+			  }
+			| {
+					data: components["schemas"]["ReferenceVariant"];
+					/** @constant */
+					domain: "reference";
+			  }
+			| {
+					data: components["schemas"]["TemporalVariant"];
+					/** @constant */
+					domain: "temporal";
+			  }
+			| {
+					data: components["schemas"]["DocumentVariant"];
+					/** @constant */
+					domain: "document";
+			  }
+		);
+		/** @description Path parameters for context operations. */
+		ContextPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the context.
+			 */
+			contextId: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ContextsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Context2"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description [ISO 3166-1] country, identified by its code.
+		 *
+		 *     Wraps [`celes::Country`], a static table entry carrying the numeric,
+		 *     alpha-2, and alpha-3 codes together with the country's name. Because
+		 *     every value comes from that fixed table, a `CountryCode` is always a
+		 *     real, recognised country; there is no way to hold an invalid one.
+		 *
+		 *     Used to scope region-sensitive recognizers (a phone-number or
+		 *     national-id pattern, say) to the country whose format they target.
+		 *
+		 *     Serializes as its alpha-2 code (e.g. `"US"`).
+		 *
+		 *     [ISO 3166-1]: https://www.iso.org/iso-3166-country-codes.html
+		 */
+		CountryCode: string;
+		/** @description Request to create a new API token. */
+		CreateApiToken: {
+			/** @description When the token expires. */
+			expiresIn: components["schemas"]["TokenExpiration"];
+			/** @description Human-readable name for the API token (1-100 characters). */
+			name: string;
+		};
+		/** @description Request payload for creating a new workspace connection. */
+		CreateConnection: {
+			/**
+			 * @description Connection data to be encrypted (credentials + context).
+			 *     The structure depends on the provider type.
+			 */
+			data: unknown;
+			/** @description Human-readable connection name. */
+			name: string;
+			/** @description Provider type (e.g., "openai", "postgres", "s3"). */
+			provider: string;
+		};
+		/**
+		 * @description Request payload for creating a new workspace context.
+		 *
+		 *     The `definition` is a structured context the redaction engine consumes;
+		 *     its `name`, `description`, and `version` drive the stored columns unless
+		 *     overridden here.
+		 */
+		CreateContext: {
+			/** @description The structured context body consumed by the engine. */
+			definition: components["schemas"]["Context"];
+			/** @description Optional description override. Defaults to the context's own description. */
+			description?: string;
+			/** @description Optional display name override. Defaults to the context's own name. */
+			name?: string;
+		};
+		/** @description Request payload for creating a new workspace invite. */
+		CreateInvite: {
+			/** @description When the invitation expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
+			/** @description Role the invitee will have if they accept the invitation. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: email
+			 * @description Email address of the person to invite.
+			 */
+			inviteeEmail: string;
+		};
+		/**
+		 * @description Request payload for creating a new pipeline.
+		 *
+		 *     Creates a new pipeline with the specified name and optional description.
+		 *     The definition can be added later via update.
+		 */
+		CreatePipeline: {
+			/**
+			 * @description Optional detection + redaction configuration. Defaults to an empty
+			 *     definition that can be filled in via update.
+			 */
+			definition?: components["schemas"]["PipelineDefinition"];
+			/** @description Optional description of the pipeline (max 500 characters). */
+			description?: string;
+			/** @description Pipeline name (3-100 characters). */
+			name: string;
+		};
+		/**
+		 * @description Request payload to start a run (detect) over a file.
+		 *
+		 *     Analyzes the file with the pipeline's configuration and returns the run,
+		 *     which holds the findings for review before redaction.
+		 */
+		CreatePipelineRun: {
+			/**
+			 * Format: uuid
+			 * @description The file to analyze.
+			 */
+			fileId: string;
+			/**
+			 * @description Per-document scope (languages, jurisdictions, document labels).
+			 *
+			 *     Overrides the pipeline's `defaultScope` when present; absent falls back to
+			 *     the pipeline default.
+			 */
+			scope?: components["schemas"]["ScopeParams"];
+		};
+		/**
+		 * @description Request payload for creating a new workspace policy.
+		 *
+		 *     The `definition` is a structured policy the redaction engine consumes;
+		 *     its `name`, `description`, and `version` drive the stored columns unless
+		 *     overridden here.
+		 */
+		CreatePolicy: {
+			/** @description The structured policy body consumed by the engine. */
+			definition: components["schemas"]["Policy"];
+			/** @description Optional description override. Defaults to the policy's own description. */
+			description?: string;
+			/** @description Optional display name override. Defaults to the policy's own name. */
+			name?: string;
+		};
+		/** @description Request payload for creating a new workspace webhook. */
+		CreateWebhook: {
+			/** @description Detailed description of the webhook's purpose (max 500 characters). */
+			description: string;
+			/** @description Human-readable name for the webhook (1-100 characters). */
+			displayName: string;
+			/** @description List of event types this webhook should receive. */
+			events: components["schemas"]["WebhookEvent"][];
+			/** @description Optional custom headers to include in webhook requests. */
+			headers?: {
+				[key: string]: string;
+			};
+			/** @description Initial status of the webhook (active or paused). */
+			status?: components["schemas"]["WebhookStatus"];
+			/**
+			 * Format: uri
+			 * @description The URL to send webhook payloads to.
+			 */
+			url: string;
+		};
+		/**
+		 * @description Request payload for creating a new workspace.
+		 *
+		 *     Creates a new workspace with the specified configuration. The creator is
+		 *     automatically added as an owner of the workspace.
+		 */
+		CreateWorkspace: {
+			/** @description Optional description of the workspace (max 200 characters). */
+			description?: string;
+			/** @description Display name of the workspace (3-100 characters). */
+			displayName: string;
+			/** @description Whether comments are enabled for this workspace. */
+			enableComments?: boolean;
+			/** @description Whether approval is required for processed files to be visible. */
+			requireApproval?: boolean;
+		};
+		/**
+		 * @description A reference credential for detecting leaked secrets.
+		 *
+		 *     The `value` field is intentionally excluded from serialization to
+		 *     prevent plaintext secrets from appearing in logs or API responses.
+		 *     It is only accepted during deserialization (ingest).
+		 */
+		CredentialData: {
+			/** @description Classification of this credential. */
+			credentialKind?: components["schemas"]["CredentialKind"];
+			/** @description Service or provider this credential belongs to. */
+			provider?: string;
+			/**
+			 * @description The credential value (API key, token, etc.).
+			 *
+			 *     Excluded from serialization output to prevent leaking secrets.
+			 *     Round-trip deserialization yields an empty string.
+			 */
+			value?: string;
+		};
+		/** @description Classification of credential secrets. */
+		CredentialKind:
+			| "api_key"
+			| "oauth_token"
+			| "password"
+			| "private_key"
+			| "other";
+		/**
+		 * @description Cursor-based pagination query parameters.
+		 *
+		 *     This is the preferred pagination method for API endpoints. It provides:
+		 *     - Consistent performance regardless of page depth
+		 *     - Stable results even when items are added/removed
+		 *     - Efficient "load more" / infinite scroll patterns
+		 */
+		CursorPagination: {
+			/**
+			 * @description Cursor pointing to the last item of the previous page.
+			 *     Obtain this from the `nextCursor` field in the response.
+			 */
+			after?: string;
+			/**
+			 * Format: uint32
+			 * @description The maximum number of records to return (1-100, default: 20).
+			 */
+			limit?: number;
+		};
+		/**
+		 * @description One caller-supplied dictionary for the pattern recognizer.
+		 *
+		 *     Mirrors `elide_pattern::Dictionary`. Literal-term matching via
+		 *     Aho-Corasick; faster and safer than regex for closed sets.
+		 */
+		CustomDictionary: {
+			/**
+			 * @description Context keywords lifting confidence near matches.
+			 *
+			 *     Consumed only when the analyzer's
+			 *     [`PatternRecognizerParams`]`.context_enhanced` is `true`.
+			 *
+			 *     [`PatternRecognizerParams`]: super::PatternRecognizerParams
+			 */
+			context?: components["schemas"]["CustomPatternContext"];
+			/**
+			 * @description ISO 3166-1 alpha-2 country codes scoping the dictionary.
+			 *
+			 *     Empty means "any country"; otherwise the recognizer skips
+			 *     the dictionary when the per-call jurisdiction hint is not
+			 *     in the list.
+			 */
+			countries?: components["schemas"]["CountryCode"][];
+			/** @description Entity label every match emits. */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description BCP-47 language tags scoping the dictionary.
+			 *
+			 *     Empty means "any language"; otherwise the recognizer skips
+			 *     the dictionary when the per-call language hint is not in
+			 *     the list.
+			 */
+			languages?: components["schemas"]["LanguageTag"][];
+			/** @description Human-readable identifier surfaced in provenance. */
+			name: string;
+			/**
+			 * @description Default confidence stamped on matches when a term has no
+			 *     per-term override.
+			 *
+			 *     Defaults to [`Confidence::MAX`].
+			 * @default 1
+			 */
+			score: components["schemas"]["Confidence"];
+			/**
+			 * @description Literal terms + per-term confidence overrides.
+			 *
+			 *     At least one required; the recognizer skips dictionaries
+			 *     with an empty term list at compile time.
+			 */
+			terms: components["schemas"]["CustomDictionaryTerm"][];
+		};
+		/** @description One term inside a [`CustomDictionary`]. */
+		CustomDictionaryTerm: {
+			/**
+			 * @description Per-term score override.
+			 *
+			 *     `None` falls back to the parent dictionary's `score`.
+			 */
+			score?: components["schemas"]["Confidence"];
+			/** @description The literal scanned for. */
+			term: string;
+		};
+		/**
+		 * @description Context keywords for a custom rule.
+		 *
+		 *     Either a flat list applied regardless of language, or a
+		 *     per-language map. Matches the shape of `elide_pattern`'s
+		 *     `Context` — untagged so the wire looks like either
+		 *     `["kw1", "kw2"]` or `{ "en": ["kw1"], "es": ["kw2"] }`.
+		 */
+		CustomPatternContext:
+			| string[]
+			| {
+					[key: string]: string[];
+			  };
+		/**
+		 * @description One caller-supplied regex rule for the pattern recognizer.
+		 *
+		 *     Mirrors `elide_pattern::Regex`. Serialize + Deserialize +
+		 *     JsonSchema end-to-end so SDK callers can inline rules on the
+		 *     wire; the engine converts each rule to an elide `Regex` at
+		 *     analyzer-compile time.
+		 */
+		CustomPatternRule: {
+			/**
+			 * @description Context keywords lifting confidence when they appear near
+			 *     a match.
+			 *
+			 *     Either a flat list (any language) or a per-language map.
+			 *     Consumed only when the analyzer's
+			 *     [`PatternRecognizerParams`]`.context_enhanced` is `true`.
+			 *
+			 *     [`PatternRecognizerParams`]: super::PatternRecognizerParams
+			 */
+			context?: components["schemas"]["CustomPatternContext"];
+			/**
+			 * @description ISO 3166-1 alpha-2 country codes scoping the rule.
+			 *
+			 *     Empty means "any country"; otherwise the recognizer skips
+			 *     the rule when the per-call jurisdiction hint is not in the
+			 *     list.
+			 */
+			countries?: components["schemas"]["CountryCode"][];
+			/** @description Entity label every variant emits. */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description BCP-47 language tags scoping the rule.
+			 *
+			 *     Empty means "any language"; otherwise the recognizer skips
+			 *     the rule when the per-call language hint is not in the
+			 *     list.
+			 */
+			languages?: components["schemas"]["LanguageTag"][];
+			/** @description Human-readable identifier surfaced in provenance. */
+			name: string;
+			/**
+			 * @description Regex sources + per-variant confidence + optional
+			 *     validator.
+			 *
+			 *     At least one required; the recognizer skips rules with an
+			 *     empty variant list at compile time.
+			 */
+			variants: components["schemas"]["CustomPatternVariant"][];
+		};
+		/** @description One regex variant inside a [`CustomPatternRule`]. */
+		CustomPatternVariant: {
+			/**
+			 * @description Regex source.
+			 *
+			 *     Capped at [`MAX_REGEX_SOURCE_LEN`] bytes; longer sources
+			 *     reject at deserialize. Compiled by the engine at
+			 *     analyzer-compile time.
+			 */
+			regex: string;
+			/**
+			 * @description Confidence stamped on every match, before any
+			 *     post-recognition keyword boost.
+			 *
+			 *     Defaults to [`Confidence::MAX`].
+			 * @default 1
+			 */
+			score: components["schemas"]["Confidence"];
+			/**
+			 * @description Optional validator name.
+			 *
+			 *     Resolved against elide's `ValidatorRegistry` at compile
+			 *     time (e.g. `"ssn"`, `"credit_card"`, `"iban"`). Unknown
+			 *     names error at compile. `None` means "no validation".
+			 */
+			validator?: string;
+		};
+		/** @description A date or date-range reference for temporal matching. */
+		DateData: {
+			/** @description End date for a range. When `None` this represents a single date. */
+			end?: string;
+			/** @description Start (or only) date. */
+			start: string;
+		};
+		/**
+		 * @description A date-time or date-time range reference for temporal matching.
+		 *
+		 *     Uses naive (timezone-unaware) date-times from [`DateTime`].
+		 *     For timezone-aware timestamps, use the entry-level `created_at` /
+		 *     `expires_at` fields on [`ContextEntry`].
+		 *
+		 *     [`ContextEntry`]: crate::ContextEntry
+		 *     [`DateTime`]: jiff::civil::DateTime
+		 */
+		DateTimeData: {
+			/** @description End date-time for a range. When `None` this represents a single instant. */
+			end?: string;
+			/** @description Start (or only) date-time. */
+			start: string;
+		};
+		/**
+		 * @description Dedup pipeline applied after recognition.
+		 *
+		 *     Layers run in the canonical order: calibrate → reconcile
+		 *     (merging) → reconcile (tiebreaking) → filter.
+		 */
+		DeduplicationParams: {
+			/**
+			 * @description Per-recognizer confidence weights.
+			 *
+			 *     An empty map skips the calibrate layer. The engine
+			 *     converts this into elide's `CalibrationMap` at compile
+			 *     time.
+			 */
+			calibration?: {
+				[key: string]: number;
+			};
+			/**
+			 * @description How same-label overlapping findings are merged into one.
+			 *
+			 *     Defaults to [`MergingStrategyParams::Max`].
+			 * @default max
+			 */
+			merging: components["schemas"]["MergingStrategyParams"];
+			/**
+			 * @description Minimum confidence the filter layer admits.
+			 *
+			 *     `None` falls back to [`ConfidenceThreshold::BASELINE`] at
+			 *     compile time. Wire form is an `f32` in `0.0..=1.0`;
+			 *     out-of-range values reject at deserialize, not silently
+			 *     clamp.
+			 */
+			minConfidence?: components["schemas"]["ConfidenceThreshold"];
+			/**
+			 * @description How cross-label overlaps pick a winner.
+			 *
+			 *     Defaults to [`TiebreakerParams::HighestConfidence`].
+			 * @default highest_confidence
+			 */
+			tiebreaker: components["schemas"]["TiebreakerParams"];
+		};
+		/**
+		 * @description Pixel dimensions of an image or any 2-D canvas.
+		 *
+		 *     Converts between normalized `0.0..=1.0` coordinates (what vision
+		 *     models typically emit) and absolute pixel coordinates (what renderers
+		 *     consume). See
+		 *     [`UnitBoundingBox::denormalize`]
+		 *     for the conversion.
+		 *
+		 *     [`UnitBoundingBox::denormalize`]: super::UnitBoundingBox::denormalize
+		 */
+		Dimensions: {
+			/**
+			 * Format: uint32
+			 * @description Height in pixels.
+			 */
+			height: number;
+			/**
+			 * Format: uint32
+			 * @description Width in pixels.
+			 */
+			width: number;
+		};
+		/** @description Distance metric for vector similarity comparison. */
+		DistanceMetric: "cosine" | "euclidean" | "dot_product" | "manhattan";
+		/** @description Predicate over document-level facts. */
+		DocumentPredicate:
+			| {
+					/** @constant */
+					kind: "hasTag";
+					/** @description Required document tag. */
+					tag: string;
+			  }
+			| {
+					/** @description Metadata key to read. */
+					key: string;
+					/** @constant */
+					kind: "hasMetadata";
+					/** @description Required value, or `None` to match on presence alone. */
+					value?: string;
+			  }
+			| {
+					/** @description Conjunction members. */
+					all: components["schemas"]["DocumentPredicate"][];
+					/** @constant */
+					kind: "all";
+			  }
+			| {
+					/** @description Disjunction members. */
+					any: components["schemas"]["DocumentPredicate"][];
+					/** @constant */
+					kind: "any";
+			  }
+			| {
+					/** @constant */
+					kind: "not";
+					/** @description Negated predicate. */
+					not: components["schemas"]["DocumentPredicate"];
+			  };
+		/** @description Document-related reference variants. */
+		DocumentVariant:
+			| ({
+					/** @constant */
+					kind: "template";
+			  } & components["schemas"]["TemplateData"])
+			| ({
+					/** @constant */
+					kind: "signature";
+			  } & components["schemas"]["SignatureData"]);
+		/** @description Pre-computed embedding vector for similarity comparison. */
+		EmbeddingData: {
+			/** @description Identifier of the model/algorithm that produced this embedding. */
+			algorithm?: string;
+			/** @description Distance metric to use for comparison. */
+			distanceMetric?: components["schemas"]["DistanceMetric"];
+			/** @description The embedding vector values. */
+			vector: number[];
+		};
+		/**
+		 * @description Enricher slots an analyzer can fill.
+		 *
+		 *     Each slot is at-most-one; the slot name is the kind.
+		 */
+		EnricherParams: {
+			/**
+			 * @description Language-detection enricher.
+			 *
+			 *     Detects the document's primary language(s) and writes them
+			 *     into the recognizer context. Drives jurisdiction-aware
+			 *     recognizer dispatch downstream.
+			 */
+			language?: components["schemas"]["LanguageEnricherParams"];
+			/**
+			 * @description OCR enricher (image modality only).
+			 *
+			 *     OCRs the image (or PDF page raster) and stamps the
+			 *     recognised [`Layout`] onto the recognizer context, so
+			 *     downstream text recognizers can match on the OCR'd text.
+			 *
+			 *     [`Layout`]: elide_core::modality::image::Layout
+			 */
+			ocr?: components["schemas"]["OcrEnricherParams"];
+			/**
+			 * @description Speech-to-text enricher (audio modality only).
+			 *
+			 *     Transcribes the audio stream and stamps the resulting
+			 *     [`TranscriptSegment`]s onto the recognizer context, so
+			 *     downstream text recognizers can match against the
+			 *     transcript.
+			 *
+			 *     [`TranscriptSegment`]: elide_core::modality::audio::TranscriptSegment
+			 */
+			stt?: components["schemas"]["SttEnricherParams"];
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		Entity: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TextLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["Provenance"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		Entity2: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TabularLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["Provenance2"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		Entity3: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["ImageLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["Provenance3"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		Entity4: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["AudioLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["Provenance4"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description Coreference identifier shared by entities that denote the same
+		 *     real-world thing.
+		 *
+		 *     Assigned by a recognizer that performs coreference resolution: an
+		 *     NER model or LLM that recognises "Alice", "she", and "Ms. Smith" as
+		 *     the same person within one detection call. Two entities carrying the
+		 *     same `EntityCoRef` are coreferent: they refer to the same underlying
+		 *     entity even though each is a distinct mention with its own span.
+		 *
+		 *     The identifier is opaque and only meaningful *within* a single
+		 *     detection call: it is the recognizer's local handle for a cluster of
+		 *     mentions, not a global key.
+		 */
+		EntityCoRef: string;
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		EntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["Entity"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		EntityRecord2: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["Entity2"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		EntityRecord3: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["Entity3"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		EntityRecord4: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["Entity4"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description HTTP error response representation with security-conscious design.
+		 *
+		 *     This struct contains all the information needed to serialize an error
+		 *     response, including the error name, message, HTTP status code, resource
+		 *     information, and user-friendly messages.
+		 */
+		ErrorResponse: {
+			/** @description User-friendly error message safe for client display */
+			message: string;
+			/** @description The error name/type identifier */
+			name: string;
+			/** @description The resource that the error relates to (optional, set by handler) */
+			resource?: string;
+			/** @description Helpful suggestion for resolving the error (optional) */
+			suggestion?: string;
+			/** @description Validation error details for field-specific errors */
+			validation?: components["schemas"]["ValidationErrorDetail"][];
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		Event: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["EventKind"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		Event2: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["EventKind2"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		Event3: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["EventKind3"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		Event4: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["EventKind4"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		EventKind:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TextLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TextLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["Hint"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["TextLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		EventKind2:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TabularLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TabularLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["Hint2"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["TabularLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		EventKind3:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["ImageLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["ImageLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["Hint3"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["ImageLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		EventKind4:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["AudioLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["AudioLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["Hint4"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["AudioLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/** @description Reference face data for identity matching. */
+		FaceData: {
+			/** @description Algorithm that produced the template (e.g. `"arcface"`, `"facenet"`). */
+			algorithm?: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the file holding the reference face image.
+			 */
+			imageSource: string;
+			/** @description Bounding box of the face within the image. */
+			region?: components["schemas"]["BoundingBox"];
+			/** @description Base64-encoded face embedding / template. */
+			template?: string;
+		};
+		/** @description Represents a file in responses. */
+		File: {
+			/**
+			 * Format: date-time
+			 * @description Creation timestamp.
+			 */
+			createdAt: string;
+			/** @description Display name. */
+			displayName: string;
+			/** @description File extension (without dot). */
+			fileExtension: string;
+			/**
+			 * Format: int64
+			 * @description File size in bytes.
+			 */
+			fileSize: number;
+			/**
+			 * Format: uuid
+			 * @description Unique file identifier.
+			 */
+			id: string;
+			/** @description MIME type. */
+			mimeType?: string;
+			/** @description Original filename when uploaded. */
+			originalFilename: string;
+			/**
+			 * Format: uuid
+			 * @description Parent file ID if this is a newer version.
+			 */
+			parentId?: string;
+			/** @description How the file was created (uploaded, imported, generated). */
+			source: components["schemas"]["FileSource"];
+			/** @description Classification tags. */
+			tags: string[];
+			/**
+			 * Format: date-time
+			 * @description Last update timestamp.
+			 */
+			updatedAt: string;
+			/**
+			 * Format: uuid
+			 * @description Account ID of the user who uploaded/created the file.
+			 */
+			uploadedBy: string;
+			/**
+			 * Format: int32
+			 * @description Version number (1 for original, higher for newer versions).
+			 */
+			versionNumber: number;
+			/**
+			 * Format: uuid
+			 * @description Workspace this file belongs to.
+			 */
+			workspaceId: string;
+		};
+		/** @description File format categories for filtering. */
+		FileFormat: "pdf" | "doc" | "txt" | "md" | "csv" | "json" | "png" | "jpeg";
+		/**
+		 * @description Path parameters for file operations (file ID only).
+		 *
+		 *     Since file IDs are globally unique UUIDs, workspace context can be
+		 *     derived from the file record itself for authorization purposes.
+		 */
+		FilePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the file.
+			 */
+			fileId: string;
+		};
+		/**
+		 * @description Defines how a file was created in the system.
+		 *
+		 *     This enumeration corresponds to the `FILE_SOURCE` PostgreSQL enum and is used
+		 *     to track the origin of files - whether they were uploaded by users, imported
+		 *     from external sources, or generated by the system.
+		 */
+		FileSource: "uploaded" | "imported" | "generated";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		FilesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["File"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Request to generate a shareable invite code for a workspace. */
+		GenerateInviteCode: {
+			/** @description When the invite code expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
+			/** @description Role to assign when someone joins via this invite code. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+		};
+		/** @description A geographic bounding box defined by its south-west and north-east corners. */
+		GeoBounds: {
+			/** @description North-east corner. */
+			northEast: components["schemas"]["GeoCoordinate"];
+			/** @description South-west corner. */
+			southWest: components["schemas"]["GeoCoordinate"];
+		};
+		/** @description A geographic coordinate (latitude/longitude). */
+		GeoCoordinate: {
+			/**
+			 * Format: double
+			 * @description Latitude in decimal degrees (−90 to 90).
+			 */
+			lat: number;
+			/**
+			 * Format: double
+			 * @description Longitude in decimal degrees (−180 to 180).
+			 */
+			lng: number;
+		};
+		/** @description Geospatial location variants. */
+		GeospatialVariant:
+			| ({
+					/** @constant */
+					kind: "region";
+			  } & components["schemas"]["RegionData"])
+			| ({
+					/** @constant */
+					kind: "address";
+			  } & components["schemas"]["AddressData"]);
+		/** @description A shell-style glob pattern. */
+		GlobPattern: {
+			/** @description The glob expression string. */
+			expression: string;
+		};
+		/**
+		 * @description SHA-2 variant for the [`TextRedaction::Hash`] operator.
+		 *
+		 *     Wire mirror of elide's `Sha2Algorithm`; the runtime `From`
+		 *     conversion is on the engine side so this crate stays free
+		 *     of the elide-redaction dep.
+		 */
+		HashAlgorithm: "sha256" | "sha512";
+		/** @description Response body for `GET /health/`. */
+		Health: {
+			/** @description Per-component health checks. */
+			checks: components["schemas"]["ComponentHealth"][];
+			/** @description Overall service status. */
+			status: components["schemas"]["HealthStatus"];
+			/** @description RFC 3339 timestamp of when the check was performed. */
+			timestamp: string;
+		};
+		/** @description Operational status of a service component. */
+		HealthStatus: "healthy" | "degraded" | "unhealthy";
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		Hint: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["TextData2"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["TextLocation"];
+		};
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		Hint2: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["TextData2"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["TabularLocation"];
+		};
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		Hint3: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["ImageData2"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["ImageLocation"];
+		};
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		Hint4: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["AudioData"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["AudioLocation"];
+		};
+		/** @description Reference image for object/scene matching. */
+		ImageData: {
+			/**
+			 * Format: uuid
+			 * @description Id of the file holding the reference image.
+			 */
+			imageSource: string;
+			/** @description Optional sub-region within the image. */
+			region?: components["schemas"]["BoundingBox"];
+		};
+		/**
+		 * @description Per-call payload a recognizer inspects for the [`Image`] modality.
+		 *
+		 *     Carries the encoded bytes plus the pixel [`Dimensions`], which a
+		 *     recognizer that emits unit-square boxes needs to scale them into pixel
+		 *     coordinates. An optional filename aids diagnostics and encoding
+		 *     inference.
+		 *
+		 *     [`Image`]: super::Image
+		 */
+		ImageData2: {
+			/** @description Pixel dimensions of the encoded image. */
+			dimensions: components["schemas"]["Dimensions"];
+			/** @description Original filename, when known. */
+			filename?: string;
+		};
+		/**
+		 * @description Region within image content.
+		 *
+		 *     An axis-aligned [`BoundingBox`] in pixel coordinates locates the
+		 *     region; an optional [`Polygon`] captures a rotated or quadrilateral
+		 *     shape when the source produced one (OCR engines that emit 4-point
+		 *     polygons), and an optional page number addresses multi-page documents.
+		 */
+		ImageLocation: {
+			/** @description Axis-aligned bounding box of the region, in pixel coordinates. */
+			bounding_box: components["schemas"]["BoundingBox"];
+			/**
+			 * Format: uint32
+			 * @description 1-based page number, for multi-page documents like PDFs.
+			 */
+			page?: number;
+			/**
+			 * @description Polygon vertices when the region is rotated or quadrilateral.
+			 *     Axis-aligned-only sources leave this unset.
+			 */
+			polygon?: components["schemas"]["Polygon"];
+		};
+		/** @description Operator spec a `redact` image rule carries. */
+		ImageRedaction:
+			| {
+					/** @constant */
+					kind: "erase";
+			  }
+			| {
+					/** @constant */
+					kind: "keep";
+			  }
+			| {
+					/** @constant */
+					kind: "blur";
+					/**
+					 * Format: float
+					 * @description Standard deviation of the Gaussian kernel, in pixels.
+					 *     Larger is blurrier (and harder to reverse).
+					 * @default 16
+					 */
+					sigma: number;
+			  }
+			| {
+					/**
+					 * Format: uint32
+					 * @description Side length of each mosaic block, in pixels. Larger
+					 *     blocks are coarser (and harder to reverse).
+					 * @default 16
+					 */
+					block_size: number;
+					/** @constant */
+					kind: "pixelate";
+			  }
+			| {
+					/**
+					 * @description Fill color the codec rasterises over the region.
+					 * @default {
+					 *       "b": 0,
+					 *       "g": 0,
+					 *       "r": 0
+					 *     }
+					 */
+					color: components["schemas"]["Color"];
+					/** @constant */
+					kind: "blackbox";
+			  };
+		/**
+		 * @description Workspace invite with complete information.
+		 *
+		 *     This response includes all the essential information about an
+		 *     invitation, including the unique invite ID that can be used to track or cancel
+		 *     the invitation later.
+		 */
+		Invite: {
+			/**
+			 * Format: date-time
+			 * @description When the invitation was created.
 			 */
 			createdAt: string;
 			/**
 			 * Format: date-time
-			 * @description When the notification expires.
+			 * @description When the invitation expires.
 			 */
-			expiresAt?: string | null;
+			expiresAt: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the invitation.
+			 */
+			inviteId: string;
+			/** @description Current status of the invitation. */
+			inviteStatus: components["schemas"]["InviteStatus"];
+			/** @description Invite token (only included for open invitations without invitee_email). */
+			inviteToken?: string;
+			/** @description Role the invitee will have if they accept. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description Email address of the invitee (omitted for open invite codes). */
+			inviteeEmail?: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation was last updated.
+			 */
+			updatedAt: string;
+			/**
+			 * Format: uuid
+			 * @description ID of the workspace the invitation is for.
+			 */
+			workspaceId: string;
 		};
-		/** @description Response type for unread notifications status. */
-		UnreadStatus: {
+		/** @description Response containing a generated shareable invite code. */
+		InviteCode: {
+			/**
+			 * Format: date-time
+			 * @description When the invite code expires.
+			 */
+			expiresAt: string;
+			/** @description The generated invite code that can be shared. */
+			inviteCode: string;
+			/** @description Role assigned when someone joins via this code. */
+			role: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: uuid
+			 * @description ID of the workspace this invite code is for.
+			 */
+			workspaceId: string;
+		};
+		/** @description Path parameters for joining via invite code. */
+		InviteCodePathParams: {
+			/** @description The invite code to use for joining the workspace. */
+			inviteCode: string;
+		};
+		/** @description Expiration options for invite codes. */
+		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
+		/**
+		 * @description Path parameters for invite operations (invite ID only).
+		 *
+		 *     Since invite IDs are globally unique UUIDs, workspace context can be
+		 *     derived from the invite record itself for authorization purposes.
+		 */
+		InvitePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the invite.
+			 */
+			inviteId: string;
+		};
+		/**
+		 * @description Preview of an invite with workspace details for display before joining.
+		 *
+		 *     This is a public-facing response that shows workspace information
+		 *     to help users decide whether to join via an invite code.
+		 */
+		InvitePreview: {
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was created.
+			 */
+			createdAt: string;
+			/** @description Description of the workspace. */
+			description?: string;
+			/** @description Display name of the workspace. */
+			displayName: string;
+			/**
+			 * Format: date-time
+			 * @description When the invite expires.
+			 */
+			expiresAt: string;
+			/** @description Role the user will have if they join. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description Tags associated with the workspace. */
+			tags: string[];
+			/**
+			 * Format: uuid
+			 * @description ID of the workspace.
+			 */
+			workspaceId: string;
+		};
+		/** @description Fields available for sorting workspace invites. */
+		InviteSortField: "email" | "date";
+		/**
+		 * @description Defines the current status of a workspace invitation.
+		 *
+		 *     This enumeration corresponds to the `INVITE_STATUS` PostgreSQL enum and is used
+		 *     to track the lifecycle of workspace invitations from creation to resolution.
+		 */
+		InviteStatus:
+			| "pending"
+			| "accepted"
+			| "declined"
+			| "canceled"
+			| "expired"
+			| "revoked";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		InvitesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Invite"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
 			/**
 			 * Format: int64
-			 * @description Number of unread notifications.
+			 * @description Total count of items matching the query (if requested).
 			 */
-			unreadCount: number;
+			total?: number;
+		};
+		/**
+		 * @description Kind of sensitive information: a name, an optional description, and
+		 *     zero or more tags.
+		 *
+		 *     Names are conventionally `SCREAMING_SNAKE_CASE` (`"PHONE_NUMBER"`),
+		 *     matching Presidio, but this is convention, not enforcement. The
+		 *     taxonomy is open: a [`Label`] can be minted for any name a recognizer
+		 *     or configuration needs.
+		 *
+		 *     # Identity
+		 *
+		 *     Labels are identified by [`name`]; selectors match by name. Note that
+		 *     derived equality is *structural*: two labels with the same name but
+		 *     different descriptions or tags are not `==`. Code that wants
+		 *     name-only equality should compare [`name`] explicitly.
+		 *
+		 *     # Tags
+		 *
+		 *     [`tags`] is a free-form list of short identifiers policy selectors
+		 *     can match against. Built-in labels carry category tags
+		 *     (`personal_identity`, `contact_info`, `financial`, …) plus
+		 *     cross-cutting tags where applicable (`pii`, `phi`, `pci`). Custom
+		 *     labels can ship with zero tags.
+		 *
+		 *     [`name`]: Label::name
+		 *     [`tags`]: Label::tags
+		 */
+		Label: {
+			description?: string;
+			name: string;
+			tags: string[];
+		};
+		/**
+		 * @description Registry of [`Label`]s, keyed by name.
+		 *
+		 *     Holds the authoritative definitions (names + descriptions) for a run.
+		 *     A [`LabelRef`] carried on a detection or entity is resolved back to
+		 *     its full [`Label`] with [`get`].
+		 *
+		 *     [`get`]: LabelCatalog::get
+		 */
+		LabelCatalog: {
+			[key: string]: components["schemas"]["Label"];
+		};
+		/**
+		 * @description Per-request label-catalog selection.
+		 *
+		 *     Picks builtins by name + adds inline custom schemas.
+		 */
+		LabelCatalogParams: {
+			/**
+			 * @description Builtin label names to enable.
+			 *
+			 *     E.g. `"email_address"`, `"phone_number"`. Unknown names
+			 *     log a warning and are skipped.
+			 */
+			builtins?: string[];
+			/** @description Custom labels defined inline by the caller. */
+			custom?: components["schemas"]["Label"][];
+		};
+		/**
+		 * @description Lightweight reference to a [`Label`], carrying only its name.
+		 *
+		 *     This is what detections and entities hold: cloning is cheap (short
+		 *     names inline into the [`HipStr`]), and the full [`Label`], with its
+		 *     description, is resolved on demand from a [`LabelCatalog`].
+		 *
+		 *     [`Label`]: crate::entity::Label
+		 *     [`LabelCatalog`]: crate::entity::LabelCatalog
+		 */
+		LabelRef: string;
+		/**
+		 * @description Single language detection result.
+		 *
+		 *     Carries the language plus an optional confidence and an optional
+		 *     byte-offset [`LanguageSpan`]. Backends that don't expose confidence
+		 *     leave it `None`; single-language detectors that don't track per-region
+		 *     information leave `span` as `None`. The `provenance` field records
+		 *     whether the answer came from a detector or was asserted by the caller.
+		 */
+		Language: {
+			/** @description Optional confidence score. `None` when not exposed. */
+			confidence?: components["schemas"]["Confidence"];
+			/** @description Language. */
+			language: components["schemas"]["LanguageTag"];
+			/** @description How this language was obtained: detected or caller-asserted. */
+			provenance: components["schemas"]["LanguageProvenance"];
+			/**
+			 * @description Byte-offset range this detection applies to, when known. `None`
+			 *     means the whole text.
+			 */
+			span?: components["schemas"]["LanguageSpan"];
+		};
+		/**
+		 * @description Params for the language-detection enricher.
+		 *
+		 *     Backed by [`elide_lingua::LinguaEnricher`]: the `candidates` set
+		 *     scopes the detector to a candidate language pool. An empty list
+		 *     asks lingua to consider every language compiled into its
+		 *     feature set.
+		 *
+		 *     [`elide_lingua::LinguaEnricher`]: https://docs.rs/elide-lingua/latest/elide_lingua/struct.LinguaEnricher.html
+		 */
+		LanguageEnricherParams: {
+			/**
+			 * @description Candidate language pool the detector picks from.
+			 *
+			 *     Empty means "every language lingua was compiled with"; a
+			 *     non-empty list restricts detection to those languages and
+			 *     is a real speed + accuracy win when the caller knows what
+			 *     languages their documents are in.
+			 */
+			candidates?: components["schemas"]["LanguageTag"][];
+		};
+		/**
+		 * @description How a [`Language`]'s language was obtained.
+		 *
+		 *     Lets consumers distinguish "a detector ran and got this answer" from
+		 *     "the caller asserted this language". An assertion may still carry an
+		 *     optional confidence, so this is independent of the confidence field.
+		 */
+		LanguageProvenance: "detected" | "asserted";
+		/**
+		 * @description Byte-offset range within the analyzed text.
+		 *
+		 *     Attached to a [`Language`] when the detector knows the span
+		 *     its answer covers (mixed-language input produces multiple detections,
+		 *     each with a distinct span). Single-language detections from
+		 *     non-segmenting backends, and caller-asserted answers, typically leave
+		 *     the span as `None`.
+		 */
+		LanguageSpan: {
+			/**
+			 * Format: uint
+			 * @description Byte offset of the span end in the original text.
+			 */
+			end: number;
+			/**
+			 * Format: uint
+			 * @description Byte offset of the span start in the original text.
+			 */
+			start: number;
+		};
+		/**
+		 * @description Well-formed [BCP 47] language tag, such as `en`, `en-US`, or
+		 *     `zh-Hant-HK`.
+		 *
+		 *     Wraps [`oxilangtag::LanguageTag`] over a [`HipStr`] backing store, so
+		 *     short tags (the overwhelming common case) stay inline without a heap
+		 *     allocation. Parsing validates the tag's structure up front; the
+		 *     newtype therefore guarantees that any `LanguageTag` value in the
+		 *     model is syntactically valid.
+		 *
+		 *     Used to record the language a recognizer is scoped to, or the
+		 *     detected language of a span of content.
+		 *
+		 *     [BCP 47]: https://www.rfc-editor.org/info/bcp47
+		 */
+		LanguageTag: string;
+		/**
+		 * @description List of [`Language`]s resolved for one text scan.
+		 *
+		 *     Built by a detector (one entry per detected region) or by the caller
+		 *     asserting languages. Carried on a [`RecognizerContext`] so every
+		 *     recognizer and the context enhancer can consult the call's languages.
+		 *
+		 *     [`RecognizerContext`]: crate::recognition::RecognizerContext
+		 */
+		Languages: components["schemas"]["Language"][];
+		/**
+		 * @description What a redacted output leaks about the original it replaced.
+		 *
+		 *     Variants are ordered from most-leaky to least-leaky, so `Recoverable
+		 *     < Partial < Irrecoverable`. Surfaced through
+		 *     [`Operator::leak_profile`] for policy authoring and audit reporting.
+		 *
+		 *     [`Operator::leak_profile`]: crate::operator::Operator::leak_profile
+		 */
+		LeakProfile: "recoverable" | "partial" | "irrecoverable";
+		/** @description Query parameters for listing files. */
+		ListFiles: {
+			/** @description Filter by file formats. */
+			formats?: components["schemas"]["FileFormat"][];
+			/** @description Search by file name (case-insensitive, partial match). */
+			search?: string;
+		};
+		/** @description Query parameters for listing workspace invites. */
+		ListInvites: {
+			/** @description Sort order (asc or desc). */
+			order?: components["schemas"]["SortOrder"];
+			/** @description Filter by invited role. */
+			role?: components["schemas"]["WorkspaceRole"];
+			/** @description Sort by field. */
+			sortBy?: components["schemas"]["InviteSortField"];
+		};
+		/** @description Query parameters for listing workspace members. */
+		ListMembers: {
+			/** @description Filter by 2FA status. */
+			has2fa?: boolean;
+			/** @description Sort order (asc or desc). */
+			order?: components["schemas"]["SortOrder"];
+			/** @description Filter by workspace role. */
+			role?: components["schemas"]["WorkspaceRole"];
+			/** @description Sort by field. */
+			sortBy?: components["schemas"]["MemberSortField"];
 		};
 		/** @description Request payload for login. */
 		Login: {
@@ -7337,30 +9345,1229 @@ export interface components {
 			/** @description Whether to remember this device for extended session. */
 			rememberMe: boolean;
 		};
-		/** @description Response returned after successful authentication (login/signup). */
-		AuthToken: {
-			/** @description The JWT API token for authentication. */
-			apiToken: string;
+		/** @description Represents a workspace member. */
+		Member: {
 			/**
 			 * Format: uuid
-			 * @description ID of the authenticated account.
+			 * @description Account ID of the member.
+			 */
+			accountId: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the member joined the workspace.
+			 */
+			createdAt: string;
+			/** @description Display name of the member. */
+			displayName: string;
+			/** @description Email address of the member. */
+			emailAddress: string;
+			/** @description Whether the member has two-factor authentication enabled. */
+			has2fa: boolean;
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
+		};
+		/** @description Path parameters for workspace member operations. */
+		MemberPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the member account.
 			 */
 			accountId: string;
 			/**
 			 * Format: uuid
-			 * @description ID of the token.
+			 * @description Unique identifier of the workspace.
 			 */
-			tokenId: string;
+			workspaceId: string;
+		};
+		/** @description Fields available for sorting workspace members. */
+		MemberSortField: "name" | "date";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		MembersPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Member"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description How the merging reconciler combines same-label overlaps.
+		 *
+		 *     Picks one entity per overlapping cluster of findings that
+		 *     share a label.
+		 */
+		MergingStrategyParams: "max" | "noisy_or";
+		/**
+		 * @description Per-modality operator specs carried by a `redact` rule.
+		 *
+		 *     A single rule can name an operator for every modality the
+		 *     workspace supports. At apply time the redaction phase picks the
+		 *     operator matching the entity's modality (engine reads the right
+		 *     field directly via `redactions.text.as_ref()` etc.); modalities
+		 *     the rule didn't cover fall through to the deployment-wide
+		 *     default, and entities with no operator from either source are
+		 *     skipped.
+		 */
+		ModalityRedactions: {
+			/** @description Operator for audio-modality entities. */
+			audio?: components["schemas"]["AudioRedaction"];
+			/** @description Operator for image-modality entities. */
+			image?: components["schemas"]["ImageRedaction"];
+			/** @description Operator for tabular-modality entities. */
+			tabular?: components["schemas"]["TabularRedaction"];
+			/** @description Operator for text-modality entities. */
+			text?: components["schemas"]["TextRedaction"];
+		};
+		/** @description Detail of a model/NER recognition. */
+		ModelEvent: {
+			/** @description Whether contextual analysis adjusted the score for this match. */
+			contextual: boolean;
+			/** @description Model name (e.g. `"spacy-en-core-web-lg"`, `"gpt-4"`). */
+			name: string;
+			/** @description Model version string, when known. */
+			version?: string;
+		};
+		/** @description Response type for an account notification. */
+		Notification: {
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the token was issued.
+			 * @description When the notification was created.
 			 */
-			issuedAt: string;
+			createdAt: string;
 			/**
 			 * Format: date-time
-			 * @description Timestamp when the token expires.
+			 * @description When the notification expires.
 			 */
-			expiresAt: string;
+			expiresAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique notification identifier.
+			 */
+			id: string;
+			/** @description Whether the notification has been read. */
+			isRead: boolean;
+			/** @description Notification message. */
+			message: string;
+			/** @description Notification type. */
+			notifyType: components["schemas"]["NotificationEvent"];
+			/**
+			 * Format: date-time
+			 * @description When the notification was read.
+			 */
+			readAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Related entity ID.
+			 */
+			relatedId?: string;
+			/** @description Related entity type. */
+			relatedType?: string;
+			/** @description Notification title. */
+			title: string;
+		};
+		/**
+		 * @description Defines the type of notification event sent to a user.
+		 *
+		 *     This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and is used
+		 *     for various user notifications including mentions, replies, and system announcements.
+		 */
+		NotificationEvent:
+			| "comment:mention"
+			| "comment:reply"
+			| "document:uploaded"
+			| "document:downloaded"
+			| "document:verified"
+			| "member:invited"
+			| "member:joined"
+			| "integration:synced"
+			| "integration:desynced"
+			| "system:announcement"
+			| "system:report";
+		/** @description Response for notification settings within a workspace. */
+		NotificationSettings: {
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
+			/** @description Whether to send email notifications. */
+			notifyViaEmail: boolean;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		NotificationsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Notification"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Params for the OCR enricher (image modality).
+		 *
+		 *     The backend `kind` and its per-kind fields sit inline, no
+		 *     nested `backend = { ... }` table. Serde routes on `kind`.
+		 */
+		OcrEnricherParams: {
+			/** @description Base URL of the BentoML service. */
+			base_url: string;
+			/** @constant */
+			kind: "bento";
+			/** @description Model identifier the backend should target. */
+			model: string;
+		};
+		/**
+		 * @description Identifies a redaction operator, for the redaction audit a higher
+		 *     layer assembles.
+		 *
+		 *     As with [`RecognizerId`], the version is part of the identity so the
+		 *     audit trail records which build of the operator ran. The version is
+		 *     opaque text; the core attaches no ordering semantics to it.
+		 *
+		 *     [`RecognizerId`]: crate::recognition::RecognizerId
+		 */
+		OperatorId: {
+			/** @description Stable operator name (e.g. `"mask"`, `"aes-gcm-encrypt"`). */
+			name: string;
+			/** @description Operator's version at the time it was applied. */
+			version: string;
+		};
+		/**
+		 * @description A named pattern for detection matching.
+		 *
+		 *     `label` describes the intent (for humans/LLMs); `pattern` carries
+		 *     the expression and its type.
+		 */
+		PatternData: {
+			/** @description Human-readable label describing what this pattern matches. */
+			label: string;
+		} & (
+			| ({
+					/** @constant */
+					syntax: "regex";
+			  } & components["schemas"]["RegexPattern"])
+			| ({
+					/** @constant */
+					syntax: "glob";
+			  } & components["schemas"]["GlobPattern"])
+		);
+		/** @description Detail of a pattern/dictionary recognition. */
+		PatternEvent: {
+			/**
+			 * @description Whether contextual analysis (keyword co-occurrence) adjusted the
+			 *     score for this match.
+			 */
+			contextual: boolean;
+			/** @description Name of the pattern that matched (e.g. `"ssn"`, `"email"`). */
+			name: string;
+			/** @description Literal regex source that matched, when exposed. */
+			regex?: string;
+			/** @description Name of the validator that confirmed the match (e.g. `"luhn"`). */
+			validator?: string;
+		};
+		/** @description Params for the `elide-pattern` recognizer. */
+		PatternRecognizerParams: {
+			/**
+			 * @description Load every pattern + dictionary shipped with `elide-pattern`.
+			 *
+			 *     Implies the country-scoped jurisdictional pattern packs
+			 *     are active for the scope's jurisdictions.
+			 * @default false
+			 */
+			builtins: boolean;
+			/**
+			 * @description Enable per-label context-keyword boosting.
+			 *
+			 *     Wraps the bare pattern recognizer in elide's
+			 *     `Enhanced<PatternRecognizer>` layer so per-label context
+			 *     keywords boost low-confidence matches before they leave
+			 *     the recognizer.
+			 * @default false
+			 */
+			contextEnhanced: boolean;
+			/**
+			 * @description Caller-inlined regex rules.
+			 *
+			 *     Compiled per-request. See [`CustomPatternRule`] for the
+			 *     shape; the engine bounds request-level cost with a rule-
+			 *     count cap and a per-regex NFA-size limit at compile time,
+			 *     on top of the deserialize-time source-length cap in
+			 *     [`MAX_REGEX_SOURCE_LEN`].
+			 *
+			 *     [`MAX_REGEX_SOURCE_LEN`]: super::MAX_REGEX_SOURCE_LEN
+			 */
+			custom?: components["schemas"]["CustomPatternRule"][];
+			/**
+			 * @description Caller-inlined literal-term dictionaries.
+			 *
+			 *     Compiled per-request into a shared Aho-Corasick automaton.
+			 *     Same rule-count cap as `custom` applies at compile time.
+			 */
+			customDictionaries?: components["schemas"]["CustomDictionary"][];
+		};
+		/** @description Pipeline response. */
+		Pipeline: {
+			/**
+			 * Format: uuid
+			 * @description Account that created this pipeline.
+			 */
+			accountId: string;
+			/** @description Artifacts produced by pipeline runs. */
+			artifacts: components["schemas"]["Artifact"][];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was created.
+			 */
+			createdAt: string;
+			/** @description Detection + redaction configuration. */
+			definition: components["schemas"]["PipelineDefinition"];
+			/** @description Pipeline description. */
+			description?: string;
+			/** @description Pipeline name. */
+			name: string;
+			/**
+			 * Format: uuid
+			 * @description Unique pipeline identifier.
+			 */
+			pipelineId: string;
+			/** @description Pipeline lifecycle status. */
+			status: components["schemas"]["PipelineStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was last updated.
+			 */
+			updatedAt: string;
+			/**
+			 * Format: uuid
+			 * @description Workspace this pipeline belongs to.
+			 */
+			workspaceId: string;
+		};
+		/**
+		 * @description Reusable detection + redaction configuration for a pipeline.
+		 *
+		 *     The pipeline holds the "how to detect and redact" configuration the engine
+		 *     consumes, minus the per-document assertions (which travel with a document at
+		 *     detect time). Stored as JSON in the pipeline's `definition` column but
+		 *     validated against this schema at the API boundary.
+		 *
+		 *     The split:
+		 *
+		 *     - `recognizers` / `enrichers` / `deduplication` / `label_catalog` — the
+		 *       detection machinery, assembled into an engine `AnalyzerParams` per request.
+		 *     - `default_scope` — optional pipeline-wide scope a document may override.
+		 *     - `policy_ids` / `context_ids` — references resolved live at run time against
+		 *       the workspace's policies and contexts.
+		 */
+		PipelineDefinition: {
+			/**
+			 * @description Workspace contexts supplied to detection, resolved live by id.
+			 *
+			 *     Stored relationally in the `workspace_pipeline_contexts` join table, not the JSON
+			 *     definition; surfaced here so the API exposes one coherent object.
+			 */
+			contextIds?: string[];
+			/**
+			 * @description Post-recognition deduplication pipeline.
+			 * @default {
+			 *       "merging": "max",
+			 *       "tiebreaker": "highest_confidence"
+			 *     }
+			 */
+			deduplication: components["schemas"]["DeduplicationParams"];
+			/**
+			 * @description Optional pipeline-wide scope (languages, jurisdictions, document labels).
+			 *
+			 *     A document's own scope overrides this at detect time; absent here means
+			 *     the document must assert its own.
+			 */
+			defaultScope?: components["schemas"]["ScopeParams"];
+			/**
+			 * @description Enrichers run before recognition: language, OCR, STT.
+			 * @default {}
+			 */
+			enrichers: components["schemas"]["EnricherParams"];
+			/**
+			 * @description Entity-label catalog: which entity types the recognizers emit.
+			 *
+			 *     Reusable across the pipeline's documents, so it lives here rather than in
+			 *     per-document scope.
+			 * @default {}
+			 */
+			labelCatalog: components["schemas"]["LabelCatalogParams"];
+			/**
+			 * @description Workspace policies applied at redaction, resolved live by id.
+			 *
+			 *     Stored relationally in the `workspace_pipeline_policies` join table, not the JSON
+			 *     definition; surfaced here so the API exposes one coherent object.
+			 */
+			policyIds?: string[];
+			/**
+			 * @description Recognizer lineup: pattern (incl. inline custom rules and
+			 *     dictionaries), plus the NER and LLM toggles.
+			 * @default {}
+			 */
+			recognizers: components["schemas"]["RecognizerParams"];
+		};
+		/** @description Query parameters for filtering pipelines. */
+		PipelineFilter: {
+			/** @description Search by pipeline name (trigram similarity). */
+			search?: string;
+			/** @description Filter by pipeline status. */
+			status?: components["schemas"]["PipelineStatus"];
+		};
+		/**
+		 * @description Path parameters for pipeline operations.
+		 *
+		 *     Since pipeline IDs are globally unique UUIDs, workspace context can be
+		 *     derived from the pipeline record itself for authorization purposes.
+		 */
+		PipelinePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline.
+			 */
+			pipelineId: string;
+		};
+		/** @description Response type for a pipeline run. */
+		PipelineRun: {
+			/**
+			 * Format: uuid
+			 * @description Account that triggered the run (optional).
+			 */
+			accountId?: string;
+			/**
+			 * Format: date-time
+			 * @description When the run completed.
+			 */
+			completedAt?: string;
+			/**
+			 * Format: uuid
+			 * @description File this run analyzes / redacts.
+			 */
+			fileId: string;
+			/**
+			 * Format: uuid
+			 * @description Unique run identifier.
+			 */
+			id: string;
+			/** @description Non-encrypted metadata for filtering/display. */
+			metadata: unknown;
+			/**
+			 * Format: uuid
+			 * @description Pipeline this run belongs to.
+			 */
+			pipelineId: string;
+			/**
+			 * Format: date-time
+			 * @description When the run started.
+			 */
+			startedAt: string;
+			/**
+			 * @description Current run status.
+			 *
+			 *     The analysis is available to fetch from the run's `analysis` endpoint
+			 *     once this reaches `analyzed`.
+			 */
+			status: components["schemas"]["PipelineRunStatus"];
+			/** @description How the run was triggered. */
+			triggerType: components["schemas"]["PipelineTriggerType"];
+		};
+		/** @description Path parameters for pipeline run operations. */
+		PipelineRunPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline run.
+			 */
+			runId: string;
+		};
+		/**
+		 * @description Defines the execution status of a pipeline run.
+		 *
+		 *     This enumeration corresponds to the `PIPELINE_RUN_STATUS` PostgreSQL enum and is used
+		 *     to track the current state of a pipeline execution.
+		 */
+		PipelineRunStatus:
+			| "running"
+			| "analyzed"
+			| "completed"
+			| "failed"
+			| "cancelled";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		PipelineRunsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["PipelineRun"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Defines the lifecycle status of a pipeline definition.
+		 *
+		 *     This enumeration corresponds to the `PIPELINE_STATUS` PostgreSQL enum and is used
+		 *     to track whether a pipeline is being configured, enabled and ready to run, or disabled.
+		 */
+		PipelineStatus: "draft" | "enabled" | "disabled";
+		/** @description Summary response for pipeline (used in lists). */
+		PipelineSummary: {
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was created.
+			 */
+			createdAt: string;
+			/** @description Pipeline description. */
+			description?: string;
+			/** @description Pipeline name. */
+			name: string;
+			/**
+			 * Format: uuid
+			 * @description Unique pipeline identifier.
+			 */
+			pipelineId: string;
+			/** @description Pipeline lifecycle status. */
+			status: components["schemas"]["PipelineStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		PipelineSummarysPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["PipelineSummary"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Defines how a pipeline run was initiated.
+		 *
+		 *     This enumeration corresponds to the `PIPELINE_TRIGGER_TYPE` PostgreSQL enum and is used
+		 *     to track whether a run was manually triggered, triggered by a source connector, or scheduled.
+		 */
+		PipelineTriggerType: "manual" | "source" | "scheduled";
+		/**
+		 * @description Point in a 2-D coordinate space.
+		 *
+		 *     The coordinate basis is left to the consumer: pixel coordinates for a
+		 *     raster image, normalized `0.0..=1.0` coordinates for a
+		 *     resolution-independent region, or page units for a document. The
+		 *     model only requires the two scalars.
+		 */
+		Point: {
+			/**
+			 * Format: double
+			 * @description Horizontal coordinate.
+			 */
+			x: number;
+			/**
+			 * Format: double
+			 * @description Vertical coordinate.
+			 */
+			y: number;
+		};
+		/**
+		 * @description A named, versioned governance policy.
+		 *
+		 *     Identity is the UUID; `name` is display-only. `version` is the
+		 *     policy body's semver: two submissions of the same
+		 *     `(id, version)` pair should produce identical decisions.
+		 */
+		Policy: {
+			/**
+			 * @description Document-level gate. The whole policy (rules + fallback)
+			 *     is skipped when this is `Some(...)` and the predicate is
+			 *     false for the document. Evaluated once per document.
+			 */
+			appliesWhen?: components["schemas"]["DocumentPredicate"];
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * @description Per-policy catch-all. Fires when no rule in this policy
+			 *     matched. Presence halts the chain; absence falls through
+			 *     to the next policy. [`Option`] enforces "at most one
+			 *     fallback per policy" at the type level.
+			 */
+			fallback?: components["schemas"]["PolicyAction"];
+			/**
+			 * Format: uuid
+			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
+			 *     customer-supplied so re-submissions carry the same id.
+			 *     Engine stamps this into the redaction event's
+			 *     [`Attribution::policy_id`] so reviewers can find this
+			 *     policy from any redaction it drove.
+			 *
+			 *     [`Attribution::policy_id`]: elide_core::entity::provenance::Attribution::policy_id
+			 */
+			id: string;
+			/**
+			 * @description Vocabulary the policy operates over. Engine unions every
+			 *     submitted policy's `labels` into a per-request
+			 *     [`LabelCatalog`] used to drive recognizer dispatch and
+			 *     tag-based [`Predicate::TagOneOf`] matching.
+			 *
+			 *     [`LabelCatalog`]: elide_core::entity::LabelCatalog
+			 *     [`Predicate::TagOneOf`]: predicate::Predicate::TagOneOf
+			 */
+			labels?: components["schemas"]["Label"][];
+			/** @description Human-readable name. Display-only. Does not key anything. */
+			name: string;
+			/** @description Lifecycle rules for content under this policy. */
+			retention?: components["schemas"]["RetentionPolicy"][];
+			/** @description Ordered rules. First match wins within this policy. */
+			rules?: components["schemas"]["PolicyRule"][];
+			/** @description Semver of the policy body. */
+			version: string;
+		};
+		/** @description Response type for a workspace policy. */
+		Policy2: {
+			/**
+			 * Format: uuid
+			 * @description Account that created this policy.
+			 */
+			accountId: string;
+			/**
+			 * Format: date-time
+			 * @description When the policy was created.
+			 */
+			createdAt: string;
+			/** @description The structured policy body consumed by the engine. */
+			definition: components["schemas"]["Policy"];
+			/** @description Policy description. */
+			description?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique policy identifier.
+			 */
+			id: string;
+			/** @description Human-readable policy name. */
+			name: string;
+			/**
+			 * Format: date-time
+			 * @description When the policy was last updated.
+			 */
+			updatedAt: string;
+			/** @description Semver of the policy body. */
+			version: string;
+			/**
+			 * Format: uuid
+			 * @description Workspace this policy belongs to.
+			 */
+			workspaceId: string;
+		};
+		/**
+		 * @description What a rule does when its [`predicate`](PolicyRule::predicate)
+		 *     matches.
+		 *
+		 *     Three verbs: [`Redact`](PolicyAction::Redact) transforms the
+		 *     entity with one operator per modality;
+		 *     [`Suppress`](PolicyAction::Suppress) drops the entity entirely
+		 *     (false-positive marker) and stamps a reason onto the audit;
+		 *     [`Audit`](PolicyAction::Audit) flags it for human review without
+		 *     transforming.
+		 */
+		PolicyAction:
+			| ({
+					/** @constant */
+					kind: "redact";
+			  } & components["schemas"]["ModalityRedactions"])
+			| ({
+					/** @constant */
+					kind: "suppress";
+			  } & components["schemas"]["SuppressAction"])
+			| ({
+					/** @constant */
+					kind: "audit";
+			  } & components["schemas"]["AuditAction"]);
+		/** @description Path parameters for policy operations. */
+		PolicyPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the policy.
+			 */
+			policyId: string;
+		};
+		/**
+		 * @description One rule inside a [`Policy`]. Identity is the UUID; `name` /
+		 *     `description` are display-only.
+		 *
+		 *     [`Policy`]: super::Policy
+		 */
+		PolicyRule: {
+			/** @description What to do on match. */
+			action: components["schemas"]["PolicyAction"];
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * Format: uuid
+			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
+			 *     customer-supplied so re-submissions carry the same id.
+			 *     Engine stamps this into the redaction event's
+			 *     [`Attribution::reason`] so reviewers can trace back which
+			 *     rule fired.
+			 *
+			 *     [`Attribution::reason`]: elide_core::entity::provenance::Attribution::reason
+			 */
+			id: string;
+			/** @description Human-readable name. Display-only. Does not key anything. */
+			name: string;
+			/**
+			 * @description Entity-level predicate that decides whether the rule fires
+			 *     on a given recognised entity. Composable; see
+			 *     [`Predicate`] for the full grammar.
+			 */
+			predicate: components["schemas"]["Predicate"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		PolicysPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Policy2"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Closed polygon, given by its ordered vertices.
+		 *
+		 *     A richer location than a [`BoundingBox`] for detections whose extent
+		 *     is not rectangular: rotated text, a region traced by a vision model, a
+		 *     signature. The boundary is implicitly closed, so the last vertex
+		 *     connects back to the first.
+		 *
+		 *     [`BoundingBox`]: super::BoundingBox
+		 */
+		Polygon: components["schemas"]["Point"][];
+		/**
+		 * @description Predicate over a recognised entity. The wire format uses an
+		 *     internally tagged enum so authors write
+		 *     `{ "kind": "confidence", "min": 0.7 }` etc.
+		 */
+		Predicate:
+			| {
+					/** @constant */
+					kind: "confidence";
+					/**
+					 * Format: float
+					 * @description Minimum confidence in `[0.0, 1.0]`.
+					 */
+					min: number;
+			  }
+			| {
+					/** @constant */
+					kind: "labelOneOf";
+					/** @description Allowed labels. */
+					labels: string[];
+			  }
+			| {
+					/** @constant */
+					kind: "tagOneOf";
+					/** @description Allowed tags. */
+					tags: string[];
+			  }
+			| {
+					/** @description Cluster id to match. */
+					coref: string;
+					/** @constant */
+					kind: "coRef";
+			  }
+			| {
+					/** @description Conjunction members. */
+					all: components["schemas"]["Predicate"][];
+					/** @constant */
+					kind: "all";
+			  }
+			| {
+					/** @description Disjunction members. */
+					any: components["schemas"]["Predicate"][];
+					/** @constant */
+					kind: "any";
+			  }
+			| {
+					/** @constant */
+					kind: "not";
+					/** @description Negated predicate. */
+					not: components["schemas"]["Predicate"];
+			  };
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		Provenance: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["Event"][];
+		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		Provenance2: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["Event2"][];
+		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		Provenance3: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["Event3"][];
+		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		Provenance4: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["Event4"][];
+		};
+		Range_of_uint: {
+			/** Format: uint */
+			end: number;
+			/** Format: uint */
+			start: number;
+		};
+		/**
+		 * @description A modality-tagged group of recognized entities.
+		 *
+		 *     The unit [`AnalyzedDocument`] stores in `body` and in every
+		 *     `parts` entry.
+		 *
+		 *     Tagged by `modality` (snake_case) so deserialization picks the
+		 *     right variant and the entity vec inside is statically typed
+		 *     per modality — apply-time we hand each variant back to elide
+		 *     as a `Vec<Entity<M>>` for the appropriate `M`.
+		 */
+		RecognizedGroup:
+			| {
+					/** @description Recognized entities, in source-coordinate order. */
+					entities: components["schemas"]["EntityRecord"][];
+					/** @constant */
+					modality: "text";
+			  }
+			| {
+					/** @description Recognized entities, in source-coordinate order. */
+					entities: components["schemas"]["EntityRecord2"][];
+					/** @constant */
+					modality: "tabular";
+			  }
+			| {
+					/** @description Recognized entities, in source-coordinate order. */
+					entities: components["schemas"]["EntityRecord3"][];
+					/** @constant */
+					modality: "image";
+			  }
+			| {
+					/** @description Recognized entities, in source-coordinate order. */
+					entities: components["schemas"]["EntityRecord4"][];
+					/** @constant */
+					modality: "audio";
+			  };
+		/**
+		 * @description Recognizer slots an analyzer can fill.
+		 *
+		 *     Pattern is at-most-one (per-request); NER and LLM are
+		 *     deployment-owned lineups each gated by a three-state
+		 *     [`Option<bool>`] toggle.
+		 */
+		RecognizerParams: {
+			/**
+			 * @description Run the deployment's LLM recognizer lineup.
+			 *
+			 *     Same three-state semantics as [`ner`]. The lineup is
+			 *     filtered by declared modality — only recognizers whose
+			 *     `modalities` list contains the analyzer's modality
+			 *     attach.
+			 *
+			 *     [`ner`]: RecognizerParams::ner
+			 */
+			llm?: boolean;
+			/**
+			 * @description Run the deployment's NER recognizer lineup.
+			 *
+			 *     - `Some(true)`: explicit opt-in. Attaches every
+			 *       deployment-configured recognizer. Fails the analyzer
+			 *       compile with a `Validation` error when the deployment
+			 *       has no NER recognizers configured.
+			 *     - `Some(false)`: explicit opt-out. Skips NER entirely.
+			 *     - `None`: softly-on default. Attaches every configured
+			 *       recognizer if the deployment has any; skips silently
+			 *       otherwise.
+			 */
+			ner?: boolean;
+			/**
+			 * @description Built-in pattern + dictionary recognizer (`elide-pattern`).
+			 *
+			 *     At most one per analyzer.
+			 */
+			pattern?: components["schemas"]["PatternRecognizerParams"];
+		};
+		/** @description Direct comparison reference variants. */
+		ReferenceVariant:
+			| ({
+					/** @constant */
+					kind: "text";
+			  } & components["schemas"]["TextData"])
+			| ({
+					/** @constant */
+					kind: "tag";
+			  } & components["schemas"]["TagData"])
+			| ({
+					/** @constant */
+					kind: "credential";
+			  } & components["schemas"]["CredentialData"])
+			| ({
+					/** @constant */
+					kind: "image";
+			  } & components["schemas"]["ImageData"]);
+		/** @description A regular expression pattern. */
+		RegexPattern: {
+			/** @description The regex expression string. */
+			expression: string;
+		};
+		/** @description Geospatial region reference data for location-based detection. */
+		RegionData: {
+			/** @description Optional human-readable name for this region. */
+			name?: string;
+		} & (
+			| ({
+					/** @constant */
+					shape: "bounds";
+			  } & components["schemas"]["GeoBounds"])
+			| {
+					/** @description Center of the circle. */
+					center: components["schemas"]["GeoCoordinate"];
+					/**
+					 * Format: double
+					 * @description Radius in meters.
+					 */
+					radius_m: number;
+					/** @constant */
+					shape: "circle";
+			  }
+			| {
+					/** @description Boundary vertices in order (x = lng, y = lat). */
+					boundary: components["schemas"]["Polygon"];
+					/** @constant */
+					shape: "polygon";
+			  }
+		);
+		/** @description Request to respond to a workspace invitation. */
+		ReplyInvite: {
+			/** @description Whether to accept or decline the invitation. */
+			acceptInvite: boolean;
+		};
+		/**
+		 * @description How long data is retained.
+		 *
+		 *     Ordered from strictest to laxest: `ZeroRetention <
+		 *     Duration { days: N } < Indefinite`, and within `Duration`,
+		 *     smaller `days` is stricter (`Duration { days: 7 } <
+		 *     Duration { days: 30 }`). The derived [`Ord`] reflects this:
+		 *     strictest-wins resolution across multiple policies is just
+		 *     `iter.min()`. Variant declaration order is load-bearing;
+		 *     don't reorder.
+		 */
+		Retention:
+			| {
+					/** @constant */
+					mode: "zero_retention";
+			  }
+			| {
+					/**
+					 * Format: uint64
+					 * @description Maximum number of days to retain data.
+					 */
+					days: number;
+					/** @constant */
+					mode: "duration";
+			  }
+			| {
+					/** @constant */
+					mode: "indefinite";
+			  };
+		/** @description A single retention rule: scope + duration. */
+		RetentionPolicy: {
+			/** @description How long to retain data. */
+			retention: components["schemas"]["Retention"];
+			/** @description What class of data this applies to. */
+			scope: components["schemas"]["RetentionScope"];
+		};
+		/** @description What class of data a retention policy applies to. */
+		RetentionScope: "original_content" | "redacted_output" | "audit_logs";
+		/**
+		 * @description A serializable summary of *which selection rule* bound an operator to an
+		 *     entity — the automatic "why" behind a redaction.
+		 *
+		 *     The anonymizer selects an operator by walking an ordered rule list and
+		 *     taking the first match. That decision is recorded on the [`Redaction`]
+		 *     event as a `RuleMatch` so an audit can see *why* this operator ran
+		 *     ("matched label EMAIL_ADDRESS", "carried tag financial", "the fallback").
+		 *
+		 *     This is a summary, not the live rule: a predicate rule can't carry its
+		 *     closure into provenance, so [`Predicate`] records only that a predicate
+		 *     matched, not which one.
+		 *
+		 *     [`Redaction`]: crate::entity::provenance::EventKind::Redaction
+		 *     [`Predicate`]: RuleMatch::Predicate
+		 */
+		RuleMatch:
+			| {
+					label: components["schemas"]["LabelRef"];
+			  }
+			| {
+					tag: string;
+			  }
+			| "predicate"
+			| "fallback";
+		/**
+		 * @description Caller-asserted scope shared across every payload of one analysis.
+		 *
+		 *     Built once with the `with_*` chain and passed by reference to the
+		 *     analyzer, which borrows it into a fresh [`RecognizerContext`] per
+		 *     payload. It holds only what the *caller* asserts about the analysis as a
+		 *     whole — languages, jurisdictions, document labels, the target catalog, a
+		 *     correlation id — none of which depends on the medium, so one `Scope`
+		 *     drives a text, image, or audio analysis alike.
+		 *
+		 *     Per-medium regions (caller-supplied inclusions and exclusions, which are
+		 *     `M::Location`-typed) live in [`Annotations`], attached to the analyzer
+		 *     of that modality. The per-payload working state (NLP artifacts, detected
+		 *     languages) lives on the context, not here.
+		 *
+		 *     [`RecognizerContext`]: super::RecognizerContext
+		 *     [`Annotations`]: super::annotation::Annotations
+		 */
+		Scope: {
+			/**
+			 * @description The entity types recognizers are asked to emit. A zero-shot NER
+			 *     model requests exactly this set; an LLM prompt lists it as the
+			 *     labels to find. Empty means "the recognizer's own default" — a
+			 *     recognizer with its own configured label set keeps it; one without
+			 *     emits whatever its backend natively produces.
+			 * @default {}
+			 */
+			catalog: components["schemas"]["LabelCatalog"];
+			/**
+			 * Format: uuid
+			 * @description Correlation UUID propagated through the tracing span for this
+			 *     analysis.
+			 * @default null
+			 */
+			correlation_id: string;
+			/**
+			 * @description Caller-asserted jurisdictions. When non-empty, recognizers that
+			 *     carry per-rule country scopes skip rules that match none of them.
+			 *     An empty list means "any": rules that declare countries still run
+			 *     as a permissive fallback so callers who don't assert a jurisdiction
+			 *     don't lose detections. A document spanning several jurisdictions
+			 *     can assert all of them; a rule runs when any one matches.
+			 * @default []
+			 */
+			countries: components["schemas"]["CountryCode"][];
+			/**
+			 * @description Caller-asserted languages for the analysis. Empty means the caller
+			 *     asserted none, leaving detection (if an enricher runs) to fill in.
+			 * @default []
+			 */
+			languages: components["schemas"]["Languages"];
+			/**
+			 * @description Document-level classification tags (e.g. `"medical"`,
+			 *     `"gdpr-request"`). Recognizers may use these to bias their behavior
+			 *     for domain-specific terms; those that don't ignore the field.
+			 *
+			 *     Named `tags`, not `labels`, to keep "label" reserved for the entity
+			 *     taxonomy ([`LabelRef`]/[`LabelCatalog`]): these classify the
+			 *     *document*, whereas [`catalog`] names the entity *types* to emit.
+			 *
+			 *     [`catalog`]: Self::catalog
+			 *     [`LabelRef`]: crate::entity::LabelRef
+			 *     [`LabelCatalog`]: crate::entity::LabelCatalog
+			 * @default []
+			 */
+			tags: string[];
+		};
+		/**
+		 * @description Caller-asserted scope for one request.
+		 *
+		 *     Mirrors the wire-visible knobs of `elide::recognition::Scope`.
+		 *     The engine assembles this plus a server-minted
+		 *     `correlation_id` into the orchestrator's `Scope` at compile
+		 *     time.
+		 */
+		ScopeParams: {
+			/**
+			 * @description Caller-asserted jurisdictions.
+			 *
+			 *     When non-empty, recognizers that carry per-rule country
+			 *     scopes skip rules that match none of them. An empty list
+			 *     means "any": rules that declare countries still run as a
+			 *     permissive fallback so callers who don't assert a
+			 *     jurisdiction don't lose detections.
+			 */
+			countries?: components["schemas"]["CountryCode"][];
+			/**
+			 * @description Per-request entity-label catalog.
+			 *
+			 *     Builtins selected by name + custom inline schemas. Drives
+			 *     what recognizers are asked to emit and tag-based selector
+			 *     matching in the anonymizer. Engine resolves this into the
+			 *     assembled `elide::recognition::Scope`'s `catalog` field at
+			 *     compile time.
+			 * @default {}
+			 */
+			labelCatalog: components["schemas"]["LabelCatalogParams"];
+			/**
+			 * @description Caller-asserted languages for the analysis.
+			 *
+			 *     Empty means the caller asserted none, leaving detection
+			 *     (if a language enricher runs) to fill in.
+			 * @default []
+			 */
+			languages: components["schemas"]["Languages"];
+			/**
+			 * @description Document-level classification tags.
+			 *
+			 *     E.g. `"medical"`, `"gdpr-request"`. Recognizers may use
+			 *     these to bias their behaviour for domain-specific terms;
+			 *     those that don't ignore the field.
+			 *
+			 *     Distinct from [`label_catalog`]: tags classify the
+			 *     *document*, whereas the catalog names the entity *types*
+			 *     to emit.
+			 *
+			 *     [`label_catalog`]: ScopeParams::label_catalog
+			 */
+			tags?: string[];
+		};
+		/** @description Reference handwritten signature for verification. */
+		SignatureData: {
+			/** @description Algorithm used for signature verification. */
+			algorithm?: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the file holding the reference signature image.
+			 */
+			imageSource: string;
+			/** @description Bounding box of the signature within the image. */
+			region?: components["schemas"]["BoundingBox"];
+			/** @description Identity of the signer this signature belongs to. */
+			signerId?: string;
 		};
 		/** @description Request payload for signup. */
 		Signup: {
@@ -7376,35 +10583,761 @@ export interface components {
 			/** @description Whether to remember the device for extended session. */
 			rememberMe: boolean;
 		};
+		/** @description Sort order direction. */
+		SortOrder: "asc" | "desc";
+		/**
+		 * @description Params for the STT enricher (audio modality).
+		 *
+		 *     The backend `kind` and its per-kind fields sit inline, no
+		 *     nested `backend = { ... }` table. Serde routes on `kind`.
+		 */
+		SttEnricherParams: {
+			/** @description Base URL of the BentoML service. */
+			base_url: string;
+			/** @constant */
+			kind: "bento";
+			/** @description Model identifier the backend should target. */
+			model: string;
+		};
+		/** @description Payload for the `suppress` action. */
+		SuppressAction: {
+			/**
+			 * @description Human-readable reason the entity is being suppressed. Surfaced
+			 *     verbatim in the audit entry so reviewers can tell apart
+			 *     "synthetic test data," "incident response," and "known false
+			 *     positive" without re-reading the policy.
+			 */
+			reason?: string;
+		};
+		/**
+		 * @description Cell-addressed location within tabular content.
+		 *
+		 *     Identifies a cell by zero-based [`row_index`] and
+		 *     [`column_index`], optionally narrowed to a byte
+		 *     range within the cell text for an entity that spans only part of the
+		 *     cell. [`sheet_name`] scopes the cell to one sheet of
+		 *     a multi-sheet workbook; [`column_name`] is a
+		 *     human-readable header carried for provenance.
+		 *
+		 *     Overlap and ordering treat the sheet, cell, and byte range as
+		 *     coordinates. The column name is redundant with the column index, so it
+		 *     is carried but excluded from comparison.
+		 *
+		 *     [`row_index`]: Self::row_index
+		 *     [`column_index`]: Self::column_index
+		 *     [`sheet_name`]: Self::sheet_name
+		 *     [`column_name`]: Self::column_name
+		 */
+		TabularLocation: {
+			/**
+			 * Format: uint32
+			 * @description Zero-based column index of the cell.
+			 */
+			column_index: number;
+			/** @description Header label of the column, when known. */
+			column_name?: string;
+			/**
+			 * Format: uint
+			 * @description Byte offset within the cell text where the entity ends (exclusive).
+			 *     Unset means the whole cell.
+			 */
+			end_offset?: number;
+			/**
+			 * Format: uint32
+			 * @description Zero-based row index of the cell.
+			 */
+			row_index: number;
+			/** @description Sheet name within a multi-sheet workbook, when known. */
+			sheet_name?: string;
+			/**
+			 * Format: uint
+			 * @description Byte offset within the cell text where the entity starts. Unset
+			 *     means the whole cell.
+			 */
+			start_offset?: number;
+		};
+		/** @description Operator spec a `redact` tabular rule carries. */
+		TabularRedaction:
+			| {
+					/** @constant */
+					kind: "cell";
+					/**
+					 * @description The text operator to apply. Reuses the full text
+					 *     vocabulary (Erase, Keep, Mask, Replace, Hash,
+					 *     Pseudonymize, Encrypt).
+					 */
+					spec: components["schemas"]["TextRedaction"];
+			  }
+			| {
+					/** @constant */
+					kind: "drop_row";
+			  }
+			| {
+					/** @constant */
+					kind: "drop_column";
+			  };
+		/** @description A keyword tag for classification and routing. */
+		TagData: {
+			/** @description Optional category grouping related tags. */
+			category?: string;
+			/** @description The tag value (e.g. `"pii"`, `"financial"`, `"hipaa"`). */
+			value: string;
+		};
+		/**
+		 * @description Reference document template for layout/type classification.
+		 *
+		 *     Used to detect documents of a known type (ID cards, passports, forms,
+		 *     invoices) by comparing their visual layout against this reference.
+		 */
+		TemplateData: {
+			/** @description Document type label (e.g. `"passport"`, `"drivers_license"`, `"invoice"`). */
+			documentType?: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the file holding the reference template image.
+			 */
+			imageSource: string;
+			/** @description Optional sub-region of interest within the template. */
+			region?: components["schemas"]["BoundingBox"];
+		};
+		/** @description Temporal matching variants. */
+		TemporalVariant:
+			| ({
+					/** @constant */
+					kind: "date";
+			  } & components["schemas"]["DateData"])
+			| ({
+					/** @constant */
+					kind: "time";
+			  } & components["schemas"]["TimeData"])
+			| ({
+					/** @constant */
+					kind: "date_time";
+			  } & components["schemas"]["DateTimeData"])
+			| ({
+					/** @constant */
+					kind: "time_span";
+			  } & components["schemas"]["TimeSpanData"]);
+		/** @description Request payload for testing a webhook. */
+		TestWebhook: {
+			/**
+			 * @description Optional custom payload to send in the test request.
+			 *     If not provided, a default test payload will be used.
+			 */
+			payload?: unknown;
+		};
+		/**
+		 * @description Textual reference data as key-value pairs.
+		 *
+		 *     Keys describe *what* a value represents (for humans and LLMs);
+		 *     values are the literal strings used for matching.
+		 */
+		TextData: {
+			/** @description Key-value pairs for matching. */
+			entries?: components["schemas"]["TextEntry"][];
+			/** @description BCP-47 language tag for locale-sensitive matching. */
+			language?: components["schemas"]["LanguageTag"];
+		};
+		/**
+		 * @description Run of text.
+		 *
+		 *     Either the payload a text recognizer inspects, or the value sliced out
+		 *     at an entity's location for an operator.
+		 *
+		 *     Held as a [`HipStr`] so short values inline and longer ones share a
+		 *     refcounted buffer, making cheap clones when one payload is passed to
+		 *     several recognizers.
+		 */
+		TextData2: string;
+		/**
+		 * @description A labeled text value for reference matching.
+		 *
+		 *     The `key` is a human/LLM-readable label describing what this value
+		 *     represents (e.g. `"full_name"`, `"account_number"`).  The `value` is
+		 *     the literal string used for pattern matching.
+		 */
+		TextEntry: {
+			/** @description Human/LLM-readable label. */
+			key: string;
+			/** @description Literal value for pattern matching. */
+			value: string;
+		};
+		/**
+		 * @description Half-open `[start, end)` byte range within text content.
+		 *
+		 *     Ordering and overlap consider only `(start, end)`; the optional page
+		 *     number is carried for codecs that page their text but does not affect
+		 *     comparison.
+		 */
+		TextLocation: {
+			/**
+			 * Format: uint
+			 * @description Byte offset where the range ends (exclusive).
+			 */
+			end: number;
+			/**
+			 * Format: uint32
+			 * @description 1-based page number, when known.
+			 */
+			page?: number;
+			/**
+			 * Format: uint
+			 * @description Byte offset where the range starts.
+			 */
+			start: number;
+		};
+		/** @description Operator spec a `redact` text rule carries. */
+		TextRedaction:
+			| {
+					/** @constant */
+					kind: "erase";
+			  }
+			| {
+					/** @constant */
+					kind: "keep";
+			  }
+			| {
+					/**
+					 * Format: uint
+					 * @description Characters to leave unmasked at the start of the value.
+					 *     `0` (the default) masks from the start.
+					 */
+					keep_prefix?: number;
+					/**
+					 * Format: uint
+					 * @description Characters to leave unmasked at the end of the value.
+					 *     `0` (the default) masks through to the end.
+					 */
+					keep_suffix?: number;
+					/** @constant */
+					kind: "mask";
+					/**
+					 * @description The character that replaces masked positions.
+					 * @default *
+					 */
+					mask_char: string;
+			  }
+			| {
+					/** @constant */
+					kind: "replace";
+					/**
+					 * @description Template string. Default `[{label}]`.
+					 * @default [{label}]
+					 */
+					template: string;
+			  }
+			| {
+					/**
+					 * @description SHA-256 (default) or SHA-512.
+					 * @default sha256
+					 */
+					algorithm: components["schemas"]["HashAlgorithm"];
+					/** @constant */
+					kind: "hash";
+					/** @description Salt prepended to the value before hashing. */
+					salt?: string;
+			  }
+			| {
+					/** @constant */
+					kind: "pseudonymize";
+			  }
+			| {
+					/** @constant */
+					kind: "encrypt";
+			  };
+		/**
+		 * @description How the structural reconciler picks a winner across labels.
+		 *
+		 *     Runs after merging when overlapping entities carry different
+		 *     labels.
+		 */
+		TiebreakerParams: "highest_confidence" | "longest_span";
+		/**
+		 * @description A time-of-day or time range reference for temporal matching.
+		 *
+		 *     Uses naive (timezone-unaware) times from [`Time`].
+		 *     Useful for matching recurring time patterns (e.g. business hours).
+		 *
+		 *     [`Time`]: jiff::civil::Time
+		 */
+		TimeData: {
+			/** @description End time for a range. When `None` this represents a single time. */
+			end?: string;
+			/** @description Start (or only) time. */
+			start: string;
+		};
+		/**
+		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
+		 *
+		 *     The coordinate a time-addressed medium (audio, video) uses to locate a
+		 *     region: a transcribed segment, a redacted span. Microsecond precision
+		 *     is finer than both word-level speech timings and per-sample audio
+		 *     resolution, so a span never loses precision being carried as a
+		 *     `TimeSpan`; the endpoints are non-negative offsets by construction.
+		 *
+		 *     Half-open like a byte range: `[start, end)`, so two intervals that
+		 *     merely touch (`a.end == b.start`) do not [`overlap`].
+		 *
+		 *     [`from_millis`] and [`as_millis`] bridge the millisecond-based APIs
+		 *     that surround it (audio durations, provider timings reported in ms).
+		 *
+		 *     [`overlap`]: Self::overlaps
+		 *     [`from_millis`]: Self::from_millis
+		 *     [`as_millis`]: Self::start_millis
+		 */
+		TimeSpan: {
+			/**
+			 * Format: uint64
+			 * @description Microseconds from the start of the stream where the interval ends
+			 *     (exclusive).
+			 */
+			end_us: number;
+			/**
+			 * Format: uint64
+			 * @description Microseconds from the start of the stream where the interval begins.
+			 */
+			start_us: number;
+		};
+		/** @description A time span reference for matching audio/video segments. */
+		TimeSpanData: {
+			/** @description Optional human-readable label (e.g. `"intro"`, `"closing remarks"`). */
+			label?: string;
+			/** @description The time interval to match. */
+			span: components["schemas"]["TimeSpan"];
+		};
+		/** @description Expiration options for API tokens. */
+		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
+		/**
+		 * @description Path parameters for API token operations.
+		 *
+		 *     Since token IDs are globally unique UUIDs, account context is verified
+		 *     by comparing with the authenticated user's account ID.
+		 */
+		TokenPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the API token.
+			 */
+			tokenId: string;
+		};
+		/** @description Response type for unread notifications status. */
+		UnreadStatus: {
+			/**
+			 * Format: int64
+			 * @description Number of unread notifications.
+			 */
+			unreadCount: number;
+		};
+		/** @description Request payload to update an account. */
+		UpdateAccount: {
+			/** @description Company or organization name (empty string clears the value). */
+			companyName?: string;
+			/** @description New display name (2-100 characters). */
+			displayName?: string;
+			/**
+			 * Format: email
+			 * @description New email address (must be valid email format).
+			 */
+			emailAddress?: string;
+			/** @description New password (will be hashed before storage). */
+			password?: string;
+		};
+		/** @description Request to update an existing API token. */
+		UpdateApiToken: {
+			/** @description Updated name for the API token (1-100 characters). */
+			name?: string;
+		};
+		/** @description Request payload for updating an existing workspace connection. */
+		UpdateConnection: {
+			/**
+			 * @description Connection data to be encrypted (credentials + context).
+			 *     If provided, replaces the existing encrypted data.
+			 */
+			data?: unknown;
+			/** @description Human-readable connection name. */
+			name?: string;
+		};
+		/**
+		 * @description Request payload for updating an existing workspace context.
+		 *
+		 *     Replacing the `definition` replaces the whole context body.
+		 */
+		UpdateContext: {
+			/** @description New context body (replaces the stored definition). */
+			definition?: components["schemas"]["Context"];
+			/** @description Context description. */
+			description?: string;
+			/** @description Human-readable context name. */
+			name?: string;
+		};
+		/** @description Request to update file metadata. */
+		UpdateFile: {
+			/** @description New display name for the file. */
+			displayName?: string;
+			/** @description Updated metadata. */
+			metadata?: unknown;
+			/** @description Updated tags. */
+			tags?: string[];
+		};
+		/** @description Request to update a member's role. */
+		UpdateMember: {
+			/** @description New role for the member. */
+			role: components["schemas"]["WorkspaceRole"];
+		};
+		/** @description Request payload for updating notification settings. */
+		UpdateNotificationSettings: {
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp?: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail?: components["schemas"]["NotificationEvent"][];
+			/** @description Whether to send email notifications. */
+			notifyViaEmail?: boolean;
+		};
+		/**
+		 * @description Request payload to update an existing pipeline.
+		 *
+		 *     All fields are optional; only provided fields will be updated. Supplying a
+		 *     `definition` replaces the whole detection + redaction configuration.
+		 */
+		UpdatePipeline: {
+			/** @description New detection + redaction configuration (replaces the whole definition). */
+			definition?: components["schemas"]["PipelineDefinition"];
+			/** @description New description for the pipeline (max 500 characters). */
+			description?: string;
+			/** @description New name for the pipeline (3-100 characters). */
+			name?: string;
+			/** @description New status for the pipeline. */
+			status?: components["schemas"]["PipelineStatus"];
+		};
+		/**
+		 * @description Request payload for updating an existing workspace policy.
+		 *
+		 *     Replacing the `definition` replaces the whole policy body.
+		 */
+		UpdatePolicy: {
+			/** @description New policy body (replaces the stored definition). */
+			definition?: components["schemas"]["Policy"];
+			/** @description Policy description. */
+			description?: string;
+			/** @description Human-readable policy name. */
+			name?: string;
+		};
+		/** @description Request payload for updating an existing workspace webhook. */
+		UpdateWebhook: {
+			/** @description Updated description of the webhook's purpose (max 500 characters). */
+			description?: string;
+			/** @description Updated human-readable name for the webhook (1-100 characters). */
+			displayName?: string;
+			/** @description Updated list of event types this webhook should receive. */
+			events?: components["schemas"]["WebhookEvent"][];
+			/** @description Updated custom headers to include in webhook requests. */
+			headers?: {
+				[key: string]: string;
+			};
+			/** @description Updated status (active or paused). Ignored if webhook is currently disabled. */
+			status?: components["schemas"]["WebhookStatus"];
+			/**
+			 * Format: uri
+			 * @description Updated URL to send webhook payloads to.
+			 */
+			url?: string;
+		};
+		/**
+		 * @description Request payload to update an existing workspace.
+		 *
+		 *     All fields are optional; only provided fields will be updated.
+		 */
+		UpdateWorkspace: {
+			/** @description New description for the workspace (max 500 characters). */
+			description?: string;
+			/** @description New display name for the workspace (3-100 characters). */
+			displayName?: string;
+			/** @description Whether comments are enabled for this workspace. */
+			enableComments?: boolean;
+			/** @description Whether approval is required for processed files to be visible. */
+			requireApproval?: boolean;
+		};
+		/** @description Validation error details for field-specific errors. */
+		ValidationErrorDetail: {
+			/** @description Error code for the validation failure */
+			code: string;
+			/** @description Field name that failed validation */
+			field: string;
+			/** @description Human-readable error message */
+			message: string;
+			/** @description Additional parameters related to the validation error */
+			params?: {
+				[key: string]: unknown;
+			};
+		};
 		/** @description Path parameters for version extraction. */
 		VersionParams: {
 			/** @description The API version string (e.g., "v1", "v2"). */
 			version: string;
 		};
-		/** @description Request payload for monitoring status endpoint. */
-		CheckHealth: {
+		/** @description Reference voice data for speaker identification. */
+		VoiceData: {
+			/** @description Algorithm that produced the voiceprint (e.g. `"ecapa-tdnn"`, `"x-vector"`). */
+			algorithm?: string;
 			/**
-			 * Format: uint32
-			 * @description Timeout in milliseconds for health checks.
+			 * Format: uuid
+			 * @description Id of the file holding the reference audio.
 			 */
-			timeout?: number | null;
-			/** @description Whether to return cached results if available. */
-			useCache?: boolean | null;
+			audioSource: string;
+			/** @description Segment within the audio used for enrollment. */
+			segment?: components["schemas"]["TimeSpan"];
+			/** @description Base64-encoded speaker embedding / voiceprint. */
+			template?: string;
 		};
-		/** @description System monitoring status response. */
-		MonitorStatus: {
+		/** @description Shape of a synthesized tone. */
+		Waveform: "sine" | "square";
+		/** @description Workspace webhook response. */
+		Webhook: {
 			/**
 			 * Format: date-time
-			 * @description Timestamp when this status was generated.
+			 * @description Timestamp when this webhook was first created.
 			 */
-			checkedAt: string;
-			/** @description Overall system health status. */
-			status: components["schemas"]["ServiceStatus"];
-			/** @description Application version. */
-			version: string;
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Account that originally created this webhook.
+			 */
+			createdBy: string;
+			/** @description Detailed description of the webhook's purpose. */
+			description: string;
+			/** @description Human-readable name for the webhook. */
+			displayName: string;
+			/** @description List of event types this webhook receives. */
+			events: components["schemas"]["WebhookEvent"][];
+			/** @description Custom headers included in webhook requests. */
+			headers: {
+				[key: string]: string;
+			};
+			/**
+			 * Format: date-time
+			 * @description Timestamp of the most recent webhook trigger.
+			 */
+			lastTriggeredAt?: string;
+			/** @description Current status of the webhook. */
+			status: components["schemas"]["WebhookStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when this webhook was last modified.
+			 */
+			updatedAt: string;
+			/** @description The URL to send webhook payloads to. */
+			url: string;
+			/**
+			 * Format: uuid
+			 * @description Unique webhook identifier.
+			 */
+			webhookId: string;
+			/**
+			 * Format: uuid
+			 * @description Reference to the workspace this webhook belongs to.
+			 */
+			workspaceId: string;
 		};
-		/** @description Represents the operational status of a service. */
-		ServiceStatus: "healthy" | "degraded" | "unhealthy";
+		/**
+		 * @description Webhook creation response that includes the secret (visible only once).
+		 *
+		 *     The secret is used for HMAC-SHA256 signature verification of webhook payloads.
+		 *     It is only returned when the webhook is first created and cannot be retrieved
+		 *     again. Store it securely.
+		 */
+		WebhookCreated: {
+			/**
+			 * Format: date-time
+			 * @description Timestamp when this webhook was first created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Account that originally created this webhook.
+			 */
+			createdBy: string;
+			/** @description Detailed description of the webhook's purpose. */
+			description: string;
+			/** @description Human-readable name for the webhook. */
+			displayName: string;
+			/** @description List of event types this webhook receives. */
+			events: components["schemas"]["WebhookEvent"][];
+			/** @description Custom headers included in webhook requests. */
+			headers: {
+				[key: string]: string;
+			};
+			/**
+			 * Format: date-time
+			 * @description Timestamp of the most recent webhook trigger.
+			 */
+			lastTriggeredAt?: string;
+			/**
+			 * @description HMAC-SHA256 signing secret for webhook verification.
+			 *
+			 *     **Important**: This is the only time the secret will be shown.
+			 *     Store it securely as it cannot be retrieved again.
+			 */
+			secret: string;
+			/** @description Current status of the webhook. */
+			status: components["schemas"]["WebhookStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when this webhook was last modified.
+			 */
+			updatedAt: string;
+			/** @description The URL to send webhook payloads to. */
+			url: string;
+			/**
+			 * Format: uuid
+			 * @description Unique webhook identifier.
+			 */
+			webhookId: string;
+			/**
+			 * Format: uuid
+			 * @description Reference to the workspace this webhook belongs to.
+			 */
+			workspaceId: string;
+		};
+		/**
+		 * @description Defines the types of events that can trigger webhook delivery.
+		 *
+		 *     This enumeration corresponds to the `WEBHOOK_EVENT` PostgreSQL enum and is used
+		 *     to configure which events a webhook should receive notifications for.
+		 */
+		WebhookEvent:
+			| "document:created"
+			| "document:updated"
+			| "document:deleted"
+			| "file:created"
+			| "file:updated"
+			| "file:deleted"
+			| "member:added"
+			| "member:deleted"
+			| "member:updated"
+			| "connection:created"
+			| "connection:updated"
+			| "connection:deleted"
+			| "connection:synced"
+			| "connection:desynced";
+		/**
+		 * @description Path parameters for webhook operations (webhook ID only).
+		 *
+		 *     Since webhook IDs are globally unique UUIDs, workspace context can be
+		 *     derived from the webhook record itself for authorization purposes.
+		 */
+		WebhookPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the webhook.
+			 */
+			webhookId: string;
+		};
+		/** @description Result of a webhook delivery attempt. */
+		WebhookResult: {
+			/**
+			 * Format: int64
+			 * @description Time taken to receive a response in milliseconds.
+			 */
+			responseTimeMs: number;
+			/**
+			 * Format: uint16
+			 * @description HTTP status code returned by the webhook endpoint.
+			 */
+			statusCode: number;
+		};
+		/**
+		 * @description Defines the operational status of a workspace webhook.
+		 *
+		 *     This enumeration corresponds to the `WEBHOOK_STATUS` PostgreSQL enum and is used
+		 *     to manage webhook states from active operation through pausing and disabling.
+		 */
+		WebhookStatus: "active" | "paused" | "disabled";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WebhooksPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Webhook"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Workspace response. */
+		Workspace: {
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description ID of the account that created the workspace.
+			 */
+			createdBy: string;
+			/** @description Description of the workspace. */
+			description?: string;
+			/** @description Display name of the workspace. */
+			displayName: string;
+			/** @description Whether comments are enabled for this workspace. */
+			enableComments: boolean;
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
+			/** @description Whether approval is required to processed files to be visible. */
+			requireApproval: boolean;
+			/** @description Tags associated with the workspace. */
+			tags: string[];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was last updated.
+			 */
+			updatedAt: string;
+			/**
+			 * Format: uuid
+			 * @description ID of the workspace.
+			 */
+			workspaceId: string;
+		};
+		/** @description Path parameters for workspace-level operations. */
+		WorkspacePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+		};
+		/**
+		 * @description Defines the role and permission level of a workspace member.
+		 *
+		 *     This enumeration corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
+		 *     hierarchical access control for workspace members with clearly defined capabilities.
+		 */
+		WorkspaceRole: "owner" | "admin" | "member" | "guest";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacesPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Workspace"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
 	};
 	responses: never;
 	parameters: never;

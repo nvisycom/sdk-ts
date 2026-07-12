@@ -98,7 +98,7 @@ export class Workspaces {
 		workspaceId: string,
 	): Promise<NotificationSettings> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/notifications",
+			"/workspaces/{workspaceId}/notifications/",
 			{
 				params: { path: { workspaceId } },
 			},
@@ -118,7 +118,7 @@ export class Workspaces {
 		settings: UpdateNotificationSettings,
 	): Promise<NotificationSettings> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/notifications",
+			"/workspaces/{workspaceId}/notifications/",
 			{
 				params: { path: { workspaceId } },
 				body: settings,

@@ -1,8 +1,6 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
-	DeleteFiles,
-	DownloadFiles,
 	File,
 	FilesPage,
 	ListFiles,
@@ -53,7 +51,7 @@ export class Files {
 	/**
 	 * List files in a workspace
 	 * @param workspaceId - Workspace ID
-	 * @param query - Optional query parameters (formats, limit, after)
+	 * @param query - Optional query parameters (formats, search, limit, after)
 	 * @returns Promise that resolves with a paginated list of files
 	 * @throws {ApiError} if the request fails
 	 */
@@ -74,7 +72,7 @@ export class Files {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getFile(fileId: string): Promise<File> {
-		const { data } = await this.#api.GET("/files/{fileId}", {
+		const { data } = await this.#api.GET("/files/{fileId}/", {
 			params: { path: { fileId } },
 		});
 		return data!;
@@ -87,7 +85,7 @@ export class Files {
 	 * @throws {ApiError} if the request fails
 	 */
 	async downloadFile(fileId: string): Promise<Response> {
-		const { response } = await this.#api.GET("/files/{fileId}/content", {
+		const { response } = await this.#api.GET("/files/{fileId}/content/", {
 			params: { path: { fileId } },
 			parseAs: "stream",
 		});
@@ -102,7 +100,7 @@ export class Files {
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateFile(fileId: string, updates: UpdateFile): Promise<File> {
-		const { data } = await this.#api.PATCH("/files/{fileId}", {
+		const { data } = await this.#api.PATCH("/files/{fileId}/", {
 			params: { path: { fileId } },
 			body: updates,
 		});
@@ -116,44 +114,8 @@ export class Files {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteFile(fileId: string): Promise<void> {
-		await this.#api.DELETE("/files/{fileId}", {
+		await this.#api.DELETE("/files/{fileId}/", {
 			params: { path: { fileId } },
-		});
-	}
-
-	/**
-	 * Download files as an archive
-	 * @param workspaceId - Workspace ID
-	 * @param request - Download request with format and optional file IDs
-	 * @returns Promise that resolves with the archive response
-	 * @throws {ApiError} if the request fails
-	 */
-	async downloadFiles(
-		workspaceId: string,
-		request: DownloadFiles,
-	): Promise<Response> {
-		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceId}/files/batch",
-			{
-				params: { path: { workspaceId } },
-				body: request,
-				parseAs: "stream",
-			},
-		);
-		return response;
-	}
-
-	/**
-	 * Delete multiple files
-	 * @param workspaceId - Workspace ID
-	 * @param request - Delete request with file IDs
-	 * @returns Promise that resolves when the files are deleted
-	 * @throws {ApiError} if the request fails
-	 */
-	async deleteFiles(workspaceId: string, request: DeleteFiles): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/files/batch", {
-			params: { path: { workspaceId } },
-			body: request,
 		});
 	}
 }
