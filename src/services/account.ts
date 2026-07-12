@@ -20,7 +20,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getAccount(): Promise<AccountData> {
-		const { data } = await this.#api.GET("/account");
+		const { data } = await this.#api.GET("/account/");
 		return data!;
 	}
 
@@ -31,7 +31,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateAccount(updates: UpdateAccount): Promise<AccountData> {
-		const { data } = await this.#api.PATCH("/account", {
+		const { data } = await this.#api.PATCH("/account/", {
 			body: updates,
 		});
 		return data!;
@@ -43,6 +43,6 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteAccount(): Promise<void> {
-		await this.#api.DELETE("/account");
+		await this.#api.DELETE("/account/");
 	}
 }

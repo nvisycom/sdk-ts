@@ -24,16 +24,16 @@ import type { paths } from "@/schema/api.js";
 import {
 	Account,
 	Activities,
-	Annotations,
 	ApiTokens,
 	Auth,
-	Comments,
-	Documents,
+	Connections,
+	Contexts,
 	Files,
-	Integrations,
 	Invites,
 	Members,
 	Notifications,
+	Pipelines,
+	Policies,
 	Runs,
 	Status,
 	Webhooks,
@@ -233,13 +233,6 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for managing file annotations.
-	 */
-	get annotations(): Annotations {
-		return new Annotations(this.#api);
-	}
-
-	/**
 	 * Service for managing API tokens.
 	 */
 	get apiTokens(): ApiTokens {
@@ -247,17 +240,17 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for managing file comments.
+	 * Service for managing connections.
 	 */
-	get comments(): Comments {
-		return new Comments(this.#api);
+	get connections(): Connections {
+		return new Connections(this.#api);
 	}
 
 	/**
-	 * Service for document operations.
+	 * Service for managing contexts.
 	 */
-	get documents(): Documents {
-		return new Documents(this.#api);
+	get contexts(): Contexts {
+		return new Contexts(this.#api);
 	}
 
 	/**
@@ -268,10 +261,17 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for managing integrations.
+	 * Service for managing pipelines.
 	 */
-	get integrations(): Integrations {
-		return new Integrations(this.#api);
+	get pipelines(): Pipelines {
+		return new Pipelines(this.#api);
+	}
+
+	/**
+	 * Service for managing policies.
+	 */
+	get policies(): Policies {
+		return new Policies(this.#api);
 	}
 
 	/**
@@ -296,7 +296,7 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for managing processing runs.
+	 * Service for managing pipeline runs.
 	 */
 	get runs(): Runs {
 		return new Runs(this.#api);

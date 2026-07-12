@@ -79,7 +79,7 @@ export async function login(
 	config?: AuthConfig,
 ): Promise<AuthToken> {
 	const client = createAuthClient(config);
-	const { data } = await client.POST("/auth/login", {
+	const { data } = await client.POST("/auth/login/", {
 		body: credentials,
 	});
 	return data!;
@@ -115,7 +115,7 @@ export async function signup(
 	config?: AuthConfig,
 ): Promise<AuthToken> {
 	const client = createAuthClient(config);
-	const { data } = await client.POST("/auth/signup", {
+	const { data } = await client.POST("/auth/signup/", {
 		body: details,
 	});
 	return data!;

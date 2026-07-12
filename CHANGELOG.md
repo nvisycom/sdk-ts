@@ -8,6 +8,35 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- `contexts` service and datatypes (`Context`, `CreateContext`,
+  `UpdateContext`, `ContextEntry`, `ContextsPage`)
+- `connections` service and datatypes (`Connection`, `CreateConnection`,
+  `UpdateConnection`, `ConnectionsQuery`, `ConnectionsPage`)
+- `pipelines` service and datatypes (`Pipeline`, `CreatePipeline`,
+  `UpdatePipeline`, `PipelineDefinition`, `PipelineStatus`, `PipelineSummary`,
+  `PipelineSummariesPage`, and more)
+- `policies` service and datatypes (`Policy`, `CreatePolicy`, `UpdatePolicy`,
+  `PolicyRule`, `PolicyAction`, `PoliciesPage`)
+- `Health` datatypes for the health endpoint (`Health`, `HealthStatus`,
+  `ComponentHealth`, `CheckHealth`)
+
+### Changed
+
+- Regenerated the API schema against the redacted-pipeline platform API
+- `runs` is now a pipeline-run service: `listRuns(pipelineId)`,
+  `createRun(pipelineId)`, `getRun(runId)`, `getDetections(runId)`,
+  `redact(runId)` (was integration-run based)
+- `status.checkHealth()` now returns `Health` (was `MonitorStatus`)
+- `NvisyApiError.resource` and `.suggestion` are now `string | undefined`
+  (were `string | null`)
+
+### Removed
+
+- `annotations`, `comments`, `documents`, and `integrations` services and
+  their datatypes (no longer part of the API)
+
 ## [0.3.0] - 2026-01-09
 
 ### Added

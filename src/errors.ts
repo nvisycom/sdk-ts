@@ -82,15 +82,15 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 
 	/**
 	 * The resource type that the error relates to (e.g., "account", "project").
-	 * May be null if the error is not resource-specific.
+	 * May be undefined if the error is not resource-specific.
 	 */
-	public readonly resource?: string | null;
+	public readonly resource?: string;
 
 	/**
 	 * A helpful suggestion for resolving the error.
-	 * May be null if no suggestion is available.
+	 * May be undefined if no suggestion is available.
 	 */
-	public readonly suggestion?: string | null;
+	public readonly suggestion?: string;
 
 	/**
 	 * Field-specific validation errors.
