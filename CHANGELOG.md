@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-12
+
 ### Added
 
 - `contexts` service and datatypes (`Context`, `CreateContext`,
@@ -25,17 +27,18 @@ and this project adheres to
 ### Changed
 
 - Regenerated the API schema against the redacted-pipeline platform API
-- `runs` is now a pipeline-run service: `listRuns(pipelineId)`,
+- **BREAKING**: `runs` is now a pipeline-run service: `listRuns(pipelineId)`,
   `createRun(pipelineId)`, `getRun(runId)`, `getDetections(runId)`,
   `redact(runId)` (was integration-run based)
-- `status.checkHealth()` now returns `Health` (was `MonitorStatus`)
-- `NvisyApiError.resource` and `.suggestion` are now `string | undefined`
-  (were `string | null`)
+- **BREAKING**: `status.checkHealth()` now returns `Health` (was
+  `MonitorStatus`)
+- **BREAKING**: `NvisyApiError.resource` and `.suggestion` are now
+  `string | undefined` (were `string | null`)
 
 ### Removed
 
-- `annotations`, `comments`, `documents`, and `integrations` services and
-  their datatypes (no longer part of the API)
+- **BREAKING**: `annotations`, `comments`, `documents`, and `integrations`
+  services and their datatypes (no longer part of the API)
 
 ## [0.3.0] - 2026-01-09
 
@@ -136,7 +139,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/nvisycom/sdk-ts/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/nvisycom/sdk-ts/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/nvisycom/sdk-ts/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/nvisycom/sdk-ts/releases/tag/v0.1.0
