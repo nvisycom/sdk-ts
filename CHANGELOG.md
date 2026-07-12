@@ -27,17 +27,18 @@ and this project adheres to
 ### Changed
 
 - Regenerated the API schema against the redacted-pipeline platform API
-- `runs` is now a pipeline-run service: `listRuns(pipelineId)`,
+- **BREAKING**: `runs` is now a pipeline-run service: `listRuns(pipelineId)`,
   `createRun(pipelineId)`, `getRun(runId)`, `getDetections(runId)`,
   `redact(runId)` (was integration-run based)
-- `status.checkHealth()` now returns `Health` (was `MonitorStatus`)
-- `NvisyApiError.resource` and `.suggestion` are now `string | undefined`
-  (were `string | null`)
+- **BREAKING**: `status.checkHealth()` now returns `Health` (was
+  `MonitorStatus`)
+- **BREAKING**: `NvisyApiError.resource` and `.suggestion` are now
+  `string | undefined` (were `string | null`)
 
 ### Removed
 
-- `annotations`, `comments`, `documents`, and `integrations` services and
-  their datatypes (no longer part of the API)
+- **BREAKING**: `annotations`, `comments`, `documents`, and `integrations`
+  services and their datatypes (no longer part of the API)
 
 ## [0.3.0] - 2026-01-09
 
