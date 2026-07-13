@@ -86,7 +86,7 @@
 		"openapi-typescript": "^7.13.0",
 		"rimraf": "^6.1.3",
 		"tsdown": "^0.22.3",
-		"typescript": "^5.9.3",
+		"typescript": "^7.0.2",
 		"vitest": "^4.1.9"
 	},
 	"engines": {
