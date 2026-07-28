@@ -34,13 +34,13 @@ export class Workspaces {
 
 	/**
 	 * Get workspace details by ID
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @returns Promise that resolves with the workspace details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getWorkspace(workspaceId: string): Promise<Workspace> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/", {
-			params: { path: { workspaceId } },
+	async getWorkspace(workspaceSlug: string): Promise<Workspace> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceSlug}/", {
+			params: { path: { workspaceSlug } },
 		});
 		return data!;
 	}
@@ -60,17 +60,17 @@ export class Workspaces {
 
 	/**
 	 * Update an existing workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param updates - Workspace update request
 	 * @returns Promise that resolves with the updated workspace
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateWorkspace(
-		workspaceId: string,
+		workspaceSlug: string,
 		updates: UpdateWorkspace,
 	): Promise<Workspace> {
-		const { data } = await this.#api.PATCH("/workspaces/{workspaceId}/", {
-			params: { path: { workspaceId } },
+		const { data } = await this.#api.PATCH("/workspaces/{workspaceSlug}/", {
+			params: { path: { workspaceSlug } },
 			body: updates,
 		});
 		return data!;
@@ -78,29 +78,29 @@ export class Workspaces {
 
 	/**
 	 * Delete a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @returns Promise that resolves when the workspace is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteWorkspace(workspaceId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/", {
-			params: { path: { workspaceId } },
+	async deleteWorkspace(workspaceSlug: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceSlug}/", {
+			params: { path: { workspaceSlug } },
 		});
 	}
 
 	/**
 	 * Get notification settings for the authenticated user in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @returns Promise that resolves with the notification settings
 	 * @throws {ApiError} if the request fails
 	 */
 	async getNotificationSettings(
-		workspaceId: string,
+		workspaceSlug: string,
 	): Promise<NotificationSettings> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/notifications/",
+			"/workspaces/{workspaceSlug}/notifications/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspaceSlug } },
 			},
 		);
 		return data!;
@@ -108,19 +108,19 @@ export class Workspaces {
 
 	/**
 	 * Update notification settings for the authenticated user in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param settings - Notification settings update request
 	 * @returns Promise that resolves with the updated notification settings
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateNotificationSettings(
-		workspaceId: string,
+		workspaceSlug: string,
 		settings: UpdateNotificationSettings,
 	): Promise<NotificationSettings> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/notifications/",
+			"/workspaces/{workspaceSlug}/notifications/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspaceSlug } },
 				body: settings,
 			},
 		);

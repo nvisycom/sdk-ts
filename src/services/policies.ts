@@ -19,19 +19,19 @@ export class Policies {
 
 	/**
 	 * List policies in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param query - Optional pagination parameters (limit, after)
 	 * @returns Promise that resolves with a paginated list of policies
 	 * @throws {ApiError} if the request fails
 	 */
 	async listPolicies(
-		workspaceId: string,
+		workspaceSlug: string,
 		query?: CursorPagination,
 	): Promise<PoliciesPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/policies/",
+			"/workspaces/{workspaceSlug}/policies/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspaceSlug }, query },
 			},
 		);
 		return data!;
@@ -39,19 +39,19 @@ export class Policies {
 
 	/**
 	 * Create a policy in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param policy - Policy creation request
 	 * @returns Promise that resolves with the created policy
 	 * @throws {ApiError} if the request fails
 	 */
 	async createPolicy(
-		workspaceId: string,
+		workspaceSlug: string,
 		policy: CreatePolicy,
 	): Promise<Policy> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/policies/",
+			"/workspaces/{workspaceSlug}/policies/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspaceSlug } },
 				body: policy,
 			},
 		);
@@ -59,42 +59,58 @@ export class Policies {
 	}
 
 	/**
-	 * Get policy details by ID
-	 * @param policyId - Policy ID
+	 * Get policy details by slug
+	 * @param workspaceSlug - Workspace slug
+	 * @param policySlug - Policy slug
 	 * @returns Promise that resolves with the policy details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getPolicy(policyId: string): Promise<Policy> {
-		const { data } = await this.#api.GET("/policies/{policyId}/", {
-			params: { path: { policyId } },
-		});
+	async getPolicy(workspaceSlug: string, policySlug: string): Promise<Policy> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/policies/{policySlug}/",
+			{
+				params: { path: { workspaceSlug, policySlug } },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Update a policy
-	 * @param policyId - Policy ID
+	 * @param workspaceSlug - Workspace slug
+	 * @param policySlug - Policy slug
 	 * @param updates - Policy update request
 	 * @returns Promise that resolves with the updated policy
 	 * @throws {ApiError} if the request fails
 	 */
-	async updatePolicy(policyId: string, updates: UpdatePolicy): Promise<Policy> {
-		const { data } = await this.#api.PUT("/policies/{policyId}/", {
-			params: { path: { policyId } },
-			body: updates,
-		});
+	async updatePolicy(
+		workspaceSlug: string,
+		policySlug: string,
+		updates: UpdatePolicy,
+	): Promise<Policy> {
+		const { data } = await this.#api.PUT(
+			"/workspaces/{workspaceSlug}/policies/{policySlug}/",
+			{
+				params: { path: { workspaceSlug, policySlug } },
+				body: updates,
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Delete a policy
-	 * @param policyId - Policy ID
+	 * @param workspaceSlug - Workspace slug
+	 * @param policySlug - Policy slug
 	 * @returns Promise that resolves when the policy is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deletePolicy(policyId: string): Promise<void> {
-		await this.#api.DELETE("/policies/{policyId}/", {
-			params: { path: { policyId } },
-		});
+	async deletePolicy(workspaceSlug: string, policySlug: string): Promise<void> {
+		await this.#api.DELETE(
+			"/workspaces/{workspaceSlug}/policies/{policySlug}/",
+			{
+				params: { path: { workspaceSlug, policySlug } },
+			},
+		);
 	}
 }

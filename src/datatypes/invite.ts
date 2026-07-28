@@ -3,6 +3,7 @@ import type { components } from "@/schema/api.js";
 type Schemas = components["schemas"];
 
 export type Invite = Schemas["Invite"];
+export type InviteSent = Schemas["InviteSent"];
 export type CreateInvite = Schemas["CreateInvite"];
 export type ReplyInvite = Schemas["ReplyInvite"];
 export type GenerateInviteCode = Schemas["GenerateInviteCode"];

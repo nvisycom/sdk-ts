@@ -19,19 +19,19 @@ export class Connections {
 
 	/**
 	 * List connections in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param query - Optional query parameters (provider, limit, after)
 	 * @returns Promise that resolves with a paginated list of connections
 	 * @throws {ApiError} if the request fails
 	 */
 	async listConnections(
-		workspaceId: string,
+		workspaceSlug: string,
 		query?: CursorPagination & { provider?: string },
 	): Promise<ConnectionsPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/connections/",
+			"/workspaces/{workspaceSlug}/connections/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspaceSlug }, query },
 			},
 		);
 		return data!;
@@ -39,19 +39,19 @@ export class Connections {
 
 	/**
 	 * Create a connection in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param connection - Connection creation request
 	 * @returns Promise that resolves with the created connection
 	 * @throws {ApiError} if the request fails
 	 */
 	async createConnection(
-		workspaceId: string,
+		workspaceSlug: string,
 		connection: CreateConnection,
 	): Promise<Connection> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/",
+			"/workspaces/{workspaceSlug}/connections/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspaceSlug } },
 				body: connection,
 			},
 		);
@@ -60,44 +60,63 @@ export class Connections {
 
 	/**
 	 * Get connection details by ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param connectionId - Connection ID
 	 * @returns Promise that resolves with the connection details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getConnection(connectionId: string): Promise<Connection> {
-		const { data } = await this.#api.GET("/connections/{connectionId}/", {
-			params: { path: { connectionId } },
-		});
+	async getConnection(
+		workspaceSlug: string,
+		connectionId: string,
+	): Promise<Connection> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
+			{
+				params: { path: { workspaceSlug, connectionId } },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Update a connection
+	 * @param workspaceSlug - Workspace slug
 	 * @param connectionId - Connection ID
 	 * @param updates - Connection update request
 	 * @returns Promise that resolves with the updated connection
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateConnection(
+		workspaceSlug: string,
 		connectionId: string,
 		updates: UpdateConnection,
 	): Promise<Connection> {
-		const { data } = await this.#api.PUT("/connections/{connectionId}/", {
-			params: { path: { connectionId } },
-			body: updates,
-		});
+		const { data } = await this.#api.PUT(
+			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
+			{
+				params: { path: { workspaceSlug, connectionId } },
+				body: updates,
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Delete a connection
+	 * @param workspaceSlug - Workspace slug
 	 * @param connectionId - Connection ID
 	 * @returns Promise that resolves when the connection is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteConnection(connectionId: string): Promise<void> {
-		await this.#api.DELETE("/connections/{connectionId}/", {
-			params: { path: { connectionId } },
-		});
+	async deleteConnection(
+		workspaceSlug: string,
+		connectionId: string,
+	): Promise<void> {
+		await this.#api.DELETE(
+			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
+			{
+				params: { path: { workspaceSlug, connectionId } },
+			},
+		);
 	}
 }

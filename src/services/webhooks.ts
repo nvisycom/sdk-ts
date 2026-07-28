@@ -5,6 +5,7 @@ import type {
 	TestWebhook,
 	UpdateWebhook,
 	Webhook,
+	WebhookCreated,
 	WebhookResult,
 	WebhooksPage,
 } from "@/datatypes/index.js";
@@ -21,52 +22,39 @@ export class Webhooks {
 
 	/**
 	 * List all webhooks in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param query - Optional pagination parameters (limit, after)
 	 * @returns Promise that resolves with a paginated list of webhooks
 	 * @throws {ApiError} if the request fails
 	 */
 	async listWebhooks(
-		workspaceId: string,
+		workspaceSlug: string,
 		query?: CursorPagination,
 	): Promise<WebhooksPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/webhooks/",
+			"/workspaces/{workspaceSlug}/webhooks/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspaceSlug }, query },
 			},
 		);
 		return data!;
 	}
 
 	/**
-	 * Get a specific webhook by ID
-	 * @param webhookId - Webhook ID
-	 * @returns Promise that resolves with the webhook details
-	 * @throws {ApiError} if the request fails
-	 */
-	async getWebhook(webhookId: string): Promise<Webhook> {
-		const { data } = await this.#api.GET("/webhooks/{webhookId}/", {
-			params: { path: { webhookId } },
-		});
-		return data!;
-	}
-
-	/**
 	 * Create a new webhook
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param webhook - Webhook creation request
-	 * @returns Promise that resolves with the created webhook
+	 * @returns Promise that resolves with the created webhook (including secret)
 	 * @throws {ApiError} if the request fails
 	 */
 	async createWebhook(
-		workspaceId: string,
+		workspaceSlug: string,
 		webhook: CreateWebhook,
-	): Promise<Webhook> {
+	): Promise<WebhookCreated> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/webhooks/",
+			"/workspaces/{workspaceSlug}/webhooks/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspaceSlug } },
 				body: webhook,
 			},
 		);
@@ -74,50 +62,81 @@ export class Webhooks {
 	}
 
 	/**
+	 * Get a specific webhook by slug
+	 * @param workspaceSlug - Workspace slug
+	 * @param webhookId - Webhook ID
+	 * @returns Promise that resolves with the webhook details
+	 * @throws {ApiError} if the request fails
+	 */
+	async getWebhook(workspaceSlug: string, webhookId: string): Promise<Webhook> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/",
+			{
+				params: { path: { workspaceSlug, webhookId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
 	 * Update an existing webhook
+	 * @param workspaceSlug - Workspace slug
 	 * @param webhookId - Webhook ID
 	 * @param updates - Webhook update request
 	 * @returns Promise that resolves with the updated webhook
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateWebhook(
+		workspaceSlug: string,
 		webhookId: string,
 		updates: UpdateWebhook,
 	): Promise<Webhook> {
-		const { data } = await this.#api.PUT("/webhooks/{webhookId}/", {
-			params: { path: { webhookId } },
-			body: updates,
-		});
+		const { data } = await this.#api.PUT(
+			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/",
+			{
+				params: { path: { workspaceSlug, webhookId } },
+				body: updates,
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Delete a webhook
+	 * @param workspaceSlug - Workspace slug
 	 * @param webhookId - Webhook ID
 	 * @returns Promise that resolves when the webhook is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteWebhook(webhookId: string): Promise<void> {
-		await this.#api.DELETE("/webhooks/{webhookId}/", {
-			params: { path: { webhookId } },
-		});
+	async deleteWebhook(workspaceSlug: string, webhookId: string): Promise<void> {
+		await this.#api.DELETE(
+			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/",
+			{
+				params: { path: { workspaceSlug, webhookId } },
+			},
+		);
 	}
 
 	/**
 	 * Test a webhook by sending a test payload
+	 * @param workspaceSlug - Workspace slug
 	 * @param webhookId - Webhook ID
 	 * @param options - Test webhook options
 	 * @returns Promise that resolves with the test result
 	 * @throws {ApiError} if the request fails
 	 */
 	async testWebhook(
+		workspaceSlug: string,
 		webhookId: string,
 		options?: TestWebhook,
 	): Promise<WebhookResult> {
-		const { data } = await this.#api.POST("/webhooks/{webhookId}/test/", {
-			params: { path: { webhookId } },
-			body: options ?? {},
-		});
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/test/",
+			{
+				params: { path: { workspaceSlug, webhookId } },
+				body: options ?? {},
+			},
+		);
 		return data!;
 	}
 }

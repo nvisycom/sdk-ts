@@ -200,7 +200,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/accounts/{accountId}/": {
+	"/accounts/{username}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -208,28 +208,33 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get account by ID
-		 * @description Returns an account's details by ID. The requester must share at least one workspace with the target account.
+		 * Get account by username
+		 * @description Returns an account's public profile by its handle. The requester must share at least one workspace with the target account.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the account. */
-					accountId: string;
+					/** @description Public handle of the account. */
+					username: components["schemas"]["Username"];
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Represents an account. */
+				/**
+				 * @description Public view of an account, returned when looking up someone other than the
+				 *     authenticated caller. Carries only the fields safe to share with a
+				 *     workspace peer; private details (email, account flags) are omitted
+				 *     and remain available solely through the caller's own `/account/` view.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Account"];
+						"application/json": components["schemas"]["PublicAccount"];
 					};
 				};
 				/**
@@ -830,7 +835,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/": {
+	"/workspaces/{workspaceSlug}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -846,8 +851,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -920,8 +925,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -992,15 +997,16 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
 			/**
 			 * @description Request payload to update an existing workspace.
 			 *
-			 *     All fields are optional; only provided fields will be updated.
+			 *     All fields are optional; only provided fields will be updated. The slug is
+			 *     immutable and set at creation, so it cannot be changed here.
 			 */
 			requestBody: {
 				content: {
@@ -1084,7 +1090,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/notifications/": {
+	"/workspaces/{workspaceSlug}/notifications/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1100,8 +1106,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -1162,8 +1168,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -1250,7 +1256,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/activities/": {
+	"/workspaces/{workspaceSlug}/activities/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1274,8 +1280,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -1336,7 +1342,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/": {
+	"/workspaces/{workspaceSlug}/connections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1362,8 +1368,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -1426,8 +1432,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -1523,7 +1529,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/connections/{connectionId}/": {
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1539,8 +1545,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the connection. */
-					connectionId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
 				};
 				cookie?: never;
 			};
@@ -1616,8 +1624,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the connection. */
-					connectionId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
 				};
 				cookie?: never;
 			};
@@ -1732,8 +1742,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the connection. */
-					connectionId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
 				};
 				cookie?: never;
 			};
@@ -1798,462 +1810,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/contexts/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List contexts
-		 * @description Returns all contexts for the workspace.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-				};
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *     Provides a consistent structure for all paginated API responses with
-				 *     cursor-based pagination support. When `next_cursor` is present, there
-				 *     are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ContextsPage"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create context
-		 * @description Creates a structured reference-data context for the workspace.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			/**
-			 * @description Request payload for creating a new workspace context.
-			 *
-			 *     The `definition` is a structured context the redaction engine consumes;
-			 *     its `name`, `description`, and `version` drive the stored columns unless
-			 *     overridden here.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateContext"];
-				};
-			};
-			responses: {
-				/** @description Response type for a workspace context. */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Context2"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/contexts/{contextId}/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get context
-		 * @description Returns a single context.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the context. */
-					contextId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Response type for a workspace context. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Context2"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		/**
-		 * Update context
-		 * @description Updates context fields. Replacing the definition replaces the whole body.
-		 */
-		put: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the context. */
-					contextId: string;
-				};
-				cookie?: never;
-			};
-			/**
-			 * @description Request payload for updating an existing workspace context.
-			 *
-			 *     Replacing the `definition` replaces the whole context body.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UpdateContext"];
-				};
-			};
-			responses: {
-				/** @description Response type for a workspace context. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Context2"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		post?: never;
-		/**
-		 * Delete context
-		 * @description Soft-deletes the context from the workspace.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Unique identifier of the context. */
-					contextId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/invites/": {
+	"/workspaces/{workspaceSlug}/invites/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2283,8 +1840,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -2340,15 +1897,15 @@ export interface paths {
 		put?: never;
 		/**
 		 * Send invitation
-		 * @description Sends an invitation to join a workspace to the specified email address.
+		 * @description Invites an existing platform user to the workspace and delivers an in-app notification. No email is sent by this server. The response is identical whether or not the address belongs to a known account, so it cannot be used to determine whether an account exists.
 		 */
 		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -2360,18 +1917,18 @@ export interface paths {
 			};
 			responses: {
 				/**
-				 * @description Workspace invite with complete information.
+				 * @description Acknowledgement returned after sending a workspace invitation.
 				 *
-				 *     This response includes all the essential information about an
-				 *     invitation, including the unique invite ID that can be used to track or cancel
-				 *     the invitation later.
+				 *     The response is deliberately uniform: it carries no invite identifier or
+				 *     status, so it is identical whether or not the address belonged to a known
+				 *     account and cannot be used to probe for account existence.
 				 */
-				201: {
+				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Invite"];
+						"application/json": components["schemas"]["InviteSent"];
 					};
 				};
 				/**
@@ -2460,7 +2017,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/invites/code/": {
+	"/workspaces/{workspaceSlug}/invites/code/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2478,8 +2035,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -2570,7 +2127,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/invites/{inviteId}/": {
+	"/workspaces/{workspaceSlug}/invites/{inviteId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2588,6 +2145,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 					/** @description Unique identifier of the invite. */
 					inviteId: string;
 				};
@@ -2689,6 +2248,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 					/** @description Unique identifier of the invite. */
 					inviteId: string;
 				};
@@ -2948,7 +2509,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/members/": {
+	"/workspaces/{workspaceSlug}/members/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2980,8 +2541,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -3057,7 +2618,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/members/leave/": {
+	"/workspaces/{workspaceSlug}/members/leave/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3075,8 +2636,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -3142,7 +2703,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/members/{accountId}/": {
+	"/workspaces/{workspaceSlug}/members/{username}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3158,10 +2719,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the member account. */
-					accountId: string;
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Public handle of the member's account. */
+					username: components["schemas"]["Username"];
 				};
 				cookie?: never;
 			};
@@ -3234,10 +2795,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the member account. */
-					accountId: string;
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Public handle of the member's account. */
+					username: components["schemas"]["Username"];
 				};
 				cookie?: never;
 			};
@@ -3323,10 +2884,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the member account. */
-					accountId: string;
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Public handle of the member's account. */
+					username: components["schemas"]["Username"];
 				};
 				cookie?: never;
 			};
@@ -3428,7 +2989,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/webhooks/": {
+	"/workspaces/{workspaceSlug}/webhooks/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3452,8 +3013,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -3516,8 +3077,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -3614,7 +3175,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/webhooks/{webhookId}/": {
+	"/workspaces/{workspaceSlug}/webhooks/{webhookId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3630,8 +3191,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the webhook. */
-					webhookId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the webhook. */
+					webhookId: components["schemas"]["WebhookId"];
 				};
 				cookie?: never;
 			};
@@ -3702,8 +3265,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the webhook. */
-					webhookId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the webhook. */
+					webhookId: components["schemas"]["WebhookId"];
 				};
 				cookie?: never;
 			};
@@ -3813,8 +3378,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the webhook. */
-					webhookId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the webhook. */
+					webhookId: components["schemas"]["WebhookId"];
 				};
 				cookie?: never;
 			};
@@ -3879,7 +3446,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/webhooks/{webhookId}/test/": {
+	"/workspaces/{workspaceSlug}/webhooks/{webhookId}/test/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3897,8 +3464,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the webhook. */
-					webhookId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the webhook. */
+					webhookId: components["schemas"]["WebhookId"];
 				};
 				cookie?: never;
 			};
@@ -3998,7 +3567,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/files/": {
+	"/workspaces/{workspaceSlug}/files/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4026,8 +3595,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -4090,8 +3659,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -4163,7 +3732,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/files/{fileId}/": {
+	"/workspaces/{workspaceSlug}/files/{fileId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4179,6 +3748,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 				};
@@ -4253,6 +3824,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 				};
@@ -4318,13 +3891,15 @@ export interface paths {
 		head?: never;
 		/**
 		 * Update file
-		 * @description Updates file metadata such as display name or processing priority.
+		 * @description Updates file metadata such as display name, tags, or metadata.
 		 */
 		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 				};
@@ -4428,7 +4003,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/files/{fileId}/content/": {
+	"/workspaces/{workspaceSlug}/files/{fileId}/content/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4444,6 +4019,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 					/** @description Unique identifier of the file. */
 					fileId: string;
 				};
@@ -4513,7 +4090,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/pipelines/": {
+	"/workspaces/{workspaceSlug}/pipelines/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4541,8 +4118,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -4605,8 +4182,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -4702,7 +4279,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/pipelines/{pipelineId}/": {
+	"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4718,8 +4295,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the pipeline, unique within its workspace. */
+					pipelineSlug: string;
 				};
 				cookie?: never;
 			};
@@ -4792,8 +4371,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the pipeline, unique within its workspace. */
+					pipelineSlug: string;
 				};
 				cookie?: never;
 			};
@@ -4864,8 +4445,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the pipeline, unique within its workspace. */
+					pipelineSlug: string;
 				};
 				cookie?: never;
 			};
@@ -4972,7 +4555,110 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/pipelines/{pipelineId}/runs/": {
+	"/workspaces/{workspaceSlug}/pipelines/runs/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List workspace runs
+		 * @description Returns all pipeline runs across the workspace, most recent first, with optional status and pipeline filters.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/** @description Filter by run status. */
+					status?: components["schemas"]["PipelineRunStatus"];
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["PipelineRunsPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/runs/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4996,8 +4682,10 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the pipeline, unique within its workspace. */
+					pipelineSlug: string;
 				};
 				cookie?: never;
 			};
@@ -5075,8 +4763,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline. */
-					pipelineId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the pipeline, unique within its workspace. */
+					pipelineSlug: string;
 				};
 				cookie?: never;
 			};
@@ -5092,7 +4782,12 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response type for a pipeline run. */
+				/**
+				 * @description Response type for a pipeline run.
+				 *
+				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
+				 *     slugs are carried for context.
+				 */
 				201: {
 					headers: {
 						[name: string]: unknown;
@@ -5187,7 +4882,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/runs/{runId}/": {
+	"/workspaces/{workspaceSlug}/runs/{runId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5203,14 +4898,21 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline run. */
-					runId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the run. */
+					runId: components["schemas"]["RunId"];
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Response type for a pipeline run. */
+				/**
+				 * @description Response type for a pipeline run.
+				 *
+				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
+				 *     slugs are carried for context.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -5274,7 +4976,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/runs/{runId}/detections/": {
+	"/workspaces/{workspaceSlug}/runs/{runId}/detections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5290,8 +4992,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline run. */
-					runId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the run. */
+					runId: components["schemas"]["RunId"];
 				};
 				cookie?: never;
 			};
@@ -5312,9 +5016,10 @@ export interface paths {
 				 *
 				 *     `correlation_id` on the persisted scope is always `None`; the
 				 *     anonymize call supplies a fresh id from the passed
-				 *     [`Document`](nvisy_schema::file::Document) so anonymize-side
-				 *     tracing spans are distinct from the analyze-side ones.
+				 *     [`Document`] so anonymize-side tracing spans are distinct
+				 *     from the analyze-side ones.
 				 *
+				 *     [`Document`]: nvisy_schema::file::Document
 				 *     [`Scope`]: elide::recognition::Scope
 				 */
 				200: {
@@ -5395,7 +5100,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/runs/{runId}/redactions/": {
+	"/workspaces/{workspaceSlug}/runs/{runId}/redactions/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5413,14 +5118,21 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the pipeline run. */
-					runId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the run. */
+					runId: components["schemas"]["RunId"];
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Response type for a pipeline run. */
+				/**
+				 * @description Response type for a pipeline run.
+				 *
+				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
+				 *     slugs are carried for context.
+				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -5497,7 +5209,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/policies/": {
+	"/workspaces/{workspaceSlug}/policies/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5521,8 +5233,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -5585,8 +5297,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the workspace. */
-					workspaceId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
 				};
 				cookie?: never;
 			};
@@ -5683,7 +5395,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/policies/{policyId}/": {
+	"/workspaces/{workspaceSlug}/policies/{policySlug}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5699,8 +5411,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the policy. */
-					policyId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the policy, unique within its workspace. */
+					policySlug: string;
 				};
 				cookie?: never;
 			};
@@ -5771,8 +5485,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the policy. */
-					policyId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the policy, unique within its workspace. */
+					policySlug: string;
 				};
 				cookie?: never;
 			};
@@ -5886,8 +5602,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Unique identifier of the policy. */
-					policyId: string;
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the policy, unique within its workspace. */
+					policySlug: string;
 				};
 				cookie?: never;
 			};
@@ -6373,19 +6091,12 @@ export interface components {
 		/** @description Represents an account. */
 		Account: {
 			/**
-			 * Format: uuid
-			 * @description Unique identifier of the account.
-			 */
-			accountId: string;
-			/** @description Company name (optional). */
-			companyName?: string;
-			/**
 			 * Format: date-time
 			 * @description Timestamp when the account was created.
 			 */
 			createdAt: string;
-			/** @description Display name of the account holder. */
-			displayName: string;
+			/** @description Display name of the account holder, when set. */
+			displayName?: string;
 			/** @description Email address associated with the account. */
 			emailAddress: string;
 			/** @description Whether the account email has been verified. */
@@ -6399,29 +6110,25 @@ export interface components {
 			 * @description Timestamp when the account was last updated.
 			 */
 			updatedAt: string;
+			/** @description Public handle of the account. */
+			username: components["schemas"]["Username"];
 		};
 		/**
 		 * @description Path parameters for account operations.
 		 *
-		 *     Used when retrieving account information by ID. Access is granted
+		 *     Used when retrieving account information by handle. Access is granted
 		 *     if the requester shares at least one workspace with the target account.
 		 */
 		AccountPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the account.
-			 */
-			accountId: string;
+			/** @description Public handle of the account. */
+			username: components["schemas"]["Username"];
 		};
 		/** @description Response type for a workspace activity. */
 		Activity: {
-			/**
-			 * Format: uuid
-			 * @description Account that performed the activity.
-			 */
-			accountId?: string;
 			/** @description Type of activity. */
 			activityType: components["schemas"]["ActivityType"];
+			/** @description Handle of the account that performed the activity, if any. */
+			actorUsername?: components["schemas"]["Username"];
 			/**
 			 * Format: date-time
 			 * @description When the activity occurred.
@@ -6434,11 +6141,8 @@ export interface components {
 			 * @description Unique activity identifier.
 			 */
 			id: string;
-			/**
-			 * Format: uuid
-			 * @description Workspace ID.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this activity belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/**
 		 * @description Defines the type of activity performed in a workspace for audit logging.
@@ -6467,13 +6171,10 @@ export interface components {
 			| "webhook:updated"
 			| "webhook:deleted"
 			| "webhook:triggered"
-			| "document:created"
-			| "document:updated"
-			| "document:deleted"
-			| "document:verified"
-			| "comment:added"
-			| "comment:updated"
-			| "comment:deleted"
+			| "file:created"
+			| "file:updated"
+			| "file:deleted"
+			| "file:verified"
 			| "custom";
 		/**
 		 * @description Generic paginated response wrapper.
@@ -6493,33 +6194,6 @@ export interface components {
 			 */
 			total?: number;
 		};
-		/** @description Structured address reference. */
-		AddressData: {
-			/** @description City name. */
-			city?: string;
-			/** @description ISO 3166-1 alpha-2 country code. */
-			country?: string;
-			/** @description Additional free-form address fields. */
-			extra?: {
-				[key: string]: string;
-			};
-			/** @description Postal / ZIP code. */
-			postalCode?: string;
-			/** @description State, province, or administrative area. */
-			state?: string;
-			/** @description Street line (e.g. `"123 Main St"`). */
-			street?: string;
-		};
-		/** @description Analytic computation variants. */
-		AnalyticVariant:
-			| ({
-					/** @constant */
-					kind: "embedding";
-			  } & components["schemas"]["EmbeddingData"])
-			| ({
-					/** @constant */
-					kind: "pattern";
-			  } & components["schemas"]["PatternData"]);
 		/**
 		 * @description What detection found in one document.
 		 *
@@ -6535,9 +6209,10 @@ export interface components {
 		 *
 		 *     `correlation_id` on the persisted scope is always `None`; the
 		 *     anonymize call supplies a fresh id from the passed
-		 *     [`Document`](nvisy_schema::file::Document) so anonymize-side
-		 *     tracing spans are distinct from the analyze-side ones.
+		 *     [`Document`] so anonymize-side tracing spans are distinct
+		 *     from the analyze-side ones.
 		 *
+		 *     [`Document`]: nvisy_schema::file::Document
 		 *     [`Scope`]: elide::recognition::Scope
 		 */
 		AnalyzedDocument: {
@@ -6581,11 +6256,6 @@ export interface components {
 		/** @description API token response structure. */
 		ApiToken: {
 			/**
-			 * Format: uuid
-			 * @description Reference to the account this token belongs to.
-			 */
-			accountId: string;
-			/**
 			 * Format: date-time
 			 * @description Timestamp when the token expires (None = never expires).
 			 */
@@ -6619,11 +6289,6 @@ export interface components {
 		ApiTokenType: "web" | "api" | "cli";
 		/** @description API token with JWT token string (only returned on creation). */
 		ApiTokenWithJWT: {
-			/**
-			 * Format: uuid
-			 * @description Reference to the account this token belongs to.
-			 */
-			accountId: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the token expires (omitted = never expires).
@@ -6800,11 +6465,6 @@ export interface components {
 		};
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
-			/**
-			 * Format: uuid
-			 * @description ID of the authenticated account.
-			 */
-			accountId: string;
 			/** @description The JWT API token for authentication. */
 			apiToken: string;
 			/**
@@ -6817,22 +6477,9 @@ export interface components {
 			 * @description Timestamp when the token was issued.
 			 */
 			issuedAt: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the token.
-			 */
-			tokenId: string;
+			/** @description Handle of the authenticated account. */
+			username: components["schemas"]["Username"];
 		};
-		/** @description Biometric identity verification variants. */
-		BiometricVariant:
-			| ({
-					/** @constant */
-					kind: "face";
-			  } & components["schemas"]["FaceData"])
-			| ({
-					/** @constant */
-					kind: "voice";
-			  } & components["schemas"]["VoiceData"]);
 		/**
 		 * @description Axis-aligned rectangle, given by its minimum and maximum corners.
 		 *
@@ -6928,20 +6575,19 @@ export interface components {
 		 */
 		Connection: {
 			/**
-			 * Format: uuid
-			 * @description Account that created this connection.
-			 */
-			accountId: string;
-			/**
 			 * Format: date-time
 			 * @description When the connection was created.
 			 */
 			createdAt: string;
+			/** @description Handle of the account that created this connection. */
+			creatorUsername: components["schemas"]["Username"];
+			/** @description Opaque identifier of the connection. */
+			id: components["schemas"]["ConnectionId"];
 			/**
-			 * Format: uuid
-			 * @description Unique connection identifier.
+			 * Format: date-time
+			 * @description When the connection last synced successfully, if ever.
 			 */
-			id: string;
+			lastSynced?: string;
 			/** @description Human-readable connection name. */
 			name: string;
 			/** @description Provider type (e.g., "openai", "postgres", "s3"). */
@@ -6951,19 +6597,22 @@ export interface components {
 			 * @description When the connection was last updated.
 			 */
 			updatedAt: string;
-			/**
-			 * Format: uuid
-			 * @description Workspace this connection belongs to.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this connection belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
-		/** @description Path parameters for connection operations. */
+		/** @description Opaque conn identifier (conn_<uuid>). */
+		ConnectionId: string;
+		/**
+		 * @description Path parameters for connection operations.
+		 *
+		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by
+		 *     the [`WorkspaceContext`] extractor.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
 		ConnectionPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the connection.
-			 */
-			connectionId: string;
+			/** @description Opaque identifier of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -6987,133 +6636,6 @@ export interface components {
 		ConnectionsQuery: {
 			/** @description Filter by provider type. */
 			provider?: string;
-		};
-		/** @description A persistent, reusable collection of reference data for detection. */
-		Context: {
-			/** @description Optional longer description. */
-			description?: string;
-			/** @description Reference-data entries. */
-			entries: components["schemas"]["ContextEntry"][];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier for this context.
-			 */
-			id: string;
-			/** @description Human-readable label for this context. */
-			name: string;
-			/** @description Context version. */
-			version: string;
-		};
-		/** @description Response type for a workspace context. */
-		Context2: {
-			/**
-			 * Format: uuid
-			 * @description Account that created this context.
-			 */
-			accountId: string;
-			/**
-			 * Format: date-time
-			 * @description When the context was created.
-			 */
-			createdAt: string;
-			/** @description The structured context body consumed by the engine. */
-			definition: components["schemas"]["Context"];
-			/** @description Context description. */
-			description?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique context identifier.
-			 */
-			id: string;
-			/** @description Human-readable context name. */
-			name: string;
-			/**
-			 * Format: date-time
-			 * @description When the context was last updated.
-			 */
-			updatedAt: string;
-			/** @description Semver of the context body. */
-			version: string;
-			/**
-			 * Format: uuid
-			 * @description Workspace this context belongs to.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description A single reference-data entry within a [`Context`].
-		 *
-		 *     [`Context`]: super::Context
-		 */
-		ContextEntry: {
-			/** @description When this entry was created. */
-			createdAt: string;
-			/** @description When this entry should stop being used. */
-			expiresAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier for this entry.
-			 */
-			id: string;
-			/** @description Human-readable label. */
-			label?: string;
-		} & (
-			| {
-					data: components["schemas"]["BiometricVariant"];
-					/** @constant */
-					domain: "biometric";
-			  }
-			| {
-					data: components["schemas"]["GeospatialVariant"];
-					/** @constant */
-					domain: "geospatial";
-			  }
-			| {
-					data: components["schemas"]["AnalyticVariant"];
-					/** @constant */
-					domain: "analytic";
-			  }
-			| {
-					data: components["schemas"]["ReferenceVariant"];
-					/** @constant */
-					domain: "reference";
-			  }
-			| {
-					data: components["schemas"]["TemporalVariant"];
-					/** @constant */
-					domain: "temporal";
-			  }
-			| {
-					data: components["schemas"]["DocumentVariant"];
-					/** @constant */
-					domain: "document";
-			  }
-		);
-		/** @description Path parameters for context operations. */
-		ContextPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the context.
-			 */
-			contextId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ContextsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Context2"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
 		};
 		/**
 		 * @description [ISO 3166-1] country, identified by its code.
@@ -7150,21 +6672,6 @@ export interface components {
 			/** @description Provider type (e.g., "openai", "postgres", "s3"). */
 			provider: string;
 		};
-		/**
-		 * @description Request payload for creating a new workspace context.
-		 *
-		 *     The `definition` is a structured context the redaction engine consumes;
-		 *     its `name`, `description`, and `version` drive the stored columns unless
-		 *     overridden here.
-		 */
-		CreateContext: {
-			/** @description The structured context body consumed by the engine. */
-			definition: components["schemas"]["Context"];
-			/** @description Optional description override. Defaults to the context's own description. */
-			description?: string;
-			/** @description Optional display name override. Defaults to the context's own name. */
-			name?: string;
-		};
 		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
 			/** @description When the invitation expires. */
@@ -7193,6 +6700,8 @@ export interface components {
 			description?: string;
 			/** @description Pipeline name (3-100 characters). */
 			name: string;
+			/** @description URL slug, unique within the workspace and immutable after creation. */
+			slug: components["schemas"]["Slug"];
 		};
 		/**
 		 * @description Request payload to start a run (detect) over a file.
@@ -7228,6 +6737,8 @@ export interface components {
 			description?: string;
 			/** @description Optional display name override. Defaults to the policy's own name. */
 			name?: string;
+			/** @description URL slug, unique within the workspace and immutable after creation. */
+			slug: components["schemas"]["Slug"];
 		};
 		/** @description Request payload for creating a new workspace webhook. */
 		CreateWebhook: {
@@ -7258,40 +6769,13 @@ export interface components {
 		CreateWorkspace: {
 			/** @description Optional description of the workspace (max 200 characters). */
 			description?: string;
-			/** @description Display name of the workspace (3-100 characters). */
+			/** @description Display name of the workspace (3-32 characters). */
 			displayName: string;
-			/** @description Whether comments are enabled for this workspace. */
-			enableComments?: boolean;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean;
+			/** @description Optional URL slug. Derived from the display name when omitted. */
+			slug?: components["schemas"]["Slug"];
 		};
-		/**
-		 * @description A reference credential for detecting leaked secrets.
-		 *
-		 *     The `value` field is intentionally excluded from serialization to
-		 *     prevent plaintext secrets from appearing in logs or API responses.
-		 *     It is only accepted during deserialization (ingest).
-		 */
-		CredentialData: {
-			/** @description Classification of this credential. */
-			credentialKind?: components["schemas"]["CredentialKind"];
-			/** @description Service or provider this credential belongs to. */
-			provider?: string;
-			/**
-			 * @description The credential value (API key, token, etc.).
-			 *
-			 *     Excluded from serialization output to prevent leaking secrets.
-			 *     Round-trip deserialization yields an empty string.
-			 */
-			value?: string;
-		};
-		/** @description Classification of credential secrets. */
-		CredentialKind:
-			| "api_key"
-			| "oauth_token"
-			| "password"
-			| "private_key"
-			| "other";
 		/**
 		 * @description Cursor-based pagination query parameters.
 		 *
@@ -7464,29 +6948,6 @@ export interface components {
 			 */
 			validator?: string;
 		};
-		/** @description A date or date-range reference for temporal matching. */
-		DateData: {
-			/** @description End date for a range. When `None` this represents a single date. */
-			end?: string;
-			/** @description Start (or only) date. */
-			start: string;
-		};
-		/**
-		 * @description A date-time or date-time range reference for temporal matching.
-		 *
-		 *     Uses naive (timezone-unaware) date-times from [`DateTime`].
-		 *     For timezone-aware timestamps, use the entry-level `created_at` /
-		 *     `expires_at` fields on [`ContextEntry`].
-		 *
-		 *     [`ContextEntry`]: crate::ContextEntry
-		 *     [`DateTime`]: jiff::civil::DateTime
-		 */
-		DateTimeData: {
-			/** @description End date-time for a range. When `None` this represents a single instant. */
-			end?: string;
-			/** @description Start (or only) date-time. */
-			start: string;
-		};
 		/**
 		 * @description Dedup pipeline applied after recognition.
 		 *
@@ -7551,8 +7012,6 @@ export interface components {
 			 */
 			width: number;
 		};
-		/** @description Distance metric for vector similarity comparison. */
-		DistanceMetric: "cosine" | "euclidean" | "dot_product" | "manhattan";
 		/** @description Predicate over document-level facts. */
 		DocumentPredicate:
 			| {
@@ -7587,25 +7046,6 @@ export interface components {
 					/** @description Negated predicate. */
 					not: components["schemas"]["DocumentPredicate"];
 			  };
-		/** @description Document-related reference variants. */
-		DocumentVariant:
-			| ({
-					/** @constant */
-					kind: "template";
-			  } & components["schemas"]["TemplateData"])
-			| ({
-					/** @constant */
-					kind: "signature";
-			  } & components["schemas"]["SignatureData"]);
-		/** @description Pre-computed embedding vector for similarity comparison. */
-		EmbeddingData: {
-			/** @description Identifier of the model/algorithm that produced this embedding. */
-			algorithm?: string;
-			/** @description Distance metric to use for comparison. */
-			distanceMetric?: components["schemas"]["DistanceMetric"];
-			/** @description The embedding vector values. */
-			vector: number[];
-		};
 		/**
 		 * @description Enricher slots an analyzer can fill.
 		 *
@@ -8628,20 +8068,6 @@ export interface components {
 					/** @description Which operator (name + version) ran. */
 					operator: components["schemas"]["OperatorId"];
 			  };
-		/** @description Reference face data for identity matching. */
-		FaceData: {
-			/** @description Algorithm that produced the template (e.g. `"arcface"`, `"facenet"`). */
-			algorithm?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the file holding the reference face image.
-			 */
-			imageSource: string;
-			/** @description Bounding box of the face within the image. */
-			region?: components["schemas"]["BoundingBox"];
-			/** @description Base64-encoded face embedding / template. */
-			template?: string;
-		};
 		/** @description Represents a file in responses. */
 		File: {
 			/**
@@ -8681,37 +8107,18 @@ export interface components {
 			 * @description Last update timestamp.
 			 */
 			updatedAt: string;
-			/**
-			 * Format: uuid
-			 * @description Account ID of the user who uploaded/created the file.
-			 */
-			uploadedBy: string;
+			/** @description Handle of the account that uploaded/created the file. */
+			uploadedBy: components["schemas"]["Username"];
 			/**
 			 * Format: int32
 			 * @description Version number (1 for original, higher for newer versions).
 			 */
 			versionNumber: number;
-			/**
-			 * Format: uuid
-			 * @description Workspace this file belongs to.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this file belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/** @description File format categories for filtering. */
 		FileFormat: "pdf" | "doc" | "txt" | "md" | "csv" | "json" | "png" | "jpeg";
-		/**
-		 * @description Path parameters for file operations (file ID only).
-		 *
-		 *     Since file IDs are globally unique UUIDs, workspace context can be
-		 *     derived from the file record itself for authorization purposes.
-		 */
-		FilePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the file.
-			 */
-			fileId: string;
-		};
 		/**
 		 * @description Defines how a file was created in the system.
 		 *
@@ -8744,41 +8151,6 @@ export interface components {
 			expiresIn: components["schemas"]["InviteExpiration"];
 			/** @description Role to assign when someone joins via this invite code. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
-		};
-		/** @description A geographic bounding box defined by its south-west and north-east corners. */
-		GeoBounds: {
-			/** @description North-east corner. */
-			northEast: components["schemas"]["GeoCoordinate"];
-			/** @description South-west corner. */
-			southWest: components["schemas"]["GeoCoordinate"];
-		};
-		/** @description A geographic coordinate (latitude/longitude). */
-		GeoCoordinate: {
-			/**
-			 * Format: double
-			 * @description Latitude in decimal degrees (−90 to 90).
-			 */
-			lat: number;
-			/**
-			 * Format: double
-			 * @description Longitude in decimal degrees (−180 to 180).
-			 */
-			lng: number;
-		};
-		/** @description Geospatial location variants. */
-		GeospatialVariant:
-			| ({
-					/** @constant */
-					kind: "region";
-			  } & components["schemas"]["RegionData"])
-			| ({
-					/** @constant */
-					kind: "address";
-			  } & components["schemas"]["AddressData"]);
-		/** @description A shell-style glob pattern. */
-		GlobPattern: {
-			/** @description The glob expression string. */
-			expression: string;
 		};
 		/**
 		 * @description SHA-2 variant for the [`TextRedaction::Hash`] operator.
@@ -8818,7 +8190,7 @@ export interface components {
 		 */
 		Hint: {
 			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["TextData2"];
+			data: components["schemas"]["TextData"];
 			/** @description Where the hint text sits in the source (the header cell, the key). */
 			location: components["schemas"]["TextLocation"];
 		};
@@ -8841,7 +8213,7 @@ export interface components {
 		 */
 		Hint2: {
 			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["TextData2"];
+			data: components["schemas"]["TextData"];
 			/** @description Where the hint text sits in the source (the header cell, the key). */
 			location: components["schemas"]["TabularLocation"];
 		};
@@ -8864,7 +8236,7 @@ export interface components {
 		 */
 		Hint3: {
 			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["ImageData2"];
+			data: components["schemas"]["ImageData"];
 			/** @description Where the hint text sits in the source (the header cell, the key). */
 			location: components["schemas"]["ImageLocation"];
 		};
@@ -8891,16 +8263,6 @@ export interface components {
 			/** @description Where the hint text sits in the source (the header cell, the key). */
 			location: components["schemas"]["AudioLocation"];
 		};
-		/** @description Reference image for object/scene matching. */
-		ImageData: {
-			/**
-			 * Format: uuid
-			 * @description Id of the file holding the reference image.
-			 */
-			imageSource: string;
-			/** @description Optional sub-region within the image. */
-			region?: components["schemas"]["BoundingBox"];
-		};
 		/**
 		 * @description Per-call payload a recognizer inspects for the [`Image`] modality.
 		 *
@@ -8911,7 +8273,7 @@ export interface components {
 		 *
 		 *     [`Image`]: super::Image
 		 */
-		ImageData2: {
+		ImageData: {
 			/** @description Pixel dimensions of the encoded image. */
 			dimensions: components["schemas"]["Dimensions"];
 			/** @description Original filename, when known. */
@@ -9020,11 +8382,8 @@ export interface components {
 			 * @description When the invitation was last updated.
 			 */
 			updatedAt: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace the invitation is for.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace the invitation is for. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/** @description Response containing a generated shareable invite code. */
 		InviteCode: {
@@ -9037,11 +8396,8 @@ export interface components {
 			inviteCode: string;
 			/** @description Role assigned when someone joins via this code. */
 			role: components["schemas"]["WorkspaceRole"];
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace this invite code is for.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this invite code is for. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/** @description Path parameters for joining via invite code. */
 		InviteCodePathParams: {
@@ -9050,12 +8406,7 @@ export interface components {
 		};
 		/** @description Expiration options for invite codes. */
 		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
-		/**
-		 * @description Path parameters for invite operations (invite ID only).
-		 *
-		 *     Since invite IDs are globally unique UUIDs, workspace context can be
-		 *     derived from the invite record itself for authorization purposes.
-		 */
+		/** @description Path parameters for invite operations. */
 		InvitePathParams: {
 			/**
 			 * Format: uuid
@@ -9088,11 +8439,19 @@ export interface components {
 			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Tags associated with the workspace. */
 			tags: string[];
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace. */
+			workspaceSlug: components["schemas"]["Slug"];
+		};
+		/**
+		 * @description Acknowledgement returned after sending a workspace invitation.
+		 *
+		 *     The response is deliberately uniform: it carries no invite identifier or
+		 *     status, so it is identical whether or not the address belonged to a known
+		 *     account and cannot be used to probe for account existence.
+		 */
+		InviteSent: {
+			/** @description Human-readable confirmation message. */
+			detail: string;
 		};
 		/** @description Fields available for sorting workspace invites. */
 		InviteSortField: "email" | "date";
@@ -9335,49 +8694,38 @@ export interface components {
 		};
 		/** @description Request payload for login. */
 		Login: {
-			/**
-			 * Format: email
-			 * @description Email address of the account.
-			 */
-			emailAddress: string;
+			/** @description Email address or username of the account. */
+			identifier: string;
 			/** @description Password of the account. */
 			password: string;
-			/** @description Whether to remember this device for extended session. */
+			/**
+			 * @description Whether to remember this device for extended session. Defaults to false.
+			 * @default false
+			 */
 			rememberMe: boolean;
 		};
 		/** @description Represents a workspace member. */
 		Member: {
 			/**
-			 * Format: uuid
-			 * @description Account ID of the member.
-			 */
-			accountId: string;
-			/**
 			 * Format: date-time
 			 * @description Timestamp when the member joined the workspace.
 			 */
 			createdAt: string;
-			/** @description Display name of the member. */
-			displayName: string;
+			/** @description Display name of the member, when set. */
+			displayName?: string;
 			/** @description Email address of the member. */
 			emailAddress: string;
 			/** @description Whether the member has two-factor authentication enabled. */
 			has2fa: boolean;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
+			/** @description Handle of the member's account. */
+			username: components["schemas"]["Username"];
 		};
 		/** @description Path parameters for workspace member operations. */
 		MemberPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the member account.
-			 */
-			accountId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
+			/** @description Public handle of the member's account. */
+			username: components["schemas"]["Username"];
 		};
 		/** @description Fields available for sorting workspace members. */
 		MemberSortField: "name" | "date";
@@ -9478,18 +8826,16 @@ export interface components {
 		 * @description Defines the type of notification event sent to a user.
 		 *
 		 *     This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and is used
-		 *     for various user notifications including mentions, replies, and system announcements.
+		 *     for various user notifications including file, member, connection, and system events.
 		 */
 		NotificationEvent:
-			| "comment:mention"
-			| "comment:reply"
-			| "document:uploaded"
-			| "document:downloaded"
-			| "document:verified"
+			| "file:uploaded"
+			| "file:downloaded"
+			| "file:verified"
 			| "member:invited"
 			| "member:joined"
-			| "integration:synced"
-			| "integration:desynced"
+			| "connection:synced"
+			| "connection:desynced"
 			| "system:announcement"
 			| "system:report";
 		/** @description Response for notification settings within a workspace. */
@@ -9549,25 +8895,6 @@ export interface components {
 			/** @description Operator's version at the time it was applied. */
 			version: string;
 		};
-		/**
-		 * @description A named pattern for detection matching.
-		 *
-		 *     `label` describes the intent (for humans/LLMs); `pattern` carries
-		 *     the expression and its type.
-		 */
-		PatternData: {
-			/** @description Human-readable label describing what this pattern matches. */
-			label: string;
-		} & (
-			| ({
-					/** @constant */
-					syntax: "regex";
-			  } & components["schemas"]["RegexPattern"])
-			| ({
-					/** @constant */
-					syntax: "glob";
-			  } & components["schemas"]["GlobPattern"])
-		);
 		/** @description Detail of a pattern/dictionary recognition. */
 		PatternEvent: {
 			/**
@@ -9624,11 +8951,6 @@ export interface components {
 		};
 		/** @description Pipeline response. */
 		Pipeline: {
-			/**
-			 * Format: uuid
-			 * @description Account that created this pipeline.
-			 */
-			accountId: string;
 			/** @description Artifacts produced by pipeline runs. */
 			artifacts: components["schemas"]["Artifact"][];
 			/**
@@ -9636,17 +8958,16 @@ export interface components {
 			 * @description Timestamp when the pipeline was created.
 			 */
 			createdAt: string;
+			/** @description Handle of the account that created this pipeline. */
+			creatorUsername: components["schemas"]["Username"];
 			/** @description Detection + redaction configuration. */
 			definition: components["schemas"]["PipelineDefinition"];
 			/** @description Pipeline description. */
 			description?: string;
 			/** @description Pipeline name. */
 			name: string;
-			/**
-			 * Format: uuid
-			 * @description Unique pipeline identifier.
-			 */
-			pipelineId: string;
+			/** @description URL slug of the pipeline, unique within its workspace. */
+			slug: components["schemas"]["Slug"];
 			/** @description Pipeline lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
@@ -9654,11 +8975,8 @@ export interface components {
 			 * @description Timestamp when the pipeline was last updated.
 			 */
 			updatedAt: string;
-			/**
-			 * Format: uuid
-			 * @description Workspace this pipeline belongs to.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this pipeline belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/**
 		 * @description Reusable detection + redaction configuration for a pipeline.
@@ -9673,17 +8991,10 @@ export interface components {
 		 *     - `recognizers` / `enrichers` / `deduplication` / `label_catalog` — the
 		 *       detection machinery, assembled into an engine `AnalyzerParams` per request.
 		 *     - `default_scope` — optional pipeline-wide scope a document may override.
-		 *     - `policy_ids` / `context_ids` — references resolved live at run time against
-		 *       the workspace's policies and contexts.
+		 *     - `policy_slugs` — references to the workspace's policies, resolved at run
+		 *       time.
 		 */
 		PipelineDefinition: {
-			/**
-			 * @description Workspace contexts supplied to detection, resolved live by id.
-			 *
-			 *     Stored relationally in the `workspace_pipeline_contexts` join table, not the JSON
-			 *     definition; surfaced here so the API exposes one coherent object.
-			 */
-			contextIds?: string[];
 			/**
 			 * @description Post-recognition deduplication pipeline.
 			 * @default {
@@ -9713,12 +9024,12 @@ export interface components {
 			 */
 			labelCatalog: components["schemas"]["LabelCatalogParams"];
 			/**
-			 * @description Workspace policies applied at redaction, resolved live by id.
+			 * @description Slugs of workspace policies applied at redaction.
 			 *
 			 *     Stored relationally in the `workspace_pipeline_policies` join table, not the JSON
 			 *     definition; surfaced here so the API exposes one coherent object.
 			 */
-			policyIds?: string[];
+			policySlugs?: components["schemas"]["Slug"][];
 			/**
 			 * @description Recognizer lineup: pattern (incl. inline custom rules and
 			 *     dictionaries), plus the NER and LLM toggles.
@@ -9733,26 +9044,18 @@ export interface components {
 			/** @description Filter by pipeline status. */
 			status?: components["schemas"]["PipelineStatus"];
 		};
-		/**
-		 * @description Path parameters for pipeline operations.
-		 *
-		 *     Since pipeline IDs are globally unique UUIDs, workspace context can be
-		 *     derived from the pipeline record itself for authorization purposes.
-		 */
+		/** @description Path parameters for pipeline operations. */
 		PipelinePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline.
-			 */
-			pipelineId: string;
+			/** @description URL slug of the pipeline, unique within its workspace. */
+			pipelineSlug: string;
 		};
-		/** @description Response type for a pipeline run. */
+		/**
+		 * @description Response type for a pipeline run.
+		 *
+		 *     A run is addressed by its own opaque id; the owning pipeline and workspace
+		 *     slugs are carried for context.
+		 */
 		PipelineRun: {
-			/**
-			 * Format: uuid
-			 * @description Account that triggered the run (optional).
-			 */
-			accountId?: string;
 			/**
 			 * Format: date-time
 			 * @description When the run completed.
@@ -9763,18 +9066,12 @@ export interface components {
 			 * @description File this run analyzes / redacts.
 			 */
 			fileId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique run identifier.
-			 */
-			id: string;
+			/** @description Opaque identifier of the run. */
+			id: components["schemas"]["RunId"];
 			/** @description Non-encrypted metadata for filtering/display. */
 			metadata: unknown;
-			/**
-			 * Format: uuid
-			 * @description Pipeline this run belongs to.
-			 */
-			pipelineId: string;
+			/** @description Slug of the pipeline this run belongs to. */
+			pipelineSlug: components["schemas"]["Slug"];
 			/**
 			 * Format: date-time
 			 * @description When the run started.
@@ -9783,20 +9080,21 @@ export interface components {
 			/**
 			 * @description Current run status.
 			 *
-			 *     The analysis is available to fetch from the run's `analysis` endpoint
-			 *     once this reaches `analyzed`.
+			 *     The detections are available to fetch from the run's `detections`
+			 *     endpoint once this reaches `analyzed`.
 			 */
 			status: components["schemas"]["PipelineRunStatus"];
 			/** @description How the run was triggered. */
 			triggerType: components["schemas"]["PipelineTriggerType"];
+			/** @description Handle of the account that triggered the run, if any. */
+			triggerUsername?: components["schemas"]["Username"];
+			/** @description Slug of the workspace this run belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/** @description Path parameters for pipeline run operations. */
 		PipelineRunPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline run.
-			 */
-			runId: string;
+			/** @description Opaque identifier of the run. */
+			runId: components["schemas"]["RunId"];
 		};
 		/**
 		 * @description Defines the execution status of a pipeline run.
@@ -9846,11 +9144,8 @@ export interface components {
 			description?: string;
 			/** @description Pipeline name. */
 			name: string;
-			/**
-			 * Format: uuid
-			 * @description Unique pipeline identifier.
-			 */
-			pipelineId: string;
+			/** @description URL slug of the pipeline, unique within its workspace. */
+			slug: components["schemas"]["Slug"];
 			/** @description Pipeline lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
@@ -9960,26 +9255,20 @@ export interface components {
 		/** @description Response type for a workspace policy. */
 		Policy2: {
 			/**
-			 * Format: uuid
-			 * @description Account that created this policy.
-			 */
-			accountId: string;
-			/**
 			 * Format: date-time
 			 * @description When the policy was created.
 			 */
 			createdAt: string;
+			/** @description Handle of the account that created this policy. */
+			creatorUsername: components["schemas"]["Username"];
 			/** @description The structured policy body consumed by the engine. */
 			definition: components["schemas"]["Policy"];
 			/** @description Policy description. */
 			description?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique policy identifier.
-			 */
-			id: string;
 			/** @description Human-readable policy name. */
 			name: string;
+			/** @description URL slug of the policy, unique within its workspace. */
+			slug: components["schemas"]["Slug"];
 			/**
 			 * Format: date-time
 			 * @description When the policy was last updated.
@@ -9987,22 +9276,21 @@ export interface components {
 			updatedAt: string;
 			/** @description Semver of the policy body. */
 			version: string;
-			/**
-			 * Format: uuid
-			 * @description Workspace this policy belongs to.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this policy belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/**
-		 * @description What a rule does when its [`predicate`](PolicyRule::predicate)
-		 *     matches.
+		 * @description What a rule does when its [`predicate`] matches.
 		 *
-		 *     Three verbs: [`Redact`](PolicyAction::Redact) transforms the
-		 *     entity with one operator per modality;
-		 *     [`Suppress`](PolicyAction::Suppress) drops the entity entirely
-		 *     (false-positive marker) and stamps a reason onto the audit;
-		 *     [`Audit`](PolicyAction::Audit) flags it for human review without
-		 *     transforming.
+		 *     Three verbs: [`Redact`] transforms the entity with one operator
+		 *     per modality; [`Suppress`] drops the entity entirely (false-positive
+		 *     marker) and stamps a reason onto the audit; [`Audit`] flags it for
+		 *     human review without transforming.
+		 *
+		 *     [`predicate`]: PolicyRule::predicate
+		 *     [`Redact`]: PolicyAction::Redact
+		 *     [`Suppress`]: PolicyAction::Suppress
+		 *     [`Audit`]: PolicyAction::Audit
 		 */
 		PolicyAction:
 			| ({
@@ -10017,13 +9305,17 @@ export interface components {
 					/** @constant */
 					kind: "audit";
 			  } & components["schemas"]["AuditAction"]);
-		/** @description Path parameters for policy operations. */
+		/**
+		 * @description Path parameters for policy operations.
+		 *
+		 *     The workspace is resolved by the [`WorkspaceContext`] extractor from the
+		 *     `{workspaceSlug}` path segment.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
 		PolicyPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the policy.
-			 */
-			policyId: string;
+			/** @description URL slug of the policy, unique within its workspace. */
+			policySlug: string;
 		};
 		/**
 		 * @description One rule inside a [`Policy`]. Identity is the UUID; `name` /
@@ -10236,6 +9528,23 @@ export interface components {
 			/** @description Events, in the order they happened. */
 			events: components["schemas"]["Event4"][];
 		};
+		/**
+		 * @description Public view of an account, returned when looking up someone other than the
+		 *     authenticated caller. Carries only the fields safe to share with a
+		 *     workspace peer; private details (email, account flags) are omitted
+		 *     and remain available solely through the caller's own `/account/` view.
+		 */
+		PublicAccount: {
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the account was created.
+			 */
+			createdAt: string;
+			/** @description Display name of the account holder, when set. */
+			displayName?: string;
+			/** @description Public handle of the account. */
+			username: components["schemas"]["Username"];
+		};
 		Range_of_uint: {
 			/** Format: uint */
 			end: number;
@@ -10317,56 +9626,6 @@ export interface components {
 			 */
 			pattern?: components["schemas"]["PatternRecognizerParams"];
 		};
-		/** @description Direct comparison reference variants. */
-		ReferenceVariant:
-			| ({
-					/** @constant */
-					kind: "text";
-			  } & components["schemas"]["TextData"])
-			| ({
-					/** @constant */
-					kind: "tag";
-			  } & components["schemas"]["TagData"])
-			| ({
-					/** @constant */
-					kind: "credential";
-			  } & components["schemas"]["CredentialData"])
-			| ({
-					/** @constant */
-					kind: "image";
-			  } & components["schemas"]["ImageData"]);
-		/** @description A regular expression pattern. */
-		RegexPattern: {
-			/** @description The regex expression string. */
-			expression: string;
-		};
-		/** @description Geospatial region reference data for location-based detection. */
-		RegionData: {
-			/** @description Optional human-readable name for this region. */
-			name?: string;
-		} & (
-			| ({
-					/** @constant */
-					shape: "bounds";
-			  } & components["schemas"]["GeoBounds"])
-			| {
-					/** @description Center of the circle. */
-					center: components["schemas"]["GeoCoordinate"];
-					/**
-					 * Format: double
-					 * @description Radius in meters.
-					 */
-					radius_m: number;
-					/** @constant */
-					shape: "circle";
-			  }
-			| {
-					/** @description Boundary vertices in order (x = lng, y = lat). */
-					boundary: components["schemas"]["Polygon"];
-					/** @constant */
-					shape: "polygon";
-			  }
-		);
 		/** @description Request to respond to a workspace invitation. */
 		ReplyInvite: {
 			/** @description Whether to accept or decline the invitation. */
@@ -10435,6 +9694,8 @@ export interface components {
 			  }
 			| "predicate"
 			| "fallback";
+		/** @description Opaque run identifier (run_<uuid>). */
+		RunId: string;
 		/**
 		 * @description Caller-asserted scope shared across every payload of one analysis.
 		 *
@@ -10555,24 +9816,10 @@ export interface components {
 			 */
 			tags?: string[];
 		};
-		/** @description Reference handwritten signature for verification. */
-		SignatureData: {
-			/** @description Algorithm used for signature verification. */
-			algorithm?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the file holding the reference signature image.
-			 */
-			imageSource: string;
-			/** @description Bounding box of the signature within the image. */
-			region?: components["schemas"]["BoundingBox"];
-			/** @description Identity of the signer this signature belongs to. */
-			signerId?: string;
-		};
 		/** @description Request payload for signup. */
 		Signup: {
-			/** @description Display name of the account. */
-			displayName: string;
+			/** @description Optional display name of the account. */
+			displayName?: string;
 			/**
 			 * Format: email
 			 * @description Email address of the account.
@@ -10580,8 +9827,23 @@ export interface components {
 			emailAddress: string;
 			/** @description Password of the account. */
 			password: string;
-			/** @description Whether to remember the device for extended session. */
+			/**
+			 * @description Whether to remember the device for extended session. Defaults to false.
+			 * @default false
+			 */
 			rememberMe: boolean;
+			/** @description Public account handle, unique across all accounts. */
+			username: components["schemas"]["Username"];
+		};
+		/** @description Lowercase, dash-separated resource identifier used in URLs. */
+		Slug: string;
+		/**
+		 * @description The `{workspaceSlug}` path segment. Named to match the OpenAPI parameter and
+		 *     the route definition.
+		 */
+		SlugParam: {
+			/** @description URL-safe workspace identifier. */
+			workspaceSlug: string;
 		};
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
@@ -10676,48 +9938,6 @@ export interface components {
 					/** @constant */
 					kind: "drop_column";
 			  };
-		/** @description A keyword tag for classification and routing. */
-		TagData: {
-			/** @description Optional category grouping related tags. */
-			category?: string;
-			/** @description The tag value (e.g. `"pii"`, `"financial"`, `"hipaa"`). */
-			value: string;
-		};
-		/**
-		 * @description Reference document template for layout/type classification.
-		 *
-		 *     Used to detect documents of a known type (ID cards, passports, forms,
-		 *     invoices) by comparing their visual layout against this reference.
-		 */
-		TemplateData: {
-			/** @description Document type label (e.g. `"passport"`, `"drivers_license"`, `"invoice"`). */
-			documentType?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the file holding the reference template image.
-			 */
-			imageSource: string;
-			/** @description Optional sub-region of interest within the template. */
-			region?: components["schemas"]["BoundingBox"];
-		};
-		/** @description Temporal matching variants. */
-		TemporalVariant:
-			| ({
-					/** @constant */
-					kind: "date";
-			  } & components["schemas"]["DateData"])
-			| ({
-					/** @constant */
-					kind: "time";
-			  } & components["schemas"]["TimeData"])
-			| ({
-					/** @constant */
-					kind: "date_time";
-			  } & components["schemas"]["DateTimeData"])
-			| ({
-					/** @constant */
-					kind: "time_span";
-			  } & components["schemas"]["TimeSpanData"]);
 		/** @description Request payload for testing a webhook. */
 		TestWebhook: {
 			/**
@@ -10725,18 +9945,6 @@ export interface components {
 			 *     If not provided, a default test payload will be used.
 			 */
 			payload?: unknown;
-		};
-		/**
-		 * @description Textual reference data as key-value pairs.
-		 *
-		 *     Keys describe *what* a value represents (for humans and LLMs);
-		 *     values are the literal strings used for matching.
-		 */
-		TextData: {
-			/** @description Key-value pairs for matching. */
-			entries?: components["schemas"]["TextEntry"][];
-			/** @description BCP-47 language tag for locale-sensitive matching. */
-			language?: components["schemas"]["LanguageTag"];
 		};
 		/**
 		 * @description Run of text.
@@ -10748,20 +9956,7 @@ export interface components {
 		 *     refcounted buffer, making cheap clones when one payload is passed to
 		 *     several recognizers.
 		 */
-		TextData2: string;
-		/**
-		 * @description A labeled text value for reference matching.
-		 *
-		 *     The `key` is a human/LLM-readable label describing what this value
-		 *     represents (e.g. `"full_name"`, `"account_number"`).  The `value` is
-		 *     the literal string used for pattern matching.
-		 */
-		TextEntry: {
-			/** @description Human/LLM-readable label. */
-			key: string;
-			/** @description Literal value for pattern matching. */
-			value: string;
-		};
+		TextData: string;
 		/**
 		 * @description Half-open `[start, end)` byte range within text content.
 		 *
@@ -10853,20 +10048,6 @@ export interface components {
 		 */
 		TiebreakerParams: "highest_confidence" | "longest_span";
 		/**
-		 * @description A time-of-day or time range reference for temporal matching.
-		 *
-		 *     Uses naive (timezone-unaware) times from [`Time`].
-		 *     Useful for matching recurring time patterns (e.g. business hours).
-		 *
-		 *     [`Time`]: jiff::civil::Time
-		 */
-		TimeData: {
-			/** @description End time for a range. When `None` this represents a single time. */
-			end?: string;
-			/** @description Start (or only) time. */
-			start: string;
-		};
-		/**
 		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
 		 *
 		 *     The coordinate a time-addressed medium (audio, video) uses to locate a
@@ -10898,13 +10079,6 @@ export interface components {
 			 */
 			start_us: number;
 		};
-		/** @description A time span reference for matching audio/video segments. */
-		TimeSpanData: {
-			/** @description Optional human-readable label (e.g. `"intro"`, `"closing remarks"`). */
-			label?: string;
-			/** @description The time interval to match. */
-			span: components["schemas"]["TimeSpan"];
-		};
 		/** @description Expiration options for API tokens. */
 		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
 		/**
@@ -10930,9 +10104,7 @@ export interface components {
 		};
 		/** @description Request payload to update an account. */
 		UpdateAccount: {
-			/** @description Company or organization name (empty string clears the value). */
-			companyName?: string;
-			/** @description New display name (2-100 characters). */
+			/** @description New display name (2-32 characters). */
 			displayName?: string;
 			/**
 			 * Format: email
@@ -10941,6 +10113,8 @@ export interface components {
 			emailAddress?: string;
 			/** @description New password (will be hashed before storage). */
 			password?: string;
+			/** @description New account handle. */
+			username?: components["schemas"]["Username"];
 		};
 		/** @description Request to update an existing API token. */
 		UpdateApiToken: {
@@ -10955,19 +10129,6 @@ export interface components {
 			 */
 			data?: unknown;
 			/** @description Human-readable connection name. */
-			name?: string;
-		};
-		/**
-		 * @description Request payload for updating an existing workspace context.
-		 *
-		 *     Replacing the `definition` replaces the whole context body.
-		 */
-		UpdateContext: {
-			/** @description New context body (replaces the stored definition). */
-			definition?: components["schemas"]["Context"];
-			/** @description Context description. */
-			description?: string;
-			/** @description Human-readable context name. */
 			name?: string;
 		};
 		/** @description Request to update file metadata. */
@@ -11045,18 +10206,19 @@ export interface components {
 		/**
 		 * @description Request payload to update an existing workspace.
 		 *
-		 *     All fields are optional; only provided fields will be updated.
+		 *     All fields are optional; only provided fields will be updated. The slug is
+		 *     immutable and set at creation, so it cannot be changed here.
 		 */
 		UpdateWorkspace: {
 			/** @description New description for the workspace (max 500 characters). */
 			description?: string;
-			/** @description New display name for the workspace (3-100 characters). */
+			/** @description New display name for the workspace (3-32 characters). */
 			displayName?: string;
-			/** @description Whether comments are enabled for this workspace. */
-			enableComments?: boolean;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean;
 		};
+		/** @description Public account handle used in URLs (e.g. /accounts/{username}). */
+		Username: string;
 		/** @description Validation error details for field-specific errors. */
 		ValidationErrorDetail: {
 			/** @description Error code for the validation failure */
@@ -11075,20 +10237,6 @@ export interface components {
 			/** @description The API version string (e.g., "v1", "v2"). */
 			version: string;
 		};
-		/** @description Reference voice data for speaker identification. */
-		VoiceData: {
-			/** @description Algorithm that produced the voiceprint (e.g. `"ecapa-tdnn"`, `"x-vector"`). */
-			algorithm?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the file holding the reference audio.
-			 */
-			audioSource: string;
-			/** @description Segment within the audio used for enrollment. */
-			segment?: components["schemas"]["TimeSpan"];
-			/** @description Base64-encoded speaker embedding / voiceprint. */
-			template?: string;
-		};
 		/** @description Shape of a synthesized tone. */
 		Waveform: "sine" | "square";
 		/** @description Workspace webhook response. */
@@ -11098,11 +10246,8 @@ export interface components {
 			 * @description Timestamp when this webhook was first created.
 			 */
 			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Account that originally created this webhook.
-			 */
-			createdBy: string;
+			/** @description Handle of the account that created this webhook. */
+			creatorUsername: components["schemas"]["Username"];
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
 			/** @description Human-readable name for the webhook. */
@@ -11113,6 +10258,8 @@ export interface components {
 			headers: {
 				[key: string]: string;
 			};
+			/** @description Opaque identifier of the webhook. */
+			id: components["schemas"]["WebhookId"];
 			/**
 			 * Format: date-time
 			 * @description Timestamp of the most recent webhook trigger.
@@ -11127,16 +10274,8 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
-			/**
-			 * Format: uuid
-			 * @description Unique webhook identifier.
-			 */
-			webhookId: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the workspace this webhook belongs to.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this webhook belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/**
 		 * @description Webhook creation response that includes the secret (visible only once).
@@ -11151,11 +10290,8 @@ export interface components {
 			 * @description Timestamp when this webhook was first created.
 			 */
 			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Account that originally created this webhook.
-			 */
-			createdBy: string;
+			/** @description Handle of the account that created this webhook. */
+			creatorUsername: components["schemas"]["Username"];
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
 			/** @description Human-readable name for the webhook. */
@@ -11166,6 +10302,8 @@ export interface components {
 			headers: {
 				[key: string]: string;
 			};
+			/** @description Opaque identifier of the webhook. */
+			id: components["schemas"]["WebhookId"];
 			/**
 			 * Format: date-time
 			 * @description Timestamp of the most recent webhook trigger.
@@ -11187,16 +10325,8 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
-			/**
-			 * Format: uuid
-			 * @description Unique webhook identifier.
-			 */
-			webhookId: string;
-			/**
-			 * Format: uuid
-			 * @description Reference to the workspace this webhook belongs to.
-			 */
-			workspaceId: string;
+			/** @description Slug of the workspace this webhook belongs to. */
+			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/**
 		 * @description Defines the types of events that can trigger webhook delivery.
@@ -11205,9 +10335,6 @@ export interface components {
 		 *     to configure which events a webhook should receive notifications for.
 		 */
 		WebhookEvent:
-			| "document:created"
-			| "document:updated"
-			| "document:deleted"
 			| "file:created"
 			| "file:updated"
 			| "file:deleted"
@@ -11219,18 +10346,12 @@ export interface components {
 			| "connection:deleted"
 			| "connection:synced"
 			| "connection:desynced";
-		/**
-		 * @description Path parameters for webhook operations (webhook ID only).
-		 *
-		 *     Since webhook IDs are globally unique UUIDs, workspace context can be
-		 *     derived from the webhook record itself for authorization purposes.
-		 */
+		/** @description Opaque whk identifier (whk_<uuid>). */
+		WebhookId: string;
+		/** @description Path parameters for webhook operations. */
 		WebhookPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the webhook.
-			 */
-			webhookId: string;
+			/** @description Opaque identifier of the webhook. */
+			webhookId: components["schemas"]["WebhookId"];
 		};
 		/** @description Result of a webhook delivery attempt. */
 		WebhookResult: {
@@ -11277,21 +10398,18 @@ export interface components {
 			 * @description Timestamp when the workspace was created.
 			 */
 			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the account that created the workspace.
-			 */
-			createdBy: string;
+			/** @description Handle of the account that created this workspace. */
+			creatorUsername: components["schemas"]["Username"];
 			/** @description Description of the workspace. */
 			description?: string;
 			/** @description Display name of the workspace. */
 			displayName: string;
-			/** @description Whether comments are enabled for this workspace. */
-			enableComments: boolean;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
 			/** @description Whether approval is required to processed files to be visible. */
 			requireApproval: boolean;
+			/** @description URL-safe workspace identifier. */
+			slug: components["schemas"]["Slug"];
 			/** @description Tags associated with the workspace. */
 			tags: string[];
 			/**
@@ -11299,19 +10417,14 @@ export interface components {
 			 * @description Timestamp when the workspace was last updated.
 			 */
 			updatedAt: string;
-			/**
-			 * Format: uuid
-			 * @description ID of the workspace.
-			 */
-			workspaceId: string;
 		};
-		/** @description Path parameters for workspace-level operations. */
-		WorkspacePathParams: {
+		/** @description Path parameters for file operations within a workspace context. */
+		WorkspaceFilePathParams: {
 			/**
 			 * Format: uuid
-			 * @description Unique identifier of the workspace.
+			 * @description Unique identifier of the file.
 			 */
-			workspaceId: string;
+			fileId: string;
 		};
 		/**
 		 * @description Defines the role and permission level of a workspace member.
@@ -11320,6 +10433,11 @@ export interface components {
 		 *     hierarchical access control for workspace members with clearly defined capabilities.
 		 */
 		WorkspaceRole: "owner" | "admin" | "member" | "guest";
+		/** @description Query parameters for listing runs across a workspace. */
+		WorkspaceRunsQuery: {
+			/** @description Filter by run status. */
+			status?: components["schemas"]["PipelineRunStatus"];
+		};
 		/**
 		 * @description Generic paginated response wrapper.
 		 *

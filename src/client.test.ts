@@ -60,7 +60,6 @@ describe("Nvisy", () => {
 			expect(nvisy.activities).toBeDefined();
 			expect(nvisy.apiTokens).toBeDefined();
 			expect(nvisy.connections).toBeDefined();
-			expect(nvisy.contexts).toBeDefined();
 			expect(nvisy.files).toBeDefined();
 			expect(nvisy.invites).toBeDefined();
 			expect(nvisy.members).toBeDefined();

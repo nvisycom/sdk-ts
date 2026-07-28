@@ -4,6 +4,7 @@ import type {
 	CreatePipelineRun,
 	CursorPagination,
 	PipelineRun,
+	PipelineRunStatus,
 	PipelineRunsPage,
 } from "@/datatypes/index.js";
 
@@ -18,76 +19,121 @@ export class Runs {
 	}
 
 	/**
-	 * List runs for a pipeline
-	 * @param pipelineId - Pipeline ID
-	 * @param query - Optional pagination parameters (limit, after)
+	 * List all pipeline runs in a workspace
+	 * @param workspaceSlug - Workspace slug
+	 * @param query - Optional query parameters (status, limit, after)
 	 * @returns Promise that resolves with a paginated list of pipeline runs
 	 * @throws {ApiError} if the request fails
 	 */
 	async listRuns(
-		pipelineId: string,
+		workspaceSlug: string,
+		query?: CursorPagination & { status?: PipelineRunStatus },
+	): Promise<PipelineRunsPage> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/pipelines/runs/",
+			{
+				params: { path: { workspaceSlug }, query },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * List runs for a specific pipeline
+	 * @param workspaceSlug - Workspace slug
+	 * @param pipelineSlug - Pipeline slug
+	 * @param query - Optional pagination parameters (limit, after)
+	 * @returns Promise that resolves with a paginated list of pipeline runs
+	 * @throws {ApiError} if the request fails
+	 */
+	async listPipelineRuns(
+		workspaceSlug: string,
+		pipelineSlug: string,
 		query?: CursorPagination,
 	): Promise<PipelineRunsPage> {
-		const { data } = await this.#api.GET("/pipelines/{pipelineId}/runs/", {
-			params: { path: { pipelineId }, query },
-		});
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/runs/",
+			{
+				params: { path: { workspaceSlug, pipelineSlug }, query },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Trigger a new run for a pipeline
-	 * @param pipelineId - Pipeline ID
+	 * @param workspaceSlug - Workspace slug
+	 * @param pipelineSlug - Pipeline slug
 	 * @param run - Pipeline run creation request
 	 * @returns Promise that resolves with the created pipeline run
 	 * @throws {ApiError} if the request fails
 	 */
 	async createRun(
-		pipelineId: string,
+		workspaceSlug: string,
+		pipelineSlug: string,
 		run: CreatePipelineRun,
 	): Promise<PipelineRun> {
-		const { data } = await this.#api.POST("/pipelines/{pipelineId}/runs/", {
-			params: { path: { pipelineId } },
-			body: run,
-		});
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/runs/",
+			{
+				params: { path: { workspaceSlug, pipelineSlug } },
+				body: run,
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Get pipeline run details by ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param runId - Run ID
 	 * @returns Promise that resolves with the pipeline run details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getRun(runId: string): Promise<PipelineRun> {
-		const { data } = await this.#api.GET("/runs/{runId}/", {
-			params: { path: { runId } },
-		});
+	async getRun(workspaceSlug: string, runId: string): Promise<PipelineRun> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/runs/{runId}/",
+			{
+				params: { path: { workspaceSlug, runId } },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Get the detections (analyzed document) for a pipeline run
+	 * @param workspaceSlug - Workspace slug
 	 * @param runId - Run ID
 	 * @returns Promise that resolves with the analyzed document
 	 * @throws {ApiError} if the request fails
 	 */
-	async getDetections(runId: string): Promise<AnalyzedDocument> {
-		const { data } = await this.#api.GET("/runs/{runId}/detections/", {
-			params: { path: { runId } },
-		});
+	async getDetections(
+		workspaceSlug: string,
+		runId: string,
+	): Promise<AnalyzedDocument> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/runs/{runId}/detections/",
+			{
+				params: { path: { workspaceSlug, runId } },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Apply redactions to a pipeline run
+	 * @param workspaceSlug - Workspace slug
 	 * @param runId - Run ID
 	 * @returns Promise that resolves with the updated pipeline run
 	 * @throws {ApiError} if the request fails
 	 */
-	async redact(runId: string): Promise<PipelineRun> {
-		const { data } = await this.#api.POST("/runs/{runId}/redactions/", {
-			params: { path: { runId } },
-		});
+	async redact(workspaceSlug: string, runId: string): Promise<PipelineRun> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/runs/{runId}/redactions/",
+			{
+				params: { path: { workspaceSlug, runId } },
+			},
+		);
 		return data!;
 	}
 }

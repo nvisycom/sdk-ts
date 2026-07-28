@@ -3,6 +3,7 @@ import type { components } from "@/schema/api.js";
 type Schemas = components["schemas"];
 
 export type Webhook = Schemas["Webhook"];
+export type WebhookCreated = Schemas["WebhookCreated"];
 export type CreateWebhook = Schemas["CreateWebhook"];
 export type UpdateWebhook = Schemas["UpdateWebhook"];
 export type TestWebhook = Schemas["TestWebhook"];
