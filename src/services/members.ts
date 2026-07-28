@@ -19,34 +19,37 @@ export class Members {
 
 	/**
 	 * List members of a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param query - Optional query parameters (role, has2fa, sortBy, order, limit, after)
 	 * @returns Promise that resolves with a paginated list of members
 	 * @throws {ApiError} if the request fails
 	 */
 	async listMembers(
-		workspaceId: string,
+		workspaceSlug: string,
 		query?: ListMembers & CursorPagination,
 	): Promise<MembersPage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/members/", {
-			params: { path: { workspaceId }, query },
-		});
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/members/",
+			{
+				params: { path: { workspaceSlug }, query },
+			},
+		);
 		return data!;
 	}
 
 	/**
-	 * Get member details by account ID
-	 * @param workspaceId - Workspace ID
-	 * @param accountId - Account ID
+	 * Get member details by username
+	 * @param workspaceSlug - Workspace slug
+	 * @param username - Member username
 	 * @returns Promise that resolves with the member details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getMember(workspaceId: string, accountId: string): Promise<Member> {
+	async getMember(workspaceSlug: string, username: string): Promise<Member> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/members/{accountId}/",
+			"/workspaces/{workspaceSlug}/members/{username}/",
 			{
 				params: {
-					path: { workspaceId, accountId },
+					path: { workspaceSlug, username },
 				},
 			},
 		);
@@ -55,22 +58,22 @@ export class Members {
 
 	/**
 	 * Update a member's role
-	 * @param workspaceId - Workspace ID
-	 * @param accountId - Account ID
+	 * @param workspaceSlug - Workspace slug
+	 * @param username - Member username
 	 * @param updates - New role for the member
 	 * @returns Promise that resolves with the updated member
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateMember(
-		workspaceId: string,
-		accountId: string,
+		workspaceSlug: string,
+		username: string,
 		updates: UpdateMember,
 	): Promise<Member> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/members/{accountId}/",
+			"/workspaces/{workspaceSlug}/members/{username}/",
 			{
 				params: {
-					path: { workspaceId, accountId },
+					path: { workspaceSlug, username },
 				},
 				body: updates,
 			},
@@ -80,26 +83,26 @@ export class Members {
 
 	/**
 	 * Remove a member from a workspace
-	 * @param workspaceId - Workspace ID
-	 * @param accountId - Account ID
+	 * @param workspaceSlug - Workspace slug
+	 * @param username - Member username
 	 * @returns Promise that resolves when the member is removed
 	 * @throws {ApiError} if the request fails
 	 */
-	async removeMember(workspaceId: string, accountId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/members/{accountId}/", {
-			params: { path: { workspaceId, accountId } },
+	async removeMember(workspaceSlug: string, username: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceSlug}/members/{username}/", {
+			params: { path: { workspaceSlug, username } },
 		});
 	}
 
 	/**
 	 * Leave a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @returns Promise that resolves when the member has left
 	 * @throws {ApiError} if the request fails
 	 */
-	async leaveWorkspace(workspaceId: string): Promise<void> {
-		await this.#api.POST("/workspaces/{workspaceId}/members/leave/", {
-			params: { path: { workspaceId } },
+	async leaveWorkspace(workspaceSlug: string): Promise<void> {
+		await this.#api.POST("/workspaces/{workspaceSlug}/members/leave/", {
+			params: { path: { workspaceSlug } },
 		});
 	}
 }

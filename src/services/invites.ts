@@ -6,6 +6,7 @@ import type {
 	Invite,
 	InviteCode,
 	InvitePreview,
+	InviteSent,
 	InvitesPage,
 	ListInvites,
 	Member,
@@ -30,27 +31,33 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async listInvites(
-		workspaceId: string,
+		workspaceSlug: string,
 		query?: ListInvites & CursorPagination,
 	): Promise<InvitesPage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/invites/", {
-			params: { path: { workspaceId }, query },
-		});
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/invites/",
+			{
+				params: { path: { workspaceSlug }, query },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Send an invitation to join a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param invite - Invitation request
-	 * @returns Promise that resolves with the created invitation
+	 * @returns Promise that resolves with the sent invitation
 	 * @throws {ApiError} if the request fails
 	 */
-	async sendInvite(workspaceId: string, invite: CreateInvite): Promise<Invite> {
+	async sendInvite(
+		workspaceSlug: string,
+		invite: CreateInvite,
+	): Promise<InviteSent> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/invites/",
+			"/workspaces/{workspaceSlug}/invites/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspaceSlug } },
 				body: invite,
 			},
 		);
@@ -59,46 +66,55 @@ export class Invites {
 
 	/**
 	 * Cancel a pending invitation
+	 * @param workspaceSlug - Workspace slug
 	 * @param inviteId - Invite ID
 	 * @returns Promise that resolves when the invitation is canceled
 	 * @throws {ApiError} if the request fails
 	 */
-	async cancelInvite(inviteId: string): Promise<void> {
-		await this.#api.DELETE("/invites/{inviteId}/", {
-			params: { path: { inviteId } },
+	async cancelInvite(workspaceSlug: string, inviteId: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceSlug}/invites/{inviteId}/", {
+			params: { path: { workspaceSlug, inviteId } },
 		});
 	}
 
 	/**
 	 * Reply to an invitation (accept or decline)
+	 * @param workspaceSlug - Workspace slug
 	 * @param inviteId - Invite ID
 	 * @param reply - Reply request
 	 * @returns Promise that resolves with the updated invitation
 	 * @throws {ApiError} if the request fails
 	 */
-	async replyToInvite(inviteId: string, reply: ReplyInvite): Promise<Invite> {
-		const { data } = await this.#api.POST("/invites/{inviteId}/", {
-			params: { path: { inviteId } },
-			body: reply,
-		});
+	async replyToInvite(
+		workspaceSlug: string,
+		inviteId: string,
+		reply: ReplyInvite,
+	): Promise<Invite> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/invites/{inviteId}/",
+			{
+				params: { path: { workspaceSlug, inviteId } },
+				body: reply,
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Generate a shareable invite code for a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param options - Invite code generation options
 	 * @returns Promise that resolves with the generated invite code
 	 * @throws {ApiError} if the request fails
 	 */
 	async generateInviteCode(
-		workspaceId: string,
+		workspaceSlug: string,
 		options: GenerateInviteCode,
 	): Promise<InviteCode> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/invites/code/",
+			"/workspaces/{workspaceSlug}/invites/code/",
 			{
-				params: { path: { workspaceId } },
+				params: { path: { workspaceSlug } },
 				body: options,
 			},
 		);

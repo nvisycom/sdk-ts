@@ -4,7 +4,6 @@ export type * from "@/datatypes/activity.js";
 export type * from "@/datatypes/api-token.js";
 export type * from "@/datatypes/auth.js";
 export type * from "@/datatypes/connection.js";
-export type * from "@/datatypes/context.js";
 export type * from "@/datatypes/error.js";
 export type * from "@/datatypes/file.js";
 export type * from "@/datatypes/health.js";

@@ -8,6 +8,31 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **BREAKING**: resources are now addressed under their workspace. Workspaces
+  are identified by slug (`workspaceSlug`), and item-level methods for
+  connections, files, invites, members, pipelines, policies, runs, and
+  webhooks now take the workspace slug as their first argument
+- **BREAKING**: pipelines and policies are addressed by slug (`pipelineSlug`,
+  `policySlug`); members and public accounts by `username`
+- **BREAKING**: `runs` methods are workspace-scoped:
+  `listRuns(workspaceSlug)`, `listPipelineRuns(workspaceSlug, pipelineSlug)`,
+  `createRun(workspaceSlug, pipelineSlug, run)`,
+  `getRun(workspaceSlug, runId)`, `getDetections(workspaceSlug, runId)`,
+  `redact(workspaceSlug, runId)`
+- **BREAKING**: `webhooks.createWebhook()` now returns `WebhookCreated`;
+  `invites.sendInvite()` now returns `InviteSent`
+
+### Added
+
+- `account.getPublicAccount(username)` for public account profiles
+
+### Removed
+
+- **BREAKING**: `contexts` service and datatypes (no longer part of the API)
+
 ## [0.4.0] - 2026-07-12
 
 ### Added

@@ -27,7 +27,6 @@ import {
 	ApiTokens,
 	Auth,
 	Connections,
-	Contexts,
 	Files,
 	Invites,
 	Members,
@@ -244,13 +243,6 @@ export class Nvisy {
 	 */
 	get connections(): Connections {
 		return new Connections(this.#api);
-	}
-
-	/**
-	 * Service for managing contexts.
-	 */
-	get contexts(): Contexts {
-		return new Contexts(this.#api);
 	}
 
 	/**

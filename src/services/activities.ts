@@ -13,19 +13,19 @@ export class Activities {
 
 	/**
 	 * List activities for a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param query - Optional pagination parameters (limit, after)
 	 * @returns Promise that resolves with a paginated list of activities
 	 * @throws {ApiError} if the request fails
 	 */
 	async listActivities(
-		workspaceId: string,
+		workspaceSlug: string,
 		query?: CursorPagination,
 	): Promise<ActivitiesPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/activities/",
+			"/workspaces/{workspaceSlug}/activities/",
 			{
-				params: { path: { workspaceId }, query },
+				params: { path: { workspaceSlug }, query },
 			},
 		);
 		return data!;

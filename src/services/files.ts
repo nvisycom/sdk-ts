@@ -19,13 +19,13 @@ export class Files {
 
 	/**
 	 * Upload one or more files to a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param files - File or array of files to upload
 	 * @returns Promise that resolves with the uploaded file metadata
 	 * @throws {ApiError} if the request fails
 	 */
 	async uploadFiles(
-		workspaceId: string,
+		workspaceSlug: string,
 		files: Blob | Blob[],
 	): Promise<File[]> {
 		const formData = new FormData();
@@ -36,86 +36,106 @@ export class Files {
 			formData.append("files", file, name);
 		}
 
-		const { data } = await this.#api.POST("/workspaces/{workspaceId}/files/", {
-			params: { path: { workspaceId } },
-			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
-			body: formData as unknown as unknown[],
-			bodySerializer: (formData) => formData,
-			// Remove Content-Type so browser sets multipart/form-data with boundary.
-			headers: { "Content-Type": null } as unknown as HeadersInit,
-		});
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/files/",
+			{
+				params: { path: { workspaceSlug } },
+				// Schema types multipart as unknown[], but openapi-fetch needs FormData.
+				body: formData as unknown as unknown[],
+				bodySerializer: (formData) => formData,
+				// Remove Content-Type so browser sets multipart/form-data with boundary.
+				headers: { "Content-Type": null } as unknown as HeadersInit,
+			},
+		);
 
 		return data!;
 	}
 
 	/**
 	 * List files in a workspace
-	 * @param workspaceId - Workspace ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param query - Optional query parameters (formats, search, limit, after)
 	 * @returns Promise that resolves with a paginated list of files
 	 * @throws {ApiError} if the request fails
 	 */
 	async listFiles(
-		workspaceId: string,
+		workspaceSlug: string,
 		query?: ListFiles & CursorPagination,
 	): Promise<FilesPage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/files/", {
-			params: { path: { workspaceId }, query },
+		const { data } = await this.#api.GET("/workspaces/{workspaceSlug}/files/", {
+			params: { path: { workspaceSlug }, query },
 		});
 		return data!;
 	}
 
 	/**
 	 * Get file metadata by ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param fileId - File ID
 	 * @returns Promise that resolves with the file metadata
 	 * @throws {ApiError} if the request fails
 	 */
-	async getFile(fileId: string): Promise<File> {
-		const { data } = await this.#api.GET("/files/{fileId}/", {
-			params: { path: { fileId } },
-		});
+	async getFile(workspaceSlug: string, fileId: string): Promise<File> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/files/{fileId}/",
+			{
+				params: { path: { workspaceSlug, fileId } },
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Download a file by ID
+	 * @param workspaceSlug - Workspace slug
 	 * @param fileId - File ID
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */
-	async downloadFile(fileId: string): Promise<Response> {
-		const { response } = await this.#api.GET("/files/{fileId}/content/", {
-			params: { path: { fileId } },
-			parseAs: "stream",
-		});
+	async downloadFile(workspaceSlug: string, fileId: string): Promise<Response> {
+		const { response } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/files/{fileId}/content/",
+			{
+				params: { path: { workspaceSlug, fileId } },
+				parseAs: "stream",
+			},
+		);
 		return response;
 	}
 
 	/**
 	 * Update a file's metadata
+	 * @param workspaceSlug - Workspace slug
 	 * @param fileId - File ID
 	 * @param updates - File update request
 	 * @returns Promise that resolves with the updated file
 	 * @throws {ApiError} if the request fails
 	 */
-	async updateFile(fileId: string, updates: UpdateFile): Promise<File> {
-		const { data } = await this.#api.PATCH("/files/{fileId}/", {
-			params: { path: { fileId } },
-			body: updates,
-		});
+	async updateFile(
+		workspaceSlug: string,
+		fileId: string,
+		updates: UpdateFile,
+	): Promise<File> {
+		const { data } = await this.#api.PATCH(
+			"/workspaces/{workspaceSlug}/files/{fileId}/",
+			{
+				params: { path: { workspaceSlug, fileId } },
+				body: updates,
+			},
+		);
 		return data!;
 	}
 
 	/**
 	 * Delete a file
+	 * @param workspaceSlug - Workspace slug
 	 * @param fileId - File ID
 	 * @returns Promise that resolves when the file is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteFile(fileId: string): Promise<void> {
-		await this.#api.DELETE("/files/{fileId}/", {
-			params: { path: { fileId } },
+	async deleteFile(workspaceSlug: string, fileId: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceSlug}/files/{fileId}/", {
+			params: { path: { workspaceSlug, fileId } },
 		});
 	}
 }

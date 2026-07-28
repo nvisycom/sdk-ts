@@ -1,6 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	Account as AccountData,
+	PublicAccount,
 	UpdateAccount,
 } from "@/datatypes/index.js";
 
@@ -44,5 +45,18 @@ export class Account {
 	 */
 	async deleteAccount(): Promise<void> {
 		await this.#api.DELETE("/account/");
+	}
+
+	/**
+	 * Get a public account profile by username
+	 * @param username - Account username
+	 * @returns Promise that resolves with the public account details
+	 * @throws {ApiError} if the request fails
+	 */
+	async getPublicAccount(username: string): Promise<PublicAccount> {
+		const { data } = await this.#api.GET("/accounts/{username}/", {
+			params: { path: { username } },
+		});
+		return data!;
 	}
 }
