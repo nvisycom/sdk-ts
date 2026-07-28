@@ -8,6 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-29
+
+### Added
+
+- `ApiToken.current` field, indicating which token authenticated the
+  current request (set by the token listing endpoint)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.5.0] - 2026-07-12
 
 ### Added
@@ -166,7 +177,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/nvisycom/sdk-ts/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/nvisycom/sdk-ts/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/nvisycom/sdk-ts/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/nvisycom/sdk-ts/compare/v0.2.0...v0.3.0
