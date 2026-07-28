@@ -28,7 +28,6 @@ npm install @nvisy/sdk
 import { Nvisy } from "@nvisy/sdk";
 
 const client = new Nvisy({ apiToken: "your-api-token" });
-
 const account = await client.account.getAccount();
 const workspaces = await client.workspaces.listWorkspaces();
 ```
