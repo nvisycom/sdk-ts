@@ -3652,7 +3652,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Upload files
-		 * @description Uploads one or more files to a document for processing. Files are validated, stored, and queued for processing.
+		 * @description Uploads one or more files to a workspace. Each file is encrypted, streamed to storage, and recorded.
 		 */
 		post: {
 			parameters: {
@@ -4288,7 +4288,7 @@ export interface paths {
 		};
 		/**
 		 * Get pipeline
-		 * @description Returns a pipeline by its unique identifier.
+		 * @description Returns a pipeline by its slug.
 		 */
 		get: {
 			parameters: {
@@ -6255,6 +6255,13 @@ export interface components {
 		};
 		/** @description API token response structure. */
 		ApiToken: {
+			/**
+			 * @description Whether this token is the one the current request authenticated with.
+			 *
+			 *     Lets a client single out the active session in the list. Defaults to
+			 *     `false`; the listing handler sets it for the matching token.
+			 */
+			current: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the token expires (None = never expires).
