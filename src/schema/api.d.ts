@@ -3581,8 +3581,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Filter by file formats. */
-					formats?: components["schemas"]["FileFormat"][];
+					/**
+					 * @description Filter by file extension. Each entry expands to its format's full
+					 *     extension set (so `jpg` also matches `jpeg`).
+					 */
+					formats?: components["schemas"]["FormatToken"][];
+					/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
+					modality?: components["schemas"]["ModalityToken"][];
 					/** @description Search by file name (case-insensitive, partial match). */
 					search?: string;
 					/**
@@ -6705,7 +6710,7 @@ export interface components {
 			definition?: components["schemas"]["PipelineDefinition"];
 			/** @description Optional description of the pipeline (max 500 characters). */
 			description?: string;
-			/** @description Pipeline name (3-100 characters). */
+			/** @description Pipeline name (2-128 characters). */
 			name: string;
 			/** @description URL slug, unique within the workspace and immutable after creation. */
 			slug: components["schemas"]["Slug"];
@@ -6956,47 +6961,6 @@ export interface components {
 			validator?: string;
 		};
 		/**
-		 * @description Dedup pipeline applied after recognition.
-		 *
-		 *     Layers run in the canonical order: calibrate → reconcile
-		 *     (merging) → reconcile (tiebreaking) → filter.
-		 */
-		DeduplicationParams: {
-			/**
-			 * @description Per-recognizer confidence weights.
-			 *
-			 *     An empty map skips the calibrate layer. The engine
-			 *     converts this into elide's `CalibrationMap` at compile
-			 *     time.
-			 */
-			calibration?: {
-				[key: string]: number;
-			};
-			/**
-			 * @description How same-label overlapping findings are merged into one.
-			 *
-			 *     Defaults to [`MergingStrategyParams::Max`].
-			 * @default max
-			 */
-			merging: components["schemas"]["MergingStrategyParams"];
-			/**
-			 * @description Minimum confidence the filter layer admits.
-			 *
-			 *     `None` falls back to [`ConfidenceThreshold::BASELINE`] at
-			 *     compile time. Wire form is an `f32` in `0.0..=1.0`;
-			 *     out-of-range values reject at deserialize, not silently
-			 *     clamp.
-			 */
-			minConfidence?: components["schemas"]["ConfidenceThreshold"];
-			/**
-			 * @description How cross-label overlaps pick a winner.
-			 *
-			 *     Defaults to [`TiebreakerParams::HighestConfidence`].
-			 * @default highest_confidence
-			 */
-			tiebreaker: components["schemas"]["TiebreakerParams"];
-		};
-		/**
 		 * @description Pixel dimensions of an image or any 2-D canvas.
 		 *
 		 *     Converts between normalized `0.0..=1.0` coordinates (what vision
@@ -7053,42 +7017,6 @@ export interface components {
 					/** @description Negated predicate. */
 					not: components["schemas"]["DocumentPredicate"];
 			  };
-		/**
-		 * @description Enricher slots an analyzer can fill.
-		 *
-		 *     Each slot is at-most-one; the slot name is the kind.
-		 */
-		EnricherParams: {
-			/**
-			 * @description Language-detection enricher.
-			 *
-			 *     Detects the document's primary language(s) and writes them
-			 *     into the recognizer context. Drives jurisdiction-aware
-			 *     recognizer dispatch downstream.
-			 */
-			language?: components["schemas"]["LanguageEnricherParams"];
-			/**
-			 * @description OCR enricher (image modality only).
-			 *
-			 *     OCRs the image (or PDF page raster) and stamps the
-			 *     recognised [`Layout`] onto the recognizer context, so
-			 *     downstream text recognizers can match on the OCR'd text.
-			 *
-			 *     [`Layout`]: elide_core::modality::image::Layout
-			 */
-			ocr?: components["schemas"]["OcrEnricherParams"];
-			/**
-			 * @description Speech-to-text enricher (audio modality only).
-			 *
-			 *     Transcribes the audio stream and stamps the resulting
-			 *     [`TranscriptSegment`]s onto the recognizer context, so
-			 *     downstream text recognizers can match against the
-			 *     transcript.
-			 *
-			 *     [`TranscriptSegment`]: elide_core::modality::audio::TranscriptSegment
-			 */
-			stt?: components["schemas"]["SttEnricherParams"];
-		};
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
@@ -8124,8 +8052,6 @@ export interface components {
 			/** @description Slug of the workspace this file belongs to. */
 			workspaceSlug: components["schemas"]["Slug"];
 		};
-		/** @description File format categories for filtering. */
-		FileFormat: "pdf" | "doc" | "txt" | "md" | "csv" | "json" | "png" | "jpeg";
 		/**
 		 * @description Defines how a file was created in the system.
 		 *
@@ -8152,6 +8078,26 @@ export interface components {
 			 */
 			total?: number;
 		};
+		/**
+		 * @description A supported file extension.
+		 * @enum {string}
+		 */
+		FormatToken:
+			| "csv"
+			| "docx"
+			| "htm"
+			| "html"
+			| "jpeg"
+			| "jpg"
+			| "json"
+			| "log"
+			| "png"
+			| "tif"
+			| "tiff"
+			| "txt"
+			| "wav"
+			| "xlsx"
+			| "xml";
 		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
 			/** @description When the invite code expires. */
@@ -8587,27 +8533,6 @@ export interface components {
 			span?: components["schemas"]["LanguageSpan"];
 		};
 		/**
-		 * @description Params for the language-detection enricher.
-		 *
-		 *     Backed by [`elide_lingua::LinguaEnricher`]: the `candidates` set
-		 *     scopes the detector to a candidate language pool. An empty list
-		 *     asks lingua to consider every language compiled into its
-		 *     feature set.
-		 *
-		 *     [`elide_lingua::LinguaEnricher`]: https://docs.rs/elide-lingua/latest/elide_lingua/struct.LinguaEnricher.html
-		 */
-		LanguageEnricherParams: {
-			/**
-			 * @description Candidate language pool the detector picks from.
-			 *
-			 *     Empty means "every language lingua was compiled with"; a
-			 *     non-empty list restricts detection to those languages and
-			 *     is a real speed + accuracy win when the caller knows what
-			 *     languages their documents are in.
-			 */
-			candidates?: components["schemas"]["LanguageTag"][];
-		};
-		/**
 		 * @description How a [`Language`]'s language was obtained.
 		 *
 		 *     Lets consumers distinguish "a detector ran and got this answer" from
@@ -8674,8 +8599,13 @@ export interface components {
 		LeakProfile: "recoverable" | "partial" | "irrecoverable";
 		/** @description Query parameters for listing files. */
 		ListFiles: {
-			/** @description Filter by file formats. */
-			formats?: components["schemas"]["FileFormat"][];
+			/**
+			 * @description Filter by file extension. Each entry expands to its format's full
+			 *     extension set (so `jpg` also matches `jpeg`).
+			 */
+			formats?: components["schemas"]["FormatToken"][];
+			/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
+			modality?: components["schemas"]["ModalityToken"][];
 			/** @description Search by file name (case-insensitive, partial match). */
 			search?: string;
 		};
@@ -8782,6 +8712,11 @@ export interface components {
 			/** @description Operator for text-modality entities. */
 			text?: components["schemas"]["TextRedaction"];
 		};
+		/**
+		 * @description A supported document modality.
+		 * @enum {string}
+		 */
+		ModalityToken: "audio" | "image" | "tabular" | "text";
 		/** @description Detail of a model/NER recognition. */
 		ModelEvent: {
 			/** @description Whether contextual analysis adjusted the score for this match. */
@@ -8871,20 +8806,6 @@ export interface components {
 			 * @description Total count of items matching the query (if requested).
 			 */
 			total?: number;
-		};
-		/**
-		 * @description Params for the OCR enricher (image modality).
-		 *
-		 *     The backend `kind` and its per-kind fields sit inline, no
-		 *     nested `backend = { ... }` table. Serde routes on `kind`.
-		 */
-		OcrEnricherParams: {
-			/** @description Base URL of the BentoML service. */
-			base_url: string;
-			/** @constant */
-			kind: "bento";
-			/** @description Model identifier the backend should target. */
-			model: string;
 		};
 		/**
 		 * @description Identifies a redaction operator, for the redaction audit a higher
@@ -8986,30 +8907,43 @@ export interface components {
 			workspaceSlug: components["schemas"]["Slug"];
 		};
 		/**
-		 * @description Reusable detection + redaction configuration for a pipeline.
+		 * @description A pipeline's deduplication intent.
 		 *
-		 *     The pipeline holds the "how to detect and redact" configuration the engine
-		 *     consumes, minus the per-document assertions (which travel with a document at
-		 *     detect time). Stored as JSON in the pipeline's `definition` column but
-		 *     validated against this schema at the API boundary.
+		 *     Each field is optional: when a pipeline omits one, it inherits the
+		 *     deployment default from the engine config. Per-recognizer calibration is
+		 *     operator-only and never set here.
+		 */
+		PipelineDeduplication: {
+			/** @description How same-label overlapping findings are merged into one. */
+			merging?: components["schemas"]["MergingStrategyParams"];
+			/** @description Minimum confidence the filter layer admits. */
+			minConfidence?: components["schemas"]["ConfidenceThreshold"];
+			/** @description How cross-label overlaps pick a winner. */
+			tiebreaker?: components["schemas"]["TiebreakerParams"];
+		};
+		/**
+		 * @description A pipeline's detection + governance intent.
+		 *
+		 *     Holds what a pipeline author decides — which recognizers to run, the entity
+		 *     labels, the default scope, and the policies to apply. Infrastructure config
+		 *     (enrichment backends, deduplication calibration) is server-wide and lives in
+		 *     the engine config, not here. Stored as JSON in the pipeline's `definition`
+		 *     column but validated against this schema at the API boundary.
 		 *
 		 *     The split:
 		 *
-		 *     - `recognizers` / `enrichers` / `deduplication` / `label_catalog` — the
-		 *       detection machinery, assembled into an engine `AnalyzerParams` per request.
+		 *     - `recognizers` / `deduplication` / `label_catalog` — the detection intent,
+		 *       merged with the server-wide engine defaults into an `AnalyzerParams`.
 		 *     - `default_scope` — optional pipeline-wide scope a document may override.
 		 *     - `policy_slugs` — references to the workspace's policies, resolved at run
 		 *       time.
 		 */
 		PipelineDefinition: {
 			/**
-			 * @description Post-recognition deduplication pipeline.
-			 * @default {
-			 *       "merging": "max",
-			 *       "tiebreaker": "highest_confidence"
-			 *     }
+			 * @description Post-recognition deduplication behavior.
+			 * @default {}
 			 */
-			deduplication: components["schemas"]["DeduplicationParams"];
+			deduplication: components["schemas"]["PipelineDeduplication"];
 			/**
 			 * @description Optional pipeline-wide scope (languages, jurisdictions, document labels).
 			 *
@@ -9017,11 +8951,6 @@ export interface components {
 			 *     the document must assert its own.
 			 */
 			defaultScope?: components["schemas"]["ScopeParams"];
-			/**
-			 * @description Enrichers run before recognition: language, OCR, STT.
-			 * @default {}
-			 */
-			enrichers: components["schemas"]["EnricherParams"];
 			/**
 			 * @description Entity-label catalog: which entity types the recognizers emit.
 			 *
@@ -9536,6 +9465,19 @@ export interface components {
 			events: components["schemas"]["Event4"][];
 		};
 		/**
+		 * @description How to pick recognizers out of a deployment-configured lineup.
+		 *
+		 *     Untagged on the wire: `true` / `false` / a list of names.
+		 *
+		 *     - `All(true)`: explicit opt-in. Attaches every configured
+		 *       recognizer; fails the analyzer compile if the lineup is
+		 *       empty.
+		 *     - `All(false)`: explicit opt-out. Skips the lineup entirely.
+		 *     - `Only(names)`: attach only the named recognizers. An empty
+		 *       list and any unknown name fail the analyzer compile.
+		 */
+		ProviderSelection: boolean | string[];
+		/**
 		 * @description Public view of an account, returned when looking up someone other than the
 		 *     authenticated caller. Carries only the fields safe to share with a
 		 *     workspace peer; private details (email, account flags) are omitted
@@ -9598,34 +9540,28 @@ export interface components {
 		 * @description Recognizer slots an analyzer can fill.
 		 *
 		 *     Pattern is at-most-one (per-request); NER and LLM are
-		 *     deployment-owned lineups each gated by a three-state
-		 *     [`Option<bool>`] toggle.
+		 *     deployment-owned lineups each selected by a
+		 *     [`ProviderSelection`].
 		 */
 		RecognizerParams: {
 			/**
-			 * @description Run the deployment's LLM recognizer lineup.
+			 * @description Select which of the deployment's LLM recognizers to run.
 			 *
-			 *     Same three-state semantics as [`ner`]. The lineup is
-			 *     filtered by declared modality — only recognizers whose
-			 *     `modalities` list contains the analyzer's modality
-			 *     attach.
+			 *     Same shape as [`ner`]. The lineup is additionally filtered
+			 *     by declared modality — only recognizers whose `modalities`
+			 *     list contains the analyzer's modality attach.
 			 *
 			 *     [`ner`]: RecognizerParams::ner
 			 */
-			llm?: boolean;
+			llm?: components["schemas"]["ProviderSelection"];
 			/**
-			 * @description Run the deployment's NER recognizer lineup.
+			 * @description Select which of the deployment's NER recognizers to run.
 			 *
-			 *     - `Some(true)`: explicit opt-in. Attaches every
-			 *       deployment-configured recognizer. Fails the analyzer
-			 *       compile with a `Validation` error when the deployment
-			 *       has no NER recognizers configured.
-			 *     - `Some(false)`: explicit opt-out. Skips NER entirely.
-			 *     - `None`: softly-on default. Attaches every configured
-			 *       recognizer if the deployment has any; skips silently
-			 *       otherwise.
+			 *     See [`ProviderSelection`] for the shape. `None` is the
+			 *     softly-on default: attach every configured recognizer if
+			 *     the deployment has any, skip silently otherwise.
 			 */
-			ner?: boolean;
+			ner?: components["schemas"]["ProviderSelection"];
 			/**
 			 * @description Built-in pattern + dictionary recognizer (`elide-pattern`).
 			 *
@@ -9854,20 +9790,6 @@ export interface components {
 		};
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
-		/**
-		 * @description Params for the STT enricher (audio modality).
-		 *
-		 *     The backend `kind` and its per-kind fields sit inline, no
-		 *     nested `backend = { ... }` table. Serde routes on `kind`.
-		 */
-		SttEnricherParams: {
-			/** @description Base URL of the BentoML service. */
-			base_url: string;
-			/** @constant */
-			kind: "bento";
-			/** @description Model identifier the backend should target. */
-			model: string;
-		};
 		/** @description Payload for the `suppress` action. */
 		SuppressAction: {
 			/**
@@ -10172,7 +10094,7 @@ export interface components {
 			definition?: components["schemas"]["PipelineDefinition"];
 			/** @description New description for the pipeline (max 500 characters). */
 			description?: string;
-			/** @description New name for the pipeline (3-100 characters). */
+			/** @description New name for the pipeline (2-128 characters). */
 			name?: string;
 			/** @description New status for the pipeline. */
 			status?: components["schemas"]["PipelineStatus"];
