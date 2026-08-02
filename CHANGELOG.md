@@ -8,6 +8,19 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- `FormatToken` and `ModalityToken` datatypes for the file `formats` and
+  `modalities` filters
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
+### Removed
+
+- **BREAKING**: `FileFormat` datatype (replaced by `FormatToken`)
+
 ## [0.6.0] - 2026-07-29
 
 ### Added
