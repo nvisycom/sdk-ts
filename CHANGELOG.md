@@ -8,6 +8,22 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- **BREAKING**: `status.checkHealth()` no longer sends a request body on the
+  `GET /health/` request. A GET with a body throws `TypeError: Request with
+  GET method cannot have body` in browsers, which made the method unusable
+  there. The method now takes no arguments (was `checkHealth(options?)`).
+
+### Removed
+
+- **BREAKING**: `CheckHealth` datatype (the health endpoint no longer accepts
+  a request payload)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.7.0] - 2026-08-02
 
 ### Added
