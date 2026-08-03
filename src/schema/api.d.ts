@@ -6054,12 +6054,7 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/** @description Request payload for monitoring status endpoint. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CheckHealth"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				/** @description Response body for `GET /health/`. */
 				200: {
@@ -6510,11 +6505,6 @@ export interface components {
 			/** @description Minimum corner (top-left, conventionally). */
 			min: components["schemas"]["Point"];
 		};
-		/** @description Request payload for monitoring status endpoint. */
-		CheckHealth: {
-			/** @description Whether to return cached results if available. */
-			useCache?: boolean;
-		};
 		/**
 		 * @description Color as 8-bit RGB.
 		 *
@@ -6540,11 +6530,6 @@ export interface components {
 		};
 		/** @description Health of a single service component. */
 		ComponentHealth: {
-			/**
-			 * Format: uint64
-			 * @description How long the health check took, when measured.
-			 */
-			latency?: number;
 			/** @description Component name (e.g. `"postgres"`, `"nats"`). */
 			name: string;
 			/** @description Status of this component. */
