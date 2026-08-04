@@ -8,6 +8,26 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-08-04
+
+### Added
+
+- `syncs` service for connection syncs: `startSync`, `listSyncs`, `getSync`,
+  `cancelSync`
+- `connections.verifyConnection()` to validate a connection's configuration
+  and credentials
+- `ConnectionSync`, `ConnectionSyncsPage`, `SyncConnection`, and
+  `ConnectionVerification` datatypes
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **BREAKING**: `connections.updateConnection()`,
+  `policies.updatePolicy()`, and `webhooks.updateWebhook()` now issue
+  `PATCH` instead of `PUT`
+- **BREAKING**: `invites.replyToInvite()` now resolves to `Member` (the
+  created member) instead of `Invite`
+
 ### Fixed
 
 - **BREAKING**: `status.checkHealth()` no longer sends a request body on the
@@ -19,10 +39,6 @@ and this project adheres to
 
 - **BREAKING**: `CheckHealth` datatype (the health endpoint no longer accepts
   a request payload)
-
-### Changed
-
-- Regenerated the API schema against the updated platform handlers
 
 ## [0.7.0] - 2026-08-02
 
@@ -208,7 +224,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/nvisycom/sdk-ts/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/nvisycom/sdk-ts/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/nvisycom/sdk-ts/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/nvisycom/sdk-ts/compare/v0.4.0...v0.5.0
