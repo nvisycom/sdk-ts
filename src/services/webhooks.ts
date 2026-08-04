@@ -91,7 +91,7 @@ export class Webhooks {
 		webhookId: string,
 		updates: UpdateWebhook,
 	): Promise<Webhook> {
-		const { data } = await this.#api.PUT(
+		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/",
 			{
 				params: { path: { workspaceSlug, webhookId } },

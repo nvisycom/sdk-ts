@@ -3,7 +3,6 @@ import type {
 	CreateInvite,
 	CursorPagination,
 	GenerateInviteCode,
-	Invite,
 	InviteCode,
 	InvitePreview,
 	InviteSent,
@@ -89,7 +88,7 @@ export class Invites {
 		workspaceSlug: string,
 		inviteId: string,
 		reply: ReplyInvite,
-	): Promise<Invite> {
+	): Promise<Member> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/invites/{inviteId}/",
 			{

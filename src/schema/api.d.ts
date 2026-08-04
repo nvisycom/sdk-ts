@@ -217,7 +217,7 @@ export interface paths {
 				header?: never;
 				path: {
 					/** @description Public handle of the account. */
-					username: components["schemas"]["Username"];
+					username: components["schemas"]["Handle"];
 				};
 				cookie?: never;
 			};
@@ -1615,11 +1615,87 @@ export interface paths {
 				};
 			};
 		};
+		put?: never;
+		post?: never;
+		/**
+		 * Delete connection
+		 * @description Soft-deletes the connection from the workspace.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
 		/**
 		 * Update connection
 		 * @description Updates connection name or encrypted data.
 		 */
-		put: {
+		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -1732,12 +1808,22 @@ export interface paths {
 				};
 			};
 		};
-		post?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/verify/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
 		/**
-		 * Delete connection
-		 * @description Soft-deletes the connection from the workspace.
+		 * Verify connection
+		 * @description Checks whether the connection's backing store is reachable with its stored credentials.
 		 */
-		delete: {
+		post: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -1751,12 +1837,14 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
-				204: {
+				/** @description Result of a connection reachability check. */
+				200: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content?: never;
+					content: {
+						"application/json": components["schemas"]["ConnectionVerification"];
+					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -1805,6 +1893,442 @@ export interface paths {
 				};
 			};
 		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/sync/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Sync connection
+		 * @description Imports an object from or exports a file to the connection. Returns the created sync; poll it for completion.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload to trigger a connection sync.
+			 *
+			 *     The direction is determined by the connection's configured `sync_mode`.
+			 *     - Import connections need no body: the sync fetches every not-yet-imported
+			 *       object under the connection's root path.
+			 *     - Export connections push one workspace file (`file_id`) to one object
+			 *       `key`; both are required for export and ignored for import.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["SyncConnection"];
+				};
+			};
+			responses: {
+				/** @description A connection sync run (import or export). */
+				202: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionSync"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List connection syncs
+		 * @description Returns the connection's sync history, most recent first.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionSyncsPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get connection sync
+		 * @description Returns a single sync run for the connection.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+					/** @description Unique identifier of the sync run. */
+					syncId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description A connection sync run (import or export). */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionSync"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/cancel/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Cancel connection sync
+		 * @description Cancels an in-progress sync run. A run that already finished returns 409.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+					/** @description Unique identifier of the sync run. */
+					syncId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description A connection sync run (import or export). */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionSync"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
 		options?: never;
 		head?: never;
 		patch?: never;
@@ -2138,7 +2662,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Reply to invitation
-		 * @description Allows the invitee to accept or decline a workspace invitation.
+		 * @description Accepts or declines a workspace invitation. On accept the user becomes a member and the new membership is returned; on decline no membership is created.
 		 */
 		post: {
 			parameters: {
@@ -2159,19 +2683,21 @@ export interface paths {
 				};
 			};
 			responses: {
-				/**
-				 * @description Workspace invite with complete information.
-				 *
-				 *     This response includes all the essential information about an
-				 *     invitation, including the unique invite ID that can be used to track or cancel
-				 *     the invitation later.
-				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Invite"];
+						"application/json": components["schemas"]["Member"] | null;
+					};
+				};
+				/** @description Represents a workspace member. */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Member"];
 					};
 				};
 				/**
@@ -2212,6 +2738,21 @@ export interface paths {
 				 *     information, and user-friendly messages.
 				 */
 				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -2722,7 +3263,7 @@ export interface paths {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
 					/** @description Public handle of the member's account. */
-					username: components["schemas"]["Username"];
+					username: components["schemas"]["Handle"];
 				};
 				cookie?: never;
 			};
@@ -2798,7 +3339,7 @@ export interface paths {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
 					/** @description Public handle of the member's account. */
-					username: components["schemas"]["Username"];
+					username: components["schemas"]["Handle"];
 				};
 				cookie?: never;
 			};
@@ -2887,7 +3428,7 @@ export interface paths {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
 					/** @description Public handle of the member's account. */
-					username: components["schemas"]["Username"];
+					username: components["schemas"]["Handle"];
 				};
 				cookie?: never;
 			};
@@ -3256,11 +3797,87 @@ export interface paths {
 				};
 			};
 		};
+		put?: never;
+		post?: never;
+		/**
+		 * Delete webhook
+		 * @description Permanently removes the webhook from the workspace.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the webhook. */
+					webhookId: components["schemas"]["WebhookId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
 		/**
 		 * Update webhook
 		 * @description Updates webhook configuration such as URL or event subscriptions.
 		 */
-		put: {
+		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -3368,82 +3985,6 @@ export interface paths {
 				};
 			};
 		};
-		post?: never;
-		/**
-		 * Delete webhook
-		 * @description Permanently removes the webhook from the workspace.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description Opaque identifier of the webhook. */
-					webhookId: components["schemas"]["WebhookId"];
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
 		trace?: never;
 	};
 	"/workspaces/{workspaceSlug}/webhooks/{webhookId}/test/": {
@@ -5481,11 +6022,87 @@ export interface paths {
 				};
 			};
 		};
+		put?: never;
+		post?: never;
+		/**
+		 * Delete policy
+		 * @description Soft-deletes the policy from the workspace.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description URL slug of the policy, unique within its workspace. */
+					policySlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
 		/**
 		 * Update policy
 		 * @description Updates policy fields. Replacing the definition replaces the whole body.
 		 */
-		put: {
+		patch: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -5597,82 +6214,6 @@ export interface paths {
 				};
 			};
 		};
-		post?: never;
-		/**
-		 * Delete policy
-		 * @description Soft-deletes the policy from the workspace.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the policy, unique within its workspace. */
-					policySlug: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
 		trace?: never;
 	};
 	"/notifications/": {
@@ -6111,7 +6652,7 @@ export interface components {
 			 */
 			updatedAt: string;
 			/** @description Public handle of the account. */
-			username: components["schemas"]["Username"];
+			username: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Path parameters for account operations.
@@ -6121,14 +6662,14 @@ export interface components {
 		 */
 		AccountPathParams: {
 			/** @description Public handle of the account. */
-			username: components["schemas"]["Username"];
+			username: components["schemas"]["Handle"];
 		};
 		/** @description Response type for a workspace activity. */
 		Activity: {
 			/** @description Type of activity. */
 			activityType: components["schemas"]["ActivityType"];
 			/** @description Handle of the account that performed the activity, if any. */
-			actorUsername?: components["schemas"]["Username"];
+			actorUsername?: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
 			 * @description When the activity occurred.
@@ -6141,8 +6682,8 @@ export interface components {
 			 * @description Unique activity identifier.
 			 */
 			id: string;
-			/** @description Slug of the workspace this activity belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this activity belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Defines the type of activity performed in a workspace for audit logging.
@@ -6262,6 +6803,8 @@ export interface components {
 			 *     `false`; the listing handler sets it for the matching token.
 			 */
 			current: boolean;
+			/** @description Human-readable display name for the API token. */
+			displayName: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the token expires (None = never expires).
@@ -6282,8 +6825,6 @@ export interface components {
 			 * @description Timestamp of most recent token activity.
 			 */
 			lastUsedAt?: string;
-			/** @description Human-readable name for the API token. */
-			name: string;
 			/** @description Type of token (web, api, etc.). */
 			sessionType: components["schemas"]["ApiTokenType"];
 		};
@@ -6296,6 +6837,8 @@ export interface components {
 		ApiTokenType: "web" | "api" | "cli";
 		/** @description API token with JWT token string (only returned on creation). */
 		ApiTokenWithJWT: {
+			/** @description Human-readable display name for the API token. */
+			displayName: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the token expires (omitted = never expires).
@@ -6311,8 +6854,6 @@ export interface components {
 			 * @description Timestamp of token creation.
 			 */
 			issuedAt: string;
-			/** @description Human-readable name for the API token. */
-			name: string;
 			/** @description Type of token (web, mobile, api, etc.). */
 			sessionType: components["schemas"]["ApiTokenType"];
 			/** @description The JWT token string (only shown once on creation). */
@@ -6485,7 +7026,7 @@ export interface components {
 			 */
 			issuedAt: string;
 			/** @description Handle of the authenticated account. */
-			username: components["schemas"]["Username"];
+			username: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Axis-aligned rectangle, given by its minimum and maximum corners.
@@ -6577,7 +7118,11 @@ export interface components {
 			 */
 			createdAt: string;
 			/** @description Handle of the account that created this connection. */
-			creatorUsername: components["schemas"]["Username"];
+			creatorUsername: components["schemas"]["Handle"];
+			/** @description How an import reconciles files whose source object was deleted. */
+			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
+			/** @description Human-readable connection display name. */
+			displayName: string;
 			/** @description Opaque identifier of the connection. */
 			id: components["schemas"]["ConnectionId"];
 			/**
@@ -6585,17 +7130,19 @@ export interface components {
 			 * @description When the connection last synced successfully, if ever.
 			 */
 			lastSynced?: string;
-			/** @description Human-readable connection name. */
-			name: string;
-			/** @description Provider type (e.g., "openai", "postgres", "s3"). */
+			/** @description Object store provider (`s3`, `azure`, `gcs`). */
 			provider: string;
+			/** @description Cron expression for scheduled imports, if configured. */
+			scheduleCron?: string;
+			/** @description Whether the connection imports data in or exports data out. */
+			syncMode: components["schemas"]["SyncMode"];
 			/**
 			 * Format: date-time
 			 * @description When the connection was last updated.
 			 */
 			updatedAt: string;
-			/** @description Slug of the workspace this connection belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this connection belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Opaque conn identifier (conn_<uuid>). */
 		ConnectionId: string;
@@ -6610,6 +7157,77 @@ export interface components {
 		ConnectionPathParams: {
 			/** @description Opaque identifier of the connection. */
 			connectionId: components["schemas"]["ConnectionId"];
+		};
+		/** @description A connection sync run (import or export). */
+		ConnectionSync: {
+			/**
+			 * Format: int32
+			 * @description 1-based attempt number; scheduled syncs may be retried on failure.
+			 */
+			attempt: number;
+			/**
+			 * Format: date-time
+			 * @description When the sync finished, if it has.
+			 */
+			completedAt?: string;
+			/** @description The connection this sync belongs to. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Failure reason when the sync failed; omitted otherwise. */
+			errorMessage?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique sync identifier.
+			 */
+			id: string;
+			/**
+			 * Format: int64
+			 * @description Number of objects transferred so far.
+			 */
+			recordsSynced: number;
+			/**
+			 * Format: date-time
+			 * @description When the sync started.
+			 */
+			startedAt: string;
+			/** @description Current status of the sync. */
+			status: components["schemas"]["SyncStatus"];
+			/** @description How the sync was triggered. */
+			triggerType: components["schemas"]["SyncTriggerType"];
+		};
+		/** @description Path parameters for a specific connection sync. */
+		ConnectionSyncPathParams: {
+			/** @description Opaque identifier of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the sync run.
+			 */
+			syncId: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ConnectionSyncsPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["ConnectionSync"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Result of a connection reachability check. */
+		ConnectionVerification: {
+			/** @description Failure reason when not reachable; omitted on success. */
+			error?: string;
+			/** @description Whether the backing store was reachable with the stored credentials. */
+			reachable: boolean;
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -6652,22 +7270,34 @@ export interface components {
 		CountryCode: string;
 		/** @description Request to create a new API token. */
 		CreateApiToken: {
+			/** @description Human-readable display name for the API token (1-100 characters). */
+			displayName: string;
 			/** @description When the token expires. */
 			expiresIn: components["schemas"]["TokenExpiration"];
-			/** @description Human-readable name for the API token (1-100 characters). */
-			name: string;
 		};
 		/** @description Request payload for creating a new workspace connection. */
 		CreateConnection: {
 			/**
-			 * @description Connection data to be encrypted (credentials + context).
-			 *     The structure depends on the provider type.
+			 * @description Connection data to be encrypted (provider credentials + optional root
+			 *     path). The structure depends on the provider type.
 			 */
 			data: unknown;
-			/** @description Human-readable connection name. */
-			name: string;
-			/** @description Provider type (e.g., "openai", "postgres", "s3"). */
+			/**
+			 * @description How an import reconciles files whose source object was deleted.
+			 * @default ignore
+			 */
+			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
+			/** @description Human-readable connection display name. */
+			displayName: string;
+			/** @description Object store provider (`s3`, `azure`, `gcs`). */
 			provider: string;
+			/** @description Cron expression for scheduled imports; omit for manual-only. */
+			scheduleCron?: string;
+			/**
+			 * @description Whether the connection imports data in or exports data out.
+			 * @default import
+			 */
+			syncMode: components["schemas"]["SyncMode"];
 		};
 		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
@@ -6695,10 +7325,10 @@ export interface components {
 			definition?: components["schemas"]["PipelineDefinition"];
 			/** @description Optional description of the pipeline (max 500 characters). */
 			description?: string;
-			/** @description Pipeline name (2-128 characters). */
-			name: string;
+			/** @description Pipeline display name (2-128 characters). */
+			displayName: string;
 			/** @description URL slug, unique within the workspace and immutable after creation. */
-			slug: components["schemas"]["Slug"];
+			slug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Request payload to start a run (detect) over a file.
@@ -6733,15 +7363,15 @@ export interface components {
 			/** @description Optional description override. Defaults to the policy's own description. */
 			description?: string;
 			/** @description Optional display name override. Defaults to the policy's own name. */
-			name?: string;
+			displayName?: string;
 			/** @description URL slug, unique within the workspace and immutable after creation. */
-			slug: components["schemas"]["Slug"];
+			slug: components["schemas"]["Handle"];
 		};
 		/** @description Request payload for creating a new workspace webhook. */
 		CreateWebhook: {
 			/** @description Detailed description of the webhook's purpose (max 500 characters). */
 			description: string;
-			/** @description Human-readable name for the webhook (1-100 characters). */
+			/** @description Human-readable name for the webhook (1-128 characters). */
 			displayName: string;
 			/** @description List of event types this webhook should receive. */
 			events: components["schemas"]["WebhookEvent"][];
@@ -6764,14 +7394,14 @@ export interface components {
 		 *     automatically added as an owner of the workspace.
 		 */
 		CreateWorkspace: {
-			/** @description Optional description of the workspace (max 200 characters). */
+			/** @description Optional description of the workspace (max 500 characters). */
 			description?: string;
-			/** @description Display name of the workspace (3-32 characters). */
+			/** @description Display name of the workspace (2-32 characters). */
 			displayName: string;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean;
 			/** @description Optional URL slug. Derived from the display name when omitted. */
-			slug?: components["schemas"]["Slug"];
+			slug?: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Cursor-based pagination query parameters.
@@ -8028,14 +8658,14 @@ export interface components {
 			 */
 			updatedAt: string;
 			/** @description Handle of the account that uploaded/created the file. */
-			uploadedBy: components["schemas"]["Username"];
+			uploadedBy: components["schemas"]["Handle"];
 			/**
 			 * Format: int32
 			 * @description Version number (1 for original, higher for newer versions).
 			 */
 			versionNumber: number;
-			/** @description Slug of the workspace this file belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this file belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Defines how a file was created in the system.
@@ -8076,7 +8706,9 @@ export interface components {
 			| "jpg"
 			| "json"
 			| "log"
+			| "pdf"
 			| "png"
+			| "rtf"
 			| "tif"
 			| "tiff"
 			| "txt"
@@ -8090,6 +8722,8 @@ export interface components {
 			/** @description Role to assign when someone joins via this invite code. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
 		};
+		/** @description Lowercase, dash-separated identifier used in URLs and as account handles. */
+		Handle: string;
 		/**
 		 * @description SHA-2 variant for the [`TextRedaction::Hash`] operator.
 		 *
@@ -8320,8 +8954,8 @@ export interface components {
 			 * @description When the invitation was last updated.
 			 */
 			updatedAt: string;
-			/** @description Slug of the workspace the invitation is for. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace the invitation is for. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Response containing a generated shareable invite code. */
 		InviteCode: {
@@ -8334,8 +8968,8 @@ export interface components {
 			inviteCode: string;
 			/** @description Role assigned when someone joins via this code. */
 			role: components["schemas"]["WorkspaceRole"];
-			/** @description Slug of the workspace this invite code is for. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this invite code is for. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Path parameters for joining via invite code. */
 		InviteCodePathParams: {
@@ -8377,8 +9011,8 @@ export interface components {
 			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Tags associated with the workspace. */
 			tags: string[];
-			/** @description Slug of the workspace. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Acknowledgement returned after sending a workspace invitation.
@@ -8642,12 +9276,12 @@ export interface components {
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
 			/** @description Handle of the member's account. */
-			username: components["schemas"]["Username"];
+			username: components["schemas"]["Handle"];
 		};
 		/** @description Path parameters for workspace member operations. */
 		MemberPathParams: {
 			/** @description Public handle of the member's account. */
-			username: components["schemas"]["Username"];
+			username: components["schemas"]["Handle"];
 		};
 		/** @description Fields available for sorting workspace members. */
 		MemberSortField: "name" | "date";
@@ -8872,15 +9506,15 @@ export interface components {
 			 */
 			createdAt: string;
 			/** @description Handle of the account that created this pipeline. */
-			creatorUsername: components["schemas"]["Username"];
+			creatorUsername: components["schemas"]["Handle"];
 			/** @description Detection + redaction configuration. */
 			definition: components["schemas"]["PipelineDefinition"];
 			/** @description Pipeline description. */
 			description?: string;
-			/** @description Pipeline name. */
-			name: string;
+			/** @description Pipeline display name. */
+			displayName: string;
 			/** @description URL slug of the pipeline, unique within its workspace. */
-			slug: components["schemas"]["Slug"];
+			slug: components["schemas"]["Handle"];
 			/** @description Pipeline lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
@@ -8888,8 +9522,8 @@ export interface components {
 			 * @description Timestamp when the pipeline was last updated.
 			 */
 			updatedAt: string;
-			/** @description Slug of the workspace this pipeline belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this pipeline belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description A pipeline's deduplication intent.
@@ -8950,7 +9584,7 @@ export interface components {
 			 *     Stored relationally in the `workspace_pipeline_policies` join table, not the JSON
 			 *     definition; surfaced here so the API exposes one coherent object.
 			 */
-			policySlugs?: components["schemas"]["Slug"][];
+			policySlugs?: components["schemas"]["Handle"][];
 			/**
 			 * @description Recognizer lineup: pattern (incl. inline custom rules and
 			 *     dictionaries), plus the NER and LLM toggles.
@@ -8991,8 +9625,8 @@ export interface components {
 			id: components["schemas"]["RunId"];
 			/** @description Non-encrypted metadata for filtering/display. */
 			metadata: unknown;
-			/** @description Slug of the pipeline this run belongs to. */
-			pipelineSlug: components["schemas"]["Slug"];
+			/** @description Handle of the pipeline this run belongs to. */
+			pipelineSlug: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
 			 * @description When the run started.
@@ -9008,9 +9642,9 @@ export interface components {
 			/** @description How the run was triggered. */
 			triggerType: components["schemas"]["PipelineTriggerType"];
 			/** @description Handle of the account that triggered the run, if any. */
-			triggerUsername?: components["schemas"]["Username"];
-			/** @description Slug of the workspace this run belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			triggerUsername?: components["schemas"]["Handle"];
+			/** @description Handle of the workspace this run belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Path parameters for pipeline run operations. */
 		PipelineRunPathParams: {
@@ -9063,10 +9697,10 @@ export interface components {
 			createdAt: string;
 			/** @description Pipeline description. */
 			description?: string;
-			/** @description Pipeline name. */
-			name: string;
+			/** @description Pipeline display name. */
+			displayName: string;
 			/** @description URL slug of the pipeline, unique within its workspace. */
-			slug: components["schemas"]["Slug"];
+			slug: components["schemas"]["Handle"];
 			/** @description Pipeline lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
@@ -9181,15 +9815,15 @@ export interface components {
 			 */
 			createdAt: string;
 			/** @description Handle of the account that created this policy. */
-			creatorUsername: components["schemas"]["Username"];
+			creatorUsername: components["schemas"]["Handle"];
 			/** @description The structured policy body consumed by the engine. */
 			definition: components["schemas"]["Policy"];
 			/** @description Policy description. */
 			description?: string;
-			/** @description Human-readable policy name. */
-			name: string;
+			/** @description Human-readable policy display name. */
+			displayName: string;
 			/** @description URL slug of the policy, unique within its workspace. */
-			slug: components["schemas"]["Slug"];
+			slug: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
 			 * @description When the policy was last updated.
@@ -9197,8 +9831,8 @@ export interface components {
 			updatedAt: string;
 			/** @description Semver of the policy body. */
 			version: string;
-			/** @description Slug of the workspace this policy belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this policy belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description What a rule does when its [`predicate`] matches.
@@ -9477,7 +10111,7 @@ export interface components {
 			/** @description Display name of the account holder, when set. */
 			displayName?: string;
 			/** @description Public handle of the account. */
-			username: components["schemas"]["Username"];
+			username: components["schemas"]["Handle"];
 		};
 		Range_of_uint: {
 			/** Format: uint */
@@ -9761,10 +10395,8 @@ export interface components {
 			 */
 			rememberMe: boolean;
 			/** @description Public account handle, unique across all accounts. */
-			username: components["schemas"]["Username"];
+			username: components["schemas"]["Handle"];
 		};
-		/** @description Lowercase, dash-separated resource identifier used in URLs. */
-		Slug: string;
 		/**
 		 * @description The `{workspaceSlug}` path segment. Named to match the OpenAPI parameter and
 		 *     the route definition.
@@ -9785,6 +10417,53 @@ export interface components {
 			 */
 			reason?: string;
 		};
+		/**
+		 * @description Request payload to trigger a connection sync.
+		 *
+		 *     The direction is determined by the connection's configured `sync_mode`.
+		 *     - Import connections need no body: the sync fetches every not-yet-imported
+		 *       object under the connection's root path.
+		 *     - Export connections push one workspace file (`file_id`) to one object
+		 *       `key`; both are required for export and ignored for import.
+		 */
+		SyncConnection: {
+			/**
+			 * Format: uuid
+			 * @description The workspace file to export (export connections only).
+			 */
+			fileId?: string;
+			/** @description The destination object key for an export, relative to the root path. */
+			key?: string;
+		};
+		/**
+		 * @description What an import does with a file whose source object no longer exists.
+		 *
+		 *     Corresponds to the `SYNC_DELETION_POLICY` PostgreSQL enum. Deletion is opt-in
+		 *     per connection: the default `Ignore` keeps imports strictly additive so a
+		 *     transient listing error or a misconfigured root path can never remove files.
+		 */
+		SyncDeletionPolicy: "ignore" | "delete";
+		/**
+		 * @description The direction a connection syncs data.
+		 *
+		 *     Corresponds to the `SYNC_MODE` PostgreSQL enum: `Import` fetches objects from
+		 *     the connection into the workspace; `Export` pushes workspace files out.
+		 */
+		SyncMode: "import" | "export";
+		/**
+		 * @description Defines the execution status of a connection sync run.
+		 *
+		 *     This enumeration corresponds to the `SYNC_STATUS` PostgreSQL enum and tracks
+		 *     the state of an individual synchronization run.
+		 */
+		SyncStatus: "pending" | "running" | "completed" | "failed" | "cancelled";
+		/**
+		 * @description Defines how a connection sync run was initiated.
+		 *
+		 *     This enumeration corresponds to the `SYNC_TRIGGER_TYPE` PostgreSQL enum and is used
+		 *     to track whether a run was manually triggered, scheduled, or triggered by a webhook.
+		 */
+		SyncTriggerType: "manual" | "scheduled" | "webhook";
 		/**
 		 * @description Cell-addressed location within tabular content.
 		 *
@@ -10028,22 +10707,31 @@ export interface components {
 			/** @description New password (will be hashed before storage). */
 			password?: string;
 			/** @description New account handle. */
-			username?: components["schemas"]["Username"];
+			username?: components["schemas"]["Handle"];
 		};
 		/** @description Request to update an existing API token. */
 		UpdateApiToken: {
-			/** @description Updated name for the API token (1-100 characters). */
-			name?: string;
+			/** @description Updated display name for the API token (1-100 characters). */
+			displayName?: string;
 		};
 		/** @description Request payload for updating an existing workspace connection. */
 		UpdateConnection: {
 			/**
-			 * @description Connection data to be encrypted (credentials + context).
-			 *     If provided, replaces the existing encrypted data.
+			 * @description Connection data to be encrypted (provider credentials + optional root
+			 *     path). If provided, replaces the existing encrypted data.
 			 */
 			data?: unknown;
-			/** @description Human-readable connection name. */
-			name?: string;
+			/** @description How an import reconciles files whose source object was deleted. */
+			deletionPolicy?: components["schemas"]["SyncDeletionPolicy"];
+			/** @description Human-readable connection display name. */
+			displayName?: string;
+			/**
+			 * @description Cron expression for scheduled imports. Omit to leave unchanged; send
+			 *     `null` to clear it (make the connection manual-only).
+			 */
+			scheduleCron?: string;
+			/** @description Whether the connection imports data in or exports data out. */
+			syncMode?: components["schemas"]["SyncMode"];
 		};
 		/** @description Request to update file metadata. */
 		UpdateFile: {
@@ -10079,8 +10767,8 @@ export interface components {
 			definition?: components["schemas"]["PipelineDefinition"];
 			/** @description New description for the pipeline (max 500 characters). */
 			description?: string;
-			/** @description New name for the pipeline (2-128 characters). */
-			name?: string;
+			/** @description New display name for the pipeline (2-128 characters). */
+			displayName?: string;
 			/** @description New status for the pipeline. */
 			status?: components["schemas"]["PipelineStatus"];
 		};
@@ -10094,14 +10782,14 @@ export interface components {
 			definition?: components["schemas"]["Policy"];
 			/** @description Policy description. */
 			description?: string;
-			/** @description Human-readable policy name. */
-			name?: string;
+			/** @description Human-readable policy display name. */
+			displayName?: string;
 		};
 		/** @description Request payload for updating an existing workspace webhook. */
 		UpdateWebhook: {
 			/** @description Updated description of the webhook's purpose (max 500 characters). */
 			description?: string;
-			/** @description Updated human-readable name for the webhook (1-100 characters). */
+			/** @description Updated human-readable name for the webhook (1-128 characters). */
 			displayName?: string;
 			/** @description Updated list of event types this webhook should receive. */
 			events?: components["schemas"]["WebhookEvent"][];
@@ -10126,13 +10814,11 @@ export interface components {
 		UpdateWorkspace: {
 			/** @description New description for the workspace (max 500 characters). */
 			description?: string;
-			/** @description New display name for the workspace (3-32 characters). */
+			/** @description New display name for the workspace (2-32 characters). */
 			displayName?: string;
 			/** @description Whether approval is required for processed files to be visible. */
 			requireApproval?: boolean;
 		};
-		/** @description Public account handle used in URLs (e.g. /accounts/{username}). */
-		Username: string;
 		/** @description Validation error details for field-specific errors. */
 		ValidationErrorDetail: {
 			/** @description Error code for the validation failure */
@@ -10161,7 +10847,7 @@ export interface components {
 			 */
 			createdAt: string;
 			/** @description Handle of the account that created this webhook. */
-			creatorUsername: components["schemas"]["Username"];
+			creatorUsername: components["schemas"]["Handle"];
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
 			/** @description Human-readable name for the webhook. */
@@ -10188,8 +10874,8 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
-			/** @description Slug of the workspace this webhook belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this webhook belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Webhook creation response that includes the secret (visible only once).
@@ -10205,7 +10891,7 @@ export interface components {
 			 */
 			createdAt: string;
 			/** @description Handle of the account that created this webhook. */
-			creatorUsername: components["schemas"]["Username"];
+			creatorUsername: components["schemas"]["Handle"];
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
 			/** @description Human-readable name for the webhook. */
@@ -10239,8 +10925,8 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
-			/** @description Slug of the workspace this webhook belongs to. */
-			workspaceSlug: components["schemas"]["Slug"];
+			/** @description Handle of the workspace this webhook belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Defines the types of events that can trigger webhook delivery.
@@ -10313,7 +10999,7 @@ export interface components {
 			 */
 			createdAt: string;
 			/** @description Handle of the account that created this workspace. */
-			creatorUsername: components["schemas"]["Username"];
+			creatorUsername: components["schemas"]["Handle"];
 			/** @description Description of the workspace. */
 			description?: string;
 			/** @description Display name of the workspace. */
@@ -10323,7 +11009,7 @@ export interface components {
 			/** @description Whether approval is required to processed files to be visible. */
 			requireApproval: boolean;
 			/** @description URL-safe workspace identifier. */
-			slug: components["schemas"]["Slug"];
+			slug: components["schemas"]["Handle"];
 			/** @description Tags associated with the workspace. */
 			tags: string[];
 			/**

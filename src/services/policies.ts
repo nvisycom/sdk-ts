@@ -88,7 +88,7 @@ export class Policies {
 		policySlug: string,
 		updates: UpdatePolicy,
 	): Promise<Policy> {
-		const { data } = await this.#api.PUT(
+		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/policies/{policySlug}/",
 			{
 				params: { path: { workspaceSlug, policySlug } },

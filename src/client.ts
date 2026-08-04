@@ -35,6 +35,7 @@ import {
 	Policies,
 	Runs,
 	Status,
+	Syncs,
 	Webhooks,
 	Workspaces,
 } from "@/services/index.js";
@@ -292,6 +293,13 @@ export class Nvisy {
 	 */
 	get runs(): Runs {
 		return new Runs(this.#api);
+	}
+
+	/**
+	 * Service for managing connection syncs.
+	 */
+	get syncs(): Syncs {
+		return new Syncs(this.#api);
 	}
 
 	/**

@@ -2,6 +2,7 @@ import type { ApiClient } from "@/client.js";
 import type {
 	Connection,
 	ConnectionsPage,
+	ConnectionVerification,
 	CreateConnection,
 	CursorPagination,
 	UpdateConnection,
@@ -91,7 +92,7 @@ export class Connections {
 		connectionId: string,
 		updates: UpdateConnection,
 	): Promise<Connection> {
-		const { data } = await this.#api.PUT(
+		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
 			{
 				params: { path: { workspaceSlug, connectionId } },
@@ -118,5 +119,25 @@ export class Connections {
 				params: { path: { workspaceSlug, connectionId } },
 			},
 		);
+	}
+
+	/**
+	 * Verify a connection's configuration and credentials
+	 * @param workspaceSlug - Workspace slug
+	 * @param connectionId - Connection ID
+	 * @returns Promise that resolves with the verification result
+	 * @throws {ApiError} if the request fails
+	 */
+	async verifyConnection(
+		workspaceSlug: string,
+		connectionId: string,
+	): Promise<ConnectionVerification> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/connections/{connectionId}/verify/",
+			{
+				params: { path: { workspaceSlug, connectionId } },
+			},
+		);
+		return data!;
 	}
 }
