@@ -1,7 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	Connection,
-	ConnectionsPage,
+	ConnectionPage,
 	ConnectionVerification,
 	CreateConnection,
 	CursorPagination,
@@ -28,7 +28,7 @@ export class Connections {
 	async listConnections(
 		workspaceSlug: string,
 		query?: CursorPagination & { provider?: string },
-	): Promise<ConnectionsPage> {
+	): Promise<ConnectionPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/connections/",
 			{

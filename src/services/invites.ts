@@ -4,9 +4,9 @@ import type {
 	CursorPagination,
 	GenerateInviteCode,
 	InviteCode,
+	InvitePage,
 	InvitePreview,
 	InviteSent,
-	InvitesPage,
 	ListInvites,
 	Member,
 	ReplyInvite,
@@ -32,7 +32,7 @@ export class Invites {
 	async listInvites(
 		workspaceSlug: string,
 		query?: ListInvites & CursorPagination,
-	): Promise<InvitesPage> {
+	): Promise<InvitePage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/invites/",
 			{

@@ -1,7 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	ConnectionSync,
-	ConnectionSyncsPage,
+	ConnectionSyncPage,
 	CursorPagination,
 	SyncConnection,
 } from "@/datatypes/index.js";
@@ -51,7 +51,7 @@ export class Syncs {
 		workspaceSlug: string,
 		connectionId: string,
 		query?: CursorPagination,
-	): Promise<ConnectionSyncsPage> {
+	): Promise<ConnectionSyncPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/",
 			{

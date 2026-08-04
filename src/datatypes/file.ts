@@ -8,4 +8,4 @@ export type FileSource = Schemas["FileSource"];
 export type FormatToken = Schemas["FormatToken"];
 export type ModalityToken = Schemas["ModalityToken"];
 export type ListFiles = Schemas["ListFiles"];
-export type FilesPage = Schemas["FilesPage"];
+export type FilePage = Schemas["FilePage"];

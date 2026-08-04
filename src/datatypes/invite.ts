@@ -14,4 +14,4 @@ export type ListInvites = Schemas["ListInvites"];
 export type InviteSortField = Schemas["InviteSortField"];
 export type SortOrder = Schemas["SortOrder"];
 export type InvitePreview = Schemas["InvitePreview"];
-export type InvitesPage = Schemas["InvitesPage"];
+export type InvitePage = Schemas["InvitePage"];

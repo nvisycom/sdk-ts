@@ -7,4 +7,4 @@ export type NotificationEvent = Schemas["NotificationEvent"];
 export type NotificationSettings = Schemas["NotificationSettings"];
 export type UpdateNotificationSettings = Schemas["UpdateNotificationSettings"];
 export type UnreadStatus = Schemas["UnreadStatus"];
-export type NotificationsPage = Schemas["NotificationsPage"];
+export type NotificationPage = Schemas["NotificationPage"];
