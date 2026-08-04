@@ -332,7 +332,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiTokensPage"];
+						"application/json": components["schemas"]["ApiTokenPage"];
 					};
 				};
 				/**
@@ -726,7 +726,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspacesPage"];
+						"application/json": components["schemas"]["WorkspacePage"];
 					};
 				};
 				/**
@@ -1299,7 +1299,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ActivitysPage"];
+						"application/json": components["schemas"]["ActivityPage"];
 					};
 				};
 				/**
@@ -1387,7 +1387,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionsPage"];
+						"application/json": components["schemas"]["ConnectionPage"];
 					};
 				};
 				/**
@@ -2079,7 +2079,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSyncsPage"];
+						"application/json": components["schemas"]["ConnectionSyncPage"];
 					};
 				};
 				/**
@@ -2383,7 +2383,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InvitesPage"];
+						"application/json": components["schemas"]["InvitePage"];
 					};
 				};
 				/**
@@ -3101,7 +3101,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["MembersPage"];
+						"application/json": components["schemas"]["MemberPage"];
 					};
 				};
 				/**
@@ -3573,7 +3573,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WebhooksPage"];
+						"application/json": components["schemas"]["WebhookPage"];
 					};
 				};
 				/**
@@ -4160,7 +4160,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["FilesPage"];
+						"application/json": components["schemas"]["FilePage"];
 					};
 				};
 				/**
@@ -4683,7 +4683,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineSummarysPage"];
+						"application/json": components["schemas"]["PipelineSummaryPage"];
 					};
 				};
 				/**
@@ -5146,7 +5146,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRunsPage"];
+						"application/json": components["schemas"]["PipelineRunPage"];
 					};
 				};
 				/**
@@ -5249,7 +5249,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRunsPage"];
+						"application/json": components["schemas"]["PipelineRunPage"];
 					};
 				};
 				/**
@@ -5798,7 +5798,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PolicysPage"];
+						"application/json": components["schemas"]["PolicyPage"];
 					};
 				};
 				/**
@@ -6256,7 +6256,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["NotificationsPage"];
+						"application/json": components["schemas"]["NotificationPage"];
 					};
 				};
 				/**
@@ -6686,6 +6686,24 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ActivityPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Activity"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
 		 * @description Defines the type of activity performed in a workspace for audit logging.
 		 *
 		 *     This enumeration corresponds to the `ACTIVITY_TYPE` PostgreSQL enum and is used
@@ -6717,24 +6735,6 @@ export interface components {
 			| "file:deleted"
 			| "file:verified"
 			| "custom";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ActivitysPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Activity"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
 		/**
 		 * @description What detection found in one document.
 		 *
@@ -6829,6 +6829,24 @@ export interface components {
 			sessionType: components["schemas"]["ApiTokenType"];
 		};
 		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ApiTokenPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["ApiToken"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
 		 * @description Defines the type of API token for authentication and tracking purposes.
 		 *
 		 *     This enumeration corresponds to the `API_TOKEN_TYPE` PostgreSQL enum and is used
@@ -6858,24 +6876,6 @@ export interface components {
 			sessionType: components["schemas"]["ApiTokenType"];
 			/** @description The JWT token string (only shown once on creation). */
 			token: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ApiTokensPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["ApiToken"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
 		};
 		/** @description Response type for a pipeline artifact. */
 		Artifact: {
@@ -6949,6 +6949,267 @@ export interface components {
 			filename?: string;
 		};
 		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		AudioEntity: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["AudioLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["AudioProvenance"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		AudioEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["AudioEntity"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		AudioEvent: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["AudioEventKind"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		AudioEventKind:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["AudioLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["AudioLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["AudioHint"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["AudioLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		AudioHint: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["AudioData"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["AudioLocation"];
+		};
+		/**
 		 * @description A [`TimeSpan`] within audio content, with an optional speaker label.
 		 *
 		 *     The time span is the coordinate; ordering and overlap consider only it.
@@ -6964,6 +7225,31 @@ export interface components {
 			span: components["schemas"]["TimeSpan"];
 			/** @description Diarization label of the speaker, when a diarizer assigned one. */
 			speaker_id?: string;
+		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		AudioProvenance: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["AudioEvent"][];
 		};
 		/** @description Operator spec a `redact` audio rule carries. */
 		AudioRedaction:
@@ -7027,6 +7313,34 @@ export interface components {
 			issuedAt: string;
 			/** @description Handle of the authenticated account. */
 			username: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Typed credentials for Azure Blob Storage.
+		 *
+		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
+		 *     to persist the credentials encrypted at rest; they are never returned in API
+		 *     responses.
+		 */
+		AzureCredentials: {
+			/**
+			 * @description Storage account access key.
+			 * @default null
+			 */
+			accessKey: string;
+			/** @description Azure storage account name. */
+			accountName: string;
+			/** @description Azure storage container name. */
+			container: string;
+			/**
+			 * @description Custom endpoint URL (for Azure Stack or Azurite).
+			 * @default null
+			 */
+			endpoint: string;
+			/**
+			 * @description Shared Access Signature token.
+			 * @default null
+			 */
+			sasToken: string;
 		};
 		/**
 		 * @description Axis-aligned rectangle, given by its minimum and maximum corners.
@@ -7144,8 +7458,63 @@ export interface components {
 			/** @description Handle of the workspace this connection belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
+		/**
+		 * @description A fully-typed object-store connection configuration.
+		 *
+		 *     The `provider` tag selects the variant and thereby the credential shape, so
+		 *     an S3 connection cannot carry Azure credentials. Each variant carries a
+		 *     shared optional `root_path` and a nested `credentials` object, giving a wire
+		 *     shape like
+		 *     `{ "provider": "s3", "rootPath": "in/", "credentials": { "bucket": "b", "accessKeyId": "..." } }`.
+		 *
+		 *     Secrets are masked in [`Debug`]; serialization exists only to persist the
+		 *     config encrypted at rest, never to return it in API responses.
+		 */
+		ConnectionConfig:
+			| {
+					/** @description S3 credentials. */
+					credentials: components["schemas"]["S3Credentials"];
+					/** @constant */
+					provider: "s3";
+					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
+					rootPath?: string;
+			  }
+			| {
+					/** @description Azure credentials. */
+					credentials: components["schemas"]["AzureCredentials"];
+					/** @constant */
+					provider: "azure";
+					/** @description Optional root prefix within the container; keys resolve relative to it. */
+					rootPath?: string;
+			  }
+			| {
+					/** @description GCS credentials. */
+					credentials: components["schemas"]["GcsCredentials"];
+					/** @constant */
+					provider: "gcs";
+					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
+					rootPath?: string;
+			  };
 		/** @description Opaque conn identifier (conn_<uuid>). */
 		ConnectionId: string;
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ConnectionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Connection"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
 		/**
 		 * @description Path parameters for connection operations.
 		 *
@@ -7194,16 +7563,6 @@ export interface components {
 			/** @description How the sync was triggered. */
 			triggerType: components["schemas"]["SyncTriggerType"];
 		};
-		/** @description Path parameters for a specific connection sync. */
-		ConnectionSyncPathParams: {
-			/** @description Opaque identifier of the connection. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the sync run.
-			 */
-			syncId: string;
-		};
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -7211,7 +7570,7 @@ export interface components {
 		 *     cursor-based pagination support. When `next_cursor` is present, there
 		 *     are more items to fetch.
 		 */
-		ConnectionSyncsPage: {
+		ConnectionSyncPage: {
 			/** @description Items in this page. */
 			items: components["schemas"]["ConnectionSync"][];
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
@@ -7222,30 +7581,22 @@ export interface components {
 			 */
 			total?: number;
 		};
+		/** @description Path parameters for a specific connection sync. */
+		ConnectionSyncPathParams: {
+			/** @description Opaque identifier of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the sync run.
+			 */
+			syncId: string;
+		};
 		/** @description Result of a connection reachability check. */
 		ConnectionVerification: {
 			/** @description Failure reason when not reachable; omitted on success. */
 			error?: string;
 			/** @description Whether the backing store was reachable with the stored credentials. */
 			reachable: boolean;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ConnectionsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Connection"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
 		};
 		/** @description Query parameters for listing connections. */
 		ConnectionsQuery: {
@@ -7278,10 +7629,11 @@ export interface components {
 		/** @description Request payload for creating a new workspace connection. */
 		CreateConnection: {
 			/**
-			 * @description Connection data to be encrypted (provider credentials + optional root
-			 *     path). The structure depends on the provider type.
+			 * @description Typed provider configuration (provider tag + its credentials + optional
+			 *     root path), encrypted at rest. The `provider` tag selects which
+			 *     credential shape is required.
 			 */
-			data: unknown;
+			config: components["schemas"]["ConnectionConfig"];
 			/**
 			 * @description How an import reconciles files whose source object was deleted.
 			 * @default ignore
@@ -7289,8 +7641,6 @@ export interface components {
 			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Human-readable connection display name. */
 			displayName: string;
-			/** @description Object store provider (`s3`, `azure`, `gcs`). */
-			provider: string;
 			/** @description Cron expression for scheduled imports; omit for manual-only. */
 			scheduleCron?: string;
 			/**
@@ -7633,298 +7983,6 @@ export interface components {
 					not: components["schemas"]["DocumentPredicate"];
 			  };
 		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		Entity: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["TextLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["Provenance"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
-			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		Entity2: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["TabularLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["Provenance2"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
-			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		Entity3: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["ImageLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["Provenance3"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
-			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		Entity4: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["AudioLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["Provenance4"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
-			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
 		 * @description Coreference identifier shared by entities that denote the same
 		 *     real-world thing.
 		 *
@@ -7939,82 +7997,6 @@ export interface components {
 		 *     mentions, not a global key.
 		 */
 		EntityCoRef: string;
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		EntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["Entity"];
-			/**
-			 * @description Reviewer-supplied override.
-			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
-			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		EntityRecord2: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["Entity2"];
-			/**
-			 * @description Reviewer-supplied override.
-			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
-			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		EntityRecord3: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["Entity3"];
-			/**
-			 * @description Reviewer-supplied override.
-			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
-			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		EntityRecord4: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["Entity4"];
-			/**
-			 * @description Reviewer-supplied override.
-			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
-			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
-		};
 		/**
 		 * @description HTTP error response representation with security-conscious design.
 		 *
@@ -8034,590 +8016,6 @@ export interface components {
 			/** @description Validation error details for field-specific errors */
 			validation?: components["schemas"]["ValidationErrorDetail"][];
 		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		Event: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
-			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
-			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["EventKind"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
-			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
-			 */
-			source: string;
-		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		Event2: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
-			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
-			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["EventKind2"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
-			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
-			 */
-			source: string;
-		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		Event3: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
-			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
-			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["EventKind3"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
-			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
-			 */
-			source: string;
-		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		Event4: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
-			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
-			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["EventKind4"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
-			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
-			 */
-			source: string;
-		};
-		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
-		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
-		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
-		 *     [`Location`]: Modality::Location
-		 */
-		EventKind:
-			| {
-					/** @constant */
-					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TextLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TextLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
-			  }
-			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @constant */
-					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
-			  }
-			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
-					/** @constant */
-					kind: "contested";
-			  }
-			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
-					/** @constant */
-					kind: "calibration";
-			  }
-			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["Hint"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
-					/** @constant */
-					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["TextLocation"];
-			  }
-			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
-					/** @constant */
-					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-			  };
-		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
-		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
-		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
-		 *     [`Location`]: Modality::Location
-		 */
-		EventKind2:
-			| {
-					/** @constant */
-					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TabularLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TabularLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
-			  }
-			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @constant */
-					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
-			  }
-			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
-					/** @constant */
-					kind: "contested";
-			  }
-			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
-					/** @constant */
-					kind: "calibration";
-			  }
-			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["Hint2"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
-					/** @constant */
-					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["TabularLocation"];
-			  }
-			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
-					/** @constant */
-					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-			  };
-		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
-		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
-		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
-		 *     [`Location`]: Modality::Location
-		 */
-		EventKind3:
-			| {
-					/** @constant */
-					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["ImageLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["ImageLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
-			  }
-			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @constant */
-					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
-			  }
-			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
-					/** @constant */
-					kind: "contested";
-			  }
-			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
-					/** @constant */
-					kind: "calibration";
-			  }
-			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["Hint3"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
-					/** @constant */
-					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["ImageLocation"];
-			  }
-			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
-					/** @constant */
-					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-			  };
-		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
-		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
-		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
-		 *     [`Location`]: Modality::Location
-		 */
-		EventKind4:
-			| {
-					/** @constant */
-					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["AudioLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["AudioLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
-			  }
-			| {
-					/** @constant */
-					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
-			  }
-			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @constant */
-					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
-			  }
-			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
-					/** @constant */
-					kind: "contested";
-			  }
-			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
-					/** @constant */
-					kind: "calibration";
-			  }
-			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["Hint4"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
-					/** @constant */
-					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["AudioLocation"];
-			  }
-			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
-					/** @constant */
-					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-			  };
 		/** @description Represents a file in responses. */
 		File: {
 			/**
@@ -8668,21 +8066,13 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description Defines how a file was created in the system.
-		 *
-		 *     This enumeration corresponds to the `FILE_SOURCE` PostgreSQL enum and is used
-		 *     to track the origin of files - whether they were uploaded by users, imported
-		 *     from external sources, or generated by the system.
-		 */
-		FileSource: "uploaded" | "imported" | "generated";
-		/**
 		 * @description Generic paginated response wrapper.
 		 *
 		 *     Provides a consistent structure for all paginated API responses with
 		 *     cursor-based pagination support. When `next_cursor` is present, there
 		 *     are more items to fetch.
 		 */
-		FilesPage: {
+		FilePage: {
 			/** @description Items in this page. */
 			items: components["schemas"]["File"][];
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
@@ -8693,6 +8083,14 @@ export interface components {
 			 */
 			total?: number;
 		};
+		/**
+		 * @description Defines how a file was created in the system.
+		 *
+		 *     This enumeration corresponds to the `FILE_SOURCE` PostgreSQL enum and is used
+		 *     to track the origin of files - whether they were uploaded by users, imported
+		 *     from external sources, or generated by the system.
+		 */
+		FileSource: "uploaded" | "imported" | "generated";
 		/**
 		 * @description A supported file extension.
 		 * @enum {string}
@@ -8715,6 +8113,32 @@ export interface components {
 			| "wav"
 			| "xlsx"
 			| "xml";
+		/**
+		 * @description Typed credentials for Google Cloud Storage.
+		 *
+		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
+		 *     to persist the credentials encrypted at rest; they are never returned in API
+		 *     responses.
+		 */
+		GcsCredentials: {
+			/** @description GCS bucket name. */
+			bucket: string;
+			/**
+			 * @description Custom endpoint URL (for testing with a fake GCS server).
+			 * @default null
+			 */
+			endpoint: string;
+			/**
+			 * @description Inline service account key JSON (the file contents, not a path).
+			 * @default null
+			 */
+			serviceAccountKeyJson: string;
+			/**
+			 * @description Path to a service account key JSON file on the local filesystem.
+			 * @default null
+			 */
+			serviceAccountPath: string;
+		};
 		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
 			/** @description When the invite code expires. */
@@ -8744,98 +8168,6 @@ export interface components {
 		/** @description Operational status of a service component. */
 		HealthStatus: "healthy" | "degraded" | "unhealthy";
 		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
-		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
-		 *     review consumer can resolve back to the document.
-		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 */
-		Hint: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["TextData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["TextLocation"];
-		};
-		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
-		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
-		 *     review consumer can resolve back to the document.
-		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 */
-		Hint2: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["TextData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["TabularLocation"];
-		};
-		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
-		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
-		 *     review consumer can resolve back to the document.
-		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 */
-		Hint3: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["ImageData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["ImageLocation"];
-		};
-		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
-		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
-		 *     review consumer can resolve back to the document.
-		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 */
-		Hint4: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["AudioData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["AudioLocation"];
-		};
-		/**
 		 * @description Per-call payload a recognizer inspects for the [`Image`] modality.
 		 *
 		 *     Carries the encoded bytes plus the pixel [`Dimensions`], which a
@@ -8850,6 +8182,267 @@ export interface components {
 			dimensions: components["schemas"]["Dimensions"];
 			/** @description Original filename, when known. */
 			filename?: string;
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		ImageEntity: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["ImageLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["ImageProvenance"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		ImageEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["ImageEntity"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		ImageEvent: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["ImageEventKind"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		ImageEventKind:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["ImageLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["ImageLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["ImageHint"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["ImageLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		ImageHint: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["ImageData"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["ImageLocation"];
 		};
 		/**
 		 * @description Region within image content.
@@ -8872,6 +8465,31 @@ export interface components {
 			 *     Axis-aligned-only sources leave this unset.
 			 */
 			polygon?: components["schemas"]["Polygon"];
+		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		ImageProvenance: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["ImageEvent"][];
 		};
 		/** @description Operator spec a `redact` image rule carries. */
 		ImageRedaction:
@@ -8978,6 +8596,24 @@ export interface components {
 		};
 		/** @description Expiration options for invite codes. */
 		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		InvitePage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Invite"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
 		/** @description Path parameters for invite operations. */
 		InvitePathParams: {
 			/**
@@ -9040,24 +8676,6 @@ export interface components {
 			| "canceled"
 			| "expired"
 			| "revoked";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		InvitesPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Invite"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
 		/**
 		 * @description Kind of sensitive information: a name, an optional description, and
 		 *     zero or more tags.
@@ -9278,13 +8896,6 @@ export interface components {
 			/** @description Handle of the member's account. */
 			username: components["schemas"]["Handle"];
 		};
-		/** @description Path parameters for workspace member operations. */
-		MemberPathParams: {
-			/** @description Public handle of the member's account. */
-			username: components["schemas"]["Handle"];
-		};
-		/** @description Fields available for sorting workspace members. */
-		MemberSortField: "name" | "date";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -9292,7 +8903,7 @@ export interface components {
 		 *     cursor-based pagination support. When `next_cursor` is present, there
 		 *     are more items to fetch.
 		 */
-		MembersPage: {
+		MemberPage: {
 			/** @description Items in this page. */
 			items: components["schemas"]["Member"][];
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
@@ -9303,6 +8914,13 @@ export interface components {
 			 */
 			total?: number;
 		};
+		/** @description Path parameters for workspace member operations. */
+		MemberPathParams: {
+			/** @description Public handle of the member's account. */
+			username: components["schemas"]["Handle"];
+		};
+		/** @description Fields available for sorting workspace members. */
+		MemberSortField: "name" | "date";
 		/**
 		 * @description How the merging reconciler combines same-label overlaps.
 		 *
@@ -9399,15 +9017,6 @@ export interface components {
 			| "connection:desynced"
 			| "system:announcement"
 			| "system:report";
-		/** @description Response for notification settings within a workspace. */
-		NotificationSettings: {
-			/** @description Notification events to receive in-app. */
-			notificationEventsApp: components["schemas"]["NotificationEvent"][];
-			/** @description Notification events to receive via email. */
-			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
-			/** @description Whether to send email notifications. */
-			notifyViaEmail: boolean;
-		};
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -9415,7 +9024,7 @@ export interface components {
 		 *     cursor-based pagination support. When `next_cursor` is present, there
 		 *     are more items to fetch.
 		 */
-		NotificationsPage: {
+		NotificationPage: {
 			/** @description Items in this page. */
 			items: components["schemas"]["Notification"][];
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
@@ -9425,6 +9034,15 @@ export interface components {
 			 * @description Total count of items matching the query (if requested).
 			 */
 			total?: number;
+		};
+		/** @description Response for notification settings within a workspace. */
+		NotificationSettings: {
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
+			/** @description Whether to send email notifications. */
+			notifyViaEmail: boolean;
 		};
 		/**
 		 * @description Identifies a redaction operator, for the redaction audit a higher
@@ -9646,6 +9264,24 @@ export interface components {
 			/** @description Handle of the workspace this run belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		PipelineRunPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["PipelineRun"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
 		/** @description Path parameters for pipeline run operations. */
 		PipelineRunPathParams: {
 			/** @description Opaque identifier of the run. */
@@ -9663,24 +9299,6 @@ export interface components {
 			| "completed"
 			| "failed"
 			| "cancelled";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		PipelineRunsPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["PipelineRun"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
 		/**
 		 * @description Defines the lifecycle status of a pipeline definition.
 		 *
@@ -9716,7 +9334,7 @@ export interface components {
 		 *     cursor-based pagination support. When `next_cursor` is present, there
 		 *     are more items to fetch.
 		 */
-		PipelineSummarysPage: {
+		PipelineSummaryPage: {
 			/** @description Items in this page. */
 			items: components["schemas"]["PipelineSummary"][];
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
@@ -9861,6 +9479,24 @@ export interface components {
 					kind: "audit";
 			  } & components["schemas"]["AuditAction"]);
 		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		PolicyPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Policy2"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
 		 * @description Path parameters for policy operations.
 		 *
 		 *     The workspace is resolved by the [`WorkspaceContext`] extractor from the
@@ -9902,24 +9538,6 @@ export interface components {
 			 *     [`Predicate`] for the full grammar.
 			 */
 			predicate: components["schemas"]["Predicate"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		PolicysPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Policy2"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
 		};
 		/**
 		 * @description Closed polygon, given by its ordered vertices.
@@ -9984,106 +9602,6 @@ export interface components {
 					not: components["schemas"]["Predicate"];
 			  };
 		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		Provenance: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["Event"][];
-		};
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		Provenance2: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["Event2"][];
-		};
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		Provenance3: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["Event3"][];
-		};
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		Provenance4: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["Event4"][];
-		};
-		/**
 		 * @description How to pick recognizers out of a deployment-configured lineup.
 		 *
 		 *     Untagged on the wire: `true` / `false` / a list of names.
@@ -10133,25 +9651,25 @@ export interface components {
 		RecognizedGroup:
 			| {
 					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["EntityRecord"][];
+					entities: components["schemas"]["TextEntityRecord"][];
 					/** @constant */
 					modality: "text";
 			  }
 			| {
 					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["EntityRecord2"][];
+					entities: components["schemas"]["TabularEntityRecord"][];
 					/** @constant */
 					modality: "tabular";
 			  }
 			| {
 					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["EntityRecord3"][];
+					entities: components["schemas"]["ImageEntityRecord"][];
 					/** @constant */
 					modality: "image";
 			  }
 			| {
 					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["EntityRecord4"][];
+					entities: components["schemas"]["AudioEntityRecord"][];
 					/** @constant */
 					modality: "audio";
 			  };
@@ -10258,6 +9776,43 @@ export interface components {
 			| "fallback";
 		/** @description Opaque run identifier (run_<uuid>). */
 		RunId: string;
+		/**
+		 * @description Typed credentials for S3-compatible provider.
+		 *
+		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
+		 *     to persist the credentials encrypted at rest; they are never returned in API
+		 *     responses.
+		 */
+		S3Credentials: {
+			/**
+			 * @description Access key ID for static credentials.
+			 * @default null
+			 */
+			accessKeyId: string;
+			/** @description S3 bucket name. */
+			bucket: string;
+			/**
+			 * @description Endpoint URL (e.g. `http://localhost:9000` for MinIO).
+			 *     Required for non-AWS S3-compatible services.
+			 * @default null
+			 */
+			endpoint: string;
+			/**
+			 * @description AWS region (defaults to `us-east-1`).
+			 * @default us-east-1
+			 */
+			region: string;
+			/**
+			 * @description Secret access key for static credentials.
+			 * @default null
+			 */
+			secretAccessKey: string;
+			/**
+			 * @description Session token for temporary credentials.
+			 * @default null
+			 */
+			sessionToken: string;
+		};
 		/**
 		 * @description Caller-asserted scope shared across every payload of one analysis.
 		 *
@@ -10465,6 +10020,267 @@ export interface components {
 		 */
 		SyncTriggerType: "manual" | "scheduled" | "webhook";
 		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		TabularEntity: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TabularLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["TabularProvenance"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		TabularEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["TabularEntity"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		TabularEvent: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["TabularEventKind"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		TabularEventKind:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TabularLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TabularLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["TabularHint"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["TabularLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		TabularHint: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["TextData"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["TabularLocation"];
+		};
+		/**
 		 * @description Cell-addressed location within tabular content.
 		 *
 		 *     Identifies a cell by zero-based [`row_index`] and
@@ -10511,6 +10327,31 @@ export interface components {
 			 */
 			start_offset?: number;
 		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		TabularProvenance: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["TabularEvent"][];
+		};
 		/** @description Operator spec a `redact` tabular rule carries. */
 		TabularRedaction:
 			| {
@@ -10551,6 +10392,267 @@ export interface components {
 		 */
 		TextData: string;
 		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its provenance. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`provenance`]: Entity::provenance
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		TextEntity: {
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TextLocation"];
+			/**
+			 * @description Detection audit trail: every contributing detection and the fusion
+			 *     event, if any.
+			 */
+			provenance: components["schemas"]["TextProvenance"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		TextEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["TextEntity"];
+			/**
+			 * @description Reviewer-supplied override.
+			 *
+			 *     `None` means "use the policy's decision"; `Some(action)`
+			 *     overrides it for this specific entity at apply time.
+			 */
+			reviewerOverride?: components["schemas"]["PolicyAction"];
+		};
+		/**
+		 * @description One thing that happened to an entity, with its effect on confidence.
+		 *
+		 *     Events are recorded in order on an entity's [`Provenance`], forming
+		 *     the full audit trail of its life: each recognizer that found it, the
+		 *     deduplication that fused them, any score calibration, and the
+		 *     redaction that hid it. The uniform spine (who, before/after score,
+		 *     when, why) is the same for every event; the [`kind`] carries the
+		 *     event-specific detail.
+		 *
+		 *     `entity.confidence` always equals the [`after`] of the most recent
+		 *     event.
+		 *
+		 *     [`Provenance`]: crate::entity::provenance::Provenance
+		 *     [`kind`]: Event::kind
+		 *     [`after`]: Event::after
+		 */
+		TextEvent: {
+			/** @description Confidence after this event. */
+			after: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			at: string;
+			/**
+			 * @description Confidence before this event, if there was a prior value. `None` on
+			 *     the first (birth) event.
+			 */
+			before?: components["schemas"]["Confidence"];
+			/** @description Kind of event, with its event-specific detail. */
+			kind: components["schemas"]["TextEventKind"];
+			/** @description Free-text explanation of what the event did and why. */
+			reason: string;
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+		};
+		/**
+		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
+		 *     can be added compatibly. The recognition kinds ([`Pattern`],
+		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
+		 *     data.
+		 *
+		 *     [`Pattern`]: EventKind::Pattern
+		 *     [`Model`]: EventKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		TextEventKind:
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TextLocation"];
+					/** @description Pattern detail. */
+					pattern: components["schemas"]["PatternEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					/** @description Where the recognizer matched. */
+					location: components["schemas"]["TextLocation"];
+					/** @description Model detail. */
+					model: components["schemas"]["ModelEvent"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					/** @description Name of the fusion strategy that combined them. */
+					strategy: string;
+			  }
+			| {
+					/** @description The loser's confidence at resolution time. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the detection that lost arbitration. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @constant */
+					kind: "conflict";
+					/** @description Name of the conflict policy that chose the winner. */
+					resolved_by: string;
+			  }
+			| {
+					/** @description The competing detection's confidence. */
+					competing_confidence: components["schemas"]["Confidence"];
+					/** @description The label of the competing detection. */
+					competing_label: components["schemas"]["LabelRef"];
+					/** @description Name of the policy that flagged the contest. */
+					flagged_by: string;
+					/** @constant */
+					kind: "contested";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Multiplier applied.
+					 */
+					factor: number;
+					/** @constant */
+					kind: "calibration";
+			  }
+			| {
+					/**
+					 * @description The located [`Hint`] the keyword fired from, when the match came
+					 *     from an out-of-band hint (a column header, a key) rather than
+					 *     the in-text word window. `None` for an in-text-window match.
+					 *
+					 *     [`Hint`]: crate::modality::Hint
+					 */
+					hint?: components["schemas"]["TextHint"];
+					/** @description Keyword that fired the boost. */
+					keyword: string;
+					/** @constant */
+					kind: "refinement";
+					/**
+					 * @description Where the boosting keyword sits in the medium. For a hint match
+					 *     this mirrors the hint's own location; for an in-text-window match
+					 *     it is the keyword resolved through the modality's [`locate`] (a
+					 *     pixel box for image, a time span for audio, the byte range for
+					 *     text/tabular). `None` when the keyword's stream range could not be
+					 *     placed — symmetric with a match the recognizer itself drops.
+					 *
+					 *     [`locate`]: crate::modality::TextRecognizable::locate
+					 */
+					location?: components["schemas"]["TextLocation"];
+			  }
+			| {
+					/**
+					 * @description The author-supplied policy rationale, when the operator carried an
+					 *     [`Attribution`]; `None` otherwise.
+					 */
+					attribution?: components["schemas"]["Attribution"];
+					/** @description Identifier of the key needed to reverse it, if reversible. */
+					key_id?: string;
+					/** @constant */
+					kind: "redaction";
+					/** @description How much the output leaks about the original. */
+					leak_profile: components["schemas"]["LeakProfile"];
+					/**
+					 * @description Which selection rule chose this operator — the automatic "why"
+					 *     (matched a label, a tag, a predicate, or the fallback).
+					 */
+					matched_by: components["schemas"]["RuleMatch"];
+					/** @description Which operator (name + version) ran. */
+					operator: components["schemas"]["OperatorId"];
+			  };
+		/**
+		 * @description Located, typed piece of context a recognizer may treat as in-context
+		 *     for a nearby value.
+		 *
+		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
+		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     JSON object key, a log field name). So `location` points at where the
+		 *     hint text actually sits, and `data` is the hint text itself. Carrying
+		 *     the location (rather than a bare string) lets a confidence boost record
+		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     review consumer can resolve back to the document.
+		 *
+		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
+		 *     serialization and lifting patterns apply.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		TextHint: {
+			/** @description The hint text itself (a column header, a field name). */
+			data: components["schemas"]["TextData"];
+			/** @description Where the hint text sits in the source (the header cell, the key). */
+			location: components["schemas"]["TextLocation"];
+		};
+		/**
 		 * @description Half-open `[start, end)` byte range within text content.
 		 *
 		 *     Ordering and overlap consider only `(start, end)`; the optional page
@@ -10573,6 +10675,31 @@ export interface components {
 			 * @description Byte offset where the range starts.
 			 */
 			start: number;
+		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
+		 *     order.
+		 *
+		 *     This is the model's answer to "full provenance": where Presidio keeps
+		 *     a shallow, optional, per-stage explanation that is stripped by
+		 *     default, a `Provenance` is always present and records the entity's
+		 *     *entire* life as an ordered list of events: each recognizer that
+		 *     found it, the deduplication that fused them, any confidence
+		 *     calibration, and the redaction that hid it. Nothing is collapsed:
+		 *     every recognizer keeps its own recognition event with its location
+		 *     and score.
+		 *
+		 *     The events form a confidence chain (each event's [`after`] is the
+		 *     next's [`before`]) so the final confidence and its full history are
+		 *     always recoverable.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`after`]: Event::after
+		 *     [`before`]: Event::before
+		 */
+		TextProvenance: {
+			/** @description Events, in the order they happened. */
+			events: components["schemas"]["TextEvent"][];
 		};
 		/** @description Operator spec a `redact` text rule carries. */
 		TextRedaction:
@@ -10717,10 +10844,10 @@ export interface components {
 		/** @description Request payload for updating an existing workspace connection. */
 		UpdateConnection: {
 			/**
-			 * @description Connection data to be encrypted (provider credentials + optional root
-			 *     path). If provided, replaces the existing encrypted data.
+			 * @description Typed provider configuration. If provided, fully replaces the stored
+			 *     config (and, with it, the provider). Omit to leave it unchanged.
 			 */
-			data?: unknown;
+			config?: components["schemas"]["ConnectionConfig"];
 			/** @description How an import reconciles files whose source object was deleted. */
 			deletionPolicy?: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Human-readable connection display name. */
@@ -10948,6 +11075,24 @@ export interface components {
 			| "connection:desynced";
 		/** @description Opaque whk identifier (whk_<uuid>). */
 		WebhookId: string;
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WebhookPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Webhook"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
 		/** @description Path parameters for webhook operations. */
 		WebhookPathParams: {
 			/** @description Opaque identifier of the webhook. */
@@ -10973,24 +11118,6 @@ export interface components {
 		 *     to manage webhook states from active operation through pausing and disabling.
 		 */
 		WebhookStatus: "active" | "paused" | "disabled";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WebhooksPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Webhook"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
 		/** @description Workspace response. */
 		Workspace: {
 			/**
@@ -11027,6 +11154,24 @@ export interface components {
 			fileId: string;
 		};
 		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacePage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Workspace"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
 		 * @description Defines the role and permission level of a workspace member.
 		 *
 		 *     This enumeration corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
@@ -11037,24 +11182,6 @@ export interface components {
 		WorkspaceRunsQuery: {
 			/** @description Filter by run status. */
 			status?: components["schemas"]["PipelineRunStatus"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspacesPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Workspace"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
 		};
 	};
 	responses: never;

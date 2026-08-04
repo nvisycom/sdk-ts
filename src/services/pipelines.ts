@@ -4,7 +4,7 @@ import type {
 	CursorPagination,
 	Pipeline,
 	PipelineStatus,
-	PipelineSummariesPage,
+	PipelineSummaryPage,
 	UpdatePipeline,
 } from "@/datatypes/index.js";
 
@@ -28,7 +28,7 @@ export class Pipelines {
 	async listPipelines(
 		workspaceSlug: string,
 		query?: CursorPagination & { search?: string; status?: PipelineStatus },
-	): Promise<PipelineSummariesPage> {
+	): Promise<PipelineSummaryPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/",
 			{

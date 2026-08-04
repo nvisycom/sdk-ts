@@ -3,7 +3,7 @@ import type {
 	CursorPagination,
 	ListMembers,
 	Member,
-	MembersPage,
+	MemberPage,
 	UpdateMember,
 } from "@/datatypes/index.js";
 
@@ -27,7 +27,7 @@ export class Members {
 	async listMembers(
 		workspaceSlug: string,
 		query?: ListMembers & CursorPagination,
-	): Promise<MembersPage> {
+	): Promise<MemberPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/members/",
 			{

@@ -8,6 +8,28 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-08-04
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **BREAKING**: paginated response types renamed from plural to singular
+  base (e.g. `FilesPage` → `FilePage`, `ActivitiesPage` → `ActivityPage`,
+  `PoliciesPage` → `PolicyPage`, `PipelineSummariesPage` →
+  `PipelineSummaryPage`), matching the schema. All list methods return the
+  renamed types.
+
+### Added
+
+- Connection provider config datatypes: `ConnectionConfig`, `S3Credentials`,
+  `AzureCredentials`, `GcsCredentials` (needed to build a connection's
+  `config`)
+- Connection sync datatypes: `SyncMode`, `SyncStatus`, `SyncTriggerType`,
+  `SyncDeletionPolicy`
+- `Artifact` datatype for pipeline run artifacts
+- `scripts/audit-coverage.mjs` and `audit:coverage` / `audit:coverage:remote`
+  scripts to verify the SDK covers every spec operation (1:1)
+
 ## [0.8.0] - 2026-08-04
 
 ### Added
@@ -224,7 +246,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/nvisycom/sdk-ts/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/nvisycom/sdk-ts/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/nvisycom/sdk-ts/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/nvisycom/sdk-ts/compare/v0.5.0...v0.6.0

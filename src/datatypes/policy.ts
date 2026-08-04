@@ -10,4 +10,4 @@ export type CreatePolicy = Schemas["CreatePolicy"];
 export type UpdatePolicy = Schemas["UpdatePolicy"];
 export type PolicyRule = Schemas["PolicyRule"];
 export type PolicyAction = Schemas["PolicyAction"];
-export type PoliciesPage = Schemas["PolicysPage"];
+export type PolicyPage = Schemas["PolicyPage"];

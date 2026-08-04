@@ -6,8 +6,8 @@ import type {
 	UpdateWebhook,
 	Webhook,
 	WebhookCreated,
+	WebhookPage,
 	WebhookResult,
-	WebhooksPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -30,7 +30,7 @@ export class Webhooks {
 	async listWebhooks(
 		workspaceSlug: string,
 		query?: CursorPagination,
-	): Promise<WebhooksPage> {
+	): Promise<WebhookPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/webhooks/",
 			{

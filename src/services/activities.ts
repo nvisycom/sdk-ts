@@ -1,5 +1,5 @@
 import type { ApiClient } from "@/client.js";
-import type { ActivitiesPage, CursorPagination } from "@/datatypes/index.js";
+import type { ActivityPage, CursorPagination } from "@/datatypes/index.js";
 
 /**
  * Service for handling workspace activity operations
@@ -21,7 +21,7 @@ export class Activities {
 	async listActivities(
 		workspaceSlug: string,
 		query?: CursorPagination,
-	): Promise<ActivitiesPage> {
+	): Promise<ActivityPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/activities/",
 			{

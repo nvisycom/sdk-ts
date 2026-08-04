@@ -1,7 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
-	NotificationsPage,
+	NotificationPage,
 	UnreadStatus,
 } from "@/datatypes/index.js";
 
@@ -21,9 +21,7 @@ export class Notifications {
 	 * @returns Promise that resolves with a paginated list of notifications
 	 * @throws {ApiError} if the request fails
 	 */
-	async listNotifications(
-		query?: CursorPagination,
-	): Promise<NotificationsPage> {
+	async listNotifications(query?: CursorPagination): Promise<NotificationPage> {
 		const { data } = await this.#api.GET("/notifications/", {
 			params: { query },
 		});

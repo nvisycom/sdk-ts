@@ -6,7 +6,7 @@ import type {
 	UpdateNotificationSettings,
 	UpdateWorkspace,
 	Workspace,
-	WorkspacesPage,
+	WorkspacePage,
 } from "@/datatypes/index.js";
 
 /**
@@ -25,7 +25,7 @@ export class Workspaces {
 	 * @returns Promise that resolves with a paginated list of workspaces
 	 * @throws {ApiError} if the request fails
 	 */
-	async listWorkspaces(query?: CursorPagination): Promise<WorkspacesPage> {
+	async listWorkspaces(query?: CursorPagination): Promise<WorkspacePage> {
 		const { data } = await this.#api.GET("/workspaces/", {
 			params: { query },
 		});

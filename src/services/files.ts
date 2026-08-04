@@ -2,7 +2,7 @@ import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
 	File,
-	FilesPage,
+	FilePage,
 	ListFiles,
 	UpdateFile,
 } from "@/datatypes/index.js";
@@ -61,7 +61,7 @@ export class Files {
 	async listFiles(
 		workspaceSlug: string,
 		query?: ListFiles & CursorPagination,
-	): Promise<FilesPage> {
+	): Promise<FilePage> {
 		const { data } = await this.#api.GET("/workspaces/{workspaceSlug}/files/", {
 			params: { path: { workspaceSlug }, query },
 		});

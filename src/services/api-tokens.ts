@@ -1,7 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	ApiToken,
-	ApiTokensPage,
+	ApiTokenPage,
 	ApiTokenWithJWT,
 	CreateApiToken,
 	CursorPagination,
@@ -24,7 +24,7 @@ export class ApiTokens {
 	 * @returns Promise that resolves with a paginated list of API tokens
 	 * @throws {ApiError} if the request fails
 	 */
-	async listApiTokens(query?: CursorPagination): Promise<ApiTokensPage> {
+	async listApiTokens(query?: CursorPagination): Promise<ApiTokenPage> {
 		const { data } = await this.#api.GET("/api-tokens/", {
 			params: { query },
 		});

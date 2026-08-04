@@ -2,8 +2,8 @@ import type { ApiClient } from "@/client.js";
 import type {
 	CreatePolicy,
 	CursorPagination,
-	PoliciesPage,
 	Policy,
+	PolicyPage,
 	UpdatePolicy,
 } from "@/datatypes/index.js";
 
@@ -27,7 +27,7 @@ export class Policies {
 	async listPolicies(
 		workspaceSlug: string,
 		query?: CursorPagination,
-	): Promise<PoliciesPage> {
+	): Promise<PolicyPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/policies/",
 			{

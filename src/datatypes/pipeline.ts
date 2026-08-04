@@ -10,4 +10,4 @@ export type PipelineFilter = Schemas["PipelineFilter"];
 export type PipelineStatus = Schemas["PipelineStatus"];
 export type PipelineTriggerType = Schemas["PipelineTriggerType"];
 export type PipelineSummary = Schemas["PipelineSummary"];
-export type PipelineSummariesPage = Schemas["PipelineSummarysPage"];
+export type PipelineSummaryPage = Schemas["PipelineSummaryPage"];

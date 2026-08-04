@@ -4,8 +4,8 @@ import type {
 	CreatePipelineRun,
 	CursorPagination,
 	PipelineRun,
+	PipelineRunPage,
 	PipelineRunStatus,
-	PipelineRunsPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -28,7 +28,7 @@ export class Runs {
 	async listRuns(
 		workspaceSlug: string,
 		query?: CursorPagination & { status?: PipelineRunStatus },
-	): Promise<PipelineRunsPage> {
+	): Promise<PipelineRunPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/runs/",
 			{
@@ -50,7 +50,7 @@ export class Runs {
 		workspaceSlug: string,
 		pipelineSlug: string,
 		query?: CursorPagination,
-	): Promise<PipelineRunsPage> {
+	): Promise<PipelineRunPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/runs/",
 			{
