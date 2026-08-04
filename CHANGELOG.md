@@ -8,6 +8,19 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-08-04
+
+### Added
+
+- `syncs.listWorkspaceSyncs()` to list all syncs across a workspace's
+  connections (`GET /workspaces/{workspaceSlug}/syncs/`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- `connections.listConnections()` and `syncs.listWorkspaceSyncs()` accept a
+  repeatable `provider` filter (`string[]`)
+
 ## [0.9.0] - 2026-08-04
 
 ### Changed
@@ -246,7 +259,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/nvisycom/sdk-ts/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/nvisycom/sdk-ts/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/nvisycom/sdk-ts/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/nvisycom/sdk-ts/compare/v0.6.0...v0.7.0
