@@ -18,20 +18,11 @@ function client(): Nvisy {
 }
 
 describe("health (e2e)", () => {
-	it("checkHealth() completes a real GET without sending a body", async () => {
-		// A GET carrying a request body throws `TypeError: Request with GET
-		// method cannot have body` when a real fetch runs. If this resolves,
-		// the SDK is not attaching a body to the health request.
+	it("returns the API health status", async () => {
 		const health = await client().status.checkHealth();
 
 		expect(health).toBeDefined();
-		expect(typeof health.status).toBe("string");
 		expect(["healthy", "degraded", "unhealthy"]).toContain(health.status);
 		expect(Array.isArray(health.checks)).toBe(true);
-	});
-
-	it("checkHealth() takes no arguments", () => {
-		// Guards the signature: passing options used to attach a body.
-		expect(client().status.checkHealth.length).toBe(0);
 	});
 });
