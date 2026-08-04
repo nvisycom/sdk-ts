@@ -292,6 +292,236 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/accounts/{username}/avatar/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get account avatar
+		 * @description Returns the account's avatar image (WebP). 404 when unset.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Public handle of the account. */
+					username: components["schemas"]["Handle"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		/**
+		 * Upload account avatar
+		 * @description Uploads and normalizes the account's avatar. Only the account itself may set it.
+		 */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Public handle of the account. */
+					username: components["schemas"]["Handle"];
+				};
+				cookie?: never;
+			};
+			/** @description multipart form data */
+			requestBody: {
+				content: {
+					"multipart/form-data": unknown[];
+				};
+			};
+			responses: {
+				/** @description Represents an account. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Account"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		post?: never;
+		/**
+		 * Delete account avatar
+		 * @description Removes the account's avatar. Only the account itself may delete it.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Public handle of the account. */
+					username: components["schemas"]["Handle"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/api-tokens/": {
 		parameters: {
 			query?: never;
@@ -1088,6 +1318,249 @@ export interface paths {
 				};
 			};
 		};
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/avatar/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get workspace avatar
+		 * @description Returns the workspace's avatar image (WebP). 404 when unset.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		/**
+		 * Upload workspace avatar
+		 * @description Uploads and normalizes the workspace's avatar. Requires UpdateWorkspace.
+		 */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			/** @description multipart form data */
+			requestBody: {
+				content: {
+					"multipart/form-data": unknown[];
+				};
+			};
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		post?: never;
+		/**
+		 * Delete workspace avatar
+		 * @description Removes the workspace's avatar. Requires UpdateWorkspace.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
 	"/workspaces/{workspaceSlug}/notifications/": {
@@ -5910,7 +6383,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PolicyPage"];
+						"application/json": components["schemas"]["PolicySummaryPage"];
 					};
 				};
 				/**
@@ -5964,8 +6437,8 @@ export interface paths {
 			 * @description Request payload for creating a new workspace policy.
 			 *
 			 *     The `definition` is a structured policy the redaction engine consumes;
-			 *     its `name`, `description`, and `version` drive the stored columns unless
-			 *     overridden here.
+			 *     its `name` and `description` drive the stored columns unless overridden
+			 *     here.
 			 */
 			requestBody: {
 				content: {
@@ -5979,7 +6452,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Policy2"];
+						"application/json": components["schemas"]["Policy"];
 					};
 				};
 				/**
@@ -6084,7 +6557,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Policy2"];
+						"application/json": components["schemas"]["Policy"];
 					};
 				};
 				/**
@@ -6243,7 +6716,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Policy2"];
+						"application/json": components["schemas"]["Policy"];
 					};
 				};
 				/**
@@ -6743,6 +7216,8 @@ export interface components {
 	schemas: {
 		/** @description Represents an account. */
 		Account: {
+			/** @description Serve path of the account's avatar, when set. */
+			avatarUrl?: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the account was created.
@@ -7150,7 +7625,7 @@ export interface components {
 			 *     `None` means "use the policy's decision"; `Some(action)`
 			 *     overrides it for this specific entity at apply time.
 			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
+			reviewerOverride?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -7400,15 +7875,6 @@ export interface components {
 					 */
 					waveform: components["schemas"]["Waveform"];
 			  };
-		/** @description Payload for the `audit` action. */
-		AuditAction: {
-			/**
-			 * @description Severity hint propagated into the audit entry (e.g.
-			 *     `"low"`, `"medium"`, `"high"`). Free-form for now; downstream
-			 *     review tooling decides how to render or filter.
-			 */
-			severity?: string;
-		};
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
 			/** @description The JWT API token for authentication. */
@@ -7827,12 +8293,12 @@ export interface components {
 		 * @description Request payload for creating a new workspace policy.
 		 *
 		 *     The `definition` is a structured policy the redaction engine consumes;
-		 *     its `name`, `description`, and `version` drive the stored columns unless
-		 *     overridden here.
+		 *     its `name` and `description` drive the stored columns unless overridden
+		 *     here.
 		 */
 		CreatePolicy: {
 			/** @description The structured policy body consumed by the engine. */
-			definition: components["schemas"]["Policy"];
+			definition: components["schemas"]["PolicyDefinition"];
 			/** @description Optional description override. Defaults to the policy's own description. */
 			description?: string;
 			/** @description Optional display name override. Defaults to the policy's own name. */
@@ -8396,7 +8862,7 @@ export interface components {
 			 *     `None` means "use the policy's decision"; `Some(action)`
 			 *     overrides it for this specific entity at apply time.
 			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
+			reviewerOverride?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -9495,20 +9961,37 @@ export interface components {
 			 */
 			y: number;
 		};
-		/**
-		 * @description A named, versioned governance policy.
-		 *
-		 *     Identity is the UUID; `name` is display-only. `version` is the
-		 *     policy body's semver: two submissions of the same
-		 *     `(id, version)` pair should produce identical decisions.
-		 */
+		/** @description Response type for a workspace policy. */
 		Policy: {
 			/**
-			 * @description Document-level gate. The whole policy (rules + fallback)
-			 *     is skipped when this is `Some(...)` and the predicate is
-			 *     false for the document. Evaluated once per document.
+			 * Format: date-time
+			 * @description When the policy was created.
 			 */
-			appliesWhen?: components["schemas"]["DocumentPredicate"];
+			createdAt: string;
+			/** @description Handle of the account that created this policy. */
+			creatorUsername: components["schemas"]["Handle"];
+			/** @description The structured policy body consumed by the engine. */
+			definition: components["schemas"]["PolicyDefinition"];
+			/** @description Policy description. */
+			description?: string;
+			/** @description Human-readable policy display name. */
+			displayName: string;
+			/** @description URL slug of the policy, unique within its workspace. */
+			slug: components["schemas"]["Handle"];
+			/**
+			 * Format: date-time
+			 * @description When the policy was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this policy belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description A named governance policy.
+		 *
+		 *     Identity is the UUID; `name` is display-only.
+		 */
+		PolicyDefinition: {
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
@@ -9517,7 +10000,7 @@ export interface components {
 			 *     to the next policy. [`Option`] enforces "at most one
 			 *     fallback per policy" at the type level.
 			 */
-			fallback?: components["schemas"]["PolicyAction"];
+			fallback?: components["schemas"]["ModalityRedactions"];
 			/**
 			 * Format: uuid
 			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
@@ -9545,79 +10028,12 @@ export interface components {
 			retention?: components["schemas"]["RetentionPolicy"][];
 			/** @description Ordered rules. First match wins within this policy. */
 			rules?: components["schemas"]["PolicyRule"][];
-			/** @description Semver of the policy body. */
-			version: string;
-		};
-		/** @description Response type for a workspace policy. */
-		Policy2: {
 			/**
-			 * Format: date-time
-			 * @description When the policy was created.
+			 * @description Document-level gate. The whole policy (rules + fallback)
+			 *     is skipped when this is `Some(...)` and the predicate is
+			 *     false for the document. Evaluated once per document.
 			 */
-			createdAt: string;
-			/** @description Handle of the account that created this policy. */
-			creatorUsername: components["schemas"]["Handle"];
-			/** @description The structured policy body consumed by the engine. */
-			definition: components["schemas"]["Policy"];
-			/** @description Policy description. */
-			description?: string;
-			/** @description Human-readable policy display name. */
-			displayName: string;
-			/** @description URL slug of the policy, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
-			/**
-			 * Format: date-time
-			 * @description When the policy was last updated.
-			 */
-			updatedAt: string;
-			/** @description Semver of the policy body. */
-			version: string;
-			/** @description Handle of the workspace this policy belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description What a rule does when its [`predicate`] matches.
-		 *
-		 *     Three verbs: [`Redact`] transforms the entity with one operator
-		 *     per modality; [`Suppress`] drops the entity entirely (false-positive
-		 *     marker) and stamps a reason onto the audit; [`Audit`] flags it for
-		 *     human review without transforming.
-		 *
-		 *     [`predicate`]: PolicyRule::predicate
-		 *     [`Redact`]: PolicyAction::Redact
-		 *     [`Suppress`]: PolicyAction::Suppress
-		 *     [`Audit`]: PolicyAction::Audit
-		 */
-		PolicyAction:
-			| ({
-					/** @constant */
-					kind: "redact";
-			  } & components["schemas"]["ModalityRedactions"])
-			| ({
-					/** @constant */
-					kind: "suppress";
-			  } & components["schemas"]["SuppressAction"])
-			| ({
-					/** @constant */
-					kind: "audit";
-			  } & components["schemas"]["AuditAction"]);
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		PolicyPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Policy2"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
+			when?: components["schemas"]["DocumentPredicate"];
 		};
 		/**
 		 * @description Path parameters for policy operations.
@@ -9632,14 +10048,19 @@ export interface components {
 			policySlug: string;
 		};
 		/**
-		 * @description One rule inside a [`Policy`]. Identity is the UUID; `name` /
+		 * @description One rule inside a [`PolicyDefinition`]. Identity is the UUID; `name` /
 		 *     `description` are display-only.
 		 *
-		 *     [`Policy`]: super::Policy
+		 *     [`PolicyDefinition`]: super::PolicyDefinition
 		 */
 		PolicyRule: {
-			/** @description What to do on match. */
-			action: components["schemas"]["PolicyAction"];
+			/**
+			 * @description Per-modality redaction operators applied when the
+			 *     predicate matches. Modalities the rule doesn't cover fall
+			 *     through to the policy fallback (or the next policy in the
+			 *     chain).
+			 */
+			action: components["schemas"]["ModalityRedactions"];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
@@ -9663,6 +10084,53 @@ export interface components {
 			predicate: components["schemas"]["Predicate"];
 		};
 		/**
+		 * @description Lightweight policy view for lists.
+		 *
+		 *     Carries only the metadata available without decrypting the policy body, so a
+		 *     page of policies costs no per-item decryption. The full [`Policy`] (with its
+		 *     `definition`) is returned by the single-policy endpoint.
+		 */
+		PolicySummary: {
+			/**
+			 * Format: date-time
+			 * @description When the policy was created.
+			 */
+			createdAt: string;
+			/** @description Handle of the account that created this policy. */
+			creatorUsername: components["schemas"]["Handle"];
+			/** @description Policy description. */
+			description?: string;
+			/** @description Human-readable policy display name. */
+			displayName: string;
+			/** @description URL slug of the policy, unique within its workspace. */
+			slug: components["schemas"]["Handle"];
+			/**
+			 * Format: date-time
+			 * @description When the policy was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this policy belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		PolicySummaryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["PolicySummary"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
 		 * @description Closed polygon, given by its ordered vertices.
 		 *
 		 *     A richer location than a [`BoundingBox`] for detections whose extent
@@ -9682,11 +10150,8 @@ export interface components {
 			| {
 					/** @constant */
 					kind: "confidence";
-					/**
-					 * Format: float
-					 * @description Minimum confidence in `[0.0, 1.0]`.
-					 */
-					min: number;
+					/** @description Minimum confidence cutoff. */
+					min: components["schemas"]["ConfidenceThreshold"];
 			  }
 			| {
 					/** @constant */
@@ -9744,6 +10209,8 @@ export interface components {
 		 *     and remain available solely through the caller's own `/account/` view.
 		 */
 		PublicAccount: {
+			/** @description Serve path of the account's avatar, when set. */
+			avatarUrl?: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the account was created.
@@ -10085,16 +10552,6 @@ export interface components {
 		};
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
-		/** @description Payload for the `suppress` action. */
-		SuppressAction: {
-			/**
-			 * @description Human-readable reason the entity is being suppressed. Surfaced
-			 *     verbatim in the audit entry so reviewers can tell apart
-			 *     "synthetic test data," "incident response," and "known false
-			 *     positive" without re-reading the policy.
-			 */
-			reason?: string;
-		};
 		/**
 		 * @description Request payload to trigger a connection sync.
 		 *
@@ -10232,7 +10689,7 @@ export interface components {
 			 *     `None` means "use the policy's decision"; `Some(action)`
 			 *     overrides it for this specific entity at apply time.
 			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
+			reviewerOverride?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -10604,7 +11061,7 @@ export interface components {
 			 *     `None` means "use the policy's decision"; `Some(action)`
 			 *     overrides it for this specific entity at apply time.
 			 */
-			reviewerOverride?: components["schemas"]["PolicyAction"];
+			reviewerOverride?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -10876,6 +11333,32 @@ export interface components {
 					salt?: string;
 			  }
 			| {
+					/**
+					 * @description BCP-47 tag used when the entity carries no language of
+					 *     its own. Defaults to English (`"en"`).
+					 */
+					default_language?: components["schemas"]["LanguageTag"];
+					/**
+					 * @description Template used for entity labels outside the built-in
+					 *     PII catalogue (which `Fake` can't generate for).
+					 *     Supports the same `{label}` / `{value}` / `{coref}`
+					 *     placeholders as [`Replace`]. Defaults to `[{label}]`.
+					 *
+					 *     [`Replace`]: TextRedaction::Replace
+					 * @default [{label}]
+					 */
+					fallback_template: string;
+					/** @constant */
+					kind: "fake";
+					/**
+					 * Format: uint64
+					 * @description Seed mixed into per-entity RNG state. Two runs with the
+					 *     same seed and the same input entities produce the same
+					 *     surrogates. Defaults to `0`.
+					 */
+					seed?: number;
+			  }
+			| {
 					/** @constant */
 					kind: "pseudonymize";
 			  }
@@ -11035,7 +11518,7 @@ export interface components {
 		 */
 		UpdatePolicy: {
 			/** @description New policy body (replaces the stored definition). */
-			definition?: components["schemas"]["Policy"];
+			definition?: components["schemas"]["PolicyDefinition"];
 			/** @description Policy description. */
 			description?: string;
 			/** @description Human-readable policy display name. */
@@ -11249,6 +11732,8 @@ export interface components {
 		WebhookStatus: "active" | "paused" | "disabled";
 		/** @description Workspace response. */
 		Workspace: {
+			/** @description Serve path of the workspace's avatar (logo), when set. */
+			avatarUrl?: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the workspace was created.

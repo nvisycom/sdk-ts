@@ -3,7 +3,7 @@ import type {
 	CreatePolicy,
 	CursorPagination,
 	Policy,
-	PolicyPage,
+	PolicySummaryPage,
 	UpdatePolicy,
 } from "@/datatypes/index.js";
 
@@ -27,7 +27,7 @@ export class Policies {
 	async listPolicies(
 		workspaceSlug: string,
 		query?: CursorPagination,
-	): Promise<PolicyPage> {
+	): Promise<PolicySummaryPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/policies/",
 			{
