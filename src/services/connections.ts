@@ -27,7 +27,7 @@ export class Connections {
 	 */
 	async listConnections(
 		workspaceSlug: string,
-		query?: CursorPagination & { provider?: string },
+		query?: CursorPagination & { provider?: string[] },
 	): Promise<ConnectionPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/connections/",

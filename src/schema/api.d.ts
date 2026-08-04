@@ -1363,8 +1363,11 @@ export interface paths {
 					after?: string;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by provider type. */
-					provider?: string;
+					/**
+					 * @description Filter by provider (`s3`, `azure`, `gcs`). Repeatable; a connection
+					 *     matches if it uses any of the given providers. Empty means no filter.
+					 */
+					provider?: string[];
 				};
 				header?: never;
 				path: {
@@ -1893,6 +1896,115 @@ export interface paths {
 				};
 			};
 		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/syncs/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List workspace syncs
+		 * @description Returns all sync runs across the workspace's connections, most recent first, with optional status and provider filters.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/**
+					 * @description Filter by connection provider (`s3`, `azure`, `gcs`). Repeatable; a sync
+					 *     matches if its connection uses any of the given providers. Empty means no
+					 *     provider filter.
+					 */
+					provider?: string[];
+					/** @description Filter by sync status. */
+					status?: components["schemas"]["SyncStatus"];
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionSyncPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;
@@ -7439,6 +7551,8 @@ export interface components {
 			displayName: string;
 			/** @description Opaque identifier of the connection. */
 			id: components["schemas"]["ConnectionId"];
+			/** @description Whether the connection is enabled for syncing. */
+			isActive: boolean;
 			/**
 			 * Format: date-time
 			 * @description When the connection last synced successfully, if ever.
@@ -7600,8 +7714,12 @@ export interface components {
 		};
 		/** @description Query parameters for listing connections. */
 		ConnectionsQuery: {
-			/** @description Filter by provider type. */
-			provider?: string;
+			/**
+			 * @description Filter by provider (`s3`, `azure`, `gcs`). Repeatable; a connection
+			 *     matches if it uses any of the given providers. Empty means no filter.
+			 * @default []
+			 */
+			provider: string[];
 		};
 		/**
 		 * @description [ISO 3166-1] country, identified by its code.
@@ -7641,6 +7759,11 @@ export interface components {
 			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Human-readable connection display name. */
 			displayName: string;
+			/**
+			 * @description Whether the connection is enabled for syncing. Omit to default to active;
+			 *     set `false` to create it disabled.
+			 */
+			isActive?: boolean;
 			/** @description Cron expression for scheduled imports; omit for manual-only. */
 			scheduleCron?: string;
 			/**
@@ -10853,6 +10976,12 @@ export interface components {
 			/** @description Human-readable connection display name. */
 			displayName?: string;
 			/**
+			 * @description Whether the connection is enabled for syncing. `false` disables it
+			 *     (pausing scheduled syncs and rejecting manual ones); omit to leave
+			 *     unchanged.
+			 */
+			isActive?: boolean;
+			/**
 			 * @description Cron expression for scheduled imports. Omit to leave unchanged; send
 			 *     `null` to clear it (make the connection manual-only).
 			 */
@@ -11182,6 +11311,18 @@ export interface components {
 		WorkspaceRunsQuery: {
 			/** @description Filter by run status. */
 			status?: components["schemas"]["PipelineRunStatus"];
+		};
+		/** @description Query parameters for listing all syncs across a workspace. */
+		WorkspaceSyncsQuery: {
+			/**
+			 * @description Filter by connection provider (`s3`, `azure`, `gcs`). Repeatable; a sync
+			 *     matches if its connection uses any of the given providers. Empty means no
+			 *     provider filter.
+			 * @default []
+			 */
+			provider: string[];
+			/** @description Filter by sync status. */
+			status?: components["schemas"]["SyncStatus"];
 		};
 	};
 	responses: never;

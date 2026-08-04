@@ -4,6 +4,7 @@ import type {
 	ConnectionSyncPage,
 	CursorPagination,
 	SyncConnection,
+	SyncStatus,
 } from "@/datatypes/index.js";
 
 /**
@@ -14,6 +15,23 @@ export class Syncs {
 
 	constructor(api: ApiClient) {
 		this.#api = api;
+	}
+
+	/**
+	 * List all syncs across a workspace's connections
+	 * @param workspaceSlug - Workspace slug
+	 * @param query - Optional query parameters (provider, status, limit, after)
+	 * @returns Promise that resolves with a paginated list of connection syncs
+	 * @throws {ApiError} if the request fails
+	 */
+	async listWorkspaceSyncs(
+		workspaceSlug: string,
+		query?: CursorPagination & { provider?: string[]; status?: SyncStatus },
+	): Promise<ConnectionSyncPage> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceSlug}/syncs/", {
+			params: { path: { workspaceSlug }, query },
+		});
+		return data!;
 	}
 
 	/**
