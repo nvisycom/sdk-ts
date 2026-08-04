@@ -59,4 +59,53 @@ export class Account {
 		});
 		return data!;
 	}
+
+	/**
+	 * Download an account's avatar image
+	 * @param username - Account username
+	 * @returns Promise that resolves with the avatar response
+	 * @throws {ApiError} if the request fails
+	 */
+	async getAvatar(username: string): Promise<Response> {
+		const { response } = await this.#api.GET("/accounts/{username}/avatar/", {
+			params: { path: { username } },
+			parseAs: "stream",
+		});
+		return response;
+	}
+
+	/**
+	 * Upload an account's avatar image
+	 * @param username - Account username
+	 * @param avatar - Avatar image to upload
+	 * @returns Promise that resolves with the updated account
+	 * @throws {ApiError} if the request fails
+	 */
+	async uploadAvatar(username: string, avatar: Blob): Promise<AccountData> {
+		const formData = new FormData();
+		const name = avatar instanceof File ? avatar.name : "avatar";
+		formData.append("avatar", avatar, name);
+
+		const { data } = await this.#api.PUT("/accounts/{username}/avatar/", {
+			params: { path: { username } },
+			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
+			body: formData as unknown as unknown[],
+			bodySerializer: (formData) => formData,
+			// Remove Content-Type so browser sets multipart/form-data with boundary.
+			headers: { "Content-Type": null } as unknown as HeadersInit,
+		});
+		return data!;
+	}
+
+	/**
+	 * Delete an account's avatar image
+	 * @param username - Account username
+	 * @returns Promise that resolves when the avatar is deleted
+	 * @throws {ApiError} if the request fails
+	 */
+	async deleteAvatar(username: string): Promise<void> {
+		await this.#api.DELETE("/accounts/{username}/avatar/", {
+			params: { path: { username } },
+		});
+	}
 }

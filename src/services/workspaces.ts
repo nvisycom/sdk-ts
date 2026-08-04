@@ -126,4 +126,55 @@ export class Workspaces {
 		);
 		return data!;
 	}
+
+	/**
+	 * Download a workspace's avatar image
+	 * @param workspaceSlug - Workspace slug
+	 * @returns Promise that resolves with the avatar response
+	 * @throws {ApiError} if the request fails
+	 */
+	async getAvatar(workspaceSlug: string): Promise<Response> {
+		const { response } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/avatar/",
+			{
+				params: { path: { workspaceSlug } },
+				parseAs: "stream",
+			},
+		);
+		return response;
+	}
+
+	/**
+	 * Upload a workspace's avatar image
+	 * @param workspaceSlug - Workspace slug
+	 * @param avatar - Avatar image to upload
+	 * @returns Promise that resolves when the avatar is uploaded
+	 * @throws {ApiError} if the request fails
+	 */
+	async uploadAvatar(workspaceSlug: string, avatar: Blob): Promise<void> {
+		const formData = new FormData();
+		const name = avatar instanceof File ? avatar.name : "avatar";
+		formData.append("avatar", avatar, name);
+
+		await this.#api.PUT("/workspaces/{workspaceSlug}/avatar/", {
+			params: { path: { workspaceSlug } },
+			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
+			body: formData as unknown as unknown[],
+			bodySerializer: (formData) => formData,
+			// Remove Content-Type so browser sets multipart/form-data with boundary.
+			headers: { "Content-Type": null } as unknown as HeadersInit,
+		});
+	}
+
+	/**
+	 * Delete a workspace's avatar image
+	 * @param workspaceSlug - Workspace slug
+	 * @returns Promise that resolves when the avatar is deleted
+	 * @throws {ApiError} if the request fails
+	 */
+	async deleteAvatar(workspaceSlug: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceSlug}/avatar/", {
+			params: { path: { workspaceSlug } },
+		});
+	}
 }

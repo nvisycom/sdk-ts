@@ -8,6 +8,25 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-08-04
+
+### Added
+
+- Avatar methods on `account` and `workspaces`: `getAvatar`, `uploadAvatar`,
+  `deleteAvatar` (account keyed by `username`, workspace by `workspaceSlug`)
+- `PolicySummary` and `PolicySummaryPage` datatypes
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- `policies.listPolicies()` now returns `PolicySummaryPage` (summaries)
+- `Account` now includes an `avatarUrl` field
+
+### Removed
+
+- **BREAKING**: `PolicyPage` datatype (replaced by `PolicySummaryPage`)
+- **BREAKING**: `PolicyAction` datatype (no longer part of the API)
+
 ## [0.10.0] - 2026-08-04
 
 ### Added
@@ -259,7 +278,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/nvisycom/sdk-ts/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/nvisycom/sdk-ts/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/nvisycom/sdk-ts/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/nvisycom/sdk-ts/compare/v0.7.0...v0.8.0
