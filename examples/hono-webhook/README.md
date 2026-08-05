@@ -4,8 +4,8 @@ A minimal [Hono](https://hono.dev) server that verifies incoming Nvisy webhooks
 using [`@nvisy/sdk/webhooks`](../../README.md).
 
 It uses `constructEventFromRequest`, which accepts the standard Fetch `Request`
-(`c.req.raw`) — reading the raw body and `X-Webhook-*` headers, verifying the
-HMAC-SHA256 signature, and returning the parsed event. The same approach works
+(`c.req.raw`): it reads the raw body and `X-Webhook-*` headers, verifies the
+HMAC-SHA256 signature, and returns the parsed event. The same approach works
 in any web-standard runtime (Next.js App Router, Remix, SvelteKit, Deno, Bun,
 Cloudflare Workers).
 

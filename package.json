@@ -6,12 +6,18 @@
 	"private": false,
 	"keywords": [
 		"nvisy",
-		"document",
-		"privacy",
 		"sdk",
 		"api",
+		"client",
 		"typescript",
-		"client"
+		"redaction",
+		"anonymization",
+		"pii",
+		"phi",
+		"data-privacy",
+		"data-masking",
+		"sensitive-data",
+		"document-processing"
 	],
 	"author": "Nvisy <support@nvisy.com>",
 	"license": "MIT",
