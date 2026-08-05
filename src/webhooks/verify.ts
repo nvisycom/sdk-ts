@@ -2,6 +2,15 @@ import type { WebhookEvent } from "@/datatypes/index.js";
 import { NvisyError } from "@/errors.js";
 
 /**
+ * A webhook event type: any of the known {@link WebhookEvent} values (which
+ * autocomplete), plus any other string — the server may emit an event type the
+ * installed SDK version doesn't yet know about, so always handle the default
+ * case.
+ */
+// `string & {}` preserves the literal-union autocomplete while widening to string.
+export type WebhookEventType = WebhookEvent | (string & {});
+
+/**
  * Header names the Nvisy webhook delivery sends. Use these to pull values off
  * an incoming request before verifying.
  */
@@ -139,8 +148,11 @@ export async function verifyWebhook(
  * based on the `event` field.
  */
 export interface WebhookDelivery {
-	/** The event type (from the `X-Webhook-Event` header / payload). */
-	event: WebhookEvent;
+	/**
+	 * The event type, from the `X-Webhook-Event` header. `undefined` if the
+	 * delivery carried no event header.
+	 */
+	event?: WebhookEventType;
 	/** The delivery's request id (from `X-Webhook-Request-Id`). */
 	requestId?: string;
 	/** The delivery timestamp in unix seconds. */
@@ -171,9 +183,11 @@ export interface ConstructEventOptions extends VerifyWebhookOptions {
 export async function constructEvent(
 	options: ConstructEventOptions,
 ): Promise<WebhookDelivery> {
+	// verifyWebhook validates the signature and the timestamp, so by here
+	// `options.timestamp` is known to be finite.
 	await verifyWebhook(options);
 	return {
-		event: options.event as WebhookEvent,
+		event: options.event,
 		requestId: options.requestId,
 		timestamp: Number(options.timestamp),
 		payload: JSON.parse(options.payload),

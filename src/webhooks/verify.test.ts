@@ -157,6 +157,33 @@ describe("constructEvent", () => {
 		expect(delivery.payload).toEqual({ id: "run_123", status: "completed" });
 	});
 
+	it("leaves event undefined when no event is provided", async () => {
+		const signature = `sha256=${await sign(SECRET, TIMESTAMP, PAYLOAD)}`;
+		const delivery = await constructEvent({
+			secret: SECRET,
+			payload: PAYLOAD,
+			signature,
+			timestamp: String(TIMESTAMP),
+			now: TIMESTAMP,
+		});
+		expect(delivery.event).toBeUndefined();
+	});
+
+	it("passes through an unknown event type without narrowing away", async () => {
+		const signature = `sha256=${await sign(SECRET, TIMESTAMP, PAYLOAD)}`;
+		const delivery = await constructEvent({
+			secret: SECRET,
+			payload: PAYLOAD,
+			signature,
+			timestamp: String(TIMESTAMP),
+			// An event the installed SDK version doesn't know yet — the type
+			// widens to string, so this is allowed rather than lost.
+			event: "future:event",
+			now: TIMESTAMP,
+		});
+		expect(delivery.event).toBe("future:event");
+	});
+
 	it("throws before parsing when the signature is invalid", async () => {
 		await expect(
 			constructEvent({
