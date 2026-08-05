@@ -1,0 +1,17 @@
+{
+	"name": "nvisy-sdk-client-example",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"description": "Example of using the Nvisy SDK client",
+	"scripts": {
+		"start": "tsx src/index.ts"
+	},
+	"dependencies": {
+		"@nvisy/sdk": "^0.11.0"
+	},
+	"devDependencies": {
+		"tsx": "^4.19.0",
+		"typescript": "^5.9.3"
+	}
+}
