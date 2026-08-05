@@ -8,6 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
+### Removed
+
+- **BREAKING**: `account.getAvatar()` and `workspaces.getAvatar()`. Avatar
+  images are now served from a content-addressed path exposed as the
+  `avatarUrl` field on the account/workspace; fetch that URL directly.
+  Uploading (`uploadAvatar`) and deleting (`deleteAvatar`) are unchanged.
+
 ## [0.12.0] - 2026-08-05
 
 ### Added

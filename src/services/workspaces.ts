@@ -127,22 +127,6 @@ export class Workspaces {
 		return data!;
 	}
 
-	/**
-	 * Download a workspace's avatar image
-	 * @param workspaceSlug - Workspace slug
-	 * @returns Promise that resolves with the avatar response
-	 * @throws {ApiError} if the request fails
-	 */
-	async getAvatar(workspaceSlug: string): Promise<Response> {
-		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/avatar/",
-			{
-				params: { path: { workspaceSlug } },
-				parseAs: "stream",
-			},
-		);
-		return response;
-	}
 
 	/**
 	 * Upload a workspace's avatar image
