@@ -7261,6 +7261,8 @@ export interface components {
 		AccountRef: {
 			/** @description Serve path of the account's avatar, when set. */
 			avatarUrl?: string;
+			/** @description Human-readable display name, when set. */
+			displayName?: string;
 			/** @description Handle of the account. */
 			username: components["schemas"]["Handle"];
 		};
