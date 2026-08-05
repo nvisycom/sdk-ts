@@ -1,4 +1,5 @@
 import type { WebhookEvent } from "@/datatypes/index.js";
+import { NvisyError } from "@/errors.js";
 
 /**
  * A webhook event type: any of the known {@link WebhookEvent} values (which
@@ -8,7 +9,6 @@ import type { WebhookEvent } from "@/datatypes/index.js";
  */
 // `string & {}` preserves the literal-union autocomplete while widening to string.
 export type WebhookEventType = WebhookEvent | (string & {});
-import { NvisyError } from "@/errors.js";
 
 /**
  * Header names the Nvisy webhook delivery sends. Use these to pull values off
