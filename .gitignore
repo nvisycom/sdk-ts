@@ -12,6 +12,12 @@ Thumbs.db
 test-results/
 node_modules/
 
+# Example projects generate their own lockfiles when installed; the root
+# package-lock.json stays tracked.
+examples/**/package-lock.json
+examples/**/pnpm-lock.yaml
+examples/**/yarn.lock
+
 # Generated
 *.backup
 coverage/
