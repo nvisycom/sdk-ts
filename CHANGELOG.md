@@ -8,6 +8,19 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- `@nvisy/sdk/webhooks` — utilities for receiving webhooks, built on Web
+  Crypto (works in Node, browsers, edge runtimes, and workers):
+  - `verifyWebhook()` / `constructEvent()` — verify a signature and parse the
+    event from raw values
+  - `verifyRequest()` / `constructEventFromRequest()` — accept a standard
+    Fetch `Request`, for web-standard frameworks (Hono, Next.js App Router,
+    Remix, SvelteKit, Deno, Bun, Cloudflare Workers)
+  - `WEBHOOK_HEADERS` constant and `WebhookSignatureError`
+  - HMAC-SHA256 verification with constant-time comparison and timestamp
+    replay protection
+
 ## [0.11.0] - 2026-08-04
 
 ### Added

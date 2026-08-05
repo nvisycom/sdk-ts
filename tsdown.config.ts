@@ -7,6 +7,7 @@ export default defineConfig({
 		"src/auth/index.ts",
 		"src/services/index.ts",
 		"src/datatypes/index.ts",
+		"src/webhooks/index.ts",
 	],
 	format: ["esm"],
 
