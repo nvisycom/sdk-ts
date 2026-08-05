@@ -1,6 +1,6 @@
 {
 	"name": "@nvisy/sdk",
-	"version": "0.11.0",
+	"version": "0.12.0",
 	"description": "Official TypeScript SDK for Nvisy document processing platform",
 	"type": "module",
 	"private": false,
