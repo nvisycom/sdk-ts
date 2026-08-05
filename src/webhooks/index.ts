@@ -38,19 +38,19 @@
  * ```
  */
 
+export type { RequestVerifyOptions } from "@/webhooks/request.js";
 export {
 	constructEventFromRequest,
 	verifyRequest,
 } from "@/webhooks/request.js";
-export type { RequestVerifyOptions } from "@/webhooks/request.js";
-export {
-	constructEvent,
-	verifyWebhook,
-	WebhookSignatureError,
-	WEBHOOK_HEADERS,
-} from "@/webhooks/verify.js";
 export type {
 	ConstructEventOptions,
 	VerifyWebhookOptions,
 	WebhookDelivery,
+} from "@/webhooks/verify.js";
+export {
+	constructEvent,
+	verifyWebhook,
+	WEBHOOK_HEADERS,
+	WebhookSignatureError,
 } from "@/webhooks/verify.js";
