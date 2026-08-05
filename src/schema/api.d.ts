@@ -7251,12 +7251,23 @@ export interface components {
 			/** @description Public handle of the account. */
 			username: components["schemas"]["Handle"];
 		};
+		/**
+		 * @description Public reference to the account behind a resource — whoever created it,
+		 *     uploaded it, triggered it, or performed it.
+		 *
+		 *     Reused across resource responses so an account is always presented the same
+		 *     way: a handle plus an optional avatar.
+		 */
+		AccountRef: {
+			/** @description Serve path of the account's avatar, when set. */
+			avatarUrl?: string;
+			/** @description Handle of the account. */
+			username: components["schemas"]["Handle"];
+		};
 		/** @description Response type for a workspace activity. */
 		Activity: {
 			/** @description Type of activity. */
 			activityType: components["schemas"]["ActivityType"];
-			/** @description Handle of the account that performed the activity, if any. */
-			actorUsername?: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
 			 * @description When the activity occurred.
@@ -7269,6 +7280,8 @@ export interface components {
 			 * @description Unique activity identifier.
 			 */
 			id: string;
+			/** @description Account that performed the activity. */
+			performedBy: components["schemas"]["AccountRef"];
 			/** @description Handle of the workspace this activity belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
@@ -8009,8 +8022,8 @@ export interface components {
 			 * @description When the connection was created.
 			 */
 			createdAt: string;
-			/** @description Handle of the account that created this connection. */
-			creatorUsername: components["schemas"]["Handle"];
+			/** @description Account that created this connection. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description How an import reconciles files whose source object was deleted. */
 			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Human-readable connection display name. */
@@ -8142,6 +8155,8 @@ export interface components {
 			status: components["schemas"]["SyncStatus"];
 			/** @description How the sync was triggered. */
 			triggerType: components["schemas"]["SyncTriggerType"];
+			/** @description Account that triggered the sync. */
+			triggeredBy: components["schemas"]["AccountRef"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -8644,8 +8659,8 @@ export interface components {
 			 * @description Last update timestamp.
 			 */
 			updatedAt: string;
-			/** @description Handle of the account that uploaded/created the file. */
-			uploadedBy: components["schemas"]["Handle"];
+			/** @description Account that uploaded/created the file. */
+			uploadedBy: components["schemas"]["AccountRef"];
 			/**
 			 * Format: int32
 			 * @description Version number (1 for original, higher for newer versions).
@@ -9469,6 +9484,8 @@ export interface components {
 		};
 		/** @description Represents a workspace member. */
 		Member: {
+			/** @description Serve path of the member's avatar, when set. */
+			avatarUrl?: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the member joined the workspace.
@@ -9712,8 +9729,8 @@ export interface components {
 			 * @description Timestamp when the pipeline was created.
 			 */
 			createdAt: string;
-			/** @description Handle of the account that created this pipeline. */
-			creatorUsername: components["schemas"]["Handle"];
+			/** @description Account that created this pipeline. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description Detection + redaction configuration. */
 			definition: components["schemas"]["PipelineDefinition"];
 			/** @description Pipeline description. */
@@ -9848,8 +9865,8 @@ export interface components {
 			status: components["schemas"]["PipelineRunStatus"];
 			/** @description How the run was triggered. */
 			triggerType: components["schemas"]["PipelineTriggerType"];
-			/** @description Handle of the account that triggered the run, if any. */
-			triggerUsername?: components["schemas"]["Handle"];
+			/** @description Account that triggered the run. */
+			triggeredBy: components["schemas"]["AccountRef"];
 			/** @description Handle of the workspace this run belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
@@ -9937,10 +9954,11 @@ export interface components {
 		/**
 		 * @description Defines how a pipeline run was initiated.
 		 *
-		 *     This enumeration corresponds to the `PIPELINE_TRIGGER_TYPE` PostgreSQL enum and is used
-		 *     to track whether a run was manually triggered, triggered by a source connector, or scheduled.
+		 *     This enumeration corresponds to the `PIPELINE_TRIGGER_TYPE` PostgreSQL enum:
+		 *     a run is either started directly by a user or automatically by the system
+		 *     (for example, a file upload that the pipeline auto-redacts).
 		 */
-		PipelineTriggerType: "manual" | "source" | "scheduled";
+		PipelineTriggerType: "user" | "system";
 		/**
 		 * @description Point in a 2-D coordinate space.
 		 *
@@ -9968,8 +9986,8 @@ export interface components {
 			 * @description When the policy was created.
 			 */
 			createdAt: string;
-			/** @description Handle of the account that created this policy. */
-			creatorUsername: components["schemas"]["Handle"];
+			/** @description Account that created this policy. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description The structured policy body consumed by the engine. */
 			definition: components["schemas"]["PolicyDefinition"];
 			/** @description Policy description. */
@@ -10096,8 +10114,8 @@ export interface components {
 			 * @description When the policy was created.
 			 */
 			createdAt: string;
-			/** @description Handle of the account that created this policy. */
-			creatorUsername: components["schemas"]["Handle"];
+			/** @description Account that created this policy. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description Policy description. */
 			description?: string;
 			/** @description Human-readable policy display name. */
@@ -11581,12 +11599,17 @@ export interface components {
 		/** @description Workspace webhook response. */
 		Webhook: {
 			/**
+			 * Format: int32
+			 * @description Consecutive failed deliveries since the last success.
+			 */
+			consecutiveFailures: number;
+			/**
 			 * Format: date-time
 			 * @description Timestamp when this webhook was first created.
 			 */
 			createdAt: string;
-			/** @description Handle of the account that created this webhook. */
-			creatorUsername: components["schemas"]["Handle"];
+			/** @description Account that created this webhook. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
 			/** @description Human-readable name for the webhook. */
@@ -11601,9 +11624,14 @@ export interface components {
 			id: components["schemas"]["WebhookId"];
 			/**
 			 * Format: date-time
-			 * @description Timestamp of the most recent webhook trigger.
+			 * @description Timestamp of the most recent failed delivery.
 			 */
-			lastTriggeredAt?: string;
+			lastFailureAt?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of the most recent successful delivery.
+			 */
+			lastSuccessAt?: string;
 			/** @description Current status of the webhook. */
 			status: components["schemas"]["WebhookStatus"];
 			/**
@@ -11625,12 +11653,17 @@ export interface components {
 		 */
 		WebhookCreated: {
 			/**
+			 * Format: int32
+			 * @description Consecutive failed deliveries since the last success.
+			 */
+			consecutiveFailures: number;
+			/**
 			 * Format: date-time
 			 * @description Timestamp when this webhook was first created.
 			 */
 			createdAt: string;
-			/** @description Handle of the account that created this webhook. */
-			creatorUsername: components["schemas"]["Handle"];
+			/** @description Account that created this webhook. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description Detailed description of the webhook's purpose. */
 			description: string;
 			/** @description Human-readable name for the webhook. */
@@ -11645,9 +11678,14 @@ export interface components {
 			id: components["schemas"]["WebhookId"];
 			/**
 			 * Format: date-time
-			 * @description Timestamp of the most recent webhook trigger.
+			 * @description Timestamp of the most recent failed delivery.
 			 */
-			lastTriggeredAt?: string;
+			lastFailureAt?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of the most recent successful delivery.
+			 */
+			lastSuccessAt?: string;
 			/**
 			 * @description HMAC-SHA256 signing secret for webhook verification.
 			 *
@@ -11739,8 +11777,8 @@ export interface components {
 			 * @description Timestamp when the workspace was created.
 			 */
 			createdAt: string;
-			/** @description Handle of the account that created this workspace. */
-			creatorUsername: components["schemas"]["Handle"];
+			/** @description Account that created this workspace. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description Description of the workspace. */
 			description?: string;
 			/** @description Display name of the workspace. */

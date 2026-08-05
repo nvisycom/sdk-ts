@@ -20,6 +20,12 @@ and this project adheres to
   - `WEBHOOK_HEADERS` constant and `WebhookSignatureError`
   - HMAC-SHA256 verification with constant-time comparison and timestamp
     replay protection
+- `AccountRef` datatype — the public account reference (username + avatar)
+  embedded in resources by their creator/trigger fields
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
 
 ## [0.11.0] - 2026-08-04
 
