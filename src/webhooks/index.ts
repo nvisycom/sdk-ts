@@ -47,6 +47,7 @@ export type {
 	ConstructEventOptions,
 	VerifyWebhookOptions,
 	WebhookDelivery,
+	WebhookEventType,
 } from "@/webhooks/verify.js";
 export {
 	constructEvent,
