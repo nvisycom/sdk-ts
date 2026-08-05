@@ -7105,7 +7105,7 @@ export interface paths {
 				path: {
 					/** @description Opaque id of the avatar's owner. */
 					id: string;
-					/** @description Content-hash cache-busting segment (ignored when serving). */
+					/** @description Content-hash version segment identifying the exact stored object. */
 					version: string;
 				};
 				cookie?: never;
@@ -7162,7 +7162,7 @@ export interface paths {
 				path: {
 					/** @description Opaque id of the avatar's owner. */
 					id: string;
-					/** @description Content-hash cache-busting segment (ignored when serving). */
+					/** @description Content-hash version segment identifying the exact stored object. */
 					version: string;
 				};
 				cookie?: never;
@@ -7899,8 +7899,11 @@ export interface components {
 			username: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description Path parameters for a public avatar route: the owner id and a cache-busting
-		 *     content-hash segment (ignored when serving).
+		 * @description Path parameters for a public avatar route: the owner id and the avatar's
+		 *     content-hash version.
+		 *
+		 *     Each version is a distinct stored object, so an unknown version simply does
+		 *     not resolve — the version needs no separate validation.
 		 */
 		AvatarPathParams: {
 			/**
@@ -7908,7 +7911,7 @@ export interface components {
 			 * @description Opaque id of the avatar's owner.
 			 */
 			id: string;
-			/** @description Content-hash cache-busting segment (ignored when serving). */
+			/** @description Content-hash version segment identifying the exact stored object. */
 			version: string;
 		};
 		/**

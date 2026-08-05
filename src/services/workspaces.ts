@@ -127,7 +127,6 @@ export class Workspaces {
 		return data!;
 	}
 
-
 	/**
 	 * Upload a workspace's avatar image
 	 * @param workspaceSlug - Workspace slug
