@@ -1,4 +1,4 @@
-# Nvisy SDK for TypeScript
+# @nvisy/sdk
 
 [![npm](https://img.shields.io/npm/v/@nvisy/sdk?style=flat-square)](https://www.npmjs.com/package/@nvisy/sdk)
 [![Build](https://img.shields.io/github/actions/workflow/status/nvisycom/sdk-ts/build.yml?branch=main&label=build%20%26%20test&style=flat-square)](https://github.com/nvisycom/sdk-ts/actions/workflows/build.yml)
@@ -9,12 +9,6 @@ Nvisy detects and removes sensitive information across documents, images, and au
 It combines deterministic patterns, NER, computer vision, and LLM-driven classification
 into auditable, policy-driven pipelines built for regulated industries such as
 healthcare, legal, government, and financial services.
-
-> [!WARNING]
-> **Active development: API not stable.** This project is under active
-> development. Public APIs, configuration shapes, and on-disk formats may change
-> without notice between releases. Pin a specific version if you depend on this
-> in production.
 
 ## Installation
 

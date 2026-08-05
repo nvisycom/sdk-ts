@@ -13,5 +13,5 @@ npm start
 ```
 
 It prints the authenticated account, lists workspaces and the first
-workspace's pipelines, and — if you set `NVISY_FILE_ID` — triggers a pipeline
+workspace's pipelines, and (if you set `NVISY_FILE_ID`) triggers a pipeline
 run.
