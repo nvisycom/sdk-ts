@@ -61,20 +61,6 @@ export class Account {
 	}
 
 	/**
-	 * Download an account's avatar image
-	 * @param username - Account username
-	 * @returns Promise that resolves with the avatar response
-	 * @throws {ApiError} if the request fails
-	 */
-	async getAvatar(username: string): Promise<Response> {
-		const { response } = await this.#api.GET("/accounts/{username}/avatar/", {
-			params: { path: { username } },
-			parseAs: "stream",
-		});
-		return response;
-	}
-
-	/**
 	 * Upload an account's avatar image
 	 * @param username - Account username
 	 * @param avatar - Avatar image to upload

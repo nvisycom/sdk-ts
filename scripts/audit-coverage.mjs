@@ -27,6 +27,18 @@ const SPEC_URL =
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
+/**
+ * Operations intentionally not wrapped by an SDK method, so the audit doesn't
+ * flag them as missing. Keep this list short and justified.
+ *
+ * - Avatar serve paths: content-addressed static asset URLs. Consumers use the
+ *   `avatarUrl` field on the account/workspace directly, not an SDK call.
+ */
+const IGNORED_OPERATIONS = new Set([
+	"GET /avatars/accounts/{id}/{version}/",
+	"GET /avatars/workspaces/{id}/{version}/",
+]);
+
 /** Every "METHOD /path" operation declared in the spec. */
 function specOperations(spec) {
 	const ops = new Set();
@@ -79,8 +91,11 @@ async function main() {
 	const ops = specOperations(spec);
 	const calls = sdkCalls();
 
-	const missing = [...ops].filter((op) => !calls.has(op)).sort();
+	const missing = [...ops]
+		.filter((op) => !calls.has(op) && !IGNORED_OPERATIONS.has(op))
+		.sort();
 	const extra = [...calls].filter((call) => !ops.has(call)).sort();
+	const ignored = [...IGNORED_OPERATIONS].filter((op) => ops.has(op)).sort();
 
 	console.log(`Spec operations: ${ops.size} | SDK calls: ${calls.size}\n`);
 
@@ -89,6 +104,11 @@ async function main() {
 
 	console.log(`\nEXTRA (SDK call not in spec): ${extra.length}`);
 	for (const call of extra) console.log(`  ${call}`);
+
+	if (ignored.length) {
+		console.log(`\nIGNORED (intentionally not wrapped): ${ignored.length}`);
+		for (const op of ignored) console.log(`  ${op}`);
+	}
 
 	if (missing.length || extra.length) {
 		console.log("\nCoverage audit FAILED.");
