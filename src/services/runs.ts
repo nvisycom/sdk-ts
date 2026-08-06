@@ -107,10 +107,7 @@ export class Runs {
 	 * @returns Promise that resolves with the audit
 	 * @throws {ApiError} if the request fails
 	 */
-	async getDetections(
-		workspaceSlug: string,
-		runId: string,
-	): Promise<Audit> {
+	async getDetections(workspaceSlug: string, runId: string): Promise<Audit> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/runs/{runId}/detections/",
 			{
