@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **BREAKING**: the detections result type is renamed `AnalyzedDocument` to
+  `Audit`. `runs.getDetections()` now resolves to `Audit`.
+
 ## [0.13.0] - 2026-08-05
 
 ### Changed

@@ -6157,7 +6157,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["AnalyzedDocument"];
+						"application/json": components["schemas"]["Audit"];
 					};
 				};
 				/**
@@ -7328,65 +7328,6 @@ export interface components {
 			| "file:deleted"
 			| "file:verified"
 			| "custom";
-		/**
-		 * @description What detection found in one document.
-		 *
-		 *     The body group plus per-container-part groups (each tagged
-		 *     by modality) plus a snapshot of the recognition [`Scope`] the
-		 *     entities were scored against.
-		 *
-		 *     The scope snapshot travels with the entities so anonymize
-		 *     can rebuild an orchestrator against exactly the vocabulary
-		 *     analyze used. Anything a policy predicate compares against
-		 *     (label catalog, document-level classification labels,
-		 *     asserted languages / jurisdictions) is here.
-		 *
-		 *     `correlation_id` on the persisted scope is always `None`; the
-		 *     anonymize call supplies a fresh id from the passed
-		 *     [`Document`] so anonymize-side tracing spans are distinct
-		 *     from the analyze-side ones.
-		 *
-		 *     [`Document`]: nvisy_schema::file::Document
-		 *     [`Scope`]: elide::recognition::Scope
-		 */
-		AnalyzedDocument: {
-			/**
-			 * @description The body group.
-			 *
-			 *     `None` when no body pipeline produced entities (pre-analyze,
-			 *     or the codec resolved the doc to a modality with no
-			 *     pipeline).
-			 */
-			body?: components["schemas"]["RecognizedGroup"];
-			/**
-			 * @description One entry per container part the orchestrator surfaced.
-			 *
-			 *     Keyed by the container-private part id (e.g. a DOCX zip
-			 *     entry name like `"word/media/image1.png"`); each value
-			 *     carries that part's modality + entities.
-			 */
-			parts?: {
-				[key: string]: components["schemas"]["RecognizedGroup"];
-			};
-			/**
-			 * @description Recognition scope snapshot.
-			 *
-			 *     The resolved label catalog + asserted languages,
-			 *     countries, and document labels. Held so
-			 *     [`Engine::anonymize_document`] can compile against the same
-			 *     vocabulary analyze used without the caller re-passing an
-			 *     `AnalyzerParams`.
-			 *
-			 *     Required on the wire. A missing scope on an incoming
-			 *     [`AnalyzedDocument`] would default to an empty catalog and
-			 *     silently underfire every `TagOneOf` policy predicate;
-			 *     rejecting at deserialize time surfaces the shape mismatch
-			 *     at load, not at apply.
-			 *
-			 *     [`Engine::anonymize_document`]: super::Engine::anonymize_document
-			 */
-			scope: components["schemas"]["Scope"];
-		};
 		/** @description API token response structure. */
 		ApiToken: {
 			/**
@@ -7626,12 +7567,14 @@ export interface components {
 			/** @description The elide entity, as recognition produced it. */
 			entity: components["schemas"]["AudioEntity"];
 			/**
-			 * @description Reviewer-supplied override.
+			 * @description Reviewer-supplied redaction override.
 			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule.
 			 */
-			reviewerOverride?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -7881,6 +7824,65 @@ export interface components {
 					 */
 					waveform: components["schemas"]["Waveform"];
 			  };
+		/**
+		 * @description What detection found in one document.
+		 *
+		 *     The body group plus per-container-part groups (each tagged
+		 *     by modality) plus a snapshot of the recognition [`Scope`] the
+		 *     entities were scored against.
+		 *
+		 *     The scope snapshot travels with the entities so anonymize
+		 *     can rebuild an orchestrator against exactly the vocabulary
+		 *     analyze used. Anything a policy predicate compares against
+		 *     (label catalog, document-level classification labels,
+		 *     asserted languages / jurisdictions) is here.
+		 *
+		 *     `correlation_id` on the persisted scope is always `None`; the
+		 *     anonymize call supplies a fresh id from the passed
+		 *     [`Document`] so anonymize-side tracing spans are distinct
+		 *     from the analyze-side ones.
+		 *
+		 *     [`Document`]: nvisy_schema::file::Document
+		 *     [`Scope`]: elide::recognition::Scope
+		 */
+		Audit: {
+			/**
+			 * @description The body group.
+			 *
+			 *     `None` when no body pipeline produced entities (pre-analyze,
+			 *     or the codec resolved the doc to a modality with no
+			 *     pipeline).
+			 */
+			body?: components["schemas"]["RecognizedGroup"];
+			/**
+			 * @description One entry per container part the orchestrator surfaced.
+			 *
+			 *     Keyed by the container-private part id (e.g. a DOCX zip
+			 *     entry name like `"word/media/image1.png"`); each value
+			 *     carries that part's modality + entities.
+			 */
+			parts?: {
+				[key: string]: components["schemas"]["RecognizedGroup"];
+			};
+			/**
+			 * @description Recognition scope snapshot.
+			 *
+			 *     The resolved label catalog + asserted languages,
+			 *     countries, and document labels. Held so
+			 *     [`Engine::anonymize_document`] can compile against the same
+			 *     vocabulary analyze used without the caller re-passing an
+			 *     `AnalyzerParams`.
+			 *
+			 *     Required on the wire. A missing scope on an incoming
+			 *     [`Audit`] would default to an empty catalog and
+			 *     silently underfire every `TagOneOf` policy predicate;
+			 *     rejecting at deserialize time surfaces the shape mismatch
+			 *     at load, not at apply.
+			 *
+			 *     [`Engine::anonymize_document`]: super::Engine::anonymize_document
+			 */
+			scope: components["schemas"]["Scope"];
+		};
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
 			/** @description The JWT API token for authentication. */
@@ -8881,12 +8883,14 @@ export interface components {
 			/** @description The elide entity, as recognition produced it. */
 			entity: components["schemas"]["ImageEntity"];
 			/**
-			 * @description Reviewer-supplied override.
+			 * @description Reviewer-supplied redaction override.
 			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule.
 			 */
-			reviewerOverride?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -9334,7 +9338,7 @@ export interface components {
 			[key: string]: components["schemas"]["Label"];
 		};
 		/**
-		 * @description Per-request label-catalog selection.
+		 * @description Per-policy label-catalog selection.
 		 *
 		 *     Picks builtins by name + adds inline custom schemas.
 		 */
@@ -9345,7 +9349,7 @@ export interface components {
 			 *     E.g. `"email_address"`, `"phone_number"`. Unknown names
 			 *     log a warning and are skipped.
 			 */
-			builtins?: string[];
+			builtins?: components["schemas"]["LabelRef"][];
 			/** @description Custom labels defined inline by the caller. */
 			custom?: components["schemas"]["Label"][];
 		};
@@ -9776,16 +9780,19 @@ export interface components {
 		/**
 		 * @description A pipeline's detection + governance intent.
 		 *
-		 *     Holds what a pipeline author decides — which recognizers to run, the entity
-		 *     labels, the default scope, and the policies to apply. Infrastructure config
-		 *     (enrichment backends, deduplication calibration) is server-wide and lives in
-		 *     the engine config, not here. Stored as JSON in the pipeline's `definition`
-		 *     column but validated against this schema at the API boundary.
+		 *     Holds what a pipeline author decides — which recognizers to run, the default
+		 *     scope, and the policies to apply. Infrastructure config (enrichment backends,
+		 *     deduplication calibration) is server-wide and lives in the engine config, not
+		 *     here. Stored as JSON in the pipeline's `definition` column but validated
+		 *     against this schema at the API boundary.
+		 *
+		 *     The label catalog is not part of this: the policies own the label vocabulary,
+		 *     and the engine derives the detection catalog from them at run time.
 		 *
 		 *     The split:
 		 *
-		 *     - `recognizers` / `deduplication` / `label_catalog` — the detection intent,
-		 *       merged with the server-wide engine defaults into an `AnalyzerParams`.
+		 *     - `recognizers` / `deduplication` — the detection intent, merged with the
+		 *       server-wide engine defaults into an `AnalyzerParams`.
 		 *     - `default_scope` — optional pipeline-wide scope a document may override.
 		 *     - `policy_slugs` — references to the workspace's policies, resolved at run
 		 *       time.
@@ -9803,14 +9810,6 @@ export interface components {
 			 *     the document must assert its own.
 			 */
 			defaultScope?: components["schemas"]["ScopeParams"];
-			/**
-			 * @description Entity-label catalog: which entity types the recognizers emit.
-			 *
-			 *     Reusable across the pipeline's documents, so it lives here rather than in
-			 *     per-document scope.
-			 * @default {}
-			 */
-			labelCatalog: components["schemas"]["LabelCatalogParams"];
 			/**
 			 * @description Slugs of workspace policies applied at redaction.
 			 *
@@ -10040,15 +10039,16 @@ export interface components {
 			 */
 			id: string;
 			/**
-			 * @description Vocabulary the policy operates over. Engine unions every
-			 *     submitted policy's `labels` into a per-request
+			 * @description Vocabulary the policy operates over: builtins picked by
+			 *     name plus caller-authored custom label schemas. Engine
+			 *     unions every submitted policy's `labels` into a per-request
 			 *     [`LabelCatalog`] used to drive recognizer dispatch and
 			 *     tag-based [`Predicate::TagOneOf`] matching.
 			 *
 			 *     [`LabelCatalog`]: elide_core::entity::LabelCatalog
 			 *     [`Predicate::TagOneOf`]: predicate::Predicate::TagOneOf
 			 */
-			labels?: components["schemas"]["Label"][];
+			labels?: components["schemas"]["LabelCatalogParams"];
 			/** @description Human-readable name. Display-only. Does not key anything. */
 			name: string;
 			/** @description Lifecycle rules for content under this policy. */
@@ -10184,7 +10184,7 @@ export interface components {
 					/** @constant */
 					kind: "labelOneOf";
 					/** @description Allowed labels. */
-					labels: string[];
+					labels: components["schemas"]["LabelRef"][];
 			  }
 			| {
 					/** @constant */
@@ -10257,7 +10257,7 @@ export interface components {
 		/**
 		 * @description A modality-tagged group of recognized entities.
 		 *
-		 *     The unit [`AnalyzedDocument`] stores in `body` and in every
+		 *     The unit [`Audit`] stores in `body` and in every
 		 *     `parts` entry.
 		 *
 		 *     Tagged by `modality` (snake_case) so deserialization picks the
@@ -10517,17 +10517,6 @@ export interface components {
 			 */
 			countries?: components["schemas"]["CountryCode"][];
 			/**
-			 * @description Per-request entity-label catalog.
-			 *
-			 *     Builtins selected by name + custom inline schemas. Drives
-			 *     what recognizers are asked to emit and tag-based selector
-			 *     matching in the anonymizer. Engine resolves this into the
-			 *     assembled `elide::recognition::Scope`'s `catalog` field at
-			 *     compile time.
-			 * @default {}
-			 */
-			labelCatalog: components["schemas"]["LabelCatalogParams"];
-			/**
 			 * @description Caller-asserted languages for the analysis.
 			 *
 			 *     Empty means the caller asserted none, leaving detection
@@ -10542,11 +10531,12 @@ export interface components {
 			 *     these to bias their behaviour for domain-specific terms;
 			 *     those that don't ignore the field.
 			 *
-			 *     Distinct from [`label_catalog`]: tags classify the
-			 *     *document*, whereas the catalog names the entity *types*
-			 *     to emit.
+			 *     Distinct from the entity-label catalog: tags classify the
+			 *     *document*, whereas labels name the entity *types* to
+			 *     emit. Labels are authored on each [`PolicyDefinition`],
+			 *     not here.
 			 *
-			 *     [`label_catalog`]: ScopeParams::label_catalog
+			 *     [`PolicyDefinition`]: crate::policy::PolicyDefinition
 			 */
 			tags?: string[];
 		};
@@ -10711,12 +10701,14 @@ export interface components {
 			/** @description The elide entity, as recognition produced it. */
 			entity: components["schemas"]["TabularEntity"];
 			/**
-			 * @description Reviewer-supplied override.
+			 * @description Reviewer-supplied redaction override.
 			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule.
 			 */
-			reviewerOverride?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -11083,12 +11075,14 @@ export interface components {
 			/** @description The elide entity, as recognition produced it. */
 			entity: components["schemas"]["TextEntity"];
 			/**
-			 * @description Reviewer-supplied override.
+			 * @description Reviewer-supplied redaction override.
 			 *
-			 *     `None` means "use the policy's decision"; `Some(action)`
-			 *     overrides it for this specific entity at apply time.
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule.
 			 */
-			reviewerOverride?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -11730,8 +11724,18 @@ export interface components {
 			| "connection:created"
 			| "connection:updated"
 			| "connection:deleted"
-			| "connection:synced"
-			| "connection:desynced";
+			| "connection:sync.started"
+			| "connection:sync.completed"
+			| "connection:sync.failed"
+			| "pipeline:created"
+			| "pipeline:updated"
+			| "pipeline:deleted"
+			| "pipeline:run.started"
+			| "pipeline:run.completed"
+			| "pipeline:run.failed"
+			| "policy:created"
+			| "policy:updated"
+			| "policy:deleted";
 		/** @description Opaque whk identifier (whk_<uuid>). */
 		WebhookId: string;
 		/**

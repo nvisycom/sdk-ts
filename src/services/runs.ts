@@ -1,6 +1,6 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	AnalyzedDocument,
+	Audit,
 	CreatePipelineRun,
 	CursorPagination,
 	PipelineRun,
@@ -101,16 +101,13 @@ export class Runs {
 	}
 
 	/**
-	 * Get the detections (analyzed document) for a pipeline run
+	 * Get the detections (audit) for a pipeline run
 	 * @param workspaceSlug - Workspace slug
 	 * @param runId - Run ID
-	 * @returns Promise that resolves with the analyzed document
+	 * @returns Promise that resolves with the audit
 	 * @throws {ApiError} if the request fails
 	 */
-	async getDetections(
-		workspaceSlug: string,
-		runId: string,
-	): Promise<AnalyzedDocument> {
+	async getDetections(workspaceSlug: string, runId: string): Promise<Audit> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/runs/{runId}/detections/",
 			{

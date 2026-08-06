@@ -6,5 +6,5 @@ export type PipelineRun = Schemas["PipelineRun"];
 export type CreatePipelineRun = Schemas["CreatePipelineRun"];
 export type PipelineRunStatus = Schemas["PipelineRunStatus"];
 export type PipelineRunPage = Schemas["PipelineRunPage"];
-export type AnalyzedDocument = Schemas["AnalyzedDocument"];
+export type Audit = Schemas["Audit"];
 export type Artifact = Schemas["Artifact"];
