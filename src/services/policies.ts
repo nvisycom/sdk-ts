@@ -4,8 +4,6 @@ import type {
 	CursorPagination,
 	Policy,
 	PolicySummaryPage,
-	PolicyTemplateSummary,
-	Template,
 	UpdatePolicy,
 } from "@/datatypes/index.js";
 
@@ -114,31 +112,5 @@ export class Policies {
 				params: { path: { workspaceSlug, policySlug } },
 			},
 		);
-	}
-
-	/**
-	 * List the built-in policy templates
-	 * @returns Promise that resolves with the policy template summaries
-	 * @throws {ApiError} if the request fails
-	 */
-	async listTemplates(): Promise<PolicyTemplateSummary[]> {
-		const { data } = await this.#api.GET("/catalog/policy-templates/");
-		return data!;
-	}
-
-	/**
-	 * Get a built-in policy template by slug
-	 * @param templateSlug - Template slug
-	 * @returns Promise that resolves with the template
-	 * @throws {ApiError} if the request fails
-	 */
-	async getTemplate(templateSlug: string): Promise<Template> {
-		const { data } = await this.#api.GET(
-			"/catalog/policy-templates/{templateSlug}/",
-			{
-				params: { path: { templateSlug } },
-			},
-		);
-		return data!;
 	}
 }

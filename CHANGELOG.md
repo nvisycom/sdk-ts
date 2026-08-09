@@ -10,9 +10,9 @@ and this project adheres to
 
 ### Added
 
-- `policies.listTemplates()` and `policies.getTemplate(templateSlug)` for the
-  built-in policy templates catalog, plus `Template` and
-  `PolicyTemplateSummary` datatypes
+- `PolicyTemplate` datatype, the built-in template a new policy can be based
+  on via `CreatePolicy.template` (`"hipaa_safe_harbor"`, `"gdpr_article9"`,
+  `"pci_dss_pan_truncate"`, `"pci_dss_pan_hmac"`, `"ccpa"`)
 - Policy-construction datatypes for building `CreatePolicy` / `UpdatePolicy`
   bodies: rules (`PredicatedRule`, `TableRule`, `Predicate`,
   `DocumentPredicate`), redactions (`ModalityRedactions`, `TextRedaction`,

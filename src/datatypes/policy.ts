@@ -11,9 +11,8 @@ export type CreatePolicy = Schemas["CreatePolicy"];
 export type UpdatePolicy = Schemas["UpdatePolicy"];
 export type PolicyRule = Schemas["PolicyRule"];
 
-// Built-in policy templates catalog.
-export type Template = Schemas["Template"];
-export type PolicyTemplateSummary = Schemas["PolicyTemplateSummary"];
+// Built-in policy template to base a new policy on.
+export type PolicyTemplate = Schemas["PolicyTemplate"];
 
 // Rules and their conditions.
 export type PredicatedRule = Schemas["PredicatedRule"];
