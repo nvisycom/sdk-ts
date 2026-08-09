@@ -13,6 +13,7 @@ export type * from "@/datatypes/notification.js";
 export type * from "@/datatypes/pagination.js";
 export type * from "@/datatypes/pipeline.js";
 export type * from "@/datatypes/policy.js";
+export type * from "@/datatypes/recognizer.js";
 export type * from "@/datatypes/run.js";
 export type * from "@/datatypes/webhook.js";
 export type * from "@/datatypes/workspace.js";

@@ -17,6 +17,16 @@ export type SyncTriggerType = Schemas["SyncTriggerType"];
 export type SyncDeletionPolicy = Schemas["SyncDeletionPolicy"];
 
 export type ConnectionConfig = Schemas["ConnectionConfig"];
+export type StorageConfig = Schemas["StorageConfig"];
 export type S3Credentials = Schemas["S3Credentials"];
 export type AzureCredentials = Schemas["AzureCredentials"];
 export type GcsCredentials = Schemas["GcsCredentials"];
+
+// LLM inference connection config (provider + credentials + model).
+export type LlmConfig = Schemas["LlmConfig"];
+export type AnthropicCredentials = Schemas["AnthropicCredentials"];
+export type OpenAiCredentials = Schemas["OpenAiCredentials"];
+
+// Sync scheduling.
+export type SyncSchedule = Schemas["SyncSchedule"];
+export type SyncScheduleInput = Schemas["SyncScheduleInput"];

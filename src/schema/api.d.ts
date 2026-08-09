@@ -3719,7 +3719,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description A connection sync run (import or export). */
+				/** @description A connection sync (import or export). */
 				202: {
 					headers: {
 						[name: string]: unknown;
@@ -3944,7 +3944,7 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description A connection sync run (import or export). */
+				/** @description A connection sync (import or export). */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -4037,7 +4037,7 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description A connection sync run (import or export). */
+				/** @description A connection sync (import or export). */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -7325,6 +7325,11 @@ export interface components {
 			| "file:deleted"
 			| "file:verified"
 			| "custom";
+		/** @description Anthropic API credentials. */
+		AnthropicCredentials: {
+			/** @description Anthropic API key. */
+			apiKey: string;
+		};
 		/** @description API token response structure. */
 		ApiToken: {
 			/**
@@ -8122,25 +8127,16 @@ export interface components {
 			createdAt: string;
 			/** @description Account that created this connection. */
 			createdBy: components["schemas"]["AccountRef"];
-			/** @description How an import reconciles files whose source object was deleted. */
-			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Human-readable connection display name. */
 			displayName: string;
 			/** @description Opaque identifier of the connection. */
 			id: components["schemas"]["ConnectionId"];
-			/** @description Whether the connection is enabled for syncing. */
+			/** @description Whether the connection is enabled. */
 			isActive: boolean;
-			/**
-			 * Format: date-time
-			 * @description When the connection last synced successfully, if ever.
-			 */
-			lastSynced?: string;
-			/** @description Object store provider (`s3`, `azure`, `gcs`). */
+			/** @description Provider identifier (`s3`, `azure`, `gcs`, `openai`, `ollama`, ...). */
 			provider: string;
-			/** @description Cron expression for scheduled imports, if configured. */
-			scheduleCron?: string;
-			/** @description Whether the connection imports data in or exports data out. */
-			syncMode: components["schemas"]["SyncMode"];
+			/** @description Sync configuration; present only for sync-capable connections. */
+			sync?: components["schemas"]["SyncSchedule"];
 			/**
 			 * Format: date-time
 			 * @description When the connection was last updated.
@@ -8150,42 +8146,14 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description A fully-typed object-store connection configuration.
+		 * @description A fully-typed connection configuration for any capability.
 		 *
-		 *     The `provider` tag selects the variant and thereby the credential shape, so
-		 *     an S3 connection cannot carry Azure credentials. Each variant carries a
-		 *     shared optional `root_path` and a nested `credentials` object, giving a wire
-		 *     shape like
-		 *     `{ "provider": "s3", "rootPath": "in/", "credentials": { "bucket": "b", "accessKeyId": "..." } }`.
-		 *
-		 *     Secrets are masked in [`Debug`]; serialization exists only to persist the
-		 *     config encrypted at rest, never to return it in API responses.
+		 *     Untagged: the two inner enums have disjoint `provider` values, so serde
+		 *     resolves the variant from the flat payload without an outer discriminator.
 		 */
 		ConnectionConfig:
-			| {
-					/** @description S3 credentials. */
-					credentials: components["schemas"]["S3Credentials"];
-					/** @constant */
-					provider: "s3";
-					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
-					rootPath?: string;
-			  }
-			| {
-					/** @description Azure credentials. */
-					credentials: components["schemas"]["AzureCredentials"];
-					/** @constant */
-					provider: "azure";
-					/** @description Optional root prefix within the container; keys resolve relative to it. */
-					rootPath?: string;
-			  }
-			| {
-					/** @description GCS credentials. */
-					credentials: components["schemas"]["GcsCredentials"];
-					/** @constant */
-					provider: "gcs";
-					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
-					rootPath?: string;
-			  };
+			| components["schemas"]["StorageConfig"]
+			| components["schemas"]["LlmConfig"];
 		/** @description Opaque conn identifier (conn_<uuid>). */
 		ConnectionId: string;
 		/**
@@ -8218,7 +8186,7 @@ export interface components {
 			/** @description Opaque identifier of the connection. */
 			connectionId: components["schemas"]["ConnectionId"];
 		};
-		/** @description A connection sync run (import or export). */
+		/** @description A connection sync (import or export). */
 		ConnectionSync: {
 			/**
 			 * Format: int32
@@ -8326,30 +8294,23 @@ export interface components {
 		/** @description Request payload for creating a new workspace connection. */
 		CreateConnection: {
 			/**
-			 * @description Typed provider configuration (provider tag + its credentials + optional
-			 *     root path), encrypted at rest. The `provider` tag selects which
-			 *     credential shape is required.
+			 * @description Typed provider configuration (provider tag + its credentials), encrypted
+			 *     at rest. The `provider` tag selects which credential shape is required and
+			 *     which capability the connection has.
 			 */
 			config: components["schemas"]["ConnectionConfig"];
-			/**
-			 * @description How an import reconciles files whose source object was deleted.
-			 * @default ignore
-			 */
-			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Human-readable connection display name. */
 			displayName: string;
 			/**
-			 * @description Whether the connection is enabled for syncing. Omit to default to active;
-			 *     set `false` to create it disabled.
+			 * @description Whether the connection is enabled. Omit to default to active; set `false`
+			 *     to create it disabled.
 			 */
 			isActive?: boolean;
-			/** @description Cron expression for scheduled imports; omit for manual-only. */
-			scheduleCron?: string;
 			/**
-			 * @description Whether the connection imports data in or exports data out.
-			 * @default import
+			 * @description Sync configuration. Applies only to sync-capable providers (object
+			 *     stores); rejected for others. Omit for manual-only defaults.
 			 */
-			syncMode: components["schemas"]["SyncMode"];
+			sync?: components["schemas"]["SyncScheduleInput"];
 		};
 		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
@@ -8909,6 +8870,20 @@ export interface components {
 			 */
 			serviceAccountPath: string;
 		};
+		/**
+		 * @description Which operator to apply to Article 9 special-category entities.
+		 *
+		 *     - [`Erase`](Self::Erase) — the default no-lawful-basis posture.
+		 *       Every match is removed.
+		 *     - [`Pseudonymize`](Self::Pseudonymize) — identity-preserving
+		 *       surrogate. Suitable when an Article 9(2) carve-out
+		 *       (explicit consent, employment law, public-health public
+		 *       interest, ...) authorizes retention and downstream
+		 *       analytics need per-entity coreference across mentions. The
+		 *       9(2) basis itself remains the caller's out-of-band
+		 *       obligation to establish and document.
+		 */
+		GdprArticle9Treatment: "erase" | "pseudonymize";
 		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
 			/** @description When the invite code expires. */
@@ -8929,6 +8904,33 @@ export interface components {
 		};
 		/** @description Operational status of a service component. */
 		HealthStatus: "healthy" | "degraded" | "unhealthy";
+		/**
+		 * @description Which HIPAA §164.514 de-identification method to apply.
+		 *
+		 *     The tradeoff is analytic yield vs. downstream constraint:
+		 *
+		 *     - [`SafeHarbor`](Self::SafeHarbor) — strips all eighteen
+		 *       identifier categories. No Data Use Agreement or statistician
+		 *       required, but dates, coarse geography, and ages ≥ 90 all
+		 *       disappear or collapse.
+		 *     - [`LimitedDataSet`](Self::LimitedDataSet) — narrower
+		 *       subtraction (§164.514(e)(2)) that keeps dates, town/city,
+		 *       state, ZIP, and ages verbatim. Suitable for research and
+		 *       public-health handoffs *only when* a Data Use Agreement
+		 *       governs the recipient's use.
+		 *     - [`ExpertDetermination`](Self::ExpertDetermination) —
+		 *       starting scaffold for §164.514(b)(1). Same label set as
+		 *       Safe Harbor with pseudonymization as the default terminal
+		 *       (identity-preserving across mentions). **Does not certify
+		 *       de-identification** — a qualified statistician must
+		 *       document that re-identification risk is "very small" under
+		 *       the applicable methodology before the output can be treated
+		 *       as de-identified.
+		 */
+		HipaaDeidMethod:
+			| "safe_harbor"
+			| "limited_data_set"
+			| "expert_determination";
 		/**
 		 * @description Per-call payload a recognizer inspects for the [`Image`] modality.
 		 *
@@ -9721,6 +9723,43 @@ export interface components {
 			sortBy?: components["schemas"]["MemberSortField"];
 		};
 		/**
+		 * @description A fully-typed LLM inference connection configuration.
+		 *
+		 *     The `provider` tag selects the variant and thereby the credential shape, so
+		 *     an OpenAI connection cannot carry Anthropic credentials. Serialization exists
+		 *     only to persist the config encrypted at rest, never to return it in API
+		 *     responses.
+		 */
+		LlmConfig:
+			| {
+					/** @description Override the API base URL (for Azure OpenAI or a proxy). Optional. */
+					baseUrl?: string;
+					/** @description OpenAI credentials. */
+					credentials: components["schemas"]["OpenAiCredentials"];
+					/** @description Default model to use when a request does not specify one. Optional. */
+					defaultModel?: string;
+					/** @constant */
+					provider: "openai";
+			  }
+			| {
+					/** @description Base URL of the Ollama server (e.g. `http://localhost:11434`). */
+					baseUrl: string;
+					/** @description Default model to use when a request does not specify one. Optional. */
+					defaultModel?: string;
+					/** @constant */
+					provider: "ollama";
+			  }
+			| {
+					/** @description Override the API base URL. Optional. */
+					baseUrl?: string;
+					/** @description Anthropic credentials. */
+					credentials: components["schemas"]["AnthropicCredentials"];
+					/** @description Default model to use when a request does not specify one. Optional. */
+					defaultModel?: string;
+					/** @constant */
+					provider: "anthropic";
+			  };
+		/**
 		 * @description A value localized per [`LanguageTag`], with an English-first fallback.
 		 *
 		 *     The reusable mechanism behind any text that varies by language: a
@@ -9922,6 +9961,11 @@ export interface components {
 			/** @description Whether to send email notifications. */
 			notifyViaEmail: boolean;
 		};
+		/** @description OpenAI API credentials. */
+		OpenAiCredentials: {
+			/** @description OpenAI API key. */
+			apiKey: string;
+		};
 		/**
 		 * @description Identifies a redaction operator, for the redaction audit a higher
 		 *     layer assembles.
@@ -9992,6 +10036,60 @@ export interface components {
 			 */
 			customDictionaries?: components["schemas"]["CustomDictionary"][];
 		};
+		/**
+		 * @description Which PCI DSS subsection this template addresses.
+		 *
+		 *     - [`PanRender`](Self::PanRender) — §3.5.1 render posture for
+		 *       stored Primary Account Numbers. Carries a [`PciPanRender`]
+		 *       picking between the shipped render approaches.
+		 *     - [`SavErase`](Self::SavErase) — §3.3.1 prohibition on
+		 *       storing Sensitive Authentication Data (CVV/CVC, track data,
+		 *       PIN blocks) after authorization. No options — SAV has one
+		 *       posture: erase.
+		 */
+		PciDssPart:
+			| {
+					/** @constant */
+					part: "pan_render";
+					/**
+					 * @description Which of the §3.5.1-permitted render approaches to
+					 *     apply.
+					 */
+					render: components["schemas"]["PciPanRender"];
+			  }
+			| {
+					/** @constant */
+					part: "sav_erase";
+			  };
+		/**
+		 * @description Which PCI DSS §3.5.1-permitted render approach to apply to
+		 *     stored PAN.
+		 *
+		 *     The truncation / hash split is a real operational decision,
+		 *     not a style knob:
+		 *
+		 *     - Truncation is irreversible with no key material to protect;
+		 *       destroys uniqueness (two PANs sharing the retained digits
+		 *       collapse to the same string), so unsuitable when downstream
+		 *       joins or dedup need per-row identity across a PAN column.
+		 *     - HMAC preserves 1:1 uniqueness (same PAN → same digest),
+		 *       enabling joins, dedup, and fraud-scoring on the digest. But
+		 *       the tenant owns a key the engine reads via
+		 *       [`Engine::with_key_provider`]; a leaked key permits offline
+		 *       PAN enumeration against the shipped digests.
+		 *
+		 *     The two axes inside truncation and inside HMAC are narrower.
+		 *
+		 *     Callers wanting more than one dispatched from one policy
+		 *     compose multiple templates.
+		 *
+		 *     [`Engine::with_key_provider`]: https://docs.rs/nvisy-engine/latest/nvisy_engine/struct.Engine.html
+		 */
+		PciPanRender:
+			| "truncate"
+			| "truncate_last_four"
+			| "hmac_sha256"
+			| "hmac_sha512";
 		/** @description Pipeline response. */
 		Pipeline: {
 			/** @description Artifacts produced by pipeline runs. */
@@ -10408,19 +10506,46 @@ export interface components {
 		/**
 		 * @description A regulatory posture this crate ships a [`Template`] for.
 		 *
-		 *     Serialises as a snake_case string matching the produced
-		 *     template's [`Template::id`] (`"hipaa_safe_harbor"`,
-		 *     `"gdpr_article_9"`, ...) so a wire caller can round-trip
-		 *     `template: "hipaa_safe_harbor"` through JSON directly into
-		 *     a variant. Iterate every variant via `PolicyTemplate::iter()`
-		 *     (from [`strum::IntoEnumIterator`]).
+		 *     Serialises as an internally-tagged object under `kind`,
+		 *     matching the house pattern for option-bearing enums
+		 *     (`Predicate`, `TextRedaction`, `AnyRedaction`). A caller
+		 *     wire-picks a template as
+		 *     `{"kind": "hipaa_safe_harbor"}` or, for variants with
+		 *     operator options,
+		 *     `{"kind": "pci_dss_pan", "render": "hmac_sha256"}`.
 		 */
 		PolicyTemplate:
-			| "hipaa_safe_harbor"
-			| "gdpr_article9"
-			| "pci_dss_pan_truncate"
-			| "pci_dss_pan_hmac"
-			| "ccpa";
+			| {
+					/** @constant */
+					kind: "hipaa_deidentification";
+					/**
+					 * @description Which §164.514 method to apply. See [`HipaaDeidMethod`]
+					 *     for the tradeoff.
+					 */
+					method: components["schemas"]["HipaaDeidMethod"];
+			  }
+			| {
+					/** @constant */
+					kind: "gdpr_article9";
+					/**
+					 * @description Which operator to apply to Article 9 matches. See
+					 *     [`GdprArticle9Treatment`] for the tradeoff.
+					 */
+					treatment: components["schemas"]["GdprArticle9Treatment"];
+			  }
+			| {
+					/** @constant */
+					kind: "pci_dss";
+					/**
+					 * @description Which DSS subsection this template addresses. See
+					 *     [`PciDssPart`] for the shipped subsections.
+					 */
+					part: components["schemas"]["PciDssPart"];
+			  }
+			| {
+					/** @constant */
+					kind: "ccpa";
+			  };
 		/**
 		 * @description Closed polygon, given by its ordered vertices.
 		 *
@@ -10870,6 +10995,43 @@ export interface components {
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
 		/**
+		 * @description A fully-typed object-store connection configuration.
+		 *
+		 *     The `provider` tag selects the variant and thereby the credential shape, so
+		 *     an S3 connection cannot carry Azure credentials. Each variant carries a
+		 *     shared optional `root_path` and a nested `credentials` object, giving a wire
+		 *     shape like
+		 *     `{ "provider": "s3", "rootPath": "in/", "credentials": { "bucket": "b", "accessKeyId": "..." } }`.
+		 *
+		 *     Secrets are masked in [`Debug`]; serialization exists only to persist the
+		 *     config encrypted at rest, never to return it in API responses.
+		 */
+		StorageConfig:
+			| {
+					/** @description S3 credentials. */
+					credentials: components["schemas"]["S3Credentials"];
+					/** @constant */
+					provider: "s3";
+					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
+					rootPath?: string;
+			  }
+			| {
+					/** @description Azure credentials. */
+					credentials: components["schemas"]["AzureCredentials"];
+					/** @constant */
+					provider: "azure";
+					/** @description Optional root prefix within the container; keys resolve relative to it. */
+					rootPath?: string;
+			  }
+			| {
+					/** @description GCS credentials. */
+					credentials: components["schemas"]["GcsCredentials"];
+					/** @constant */
+					provider: "gcs";
+					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
+					rootPath?: string;
+			  };
+		/**
 		 * @description Request payload to trigger a connection sync.
 		 *
 		 *     The direction is determined by the connection's configured `sync_mode`.
@@ -10902,6 +11064,40 @@ export interface components {
 		 *     the connection into the workspace; `Export` pushes workspace files out.
 		 */
 		SyncMode: "import" | "export";
+		/** @description A connection's sync configuration, present only for sync-capable connections. */
+		SyncSchedule: {
+			/** @description How an import reconciles files whose source object was deleted. */
+			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
+			/**
+			 * Format: date-time
+			 * @description When the connection last synced successfully, if ever.
+			 */
+			lastSynced?: string;
+			/** @description Cron expression for scheduled imports, if configured. */
+			scheduleCron?: string;
+			/** @description Whether the connection imports data in or exports data out. */
+			syncMode: components["schemas"]["SyncMode"];
+		};
+		/**
+		 * @description Sync configuration for a sync-capable connection (object stores).
+		 *
+		 *     Only meaningful for connections whose provider supports syncing; omitted for
+		 *     connections that do not (e.g. LLM inference).
+		 */
+		SyncScheduleInput: {
+			/**
+			 * @description How an import reconciles files whose source object was deleted.
+			 * @default ignore
+			 */
+			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
+			/** @description Cron expression for scheduled imports; omit for manual-only. */
+			scheduleCron?: string;
+			/**
+			 * @description Whether the connection imports data in or exports data out.
+			 * @default import
+			 */
+			syncMode: components["schemas"]["SyncMode"];
+		};
 		/**
 		 * @description Defines the execution status of a connection sync run.
 		 *
@@ -11945,23 +12141,18 @@ export interface components {
 			 *     config (and, with it, the provider). Omit to leave it unchanged.
 			 */
 			config?: components["schemas"]["ConnectionConfig"];
-			/** @description How an import reconciles files whose source object was deleted. */
-			deletionPolicy?: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Human-readable connection display name. */
 			displayName?: string;
 			/**
-			 * @description Whether the connection is enabled for syncing. `false` disables it
-			 *     (pausing scheduled syncs and rejecting manual ones); omit to leave
-			 *     unchanged.
+			 * @description Whether the connection is enabled. `false` disables it (pausing scheduled
+			 *     syncs and rejecting manual ones); omit to leave unchanged.
 			 */
 			isActive?: boolean;
 			/**
-			 * @description Cron expression for scheduled imports. Omit to leave unchanged; send
-			 *     `null` to clear it (make the connection manual-only).
+			 * @description Sync configuration. Applies only to sync-capable providers. Omit to leave
+			 *     unchanged.
 			 */
-			scheduleCron?: string;
-			/** @description Whether the connection imports data in or exports data out. */
-			syncMode?: components["schemas"]["SyncMode"];
+			sync?: components["schemas"]["SyncScheduleInput"];
 		};
 		/** @description Request to update file metadata. */
 		UpdateFile: {
