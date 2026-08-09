@@ -8,6 +8,26 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- Connection config datatypes: `StorageConfig`, `LlmConfig` (LLM inference
+  connections), `AnthropicCredentials`, `OpenAiCredentials`, and sync
+  scheduling (`SyncSchedule`, `SyncScheduleInput`)
+- Policy template treatment enums: `HipaaDeidMethod`, `GdprArticle9Treatment`,
+  `PciDssPart`, `PciPanRender`
+- Recognizer/detection config datatypes (`src/datatypes/recognizer.ts`):
+  `RecognizerParams`, `PatternRecognizerParams`, `ProviderSelection`, custom
+  rules/dictionaries (`CustomPatternRule`, `CustomPatternVariant`,
+  `CustomPatternContext`, `CustomDictionary`, `CustomDictionaryTerm`),
+  deduplication (`PipelineDeduplication`, `MergingStrategyParams`,
+  `TiebreakerParams`), scope/localization (`ScopeParams`, `ScopeMetadata`,
+  `CountryCode`, `Language`, `Languages`, `LanguageSpan`,
+  `LanguageProvenance`), and `Confidence`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.14.0] - 2026-08-09
 
 ### Added

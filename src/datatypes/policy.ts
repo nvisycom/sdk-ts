@@ -13,6 +13,10 @@ export type PolicyRule = Schemas["PolicyRule"];
 
 // Built-in policy template to base a new policy on.
 export type PolicyTemplate = Schemas["PolicyTemplate"];
+export type HipaaDeidMethod = Schemas["HipaaDeidMethod"];
+export type GdprArticle9Treatment = Schemas["GdprArticle9Treatment"];
+export type PciDssPart = Schemas["PciDssPart"];
+export type PciPanRender = Schemas["PciPanRender"];
 
 // Rules and their conditions.
 export type PredicatedRule = Schemas["PredicatedRule"];
