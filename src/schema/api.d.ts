@@ -6797,181 +6797,6 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/catalog/policy-templates/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List policy templates
-		 * @description Returns the deployment's built-in policy templates (summaries only).
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PolicyTemplateSummary"][];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/catalog/policy-templates/{templateSlug}/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get policy template
-		 * @description Returns a single built-in policy template with its full policy body.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Slug of the built-in policy template. */
-					templateSlug: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description A regulatory posture packaged as engine-ready data.
-				 *
-				 *     Templates are plain data; a caller wanting to diverge from
-				 *     the shipped defaults mutates the returned [`policy`]
-				 *     before submitting. The engine never sees the [`Template`]
-				 *     itself — only its [`policy`] via `Engine::analyze` /
-				 *     `Engine::anonymize`. The policy carries its own
-				 *     [`LabelGroup`]s inline via [`PolicyDefinition::groups`].
-				 *
-				 *     # Identity
-				 *
-				 *     Three separate identity fields, mirroring how elide's
-				 *     [`Label`] separates identity from display:
-				 *
-				 *     - [`id`] — the machine key (`"hipaa_safe_harbor"`,
-				 *       snake_case, ASCII, kebab-safe). Stable across template
-				 *       version bumps. What audits, registries, and API paths key
-				 *       on.
-				 *     - [`name`] — the short display string
-				 *       (`"HIPAA Safe Harbor de-identification"`). What a customer
-				 *       sees in a UI or a picker.
-				 *     - [`description`] — optional longer prose for reviewers.
-				 *
-				 *     Plus [`version`] and [`effective_date`]:
-				 *
-				 *     - [`version`] — semver-tracked version of *this* template,
-				 *       distinct from the crate's release version. A change to the
-				 *       shipped labelset or operator dispatch bumps this field.
-				 *       Multiple versions of the same [`id`] can coexist in a
-				 *       [`TemplateCatalog`] simultaneously — a customer transitioning
-				 *       between regulatory revisions might hold `v1` and `v2` at
-				 *       once and pin per document class.
-				 *     - [`effective_date`] — the date the regulatory text this
-				 *       template encodes became effective (not the date the
-				 *       template was authored). Reviewers reading an audit trail
-				 *       check this against the run date to confirm the template
-				 *       that fired was the one in force at the time.
-				 *
-				 *     [`Label`]: elide_core::entity::Label
-				 *     [`LabelGroup`]: nvisy_policy::LabelGroup
-				 *     [`PolicyDefinition`]: nvisy_policy::PolicyDefinition
-				 *     [`PolicyDefinition::groups`]: nvisy_policy::PolicyDefinition::groups
-				 *     [`TemplateCatalog`]: super::TemplateCatalog
-				 *     [`description`]: Self::description
-				 *     [`effective_date`]: Self::effective_date
-				 *     [`id`]: Self::id
-				 *     [`name`]: Self::name
-				 *     [`policy`]: Self::policy
-				 *     [`version`]: Self::version
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Template"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	"/auth/login/": {
 		parameters: {
 			query?: never;
@@ -8595,8 +8420,8 @@ export interface components {
 			| {
 					/** @constant */
 					source: "template";
-					/** @description Id of the built-in policy template to seed from. */
-					template: components["schemas"]["Handle"];
+					/** @description The built-in policy template to seed from. */
+					template: components["schemas"]["PolicyTemplate"];
 			  }
 			| {
 					/**
@@ -10580,29 +10405,22 @@ export interface components {
 			 */
 			total?: number;
 		};
-		/** @description Path parameters for a single policy template in the deployment catalog. */
-		PolicyTemplatePathParams: {
-			/** @description Slug of the built-in policy template. */
-			templateSlug: string;
-		};
 		/**
-		 * @description Lightweight template view for catalog listings.
+		 * @description A regulatory posture this crate ships a [`Template`] for.
 		 *
-		 *     Omits the policy body so a listing costs nothing to render; the full
-		 *     [`Template`] is returned by the single-template endpoint.
+		 *     Serialises as a snake_case string matching the produced
+		 *     template's [`Template::id`] (`"hipaa_safe_harbor"`,
+		 *     `"gdpr_article_9"`, ...) so a wire caller can round-trip
+		 *     `template: "hipaa_safe_harbor"` through JSON directly into
+		 *     a variant. Iterate every variant via `PolicyTemplate::iter()`
+		 *     (from [`strum::IntoEnumIterator`]).
 		 */
-		PolicyTemplateSummary: {
-			/** @description Longer description for reviewers, when present. */
-			description?: string;
-			/** @description Date the regulatory text this template encodes became effective. */
-			effectiveDate: string;
-			/** @description Machine identifier, stable across versions. */
-			id: string;
-			/** @description Human-readable template name. */
-			name: string;
-			/** @description Semver version of this template. */
-			version: string;
-		};
+		PolicyTemplate:
+			| "hipaa_safe_harbor"
+			| "gdpr_article9"
+			| "pci_dss_pan_truncate"
+			| "pci_dss_pan_hmac"
+			| "ccpa";
 		/**
 		 * @description Closed polygon, given by its ordered vertices.
 		 *
@@ -11492,92 +11310,6 @@ export interface components {
 					/** @constant */
 					kind: "drop_column";
 			  };
-		/**
-		 * @description A regulatory posture packaged as engine-ready data.
-		 *
-		 *     Templates are plain data; a caller wanting to diverge from
-		 *     the shipped defaults mutates the returned [`policy`]
-		 *     before submitting. The engine never sees the [`Template`]
-		 *     itself — only its [`policy`] via `Engine::analyze` /
-		 *     `Engine::anonymize`. The policy carries its own
-		 *     [`LabelGroup`]s inline via [`PolicyDefinition::groups`].
-		 *
-		 *     # Identity
-		 *
-		 *     Three separate identity fields, mirroring how elide's
-		 *     [`Label`] separates identity from display:
-		 *
-		 *     - [`id`] — the machine key (`"hipaa_safe_harbor"`,
-		 *       snake_case, ASCII, kebab-safe). Stable across template
-		 *       version bumps. What audits, registries, and API paths key
-		 *       on.
-		 *     - [`name`] — the short display string
-		 *       (`"HIPAA Safe Harbor de-identification"`). What a customer
-		 *       sees in a UI or a picker.
-		 *     - [`description`] — optional longer prose for reviewers.
-		 *
-		 *     Plus [`version`] and [`effective_date`]:
-		 *
-		 *     - [`version`] — semver-tracked version of *this* template,
-		 *       distinct from the crate's release version. A change to the
-		 *       shipped labelset or operator dispatch bumps this field.
-		 *       Multiple versions of the same [`id`] can coexist in a
-		 *       [`TemplateCatalog`] simultaneously — a customer transitioning
-		 *       between regulatory revisions might hold `v1` and `v2` at
-		 *       once and pin per document class.
-		 *     - [`effective_date`] — the date the regulatory text this
-		 *       template encodes became effective (not the date the
-		 *       template was authored). Reviewers reading an audit trail
-		 *       check this against the run date to confirm the template
-		 *       that fired was the one in force at the time.
-		 *
-		 *     [`Label`]: elide_core::entity::Label
-		 *     [`LabelGroup`]: nvisy_policy::LabelGroup
-		 *     [`PolicyDefinition`]: nvisy_policy::PolicyDefinition
-		 *     [`PolicyDefinition::groups`]: nvisy_policy::PolicyDefinition::groups
-		 *     [`TemplateCatalog`]: super::TemplateCatalog
-		 *     [`description`]: Self::description
-		 *     [`effective_date`]: Self::effective_date
-		 *     [`id`]: Self::id
-		 *     [`name`]: Self::name
-		 *     [`policy`]: Self::policy
-		 *     [`version`]: Self::version
-		 */
-		Template: {
-			/**
-			 * @description Optional longer prose for reviewers. `None` when the
-			 *     short `name` says enough.
-			 */
-			description?: string;
-			/**
-			 * @description The date the regulatory text this template encodes became
-			 *     effective.
-			 */
-			effectiveDate: string;
-			/**
-			 * @description Machine key — snake_case, ASCII, kebab-safe. Stable
-			 *     across version bumps; audits and registries key on this.
-			 */
-			id: string;
-			/** @description Short human-readable display string. */
-			name: string;
-			/**
-			 * @description The [`PolicyDefinition`] this template encodes. Carries
-			 *     its own [`LabelGroup`]s inline. A caller composing
-			 *     several regulatory postures in one request submits
-			 *     multiple templates and unions their policies into the
-			 *     engine's `&[PolicyDefinition]` slice.
-			 *
-			 *     [`LabelGroup`]: nvisy_policy::LabelGroup
-			 *     [`PolicyDefinition`]: nvisy_policy::PolicyDefinition
-			 */
-			policy: components["schemas"]["PolicyDefinition"];
-			/**
-			 * @description Semver version. See [`semver::Version`] for parse /
-			 *     comparison semantics.
-			 */
-			version: string;
-		};
 		/**
 		 * @description Fallback operator that runs when a declinable primary
 		 *     ([`TextRedaction::Clamp`], [`TextRedaction::GeneralizeDate`])
