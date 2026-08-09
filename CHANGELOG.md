@@ -13,6 +13,15 @@ and this project adheres to
 - `policies.listTemplates()` and `policies.getTemplate(templateSlug)` for the
   built-in policy templates catalog, plus `Template` and
   `PolicyTemplateSummary` datatypes
+- Policy-construction datatypes for building `CreatePolicy` / `UpdatePolicy`
+  bodies: rules (`PredicatedRule`, `TableRule`, `Predicate`,
+  `DocumentPredicate`), redactions (`ModalityRedactions`, `TextRedaction`,
+  `ImageRedaction`, `AudioRedaction`, `TabularRedaction`), retention
+  (`RetentionPolicy`, `Retention`, `RetentionScope`), the label vocabulary
+  (`Labels`, `LabelGroup`, `LabelEntry`, `LabelLocale`, `Label`,
+  `LocalizedText`), and detail types (`Color`, `Waveform`, `ClampBucket`,
+  `ConfidenceThreshold`, `DateStyle`, `DateGranularity`, `LanguageTag`,
+  `Sha2Algorithm`, `TerminalFallback`)
 
 ### Changed
 
