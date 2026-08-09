@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- `policies.listTemplates()` and `policies.getTemplate(templateSlug)` for the
+  built-in policy templates catalog, plus `Template` and
+  `PolicyTemplateSummary` datatypes
+
 ### Changed
 
 - Regenerated the API schema against the updated platform handlers

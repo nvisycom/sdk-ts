@@ -6134,23 +6134,20 @@ export interface paths {
 				/**
 				 * @description What detection found in one document.
 				 *
-				 *     The body group plus per-container-part groups (each tagged
-				 *     by modality) plus a snapshot of the recognition [`Scope`] the
-				 *     entities were scored against.
+				 *     The body group plus per-container-part groups (each tagged by
+				 *     modality) plus the recognition [`AuditContext`] the entities
+				 *     were scored against.
 				 *
-				 *     The scope snapshot travels with the entities so anonymize
-				 *     can rebuild an orchestrator against exactly the vocabulary
-				 *     analyze used. Anything a policy predicate compares against
-				 *     (label catalog, document-level classification labels,
-				 *     asserted languages / jurisdictions) is here.
+				 *     The context travels with the entities so anonymize can rebuild
+				 *     an orchestrator against exactly the vocabulary analyze used.
+				 *     Anything a policy predicate compares against beyond the label
+				 *     catalog (asserted languages, jurisdictions, document tags) is
+				 *     here; labels are re-derived from the policy set on each
+				 *     anonymize call.
 				 *
-				 *     `correlation_id` on the persisted scope is always `None`; the
-				 *     anonymize call supplies a fresh id from the passed
-				 *     [`Document`] so anonymize-side tracing spans are distinct
-				 *     from the analyze-side ones.
-				 *
-				 *     [`Document`]: nvisy_schema::file::Document
-				 *     [`Scope`]: elide::recognition::Scope
+				 *     No [`Default`] — a well-formed audit must carry a real
+				 *     [`AuditContext`] with a real correlation id. Callers building
+				 *     an audit outside the analyze path construct it explicitly.
 				 */
 				200: {
 					headers: {
@@ -6435,9 +6432,9 @@ export interface paths {
 			/**
 			 * @description Request payload for creating a new workspace policy.
 			 *
-			 *     The `definition` is a structured policy the redaction engine consumes;
-			 *     its `name` and `description` drive the stored columns unless overridden
-			 *     here.
+			 *     The body comes from a template or an inline definition (see [`PolicyBody`]).
+			 *     The body's `name` and `description` drive the stored columns unless
+			 *     overridden here.
 			 */
 			requestBody: {
 				content: {
@@ -6798,6 +6795,181 @@ export interface paths {
 				};
 			};
 		};
+		trace?: never;
+	};
+	"/catalog/policy-templates/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List policy templates
+		 * @description Returns the deployment's built-in policy templates (summaries only).
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["PolicyTemplateSummary"][];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/catalog/policy-templates/{templateSlug}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get policy template
+		 * @description Returns a single built-in policy template with its full policy body.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Slug of the built-in policy template. */
+					templateSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description A regulatory posture packaged as engine-ready data.
+				 *
+				 *     Templates are plain data; a caller wanting to diverge from
+				 *     the shipped defaults mutates the returned [`policy`]
+				 *     before submitting. The engine never sees the [`Template`]
+				 *     itself — only its [`policy`] via `Engine::analyze` /
+				 *     `Engine::anonymize`. The policy carries its own
+				 *     [`LabelGroup`]s inline via [`PolicyDefinition::groups`].
+				 *
+				 *     # Identity
+				 *
+				 *     Three separate identity fields, mirroring how elide's
+				 *     [`Label`] separates identity from display:
+				 *
+				 *     - [`id`] — the machine key (`"hipaa_safe_harbor"`,
+				 *       snake_case, ASCII, kebab-safe). Stable across template
+				 *       version bumps. What audits, registries, and API paths key
+				 *       on.
+				 *     - [`name`] — the short display string
+				 *       (`"HIPAA Safe Harbor de-identification"`). What a customer
+				 *       sees in a UI or a picker.
+				 *     - [`description`] — optional longer prose for reviewers.
+				 *
+				 *     Plus [`version`] and [`effective_date`]:
+				 *
+				 *     - [`version`] — semver-tracked version of *this* template,
+				 *       distinct from the crate's release version. A change to the
+				 *       shipped labelset or operator dispatch bumps this field.
+				 *       Multiple versions of the same [`id`] can coexist in a
+				 *       [`TemplateCatalog`] simultaneously — a customer transitioning
+				 *       between regulatory revisions might hold `v1` and `v2` at
+				 *       once and pin per document class.
+				 *     - [`effective_date`] — the date the regulatory text this
+				 *       template encodes became effective (not the date the
+				 *       template was authored). Reviewers reading an audit trail
+				 *       check this against the run date to confirm the template
+				 *       that fired was the one in force at the time.
+				 *
+				 *     [`Label`]: elide_core::entity::Label
+				 *     [`LabelGroup`]: nvisy_policy::LabelGroup
+				 *     [`PolicyDefinition`]: nvisy_policy::PolicyDefinition
+				 *     [`PolicyDefinition::groups`]: nvisy_policy::PolicyDefinition::groups
+				 *     [`TemplateCatalog`]: super::TemplateCatalog
+				 *     [`description`]: Self::description
+				 *     [`effective_date`]: Self::effective_date
+				 *     [`id`]: Self::id
+				 *     [`name`]: Self::name
+				 *     [`policy`]: Self::policy
+				 *     [`version`]: Self::version
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Template"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
 	"/auth/login/": {
@@ -7446,23 +7618,29 @@ export interface components {
 		 */
 		ArtifactType: "input" | "output" | "intermediate";
 		/**
-		 * @description Author-supplied rationale for a redaction: the policy it enforces and
-		 *     a reason.
+		 * @description Author-supplied rationale for a redaction: a policy name and an optional
+		 *     description.
 		 *
 		 *     Where the matched selection rule answers *which rule fired*, an
 		 *     `Attribution` answers *under what authority* — a compliance clause, an
 		 *     internal policy, a data-handling rule. A policy author attaches it to a
-		 *     selection rule (the anonymizer's `because`); the anonymizer records it on
-		 *     the entity's [`Redaction`] event so an audit can trace a change back to
-		 *     the policy that demanded it.
+		 *     selection rule (`Rule::because` in `elide-redaction`); the anonymizer
+		 *     records it on the entity's [`Redaction`] event so an audit can trace a
+		 *     change back to the policy that demanded it.
+		 *
+		 *     The `name` is the author's label for that policy (`"gdpr-art-17"`,
+		 *     `"hipaa-safe-harbor"`, `"PII removal"`); an optional `description` adds
+		 *     human context. Any stable machine identity a policy layer needs (a rule
+		 *     UUID, a jurisdiction) is that layer's concern — it can encode it in the
+		 *     name or carry it separately.
 		 *
 		 *     [`Redaction`]: crate::entity::provenance::EventKind::Redaction
 		 */
 		Attribution: {
-			/** @description Stable policy / rule identifier (e.g. `"gdpr-art-17"`, `"pci-dss-3.4"`). */
-			policy_id: string;
-			/** @description Human-readable reason (e.g. `"right to erasure"`), when given. */
-			reason?: string;
+			/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
+			description?: string;
+			/** @description The policy's name (e.g. `"gdpr-art-17"`, `"hipaa-safe-harbor"`). */
+			name: string;
 		};
 		/**
 		 * @description Per-call payload a recognizer inspects for the [`Audio`] modality.
@@ -7572,9 +7750,12 @@ export interface components {
 			 *     `None` means "use the matching policy rule's decision";
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule.
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
 			 */
-			review?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["Review"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -7827,23 +8008,20 @@ export interface components {
 		/**
 		 * @description What detection found in one document.
 		 *
-		 *     The body group plus per-container-part groups (each tagged
-		 *     by modality) plus a snapshot of the recognition [`Scope`] the
-		 *     entities were scored against.
+		 *     The body group plus per-container-part groups (each tagged by
+		 *     modality) plus the recognition [`AuditContext`] the entities
+		 *     were scored against.
 		 *
-		 *     The scope snapshot travels with the entities so anonymize
-		 *     can rebuild an orchestrator against exactly the vocabulary
-		 *     analyze used. Anything a policy predicate compares against
-		 *     (label catalog, document-level classification labels,
-		 *     asserted languages / jurisdictions) is here.
+		 *     The context travels with the entities so anonymize can rebuild
+		 *     an orchestrator against exactly the vocabulary analyze used.
+		 *     Anything a policy predicate compares against beyond the label
+		 *     catalog (asserted languages, jurisdictions, document tags) is
+		 *     here; labels are re-derived from the policy set on each
+		 *     anonymize call.
 		 *
-		 *     `correlation_id` on the persisted scope is always `None`; the
-		 *     anonymize call supplies a fresh id from the passed
-		 *     [`Document`] so anonymize-side tracing spans are distinct
-		 *     from the analyze-side ones.
-		 *
-		 *     [`Document`]: nvisy_schema::file::Document
-		 *     [`Scope`]: elide::recognition::Scope
+		 *     No [`Default`] — a well-formed audit must carry a real
+		 *     [`AuditContext`] with a real correlation id. Callers building
+		 *     an audit outside the analyze path construct it explicitly.
 		 */
 		Audit: {
 			/**
@@ -7853,7 +8031,23 @@ export interface components {
 			 *     or the codec resolved the doc to a modality with no
 			 *     pipeline).
 			 */
-			body?: components["schemas"]["RecognizedGroup"];
+			body?: components["schemas"]["EntityGroup"];
+			/**
+			 * @description Recognition context.
+			 *
+			 *     The asserted languages, countries, document tags, and the
+			 *     analyze-side correlation id. Held so
+			 *     [`Engine::anonymize`] can compile against the same
+			 *     vocabulary analyze used without the caller re-passing an
+			 *     `AnalyzerParams`.
+			 *
+			 *     Required on the wire — a missing context on an incoming
+			 *     [`Audit`] rejects at deserialize time so the shape
+			 *     mismatch surfaces at load, not at apply.
+			 *
+			 *     [`Engine::anonymize`]: super::Engine::anonymize
+			 */
+			context: components["schemas"]["AuditContext"];
 			/**
 			 * @description One entry per container part the orchestrator surfaced.
 			 *
@@ -7862,26 +8056,65 @@ export interface components {
 			 *     carries that part's modality + entities.
 			 */
 			parts?: {
-				[key: string]: components["schemas"]["RecognizedGroup"];
+				[key: string]: components["schemas"]["EntityGroup"];
 			};
+		};
+		/**
+		 * @description Recognition-side facts that travel from analyze to anonymize.
+		 *
+		 *     Mirrors elide's [`Scope`] shape one-for-one: direct fields
+		 *     for `languages` and `countries` (typed, elide-native), a
+		 *     [`metadata`] sub-struct for free-form classification strings
+		 *     (`tags`, `purpose`, `audience`), and the analyze-time
+		 *     [`correlation_id`]. The label catalog is not on here —
+		 *     labels are policy-owned, and anonymize re-derives them from
+		 *     the policy set it was handed.
+		 *
+		 *     No [`Default`] — `correlation_id` has no meaningful default
+		 *     (a nil UUID would silently collapse unrelated audits under
+		 *     one bucket in downstream trace aggregators), so callers
+		 *     supply one explicitly. Everything else defaults to empty.
+		 *
+		 *     [`Scope`]: elide::recognition::Scope
+		 *     [`metadata`]: Self::metadata
+		 *     [`correlation_id`]: Self::correlation_id
+		 */
+		AuditContext: {
 			/**
-			 * @description Recognition scope snapshot.
+			 * Format: uuid
+			 * @description Analyze-time correlation id.
 			 *
-			 *     The resolved label catalog + asserted languages,
-			 *     countries, and document labels. Held so
-			 *     [`Engine::anonymize_document`] can compile against the same
-			 *     vocabulary analyze used without the caller re-passing an
-			 *     `AnalyzerParams`.
+			 *     Threaded into every tracing span on the recognition path;
+			 *     carried over so the anonymize path can link its own spans
+			 *     to the same request. The anonymize call supplies a fresh
+			 *     id from the passed [`Document`] as the anonymize-side
+			 *     correlation id — this one stays as the analyze-side
+			 *     pointer.
 			 *
-			 *     Required on the wire. A missing scope on an incoming
-			 *     [`Audit`] would default to an empty catalog and
-			 *     silently underfire every `TagOneOf` policy predicate;
-			 *     rejecting at deserialize time surfaces the shape mismatch
-			 *     at load, not at apply.
+			 *     Required on the wire.
 			 *
-			 *     [`Engine::anonymize_document`]: super::Engine::anonymize_document
+			 *     [`Document`]: nvisy_schema::file::Document
 			 */
-			scope: components["schemas"]["Scope"];
+			correlationId: string;
+			/**
+			 * @description Caller-asserted jurisdictions.
+			 *
+			 *     Recorded from `AnalyzerParams.scope.countries`.
+			 */
+			countries?: components["schemas"]["CountryCode"][];
+			/**
+			 * @description Caller-asserted languages for the analysis.
+			 *
+			 *     Recorded from `AnalyzerParams.scope.languages` at analyze
+			 *     time; anonymize re-uses them verbatim.
+			 * @default []
+			 */
+			languages: components["schemas"]["Languages"];
+			/**
+			 * @description Free-form request context: document tags, request purpose,
+			 *     output audience. See elide's [`ScopeMetadata`].
+			 */
+			metadata?: components["schemas"]["ScopeMetadata"];
 		};
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
@@ -7962,6 +8195,35 @@ export interface components {
 			/** @description Minimum corner (top-left, conventionally). */
 			min: components["schemas"]["Point"];
 		};
+		/**
+		 * @description Text a [`TextRedaction::Clamp`] emits for out-of-range values.
+		 *
+		 *     Three forms, deserialized untagged so callers can pick the
+		 *     terser one for the case at hand:
+		 *
+		 *     - **Plain string** (`"90 or older"`) — English-only shorthand.
+		 *     - **Localized map** (`{"en": "90 or older", "fr": "90 ou plus"}`)
+		 *       — one entry per language the deployment ships; missing
+		 *       locales fall back to English at render time.
+		 *     - **Format template** (`{"format": "{n} or older"}`) — the
+		 *       engine substitutes `{n}` for the threshold, so a ceiling of
+		 *       `90` renders `"90 or older"` without the caller repeating the
+		 *       number. Same rendering in every language.
+		 *
+		 *     Round-trips through serde as whichever form the caller wrote.
+		 */
+		ClampBucket:
+			| string
+			| {
+					/**
+					 * @description The template string. `{n}` is substituted; other text
+					 *     is literal.
+					 */
+					format: string;
+			  }
+			| {
+					[key: string]: string;
+			  };
 		/**
 		 * @description Color as 8-bit RGB.
 		 *
@@ -8318,20 +8580,36 @@ export interface components {
 		/**
 		 * @description Request payload for creating a new workspace policy.
 		 *
-		 *     The `definition` is a structured policy the redaction engine consumes;
-		 *     its `name` and `description` drive the stored columns unless overridden
-		 *     here.
+		 *     The body comes from a template or an inline definition (see [`PolicyBody`]).
+		 *     The body's `name` and `description` drive the stored columns unless
+		 *     overridden here.
 		 */
 		CreatePolicy: {
-			/** @description The structured policy body consumed by the engine. */
-			definition: components["schemas"]["PolicyDefinition"];
 			/** @description Optional description override. Defaults to the policy's own description. */
 			description?: string;
 			/** @description Optional display name override. Defaults to the policy's own name. */
 			displayName?: string;
 			/** @description URL slug, unique within the workspace and immutable after creation. */
 			slug: components["schemas"]["Handle"];
-		};
+		} & (
+			| {
+					/** @constant */
+					source: "template";
+					/** @description Id of the built-in policy template to seed from. */
+					template: components["schemas"]["Handle"];
+			  }
+			| {
+					/**
+					 * @description The structured policy body.
+					 *
+					 *     Boxed to keep the enum small: an inline body is much larger than a
+					 *     template id, and most requests use a template.
+					 */
+					definition: components["schemas"]["PolicyDefinition"];
+					/** @constant */
+					source: "inline";
+			  }
+		);
 		/** @description Request payload for creating a new workspace webhook. */
 		CreateWebhook: {
 			/** @description Detailed description of the webhook's purpose (max 500 characters). */
@@ -8541,6 +8819,24 @@ export interface components {
 			validator?: string;
 		};
 		/**
+		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
+		 *
+		 *     Every rendering is an ISO-8601 form, so the output is locale-independent
+		 *     by construction — no localized month names or week markers to configure.
+		 */
+		DateGranularity: "year" | "year_month" | "hour";
+		/**
+		 * @description Which written date convention a [`GeneralizeDate`] accepts on *input*.
+		 *
+		 *     This governs only how the entity value is *parsed*; the output mirrors
+		 *     each value's own convention (see [`GeneralizeDate::render`]). The choice
+		 *     is explicit, never inferred from the entity's language: `03/04/1987` is
+		 *     a real date under both conventions (March 4 vs. April 3), so a wrong
+		 *     guess would silently emit a plausible-but-wrong month. The policy
+		 *     author, who knows the corpus's convention, sets it.
+		 */
+		DateStyle: "iso" | "us";
+		/**
 		 * @description Pixel dimensions of an image or any 2-D canvas.
 		 *
 		 *     Converts between normalized `0.0..=1.0` coordinates (what vision
@@ -8612,6 +8908,40 @@ export interface components {
 		 *     mentions, not a global key.
 		 */
 		EntityCoRef: string;
+		/**
+		 * @description A modality-tagged group of recognised entities.
+		 *
+		 *     The unit [`Audit`] stores in `body` and in every `parts`
+		 *     entry.
+		 *
+		 *     Tagged by `modality` (snake_case) so deserialization picks the
+		 *     right variant and the entity vec inside is statically typed
+		 *     per modality — apply-time we hand each variant back to elide
+		 *     as a `Vec<Entity<M>>` for the appropriate `M`.
+		 *
+		 *     [`Audit`]: crate::Audit
+		 */
+		EntityGroup:
+			| {
+					entities: components["schemas"]["TextEntityRecord"][];
+					/** @constant */
+					modality: "text";
+			  }
+			| {
+					entities: components["schemas"]["TabularEntityRecord"][];
+					/** @constant */
+					modality: "tabular";
+			  }
+			| {
+					entities: components["schemas"]["ImageEntityRecord"][];
+					/** @constant */
+					modality: "image";
+			  }
+			| {
+					entities: components["schemas"]["AudioEntityRecord"][];
+					/** @constant */
+					modality: "audio";
+			  };
 		/**
 		 * @description HTTP error response representation with security-conscious design.
 		 *
@@ -8763,14 +9093,6 @@ export interface components {
 		};
 		/** @description Lowercase, dash-separated identifier used in URLs and as account handles. */
 		Handle: string;
-		/**
-		 * @description SHA-2 variant for the [`TextRedaction::Hash`] operator.
-		 *
-		 *     Wire mirror of elide's `Sha2Algorithm`; the runtime `From`
-		 *     conversion is on the engine side so this crate stays free
-		 *     of the elide-redaction dep.
-		 */
-		HashAlgorithm: "sha256" | "sha512";
 		/** @description Response body for `GET /health/`. */
 		Health: {
 			/** @description Per-component health checks. */
@@ -8888,9 +9210,12 @@ export interface components {
 			 *     `None` means "use the matching policy rule's decision";
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule.
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
 			 */
-			review?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["Review"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -9294,55 +9619,153 @@ export interface components {
 			| "expired"
 			| "revoked";
 		/**
-		 * @description Kind of sensitive information: a name, an optional description, and
-		 *     zero or more tags.
-		 *
-		 *     Names are conventionally `SCREAMING_SNAKE_CASE` (`"PHONE_NUMBER"`),
-		 *     matching Presidio, but this is convention, not enforcement. The
-		 *     taxonomy is open: a [`Label`] can be minted for any name a recognizer
-		 *     or configuration needs.
+		 * @description Kind of sensitive information: a stable [`id`], per-language
+		 *     [`LabelLocale`]s, and zero or more tags.
 		 *
 		 *     # Identity
 		 *
-		 *     Labels are identified by [`name`]; selectors match by name. Note that
-		 *     derived equality is *structural*: two labels with the same name but
-		 *     different descriptions or tags are not `==`. Code that wants
-		 *     name-only equality should compare [`name`] explicitly.
+		 *     Labels are identified by [`id`] — a stable lowercase `snake_case`
+		 *     string (`"phone_number"`), never localized, and the catalog key that a
+		 *     [`LabelRef`] resolves through. Selectors match by id. Derived equality
+		 *     is *structural*: two labels with the same id but different
+		 *     localizations or tags are not `==`; compare [`id`] for identity.
+		 *
+		 *     # Localization
+		 *
+		 *     The display name and description are localized per [`LanguageTag`].
+		 *     English (`"en"`) is required at construction and is the fallback when a
+		 *     requested locale is absent, so [`localization`] always returns some
+		 *     text — NER and LLM read the analysis language's name and description to
+		 *     prompt the model, keyed by the stable id.
 		 *
 		 *     # Tags
 		 *
-		 *     [`tags`] is a free-form list of short identifiers policy selectors
-		 *     can match against. Built-in labels carry category tags
-		 *     (`personal_identity`, `contact_info`, `financial`, …) plus
-		 *     cross-cutting tags where applicable (`pii`, `phi`, `pci`). Custom
-		 *     labels can ship with zero tags.
+		 *     [`tags`] is a free-form list of short identifiers policy selectors can
+		 *     match against. Built-in labels carry category tags (`personal_identity`,
+		 *     `contact_info`, `financial`, …) plus cross-cutting tags where applicable
+		 *     (`pii`, `phi`, `pci`). Custom labels can ship with zero tags.
 		 *
-		 *     [`name`]: Label::name
+		 *     [`id`]: Label::id
+		 *     [`localization`]: Label::localization
 		 *     [`tags`]: Label::tags
 		 */
 		Label: {
-			description?: string;
-			name: string;
+			id: string;
+			localizations: components["schemas"]["LocalizedText"];
 			tags: string[];
 		};
 		/**
-		 * @description Registry of [`Label`]s, keyed by name.
+		 * @description One entry inside a [`TableRule`]: the label to match plus the
+		 *     per-modality operators to run.
 		 *
-		 *     Holds the authoritative definitions (names + descriptions) for a run.
-		 *     A [`LabelRef`] carried on a detection or entity is resolved back to
-		 *     its full [`Label`] with [`get`].
-		 *
-		 *     [`get`]: LabelCatalog::get
+		 *     Kept as a named struct rather than a `(LabelRef, ModalityRedactions)`
+		 *     tuple so the wire JSON reads `{"label": "email", "action": {…}}`
+		 *     instead of a positional pair.
 		 */
-		LabelCatalog: {
-			[key: string]: components["schemas"]["Label"];
+		LabelEntry: {
+			/** @description Per-modality operators to run for matching entities. */
+			action: components["schemas"]["ModalityRedactions"];
+			/** @description Label the entry matches on. */
+			label: components["schemas"]["LabelRef"];
 		};
+		/**
+		 * @description Named cluster of [`LabelRef`]s a policy's rules can reference
+		 *     by name via [`Predicate::LabelInGroup`].
+		 *
+		 *     Groups live on the [`PolicyDefinition`] that declares them
+		 *     and are visible only to that policy's own rules. Templates
+		 *     ship one group per canonical label list (`"hipaa_18"`,
+		 *     `"gdpr_article_9"`, `"pci_chd"`, `"pci_sad"`), and every
+		 *     rule that targets that list references the group by name
+		 *     instead of respelling the labels. When elide adds a new label
+		 *     to a category, extending the group covers every rule that
+		 *     referenced it — no rule edit.
+		 *
+		 *     **Compilation**: at request time the engine synthesises a
+		 *     `group:<policy_id>:<name>` tag on every label listed in the
+		 *     group, then rewrites [`Predicate::LabelInGroup { group }`]
+		 *     into [`Predicate::TagOneOf { tags: ["group:<policy_id>:<name>"] }`].
+		 *     That routes through the same `Anonymizer::with_tag` fast
+		 *     path as any authored tag — no new engine machinery, no
+		 *     per-request walk over group membership. Scoping the tag by
+		 *     `policy_id` keeps two policies that both declare `hipaa_18`
+		 *     with different labelsets from stepping on each other.
+		 *
+		 *     **Unknown group names error at request validation**, not at
+		 *     apply time. A typo doesn't silently underfire.
+		 *
+		 *     [`PolicyDefinition`]: super::PolicyDefinition
+		 *     [`Predicate::LabelInGroup`]: super::predicate::Predicate::LabelInGroup
+		 *     [`Predicate::LabelInGroup { group }`]: super::predicate::Predicate::LabelInGroup
+		 *     [`Predicate::TagOneOf { tags: ["group:<policy_id>:<name>"] }`]: super::predicate::Predicate::TagOneOf
+		 */
+		LabelGroup: {
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * @description Labels this group covers, by ref.
+			 *
+			 *     A label that doesn't appear in the request's compiled
+			 *     [`LabelCatalog`] is silently skipped at tag-synthesis time
+			 *     — a group can safely list labels the current build
+			 *     doesn't emit (e.g. modality-gated ones); rules keyed off
+			 *     the group still fire on whatever labels *are* present.
+			 *
+			 *     [`LabelCatalog`]: elide_core::entity::LabelCatalog
+			 */
+			labels: components["schemas"]["LabelRef"][];
+			/**
+			 * @description Stable name a [`Predicate::LabelInGroup`] references.
+			 *
+			 *     Free-form; a policy layer picks the vocabulary. Recommend
+			 *     snake_case identifiers (`hipaa_18`, `gdpr_article_9`) —
+			 *     they compile to `group:hipaa_18` tags on the catalog and
+			 *     read cleanly in audit provenance.
+			 *
+			 *     [`Predicate::LabelInGroup`]: super::predicate::Predicate::LabelInGroup
+			 */
+			name: string;
+		};
+		/**
+		 * @description A label's human-facing text in one language: a display name and an
+		 *     optional fuller description.
+		 *
+		 *     The `name` is a short, natural-language phrase (`"phone number"`) — the
+		 *     label a zero-shot NER model like GLiNER matches on, and the primary
+		 *     text an LLM prompt shows. The `description` is optional extra guidance
+		 *     for backends that consume it (GLiNER-2.0's bi-encoder, an LLM); leave
+		 *     it `None` when the name alone is clear.
+		 */
+		LabelLocale: {
+			/**
+			 * @description Optional fuller description, for description-capable backends
+			 *     (GLiNER-2.0, LLM). `None` when the name suffices.
+			 */
+			description?: string;
+			/**
+			 * @description Short natural-language display name (e.g. `"phone number"`). What a
+			 *     zero-shot NER model matches on and an LLM prompt surfaces.
+			 */
+			name: string;
+		};
+		/**
+		 * @description Lightweight reference to a [`Label`], carrying only its id.
+		 *
+		 *     This is what detections and entities hold: cloning is cheap (short
+		 *     ids inline into the [`HipStr`]), and the full [`Label`], with its
+		 *     localized names and descriptions, is resolved on demand from a
+		 *     [`LabelCatalog`].
+		 *
+		 *     [`Label`]: crate::entity::Label
+		 *     [`LabelCatalog`]: crate::entity::LabelCatalog
+		 */
+		LabelRef: string;
 		/**
 		 * @description Per-policy label-catalog selection.
 		 *
 		 *     Picks builtins by name + adds inline custom schemas.
 		 */
-		LabelCatalogParams: {
+		Labels: {
 			/**
 			 * @description Builtin label names to enable.
 			 *
@@ -9353,17 +9776,6 @@ export interface components {
 			/** @description Custom labels defined inline by the caller. */
 			custom?: components["schemas"]["Label"][];
 		};
-		/**
-		 * @description Lightweight reference to a [`Label`], carrying only its name.
-		 *
-		 *     This is what detections and entities hold: cloning is cheap (short
-		 *     names inline into the [`HipStr`]), and the full [`Label`], with its
-		 *     description, is resolved on demand from a [`LabelCatalog`].
-		 *
-		 *     [`Label`]: crate::entity::Label
-		 *     [`LabelCatalog`]: crate::entity::LabelCatalog
-		 */
-		LabelRef: string;
 		/**
 		 * @description Single language detection result.
 		 *
@@ -9482,6 +9894,28 @@ export interface components {
 			role?: components["schemas"]["WorkspaceRole"];
 			/** @description Sort by field. */
 			sortBy?: components["schemas"]["MemberSortField"];
+		};
+		/**
+		 * @description A value localized per [`LanguageTag`], with an English-first fallback.
+		 *
+		 *     The reusable mechanism behind any text that varies by language: a
+		 *     [`Label`]'s display name and description, a redaction operator's bucket
+		 *     label, and so on. English (`"en"`) is the conventional anchor —
+		 *     constructors seed it, and [`resolve`] falls back to it (then to any
+		 *     entry) when a requested locale is absent, so a caller that supplied
+		 *     English always gets *some* value.
+		 *
+		 *     Generic over the stored value `T`, so it carries a bare `HipStr`
+		 *     (a bucket label) or a richer struct (a label's name-plus-description)
+		 *     equally. It is a thin wrapper over a `HashMap<LanguageTag, T>`; the
+		 *     added value is the fallback policy in [`resolve`], kept in one place
+		 *     rather than reimplemented at each use site.
+		 *
+		 *     [`Label`]: crate::entity::Label
+		 *     [`resolve`]: LocalizedText::resolve
+		 */
+		LocalizedText: {
+			[key: string]: components["schemas"]["LabelLocale"];
 		};
 		/** @description Request payload for login. */
 		Login: {
@@ -10028,14 +10462,26 @@ export interface components {
 			 */
 			fallback?: components["schemas"]["ModalityRedactions"];
 			/**
+			 * @description Named clusters of [`LabelRef`]s this policy's rules may
+			 *     reference by name via [`Predicate::LabelInGroup`]. Scoped
+			 *     to this policy — a rule can only name a group its own
+			 *     policy declared; unknown references error at request
+			 *     validation. Two policies that both declare `hipaa_18` with
+			 *     different labelsets stay independent.
+			 *
+			 *     [`LabelRef`]: elide_core::entity::LabelRef
+			 *     [`Predicate::LabelInGroup`]: predicate::Predicate::LabelInGroup
+			 */
+			groups?: components["schemas"]["LabelGroup"][];
+			/**
 			 * Format: uuid
 			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
 			 *     customer-supplied so re-submissions carry the same id.
 			 *     Engine stamps this into the redaction event's
-			 *     [`Attribution::policy_id`] so reviewers can find this
-			 *     policy from any redaction it drove.
+			 *     [`Attribution::name`] so reviewers can find this policy
+			 *     from any redaction it drove.
 			 *
-			 *     [`Attribution::policy_id`]: elide_core::entity::provenance::Attribution::policy_id
+			 *     [`Attribution::name`]: elide_core::entity::provenance::Attribution::name
 			 */
 			id: string;
 			/**
@@ -10048,7 +10494,7 @@ export interface components {
 			 *     [`LabelCatalog`]: elide_core::entity::LabelCatalog
 			 *     [`Predicate::TagOneOf`]: predicate::Predicate::TagOneOf
 			 */
-			labels?: components["schemas"]["LabelCatalogParams"];
+			labels?: components["schemas"]["Labels"];
 			/** @description Human-readable name. Display-only. Does not key anything. */
 			name: string;
 			/** @description Lifecycle rules for content under this policy. */
@@ -10075,41 +10521,18 @@ export interface components {
 			policySlug: string;
 		};
 		/**
-		 * @description One rule inside a [`PolicyDefinition`]. Identity is the UUID; `name` /
-		 *     `description` are display-only.
+		 * @description One rule inside a [`PolicyDefinition`]. Identity is the UUID;
+		 *     `name` / `description` are display-only.
+		 *
+		 *     Untagged on the wire: distinguished by the presence of
+		 *     `predicate` (predicated) vs. `operators` (table). Existing
+		 *     JSON keeps working.
 		 *
 		 *     [`PolicyDefinition`]: super::PolicyDefinition
 		 */
-		PolicyRule: {
-			/**
-			 * @description Per-modality redaction operators applied when the
-			 *     predicate matches. Modalities the rule doesn't cover fall
-			 *     through to the policy fallback (or the next policy in the
-			 *     chain).
-			 */
-			action: components["schemas"]["ModalityRedactions"];
-			/** @description Optional description for reviewers. */
-			description?: string;
-			/**
-			 * Format: uuid
-			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
-			 *     customer-supplied so re-submissions carry the same id.
-			 *     Engine stamps this into the redaction event's
-			 *     [`Attribution::reason`] so reviewers can trace back which
-			 *     rule fired.
-			 *
-			 *     [`Attribution::reason`]: elide_core::entity::provenance::Attribution::reason
-			 */
-			id: string;
-			/** @description Human-readable name. Display-only. Does not key anything. */
-			name: string;
-			/**
-			 * @description Entity-level predicate that decides whether the rule fires
-			 *     on a given recognised entity. Composable; see
-			 *     [`Predicate`] for the full grammar.
-			 */
-			predicate: components["schemas"]["Predicate"];
-		};
+		PolicyRule:
+			| components["schemas"]["PredicatedRule"]
+			| components["schemas"]["TableRule"];
 		/**
 		 * @description Lightweight policy view for lists.
 		 *
@@ -10157,6 +10580,29 @@ export interface components {
 			 */
 			total?: number;
 		};
+		/** @description Path parameters for a single policy template in the deployment catalog. */
+		PolicyTemplatePathParams: {
+			/** @description Slug of the built-in policy template. */
+			templateSlug: string;
+		};
+		/**
+		 * @description Lightweight template view for catalog listings.
+		 *
+		 *     Omits the policy body so a listing costs nothing to render; the full
+		 *     [`Template`] is returned by the single-template endpoint.
+		 */
+		PolicyTemplateSummary: {
+			/** @description Longer description for reviewers, when present. */
+			description?: string;
+			/** @description Date the regulatory text this template encodes became effective. */
+			effectiveDate: string;
+			/** @description Machine identifier, stable across versions. */
+			id: string;
+			/** @description Human-readable template name. */
+			name: string;
+			/** @description Semver version of this template. */
+			version: string;
+		};
 		/**
 		 * @description Closed polygon, given by its ordered vertices.
 		 *
@@ -10193,6 +10639,16 @@ export interface components {
 					tags: string[];
 			  }
 			| {
+					/**
+					 * @description Name of the [`LabelGroup`] to match against.
+					 *
+					 *     [`LabelGroup`]: super::LabelGroup
+					 */
+					group: string;
+					/** @constant */
+					kind: "labelInGroup";
+			  }
+			| {
 					/** @description Cluster id to match. */
 					coref: string;
 					/** @constant */
@@ -10216,6 +10672,31 @@ export interface components {
 					/** @description Negated predicate. */
 					not: components["schemas"]["Predicate"];
 			  };
+		/** @description Predicate-gated rule: one predicate, one action. */
+		PredicatedRule: {
+			/**
+			 * @description Per-modality redaction operators applied when the
+			 *     predicate matches. Modalities the rule doesn't cover fall
+			 *     through to the policy fallback (or the next policy in the
+			 *     chain).
+			 */
+			action: components["schemas"]["ModalityRedactions"];
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * Format: uuid
+			 * @description Stable identifier. UUIDv7 recommended.
+			 */
+			id: string;
+			/** @description Human-readable name. Display-only. */
+			name: string;
+			/**
+			 * @description Entity-level predicate that decides whether the rule fires
+			 *     on a given recognised entity. Composable; see
+			 *     [`Predicate`] for the full grammar.
+			 */
+			predicate: components["schemas"]["Predicate"];
+		};
 		/**
 		 * @description How to pick recognizers out of a deployment-configured lineup.
 		 *
@@ -10254,42 +10735,6 @@ export interface components {
 			/** Format: uint */
 			start: number;
 		};
-		/**
-		 * @description A modality-tagged group of recognized entities.
-		 *
-		 *     The unit [`Audit`] stores in `body` and in every
-		 *     `parts` entry.
-		 *
-		 *     Tagged by `modality` (snake_case) so deserialization picks the
-		 *     right variant and the entity vec inside is statically typed
-		 *     per modality — apply-time we hand each variant back to elide
-		 *     as a `Vec<Entity<M>>` for the appropriate `M`.
-		 */
-		RecognizedGroup:
-			| {
-					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["TextEntityRecord"][];
-					/** @constant */
-					modality: "text";
-			  }
-			| {
-					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["TabularEntityRecord"][];
-					/** @constant */
-					modality: "tabular";
-			  }
-			| {
-					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["ImageEntityRecord"][];
-					/** @constant */
-					modality: "image";
-			  }
-			| {
-					/** @description Recognized entities, in source-coordinate order. */
-					entities: components["schemas"]["AudioEntityRecord"][];
-					/** @constant */
-					modality: "audio";
-			  };
 		/**
 		 * @description Recognizer slots an analyzer can fill.
 		 *
@@ -10367,6 +10812,38 @@ export interface components {
 		/** @description What class of data a retention policy applies to. */
 		RetentionScope: "original_content" | "redacted_output" | "audit_logs";
 		/**
+		 * @description A reviewer-supplied redaction override with the policy
+		 *     authority it draws from.
+		 *
+		 *     The `policy_id` isn't just for audit — it also picks which
+		 *     per-policy pseudonym vault and per-policy [`KeyProvider`] the
+		 *     override's operator resolves against, so an override using
+		 *     [`Pseudonymize`] or [`HmacHash`] stays consistent with the
+		 *     authoring policy's other rules.
+		 *
+		 *     [`KeyProvider`]: elide::redaction::operators::KeyProvider
+		 *     [`Pseudonymize`]: elide::redaction::operators::Pseudonymize
+		 *     [`HmacHash`]: elide::redaction::operators::HmacHash
+		 */
+		Review: {
+			/**
+			 * @description The per-modality redaction operators to run for this
+			 *     entity. Overrides whatever the policy set would have
+			 *     picked for the same entity.
+			 */
+			action: components["schemas"]["ModalityRedactions"];
+			/**
+			 * Format: uuid
+			 * @description The policy whose authority the reviewer exercises. Must
+			 *     match the `id` of a [`PolicyDefinition`] submitted with
+			 *     the anonymize request. The audit event stamps this UUID
+			 *     as the attribution `name`.
+			 *
+			 *     [`PolicyDefinition`]: nvisy_schema::policy::PolicyDefinition
+			 */
+			policyId: string;
+		};
+		/**
 		 * @description A serializable summary of *which selection rule* bound an operator to an
 		 *     entity — the automatic "why" behind a redaction.
 		 *
@@ -10437,7 +10914,7 @@ export interface components {
 		 *     analyzer, which borrows it into a fresh [`RecognizerContext`] per
 		 *     payload. It holds only what the *caller* asserts about the analysis as a
 		 *     whole — languages, jurisdictions, document labels, the target catalog, a
-		 *     correlation id — none of which depends on the medium, so one `Scope`
+		 *     correlation id — none of which depends on the medium, so one [`Scope`]
 		 *     drives a text, image, or audio analysis alike.
 		 *
 		 *     Per-medium regions (caller-supplied inclusions and exclusions, which are
@@ -10447,40 +10924,42 @@ export interface components {
 		 *
 		 *     [`RecognizerContext`]: super::RecognizerContext
 		 *     [`Annotations`]: super::annotation::Annotations
+		 *     Free-form, caller-asserted request context: the *document* it is about and
+		 *     the *request* driving it.
+		 *
+		 *     Three axes of opaque classification strings elide neither ships nor
+		 *     interprets — a downstream policy layer chooses what `"medical"` or
+		 *     `"fraud_detection"` or `"auditor"` mean. They are read in two places: a
+		 *     recognizer may bias its detection on them (the LLM prompt lists them so the
+		 *     model attends to the right terms), and a scope-aware operator predicate may
+		 *     branch on them at selection time (redact the same document differently per
+		 *     [`audience`]).
+		 *
+		 *     - [`tags`] classify the *document* (`"medical"`, `"gdpr-request"`).
+		 *     - [`purpose`] is why the request exists (`"fraud_detection"`).
+		 *     - [`audience`] is who the redacted output is for (`"support_agent"`,
+		 *       `"auditor"`) — the axis PCI-style "same document, two masks" branches on.
+		 *
+		 *     [`tags`]: Self::tags
+		 *     [`purpose`]: Self::purpose
+		 *     [`audience`]: Self::audience
 		 */
-		Scope: {
+		ScopeMetadata: {
 			/**
-			 * @description The entity types recognizers are asked to emit. A zero-shot NER
-			 *     model requests exactly this set; an LLM prompt lists it as the
-			 *     labels to find. Empty means "the recognizer's own default" — a
-			 *     recognizer with its own configured label set keeps it; one without
-			 *     emits whatever its backend natively produces.
-			 * @default {}
+			 * @description Who the redacted output is for (e.g. `"support_agent"`, `"auditor"`).
+			 *     The axis a per-audience redaction branches on: one detected document,
+			 *     selected differently per audience. May hold several.
+			 * @default []
 			 */
-			catalog: components["schemas"]["LabelCatalog"];
+			audience: string[];
 			/**
-			 * Format: uuid
-			 * @description Correlation UUID propagated through the tracing span for this
-			 *     analysis.
+			 * @description The caller-asserted business purpose driving this request (e.g.
+			 *     `"fraud_detection"`, `"gdpr_erasure_request"`). A scope-aware operator
+			 *     predicate may skip or swap a rule based on it; a recognizer may bias
+			 *     detection on it. `None` when the caller asserts no purpose.
 			 * @default null
 			 */
-			correlation_id: string;
-			/**
-			 * @description Caller-asserted jurisdictions. When non-empty, recognizers that
-			 *     carry per-rule country scopes skip rules that match none of them.
-			 *     An empty list means "any": rules that declare countries still run
-			 *     as a permissive fallback so callers who don't assert a jurisdiction
-			 *     don't lose detections. A document spanning several jurisdictions
-			 *     can assert all of them; a rule runs when any one matches.
-			 * @default []
-			 */
-			countries: components["schemas"]["CountryCode"][];
-			/**
-			 * @description Caller-asserted languages for the analysis. Empty means the caller
-			 *     asserted none, leaving detection (if an enricher runs) to fill in.
-			 * @default []
-			 */
-			languages: components["schemas"]["Languages"];
+			purpose: string;
 			/**
 			 * @description Document-level classification tags (e.g. `"medical"`,
 			 *     `"gdpr-request"`). Recognizers may use these to bias their behavior
@@ -10488,9 +10967,9 @@ export interface components {
 			 *
 			 *     Named `tags`, not `labels`, to keep "label" reserved for the entity
 			 *     taxonomy ([`LabelRef`]/[`LabelCatalog`]): these classify the
-			 *     *document*, whereas [`catalog`] names the entity *types* to emit.
+			 *     *document*, whereas the scope's catalog names the entity *types* to
+			 *     emit.
 			 *
-			 *     [`catalog`]: Self::catalog
 			 *     [`LabelRef`]: crate::entity::LabelRef
 			 *     [`LabelCatalog`]: crate::entity::LabelCatalog
 			 * @default []
@@ -10500,10 +10979,12 @@ export interface components {
 		/**
 		 * @description Caller-asserted scope for one request.
 		 *
-		 *     Mirrors the wire-visible knobs of `elide::recognition::Scope`.
-		 *     The engine assembles this plus a server-minted
-		 *     `correlation_id` into the orchestrator's `Scope` at compile
-		 *     time.
+		 *     A narrower wire projection of `elide::recognition::Scope`:
+		 *     `languages` and `countries` (typed, elide-native), plus
+		 *     elide's [`ScopeMetadata`] block for free-form classification
+		 *     strings (`tags`, `purpose`, `audience`). The engine assembles
+		 *     this plus a server-minted `correlation_id` and a policy-derived
+		 *     label catalog into the orchestrator's `Scope` at compile time.
 		 */
 		ScopeParams: {
 			/**
@@ -10525,21 +11006,22 @@ export interface components {
 			 */
 			languages: components["schemas"]["Languages"];
 			/**
-			 * @description Document-level classification tags.
-			 *
-			 *     E.g. `"medical"`, `"gdpr-request"`. Recognizers may use
-			 *     these to bias their behaviour for domain-specific terms;
-			 *     those that don't ignore the field.
-			 *
-			 *     Distinct from the entity-label catalog: tags classify the
-			 *     *document*, whereas labels name the entity *types* to
-			 *     emit. Labels are authored on each [`PolicyDefinition`],
-			 *     not here.
-			 *
-			 *     [`PolicyDefinition`]: crate::policy::PolicyDefinition
+			 * @description Free-form request context: document tags, request purpose,
+			 *     output audience. See elide's [`ScopeMetadata`].
 			 */
-			tags?: string[];
+			metadata?: components["schemas"]["ScopeMetadata"];
 		};
+		/**
+		 * @description Which SHA-2 variant a hashing operator uses.
+		 *
+		 *     Shared by [`Sha2Hash`] (unkeyed digest) and [`HmacHash`] (keyed HMAC):
+		 *     both pick the same underlying width, so the choice lives in one enum
+		 *     rather than one per operator.
+		 *
+		 *     [`Sha2Hash`]: super::Sha2Hash
+		 *     [`HmacHash`]: super::HmacHash
+		 */
+		Sha2Algorithm: "sha256" | "sha512";
 		/** @description Request payload for signup. */
 		Signup: {
 			/** @description Optional display name of the account. */
@@ -10616,6 +11098,42 @@ export interface components {
 		 *     to track whether a run was manually triggered, scheduled, or triggered by a webhook.
 		 */
 		SyncTriggerType: "manual" | "scheduled" | "webhook";
+		/**
+		 * @description Per-label table rule: N labels, N actions, one shared identity.
+		 *
+		 *     Each entry compiles to an elide `Rule::label` attachment under
+		 *     this rule's shared UUID / name / description — so the audit
+		 *     trail records "rule X fired" without exposing the fan-out to
+		 *     the reviewer. Meant for templates where a single policy intent
+		 *     (e.g. "HIPAA Safe Harbor identifiers") routes different labels
+		 *     to different operators.
+		 */
+		TableRule: {
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * Format: uuid
+			 * @description Stable identifier — shared by every entry the table
+			 *     expands into. UUIDv7 recommended.
+			 */
+			id: string;
+			/** @description Human-readable name. Display-only. */
+			name: string;
+			/**
+			 * @description Per-label operator dispatch. Every entity whose label
+			 *     matches a listed [`LabelRef`] attaches the paired
+			 *     [`ModalityRedactions`]. Labels absent from the list are not
+			 *     affected by this rule and fall through to the next rule or
+			 *     the policy fallback.
+			 *
+			 *     A [`Vec`] rather than a map keeps the author-supplied
+			 *     order — elide's anonymizer is first-match-wins, so wire
+			 *     order determines which entry fires when two match the
+			 *     same entity. Duplicate labels are the caller's bug; the
+			 *     engine attaches every entry, and the first one wins.
+			 */
+			operators: components["schemas"]["LabelEntry"][];
+		};
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
@@ -10706,9 +11224,12 @@ export interface components {
 			 *     `None` means "use the matching policy rule's decision";
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule.
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
 			 */
-			review?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["Review"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -10971,6 +11492,147 @@ export interface components {
 					/** @constant */
 					kind: "drop_column";
 			  };
+		/**
+		 * @description A regulatory posture packaged as engine-ready data.
+		 *
+		 *     Templates are plain data; a caller wanting to diverge from
+		 *     the shipped defaults mutates the returned [`policy`]
+		 *     before submitting. The engine never sees the [`Template`]
+		 *     itself — only its [`policy`] via `Engine::analyze` /
+		 *     `Engine::anonymize`. The policy carries its own
+		 *     [`LabelGroup`]s inline via [`PolicyDefinition::groups`].
+		 *
+		 *     # Identity
+		 *
+		 *     Three separate identity fields, mirroring how elide's
+		 *     [`Label`] separates identity from display:
+		 *
+		 *     - [`id`] — the machine key (`"hipaa_safe_harbor"`,
+		 *       snake_case, ASCII, kebab-safe). Stable across template
+		 *       version bumps. What audits, registries, and API paths key
+		 *       on.
+		 *     - [`name`] — the short display string
+		 *       (`"HIPAA Safe Harbor de-identification"`). What a customer
+		 *       sees in a UI or a picker.
+		 *     - [`description`] — optional longer prose for reviewers.
+		 *
+		 *     Plus [`version`] and [`effective_date`]:
+		 *
+		 *     - [`version`] — semver-tracked version of *this* template,
+		 *       distinct from the crate's release version. A change to the
+		 *       shipped labelset or operator dispatch bumps this field.
+		 *       Multiple versions of the same [`id`] can coexist in a
+		 *       [`TemplateCatalog`] simultaneously — a customer transitioning
+		 *       between regulatory revisions might hold `v1` and `v2` at
+		 *       once and pin per document class.
+		 *     - [`effective_date`] — the date the regulatory text this
+		 *       template encodes became effective (not the date the
+		 *       template was authored). Reviewers reading an audit trail
+		 *       check this against the run date to confirm the template
+		 *       that fired was the one in force at the time.
+		 *
+		 *     [`Label`]: elide_core::entity::Label
+		 *     [`LabelGroup`]: nvisy_policy::LabelGroup
+		 *     [`PolicyDefinition`]: nvisy_policy::PolicyDefinition
+		 *     [`PolicyDefinition::groups`]: nvisy_policy::PolicyDefinition::groups
+		 *     [`TemplateCatalog`]: super::TemplateCatalog
+		 *     [`description`]: Self::description
+		 *     [`effective_date`]: Self::effective_date
+		 *     [`id`]: Self::id
+		 *     [`name`]: Self::name
+		 *     [`policy`]: Self::policy
+		 *     [`version`]: Self::version
+		 */
+		Template: {
+			/**
+			 * @description Optional longer prose for reviewers. `None` when the
+			 *     short `name` says enough.
+			 */
+			description?: string;
+			/**
+			 * @description The date the regulatory text this template encodes became
+			 *     effective.
+			 */
+			effectiveDate: string;
+			/**
+			 * @description Machine key — snake_case, ASCII, kebab-safe. Stable
+			 *     across version bumps; audits and registries key on this.
+			 */
+			id: string;
+			/** @description Short human-readable display string. */
+			name: string;
+			/**
+			 * @description The [`PolicyDefinition`] this template encodes. Carries
+			 *     its own [`LabelGroup`]s inline. A caller composing
+			 *     several regulatory postures in one request submits
+			 *     multiple templates and unions their policies into the
+			 *     engine's `&[PolicyDefinition]` slice.
+			 *
+			 *     [`LabelGroup`]: nvisy_policy::LabelGroup
+			 *     [`PolicyDefinition`]: nvisy_policy::PolicyDefinition
+			 */
+			policy: components["schemas"]["PolicyDefinition"];
+			/**
+			 * @description Semver version. See [`semver::Version`] for parse /
+			 *     comparison semantics.
+			 */
+			version: string;
+		};
+		/**
+		 * @description Fallback operator that runs when a declinable primary
+		 *     ([`TextRedaction::Clamp`], [`TextRedaction::GeneralizeDate`])
+		 *     doesn't apply to the entity value.
+		 *
+		 *     The four operators that always apply and produce a deterministic
+		 *     output without needing engine-side infrastructure (no key
+		 *     provider, no vault). Enough to satisfy every regulatory
+		 *     pattern I know: `Clamp/GeneralizeDate → Erase` (the safe
+		 *     default), `→ Replace { template }` (an explicit placeholder),
+		 *     or `→ Mask` / `→ Keep` on the rare occasion those fit.
+		 *
+		 *     Absent from the primary's spec, elide's baked-in default is
+		 *     [`Erase`] — a bare [`TextRedaction::Clamp`] without a `fallback`
+		 *     erases values that aren't numeric.
+		 *
+		 *     [`Erase`]: TerminalFallback::Erase
+		 */
+		TerminalFallback:
+			| {
+					/** @constant */
+					kind: "erase";
+			  }
+			| {
+					/** @constant */
+					kind: "keep";
+			  }
+			| {
+					/** @constant */
+					kind: "replace";
+					/**
+					 * @description Template string. Default `[{label}]`.
+					 * @default [{label}]
+					 */
+					template: string;
+			  }
+			| {
+					/**
+					 * Format: uint
+					 * @description Characters to leave unmasked at the start of the value.
+					 */
+					keep_prefix?: number;
+					/**
+					 * Format: uint
+					 * @description Characters to leave unmasked at the end of the value.
+					 */
+					keep_suffix?: number;
+					/** @constant */
+					kind: "mask";
+					/**
+					 * @description The character that replaces masked positions.
+					 * @default *
+					 */
+					mask_char: string;
+			  };
 		/** @description Request payload for testing a webhook. */
 		TestWebhook: {
 			/**
@@ -11080,9 +11742,12 @@ export interface components {
 			 *     `None` means "use the matching policy rule's decision";
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule.
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
 			 */
-			review?: components["schemas"]["ModalityRedactions"];
+			review?: components["schemas"]["Review"];
 		};
 		/**
 		 * @description One thing that happened to an entity, with its effect on confidence.
@@ -11347,7 +12012,7 @@ export interface components {
 					 * @description SHA-256 (default) or SHA-512.
 					 * @default sha256
 					 */
-					algorithm: components["schemas"]["HashAlgorithm"];
+					algorithm: components["schemas"]["Sha2Algorithm"];
 					/** @constant */
 					kind: "hash";
 					/** @description Salt prepended to the value before hashing. */
@@ -11386,6 +12051,79 @@ export interface components {
 			| {
 					/** @constant */
 					kind: "encrypt";
+			  }
+			| {
+					/**
+					 * @description HMAC-SHA-256 (default) or HMAC-SHA-512.
+					 * @default sha256
+					 */
+					algorithm: components["schemas"]["Sha2Algorithm"];
+					/** @constant */
+					kind: "hmac_hash";
+			  }
+			| {
+					/**
+					 * Format: uint
+					 * @description Characters to keep at the start of the value.
+					 */
+					keep_prefix?: number;
+					/**
+					 * Format: uint
+					 * @description Characters to keep at the end of the value.
+					 */
+					keep_suffix?: number;
+					/** @constant */
+					kind: "truncate";
+			  }
+			| {
+					/**
+					 * Format: double
+					 * @description Threshold at or above which values collapse to
+					 *     `ceiling_bucket`. `None` disables the ceiling.
+					 */
+					ceiling?: number;
+					/**
+					 * @description Bucket label for values at or above `ceiling`. Required
+					 *     when `ceiling` is set; ignored otherwise.
+					 */
+					ceiling_bucket?: components["schemas"]["ClampBucket"];
+					/**
+					 * @description Operator that runs when the entity value isn't a
+					 *     finite number. `None` erases (elide's default).
+					 */
+					fallback?: components["schemas"]["TerminalFallback"];
+					/**
+					 * Format: double
+					 * @description Threshold at or below which values collapse to
+					 *     `floor_bucket`. `None` disables the floor.
+					 */
+					floor?: number;
+					/**
+					 * @description Bucket label for values at or below `floor`. Required
+					 *     when `floor` is set; ignored otherwise.
+					 */
+					floor_bucket?: components["schemas"]["ClampBucket"];
+					/** @constant */
+					kind: "clamp";
+			  }
+			| {
+					/**
+					 * @description Operator that runs when the entity value isn't a
+					 *     parseable date. `None` erases (elide's default).
+					 */
+					fallback?: components["schemas"]["TerminalFallback"];
+					/**
+					 * @description Coarseness of the output. Default `Year`.
+					 * @default year
+					 */
+					granularity: components["schemas"]["DateGranularity"];
+					/** @constant */
+					kind: "generalize_date";
+					/**
+					 * @description Which input convention to accept. Default `Iso`.
+					 * @default iso
+					 */
+					style: components["schemas"]["DateStyle"];
 			  };
 		/**
 		 * @description How the structural reconciler picks a winner across labels.
