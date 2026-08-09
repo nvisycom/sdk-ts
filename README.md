@@ -51,7 +51,9 @@ const client = new Nvisy({
 
 The fastest way to get started is with [Nvisy Cloud](https://nvisy.com).
 
-To run locally, see the [nvisycom/runtime](https://github.com/nvisycom/runtime) and [nvisycom/server](https://github.com/nvisycom/server) repositories.
+To run locally, see the [nvisycom/server](https://github.com/nvisycom/server) (self-hosted backend) and [nvisycom/studio](https://github.com/nvisycom/studio) (web and desktop app) repositories.
+
+If you only need redaction and not the full platform, [nvisycom/elide](https://github.com/nvisycom/elide) is a standalone framework for building PII detection and removal pipelines over multimodal documents.
 
 ## Contributing
 
