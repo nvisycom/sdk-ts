@@ -8,6 +8,11 @@ export type UpdateWorkspace = Schemas["UpdateWorkspace"];
 export type WorkspaceRole = Schemas["WorkspaceRole"];
 export type WorkspacePage = Schemas["WorkspacePage"];
 
-// Typed workspace settings: default retention and OCR rasterization policy.
+// Workspace settings: default retention and OCR policy.
 export type WorkspaceSettings = Schemas["WorkspaceSettings"];
 export type OcrPolicy = Schemas["OcrPolicy"];
+
+// Retention: shared rule, workspace defaults, pipeline override.
+export type Retention = Schemas["Retention"];
+export type RetentionSettings = Schemas["RetentionSettings"];
+export type RetentionOverride = Schemas["RetentionOverride"];
