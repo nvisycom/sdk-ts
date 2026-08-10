@@ -28,12 +28,6 @@ export type ImageRedaction = Schemas["ImageRedaction"];
 export type AudioRedaction = Schemas["AudioRedaction"];
 export type TabularRedaction = Schemas["TabularRedaction"];
 
-// Retention. `RetentionSettings` sets per-scope retention on a workspace;
-// `RetentionOverride` lets a pipeline override it per scope.
-export type Retention = Schemas["Retention"];
-export type RetentionSettings = Schemas["RetentionSettings"];
-export type RetentionOverride = Schemas["RetentionOverride"];
-
 // Label vocabulary.
 export type Labels = Schemas["Labels"];
 export type LabelGroup = Schemas["LabelGroup"];

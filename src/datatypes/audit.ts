@@ -12,7 +12,7 @@ export type EntityGroup = Schemas["EntityGroup"];
 export type AuditContext = Schemas["AuditContext"];
 export type EntityCoRef = Schemas["EntityCoRef"];
 
-// The OCR mode.
+// OCR mode a run resolved to, with its render resolution.
 export type OcrMode = Schemas["OcrMode"];
 export type Dpi = Schemas["Dpi"];
 
