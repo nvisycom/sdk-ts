@@ -13,9 +13,11 @@ and this project adheres to
 ### Added
 
 - Typed workspace settings datatypes: `WorkspaceSettings` (default retention
-  plus OCR rasterization policy), `OcrPolicy`, `OcrMode`, `Dpi`
+  plus OCR rasterization policy) and `OcrPolicy`
 - Retention model datatypes: `RetentionSettings` (per-scope workspace
   retention) and `RetentionOverride` (a pipeline's per-scope override)
+- Detection-result datatypes for the OCR mode a run actually used, reachable
+  via `Audit`: `OcrMode` and `Dpi`
 
 ### Changed
 
