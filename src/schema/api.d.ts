@@ -7530,40 +7530,6 @@ export interface components {
 			/** @description The JWT token string (only shown once on creation). */
 			token: string;
 		};
-		/** @description Response type for a pipeline artifact. */
-		Artifact: {
-			/** @description Type of artifact (input, output, intermediate). */
-			artifactType: components["schemas"]["ArtifactType"];
-			/**
-			 * Format: date-time
-			 * @description When the artifact was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description File storing the artifact data.
-			 */
-			fileId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique artifact identifier.
-			 */
-			id: string;
-			/** @description Extended metadata (checksums, counts, etc.). */
-			metadata: unknown;
-			/**
-			 * Format: uuid
-			 * @description Pipeline run that produced this artifact.
-			 */
-			runId: string;
-		};
-		/**
-		 * @description Classification of pipeline run artifacts.
-		 *
-		 *     This enumeration corresponds to the `ARTIFACT_TYPE` PostgreSQL enum and is used
-		 *     to categorize artifacts produced during pipeline runs.
-		 */
-		ArtifactType: "input" | "output" | "intermediate";
 		/**
 		 * @description Author-supplied rationale for a redaction: a policy name and an optional
 		 *     description.
@@ -8062,6 +8028,18 @@ export interface components {
 			 *     output audience. See elide's [`ScopeMetadata`].
 			 */
 			metadata?: components["schemas"]["ScopeMetadata"];
+			/**
+			 * @description OCR mode the analyze call decoded with. Recorded so the
+			 *     anonymize call re-decodes the same document under the same
+			 *     codec configuration — otherwise entity offsets stored in
+			 *     the audit wouldn't line up against a differently-rendered
+			 *     second decode. Defaults to [`OcrMode::Auto`] (the codec's
+			 *     built-in behaviour) when omitted.
+			 * @default {
+			 *       "kind": "auto"
+			 *     }
+			 */
+			ocrMode: components["schemas"]["OcrMode"];
 		};
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
@@ -8457,6 +8435,11 @@ export interface components {
 			description?: string;
 			/** @description Pipeline display name (2-128 characters). */
 			displayName: string;
+			/**
+			 * @description Optional per-scope data-retention override for this pipeline. Each unset
+			 *     scope inherits the workspace retention.
+			 */
+			retention?: components["schemas"]["RetentionOverride"];
 			/** @description URL slug, unique within the workspace and immutable after creation. */
 			slug: components["schemas"]["Handle"];
 		};
@@ -8544,8 +8527,11 @@ export interface components {
 			description?: string;
 			/** @description Display name of the workspace (2-32 characters). */
 			displayName: string;
-			/** @description Whether approval is required for processed files to be visible. */
-			requireApproval?: boolean;
+			/**
+			 * @description Workspace settings (approval requirement, data-retention rules). Defaults
+			 *     to requiring approval and keeping everything when omitted.
+			 */
+			settings?: components["schemas"]["WorkspaceSettings"];
 			/** @description Optional URL slug. Derived from the display name when omitted. */
 			slug?: components["schemas"]["Handle"];
 		};
@@ -8763,6 +8749,19 @@ export interface components {
 			width: number;
 		};
 		/**
+		 * Format: uint16
+		 * @description Dots-per-inch resolution for rasterizing vector content.
+		 *
+		 *     Used e.g. for rendering PDF pages to images for OCR.
+		 *
+		 *     PDF coordinates are in points (1 pt = 1/72 in), so
+		 *     [`scale_factor`] gives the multiplier from points to
+		 *     pixels at this resolution.
+		 *
+		 *     [`scale_factor`]: Self::scale_factor
+		 */
+		Dpi: number;
+		/**
 		 * @description Coreference identifier shared by entities that denote the same
 		 *     real-world thing.
 		 *
@@ -8841,6 +8840,8 @@ export interface components {
 			displayName: string;
 			/** @description File extension (without dot). */
 			fileExtension: string;
+			/** @description The file's role (original, redacted, audit). */
+			fileKind: components["schemas"]["FileKind"];
 			/**
 			 * Format: int64
 			 * @description File size in bytes.
@@ -8851,8 +8852,6 @@ export interface components {
 			 * @description Unique file identifier.
 			 */
 			id: string;
-			/** @description MIME type. */
-			mimeType?: string;
 			/** @description Original filename when uploaded. */
 			originalFilename: string;
 			/**
@@ -8860,10 +8859,6 @@ export interface components {
 			 * @description Parent file ID if this is a newer version.
 			 */
 			parentId?: string;
-			/** @description How the file was created (uploaded, imported, generated). */
-			source: components["schemas"]["FileSource"];
-			/** @description Classification tags. */
-			tags: string[];
 			/**
 			 * Format: date-time
 			 * @description Last update timestamp.
@@ -8879,6 +8874,15 @@ export interface components {
 			/** @description Handle of the workspace this file belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
+		/**
+		 * @description The role a file plays, which drives its data-retention scope and whether it
+		 *     is a user-facing document.
+		 *
+		 *     Corresponds to the `FILE_KIND` PostgreSQL enum. Orthogonal to the `parent_id`
+		 *     version chain (lineage); import origin (connection and remote key) lives in
+		 *     the `workspace_file_imports` satellite.
+		 */
+		FileKind: "original" | "redacted" | "audit";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -8897,14 +8901,6 @@ export interface components {
 			 */
 			total?: number;
 		};
-		/**
-		 * @description Defines how a file was created in the system.
-		 *
-		 *     This enumeration corresponds to the `FILE_SOURCE` PostgreSQL enum and is used
-		 *     to track the origin of files - whether they were uploaded by users, imported
-		 *     from external sources, or generated by the system.
-		 */
-		FileSource: "uploaded" | "imported" | "generated";
 		/**
 		 * @description A supported file extension.
 		 * @enum {string}
@@ -10057,6 +10053,45 @@ export interface components {
 			/** @description Whether to send email notifications. */
 			notifyViaEmail: boolean;
 		};
+		/**
+		 * @description Policy for turning a document's pages into images for OCR.
+		 *
+		 *     A born-digital PDF has a selectable text layer and needs no OCR; a
+		 *     scanned one is image-only and must be rendered to images first. [`Auto`]
+		 *     is the right default — extract text, render only what lacks it — but the
+		 *     text-layer parser that drives that decision is not in place yet, so today
+		 *     only [`Force`] actually renders.
+		 *
+		 *     Serializes with an internal `kind` tag (`{"kind": "auto"}`,
+		 *     `{"kind": "force", "dpi": 300}`, `{"kind": "never"}`).
+		 *
+		 *     [`Auto`]: OcrMode::Auto
+		 *     [`Force`]: OcrMode::Force
+		 */
+		OcrMode:
+			| {
+					/** @constant */
+					kind: "auto";
+			  }
+			| {
+					/** @description Resolution to render pages at; [`Dpi::OCR`] (300) is typical. */
+					dpi: components["schemas"]["Dpi"];
+					/** @constant */
+					kind: "force";
+			  }
+			| {
+					/** @constant */
+					kind: "never";
+			  };
+		/**
+		 * @description How a workspace's documents are turned into images for OCR during detection.
+		 *
+		 *     A workspace-level policy over the engine's per-run OCR mode: `Auto` lets the
+		 *     engine decide from the text layer, `Force` always renders every page (for
+		 *     documents with unreliable text layers — scans, watermarks), and `Never`
+		 *     relies on the text layer only.
+		 */
+		OcrPolicy: "auto" | "force" | "never";
 		/** @description OpenAI API credentials. */
 		OpenAiCredentials: {
 			/** @description OpenAI API key. */
@@ -10188,8 +10223,6 @@ export interface components {
 			| "hmac_sha512";
 		/** @description Pipeline response. */
 		Pipeline: {
-			/** @description Artifacts produced by pipeline runs. */
-			artifacts: components["schemas"]["Artifact"][];
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the pipeline was created.
@@ -10203,6 +10236,8 @@ export interface components {
 			description?: string;
 			/** @description Pipeline display name. */
 			displayName: string;
+			/** @description Per-scope data-retention override, when the pipeline sets one. */
+			retention?: components["schemas"]["RetentionOverride"];
 			/** @description URL slug of the pipeline, unique within its workspace. */
 			slug: components["schemas"]["Handle"];
 			/** @description Pipeline lifecycle status. */
@@ -10301,15 +10336,20 @@ export interface components {
 			 * @description When the run completed.
 			 */
 			completedAt?: string;
-			/**
-			 * Format: uuid
-			 * @description File this run analyzes / redacts.
-			 */
-			fileId: string;
 			/** @description Opaque identifier of the run. */
 			id: components["schemas"]["RunId"];
+			/**
+			 * Format: uuid
+			 * @description Source document this run analyzes / redacts.
+			 */
+			inputFileId: string;
 			/** @description Non-encrypted metadata for filtering/display. */
 			metadata: unknown;
+			/**
+			 * Format: uuid
+			 * @description Redacted document produced by the run, once it completes.
+			 */
+			outputFileId?: string;
 			/** @description Handle of the pipeline this run belongs to. */
 			pipelineSlug: components["schemas"]["Handle"];
 			/**
@@ -10516,8 +10556,6 @@ export interface components {
 			labels?: components["schemas"]["Labels"];
 			/** @description Human-readable name. Display-only. Does not key anything. */
 			name: string;
-			/** @description Lifecycle rules for content under this policy. */
-			retention?: components["schemas"]["RetentionPolicy"][];
 			/** @description Ordered rules. First match wins within this policy. */
 			rules?: components["schemas"]["PolicyRule"][];
 		};
@@ -10858,43 +10896,76 @@ export interface components {
 			acceptInvite: boolean;
 		};
 		/**
-		 * @description How long data is retained.
+		 * @description How long a class of data is retained.
 		 *
-		 *     Ordered from strictest to laxest: `ZeroRetention <
-		 *     Duration { days: N } < Indefinite`, and within `Duration`,
-		 *     smaller `days` is stricter (`Duration { days: 7 } <
-		 *     Duration { days: 30 }`). The derived [`Ord`] reflects this:
-		 *     strictest-wins resolution across multiple policies is just
-		 *     `iter.min()`. Variant declaration order is load-bearing;
-		 *     don't reorder.
+		 *     Wire shape is internally tagged on `mode`: `{ "mode": "forever" }`,
+		 *     `{ "mode": "zeroDays" }`, `{ "mode": "days", "days": 30 }`.
 		 */
 		Retention:
 			| {
 					/** @constant */
-					mode: "zero_retention";
+					mode: "forever";
+			  }
+			| {
+					/** @constant */
+					mode: "zeroDays";
 			  }
 			| {
 					/**
-					 * Format: uint64
-					 * @description Maximum number of days to retain data.
+					 * Format: uint32
+					 * @description Number of days to retain data.
 					 */
 					days: number;
 					/** @constant */
-					mode: "duration";
-			  }
-			| {
-					/** @constant */
-					mode: "indefinite";
+					mode: "days";
 			  };
-		/** @description A single retention rule: scope + duration. */
-		RetentionPolicy: {
-			/** @description How long to retain data. */
-			retention: components["schemas"]["Retention"];
-			/** @description What class of data this applies to. */
-			scope: components["schemas"]["RetentionScope"];
+		/**
+		 * @description A pipeline's optional per-scope override of the workspace retention. A `None`
+		 *     field inherits the workspace value for that scope.
+		 *
+		 *     Only scopes a pipeline actually produces are overridable — original documents
+		 *     are ingested, not produced by a pipeline, so they have no per-pipeline
+		 *     override and always follow the workspace baseline.
+		 */
+		RetentionOverride: {
+			/**
+			 * @description Overrides audit-blob retention when set.
+			 * @default null
+			 */
+			auditLogs: components["schemas"]["Retention"];
+			/**
+			 * @description Overrides redacted-document retention when set.
+			 * @default null
+			 */
+			redactedDocuments: components["schemas"]["Retention"];
 		};
-		/** @description What class of data a retention policy applies to. */
-		RetentionScope: "original_content" | "redacted_output" | "audit_logs";
+		/**
+		 * @description Retention for every scope. Missing fields default to [`Retention::Forever`],
+		 *     so an empty settings blob keeps everything.
+		 */
+		RetentionSettings: {
+			/**
+			 * @description Retention for audit blobs.
+			 * @default {
+			 *       "mode": "forever"
+			 *     }
+			 */
+			auditLogs: components["schemas"]["Retention"];
+			/**
+			 * @description Retention for uploaded/imported source documents.
+			 * @default {
+			 *       "mode": "forever"
+			 *     }
+			 */
+			originalDocuments: components["schemas"]["Retention"];
+			/**
+			 * @description Retention for generated redacted documents.
+			 * @default {
+			 *       "mode": "forever"
+			 *     }
+			 */
+			redactedDocuments: components["schemas"]["Retention"];
+		};
 		/**
 		 * @description A reviewer-supplied redaction override with the policy
 		 *     authority it draws from.
@@ -12265,8 +12336,6 @@ export interface components {
 			displayName?: string;
 			/** @description Updated metadata. */
 			metadata?: unknown;
-			/** @description Updated tags. */
-			tags?: string[];
 		};
 		/** @description Request to update a member's role. */
 		UpdateMember: {
@@ -12295,6 +12364,11 @@ export interface components {
 			description?: string;
 			/** @description New display name for the pipeline (2-128 characters). */
 			displayName?: string;
+			/**
+			 * @description Replacement per-scope data-retention override. When omitted, the
+			 *     pipeline's retention override is left unchanged.
+			 */
+			retention?: components["schemas"]["RetentionOverride"];
 			/** @description New status for the pipeline. */
 			status?: components["schemas"]["PipelineStatus"];
 		};
@@ -12342,8 +12416,11 @@ export interface components {
 			description?: string;
 			/** @description New display name for the workspace (2-32 characters). */
 			displayName?: string;
-			/** @description Whether approval is required for processed files to be visible. */
-			requireApproval?: boolean;
+			/**
+			 * @description Replacement workspace settings (approval requirement, data-retention
+			 *     rules). When omitted, settings are left unchanged.
+			 */
+			settings?: components["schemas"]["WorkspaceSettings"];
 		};
 		/** @description Validation error details for field-specific errors. */
 		ValidationErrorDetail: {
@@ -12564,8 +12641,8 @@ export interface components {
 			displayName: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
-			/** @description Whether approval is required to processed files to be visible. */
-			requireApproval: boolean;
+			/** @description Workspace settings (approval requirement, data-retention rules). */
+			settings: components["schemas"]["WorkspaceSettings"];
 			/** @description URL-safe workspace identifier. */
 			slug: components["schemas"]["Handle"];
 			/** @description Tags associated with the workspace. */
@@ -12613,6 +12690,34 @@ export interface components {
 		WorkspaceRunsQuery: {
 			/** @description Filter by run status. */
 			status?: components["schemas"]["PipelineRunStatus"];
+		};
+		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
+		WorkspaceSettings: {
+			/**
+			 * @description How documents are rendered for OCR during detection.
+			 * @default auto
+			 */
+			ocr: components["schemas"]["OcrPolicy"];
+			/**
+			 * @description Whether approval is required before processed files become visible.
+			 * @default true
+			 */
+			requireApproval: boolean;
+			/**
+			 * @description Data-retention rules for the workspace.
+			 * @default {
+			 *       "auditLogs": {
+			 *         "mode": "forever"
+			 *       },
+			 *       "originalDocuments": {
+			 *         "mode": "forever"
+			 *       },
+			 *       "redactedDocuments": {
+			 *         "mode": "forever"
+			 *       }
+			 *     }
+			 */
+			retention: components["schemas"]["RetentionSettings"];
 		};
 		/** @description Query parameters for listing all syncs across a workspace. */
 		WorkspaceSyncsQuery: {

@@ -8,6 +8,28 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-08-10
+
+### Added
+
+- Typed workspace settings datatypes: `WorkspaceSettings` (default retention
+  plus OCR rasterization policy), `OcrPolicy`, `OcrMode`, `Dpi`
+- Retention model datatypes: `RetentionSettings` (per-scope workspace
+  retention) and `RetentionOverride` (a pipeline's per-scope override)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- Renamed the `FileSource` datatype to `FileKind`, matching `File.fileKind`
+
+### Removed
+
+- **Breaking:** `FileSource` datatype (renamed to `FileKind`)
+- **Breaking:** `Artifact` and `ArtifactType` datatypes. They are no longer
+  part of the schema; `runs.redact()` already returns `PipelineRun`
+- **Breaking:** `RetentionPolicy` and `RetentionScope` datatypes, superseded
+  by `RetentionSettings` / `RetentionOverride`
+
 ## [0.16.0] - 2026-08-10
 
 ### Added
@@ -390,7 +412,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.16.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/nvisycom/sdk-ts/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/nvisycom/sdk-ts/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/nvisycom/sdk-ts/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/nvisycom/sdk-ts/compare/v0.13.0...v0.14.0
