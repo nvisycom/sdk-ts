@@ -12,8 +12,7 @@ export type EntityGroup = Schemas["EntityGroup"];
 export type AuditContext = Schemas["AuditContext"];
 export type EntityCoRef = Schemas["EntityCoRef"];
 
-// OCR mode actually used for the run (`AuditContext.ocrMode`); the `force`
-// variant carries the render resolution in `Dpi`.
+// The OCR mode.
 export type OcrMode = Schemas["OcrMode"];
 export type Dpi = Schemas["Dpi"];
 
