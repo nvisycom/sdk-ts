@@ -8,6 +8,39 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-08-10
+
+### Added
+
+- `catalog` service for reading the deployment's built-in catalogs:
+  `catalog.listLabels()` (`GET /catalog/labels/`) returns the label taxonomy,
+  and `catalog.listRecognizers()` (`GET /catalog/recognizers/`) returns the
+  engine's registered recognizers grouped into NER and LLM
+- Catalog datatypes: `LabelCatalog`, `RecognizerCatalog`,
+  `RegisteredRecognizer`
+- Detection-result datatypes (`src/datatypes/audit.ts`), the model
+  `runs.getDetections()` returns via `Audit`: the entity container
+  (`EntityGroup`, `AuditContext`, `EntityCoRef`), redaction rationale
+  (`Review`, `Attribution`, `LeakProfile`, `RuleMatch`), recognition detail
+  (`ModelEvent`, `PatternEvent`, `OperatorId`, `RangeOfUint`), geometry and
+  spans (`BoundingBox`, `Point`, `Polygon`, `Dimensions`, `TimeSpan`), and the
+  per-modality entity/event/hint/location/provenance/data types for text,
+  image, audio, and tabular content
+- `ArtifactType` datatype, reachable from `Artifact`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- The coverage audit now also flags schema types reachable from response
+  bodies the SDK returns (`Audit`, `Artifact`), not only request bodies
+
+### Removed
+
+- **Breaking:** `PredicatedRule`, `TableRule`, and `DocumentPredicate`
+  datatypes. The predicate grammar is now unified into the single `Predicate`
+  union, and the two rule shapes are inlined variants of `PolicyRule`
+  (`kind: "predicated"` / `kind: "table"`)
+
 ## [0.15.0] - 2026-08-09
 
 ### Added
@@ -357,7 +390,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/nvisycom/sdk-ts/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/nvisycom/sdk-ts/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/nvisycom/sdk-ts/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/nvisycom/sdk-ts/compare/v0.12.0...v0.13.0

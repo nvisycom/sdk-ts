@@ -19,10 +19,7 @@ export type PciDssPart = Schemas["PciDssPart"];
 export type PciPanRender = Schemas["PciPanRender"];
 
 // Rules and their conditions.
-export type PredicatedRule = Schemas["PredicatedRule"];
-export type TableRule = Schemas["TableRule"];
 export type Predicate = Schemas["Predicate"];
-export type DocumentPredicate = Schemas["DocumentPredicate"];
 
 // Redaction operators, per modality.
 export type ModalityRedactions = Schemas["ModalityRedactions"];

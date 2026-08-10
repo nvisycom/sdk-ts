@@ -9,9 +9,10 @@
  * Exits non-zero if either set is non-empty, so it can gate CI or a release.
  *
  * Type coverage (warning only): schema types reachable from request bodies
- * (Create/Update/Sync/... roots) that consumers must construct but the SDK
- * does not re-export as a datatype. Reported as UNEXPORTED TYPES; does not
- * fail.
+ * (Create/Update/Sync/... roots) that consumers must construct, plus types
+ * reachable from response bodies the SDK returns (Audit, Artifact, ...Page)
+ * that consumers must read — either way, types the SDK does not re-export as a
+ * datatype. Reported as UNEXPORTED TYPES; does not fail.
  *
  * Usage:
  *   node scripts/audit-coverage.mjs [specUrl]
@@ -58,6 +59,13 @@ const IGNORED_TYPES = new Set([
 
 /** Schema names whose bodies define the request surface consumers construct. */
 const REQUEST_ROOT = /^(Create|Update|Sync|Reply|Generate|Login|Signup|Test)/;
+
+/**
+ * Schema names whose bodies define the response surface consumers read. Result
+ * models the SDK returns but that no request root reaches — e.g. the detection
+ * tree hanging off `Audit`. Matched by exact name, not prefix.
+ */
+const RESPONSE_ROOT = new Set(["Audit", "Artifact"]);
 
 /** Every "METHOD /path" operation declared in the spec. */
 function specOperations(spec) {
@@ -115,8 +123,11 @@ function exportedTypes() {
 	return exported;
 }
 
-/** All schema names transitively reachable (via `$ref`) from request bodies. */
-function requestReachableTypes(spec) {
+/**
+ * All schema names transitively reachable (via `$ref`) from the request bodies
+ * consumers construct and the response bodies they read.
+ */
+function reachableTypes(spec) {
 	const schemas = spec.components?.schemas ?? {};
 	const reachable = new Set();
 
@@ -133,7 +144,7 @@ function requestReachableTypes(spec) {
 	}
 
 	for (const name of Object.keys(schemas)) {
-		if (REQUEST_ROOT.test(name)) walk(name);
+		if (REQUEST_ROOT.test(name) || RESPONSE_ROOT.has(name)) walk(name);
 	}
 	return reachable;
 }
@@ -172,16 +183,16 @@ async function main() {
 		for (const op of ignored) console.log(`  ${op}`);
 	}
 
-	// Type coverage: request-reachable schema types the SDK does not re-export.
-	// Warning only — it does not affect the audit's pass/fail.
+	// Type coverage: request/response-reachable schema types the SDK does not
+	// re-export. Warning only — it does not affect the audit's pass/fail.
 	const exported = exportedTypes();
-	const reachable = requestReachableTypes(spec);
+	const reachable = reachableTypes(spec);
 	const unexportedTypes = [...reachable]
 		.filter((name) => !exported.has(name) && !IGNORED_TYPES.has(name))
 		.sort();
 
 	console.log(
-		`\nUNEXPORTED TYPES (request-reachable, not re-exported): ${unexportedTypes.length}`,
+		`\nUNEXPORTED TYPES (request/response-reachable, not re-exported): ${unexportedTypes.length}`,
 	);
 	for (const name of unexportedTypes) console.log(`  ${name}`);
 	if (unexportedTypes.length) {

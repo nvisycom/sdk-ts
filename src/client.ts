@@ -26,6 +26,7 @@ import {
 	Activities,
 	ApiTokens,
 	Auth,
+	Catalog,
 	Connections,
 	Files,
 	Invites,
@@ -265,6 +266,13 @@ export class Nvisy {
 	 */
 	get policies(): Policies {
 		return new Policies(this.#api);
+	}
+
+	/**
+	 * Service for reading the deployment's label and recognizer catalogs.
+	 */
+	get catalog(): Catalog {
+		return new Catalog(this.#api);
 	}
 
 	/**
