@@ -12,6 +12,10 @@ export type EntityGroup = Schemas["EntityGroup"];
 export type AuditContext = Schemas["AuditContext"];
 export type EntityCoRef = Schemas["EntityCoRef"];
 
+// The OCR mode.
+export type OcrMode = Schemas["OcrMode"];
+export type Dpi = Schemas["Dpi"];
+
 // Redaction rationale and reviewer overrides.
 export type Review = Schemas["Review"];
 export type Attribution = Schemas["Attribution"];
