@@ -3884,7 +3884,7 @@ export interface paths {
 		};
 		/**
 		 * List workspace runs
-		 * @description Returns all pipeline runs across the workspace, most recent first, with optional status and pipeline filters.
+		 * @description Returns all pipeline runs across the workspace, most recent first, with optional status, file, pipeline, trigger-account, and trigger-type filters.
 		 */
 		get: {
 			parameters: {
@@ -3896,8 +3896,16 @@ export interface paths {
 					after?: string;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
+					/** @description Filter by the source file the run analyzes. */
+					fileId?: string;
+					/** @description Filter by the owning pipeline. */
+					pipelineId?: string;
 					/** @description Filter by run status. */
 					status?: components["schemas"]["PipelineRunStatus"];
+					/** @description Filter by how the run was initiated (user vs system). */
+					triggerType?: components["schemas"]["PipelineTriggerType"];
+					/** @description Filter by the account that triggered the run. */
+					triggeredBy?: string;
 				};
 				header?: never;
 				path: {
@@ -3987,7 +3995,7 @@ export interface paths {
 		};
 		/**
 		 * List pipeline runs
-		 * @description Returns all runs for a specific pipeline.
+		 * @description Returns runs for a specific pipeline, most recent first, with optional status, file, trigger-account, and trigger-type filters.
 		 */
 		get: {
 			parameters: {
@@ -3999,6 +4007,14 @@ export interface paths {
 					after?: string;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
+					/** @description Filter by the source file the run analyzes. */
+					fileId?: string;
+					/** @description Filter by run status. */
+					status?: components["schemas"]["PipelineRunStatus"];
+					/** @description Filter by how the run was initiated (user vs system). */
+					triggerType?: components["schemas"]["PipelineTriggerType"];
+					/** @description Filter by the account that triggered the run. */
+					triggeredBy?: string;
 				};
 				header?: never;
 				path: {
@@ -10512,6 +10528,28 @@ export interface components {
 			| "failed"
 			| "cancelled";
 		/**
+		 * @description Query parameters for listing a single pipeline's runs.
+		 *
+		 *     The pipeline is fixed by the route, so it narrows only by status, file,
+		 *     trigger account, and trigger type.
+		 */
+		PipelineRunsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter by the source file the run analyzes.
+			 */
+			fileId?: string;
+			/** @description Filter by run status. */
+			status?: components["schemas"]["PipelineRunStatus"];
+			/** @description Filter by how the run was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the run.
+			 */
+			triggeredBy?: string;
+		};
+		/**
 		 * @description Defines the lifecycle status of a pipeline definition.
 		 *
 		 *     This enumeration corresponds to the `PIPELINE_STATUS` PostgreSQL enum and is used
@@ -12760,10 +12798,31 @@ export interface components {
 		 *     hierarchical access control for workspace members with clearly defined capabilities.
 		 */
 		WorkspaceRole: "owner" | "admin" | "member" | "guest";
-		/** @description Query parameters for listing runs across a workspace. */
+		/**
+		 * @description Query parameters for listing runs across a workspace.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
 		WorkspaceRunsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter by the source file the run analyzes.
+			 */
+			fileId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the owning pipeline.
+			 */
+			pipelineId?: string;
 			/** @description Filter by run status. */
 			status?: components["schemas"]["PipelineRunStatus"];
+			/** @description Filter by how the run was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the run.
+			 */
+			triggeredBy?: string;
 		};
 		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
 		WorkspaceSettings: {

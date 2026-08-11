@@ -5,7 +5,7 @@ import type {
 	CursorPagination,
 	PipelineRun,
 	PipelineRunPage,
-	PipelineRunStatus,
+	PipelineRunsQuery,
 	RunStatusEvent,
 } from "@/datatypes/index.js";
 import { NvisyError } from "@/errors.js";
@@ -24,13 +24,14 @@ export class Runs {
 	/**
 	 * List all pipeline runs in a workspace
 	 * @param workspaceSlug - Workspace slug
-	 * @param query - Optional query parameters (status, limit, after)
+	 * @param query - Optional pagination and filters (status, fileId,
+	 *   pipelineId, triggerType, triggeredBy, limit, after)
 	 * @returns Promise that resolves with a paginated list of pipeline runs
 	 * @throws {ApiError} if the request fails
 	 */
 	async listRuns(
 		workspaceSlug: string,
-		query?: CursorPagination & { status?: PipelineRunStatus },
+		query?: CursorPagination & PipelineRunsQuery & { pipelineId?: string },
 	): Promise<PipelineRunPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/runs/",
@@ -45,14 +46,15 @@ export class Runs {
 	 * List runs for a specific pipeline
 	 * @param workspaceSlug - Workspace slug
 	 * @param pipelineSlug - Pipeline slug
-	 * @param query - Optional pagination parameters (limit, after)
+	 * @param query - Optional pagination and filters (status, fileId,
+	 *   triggerType, triggeredBy, limit, after)
 	 * @returns Promise that resolves with a paginated list of pipeline runs
 	 * @throws {ApiError} if the request fails
 	 */
 	async listPipelineRuns(
 		workspaceSlug: string,
 		pipelineSlug: string,
-		query?: CursorPagination,
+		query?: CursorPagination & PipelineRunsQuery,
 	): Promise<PipelineRunPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/runs/",
