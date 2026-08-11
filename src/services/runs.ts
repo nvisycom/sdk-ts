@@ -6,7 +6,10 @@ import type {
 	PipelineRun,
 	PipelineRunPage,
 	PipelineRunStatus,
+	RunStatusEvent,
 } from "@/datatypes/index.js";
+import { NvisyError } from "@/errors.js";
+import { parseSseStream } from "@/services/sse.js";
 
 /**
  * Service for handling pipeline run operations
@@ -158,6 +161,64 @@ export class Runs {
 			},
 		);
 		return response;
+	}
+
+	/**
+	 * Open the raw Server-Sent Events stream of a run's status changes.
+	 *
+	 * Returns the underlying `Response` so callers can handle the
+	 * `text/event-stream` body themselves. Most callers want
+	 * {@link streamEvents}, which parses each frame into a typed
+	 * {@link RunStatusEvent}.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param runId - Run ID
+	 * @returns Promise that resolves with the event-stream response
+	 * @throws {ApiError} if the request fails
+	 */
+	async streamEventsResponse(
+		workspaceSlug: string,
+		runId: string,
+	): Promise<Response> {
+		const { response } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/runs/{runId}/events",
+			{
+				params: { path: { workspaceSlug, runId } },
+				parseAs: "stream",
+			},
+		);
+		return response;
+	}
+
+	/**
+	 * Stream a run's status changes as Server-Sent Events.
+	 *
+	 * Yields the current status immediately, then each transition, and ends
+	 * once the run settles (analyzed, completed, failed, or cancelled). Break
+	 * out of the loop to close the stream early. For the raw response, use
+	 * {@link streamEventsResponse}.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param runId - Run ID
+	 * @yields each {@link RunStatusEvent} as it arrives
+	 * @throws {ApiError} if the request fails to open
+	 * @throws {NvisyError} if the response has no readable body
+	 */
+	async *streamEvents(
+		workspaceSlug: string,
+		runId: string,
+	): AsyncGenerator<RunStatusEvent> {
+		const response = await this.streamEventsResponse(workspaceSlug, runId);
+		if (!response.body) {
+			throw new NvisyError("Event stream response has no body");
+		}
+		for await (const event of parseSseStream(response.body)) {
+			// The server names every frame `status`; ignore anything else
+			// (e.g. keep-alive comments never reach here).
+			if (event.event === "status") {
+				yield JSON.parse(event.data) as RunStatusEvent;
+			}
+		}
 	}
 
 	/**
