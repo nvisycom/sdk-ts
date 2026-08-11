@@ -8,6 +8,19 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-08-11
+
+### Added
+
+- `runs.downloadAuditJson()` and `runs.downloadAuditCsv()` for downloading a
+  run's audit as a pretty-printed JSON file or a zip of `entities.csv`,
+  `provenance.csv`, and `reviews.csv`. Both return the raw `Response`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers; the
+  `PipelineSummary` datatype now carries a `createdBy` field
+
 ## [0.18.0] - 2026-08-11
 
 ### Changed
@@ -432,7 +445,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.18.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/nvisycom/sdk-ts/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/nvisycom/sdk-ts/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/nvisycom/sdk-ts/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/nvisycom/sdk-ts/compare/v0.15.0...v0.16.0

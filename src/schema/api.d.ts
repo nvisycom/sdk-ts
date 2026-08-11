@@ -4296,6 +4296,115 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/workspaces/{workspaceSlug}/runs/{runId}/redactions/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Redact a run
+		 * @description Applies the pipeline's policies to the run's stored analysis, stores the redacted file, and completes the run.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the run. */
+					runId: components["schemas"]["RunId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Response type for a pipeline run.
+				 *
+				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
+				 *     slugs are carried for context.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["PipelineRun"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/workspaces/{workspaceSlug}/runs/{runId}/detections/": {
 		parameters: {
 			query?: never;
@@ -4417,20 +4526,18 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/redactions/": {
+	"/workspaces/{workspaceSlug}/runs/{runId}/audit/json": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
-		put?: never;
 		/**
-		 * Redact a run
-		 * @description Applies the pipeline's policies to the run's stored analysis, stores the redacted file, and completes the run.
+		 * Download run audit (JSON)
+		 * @description Downloads the run's audit as a pretty-printed JSON file.
 		 */
-		post: {
+		get: {
 			parameters: {
 				query?: never;
 				header?: never;
@@ -4444,19 +4551,12 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/**
-				 * @description Response type for a pipeline run.
-				 *
-				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
-				 *     slugs are carried for context.
-				 */
+				/** @description no content */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content: {
-						"application/json": components["schemas"]["PipelineRun"];
-					};
+					content?: never;
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -4520,6 +4620,110 @@ export interface paths {
 				};
 			};
 		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/runs/{runId}/audit/csv": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Download run audit (CSV)
+		 * @description Downloads the run's audit as a zip of entities.csv, provenance.csv, and reviews.csv.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the run. */
+					runId: components["schemas"]["RunId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;
@@ -10191,6 +10395,8 @@ export interface components {
 			 * @description Timestamp when the pipeline was created.
 			 */
 			createdAt: string;
+			/** @description Account that created this pipeline. */
+			createdBy: components["schemas"]["AccountRef"];
 			/** @description Pipeline description. */
 			description?: string;
 			/** @description Pipeline display name. */
@@ -10204,6 +10410,8 @@ export interface components {
 			 * @description Timestamp when the pipeline was last updated.
 			 */
 			updatedAt: string;
+			/** @description Handle of the workspace this pipeline belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
