@@ -8556,158 +8556,6 @@ export interface components {
 			limit?: number;
 		};
 		/**
-		 * @description One caller-supplied dictionary for the pattern recognizer.
-		 *
-		 *     Mirrors `elide_pattern::Dictionary`. Literal-term matching via
-		 *     Aho-Corasick; faster and safer than regex for closed sets.
-		 */
-		CustomDictionary: {
-			/**
-			 * @description Context keywords lifting confidence near matches.
-			 *
-			 *     Consumed only when the analyzer's
-			 *     [`PatternRecognizerParams`]`.context_enhanced` is `true`.
-			 *
-			 *     [`PatternRecognizerParams`]: super::PatternRecognizerParams
-			 */
-			context?: components["schemas"]["CustomPatternContext"];
-			/**
-			 * @description ISO 3166-1 alpha-2 country codes scoping the dictionary.
-			 *
-			 *     Empty means "any country"; otherwise the recognizer skips
-			 *     the dictionary when the per-call jurisdiction hint is not
-			 *     in the list.
-			 */
-			countries?: components["schemas"]["CountryCode"][];
-			/** @description Entity label every match emits. */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description BCP-47 language tags scoping the dictionary.
-			 *
-			 *     Empty means "any language"; otherwise the recognizer skips
-			 *     the dictionary when the per-call language hint is not in
-			 *     the list.
-			 */
-			languages?: components["schemas"]["LanguageTag"][];
-			/** @description Human-readable identifier surfaced in provenance. */
-			name: string;
-			/**
-			 * @description Default confidence stamped on matches when a term has no
-			 *     per-term override.
-			 *
-			 *     Defaults to [`Confidence::MAX`].
-			 * @default 1
-			 */
-			score: components["schemas"]["Confidence"];
-			/**
-			 * @description Literal terms + per-term confidence overrides.
-			 *
-			 *     At least one required; the recognizer skips dictionaries
-			 *     with an empty term list at compile time.
-			 */
-			terms: components["schemas"]["CustomDictionaryTerm"][];
-		};
-		/** @description One term inside a [`CustomDictionary`]. */
-		CustomDictionaryTerm: {
-			/**
-			 * @description Per-term score override.
-			 *
-			 *     `None` falls back to the parent dictionary's `score`.
-			 */
-			score?: components["schemas"]["Confidence"];
-			/** @description The literal scanned for. */
-			term: string;
-		};
-		/**
-		 * @description Context keywords for a custom rule.
-		 *
-		 *     Either a flat list applied regardless of language, or a
-		 *     per-language map. Matches the shape of `elide_pattern`'s
-		 *     `Context` — untagged so the wire looks like either
-		 *     `["kw1", "kw2"]` or `{ "en": ["kw1"], "es": ["kw2"] }`.
-		 */
-		CustomPatternContext:
-			| string[]
-			| {
-					[key: string]: string[];
-			  };
-		/**
-		 * @description One caller-supplied regex rule for the pattern recognizer.
-		 *
-		 *     Mirrors `elide_pattern::Regex`. Serialize + Deserialize +
-		 *     JsonSchema end-to-end so SDK callers can inline rules on the
-		 *     wire; the engine converts each rule to an elide `Regex` at
-		 *     analyzer-compile time.
-		 */
-		CustomPatternRule: {
-			/**
-			 * @description Context keywords lifting confidence when they appear near
-			 *     a match.
-			 *
-			 *     Either a flat list (any language) or a per-language map.
-			 *     Consumed only when the analyzer's
-			 *     [`PatternRecognizerParams`]`.context_enhanced` is `true`.
-			 *
-			 *     [`PatternRecognizerParams`]: super::PatternRecognizerParams
-			 */
-			context?: components["schemas"]["CustomPatternContext"];
-			/**
-			 * @description ISO 3166-1 alpha-2 country codes scoping the rule.
-			 *
-			 *     Empty means "any country"; otherwise the recognizer skips
-			 *     the rule when the per-call jurisdiction hint is not in the
-			 *     list.
-			 */
-			countries?: components["schemas"]["CountryCode"][];
-			/** @description Entity label every variant emits. */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description BCP-47 language tags scoping the rule.
-			 *
-			 *     Empty means "any language"; otherwise the recognizer skips
-			 *     the rule when the per-call language hint is not in the
-			 *     list.
-			 */
-			languages?: components["schemas"]["LanguageTag"][];
-			/** @description Human-readable identifier surfaced in provenance. */
-			name: string;
-			/**
-			 * @description Regex sources + per-variant confidence + optional
-			 *     validator.
-			 *
-			 *     At least one required; the recognizer skips rules with an
-			 *     empty variant list at compile time.
-			 */
-			variants: components["schemas"]["CustomPatternVariant"][];
-		};
-		/** @description One regex variant inside a [`CustomPatternRule`]. */
-		CustomPatternVariant: {
-			/**
-			 * @description Regex source.
-			 *
-			 *     Capped at [`MAX_REGEX_SOURCE_LEN`] bytes; longer sources
-			 *     reject at deserialize. Compiled by the engine at
-			 *     analyzer-compile time.
-			 */
-			regex: string;
-			/**
-			 * @description Confidence stamped on every match, before any
-			 *     post-recognition keyword boost.
-			 *
-			 *     Defaults to [`Confidence::MAX`].
-			 * @default 1
-			 */
-			score: components["schemas"]["Confidence"];
-			/**
-			 * @description Optional validator name.
-			 *
-			 *     Resolved against elide's `ValidatorRegistry` at compile
-			 *     time (e.g. `"ssn"`, `"credit_card"`, `"iban"`). Unknown
-			 *     names error at compile. `None` means "no validation".
-			 */
-			validator?: string;
-		};
-		/**
 		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
 		 *
 		 *     Every rendering is an ISO-8601 form, so the output is locale-independent
@@ -9493,8 +9341,6 @@ export interface components {
 			expiresAt: string;
 			/** @description Role the user will have if they join. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description Tags associated with the workspace. */
-			tags: string[];
 			/** @description Handle of the workspace. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
@@ -9931,13 +9777,6 @@ export interface components {
 		/** @description Fields available for sorting workspace members. */
 		MemberSortField: "name" | "date";
 		/**
-		 * @description How the merging reconciler combines same-label overlaps.
-		 *
-		 *     Picks one entity per overlapping cluster of findings that
-		 *     share a label.
-		 */
-		MergingStrategyParams: "max" | "noisy_or";
-		/**
 		 * @description Per-modality operator specs carried by a `redact` rule.
 		 *
 		 *     A single rule can name an operator for every modality the
@@ -10127,46 +9966,6 @@ export interface components {
 			/** @description Name of the validator that confirmed the match (e.g. `"luhn"`). */
 			validator?: string;
 		};
-		/** @description Params for the `elide-pattern` recognizer. */
-		PatternRecognizerParams: {
-			/**
-			 * @description Load every pattern + dictionary shipped with `elide-pattern`.
-			 *
-			 *     Implies the country-scoped jurisdictional pattern packs
-			 *     are active for the scope's jurisdictions.
-			 * @default false
-			 */
-			builtins: boolean;
-			/**
-			 * @description Enable per-label context-keyword boosting.
-			 *
-			 *     Wraps the bare pattern recognizer in elide's
-			 *     `Enhanced<PatternRecognizer>` layer so per-label context
-			 *     keywords boost low-confidence matches before they leave
-			 *     the recognizer.
-			 * @default false
-			 */
-			contextEnhanced: boolean;
-			/**
-			 * @description Caller-inlined regex rules.
-			 *
-			 *     Compiled per-request. See [`CustomPatternRule`] for the
-			 *     shape; the engine bounds request-level cost with a rule-
-			 *     count cap and a per-regex NFA-size limit at compile time,
-			 *     on top of the deserialize-time source-length cap in
-			 *     [`MAX_REGEX_SOURCE_LEN`].
-			 *
-			 *     [`MAX_REGEX_SOURCE_LEN`]: super::MAX_REGEX_SOURCE_LEN
-			 */
-			custom?: components["schemas"]["CustomPatternRule"][];
-			/**
-			 * @description Caller-inlined literal-term dictionaries.
-			 *
-			 *     Compiled per-request into a shared Aho-Corasick automaton.
-			 *     Same rule-count cap as `custom` applies at compile time.
-			 */
-			customDictionaries?: components["schemas"]["CustomDictionary"][];
-		};
 		/**
 		 * @description Which PCI DSS subsection this template addresses.
 		 *
@@ -10251,46 +10050,24 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description A pipeline's deduplication intent.
-		 *
-		 *     Each field is optional: when a pipeline omits one, it inherits the
-		 *     deployment default from the engine config. Per-recognizer calibration is
-		 *     operator-only and never set here.
-		 */
-		PipelineDeduplication: {
-			/** @description How same-label overlapping findings are merged into one. */
-			merging?: components["schemas"]["MergingStrategyParams"];
-			/** @description Minimum confidence the filter layer admits. */
-			minConfidence?: components["schemas"]["ConfidenceThreshold"];
-			/** @description How cross-label overlaps pick a winner. */
-			tiebreaker?: components["schemas"]["TiebreakerParams"];
-		};
-		/**
 		 * @description A pipeline's detection + governance intent.
 		 *
-		 *     Holds what a pipeline author decides — which recognizers to run, the default
-		 *     scope, and the policies to apply. Infrastructure config (enrichment backends,
-		 *     deduplication calibration) is server-wide and lives in the engine config, not
-		 *     here. Stored as JSON in the pipeline's `definition` column but validated
-		 *     against this schema at the API boundary.
+		 *     Holds what a pipeline author decides — the default scope and the policies to
+		 *     apply. Recognition is entirely server-wide: the built-in pattern set plus the
+		 *     deployment's NER/LLM lineups and enrichment backends live in the engine
+		 *     config, not here. Stored as JSON in the pipeline's `definition` column but
+		 *     validated against this schema at the API boundary.
 		 *
 		 *     The label catalog is not part of this: the policies own the label vocabulary,
 		 *     and the engine derives the detection catalog from them at run time.
 		 *
 		 *     The split:
 		 *
-		 *     - `recognizers` / `deduplication` — the detection intent, merged with the
-		 *       server-wide engine defaults into an `AnalyzerParams`.
 		 *     - `default_scope` — optional pipeline-wide scope a document may override.
 		 *     - `policy_slugs` — references to the workspace's policies, resolved at run
 		 *       time.
 		 */
 		PipelineDefinition: {
-			/**
-			 * @description Post-recognition deduplication behavior.
-			 * @default {}
-			 */
-			deduplication: components["schemas"]["PipelineDeduplication"];
 			/**
 			 * @description Optional pipeline-wide scope (languages, jurisdictions, document labels).
 			 *
@@ -10305,12 +10082,6 @@ export interface components {
 			 *     definition; surfaced here so the API exposes one coherent object.
 			 */
 			policySlugs?: components["schemas"]["Handle"][];
-			/**
-			 * @description Recognizer lineup: pattern (incl. inline custom rules and
-			 *     dictionaries), plus the NER and LLM toggles.
-			 * @default {}
-			 */
-			recognizers: components["schemas"]["RecognizerParams"];
 		};
 		/** @description Query parameters for filtering pipelines. */
 		PipelineFilter: {
@@ -10785,19 +10556,6 @@ export interface components {
 					not: components["schemas"]["Predicate"];
 			  };
 		/**
-		 * @description How to pick recognizers out of a deployment-configured lineup.
-		 *
-		 *     Untagged on the wire: `true` / `false` / a list of names.
-		 *
-		 *     - `All(true)`: explicit opt-in. Attaches every configured
-		 *       recognizer; fails the analyzer compile if the lineup is
-		 *       empty.
-		 *     - `All(false)`: explicit opt-out. Skips the lineup entirely.
-		 *     - `Only(names)`: attach only the named recognizers. An empty
-		 *       list and any unknown name fail the analyzer compile.
-		 */
-		ProviderSelection: boolean | string[];
-		/**
 		 * @description Public view of an account, returned when looking up someone other than the
 		 *     authenticated caller. Carries only the fields safe to share with a
 		 *     workspace peer; private details (email, account flags) are omitted
@@ -10828,39 +10586,6 @@ export interface components {
 			llm: components["schemas"]["RegisteredRecognizer"][];
 			/** @description NER (named-entity recognition) recognizers. */
 			ner: components["schemas"]["RegisteredRecognizer"][];
-		};
-		/**
-		 * @description Recognizer slots an analyzer can fill.
-		 *
-		 *     Pattern is at-most-one (per-request); NER and LLM are
-		 *     deployment-owned lineups each selected by a
-		 *     [`ProviderSelection`].
-		 */
-		RecognizerParams: {
-			/**
-			 * @description Select which of the deployment's LLM recognizers to run.
-			 *
-			 *     Same shape as [`ner`]. The lineup is additionally filtered
-			 *     by declared modality — only recognizers whose `modalities`
-			 *     list contains the analyzer's modality attach.
-			 *
-			 *     [`ner`]: RecognizerParams::ner
-			 */
-			llm?: components["schemas"]["ProviderSelection"];
-			/**
-			 * @description Select which of the deployment's NER recognizers to run.
-			 *
-			 *     See [`ProviderSelection`] for the shape. `None` is the
-			 *     softly-on default: attach every configured recognizer if
-			 *     the deployment has any, skip silently otherwise.
-			 */
-			ner?: components["schemas"]["ProviderSelection"];
-			/**
-			 * @description Built-in pattern + dictionary recognizer (`elide-pattern`).
-			 *
-			 *     At most one per analyzer.
-			 */
-			pattern?: components["schemas"]["PatternRecognizerParams"];
 		};
 		/**
 		 * @description Public view of one recognizer in the engine's NER or LLM
@@ -12230,13 +11955,6 @@ export interface components {
 					style: components["schemas"]["DateStyle"];
 			  };
 		/**
-		 * @description How the structural reconciler picks a winner across labels.
-		 *
-		 *     Runs after merging when overlapping entities carry different
-		 *     labels.
-		 */
-		TiebreakerParams: "highest_confidence" | "longest_span";
-		/**
 		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
 		 *
 		 *     The coordinate a time-addressed medium (audio, video) uses to locate a
@@ -12645,8 +12363,6 @@ export interface components {
 			settings: components["schemas"]["WorkspaceSettings"];
 			/** @description URL-safe workspace identifier. */
 			slug: components["schemas"]["Handle"];
-			/** @description Tags associated with the workspace. */
-			tags: string[];
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the workspace was last updated.

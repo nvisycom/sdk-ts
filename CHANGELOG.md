@@ -8,6 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-08-11
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- Renamed the `recognizer` datatype module to `scope`, reflecting that the
+  surviving types describe analysis scope and localization, not recognizers
+
+### Removed
+
+- **Breaking:** the recognizer-configuration datatypes the platform no longer
+  exposes: `RecognizerParams`, `PatternRecognizerParams`, `ProviderSelection`,
+  `CustomPatternRule`, `CustomPatternVariant`, `CustomPatternContext`,
+  `CustomDictionary`, `CustomDictionaryTerm`, `PipelineDeduplication`,
+  `MergingStrategyParams`, and `TiebreakerParams`. Scope/localization
+  (`ScopeParams`, `ScopeMetadata`, `CountryCode`, `Language`, `Languages`,
+  `LanguageSpan`, `LanguageProvenance`) and `Confidence` remain
+
 ## [0.17.0] - 2026-08-10
 
 ### Added
@@ -414,7 +432,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/nvisycom/sdk-ts/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/nvisycom/sdk-ts/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/nvisycom/sdk-ts/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/nvisycom/sdk-ts/compare/v0.14.0...v0.15.0
