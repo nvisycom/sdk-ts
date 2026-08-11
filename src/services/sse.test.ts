@@ -25,9 +25,7 @@ describe("parseSseStream", () => {
 		const events = await collect(
 			streamOf('event: status\ndata: {"status":"queued"}\n\n'),
 		);
-		expect(events).toEqual([
-			{ event: "status", data: '{"status":"queued"}' },
-		]);
+		expect(events).toEqual([{ event: "status", data: '{"status":"queued"}' }]);
 	});
 
 	it("defaults the event name to 'message' when omitted", async () => {
@@ -45,7 +43,11 @@ describe("parseSseStream", () => {
 	it("reassembles an event split across chunk boundaries", async () => {
 		// The frame separator itself is split between two chunks.
 		const events = await collect(
-			streamOf("event: sta", "tus\ndata: {\"x\":1}\n", "\nevent: status\ndata: {\"x\":2}\n\n"),
+			streamOf(
+				"event: sta",
+				'tus\ndata: {"x":1}\n',
+				'\nevent: status\ndata: {"x":2}\n\n',
+			),
 		);
 		expect(events.map((e) => e.data)).toEqual(['{"x":1}', '{"x":2}']);
 	});
