@@ -8764,6 +8764,11 @@ export interface components {
 			retention?: components["schemas"]["RetentionOverride"];
 			/** @description URL slug, unique within the workspace and immutable after creation. */
 			slug: components["schemas"]["Handle"];
+			/**
+			 * @description Optional lifecycle status. Defaults to `draft`; pass `enabled` to create a
+			 *     pipeline ready to run without a follow-up update.
+			 */
+			status?: components["schemas"]["PipelineStatus"];
 		};
 		/**
 		 * @description Request payload to start a run (detect) over a file.
