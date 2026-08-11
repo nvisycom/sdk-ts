@@ -118,6 +118,49 @@ export class Runs {
 	}
 
 	/**
+	 * Download a run's audit as a pretty-printed JSON file
+	 * @param workspaceSlug - Workspace slug
+	 * @param runId - Run ID
+	 * @returns Promise that resolves with the file response
+	 * @throws {ApiError} if the request fails
+	 */
+	async downloadAuditJson(
+		workspaceSlug: string,
+		runId: string,
+	): Promise<Response> {
+		const { response } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/runs/{runId}/audit/json",
+			{
+				params: { path: { workspaceSlug, runId } },
+				parseAs: "stream",
+			},
+		);
+		return response;
+	}
+
+	/**
+	 * Download a run's audit as a zip of entities.csv, provenance.csv, and
+	 * reviews.csv
+	 * @param workspaceSlug - Workspace slug
+	 * @param runId - Run ID
+	 * @returns Promise that resolves with the file response
+	 * @throws {ApiError} if the request fails
+	 */
+	async downloadAuditCsv(
+		workspaceSlug: string,
+		runId: string,
+	): Promise<Response> {
+		const { response } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/runs/{runId}/audit/csv",
+			{
+				params: { path: { workspaceSlug, runId } },
+				parseAs: "stream",
+			},
+		);
+		return response;
+	}
+
+	/**
 	 * Apply redactions to a pipeline run
 	 * @param workspaceSlug - Workspace slug
 	 * @param runId - Run ID
