@@ -8,6 +8,14 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-08-11
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers; the
+  `CreatePipeline` datatype now accepts an optional `status` field, so a
+  pipeline can be created directly as `enabled` instead of the default `draft`
+
 ## [0.20.0] - 2026-08-11
 
 ### Added
@@ -461,7 +469,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.20.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.21.0...HEAD
+[0.21.0]: https://github.com/nvisycom/sdk-ts/compare/v0.20.0...v0.21.0
 [0.20.0]: https://github.com/nvisycom/sdk-ts/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/nvisycom/sdk-ts/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/nvisycom/sdk-ts/compare/v0.17.0...v0.18.0
