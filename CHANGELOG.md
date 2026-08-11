@@ -8,6 +8,22 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-08-11
+
+### Added
+
+- `runs.streamEvents()` streams a run's status changes as Server-Sent Events,
+  yielding each transition as a typed `RunStatusEvent` until the run settles:
+  `for await (const { status } of nvisy.runs.streamEvents(ws, runId)) { ... }`
+- `runs.streamEventsResponse()` for callers that want the raw `text/event-stream`
+  `Response` instead of parsed events
+- `RunStatusEvent` datatype (`{ runId, status }`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers; the run
+  events endpoint now documents its `RunStatusEvent` payload
+
 ## [0.19.0] - 2026-08-11
 
 ### Added
@@ -445,7 +461,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.19.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.20.0...HEAD
+[0.20.0]: https://github.com/nvisycom/sdk-ts/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/nvisycom/sdk-ts/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/nvisycom/sdk-ts/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/nvisycom/sdk-ts/compare/v0.16.0...v0.17.0

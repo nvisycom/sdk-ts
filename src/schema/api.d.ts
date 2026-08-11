@@ -4076,7 +4076,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Start a run (detect)
-		 * @description Analyzes a file with the pipeline's configuration and returns the run holding the findings for review. Accepts an Idempotency-Key header.
+		 * @description Starts detection for a file and returns 202 with the run in the `running` state; the analysis runs in the background. Watch the run's status via the SSE stream at `.../runs/{runId}/events` (or re-read the run) and fetch the findings from `.../runs/{runId}/detections/` once it reaches `analyzed`. A repeated Idempotency-Key returns the existing run.
 		 */
 		post: {
 			parameters: {
@@ -4108,7 +4108,21 @@ export interface paths {
 				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
 				 *     slugs are carried for context.
 				 */
-				201: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["PipelineRun"];
+					};
+				};
+				/**
+				 * @description Response type for a pipeline run.
+				 *
+				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
+				 *     slugs are carried for context.
+				 */
+				202: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -4169,6 +4183,21 @@ export interface paths {
 				 *     information, and user-friendly messages.
 				 */
 				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -4239,6 +4268,95 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["PipelineRun"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/runs/{runId}/events": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Stream pipeline run status
+		 * @description Opens a Server-Sent Events stream of the run's status changes. Emits the current status immediately, then each transition, and ends once the run settles (analyzed, failed, or cancelled). Each event's `data` is a `RunStatusEvent` (see the response schema). Authenticate with a Bearer token via a `fetch`-based client; the native `EventSource` cannot send an `Authorization` header.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the run. */
+					runId: components["schemas"]["RunId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Server-sent event stream; each event's `data` is the payload below. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/event-stream": components["schemas"]["RunStatusEvent"];
 					};
 				};
 				/**
@@ -8712,7 +8830,7 @@ export interface components {
 			headers?: {
 				[key: string]: string;
 			};
-			/** @description Initial status of the webhook (active or paused). */
+			/** @description Initial status of the webhook (enabled or disabled). */
 			status?: components["schemas"]["WebhookStatus"];
 			/**
 			 * Format: uri
@@ -10311,6 +10429,8 @@ export interface components {
 			 * @description When the run completed.
 			 */
 			completedAt?: string;
+			/** @description Human-readable failure reason, present only when the run `failed`. */
+			error?: string;
 			/** @description Opaque identifier of the run. */
 			id: components["schemas"]["RunId"];
 			/**
@@ -10374,9 +10494,14 @@ export interface components {
 		 *
 		 *     This enumeration corresponds to the `PIPELINE_RUN_STATUS` PostgreSQL enum and is used
 		 *     to track the current state of a pipeline execution.
+		 *
+		 *     The detect phase has two states: `Queued` (the run is enqueued but no worker
+		 *     has begun) and `Analyzing` (a worker is actively analyzing). They settle into
+		 *     `Analyzed` (detection done, awaiting review), then `Completed` after redaction.
 		 */
 		PipelineRunStatus:
-			| "running"
+			| "queued"
+			| "analyzing"
 			| "analyzed"
 			| "completed"
 			| "failed"
@@ -10958,6 +11083,21 @@ export interface components {
 			| "fallback";
 		/** @description Opaque run identifier (run_<uuid>). */
 		RunId: string;
+		/**
+		 * @description A run's status change, broadcast on the core-NATS subject [`run_subject`].
+		 *
+		 *     Fan-out to any watching SSE connections; the run row in Postgres remains the
+		 *     source of truth, so a missed broadcast is recoverable by re-reading the run.
+		 */
+		RunStatusEvent: {
+			/**
+			 * Format: uuid
+			 * @description The run whose status changed.
+			 */
+			runId: string;
+			/** @description The run's new status. */
+			status: components["schemas"]["PipelineRunStatus"];
+		};
 		/**
 		 * @description Typed credentials for S3-compatible provider.
 		 *
@@ -12323,7 +12463,10 @@ export interface components {
 			headers?: {
 				[key: string]: string;
 			};
-			/** @description Updated status (active or paused). Ignored if webhook is currently disabled. */
+			/**
+			 * @description Updated status (enabled or disabled). Ignored while the webhook is
+			 *     system-suspended.
+			 */
 			status?: components["schemas"]["WebhookStatus"];
 			/**
 			 * Format: uri
@@ -12500,6 +12643,7 @@ export interface components {
 			| "pipeline:updated"
 			| "pipeline:deleted"
 			| "pipeline:run.started"
+			| "pipeline:run.analyzed"
 			| "pipeline:run.completed"
 			| "pipeline:run.failed"
 			| "policy:created"
@@ -12546,10 +12690,11 @@ export interface components {
 		/**
 		 * @description Defines the operational status of a workspace webhook.
 		 *
-		 *     This enumeration corresponds to the `WEBHOOK_STATUS` PostgreSQL enum and is used
-		 *     to manage webhook states from active operation through pausing and disabling.
+		 *     This enumeration corresponds to the `WEBHOOK_STATUS` PostgreSQL enum. The
+		 *     user controls `Enabled` / `Disabled`; `Suspended` is set by the system when a
+		 *     webhook fails repeatedly, and the user can re-enable it.
 		 */
-		WebhookStatus: "active" | "paused" | "disabled";
+		WebhookStatus: "enabled" | "disabled" | "suspended";
 		/** @description Workspace response. */
 		Workspace: {
 			/** @description Serve path of the workspace's avatar (logo), when set. */
