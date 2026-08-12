@@ -8,3 +8,4 @@ export type NotificationSettings = Schemas["NotificationSettings"];
 export type UpdateNotificationSettings = Schemas["UpdateNotificationSettings"];
 export type UnreadStatus = Schemas["UnreadStatus"];
 export type NotificationPage = Schemas["NotificationPage"];
+export type MarkedReadStatus = Schemas["MarkedReadStatus"];
