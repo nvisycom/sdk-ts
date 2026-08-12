@@ -1,6 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
+	MarkedReadStatus,
 	NotificationPage,
 	UnreadStatus,
 } from "@/datatypes/index.js";
@@ -36,5 +37,26 @@ export class Notifications {
 	async getUnreadNotificationsStatus(): Promise<UnreadStatus> {
 		const { data } = await this.#api.GET("/notifications/unread/");
 		return data!;
+	}
+
+	/**
+	 * Mark every unread notification for the authenticated account as read
+	 * @returns Promise that resolves with how many were marked read
+	 * @throws {ApiError} if the request fails
+	 */
+	async markAllRead(): Promise<MarkedReadStatus> {
+		const { data } = await this.#api.POST("/notifications/read/");
+		return data!;
+	}
+
+	/**
+	 * Mark a single notification as read
+	 * @param notificationId - Notification ID
+	 * @throws {ApiError} if the request fails
+	 */
+	async markRead(notificationId: string): Promise<void> {
+		await this.#api.POST("/notifications/{notificationId}/read/", {
+			params: { path: { notificationId } },
+		});
 	}
 }

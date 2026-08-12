@@ -5845,7 +5845,7 @@ export interface paths {
 		};
 		/**
 		 * List notifications
-		 * @description Returns all notifications for the authenticated account and marks them as read.
+		 * @description Returns the authenticated account's notifications, most recent first. Read-only — use POST /notifications/read/ or POST /notifications/{notificationId}/read/ to mark them read.
 		 */
 		get: {
 			parameters: {
@@ -5952,6 +5952,130 @@ export interface paths {
 		};
 		put?: never;
 		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/notifications/read/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Mark all notifications as read
+		 * @description Marks every unread notification for the authenticated account as read and returns how many it marked.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response type for a mark-all-read action. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["MarkedReadStatus"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/notifications/{notificationId}/read/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Mark notification as read
+		 * @description Marks a single notification of the authenticated account as read.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Unique identifier of the notification. */
+					notificationId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		delete?: never;
 		options?: never;
 		head?: never;
@@ -10074,6 +10198,14 @@ export interface components {
 			 */
 			rememberMe: boolean;
 		};
+		/** @description Response type for a mark-all-read action. */
+		MarkedReadStatus: {
+			/**
+			 * Format: int64
+			 * @description Number of notifications the request marked as read.
+			 */
+			markedRead: number;
+		};
 		/** @description Represents a workspace member. */
 		Member: {
 			/** @description Serve path of the member's avatar, when set. */
@@ -10225,6 +10357,19 @@ export interface components {
 			 * @description Total count of items matching the query (if requested).
 			 */
 			total?: number;
+		};
+		/**
+		 * @description Path parameters for notification operations.
+		 *
+		 *     The notification id is globally unique; account ownership is enforced in the
+		 *     query, so a notification of another account resolves to a not-found result.
+		 */
+		NotificationPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the notification.
+			 */
+			notificationId: string;
 		};
 		/** @description Response for notification settings within a workspace. */
 		NotificationSettings: {
@@ -10459,6 +10604,11 @@ export interface components {
 			 * @description Source document this run analyzes / redacts.
 			 */
 			inputFileId: string;
+			/**
+			 * @description Display name of the source document, for showing the run without a
+			 *     separate file lookup. `None` if the file was removed (e.g. by retention).
+			 */
+			inputFileName?: string;
 			/** @description Non-encrypted metadata for filtering/display. */
 			metadata: unknown;
 			/**
@@ -10466,6 +10616,8 @@ export interface components {
 			 * @description Redacted document produced by the run, once it completes.
 			 */
 			outputFileId?: string;
+			/** @description Display name of the redacted output, once the run completes. */
+			outputFileName?: string;
 			/** @description Handle of the pipeline this run belongs to. */
 			pipelineSlug: components["schemas"]["Handle"];
 			/**

@@ -8,6 +8,20 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-08-12
+
+### Added
+
+- `notifications.markAllRead()` marks every unread notification for the
+  authenticated account as read and returns how many were marked
+  (`MarkedReadStatus`)
+- `notifications.markRead(notificationId)` marks a single notification as read
+- `MarkedReadStatus` datatype (`{ markedRead }`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.22.0] - 2026-08-12
 
 ### Added
@@ -483,7 +497,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.22.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.23.0...HEAD
+[0.23.0]: https://github.com/nvisycom/sdk-ts/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/nvisycom/sdk-ts/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/nvisycom/sdk-ts/compare/v0.20.0...v0.21.0
 [0.20.0]: https://github.com/nvisycom/sdk-ts/compare/v0.19.0...v0.20.0
