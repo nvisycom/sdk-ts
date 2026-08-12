@@ -8781,6 +8781,29 @@ export interface components {
 			/** @description Account that triggered the sync. */
 			triggeredBy: components["schemas"]["AccountRef"];
 		};
+		/** @description Params of a `connection:sync.completed` notification. */
+		ConnectionSyncCompletedParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the connection that synced.
+			 */
+			connectionId: string;
+			/**
+			 * Format: int64
+			 * @description Number of records synced, if known.
+			 */
+			recordsSynced?: number;
+		};
+		/** @description Params of a `connection:sync.failed` notification. */
+		ConnectionSyncFailedParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the connection that failed to sync.
+			 */
+			connectionId: string;
+			/** @description Failure reason, if available. */
+			error?: string;
+		};
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -10226,6 +10249,20 @@ export interface components {
 			/** @description Handle of the member's account. */
 			username: components["schemas"]["Handle"];
 		};
+		/** @description Params of a `member:invited` notification. */
+		MemberInvitedParams: {
+			/** @description Username of the account that sent the invite, if known. */
+			invitedBy?: string;
+			/** @description Slug of the workspace the account was invited to. */
+			workspaceSlug: string;
+		};
+		/** @description Params of a `member:joined` notification. */
+		MemberJoinedParams: {
+			/** @description Username of the member that joined. */
+			memberUsername: string;
+			/** @description Slug of the workspace the member joined. */
+			workspaceSlug: string;
+		};
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -10286,7 +10323,12 @@ export interface components {
 			/** @description Model version string, when known. */
 			version?: string;
 		};
-		/** @description Response type for an account notification. */
+		/**
+		 * @description Response type for an account notification.
+		 *
+		 *     The typed [`NotificationPayload`] is nested under `payload`, so a notification
+		 *     is `{ id, payload: { notifyType, <params...> }, isRead, ... }`.
+		 */
 		Notification: {
 			/**
 			 * Format: date-time
@@ -10305,39 +10347,30 @@ export interface components {
 			id: string;
 			/** @description Whether the notification has been read. */
 			isRead: boolean;
-			/** @description Notification message. */
-			message: string;
-			/** @description Notification type. */
-			notifyType: components["schemas"]["NotificationEvent"];
+			/** @description The notification type and its typed params. */
+			payload: components["schemas"]["NotificationPayload"];
 			/**
 			 * Format: date-time
 			 * @description When the notification was read.
 			 */
 			readAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Related entity ID.
-			 */
-			relatedId?: string;
-			/** @description Related entity type. */
-			relatedType?: string;
-			/** @description Notification title. */
-			title: string;
 		};
 		/**
 		 * @description Defines the type of notification event sent to a user.
 		 *
-		 *     This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and is used
-		 *     for various user notifications including file, member, connection, and system events.
+		 *     This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and
+		 *     is used for member, connection-sync, pipeline-run, and system notifications.
+		 *     The values mirror the [`WebhookEvent`](super::WebhookEvent) naming for the
+		 *     events the two channels share.
 		 */
 		NotificationEvent:
-			| "file:uploaded"
-			| "file:downloaded"
-			| "file:verified"
 			| "member:invited"
 			| "member:joined"
-			| "connection:synced"
-			| "connection:desynced"
+			| "connection:sync.completed"
+			| "connection:sync.failed"
+			| "pipeline:run.analyzed"
+			| "pipeline:run.completed"
+			| "pipeline:run.failed"
 			| "system:announcement"
 			| "system:report";
 		/**
@@ -10371,6 +10404,51 @@ export interface components {
 			 */
 			notificationId: string;
 		};
+		/**
+		 * @description The typed payload of a notification, tagged by `notifyType`.
+		 *
+		 *     Each variant is one notification type carrying its own params struct. No
+		 *     rendered text is included — the client localizes the copy from `notifyType`
+		 *     and the params. The `notifyType` values match the `NOTIFICATION_EVENT` enum,
+		 *     so the same key drives the member's per-event preferences.
+		 */
+		NotificationPayload:
+			| ({
+					/** @constant */
+					notifyType: "member:invited";
+			  } & components["schemas"]["MemberInvitedParams"])
+			| ({
+					/** @constant */
+					notifyType: "member:joined";
+			  } & components["schemas"]["MemberJoinedParams"])
+			| ({
+					/** @constant */
+					notifyType: "connection:sync.completed";
+			  } & components["schemas"]["ConnectionSyncCompletedParams"])
+			| ({
+					/** @constant */
+					notifyType: "connection:sync.failed";
+			  } & components["schemas"]["ConnectionSyncFailedParams"])
+			| ({
+					/** @constant */
+					notifyType: "pipeline:run.analyzed";
+			  } & components["schemas"]["PipelineRunAnalyzedParams"])
+			| ({
+					/** @constant */
+					notifyType: "pipeline:run.completed";
+			  } & components["schemas"]["PipelineRunCompletedParams"])
+			| ({
+					/** @constant */
+					notifyType: "pipeline:run.failed";
+			  } & components["schemas"]["PipelineRunFailedParams"])
+			| ({
+					/** @constant */
+					notifyType: "system:announcement";
+			  } & components["schemas"]["SystemAnnouncementParams"])
+			| ({
+					/** @constant */
+					notifyType: "system:report";
+			  } & components["schemas"]["SystemReportParams"]);
 		/** @description Response for notification settings within a workspace. */
 		NotificationSettings: {
 			/** @description Notification events to receive in-app. */
@@ -10638,6 +10716,44 @@ export interface components {
 			triggeredBy: components["schemas"]["AccountRef"];
 			/** @description Handle of the workspace this run belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/** @description Params of a `pipeline:run.analyzed` notification. */
+		PipelineRunAnalyzedParams: {
+			/** @description Display name of the analyzed file, if known. */
+			inputFileName?: string;
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the run.
+			 */
+			runId: string;
+		};
+		/** @description Params of a `pipeline:run.completed` notification. */
+		PipelineRunCompletedParams: {
+			/** @description Display name of the analyzed file, if known. */
+			inputFileName?: string;
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the run.
+			 */
+			runId: string;
+		};
+		/** @description Params of a `pipeline:run.failed` notification. */
+		PipelineRunFailedParams: {
+			/** @description Failure reason, if available. */
+			error?: string;
+			/** @description Display name of the analyzed file, if known. */
+			inputFileName?: string;
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the run.
+			 */
+			runId: string;
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -11592,6 +11708,19 @@ export interface components {
 		 *     to track whether a run was manually triggered, scheduled, or triggered by a webhook.
 		 */
 		SyncTriggerType: "manual" | "scheduled" | "webhook";
+		/** @description Params of a `system:announcement` notification. */
+		SystemAnnouncementParams: {
+			/** @description Announcement message key or body. */
+			message: string;
+		};
+		/** @description Params of a `system:report` notification. */
+		SystemReportParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the generated report, if any.
+			 */
+			reportId?: string;
+		};
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *

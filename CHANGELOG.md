@@ -8,6 +8,25 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-08-12
+
+### Added
+
+- `NotificationPayload` datatype, a discriminated union (on `notifyType`)
+  carrying each event's data, plus its nine named variant types:
+  `MemberInvitedParams`, `MemberJoinedParams`, `ConnectionSyncCompletedParams`,
+  `ConnectionSyncFailedParams`, `PipelineRunAnalyzedParams`,
+  `PipelineRunCompletedParams`, `PipelineRunFailedParams`,
+  `SystemAnnouncementParams`, and `SystemReportParams`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** the `Notification` datatype now carries a structured `payload`
+  (`NotificationPayload`) instead of a flat `notifyType` enum. Read the event
+  type from `notification.payload.notifyType`; each variant's data (e.g.
+  `workspaceSlug`, `recordsSynced`, `runId`) hangs off the same object
+
 ## [0.23.0] - 2026-08-12
 
 ### Added
@@ -497,7 +516,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.23.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.24.0...HEAD
+[0.24.0]: https://github.com/nvisycom/sdk-ts/compare/v0.23.0...v0.24.0
 [0.23.0]: https://github.com/nvisycom/sdk-ts/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/nvisycom/sdk-ts/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/nvisycom/sdk-ts/compare/v0.20.0...v0.21.0
