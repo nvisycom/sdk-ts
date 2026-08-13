@@ -178,10 +178,7 @@ export class Runs {
 	 * @returns Promise that resolves with the event-stream response
 	 * @throws {ApiError} if the request fails
 	 */
-	async streamEventsResponse(
-		workspaceSlug: string,
-		runId: string,
-	): Promise<Response> {
+	async events(workspaceSlug: string, runId: string): Promise<Response> {
 		const { response } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/runs/{runId}/events",
 			{
@@ -198,7 +195,7 @@ export class Runs {
 	 * Yields the current status immediately, then each transition, and ends
 	 * once the run settles (analyzed, completed, failed, or cancelled). Break
 	 * out of the loop to close the stream early. For the raw response, use
-	 * {@link streamEventsResponse}.
+	 * {@link events}.
 	 *
 	 * @param workspaceSlug - Workspace slug
 	 * @param runId - Run ID
@@ -210,7 +207,7 @@ export class Runs {
 		workspaceSlug: string,
 		runId: string,
 	): AsyncGenerator<RunStatusEvent> {
-		const response = await this.streamEventsResponse(workspaceSlug, runId);
+		const response = await this.events(workspaceSlug, runId);
 		if (!response.body) {
 			throw new NvisyError("Event stream response has no body");
 		}
