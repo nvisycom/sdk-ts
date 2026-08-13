@@ -5958,6 +5958,60 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/notifications/unread/events/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Stream unread notifications count
+		 * @description Opens a Server-Sent Events stream of the account's unread notification count. Emits the current count immediately, then each change as notifications arrive or are marked read, until the client disconnects. Each event's `data` is an `UnreadCountEvent` (see the response schema). Authenticate with a Bearer token via a `fetch`-based client; the native `EventSource` cannot send an `Authorization` header.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Server-sent event stream; each event's `data` is the payload below. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/event-stream": components["schemas"]["UnreadCountEvent"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/notifications/read/": {
 		parameters: {
 			query?: never;
@@ -7688,13 +7742,6 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
@@ -7745,13 +7792,6 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
 				 *
@@ -7833,22 +7873,28 @@ export interface components {
 			/** @description Handle of the account. */
 			username: components["schemas"]["Handle"];
 		};
-		/** @description Response type for a workspace activity. */
+		/**
+		 * @description Response type for a workspace activity.
+		 *
+		 *     The typed payload is nested under `payload`, so an activity is
+		 *     `{ id, workspaceSlug, performedBy, payload: { activityType, <params...> }, createdAt }`.
+		 */
 		Activity: {
-			/** @description Type of activity. */
-			activityType: components["schemas"]["ActivityType"];
 			/**
 			 * Format: date-time
 			 * @description When the activity occurred.
 			 */
 			createdAt: string;
-			/** @description Human-readable description. */
-			description: string;
 			/**
 			 * Format: uuid
 			 * @description Unique activity identifier.
 			 */
 			id: string;
+			/**
+			 * @description The activity type and its typed params, absent when the stored params do
+			 *     not decode into their `activityType`.
+			 */
+			payload?: components["schemas"]["ActivityPayload"];
 			/** @description Account that performed the activity. */
 			performedBy: components["schemas"]["AccountRef"];
 			/** @description Handle of the workspace this activity belongs to. */
@@ -7873,37 +7919,145 @@ export interface components {
 			total?: number;
 		};
 		/**
-		 * @description Defines the type of activity performed in a workspace for audit logging.
+		 * @description The typed payload of an audit-log activity, tagged by `activityType`.
 		 *
-		 *     This enumeration corresponds to the `ACTIVITY_TYPE` PostgreSQL enum and is used
-		 *     to categorize different types of activities that occur within workspaces for comprehensive
-		 *     audit trail and activity tracking.
+		 *     Each variant is one activity type carrying its own params. No rendered text is
+		 *     included — the client localizes the copy from `activityType` and the params.
+		 *     The `activityType` values match the `ACTIVITY_TYPE` enum.
 		 */
-		ActivityType:
-			| "workspace:created"
-			| "workspace:updated"
-			| "workspace:deleted"
-			| "workspace:exported"
-			| "workspace:imported"
-			| "member:deleted"
-			| "member:updated"
-			| "invite:created"
-			| "invite:accepted"
-			| "invite:declined"
-			| "invite:canceled"
-			| "connection:created"
-			| "connection:updated"
-			| "connection:deleted"
-			| "connection:synced"
-			| "webhook:created"
-			| "webhook:updated"
-			| "webhook:deleted"
-			| "webhook:triggered"
-			| "file:created"
-			| "file:updated"
-			| "file:deleted"
-			| "file:verified"
-			| "custom";
+		ActivityPayload:
+			| ({
+					/** @constant */
+					activityType: "workspace.created";
+			  } & components["schemas"]["WorkspaceActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "workspace.updated";
+			  } & components["schemas"]["WorkspaceActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "workspace.deleted";
+			  } & components["schemas"]["WorkspaceActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "member.added";
+			  } & components["schemas"]["MemberActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "member.updated";
+			  } & components["schemas"]["MemberActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "member.deleted";
+			  } & components["schemas"]["MemberActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "invite.created";
+			  } & components["schemas"]["InviteActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "invite.accepted";
+			  } & components["schemas"]["InviteActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "invite.declined";
+			  } & components["schemas"]["InviteActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "invite.canceled";
+			  } & components["schemas"]["InviteActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "connection.created";
+			  } & components["schemas"]["ConnectionActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "connection.updated";
+			  } & components["schemas"]["ConnectionActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "connection.deleted";
+			  } & components["schemas"]["ConnectionActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "connection.sync.completed";
+			  } & components["schemas"]["ConnectionActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "connection.sync.failed";
+			  } & components["schemas"]["ConnectionActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "webhook.created";
+			  } & components["schemas"]["WebhookActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "webhook.updated";
+			  } & components["schemas"]["WebhookActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "webhook.deleted";
+			  } & components["schemas"]["WebhookActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "webhook.triggered";
+			  } & components["schemas"]["WebhookActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "file.created";
+			  } & components["schemas"]["FileActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "file.updated";
+			  } & components["schemas"]["FileActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "file.deleted";
+			  } & components["schemas"]["FileActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "file.verified";
+			  } & components["schemas"]["FileActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "pipeline.created";
+			  } & components["schemas"]["PipelineActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "pipeline.updated";
+			  } & components["schemas"]["PipelineActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "pipeline.deleted";
+			  } & components["schemas"]["PipelineActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "pipeline.run.started";
+			  } & components["schemas"]["PipelineRunActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "pipeline.run.analyzed";
+			  } & components["schemas"]["PipelineRunActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "pipeline.run.completed";
+			  } & components["schemas"]["PipelineRunActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "pipeline.run.failed";
+			  } & components["schemas"]["PipelineRunActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "policy.created";
+			  } & components["schemas"]["PolicyActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "policy.updated";
+			  } & components["schemas"]["PolicyActivityParams"])
+			| ({
+					/** @constant */
+					activityType: "policy.deleted";
+			  } & components["schemas"]["PolicyActivityParams"]);
 		/** @description Anthropic API credentials. */
 		AnthropicCredentials: {
 			/** @description Anthropic API key. */
@@ -8702,6 +8856,14 @@ export interface components {
 			/** @description Handle of the workspace this connection belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
+		/** @description Params of a connection activity (`connection.*`). */
+		ConnectionActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the connection.
+			 */
+			connectionId: string;
+		};
 		/**
 		 * @description A fully-typed connection configuration for any capability.
 		 *
@@ -8781,7 +8943,7 @@ export interface components {
 			/** @description Account that triggered the sync. */
 			triggeredBy: components["schemas"]["AccountRef"];
 		};
-		/** @description Params of a `connection:sync.completed` notification. */
+		/** @description Params of a `connection.sync.completed` notification. */
 		ConnectionSyncCompletedParams: {
 			/**
 			 * Format: uuid
@@ -8794,7 +8956,7 @@ export interface components {
 			 */
 			recordsSynced?: number;
 		};
-		/** @description Params of a `connection:sync.failed` notification. */
+		/** @description Params of a `connection.sync.failed` notification. */
 		ConnectionSyncFailedParams: {
 			/**
 			 * Format: uuid
@@ -9211,6 +9373,16 @@ export interface components {
 			versionNumber: number;
 			/** @description Handle of the workspace this file belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/** @description Params of a file activity (`file.*`). */
+		FileActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the file.
+			 */
+			fileId: string;
+			/** @description Display name of the file. */
+			fileName: string;
 		};
 		/**
 		 * @description The role a file plays, which drives its data-retention scope and whether it
@@ -9761,6 +9933,16 @@ export interface components {
 			/** @description Handle of the workspace the invitation is for. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
+		/** @description Params of an invite activity (`invite.*`). */
+		InviteActivityParams: {
+			/** @description Email the invite was addressed to. */
+			email: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the invite.
+			 */
+			inviteId: string;
+		};
 		/** @description Response containing a generated shareable invite code. */
 		InviteCode: {
 			/**
@@ -10249,14 +10431,19 @@ export interface components {
 			/** @description Handle of the member's account. */
 			username: components["schemas"]["Handle"];
 		};
-		/** @description Params of a `member:invited` notification. */
+		/** @description Params of a member activity (`member.*`). */
+		MemberActivityParams: {
+			/** @description Username of the member acted on. */
+			memberUsername: components["schemas"]["Handle"];
+		};
+		/** @description Params of a `member.invited` notification. */
 		MemberInvitedParams: {
 			/** @description Username of the account that sent the invite, if known. */
 			invitedBy?: string;
 			/** @description Slug of the workspace the account was invited to. */
 			workspaceSlug: string;
 		};
-		/** @description Params of a `member:joined` notification. */
+		/** @description Params of a `member.joined` notification. */
 		MemberJoinedParams: {
 			/** @description Username of the member that joined. */
 			memberUsername: string;
@@ -10326,8 +10513,8 @@ export interface components {
 		/**
 		 * @description Response type for an account notification.
 		 *
-		 *     The typed [`NotificationPayload`] is nested under `payload`, so a notification
-		 *     is `{ id, payload: { notifyType, <params...> }, isRead, ... }`.
+		 *     The typed payload is nested under `payload`, so a notification is
+		 *     `{ id, payload: { notifyType, <params...> }, readAt, ... }`.
 		 */
 		Notification: {
 			/**
@@ -10345,13 +10532,14 @@ export interface components {
 			 * @description Unique notification identifier.
 			 */
 			id: string;
-			/** @description Whether the notification has been read. */
-			isRead: boolean;
-			/** @description The notification type and its typed params. */
-			payload: components["schemas"]["NotificationPayload"];
+			/**
+			 * @description The notification type and its typed params, absent when the stored params
+			 *     do not decode into their `notifyType`.
+			 */
+			payload?: components["schemas"]["NotificationPayload"];
 			/**
 			 * Format: date-time
-			 * @description When the notification was read.
+			 * @description When the notification was read; absent means unread.
 			 */
 			readAt?: string;
 		};
@@ -10364,15 +10552,15 @@ export interface components {
 		 *     events the two channels share.
 		 */
 		NotificationEvent:
-			| "member:invited"
-			| "member:joined"
-			| "connection:sync.completed"
-			| "connection:sync.failed"
-			| "pipeline:run.analyzed"
-			| "pipeline:run.completed"
-			| "pipeline:run.failed"
-			| "system:announcement"
-			| "system:report";
+			| "member.invited"
+			| "member.joined"
+			| "connection.sync.completed"
+			| "connection.sync.failed"
+			| "pipeline.run.analyzed"
+			| "pipeline.run.completed"
+			| "pipeline.run.failed"
+			| "system.announcement"
+			| "system.report";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -10407,47 +10595,46 @@ export interface components {
 		/**
 		 * @description The typed payload of a notification, tagged by `notifyType`.
 		 *
-		 *     Each variant is one notification type carrying its own params struct. No
-		 *     rendered text is included — the client localizes the copy from `notifyType`
-		 *     and the params. The `notifyType` values match the `NOTIFICATION_EVENT` enum,
-		 *     so the same key drives the member's per-event preferences.
+		 *     Each variant is one notification type carrying its own params struct. The
+		 *     `notifyType` values match [`NotificationEvent`], so the same key drives the
+		 *     member's per-event preferences.
 		 */
 		NotificationPayload:
 			| ({
 					/** @constant */
-					notifyType: "member:invited";
+					notifyType: "member.invited";
 			  } & components["schemas"]["MemberInvitedParams"])
 			| ({
 					/** @constant */
-					notifyType: "member:joined";
+					notifyType: "member.joined";
 			  } & components["schemas"]["MemberJoinedParams"])
 			| ({
 					/** @constant */
-					notifyType: "connection:sync.completed";
+					notifyType: "connection.sync.completed";
 			  } & components["schemas"]["ConnectionSyncCompletedParams"])
 			| ({
 					/** @constant */
-					notifyType: "connection:sync.failed";
+					notifyType: "connection.sync.failed";
 			  } & components["schemas"]["ConnectionSyncFailedParams"])
 			| ({
 					/** @constant */
-					notifyType: "pipeline:run.analyzed";
+					notifyType: "pipeline.run.analyzed";
 			  } & components["schemas"]["PipelineRunAnalyzedParams"])
 			| ({
 					/** @constant */
-					notifyType: "pipeline:run.completed";
+					notifyType: "pipeline.run.completed";
 			  } & components["schemas"]["PipelineRunCompletedParams"])
 			| ({
 					/** @constant */
-					notifyType: "pipeline:run.failed";
+					notifyType: "pipeline.run.failed";
 			  } & components["schemas"]["PipelineRunFailedParams"])
 			| ({
 					/** @constant */
-					notifyType: "system:announcement";
+					notifyType: "system.announcement";
 			  } & components["schemas"]["SystemAnnouncementParams"])
 			| ({
 					/** @constant */
-					notifyType: "system:report";
+					notifyType: "system.report";
 			  } & components["schemas"]["SystemReportParams"]);
 		/** @description Response for notification settings within a workspace. */
 		NotificationSettings: {
@@ -10615,6 +10802,11 @@ export interface components {
 			/** @description Handle of the workspace this pipeline belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
+		/** @description Params of a pipeline activity (`pipeline.*`, non-run). */
+		PipelineActivityParams: {
+			/** @description Slug of the pipeline. */
+			pipelineSlug: components["schemas"]["Handle"];
+		};
 		/**
 		 * @description A pipeline's detection + governance intent.
 		 *
@@ -10688,7 +10880,7 @@ export interface components {
 			 */
 			inputFileName?: string;
 			/** @description Non-encrypted metadata for filtering/display. */
-			metadata: unknown;
+			metadata: components["schemas"]["RunMetadata"];
 			/**
 			 * Format: uuid
 			 * @description Redacted document produced by the run, once it completes.
@@ -10717,7 +10909,17 @@ export interface components {
 			/** @description Handle of the workspace this run belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
-		/** @description Params of a `pipeline:run.analyzed` notification. */
+		/** @description Params of a pipeline-run activity (`pipeline.run.*`). */
+		PipelineRunActivityParams: {
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the run.
+			 */
+			runId: string;
+		};
+		/** @description Params of a `pipeline.run.analyzed` notification. */
 		PipelineRunAnalyzedParams: {
 			/** @description Display name of the analyzed file, if known. */
 			inputFileName?: string;
@@ -10729,7 +10931,7 @@ export interface components {
 			 */
 			runId: string;
 		};
-		/** @description Params of a `pipeline:run.completed` notification. */
+		/** @description Params of a `pipeline.run.completed` notification. */
 		PipelineRunCompletedParams: {
 			/** @description Display name of the analyzed file, if known. */
 			inputFileName?: string;
@@ -10741,7 +10943,7 @@ export interface components {
 			 */
 			runId: string;
 		};
-		/** @description Params of a `pipeline:run.failed` notification. */
+		/** @description Params of a `pipeline.run.failed` notification. */
 		PipelineRunFailedParams: {
 			/** @description Failure reason, if available. */
 			error?: string;
@@ -10919,6 +11121,14 @@ export interface components {
 			updatedAt: string;
 			/** @description Handle of the workspace this policy belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/** @description Params of a policy activity (`policy.*`). */
+		PolicyActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the policy.
+			 */
+			policyId: string;
 		};
 		/**
 		 * @description A named governance policy.
@@ -11394,6 +11604,13 @@ export interface components {
 			| "fallback";
 		/** @description Opaque run identifier (run_<uuid>). */
 		RunId: string;
+		/** @description Structured metadata for a pipeline run. */
+		RunMetadata: {
+			/** @description Failure reason recorded when the run failed. */
+			error?: string;
+			/** @description Free-form labels attached to the run. */
+			tags?: string[];
+		};
 		/**
 		 * @description A run's status change, broadcast on the core-NATS subject [`run_subject`].
 		 *
@@ -11708,12 +11925,12 @@ export interface components {
 		 *     to track whether a run was manually triggered, scheduled, or triggered by a webhook.
 		 */
 		SyncTriggerType: "manual" | "scheduled" | "webhook";
-		/** @description Params of a `system:announcement` notification. */
+		/** @description Params of a `system.announcement` notification. */
 		SystemAnnouncementParams: {
 			/** @description Announcement message key or body. */
 			message: string;
 		};
-		/** @description Params of a `system:report` notification. */
+		/** @description Params of a `system.report` notification. */
 		SystemReportParams: {
 			/**
 			 * Format: uuid
@@ -12673,6 +12890,21 @@ export interface components {
 			 */
 			tokenId: string;
 		};
+		/**
+		 * @description An account's current unread-notification count, broadcast on the account's
+		 *     core-NATS unread subject.
+		 *
+		 *     Fan-out to any watching SSE connections so a badge updates live; the stored
+		 *     rows in Postgres remain the source of truth, so a missed broadcast is
+		 *     recoverable by re-reading the count.
+		 */
+		UnreadCountEvent: {
+			/**
+			 * Format: int64
+			 * @description The account's current number of unread notifications.
+			 */
+			unreadCount: number;
+		};
 		/** @description Response type for unread notifications status. */
 		UnreadStatus: {
 			/**
@@ -12883,6 +13115,14 @@ export interface components {
 			/** @description Handle of the workspace this webhook belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
+		/** @description Params of a webhook activity (`webhook.*`). */
+		WebhookActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the webhook.
+			 */
+			webhookId: string;
+		};
 		/**
 		 * @description Webhook creation response that includes the secret (visible only once).
 		 *
@@ -12951,28 +13191,28 @@ export interface components {
 		 *     to configure which events a webhook should receive notifications for.
 		 */
 		WebhookEvent:
-			| "file:created"
-			| "file:updated"
-			| "file:deleted"
-			| "member:added"
-			| "member:deleted"
-			| "member:updated"
-			| "connection:created"
-			| "connection:updated"
-			| "connection:deleted"
-			| "connection:sync.started"
-			| "connection:sync.completed"
-			| "connection:sync.failed"
-			| "pipeline:created"
-			| "pipeline:updated"
-			| "pipeline:deleted"
-			| "pipeline:run.started"
-			| "pipeline:run.analyzed"
-			| "pipeline:run.completed"
-			| "pipeline:run.failed"
-			| "policy:created"
-			| "policy:updated"
-			| "policy:deleted";
+			| "file.created"
+			| "file.updated"
+			| "file.deleted"
+			| "member.added"
+			| "member.deleted"
+			| "member.updated"
+			| "connection.created"
+			| "connection.updated"
+			| "connection.deleted"
+			| "connection.sync.started"
+			| "connection.sync.completed"
+			| "connection.sync.failed"
+			| "pipeline.created"
+			| "pipeline.updated"
+			| "pipeline.deleted"
+			| "pipeline.run.started"
+			| "pipeline.run.analyzed"
+			| "pipeline.run.completed"
+			| "pipeline.run.failed"
+			| "policy.created"
+			| "policy.updated"
+			| "policy.deleted";
 		/** @description Opaque whk identifier (whk_<uuid>). */
 		WebhookId: string;
 		/**
@@ -13045,6 +13285,11 @@ export interface components {
 			 * @description Timestamp when the workspace was last updated.
 			 */
 			updatedAt: string;
+		};
+		/** @description Params of a workspace-scoped activity (`workspace.*`). */
+		WorkspaceActivityParams: {
+			/** @description Slug of the workspace acted on. */
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Path parameters for file operations within a workspace context. */
 		WorkspaceFilePathParams: {

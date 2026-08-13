@@ -9,6 +9,7 @@ export type UpdateNotificationSettings = Schemas["UpdateNotificationSettings"];
 export type UnreadStatus = Schemas["UnreadStatus"];
 export type NotificationPage = Schemas["NotificationPage"];
 export type MarkedReadStatus = Schemas["MarkedReadStatus"];
+export type UnreadCountEvent = Schemas["UnreadCountEvent"];
 
 // Notification payload: a discriminated union (on `notifyType`) whose per-event
 // data lives in a named `*Params` type.
