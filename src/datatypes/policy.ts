@@ -13,8 +13,12 @@ export type PolicyRule = Schemas["PolicyRule"];
 
 // Built-in policy template to base a new policy on.
 export type PolicyTemplate = Schemas["PolicyTemplate"];
+export type HipaaDeidentification = Schemas["HipaaDeidentification"];
 export type HipaaDeidMethod = Schemas["HipaaDeidMethod"];
+export type HipaaAccountNumbers = Schemas["HipaaAccountNumbers"];
+export type GdprArticle9 = Schemas["GdprArticle9"];
 export type GdprArticle9Treatment = Schemas["GdprArticle9Treatment"];
+export type GdprSensitiveScope = Schemas["GdprSensitiveScope"];
 export type PciDssPart = Schemas["PciDssPart"];
 export type PciPanRender = Schemas["PciPanRender"];
 

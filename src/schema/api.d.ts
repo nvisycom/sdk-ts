@@ -8163,7 +8163,7 @@ export interface components {
 		 *     UUID, a jurisdiction) is that layer's concern — it can encode it in the
 		 *     name or carry it separately.
 		 *
-		 *     [`Redaction`]: crate::entity::provenance::EventKind::Redaction
+		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
 		 */
 		Attribution: {
 			/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
@@ -8172,170 +8172,90 @@ export interface components {
 			name: string;
 		};
 		/**
-		 * @description Per-call payload a recognizer inspects for the [`Audio`] modality.
+		 * @description One node in an entity's audit DAG: a thing that happened, with its
+		 *     effect on confidence and its tamper-evident links.
 		 *
-		 *     Carries the encoded audio bytes; an optional filename aids diagnostics
-		 *     and encoding inference (the container format a decoder should expect).
-		 *     The recognizable text — a timestamped transcript — is *not* held here;
-		 *     a speech-to-text [`Enricher`] stamps it onto the call's
-		 *     [`artifacts`], keeping
-		 *     `AudioData` the codec's payload alone.
+		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
+		 *     trail of its life: each recognizer that found it, the deduplication that
+		 *     fused them, any score calibration, and the redaction that hid it. The
+		 *     uniform spine (who, resulting score, when) is the same for every event; the
+		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
+		 *     event happened.
 		 *
-		 *     [`Audio`]: super::Audio
-		 *     [`Enricher`]: crate::recognition::Enricher
-		 *     [`artifacts`]: crate::recognition::RecognizerContext::artifacts
+		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
+		 *     recognizer's first detection) has no parents, a normal step has one, and a
+		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
+		 *     [`hash`] folds the
+		 *     payload together with the parents' hashes, so altering any event breaks
+		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
+		 *     reports the first break.
+		 *
+		 *     `entity.confidence` always equals the [`confidence`] of the most recent
+		 *     event. The confidence *flowing in* is not stored: it is the parents'
+		 *     [`confidence`], recovered from the DAG.
+		 *
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
+		 *     [`kind`]: AuditEvent::kind
+		 *     [`parents`]: AuditEvent::parents
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`confidence`]: AuditEvent::confidence
 		 */
-		AudioData: {
-			/** @description Original filename, when known. */
-			filename?: string;
-		};
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		AudioEntity: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+		AudioAuditEvent: {
+			/**
+			 * @description Confidence after this event: the entity's effective confidence once it
+			 *     has happened.
+			 */
 			confidence: components["schemas"]["Confidence"];
 			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["AudioLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["AudioProvenance"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
 			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		AudioEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["AudioEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
 			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
 			 */
-			review?: components["schemas"]["Review"];
-		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		AudioEvent: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
+			hash: components["schemas"]["AuditHash"];
+			/** @description Kind of event, with its event-specific detail and its rationale. */
+			kind: components["schemas"]["AudioAuditKind"];
 			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
+			 * @description The events this one follows, by their hash. Empty for a birth event, one
+			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
+			 *     when the event is recorded; read it through [`parents`](Self::parents).
+			 *
+			 *     Not publicly settable: the links are the tamper-evident structure, so
+			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
+			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
 			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["AudioEventKind"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
+			parents: components["schemas"]["AuditHash"][];
 			/**
 			 * @description Who produced this event: a recognizer name, a deduplication strategy,
 			 *     an operator, or whatever acted.
 			 */
 			source: string;
+			/** @description When the event happened (UTC). */
+			timestamp: string;
 		};
 		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
+		 *     rationale for why it happened.
 		 *
 		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
 		 *     can be added compatibly. The recognition kinds ([`Pattern`],
 		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
 		 *     data.
 		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
+		 *     [`Pattern`]: AuditKind::Pattern
+		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
-		AudioEventKind:
+		AudioAuditKind:
 			| {
 					/** @constant */
 					kind: "pattern";
@@ -8406,7 +8326,7 @@ export interface components {
 					 *     it is the keyword resolved through the modality's [`locate`] (a
 					 *     pixel box for image, a time span for audio, the byte range for
 					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
+					 *     placed, symmetric with a match the recognizer itself drops.
 					 *
 					 *     [`locate`]: crate::modality::TextRecognizable::locate
 					 */
@@ -8425,13 +8345,177 @@ export interface components {
 					/** @description How much the output leaks about the original. */
 					leak_profile: components["schemas"]["LeakProfile"];
 					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
+					 * @description Which selection rule chose this operator: the automatic "why"
 					 *     (matched a label, a tag, a predicate, or the fallback).
 					 */
 					matched_by: components["schemas"]["RuleMatch"];
 					/** @description Which operator (name + version) ran. */
 					operator: components["schemas"]["OperatorId"];
+					/**
+					 * @description BLAKE3 digest of the original text the operator hid, when the
+					 *     redaction layer recorded it. Proves *what* was redacted without
+					 *     storing the plaintext; `None` when the operator did not capture it.
+					 */
+					span_hash?: components["schemas"]["AuditHash"];
+					/**
+					 * Format: uint32
+					 * @description Byte length of the original text the operator hid, paired with
+					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
+					 */
+					span_length?: number;
 			  };
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
+		 *     tamper-evident DAG.
+		 *
+		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
+		 *     stripped by default, an `AuditLog` is always present and records the
+		 *     entity's *entire* life: each recognizer that found it, the deduplication
+		 *     that fused them, any confidence calibration, and the redaction that hid it.
+		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
+		 *     its location and score.
+		 *
+		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
+		 *     records a birth event (no parents); each later step links to the event it
+		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
+		 *     once: the heads of the trails it combines. This is the true shape of a
+		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
+		 *     The events are stored in the order they were recorded, which is a
+		 *     topological order of the DAG (a parent is always recorded before its
+		 *     children).
+		 *
+		 *     Two chains ride the DAG's edges:
+		 *
+		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
+		 *       effective score after it; the score flowing *in* is its parents'
+		 *       confidence, so [`final_confidence`] and the full history are recoverable;
+		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
+		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
+		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
+		 *       and reports the first break.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`confidence`]: AuditEvent::confidence
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`final_confidence`]: Self::final_confidence
+		 *     [`verify`]: Self::verify
+		 */
+		AudioAuditLog: components["schemas"]["AudioAuditEvent"][];
+		/**
+		 * @description Per-call payload a recognizer inspects for the [`Audio`] modality.
+		 *
+		 *     Carries the encoded audio bytes; an optional filename aids diagnostics
+		 *     and encoding inference (the container format a decoder should expect).
+		 *     The recognizable text — a timestamped transcript — is *not* held here;
+		 *     a speech-to-text [`Enricher`] stamps it onto the call's
+		 *     [`artifacts`], keeping
+		 *     `AudioData` the codec's payload alone.
+		 *
+		 *     [`Audio`]: super::Audio
+		 *     [`Enricher`]: crate::recognition::Enricher
+		 *     [`artifacts`]: crate::recognition::RecognizerContext::artifacts
+		 */
+		AudioData: {
+			/** @description Original filename, when known. */
+			filename?: string;
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its audit trail. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`audit`]: Entity::audit
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		AudioEntity: {
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 */
+			audit: components["schemas"]["AudioAuditLog"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["AudioLocation"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		AudioEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["AudioEntity"];
+			/**
+			 * @description Reviewer-supplied redaction override.
+			 *
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
+			 */
+			review?: components["schemas"]["Review"];
+		};
 		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
 		 *     for a nearby value.
@@ -8471,31 +8555,6 @@ export interface components {
 			span: components["schemas"]["TimeSpan"];
 			/** @description Diarization label of the speaker, when a diarizer assigned one. */
 			speaker_id?: string;
-		};
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		AudioProvenance: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["AudioEvent"][];
 		};
 		/** @description Operator spec a `redact` audio rule carries. */
 		AudioRedaction:
@@ -8657,6 +8716,21 @@ export interface components {
 			 */
 			ocrMode: components["schemas"]["OcrMode"];
 		};
+		/**
+		 * @description A 32-byte BLAKE3 digest.
+		 *
+		 *     The tamper-evident link in an [`AuditLog`] DAG: each [`AuditEvent`] hashes
+		 *     its payload together with its parents' hashes, so altering any event breaks
+		 *     every event downstream of it. Displays and (with the `serde` feature)
+		 *     (de)serializes as lowercase hex.
+		 *
+		 *     The all-zero hash is [`GENESIS`](AuditHash::GENESIS), the link a birth event
+		 *     (one with no parents) chains from.
+		 *
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 */
+		AuditHash: string;
 		/** @description Response returned after successful authentication (login/signup). */
 		AuthToken: {
 			/** @description The JWT API token for authentication. */
@@ -8737,6 +8811,24 @@ export interface components {
 			min: components["schemas"]["Point"];
 		};
 		/**
+		 * @description The coarse group a [`Label`] belongs to, for organizing detected entities
+		 *     by kind (`financial`, `health`, `identity`, …).
+		 *
+		 *     A category answers "what *sort* of information is this" at a display level:
+		 *     a consumer groups a redaction audit into sections by category. It is
+		 *     distinct from a label's [`tags`], which are cross-cutting sensitivity
+		 *     markers (`pii`, `phi`, `pci`) a label may carry several of; a label has at
+		 *     most **one** category. Built-in labels ship with a category; a custom
+		 *     [`Label`] has none unless one is set.
+		 *
+		 *     The value is an open, lowercase `snake_case` identifier, so a custom label
+		 *     can define its own category rather than being confined to the shipped set.
+		 *
+		 *     [`Label`]: super::Label
+		 *     [`tags`]: super::Label::tags
+		 */
+		Category: string;
+		/**
 		 * @description Text a [`TextRedaction::Clamp`] emits for out-of-range values.
 		 *
 		 *     Three forms, deserialized untagged so callers can pick the
@@ -8799,7 +8891,7 @@ export interface components {
 		 * Format: float
 		 * @description Confidence score in the closed range `0.0..=1.0`.
 		 *
-		 *     Carried by every provenance [`Event`] (the `before`/`after` of a
+		 *     Carried by every provenance [`AuditEvent`] (the `before`/`after` of a
 		 *     recognition, fusion, or calibration) and by the effective confidence
 		 *     of an [`Entity`]. The newtype enforces the range at construction so
 		 *     no downstream code has to defend against values outside `[0, 1]`.
@@ -8809,7 +8901,7 @@ export interface components {
 		 *     *cutoff* configured to filter scores. Compare the two with
 		 *     [`ConfidenceThreshold::passes`].
 		 *
-		 *     [`Event`]: crate::entity::provenance::Event
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
 		 *     [`Entity`]: crate::entity::Entity
 		 */
 		Confidence: number;
@@ -9460,6 +9552,29 @@ export interface components {
 			serviceAccountPath: string;
 		};
 		/**
+		 * @description The GDPR Article 9 template config — treatment axis fused
+		 *     with sensitive-scope axis. Carried directly by
+		 *     [`crate::PolicyTemplate::GdprArticle9`].
+		 */
+		GdprArticle9: {
+			/**
+			 * @description Which sensitive-data labels to cover. Defaults to
+			 *     [`GdprSensitiveScope::Article9`] (nine Article 9(1)
+			 *     categories only). Pick
+			 *     [`GdprSensitiveScope::Article9WithReidHardening`] to add
+			 *     Recital 26 quasi-identifiers, or
+			 *     [`GdprSensitiveScope::Article9And10`] to also cover
+			 *     Article 10 criminal-justice data.
+			 * @default article9
+			 */
+			scope: components["schemas"]["GdprSensitiveScope"];
+			/**
+			 * @description Which operator to apply to matches. See
+			 *     [`GdprArticle9Treatment`] for the tradeoff.
+			 */
+			treatment: components["schemas"]["GdprArticle9Treatment"];
+		};
+		/**
 		 * @description Which operator to apply to Article 9 special-category entities.
 		 *
 		 *     - [`Erase`](Self::Erase) — the default no-lawful-basis posture.
@@ -9473,6 +9588,34 @@ export interface components {
 		 *       obligation to establish and document.
 		 */
 		GdprArticle9Treatment: "erase" | "pseudonymize";
+		/**
+		 * @description Which sensitive-data labels the template's group covers.
+		 *
+		 *     Three tiers, each strictly widening the previous one so a
+		 *     caller upgrading through the tiers never loses coverage:
+		 *
+		 *     - [`Article9`](Self::Article9) — the nine Article 9(1)
+		 *       special categories only. The default.
+		 *     - [`Article9WithReidHardening`](Self::Article9WithReidHardening) —
+		 *       Article 9 plus `date_of_birth` and `postal_code`. The two
+		 *       quasi-identifiers Recital 26 highlights as re-identification
+		 *       vectors when combined with special-category data. Non-
+		 *       binding guidance, but reflects supervisory-authority
+		 *       expectations on pseudonymization robustness.
+		 *     - [`Article9And10`](Self::Article9And10) — Article 9 + Recital
+		 *       26 hardening + Article 10's criminal-justice labels
+		 *       (`criminal_record`, `criminal_charge`, `judicial_narrative`).
+		 *       Article 10 governs "personal data relating to criminal
+		 *       convictions and offences", processed only under authorized
+		 *       official-authority control or specific Union/Member-State
+		 *       law. Callers with criminal-justice adjacency (background-
+		 *       check services, court-records handling, HR compliance) pick
+		 *       this tier.
+		 */
+		GdprSensitiveScope:
+			| "article9"
+			| "article9_with_reid_hardening"
+			| "article9_and10";
 		/** @description Request to generate a shareable invite code for a workspace. */
 		GenerateInviteCode: {
 			/** @description When the invite code expires. */
@@ -9493,6 +9636,29 @@ export interface components {
 		};
 		/** @description Operational status of a service component. */
 		HealthStatus: "healthy" | "degraded" | "unhealthy";
+		/**
+		 * @description Which account-identifier labels §164.514(b)(2)(i)(J) covers.
+		 *
+		 *     The regulation names "account numbers" without enumerating
+		 *     them; HHS OCR's 2012 guidance doesn't narrow it either. In
+		 *     practice, covered entities and de-ID vendors treat bank
+		 *     accounts, IBANs, and payment cards as the core §(J) set —
+		 *     [`Standard`](Self::Standard). Cryptocurrency wallet addresses
+		 *     are the newer case: they identify a specific holder's account
+		 *     by function, and the §(R) catch-all pulls in "any other unique
+		 *     identifying number, characteristic, or code" tied to an
+		 *     individual, which arguably captures them. Deployments where
+		 *     crypto addresses can appear in patient-facing artifacts pick
+		 *     [`Extended`](Self::Extended); deployments where they can't
+		 *     stay on `Standard`.
+		 *
+		 *     The compliant posture for anything account-shaped is
+		 *     "remove"; the split is only about how broadly this template
+		 *     pre-declares the account label scope. A caller who wants
+		 *     broader coverage combines this template's policy with a
+		 *     separate PII scope on the same request.
+		 */
+		HipaaAccountNumbers: "standard" | "extended";
 		/**
 		 * @description Which HIPAA §164.514 de-identification method to apply.
 		 *
@@ -9521,168 +9687,111 @@ export interface components {
 			| "limited_data_set"
 			| "expert_determination";
 		/**
-		 * @description Per-call payload a recognizer inspects for the [`Image`] modality.
-		 *
-		 *     Carries the encoded bytes plus the pixel [`Dimensions`], which a
-		 *     recognizer that emits unit-square boxes needs to scale them into pixel
-		 *     coordinates. An optional filename aids diagnostics and encoding
-		 *     inference.
-		 *
-		 *     [`Image`]: super::Image
+		 * @description The HIPAA §164.514 template config — method axis fused with
+		 *     account-identifier axis. Carried directly by
+		 *     [`crate::PolicyTemplate::HipaaDeidentification`].
 		 */
-		ImageData: {
-			/** @description Pixel dimensions of the encoded image. */
-			dimensions: components["schemas"]["Dimensions"];
-			/** @description Original filename, when known. */
-			filename?: string;
+		HipaaDeidentification: {
+			/**
+			 * @description Which §(J) account-identifier labels to remove. Defaults
+			 *     to [`HipaaAccountNumbers::Standard`] (bank account +
+			 *     IBAN + payment card). Pick
+			 *     [`HipaaAccountNumbers::Extended`] to add crypto wallet
+			 *     addresses under the §(R) catch-all reading.
+			 * @default standard
+			 */
+			accounts: components["schemas"]["HipaaAccountNumbers"];
+			/**
+			 * @description Which §164.514 method to apply. See [`HipaaDeidMethod`]
+			 *     for the tradeoff.
+			 */
+			method: components["schemas"]["HipaaDeidMethod"];
 		};
 		/**
-		 * @description Detected piece of sensitive information within some medium.
+		 * @description One node in an entity's audit DAG: a thing that happened, with its
+		 *     effect on confidence and its tamper-evident links.
 		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
+		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
+		 *     trail of its life: each recognizer that found it, the deduplication that
+		 *     fused them, any score calibration, and the redaction that hid it. The
+		 *     uniform spine (who, resulting score, when) is the same for every event; the
+		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
+		 *     event happened.
 		 *
-		 *     # Birth and fusion
+		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
+		 *     recognizer's first detection) has no parents, a normal step has one, and a
+		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
+		 *     [`hash`] folds the
+		 *     payload together with the parents' hashes, so altering any event breaks
+		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
+		 *     reports the first break.
 		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
+		 *     `entity.confidence` always equals the [`confidence`] of the most recent
+		 *     event. The confidence *flowing in* is not stored: it is the parents'
+		 *     [`confidence`], recovered from the DAG.
 		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
+		 *     [`kind`]: AuditEvent::kind
+		 *     [`parents`]: AuditEvent::parents
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`confidence`]: AuditEvent::confidence
 		 */
-		ImageEntity: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+		ImageAuditEvent: {
+			/**
+			 * @description Confidence after this event: the entity's effective confidence once it
+			 *     has happened.
+			 */
 			confidence: components["schemas"]["Confidence"];
 			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["ImageLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["ImageProvenance"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
 			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		ImageEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["ImageEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
 			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
 			 */
-			review?: components["schemas"]["Review"];
-		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		ImageEvent: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
+			hash: components["schemas"]["AuditHash"];
+			/** @description Kind of event, with its event-specific detail and its rationale. */
+			kind: components["schemas"]["ImageAuditKind"];
 			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
+			 * @description The events this one follows, by their hash. Empty for a birth event, one
+			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
+			 *     when the event is recorded; read it through [`parents`](Self::parents).
+			 *
+			 *     Not publicly settable: the links are the tamper-evident structure, so
+			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
+			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
 			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["ImageEventKind"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
+			parents: components["schemas"]["AuditHash"][];
 			/**
 			 * @description Who produced this event: a recognizer name, a deduplication strategy,
 			 *     an operator, or whatever acted.
 			 */
 			source: string;
+			/** @description When the event happened (UTC). */
+			timestamp: string;
 		};
 		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
+		 *     rationale for why it happened.
 		 *
 		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
 		 *     can be added compatibly. The recognition kinds ([`Pattern`],
 		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
 		 *     data.
 		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
+		 *     [`Pattern`]: AuditKind::Pattern
+		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
-		ImageEventKind:
+		ImageAuditKind:
 			| {
 					/** @constant */
 					kind: "pattern";
@@ -9753,7 +9862,7 @@ export interface components {
 					 *     it is the keyword resolved through the modality's [`locate`] (a
 					 *     pixel box for image, a time span for audio, the byte range for
 					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
+					 *     placed, symmetric with a match the recognizer itself drops.
 					 *
 					 *     [`locate`]: crate::modality::TextRecognizable::locate
 					 */
@@ -9772,13 +9881,175 @@ export interface components {
 					/** @description How much the output leaks about the original. */
 					leak_profile: components["schemas"]["LeakProfile"];
 					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
+					 * @description Which selection rule chose this operator: the automatic "why"
 					 *     (matched a label, a tag, a predicate, or the fallback).
 					 */
 					matched_by: components["schemas"]["RuleMatch"];
 					/** @description Which operator (name + version) ran. */
 					operator: components["schemas"]["OperatorId"];
+					/**
+					 * @description BLAKE3 digest of the original text the operator hid, when the
+					 *     redaction layer recorded it. Proves *what* was redacted without
+					 *     storing the plaintext; `None` when the operator did not capture it.
+					 */
+					span_hash?: components["schemas"]["AuditHash"];
+					/**
+					 * Format: uint32
+					 * @description Byte length of the original text the operator hid, paired with
+					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
+					 */
+					span_length?: number;
 			  };
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
+		 *     tamper-evident DAG.
+		 *
+		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
+		 *     stripped by default, an `AuditLog` is always present and records the
+		 *     entity's *entire* life: each recognizer that found it, the deduplication
+		 *     that fused them, any confidence calibration, and the redaction that hid it.
+		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
+		 *     its location and score.
+		 *
+		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
+		 *     records a birth event (no parents); each later step links to the event it
+		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
+		 *     once: the heads of the trails it combines. This is the true shape of a
+		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
+		 *     The events are stored in the order they were recorded, which is a
+		 *     topological order of the DAG (a parent is always recorded before its
+		 *     children).
+		 *
+		 *     Two chains ride the DAG's edges:
+		 *
+		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
+		 *       effective score after it; the score flowing *in* is its parents'
+		 *       confidence, so [`final_confidence`] and the full history are recoverable;
+		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
+		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
+		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
+		 *       and reports the first break.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`confidence`]: AuditEvent::confidence
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`final_confidence`]: Self::final_confidence
+		 *     [`verify`]: Self::verify
+		 */
+		ImageAuditLog: components["schemas"]["ImageAuditEvent"][];
+		/**
+		 * @description Per-call payload a recognizer inspects for the [`Image`] modality.
+		 *
+		 *     Carries the encoded bytes plus the pixel [`Dimensions`], which a
+		 *     recognizer that emits unit-square boxes needs to scale them into pixel
+		 *     coordinates. An optional filename aids diagnostics and encoding
+		 *     inference.
+		 *
+		 *     [`Image`]: super::Image
+		 */
+		ImageData: {
+			/** @description Pixel dimensions of the encoded image. */
+			dimensions: components["schemas"]["Dimensions"];
+			/** @description Original filename, when known. */
+			filename?: string;
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its audit trail. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`audit`]: Entity::audit
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		ImageEntity: {
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 */
+			audit: components["schemas"]["ImageAuditLog"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["ImageLocation"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		ImageEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["ImageEntity"];
+			/**
+			 * @description Reviewer-supplied redaction override.
+			 *
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
+			 */
+			review?: components["schemas"]["Review"];
+		};
 		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
 		 *     for a nearby value.
@@ -9823,31 +10094,6 @@ export interface components {
 			 *     Axis-aligned-only sources leave this unset.
 			 */
 			polygon?: components["schemas"]["Polygon"];
-		};
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		ImageProvenance: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["ImageEvent"][];
 		};
 		/** @description Operator spec a `redact` image rule carries. */
 		ImageRedaction:
@@ -10044,7 +10290,7 @@ export interface components {
 			| "revoked";
 		/**
 		 * @description Kind of sensitive information: a stable [`id`], per-language
-		 *     [`LabelLocale`]s, and zero or more tags.
+		 *     [`LabelLocale`]s, an optional [`category`], and zero or more tags.
 		 *
 		 *     # Identity
 		 *
@@ -10062,18 +10308,25 @@ export interface components {
 		 *     text — NER and LLM read the analysis language's name and description to
 		 *     prompt the model, keyed by the stable id.
 		 *
-		 *     # Tags
+		 *     # Category and tags
 		 *
-		 *     [`tags`] is a free-form list of short identifiers policy selectors can
-		 *     match against. Built-in labels carry category tags (`personal_identity`,
-		 *     `contact_info`, `financial`, …) plus cross-cutting tags where applicable
-		 *     (`pii`, `phi`, `pci`). Custom labels can ship with zero tags.
+		 *     [`category`] is the single coarse group a label belongs to (`financial`,
+		 *     `health`, `identity`, …), for organizing detected entities by kind. Built-in
+		 *     labels ship with one; a custom label has none unless set.
+		 *
+		 *     [`tags`] is a free-form list of *cross-cutting* markers a policy selector
+		 *     matches against — sensitivity flags a label may carry several of (`pii`,
+		 *     `phi`, `pci`, `sad`, `secret`). Distinct from the category: a label has at
+		 *     most one category but any number of tags. Custom labels can ship with zero
+		 *     of either.
 		 *
 		 *     [`id`]: Label::id
 		 *     [`localization`]: Label::localization
+		 *     [`category`]: Label::category
 		 *     [`tags`]: Label::tags
 		 */
 		Label: {
+			category?: components["schemas"]["Category"];
 			id: string;
 			localizations: components["schemas"]["LocalizedText"];
 			tags: string[];
@@ -11165,7 +11418,7 @@ export interface components {
 			 *     [`Attribution::name`] so reviewers can find this policy
 			 *     from any redaction it drove.
 			 *
-			 *     [`Attribution::name`]: elide_core::entity::provenance::Attribution::name
+			 *     [`Attribution::name`]: elide_core::entity::audit::Attribution::name
 			 */
 			id: string;
 			/**
@@ -11213,7 +11466,7 @@ export interface components {
 			 *     reviewers can trace which rule fired. Every attachment a
 			 *     [`RuleDispatch::Table`] expands into shares this UUID.
 			 *
-			 *     [`Attribution::description`]: elide_core::entity::provenance::Attribution::description
+			 *     [`Attribution::description`]: elide_core::entity::audit::Attribution::description
 			 */
 			id: string;
 			/** @description Human-readable name. Display-only. */
@@ -11309,24 +11562,14 @@ export interface components {
 		 *     `{"kind": "pci_dss_pan", "render": "hmac_sha256"}`.
 		 */
 		PolicyTemplate:
-			| {
+			| ({
 					/** @constant */
 					kind: "hipaa_deidentification";
-					/**
-					 * @description Which §164.514 method to apply. See [`HipaaDeidMethod`]
-					 *     for the tradeoff.
-					 */
-					method: components["schemas"]["HipaaDeidMethod"];
-			  }
-			| {
+			  } & components["schemas"]["HipaaDeidentification"])
+			| ({
 					/** @constant */
 					kind: "gdpr_article9";
-					/**
-					 * @description Which operator to apply to Article 9 matches. See
-					 *     [`GdprArticle9Treatment`] for the tradeoff.
-					 */
-					treatment: components["schemas"]["GdprArticle9Treatment"];
-			  }
+			  } & components["schemas"]["GdprArticle9"])
 			| {
 					/** @constant */
 					kind: "pci_dss";
@@ -11339,6 +11582,10 @@ export interface components {
 			| {
 					/** @constant */
 					kind: "ccpa";
+			  }
+			| {
+					/** @constant */
+					kind: "soc2_secrets";
 			  };
 		/**
 		 * @description Closed polygon, given by its ordered vertices.
@@ -11590,7 +11837,7 @@ export interface components {
 		 *     closure into provenance, so [`Predicate`] records only that a predicate
 		 *     matched, not which one.
 		 *
-		 *     [`Redaction`]: crate::entity::provenance::EventKind::Redaction
+		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
 		 *     [`Predicate`]: RuleMatch::Predicate
 		 */
 		RuleMatch:
@@ -11939,152 +12186,90 @@ export interface components {
 			reportId?: string;
 		};
 		/**
-		 * @description Detected piece of sensitive information within some medium.
+		 * @description One node in an entity's audit DAG: a thing that happened, with its
+		 *     effect on confidence and its tamper-evident links.
 		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
+		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
+		 *     trail of its life: each recognizer that found it, the deduplication that
+		 *     fused them, any score calibration, and the redaction that hid it. The
+		 *     uniform spine (who, resulting score, when) is the same for every event; the
+		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
+		 *     event happened.
 		 *
-		 *     # Birth and fusion
+		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
+		 *     recognizer's first detection) has no parents, a normal step has one, and a
+		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
+		 *     [`hash`] folds the
+		 *     payload together with the parents' hashes, so altering any event breaks
+		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
+		 *     reports the first break.
 		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
+		 *     `entity.confidence` always equals the [`confidence`] of the most recent
+		 *     event. The confidence *flowing in* is not stored: it is the parents'
+		 *     [`confidence`], recovered from the DAG.
 		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
+		 *     [`kind`]: AuditEvent::kind
+		 *     [`parents`]: AuditEvent::parents
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`confidence`]: AuditEvent::confidence
 		 */
-		TabularEntity: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+		TabularAuditEvent: {
+			/**
+			 * @description Confidence after this event: the entity's effective confidence once it
+			 *     has happened.
+			 */
 			confidence: components["schemas"]["Confidence"];
 			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["TabularLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["TabularProvenance"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
 			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		TabularEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["TabularEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
 			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
 			 */
-			review?: components["schemas"]["Review"];
-		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		TabularEvent: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
+			hash: components["schemas"]["AuditHash"];
+			/** @description Kind of event, with its event-specific detail and its rationale. */
+			kind: components["schemas"]["TabularAuditKind"];
 			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
+			 * @description The events this one follows, by their hash. Empty for a birth event, one
+			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
+			 *     when the event is recorded; read it through [`parents`](Self::parents).
+			 *
+			 *     Not publicly settable: the links are the tamper-evident structure, so
+			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
+			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
 			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["TabularEventKind"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
+			parents: components["schemas"]["AuditHash"][];
 			/**
 			 * @description Who produced this event: a recognizer name, a deduplication strategy,
 			 *     an operator, or whatever acted.
 			 */
 			source: string;
+			/** @description When the event happened (UTC). */
+			timestamp: string;
 		};
 		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
+		 *     rationale for why it happened.
 		 *
 		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
 		 *     can be added compatibly. The recognition kinds ([`Pattern`],
 		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
 		 *     data.
 		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
+		 *     [`Pattern`]: AuditKind::Pattern
+		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
-		TabularEventKind:
+		TabularAuditKind:
 			| {
 					/** @constant */
 					kind: "pattern";
@@ -12155,7 +12340,7 @@ export interface components {
 					 *     it is the keyword resolved through the modality's [`locate`] (a
 					 *     pixel box for image, a time span for audio, the byte range for
 					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
+					 *     placed, symmetric with a match the recognizer itself drops.
 					 *
 					 *     [`locate`]: crate::modality::TextRecognizable::locate
 					 */
@@ -12174,13 +12359,159 @@ export interface components {
 					/** @description How much the output leaks about the original. */
 					leak_profile: components["schemas"]["LeakProfile"];
 					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
+					 * @description Which selection rule chose this operator: the automatic "why"
 					 *     (matched a label, a tag, a predicate, or the fallback).
 					 */
 					matched_by: components["schemas"]["RuleMatch"];
 					/** @description Which operator (name + version) ran. */
 					operator: components["schemas"]["OperatorId"];
+					/**
+					 * @description BLAKE3 digest of the original text the operator hid, when the
+					 *     redaction layer recorded it. Proves *what* was redacted without
+					 *     storing the plaintext; `None` when the operator did not capture it.
+					 */
+					span_hash?: components["schemas"]["AuditHash"];
+					/**
+					 * Format: uint32
+					 * @description Byte length of the original text the operator hid, paired with
+					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
+					 */
+					span_length?: number;
 			  };
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
+		 *     tamper-evident DAG.
+		 *
+		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
+		 *     stripped by default, an `AuditLog` is always present and records the
+		 *     entity's *entire* life: each recognizer that found it, the deduplication
+		 *     that fused them, any confidence calibration, and the redaction that hid it.
+		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
+		 *     its location and score.
+		 *
+		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
+		 *     records a birth event (no parents); each later step links to the event it
+		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
+		 *     once: the heads of the trails it combines. This is the true shape of a
+		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
+		 *     The events are stored in the order they were recorded, which is a
+		 *     topological order of the DAG (a parent is always recorded before its
+		 *     children).
+		 *
+		 *     Two chains ride the DAG's edges:
+		 *
+		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
+		 *       effective score after it; the score flowing *in* is its parents'
+		 *       confidence, so [`final_confidence`] and the full history are recoverable;
+		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
+		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
+		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
+		 *       and reports the first break.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`confidence`]: AuditEvent::confidence
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`final_confidence`]: Self::final_confidence
+		 *     [`verify`]: Self::verify
+		 */
+		TabularAuditLog: components["schemas"]["TabularAuditEvent"][];
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its audit trail. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`audit`]: Entity::audit
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		TabularEntity: {
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 */
+			audit: components["schemas"]["TabularAuditLog"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TabularLocation"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		TabularEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["TabularEntity"];
+			/**
+			 * @description Reviewer-supplied redaction override.
+			 *
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
+			 */
+			review?: components["schemas"]["Review"];
+		};
 		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
 		 *     for a nearby value.
@@ -12250,31 +12581,6 @@ export interface components {
 			 *     means the whole cell.
 			 */
 			start_offset?: number;
-		};
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		TabularProvenance: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["TabularEvent"][];
 		};
 		/** @description Operator spec a `redact` tabular rule carries. */
 		TabularRedaction:
@@ -12360,163 +12666,90 @@ export interface components {
 			payload?: unknown;
 		};
 		/**
-		 * @description Run of text.
+		 * @description One node in an entity's audit DAG: a thing that happened, with its
+		 *     effect on confidence and its tamper-evident links.
 		 *
-		 *     Either the payload a text recognizer inspects, or the value sliced out
-		 *     at an entity's location for an operator.
+		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
+		 *     trail of its life: each recognizer that found it, the deduplication that
+		 *     fused them, any score calibration, and the redaction that hid it. The
+		 *     uniform spine (who, resulting score, when) is the same for every event; the
+		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
+		 *     event happened.
 		 *
-		 *     Held as a [`HipStr`] so short values inline and longer ones share a
-		 *     refcounted buffer, making cheap clones when one payload is passed to
-		 *     several recognizers.
+		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
+		 *     recognizer's first detection) has no parents, a normal step has one, and a
+		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
+		 *     [`hash`] folds the
+		 *     payload together with the parents' hashes, so altering any event breaks
+		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
+		 *     reports the first break.
+		 *
+		 *     `entity.confidence` always equals the [`confidence`] of the most recent
+		 *     event. The confidence *flowing in* is not stored: it is the parents'
+		 *     [`confidence`], recovered from the DAG.
+		 *
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
+		 *     [`kind`]: AuditEvent::kind
+		 *     [`parents`]: AuditEvent::parents
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`confidence`]: AuditEvent::confidence
 		 */
-		TextData: string;
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`Event`] (its own finding) in the entity's [`provenance`]. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its provenance. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`Event`]: crate::entity::provenance::Event
-		 *     [`provenance`]: Entity::provenance
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		TextEntity: {
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+		TextAuditEvent: {
+			/**
+			 * @description Confidence after this event: the entity's effective confidence once it
+			 *     has happened.
+			 */
 			confidence: components["schemas"]["Confidence"];
 			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["TextLocation"];
-			/**
-			 * @description Detection audit trail: every contributing detection and the fusion
-			 *     event, if any.
-			 */
-			provenance: components["schemas"]["TextProvenance"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). Provenance, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
 			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		TextEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["TextEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
 			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
 			 */
-			review?: components["schemas"]["Review"];
-		};
-		/**
-		 * @description One thing that happened to an entity, with its effect on confidence.
-		 *
-		 *     Events are recorded in order on an entity's [`Provenance`], forming
-		 *     the full audit trail of its life: each recognizer that found it, the
-		 *     deduplication that fused them, any score calibration, and the
-		 *     redaction that hid it. The uniform spine (who, before/after score,
-		 *     when, why) is the same for every event; the [`kind`] carries the
-		 *     event-specific detail.
-		 *
-		 *     `entity.confidence` always equals the [`after`] of the most recent
-		 *     event.
-		 *
-		 *     [`Provenance`]: crate::entity::provenance::Provenance
-		 *     [`kind`]: Event::kind
-		 *     [`after`]: Event::after
-		 */
-		TextEvent: {
-			/** @description Confidence after this event. */
-			after: components["schemas"]["Confidence"];
-			/** @description When the event happened (UTC). */
-			at: string;
+			hash: components["schemas"]["AuditHash"];
+			/** @description Kind of event, with its event-specific detail and its rationale. */
+			kind: components["schemas"]["TextAuditKind"];
 			/**
-			 * @description Confidence before this event, if there was a prior value. `None` on
-			 *     the first (birth) event.
+			 * @description The events this one follows, by their hash. Empty for a birth event, one
+			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
+			 *     when the event is recorded; read it through [`parents`](Self::parents).
+			 *
+			 *     Not publicly settable: the links are the tamper-evident structure, so
+			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
+			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
 			 */
-			before?: components["schemas"]["Confidence"];
-			/** @description Kind of event, with its event-specific detail. */
-			kind: components["schemas"]["TextEventKind"];
-			/** @description Free-text explanation of what the event did and why. */
-			reason: string;
+			parents: components["schemas"]["AuditHash"][];
 			/**
 			 * @description Who produced this event: a recognizer name, a deduplication strategy,
 			 *     an operator, or whatever acted.
 			 */
 			source: string;
+			/** @description When the event happened (UTC). */
+			timestamp: string;
 		};
 		/**
-		 * @description Kind of an [`Event`], carrying its event-specific detail.
+		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
+		 *     rationale for why it happened.
 		 *
 		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
 		 *     can be added compatibly. The recognition kinds ([`Pattern`],
 		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
 		 *     data.
 		 *
-		 *     [`Pattern`]: EventKind::Pattern
-		 *     [`Model`]: EventKind::Model
+		 *     [`Pattern`]: AuditKind::Pattern
+		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
-		TextEventKind:
+		TextAuditKind:
 			| {
 					/** @constant */
 					kind: "pattern";
@@ -12587,7 +12820,7 @@ export interface components {
 					 *     it is the keyword resolved through the modality's [`locate`] (a
 					 *     pixel box for image, a time span for audio, the byte range for
 					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed — symmetric with a match the recognizer itself drops.
+					 *     placed, symmetric with a match the recognizer itself drops.
 					 *
 					 *     [`locate`]: crate::modality::TextRecognizable::locate
 					 */
@@ -12606,13 +12839,170 @@ export interface components {
 					/** @description How much the output leaks about the original. */
 					leak_profile: components["schemas"]["LeakProfile"];
 					/**
-					 * @description Which selection rule chose this operator — the automatic "why"
+					 * @description Which selection rule chose this operator: the automatic "why"
 					 *     (matched a label, a tag, a predicate, or the fallback).
 					 */
 					matched_by: components["schemas"]["RuleMatch"];
 					/** @description Which operator (name + version) ran. */
 					operator: components["schemas"]["OperatorId"];
+					/**
+					 * @description BLAKE3 digest of the original text the operator hid, when the
+					 *     redaction layer recorded it. Proves *what* was redacted without
+					 *     storing the plaintext; `None` when the operator did not capture it.
+					 */
+					span_hash?: components["schemas"]["AuditHash"];
+					/**
+					 * Format: uint32
+					 * @description Byte length of the original text the operator hid, paired with
+					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
+					 */
+					span_length?: number;
 			  };
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
+		 *     tamper-evident DAG.
+		 *
+		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
+		 *     stripped by default, an `AuditLog` is always present and records the
+		 *     entity's *entire* life: each recognizer that found it, the deduplication
+		 *     that fused them, any confidence calibration, and the redaction that hid it.
+		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
+		 *     its location and score.
+		 *
+		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
+		 *     records a birth event (no parents); each later step links to the event it
+		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
+		 *     once: the heads of the trails it combines. This is the true shape of a
+		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
+		 *     The events are stored in the order they were recorded, which is a
+		 *     topological order of the DAG (a parent is always recorded before its
+		 *     children).
+		 *
+		 *     Two chains ride the DAG's edges:
+		 *
+		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
+		 *       effective score after it; the score flowing *in* is its parents'
+		 *       confidence, so [`final_confidence`] and the full history are recoverable;
+		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
+		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
+		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
+		 *       and reports the first break.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`confidence`]: AuditEvent::confidence
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`final_confidence`]: Self::final_confidence
+		 *     [`verify`]: Self::verify
+		 */
+		TextAuditLog: components["schemas"]["TextAuditEvent"][];
+		/**
+		 * @description Run of text.
+		 *
+		 *     Either the payload a text recognizer inspects, or the value sliced out
+		 *     at an entity's location for an operator.
+		 *
+		 *     Held as a [`HipStr`] so short values inline and longer ones share a
+		 *     refcounted buffer, making cheap clones when one payload is passed to
+		 *     several recognizers.
+		 */
+		TextData: string;
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its audit trail. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`audit`]: Entity::audit
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		TextEntity: {
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 */
+			audit: components["schemas"]["TextAuditLog"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TextLocation"];
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description One recognized entity plus the optional reviewer override.
+		 *
+		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
+		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
+		 *     derivation needs them schema-able. All four modalities elide
+		 *     ships satisfy these under the `serde` + `schema` features.
+		 */
+		TextEntityRecord: {
+			/** @description The elide entity, as recognition produced it. */
+			entity: components["schemas"]["TextEntity"];
+			/**
+			 * @description Reviewer-supplied redaction override.
+			 *
+			 *     `None` means "use the matching policy rule's decision";
+			 *     `Some(...)` overrides that rule for this specific entity
+			 *     at apply time. Reviewer overrides take precedence over
+			 *     every policy rule and inherit the authority of the
+			 *     [`Review::policy_id`] they name — the audit event's
+			 *     attribution stamps that policy so the trail names the
+			 *     authority under which the override fired.
+			 */
+			review?: components["schemas"]["Review"];
+		};
 		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
 		 *     for a nearby value.
@@ -12659,31 +13049,6 @@ export interface components {
 			 * @description Byte offset where the range starts.
 			 */
 			start: number;
-		};
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`Event`] in its life, in
-		 *     order.
-		 *
-		 *     This is the model's answer to "full provenance": where Presidio keeps
-		 *     a shallow, optional, per-stage explanation that is stripped by
-		 *     default, a `Provenance` is always present and records the entity's
-		 *     *entire* life as an ordered list of events: each recognizer that
-		 *     found it, the deduplication that fused them, any confidence
-		 *     calibration, and the redaction that hid it. Nothing is collapsed:
-		 *     every recognizer keeps its own recognition event with its location
-		 *     and score.
-		 *
-		 *     The events form a confidence chain (each event's [`after`] is the
-		 *     next's [`before`]) so the final confidence and its full history are
-		 *     always recoverable.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`after`]: Event::after
-		 *     [`before`]: Event::before
-		 */
-		TextProvenance: {
-			/** @description Events, in the order they happened. */
-			events: components["schemas"]["TextEvent"][];
 		};
 		/** @description Operator spec a `redact` text rule carries. */
 		TextRedaction:

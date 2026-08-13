@@ -8,6 +8,23 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-08-14
+
+### Added
+
+- `AuditHash` (audit-event digest) and `Category` (a label's coarse group)
+  datatypes
+- Policy-template config datatypes: `HipaaDeidentification`,
+  `HipaaAccountNumbers`, `GdprArticle9`, `GdprSensitiveScope`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** renamed the per-modality audit-event datatypes, for each of
+  text, image, audio, and tabular: `*Event` → `*AuditEvent`, `*EventKind` →
+  `*AuditKind`, and `*Provenance` → `*AuditLog` (e.g. `TextEvent` →
+  `TextAuditEvent`, `TextProvenance` → `TextAuditLog`)
+
 ## [0.25.0] - 2026-08-12
 
 ### Added
@@ -544,7 +561,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.25.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.26.0...HEAD
+[0.26.0]: https://github.com/nvisycom/sdk-ts/compare/v0.25.0...v0.26.0
 [0.25.0]: https://github.com/nvisycom/sdk-ts/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/nvisycom/sdk-ts/compare/v0.23.0...v0.24.0
 [0.23.0]: https://github.com/nvisycom/sdk-ts/compare/v0.22.0...v0.23.0
