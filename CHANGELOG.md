@@ -8,6 +8,26 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.28.0] - 2026-08-14
+
+### Added
+
+- `LabelScope` datatype, a named set of labels a policy detects (replacing the
+  removed label-vocabulary containers)
+- The opaque id newtypes are now re-exported, so consumers can name them in
+  their own signatures: `Handle`, `LabelRef`, `ConnectionId`, `RunId`,
+  `WebhookId`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
+### Removed
+
+- **Breaking:** the `Labels` and `LabelGroup` policy label-vocabulary
+  datatypes, replaced by `LabelScope`. The remaining label types (`LabelEntry`,
+  `LabelLocale`, `Label`, `LabelRef`, `LocalizedText`) are unchanged
+
 ## [0.27.0] - 2026-08-14
 
 ### Added
@@ -583,7 +603,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.27.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.28.0...HEAD
+[0.28.0]: https://github.com/nvisycom/sdk-ts/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/nvisycom/sdk-ts/compare/v0.26.0...v0.27.0
 [0.26.0]: https://github.com/nvisycom/sdk-ts/compare/v0.25.0...v0.26.0
 [0.25.0]: https://github.com/nvisycom/sdk-ts/compare/v0.24.0...v0.25.0

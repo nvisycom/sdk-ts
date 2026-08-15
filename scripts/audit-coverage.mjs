@@ -46,16 +46,12 @@ const IGNORED_OPERATIONS = new Set([
 
 /**
  * Schema types the type-coverage check should not expect to be exported.
- * These are opaque `string` newtypes (`type X = string`) — the SDK's methods
- * already take `string`, so a named alias would add noise without value.
+ * Empty: the SDK re-exports every request/response-reachable type, including
+ * the opaque `string` id newtypes (`Handle`, `LabelRef`, `ConnectionId`,
+ * `RunId`, `WebhookId`), so their names are available for self-documenting
+ * signatures.
  */
-const IGNORED_TYPES = new Set([
-	"Handle",
-	"LabelRef",
-	"ConnectionId",
-	"RunId",
-	"WebhookId",
-]);
+const IGNORED_TYPES = new Set([]);
 
 /** Schema names whose bodies define the request surface consumers construct. */
 const REQUEST_ROOT = /^(Create|Update|Sync|Reply|Generate|Login|Signup|Test)/;

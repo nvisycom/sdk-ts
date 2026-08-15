@@ -32,12 +32,12 @@ export type ImageRedaction = Schemas["ImageRedaction"];
 export type AudioRedaction = Schemas["AudioRedaction"];
 export type TabularRedaction = Schemas["TabularRedaction"];
 
-// Label vocabulary.
-export type Labels = Schemas["Labels"];
-export type LabelGroup = Schemas["LabelGroup"];
+// Label vocabulary. A policy detects one or more named `LabelScope`s.
+export type LabelScope = Schemas["LabelScope"];
 export type LabelEntry = Schemas["LabelEntry"];
 export type LabelLocale = Schemas["LabelLocale"];
 export type Label = Schemas["Label"];
+export type LabelRef = Schemas["LabelRef"];
 export type LocalizedText = Schemas["LocalizedText"];
 
 // Leaf / detail types.
