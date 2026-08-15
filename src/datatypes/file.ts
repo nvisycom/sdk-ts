@@ -2,6 +2,7 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
+// File resources.
 export type File = Schemas["File"];
 export type UpdateFile = Schemas["UpdateFile"];
 export type FileKind = Schemas["FileKind"];

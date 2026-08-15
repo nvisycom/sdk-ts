@@ -9592,7 +9592,7 @@ export interface components {
 		 */
 		GdprArticle9Treatment: "erase" | "pseudonymize";
 		/**
-		 * @description Which sensitive-data labels the template's group covers.
+		 * @description Which sensitive-data labels the template's scope covers.
 		 *
 		 *     Three tiers, each strictly widening the previous one so a
 		 *     caller upgrading through the tiers never loses coverage:
@@ -10348,68 +10348,6 @@ export interface components {
 			label: components["schemas"]["LabelRef"];
 		};
 		/**
-		 * @description Named cluster of [`LabelRef`]s a policy's rules can reference
-		 *     by name via [`Predicate::LabelInGroup`].
-		 *
-		 *     Groups live on the [`PolicyDefinition`] that declares them
-		 *     and are visible only to that policy's own rules. Templates
-		 *     ship one group per canonical label list (`"hipaa_18"`,
-		 *     `"gdpr_article_9"`, `"pci_chd"`, `"pci_sad"`), and every
-		 *     rule that targets that list references the group by name
-		 *     instead of respelling the labels. When elide adds a new label
-		 *     to a category, extending the group covers every rule that
-		 *     referenced it: no rule edit.
-		 *
-		 *     **Compilation**: groups stay on the policy. Evaluating a
-		 *     [`Predicate::LabelInGroup { group }`] looks the name up in
-		 *     the policy's own group table and tests the entity's label for
-		 *     membership. Nothing is stamped onto the label catalog, so two
-		 *     policies that both declare `hipaa_18` with different labelsets
-		 *     cannot step on each other.
-		 *
-		 *     **Unknown group names error at request validation**, not at
-		 *     apply time. A typo doesn't silently underfire.
-		 *
-		 *     [`PolicyDefinition`]: super::PolicyDefinition
-		 *     [`Predicate::LabelInGroup`]: crate::Predicate::LabelInGroup
-		 *     [`Predicate::LabelInGroup { group }`]: crate::Predicate::LabelInGroup
-		 */
-		LabelGroup: {
-			/**
-			 * @description Why this cluster exists: the authority that defines it.
-			 *
-			 *     A group usually maps to one regulatory category (HIPAA's
-			 *     eighteen identifiers, GDPR Article 9(1)'s nine special
-			 *     categories), so this is where that mapping is recorded as
-			 *     data rather than prose.
-			 */
-			attribution?: components["schemas"]["AttributionKind"];
-			/** @description Optional description for reviewers. */
-			description?: string;
-			/**
-			 * @description Labels this group covers, by ref.
-			 *
-			 *     A label that doesn't appear in the request's compiled
-			 *     [`LabelCatalog`] is silently skipped at tag-synthesis time
-			 *     : a group can safely list labels the current build
-			 *     doesn't emit (e.g. modality-gated ones); rules keyed off
-			 *     the group still fire on whatever labels *are* present.
-			 *
-			 *     [`LabelCatalog`]: elide_core::entity::LabelCatalog
-			 */
-			labels: components["schemas"]["LabelRef"][];
-			/**
-			 * @description Stable name a [`Predicate::LabelInGroup`] references.
-			 *
-			 *     Free-form; a policy layer picks the vocabulary. Recommend
-			 *     snake_case identifiers (`hipaa_18`, `gdpr_article_9`) -
-			 *     they read cleanly in audit provenance.
-			 *
-			 *     [`Predicate::LabelInGroup`]: crate::Predicate::LabelInGroup
-			 */
-			name: string;
-		};
-		/**
 		 * @description A label's human-facing text in one language: a display name and an
 		 *     optional fuller description.
 		 *
@@ -10444,21 +10382,54 @@ export interface components {
 		 */
 		LabelRef: string;
 		/**
-		 * @description Per-policy label-catalog selection.
+		 * @description A named set of labels a [`PolicyDefinition`] detects.
 		 *
-		 *     Picks builtins by name + adds inline custom schemas.
+		 *     Scopes live on the policy that declares them and are visible
+		 *     only to that policy's own rules. Two policies that both declare
+		 *     `hipaa_18` with different labelsets stay independent: nothing is
+		 *     stamped onto the shared label catalog, so there is no request-
+		 *     wide namespace one policy could use to reach into another's.
+		 *
+		 *     Templates ship one scope per canonical label list
+		 *     (`"hipaa_safe_harbor"`, `"gdpr_article_9"`, `"ccpa_personal_information"`).
+		 *     A policy may declare several: the union is what it detects, and
+		 *     a rule can target one by name.
+		 *
+		 *     **Unknown scope names error at request validation**, not at
+		 *     apply time. A typo doesn't silently underfire.
+		 *
+		 *     [`PolicyDefinition`]: super::PolicyDefinition
 		 */
-		Labels: {
+		LabelScope: {
 			/**
-			 * @description Builtin label names to enable.
+			 * @description Why this set exists: the authority that defines it.
 			 *
-			 *     E.g. `"email_address"`, `"phone_number"`. An unknown name
-			 *     is rejected at request compile time: a typo fails loudly
-			 *     rather than quietly dropping the label from the policy.
+			 *     A scope usually maps to one regulatory category (HIPAA's
+			 *     eighteen identifiers, GDPR Article 9(1)'s nine special
+			 *     categories), so this is where that mapping is recorded as
+			 *     data rather than prose.
 			 */
-			builtins?: components["schemas"]["LabelRef"][];
-			/** @description Custom labels defined inline by the caller. */
-			custom?: components["schemas"]["Label"][];
+			attribution?: components["schemas"]["AttributionKind"];
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * @description The labels this scope covers, by ref.
+			 *
+			 *     A label the current build doesn't emit (a modality-gated
+			 *     one, say) is simply never detected; rules keyed off the
+			 *     scope still fire on whatever labels *are* present.
+			 */
+			labels: components["schemas"]["LabelRef"][];
+			/**
+			 * @description Stable name a [`Predicate::LabelInScope`] references.
+			 *
+			 *     Free-form; a policy layer picks the vocabulary. Recommend
+			 *     snake_case identifiers (`hipaa_safe_harbor`,
+			 *     `gdpr_article_9`): they read cleanly in audit provenance.
+			 *
+			 *     [`Predicate::LabelInScope`]: crate::Predicate::LabelInScope
+			 */
+			name: string;
 		};
 		/**
 		 * @description Single language detection result.
@@ -11353,44 +11324,32 @@ export interface components {
 		 *     Identity is the UUID; `name` is display-only.
 		 */
 		PolicyDefinition: {
+			/**
+			 * @description Caller-authored label schemas this policy introduces.
+			 *
+			 *     Only for labels elide does not ship. These join the
+			 *     recognition vocabulary alongside [`scopes`], and a rule may
+			 *     target them the same way.
+			 *
+			 *     [`scopes`]: Self::scopes
+			 */
+			custom?: components["schemas"]["Label"][];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
-			 * @description Per-policy catch-all. Fires when no rule in this policy
-			 *     matched. Presence halts the chain; absence falls through
+			 * @description Per-policy catch-all, applied to any detected entity in
+			 *     the policy's vocabulary that no rule claimed. Fires when no
+			 *     rule in this policy matched. Presence halts the chain; absence falls through
 			 *     to the next policy. [`Option`] enforces "at most one
 			 *     fallback per policy" at the type level.
 			 */
 			fallback?: components["schemas"]["ModalityRedactions"];
-			/**
-			 * @description Named clusters of [`LabelRef`]s this policy's rules may
-			 *     reference by name via [`Predicate::LabelInGroup`]. Scoped
-			 *     to this policy: a rule can only name a group its own
-			 *     policy declared; unknown references error at request
-			 *     validation. Two policies that both declare `hipaa_18` with
-			 *     different labelsets stay independent.
-			 *
-			 *     [`LabelRef`]: elide_core::entity::LabelRef
-			 *     [`Predicate::LabelInGroup`]: crate::Predicate::LabelInGroup
-			 */
-			groups?: components["schemas"]["LabelGroup"][];
 			/**
 			 * Format: uuid
 			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
 			 *     customer-supplied so re-submissions carry the same id.
 			 */
 			id: string;
-			/**
-			 * @description Vocabulary the policy operates over: builtins picked by
-			 *     name plus caller-authored custom label schemas. Engine
-			 *     unions every submitted policy's `labels` into a per-request
-			 *     [`LabelCatalog`] used to drive recognizer dispatch and
-			 *     tag-based [`Predicate::TagOneOf`] matching.
-			 *
-			 *     [`LabelCatalog`]: elide_core::entity::LabelCatalog
-			 *     [`Predicate::TagOneOf`]: crate::Predicate::TagOneOf
-			 */
-			labels?: components["schemas"]["Labels"];
 			/**
 			 * @description Human-readable name. Display-only. Does not key anything.
 			 *
@@ -11404,6 +11363,24 @@ export interface components {
 			name: string;
 			/** @description Ordered rules. First match wins within this policy. */
 			rules?: components["schemas"]["PolicyRule"][];
+			/**
+			 * @description What this policy detects: one or more named, attributed
+			 *     label sets.
+			 *
+			 *     The union of every scope, plus [`custom`], is the policy's
+			 *     recognition vocabulary. A label no scope names is never
+			 *     detected, so no rule can fire on it and the policy is inert
+			 *     with respect to it.
+			 *
+			 *     Detecting more than the rules act on is deliberate: scope a
+			 *     whole regulatory category, write rules for the labels
+			 *     needing special treatment, and let [`fallback`] sweep the
+			 *     rest.
+			 *
+			 *     [`custom`]: Self::custom
+			 *     [`fallback`]: Self::fallback
+			 */
+			scopes?: components["schemas"]["LabelScope"][];
 			/**
 			 * @description The shipped template this policy was built from, when it
 			 *     was.
@@ -11426,21 +11403,18 @@ export interface components {
 		 *     server stamps them in [`into_definition`](PolicyDraft::into_definition).
 		 */
 		PolicyDraft: {
+			/** @description Caller-authored custom label schemas this policy introduces. */
+			custom?: components["schemas"]["Label"][];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/** @description Per-policy catch-all, fired when no rule matched. */
 			fallback?: components["schemas"]["ModalityRedactions"];
-			/** @description Named clusters of labels this policy's rules may reference by name. */
-			groups?: components["schemas"]["LabelGroup"][];
-			/**
-			 * @description Vocabulary the policy operates over: builtins picked by name plus
-			 *     caller-authored custom label schemas.
-			 */
-			labels?: components["schemas"]["Labels"];
 			/** @description Human-readable name. Display-only. */
 			name: string;
 			/** @description Ordered rules. First match wins within this policy. */
 			rules?: components["schemas"]["PolicyRule"][];
+			/** @description What this policy detects: named, attributed label sets. */
+			scopes?: components["schemas"]["LabelScope"][];
 		};
 		/**
 		 * @description Path parameters for policy operations.
@@ -11668,14 +11642,14 @@ export interface components {
 					tags: string[];
 			  }
 			| {
-					/**
-					 * @description Name of the [`LabelGroup`] to match against.
-					 *
-					 *     [`LabelGroup`]: super::LabelGroup
-					 */
-					group: string;
 					/** @constant */
-					kind: "labelInGroup";
+					kind: "labelInScope";
+					/**
+					 * @description Name of the [`LabelScope`] to match against.
+					 *
+					 *     [`LabelScope`]: super::LabelScope
+					 */
+					scope: string;
 			  }
 			| {
 					/** @description Cluster id to match. */
@@ -12690,7 +12664,7 @@ export interface components {
 		 *
 		 *     Records **provenance, not fidelity**. Templates are plain data
 		 *     and callers are expected to mutate the returned policy before
-		 *     submitting it (swapping an operator, widening a group), so this
+		 *     submitting it (swapping an operator, widening a scope), so this
 		 *     says "built from `hipaa_deid_safe_harbor` v1.0.0" and nothing
 		 *     about whether the policy still matches what that template
 		 *     ships. A reviewer who needs that rebuilds the template and

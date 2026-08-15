@@ -2,6 +2,7 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
+// Notification resources, settings, and unread-count tracking.
 export type Notification = Schemas["Notification"];
 export type NotificationEvent = Schemas["NotificationEvent"];
 export type NotificationSettings = Schemas["NotificationSettings"];

@@ -2,6 +2,7 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
+// Invite resources.
 export type Invite = Schemas["Invite"];
 export type InviteSent = Schemas["InviteSent"];
 export type CreateInvite = Schemas["CreateInvite"];
@@ -10,6 +11,8 @@ export type GenerateInviteCode = Schemas["GenerateInviteCode"];
 export type InviteCode = Schemas["InviteCode"];
 export type InviteStatus = Schemas["InviteStatus"];
 export type InviteExpiration = Schemas["InviteExpiration"];
+
+// Listing and pagination.
 export type ListInvites = Schemas["ListInvites"];
 export type InviteSortField = Schemas["InviteSortField"];
 export type SortOrder = Schemas["SortOrder"];
