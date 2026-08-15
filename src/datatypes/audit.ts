@@ -12,13 +12,14 @@ export type EntityGroup = Schemas["EntityGroup"];
 export type AuditContext = Schemas["AuditContext"];
 export type EntityCoRef = Schemas["EntityCoRef"];
 
-// OCR mode a run resolved to, with its render resolution.
-export type OcrMode = Schemas["OcrMode"];
+// Raster mode a run resolved to, with its render resolution.
+export type RasterMode = Schemas["RasterMode"];
 export type Dpi = Schemas["Dpi"];
 
 // Redaction rationale and reviewer overrides.
 export type Review = Schemas["Review"];
 export type Attribution = Schemas["Attribution"];
+export type AttributionKind = Schemas["AttributionKind"];
 export type LeakProfile = Schemas["LeakProfile"];
 export type RuleMatch = Schemas["RuleMatch"];
 

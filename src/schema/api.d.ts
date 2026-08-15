@@ -4578,7 +4578,7 @@ export interface paths {
 				 *     here; labels are re-derived from the policy set on each
 				 *     anonymize call.
 				 *
-				 *     No [`Default`] — a well-formed audit must carry a real
+				 *     No [`Default`]: a well-formed audit must carry a real
 				 *     [`AuditContext`] with a real correlation id. Callers building
 				 *     an audit outside the analyze path construct it explicitly.
 				 */
@@ -5226,7 +5226,9 @@ export interface paths {
 			/**
 			 * @description Request payload for updating an existing workspace policy.
 			 *
-			 *     Replacing the `definition` replaces the whole policy body.
+			 *     Replacing the `definition` replaces the whole policy body. The policy's
+			 *     template origin is server-owned and preserved across updates — it is not
+			 *     settable here.
 			 */
 			requestBody: {
 				content: {
@@ -8147,30 +8149,54 @@ export interface components {
 			token: string;
 		};
 		/**
-		 * @description Author-supplied rationale for a redaction: a policy name and an optional
-		 *     description.
+		 * @description Author-supplied rationale for a redaction: *under what authority* it was made.
 		 *
 		 *     Where the matched selection rule answers *which rule fired*, an
-		 *     `Attribution` answers *under what authority* — a compliance clause, an
+		 *     `Attribution` answers *why the policy demanded it* — a compliance clause, an
 		 *     internal policy, a data-handling rule. A policy author attaches it to a
-		 *     selection rule (`Rule::because` in `elide-redaction`); the anonymizer
-		 *     records it on the entity's [`Redaction`] event so an audit can trace a
-		 *     change back to the policy that demanded it.
+		 *     selection rule (`Rule::because` in `elide-redaction`); the anonymizer records
+		 *     it on the entity's [`Redaction`] event so an audit can trace a change back to
+		 *     the policy that demanded it.
 		 *
-		 *     The `name` is the author's label for that policy (`"gdpr-art-17"`,
-		 *     `"hipaa-safe-harbor"`, `"PII removal"`); an optional `description` adds
-		 *     human context. Any stable machine identity a policy layer needs (a rule
-		 *     UUID, a jurisdiction) is that layer's concern — it can encode it in the
-		 *     name or carry it separately.
+		 *     The rationale takes one of two [`kind`](Attribution::kind)s, by how much
+		 *     structure the author has ([`AttributionKind::Freeform`] /
+		 *     [`AttributionKind::Cited`]). Orthogonal to that, an attribution may carry a
+		 *     [`source_id`](Attribution::source_id): an opaque, caller-owned [`Uuid`] the
+		 *     policy layer uses to link back to a source record (a rule, a request, a
+		 *     document). elide-core stores and hashes it verbatim; it never resolves or
+		 *     validates it.
 		 *
 		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
 		 */
 		Attribution: {
-			/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
-			description?: string;
-			/** @description The policy's name (e.g. `"gdpr-art-17"`, `"hipaa-safe-harbor"`). */
-			name: string;
+			/** @description The shape of the rationale: a freeform label or a formal citation. */
+			kind: components["schemas"]["AttributionKind"];
+			/**
+			 * Format: uuid
+			 * @description Opaque, caller-owned link to a source record, when given.
+			 */
+			source_id?: string;
 		};
+		/** @description The shape of an [`Attribution`]'s rationale. */
+		AttributionKind:
+			| {
+					/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
+					description?: string;
+					/** @constant */
+					kind: "freeform";
+					/** @description The policy's name (e.g. `"gdpr-art-17"`, `"hipaa-safe-harbor"`). */
+					name: string;
+			  }
+			| {
+					/** @description The authority cited (e.g. `"GDPR"`, `"HIPAA"`, `"internal-policy"`). */
+					authority: string;
+					/** @description The citation within that authority (e.g. `"Art. 17(1)"`, `"§164.514"`). */
+					citation: string;
+					/** @constant */
+					kind: "cited";
+					/** @description Why the citation applies here (e.g. `"data subject requested erasure"`). */
+					rationale: string;
+			  };
 		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
@@ -8510,7 +8536,7 @@ export interface components {
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
 			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
+			 *     [`Review::policy_id`] they name: the audit event's
 			 *     attribution stamps that policy so the trail names the
 			 *     authority under which the override fired.
 			 */
@@ -8607,7 +8633,7 @@ export interface components {
 		 *     here; labels are re-derived from the policy set on each
 		 *     anonymize call.
 		 *
-		 *     No [`Default`] — a well-formed audit must carry a real
+		 *     No [`Default`]: a well-formed audit must carry a real
 		 *     [`AuditContext`] with a real correlation id. Callers building
 		 *     an audit outside the analyze path construct it explicitly.
 		 */
@@ -8629,7 +8655,7 @@ export interface components {
 			 *     vocabulary analyze used without the caller re-passing an
 			 *     `AnalyzerParams`.
 			 *
-			 *     Required on the wire — a missing context on an incoming
+			 *     Required on the wire: a missing context on an incoming
 			 *     [`Audit`] rejects at deserialize time so the shape
 			 *     mismatch surfaces at load, not at apply.
 			 *
@@ -8654,11 +8680,11 @@ export interface components {
 		 *     for `languages` and `countries` (typed, elide-native), a
 		 *     [`metadata`] sub-struct for free-form classification strings
 		 *     (`tags`, `purpose`, `audience`), and the analyze-time
-		 *     [`correlation_id`]. The label catalog is not on here —
+		 *     [`correlation_id`]. The label catalog is not on here -
 		 *     labels are policy-owned, and anonymize re-derives them from
 		 *     the policy set it was handed.
 		 *
-		 *     No [`Default`] — `correlation_id` has no meaningful default
+		 *     No [`Default`]: `correlation_id` has no meaningful default
 		 *     (a nil UUID would silently collapse unrelated audits under
 		 *     one bucket in downstream trace aggregators), so callers
 		 *     supply one explicitly. Everything else defaults to empty.
@@ -8676,12 +8702,12 @@ export interface components {
 			 *     carried over so the anonymize path can link its own spans
 			 *     to the same request. The anonymize call supplies a fresh
 			 *     id from the passed [`Document`] as the anonymize-side
-			 *     correlation id — this one stays as the analyze-side
+			 *     correlation id: this one stays as the analyze-side
 			 *     pointer.
 			 *
 			 *     Required on the wire.
 			 *
-			 *     [`Document`]: nvisy_schema::file::Document
+			 *     [`Document`]: elide_wire::file::Document
 			 */
 			correlationId: string;
 			/**
@@ -8706,15 +8732,15 @@ export interface components {
 			/**
 			 * @description OCR mode the analyze call decoded with. Recorded so the
 			 *     anonymize call re-decodes the same document under the same
-			 *     codec configuration — otherwise entity offsets stored in
+			 *     codec configuration: otherwise entity offsets stored in
 			 *     the audit wouldn't line up against a differently-rendered
-			 *     second decode. Defaults to [`OcrMode::Auto`] (the codec's
+			 *     second decode. Defaults to [`RasterMode::Auto`] (the codec's
 			 *     built-in behaviour) when omitted.
 			 * @default {
 			 *       "kind": "auto"
 			 *     }
 			 */
-			ocrMode: components["schemas"]["OcrMode"];
+			rasterMode: components["schemas"]["RasterMode"];
 		};
 		/**
 		 * @description A 32-byte BLAKE3 digest.
@@ -8834,11 +8860,11 @@ export interface components {
 		 *     Three forms, deserialized untagged so callers can pick the
 		 *     terser one for the case at hand:
 		 *
-		 *     - **Plain string** (`"90 or older"`) — English-only shorthand.
-		 *     - **Localized map** (`{"en": "90 or older", "fr": "90 ou plus"}`)
-		 *       — one entry per language the deployment ships; missing
-		 *       locales fall back to English at render time.
-		 *     - **Format template** (`{"format": "{n} or older"}`) — the
+		 *     - **Plain string** (`"90 or older"`): English-only shorthand.
+		 *     - **Localized map** (`{"en": "90 or older", "fr": "90 ou plus"}`):
+		 *       one entry per language the deployment ships; missing locales
+		 *       fall back to English at render time.
+		 *     - **Format template** (`{"format": "{n} or older"}`): the
 		 *       engine substitutes `{n}` for the threshold, so a ceiling of
 		 *       `90` renders `"90 or older"` without the caller repeating the
 		 *       number. Same rendering in every language.
@@ -9230,12 +9256,12 @@ export interface components {
 			  }
 			| {
 					/**
-					 * @description The structured policy body.
+					 * @description The client-authored policy body.
 					 *
 					 *     Boxed to keep the enum small: an inline body is much larger than a
 					 *     template id, and most requests use a template.
 					 */
-					definition: components["schemas"]["PolicyDefinition"];
+					definition: components["schemas"]["PolicyDraft"];
 					/** @constant */
 					source: "inline";
 			  }
@@ -9376,7 +9402,7 @@ export interface components {
 		 *
 		 *     Tagged by `modality` (snake_case) so deserialization picks the
 		 *     right variant and the entity vec inside is statically typed
-		 *     per modality — apply-time we hand each variant back to elide
+		 *     per modality: apply-time we hand each variant back to elide
 		 *     as a `Vec<Entity<M>>` for the appropriate `M`.
 		 *
 		 *     [`Audit`]: crate::Audit
@@ -9552,34 +9578,11 @@ export interface components {
 			serviceAccountPath: string;
 		};
 		/**
-		 * @description The GDPR Article 9 template config — treatment axis fused
-		 *     with sensitive-scope axis. Carried directly by
-		 *     [`crate::PolicyTemplate::GdprArticle9`].
-		 */
-		GdprArticle9: {
-			/**
-			 * @description Which sensitive-data labels to cover. Defaults to
-			 *     [`GdprSensitiveScope::Article9`] (nine Article 9(1)
-			 *     categories only). Pick
-			 *     [`GdprSensitiveScope::Article9WithReidHardening`] to add
-			 *     Recital 26 quasi-identifiers, or
-			 *     [`GdprSensitiveScope::Article9And10`] to also cover
-			 *     Article 10 criminal-justice data.
-			 * @default article9
-			 */
-			scope: components["schemas"]["GdprSensitiveScope"];
-			/**
-			 * @description Which operator to apply to matches. See
-			 *     [`GdprArticle9Treatment`] for the tradeoff.
-			 */
-			treatment: components["schemas"]["GdprArticle9Treatment"];
-		};
-		/**
 		 * @description Which operator to apply to Article 9 special-category entities.
 		 *
-		 *     - [`Erase`](Self::Erase) — the default no-lawful-basis posture.
+		 *     - [`Erase`](Self::Erase): the default no-lawful-basis posture.
 		 *       Every match is removed.
-		 *     - [`Pseudonymize`](Self::Pseudonymize) — identity-preserving
+		 *     - [`Pseudonymize`](Self::Pseudonymize): identity-preserving
 		 *       surrogate. Suitable when an Article 9(2) carve-out
 		 *       (explicit consent, employment law, public-health public
 		 *       interest, ...) authorizes retention and downstream
@@ -9594,15 +9597,22 @@ export interface components {
 		 *     Three tiers, each strictly widening the previous one so a
 		 *     caller upgrading through the tiers never loses coverage:
 		 *
-		 *     - [`Article9`](Self::Article9) — the nine Article 9(1)
+		 *     - [`Article9`](Self::Article9): the nine Article 9(1)
 		 *       special categories only. The default.
-		 *     - [`Article9WithReidHardening`](Self::Article9WithReidHardening) —
-		 *       Article 9 plus `date_of_birth` and `postal_code`. The two
-		 *       quasi-identifiers Recital 26 highlights as re-identification
-		 *       vectors when combined with special-category data. Non-
-		 *       binding guidance, but reflects supervisory-authority
-		 *       expectations on pseudonymization robustness.
-		 *     - [`Article9And10`](Self::Article9And10) — Article 9 + Recital
+		 *     - [`Article9WithReidHardening`](Self::Article9WithReidHardening) -
+		 *       Article 9 plus the quasi-identifiers that carry the most join
+		 *       risk against public datasets: `date_of_birth`, `postal_code`,
+		 *       and `gender` (the combination that re-identifies most of a
+		 *       population on its own), widened with `age`, `city`,
+		 *       `nationality`, `citizenship`, and `occupation`.
+		 *
+		 *       A product-defined tier, not a complete answer to Recital 26:
+		 *       the Recital sets a reasonableness test over "all the means
+		 *       reasonably likely to be used" to re-identify, judged against
+		 *       the caller's own data and adversary, so no fixed label list
+		 *       can satisfy it. Callers whose threat model reaches wider
+		 *       extend the policy after building it.
+		 *     - [`Article9And10`](Self::Article9And10): Article 9 + Recital
 		 *       26 hardening + Article 10's criminal-justice labels
 		 *       (`criminal_record`, `criminal_charge`, `judicial_narrative`).
 		 *       Article 10 governs "personal data relating to criminal
@@ -9642,7 +9652,7 @@ export interface components {
 		 *     The regulation names "account numbers" without enumerating
 		 *     them; HHS OCR's 2012 guidance doesn't narrow it either. In
 		 *     practice, covered entities and de-ID vendors treat bank
-		 *     accounts, IBANs, and payment cards as the core §(J) set —
+		 *     accounts, IBANs, and payment cards as the core §(J) set -
 		 *     [`Standard`](Self::Standard). Cryptocurrency wallet addresses
 		 *     are the newer case: they identify a specific holder's account
 		 *     by function, and the §(R) catch-all pulls in "any other unique
@@ -9664,20 +9674,20 @@ export interface components {
 		 *
 		 *     The tradeoff is analytic yield vs. downstream constraint:
 		 *
-		 *     - [`SafeHarbor`](Self::SafeHarbor) — strips all eighteen
+		 *     - [`SafeHarbor`](Self::SafeHarbor): strips all eighteen
 		 *       identifier categories. No Data Use Agreement or statistician
 		 *       required, but dates, coarse geography, and ages ≥ 90 all
 		 *       disappear or collapse.
-		 *     - [`LimitedDataSet`](Self::LimitedDataSet) — narrower
+		 *     - [`LimitedDataSet`](Self::LimitedDataSet): narrower
 		 *       subtraction (§164.514(e)(2)) that keeps dates, town/city,
 		 *       state, ZIP, and ages verbatim. Suitable for research and
 		 *       public-health handoffs *only when* a Data Use Agreement
 		 *       governs the recipient's use.
-		 *     - [`ExpertDetermination`](Self::ExpertDetermination) —
+		 *     - [`ExpertDetermination`](Self::ExpertDetermination) -
 		 *       starting scaffold for §164.514(b)(1). Same label set as
 		 *       Safe Harbor with pseudonymization as the default terminal
 		 *       (identity-preserving across mentions). **Does not certify
-		 *       de-identification** — a qualified statistician must
+		 *       de-identification**: a qualified statistician must
 		 *       document that re-identification risk is "very small" under
 		 *       the applicable methodology before the output can be treated
 		 *       as de-identified.
@@ -9686,27 +9696,6 @@ export interface components {
 			| "safe_harbor"
 			| "limited_data_set"
 			| "expert_determination";
-		/**
-		 * @description The HIPAA §164.514 template config — method axis fused with
-		 *     account-identifier axis. Carried directly by
-		 *     [`crate::PolicyTemplate::HipaaDeidentification`].
-		 */
-		HipaaDeidentification: {
-			/**
-			 * @description Which §(J) account-identifier labels to remove. Defaults
-			 *     to [`HipaaAccountNumbers::Standard`] (bank account +
-			 *     IBAN + payment card). Pick
-			 *     [`HipaaAccountNumbers::Extended`] to add crypto wallet
-			 *     addresses under the §(R) catch-all reading.
-			 * @default standard
-			 */
-			accounts: components["schemas"]["HipaaAccountNumbers"];
-			/**
-			 * @description Which §164.514 method to apply. See [`HipaaDeidMethod`]
-			 *     for the tradeoff.
-			 */
-			method: components["schemas"]["HipaaDeidMethod"];
-		};
 		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
@@ -10044,7 +10033,7 @@ export interface components {
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
 			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
+			 *     [`Review::policy_id`] they name: the audit event's
 			 *     attribution stamps that policy so the trail names the
 			 *     authority under which the override fired.
 			 */
@@ -10369,27 +10358,32 @@ export interface components {
 		 *     rule that targets that list references the group by name
 		 *     instead of respelling the labels. When elide adds a new label
 		 *     to a category, extending the group covers every rule that
-		 *     referenced it — no rule edit.
+		 *     referenced it: no rule edit.
 		 *
-		 *     **Compilation**: at request time the engine synthesises a
-		 *     `group:<policy_id>:<name>` tag on every label listed in the
-		 *     group, then rewrites [`Predicate::LabelInGroup { group }`]
-		 *     into [`Predicate::TagOneOf { tags: ["group:<policy_id>:<name>"] }`].
-		 *     That routes through the same `Anonymizer::with_tag` fast
-		 *     path as any authored tag — no new engine machinery, no
-		 *     per-request walk over group membership. Scoping the tag by
-		 *     `policy_id` keeps two policies that both declare `hipaa_18`
-		 *     with different labelsets from stepping on each other.
+		 *     **Compilation**: groups stay on the policy. Evaluating a
+		 *     [`Predicate::LabelInGroup { group }`] looks the name up in
+		 *     the policy's own group table and tests the entity's label for
+		 *     membership. Nothing is stamped onto the label catalog, so two
+		 *     policies that both declare `hipaa_18` with different labelsets
+		 *     cannot step on each other.
 		 *
 		 *     **Unknown group names error at request validation**, not at
 		 *     apply time. A typo doesn't silently underfire.
 		 *
 		 *     [`PolicyDefinition`]: super::PolicyDefinition
-		 *     [`Predicate::LabelInGroup`]: super::predicate::Predicate::LabelInGroup
-		 *     [`Predicate::LabelInGroup { group }`]: super::predicate::Predicate::LabelInGroup
-		 *     [`Predicate::TagOneOf { tags: ["group:<policy_id>:<name>"] }`]: super::predicate::Predicate::TagOneOf
+		 *     [`Predicate::LabelInGroup`]: crate::Predicate::LabelInGroup
+		 *     [`Predicate::LabelInGroup { group }`]: crate::Predicate::LabelInGroup
 		 */
 		LabelGroup: {
+			/**
+			 * @description Why this cluster exists: the authority that defines it.
+			 *
+			 *     A group usually maps to one regulatory category (HIPAA's
+			 *     eighteen identifiers, GDPR Article 9(1)'s nine special
+			 *     categories), so this is where that mapping is recorded as
+			 *     data rather than prose.
+			 */
+			attribution?: components["schemas"]["AttributionKind"];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
@@ -10397,7 +10391,7 @@ export interface components {
 			 *
 			 *     A label that doesn't appear in the request's compiled
 			 *     [`LabelCatalog`] is silently skipped at tag-synthesis time
-			 *     — a group can safely list labels the current build
+			 *     : a group can safely list labels the current build
 			 *     doesn't emit (e.g. modality-gated ones); rules keyed off
 			 *     the group still fire on whatever labels *are* present.
 			 *
@@ -10408,11 +10402,10 @@ export interface components {
 			 * @description Stable name a [`Predicate::LabelInGroup`] references.
 			 *
 			 *     Free-form; a policy layer picks the vocabulary. Recommend
-			 *     snake_case identifiers (`hipaa_18`, `gdpr_article_9`) —
-			 *     they compile to `group:hipaa_18` tags on the catalog and
-			 *     read cleanly in audit provenance.
+			 *     snake_case identifiers (`hipaa_18`, `gdpr_article_9`) -
+			 *     they read cleanly in audit provenance.
 			 *
-			 *     [`Predicate::LabelInGroup`]: super::predicate::Predicate::LabelInGroup
+			 *     [`Predicate::LabelInGroup`]: crate::Predicate::LabelInGroup
 			 */
 			name: string;
 		};
@@ -10459,8 +10452,9 @@ export interface components {
 			/**
 			 * @description Builtin label names to enable.
 			 *
-			 *     E.g. `"email_address"`, `"phone_number"`. Unknown names
-			 *     log a warning and are skipped.
+			 *     E.g. `"email_address"`, `"phone_number"`. An unknown name
+			 *     is rejected at request compile time: a typo fails loudly
+			 *     rather than quietly dropping the label from the policy.
 			 */
 			builtins?: components["schemas"]["LabelRef"][];
 			/** @description Custom labels defined inline by the caller. */
@@ -10899,36 +10893,6 @@ export interface components {
 			notifyViaEmail: boolean;
 		};
 		/**
-		 * @description Policy for turning a document's pages into images for OCR.
-		 *
-		 *     A born-digital PDF has a selectable text layer and needs no OCR; a
-		 *     scanned one is image-only and must be rendered to images first. [`Auto`]
-		 *     is the right default — extract text, render only what lacks it — but the
-		 *     text-layer parser that drives that decision is not in place yet, so today
-		 *     only [`Force`] actually renders.
-		 *
-		 *     Serializes with an internal `kind` tag (`{"kind": "auto"}`,
-		 *     `{"kind": "force", "dpi": 300}`, `{"kind": "never"}`).
-		 *
-		 *     [`Auto`]: OcrMode::Auto
-		 *     [`Force`]: OcrMode::Force
-		 */
-		OcrMode:
-			| {
-					/** @constant */
-					kind: "auto";
-			  }
-			| {
-					/** @description Resolution to render pages at; [`Dpi::OCR`] (300) is typical. */
-					dpi: components["schemas"]["Dpi"];
-					/** @constant */
-					kind: "force";
-			  }
-			| {
-					/** @constant */
-					kind: "never";
-			  };
-		/**
 		 * @description How a workspace's documents are turned into images for OCR during detection.
 		 *
 		 *     A workspace-level policy over the engine's per-run OCR mode: `Auto` lets the
@@ -10975,12 +10939,12 @@ export interface components {
 		/**
 		 * @description Which PCI DSS subsection this template addresses.
 		 *
-		 *     - [`PanRender`](Self::PanRender) — §3.5.1 render posture for
+		 *     - [`PanRender`](Self::PanRender): §3.5.1 render posture for
 		 *       stored Primary Account Numbers. Carries a [`PciPanRender`]
 		 *       picking between the shipped render approaches.
-		 *     - [`SavErase`](Self::SavErase) — §3.3.1 prohibition on
+		 *     - [`SavErase`](Self::SavErase): §3.3.1 prohibition on
 		 *       storing Sensitive Authentication Data (CVV/CVC, track data,
-		 *       PIN blocks) after authorization. No options — SAV has one
+		 *       PIN blocks) after authorization. No options: SAV has one
 		 *       posture: erase.
 		 */
 		PciDssPart:
@@ -11019,7 +10983,7 @@ export interface components {
 		 *     Callers wanting more than one dispatched from one policy
 		 *     compose multiple templates.
 		 *
-		 *     [`Engine::with_key_provider`]: https://docs.rs/nvisy-engine/latest/nvisy_engine/struct.Engine.html
+		 *     [`Engine::with_key_provider`]: https://docs.rs/elide-pipeline/latest/elide_pipeline/struct.Engine.html
 		 */
 		PciPanRender:
 			| "truncate"
@@ -11401,24 +11365,19 @@ export interface components {
 			/**
 			 * @description Named clusters of [`LabelRef`]s this policy's rules may
 			 *     reference by name via [`Predicate::LabelInGroup`]. Scoped
-			 *     to this policy — a rule can only name a group its own
+			 *     to this policy: a rule can only name a group its own
 			 *     policy declared; unknown references error at request
 			 *     validation. Two policies that both declare `hipaa_18` with
 			 *     different labelsets stay independent.
 			 *
 			 *     [`LabelRef`]: elide_core::entity::LabelRef
-			 *     [`Predicate::LabelInGroup`]: predicate::Predicate::LabelInGroup
+			 *     [`Predicate::LabelInGroup`]: crate::Predicate::LabelInGroup
 			 */
 			groups?: components["schemas"]["LabelGroup"][];
 			/**
 			 * Format: uuid
 			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
 			 *     customer-supplied so re-submissions carry the same id.
-			 *     Engine stamps this into the redaction event's
-			 *     [`Attribution::name`] so reviewers can find this policy
-			 *     from any redaction it drove.
-			 *
-			 *     [`Attribution::name`]: elide_core::entity::audit::Attribution::name
 			 */
 			id: string;
 			/**
@@ -11429,10 +11388,56 @@ export interface components {
 			 *     tag-based [`Predicate::TagOneOf`] matching.
 			 *
 			 *     [`LabelCatalog`]: elide_core::entity::LabelCatalog
-			 *     [`Predicate::TagOneOf`]: predicate::Predicate::TagOneOf
+			 *     [`Predicate::TagOneOf`]: crate::Predicate::TagOneOf
 			 */
 			labels?: components["schemas"]["Labels"];
-			/** @description Human-readable name. Display-only. Does not key anything. */
+			/**
+			 * @description Human-readable name. Display-only. Does not key anything.
+			 *
+			 *     Names the policy in a redaction event's [`Attribution`]
+			 *     when a rule that fired carried no [`AttributionKind::Cited`]
+			 *     attribution to render.
+			 *
+			 *     [`Attribution`]: elide_core::entity::audit::Attribution
+			 *     [`AttributionKind::Cited`]: elide_core::entity::audit::AttributionKind::Cited
+			 */
+			name: string;
+			/** @description Ordered rules. First match wins within this policy. */
+			rules?: components["schemas"]["PolicyRule"][];
+			/**
+			 * @description The shipped template this policy was built from, when it
+			 *     was.
+			 *
+			 *     Provenance, not fidelity: callers are expected to mutate a
+			 *     template's policy before submitting, so this records where
+			 *     the policy came from and says nothing about whether it
+			 *     still matches. `None` means hand-authored.
+			 */
+			template?: components["schemas"]["TemplateOrigin"];
+		};
+		/**
+		 * @description A client-authored policy body: the parts of a policy definition a caller may
+		 *     set, without the fields the server owns.
+		 *
+		 *     The engine's `PolicyDefinition` also carries an `id` and a `template` origin.
+		 *     Both are server-owned — the `id` is minted at creation and the `template`
+		 *     records which built-in a policy was seeded from (provenance). Neither is
+		 *     representable here, so a client cannot mint ids or forge provenance; the
+		 *     server stamps them in [`into_definition`](PolicyDraft::into_definition).
+		 */
+		PolicyDraft: {
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/** @description Per-policy catch-all, fired when no rule matched. */
+			fallback?: components["schemas"]["ModalityRedactions"];
+			/** @description Named clusters of labels this policy's rules may reference by name. */
+			groups?: components["schemas"]["LabelGroup"][];
+			/**
+			 * @description Vocabulary the policy operates over: builtins picked by name plus
+			 *     caller-authored custom label schemas.
+			 */
+			labels?: components["schemas"]["Labels"];
+			/** @description Human-readable name. Display-only. */
 			name: string;
 			/** @description Ordered rules. First match wins within this policy. */
 			rules?: components["schemas"]["PolicyRule"][];
@@ -11457,16 +11462,30 @@ export interface components {
 		 *     [`PolicyDefinition`]: super::PolicyDefinition
 		 */
 		PolicyRule: {
+			/**
+			 * @description Why this rule exists: the authority it answers to.
+			 *
+			 *     The engine renders it into the redaction event's
+			 *     [`Attribution`], so a reviewer sees the provision rather
+			 *     than a bare UUID. `None` falls back to recording the
+			 *     policy and rule ids alone.
+			 *
+			 *     Optional so ad-hoc and hand-authored rules stay cheap to
+			 *     write; the shipped templates set it on every rule.
+			 *
+			 *     [`Attribution`]: elide_core::entity::audit::Attribution
+			 */
+			attribution?: components["schemas"]["AttributionKind"];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
 			 * Format: uuid
 			 * @description Stable identifier. UUIDv7 recommended. Engine stamps it
-			 *     into the redaction event's [`Attribution::description`] so
+			 *     into the redaction event's [`Attribution::source_id`] so
 			 *     reviewers can trace which rule fired. Every attachment a
 			 *     [`RuleDispatch::Table`] expands into shares this UUID.
 			 *
-			 *     [`Attribution::description`]: elide_core::entity::audit::Attribution::description
+			 *     [`Attribution::source_id`]: elide_core::entity::audit::Attribution::source_id
 			 */
 			id: string;
 			/** @description Human-readable name. Display-only. */
@@ -11480,7 +11499,7 @@ export interface components {
 					 *     policy in the chain).
 					 *
 					 *     Boxed to keep [`RuleDispatch`]'s stack footprint
-					 *     small — [`ModalityRedactions`] carries four optional
+					 *     small: [`ModalityRedactions`] carries four optional
 					 *     per-modality operator enums and dominates the variant
 					 *     size. `Table`'s `Vec<LabelEntry>` already heap-allocates
 					 *     its entries, so boxing here keeps the two variants
@@ -11562,14 +11581,44 @@ export interface components {
 		 *     `{"kind": "pci_dss_pan", "render": "hmac_sha256"}`.
 		 */
 		PolicyTemplate:
-			| ({
+			| {
+					/**
+					 * @description Which §(J) account-identifier labels to remove. Defaults
+					 *     to [`HipaaAccountNumbers::Standard`] (bank account +
+					 *     IBAN + payment card). Pick
+					 *     [`HipaaAccountNumbers::Extended`] to add crypto wallet
+					 *     addresses under the §(R) catch-all reading.
+					 * @default standard
+					 */
+					accounts: components["schemas"]["HipaaAccountNumbers"];
 					/** @constant */
 					kind: "hipaa_deidentification";
-			  } & components["schemas"]["HipaaDeidentification"])
-			| ({
+					/**
+					 * @description Which §164.514 method to apply. See [`HipaaDeidMethod`]
+					 *     for the tradeoff.
+					 */
+					method: components["schemas"]["HipaaDeidMethod"];
+			  }
+			| {
 					/** @constant */
 					kind: "gdpr_article9";
-			  } & components["schemas"]["GdprArticle9"])
+					/**
+					 * @description Which sensitive-data labels to cover. Defaults to
+					 *     [`GdprSensitiveScope::Article9`] (nine Article 9(1)
+					 *     categories only). Pick
+					 *     [`GdprSensitiveScope::Article9WithReidHardening`] to add
+					 *     the quasi-identifier set, or
+					 *     [`GdprSensitiveScope::Article9And10`] to also cover
+					 *     Article 10 criminal-justice data.
+					 * @default article9
+					 */
+					scope: components["schemas"]["GdprSensitiveScope"];
+					/**
+					 * @description Which operator to apply to matches. See
+					 *     [`GdprArticle9Treatment`] for the tradeoff.
+					 */
+					treatment: components["schemas"]["GdprArticle9Treatment"];
+			  }
 			| {
 					/** @constant */
 					kind: "pci_dss";
@@ -11582,10 +11631,6 @@ export interface components {
 			| {
 					/** @constant */
 					kind: "ccpa";
-			  }
-			| {
-					/** @constant */
-					kind: "soc2_secrets";
 			  };
 		/**
 		 * @description Closed polygon, given by its ordered vertices.
@@ -11681,6 +11726,36 @@ export interface components {
 			/** Format: uint */
 			start: number;
 		};
+		/**
+		 * @description Policy for rendering a document's pages to images.
+		 *
+		 *     [`Auto`] is the default: use the text layer where it exists (redact by
+		 *     deleting glyphs) and render only where it is absent. [`Always`] renders
+		 *     every page regardless of the text layer, for documents whose text is
+		 *     missing, garbled, or a watermark. [`Never`] relies on the text layer only.
+		 *
+		 *     Serializes with an internal `kind` tag (`{"kind": "auto"}`,
+		 *     `{"kind": "always", "dpi": 300}`, `{"kind": "never"}`).
+		 *
+		 *     [`Auto`]: RasterMode::Auto
+		 *     [`Always`]: RasterMode::Always
+		 *     [`Never`]: RasterMode::Never
+		 */
+		RasterMode:
+			| {
+					/** @constant */
+					kind: "auto";
+			  }
+			| {
+					/** @description Resolution to render pages at; [`Dpi::OCR`] (300) is typical. */
+					dpi: components["schemas"]["Dpi"];
+					/** @constant */
+					kind: "always";
+			  }
+			| {
+					/** @constant */
+					kind: "never";
+			  };
 		/** @description The engine's registered recognizers, grouped by kind. */
 		RecognizerCatalog: {
 			/** @description LLM recognizers. */
@@ -11699,20 +11774,28 @@ export interface components {
 		 *
 		 *     Owned rather than borrowing from the engine so callers can
 		 *     carry the value past the borrow that produced it. Cloning is
-		 *     cheap — [`HipStr`] shares the backing string via an `Arc`
+		 *     cheap: [`HipStr`] shares the backing string via an `Arc`
 		 *     header.
 		 */
 		RegisteredRecognizer: {
 			/** @description Optional human-readable description. */
 			description?: string;
 			/**
-			 * @description Recognizer name — the identifier a request's allowlist
+			 * @description Recognizer name: the identifier a request's allowlist
 			 *     picks by.
 			 */
 			name: string;
 			/**
 			 * @description Provider slug. NER: `"bento"`, `"mock"`. LLM: `"openai"`,
 			 *     `"anthropic"`, `"gemini"`, `"ollama"`, `"mock"`.
+			 *
+			 *     Owned so the type deserializes from a runtime buffer: a
+			 *     `&'static str` field would make the derive emit
+			 *     `Deserialize<'static>` only, which compiles against string
+			 *     literals but not against an owned `String` or a reader -
+			 *     the shapes a host actually decodes from. Borrowing a
+			 *     `&'static str` into a [`HipStr`] does not allocate, so
+			 *     engine-side construction stays free.
 			 */
 			provider: string;
 		};
@@ -11796,7 +11879,7 @@ export interface components {
 		 * @description A reviewer-supplied redaction override with the policy
 		 *     authority it draws from.
 		 *
-		 *     The `policy_id` isn't just for audit — it also picks which
+		 *     The `policy_id` isn't just for audit: it also picks which
 		 *     per-policy pseudonym vault and per-policy [`KeyProvider`] the
 		 *     override's operator resolves against, so an override using
 		 *     [`Pseudonymize`] or [`HmacHash`] stays consistent with the
@@ -11820,7 +11903,7 @@ export interface components {
 			 *     the anonymize request. The audit event stamps this UUID
 			 *     as the attribution `name`.
 			 *
-			 *     [`PolicyDefinition`]: nvisy_schema::policy::PolicyDefinition
+			 *     [`PolicyDefinition`]: elide_governance::PolicyDefinition
 			 */
 			policyId: string;
 		};
@@ -12506,7 +12589,7 @@ export interface components {
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
 			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
+			 *     [`Review::policy_id`] they name: the audit event's
 			 *     attribution stamps that policy so the trail names the
 			 *     authority under which the override fired.
 			 */
@@ -12603,6 +12686,39 @@ export interface components {
 					kind: "drop_column";
 			  };
 		/**
+		 * @description The template a [`PolicyDefinition`] was built from.
+		 *
+		 *     Records **provenance, not fidelity**. Templates are plain data
+		 *     and callers are expected to mutate the returned policy before
+		 *     submitting it (swapping an operator, widening a group), so this
+		 *     says "built from `hipaa_deid_safe_harbor` v1.0.0" and nothing
+		 *     about whether the policy still matches what that template
+		 *     ships. A reviewer who needs that rebuilds the template and
+		 *     diffs.
+		 *
+		 *     `None` on a policy means hand-authored, not "unknown template".
+		 *
+		 *     Both fields are needed: a policy built from v1 of a template
+		 *     can differ materially from one built from v2 (a widened label
+		 *     set, a changed operator), and an audit that records only the id
+		 *     cannot tell the two apart.
+		 *
+		 *     [`PolicyDefinition`]: super::PolicyDefinition
+		 */
+		TemplateOrigin: {
+			/**
+			 * @description The template's machine key: `"hipaa_deid_safe_harbor"`,
+			 *     `"pci_dss_pan_hmac_sha256"`. Stable across version bumps.
+			 */
+			id: string;
+			/**
+			 * @description The template's own semver version, distinct from the
+			 *     crate's release version. A shipped template bumps this when
+			 *     its labelset or operator dispatch changes.
+			 */
+			version: string;
+		};
+		/**
 		 * @description Fallback operator that runs when a declinable primary
 		 *     ([`TextRedaction::Clamp`], [`TextRedaction::GeneralizeDate`])
 		 *     doesn't apply to the entity value.
@@ -12615,7 +12731,7 @@ export interface components {
 		 *     or `→ Mask` / `→ Keep` on the rare occasion those fit.
 		 *
 		 *     Absent from the primary's spec, elide's baked-in default is
-		 *     [`Erase`] — a bare [`TextRedaction::Clamp`] without a `fallback`
+		 *     [`Erase`]: a bare [`TextRedaction::Clamp`] without a `fallback`
 		 *     erases values that aren't numeric.
 		 *
 		 *     [`Erase`]: TerminalFallback::Erase
@@ -12997,7 +13113,7 @@ export interface components {
 			 *     `Some(...)` overrides that rule for this specific entity
 			 *     at apply time. Reviewer overrides take precedence over
 			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name — the audit event's
+			 *     [`Review::policy_id`] they name: the audit event's
 			 *     attribution stamps that policy so the trail names the
 			 *     authority under which the override fired.
 			 */
@@ -13362,11 +13478,13 @@ export interface components {
 		/**
 		 * @description Request payload for updating an existing workspace policy.
 		 *
-		 *     Replacing the `definition` replaces the whole policy body.
+		 *     Replacing the `definition` replaces the whole policy body. The policy's
+		 *     template origin is server-owned and preserved across updates — it is not
+		 *     settable here.
 		 */
 		UpdatePolicy: {
 			/** @description New policy body (replaces the stored definition). */
-			definition?: components["schemas"]["PolicyDefinition"];
+			definition?: components["schemas"]["PolicyDraft"];
 			/** @description Policy description. */
 			description?: string;
 			/** @description Human-readable policy display name. */
