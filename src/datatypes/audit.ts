@@ -35,6 +35,9 @@ export type Category = Schemas["Category"];
 /** Half-open `[start, end)` index range. Generated name; a plain uint range. */
 export type RangeOfUint = Schemas["Range_of_uint"];
 
+// Reference back to the original source (byte range + optional container part).
+export type SourceRef = Schemas["SourceRef"];
+
 // Geometry / spans, shared across modalities.
 export type BoundingBox = Schemas["BoundingBox"];
 export type Point = Schemas["Point"];

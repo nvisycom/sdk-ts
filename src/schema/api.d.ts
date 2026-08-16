@@ -12112,6 +12112,29 @@ export interface components {
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
 		/**
+		 * @description A reference back to the original source: a byte range, and — for a container
+		 *     whose body spans several files — which part that range indexes.
+		 *
+		 *     [`TextLocation`]'s `range` indexes the *decoded* text stream a codec hands
+		 *     the pipeline (entities resolved, container parts concatenated). A `SourceRef`
+		 *     is the *exact raw* byte range the decoded range came from, accounting for XML
+		 *     escapes where `&amp;` (5 raw bytes) decodes to `&` (1). `part` names the
+		 *     container file the range is in (`word/header1.xml`) for a multi-file body
+		 *     like DOCX, and is `None` for a single-file source (XML, HTML). It lets a
+		 *     consumer point back at the untouched source bytes.
+		 *
+		 *     [`TextLocation`]: super::TextLocation
+		 */
+		SourceRef: {
+			/**
+			 * @description The container part the range indexes, for a multi-file body; `None` for a
+			 *     single-file source.
+			 */
+			part?: string;
+			/** @description The raw source byte range. */
+			range: components["schemas"]["Range_of_uint"];
+		};
+		/**
 		 * @description A fully-typed object-store connection configuration.
 		 *
 		 *     The `provider` tag selects the variant and thereby the credential shape, so
@@ -13119,26 +13142,28 @@ export interface components {
 		/**
 		 * @description Half-open `[start, end)` byte range within text content.
 		 *
-		 *     Ordering and overlap consider only `(start, end)`; the optional page
-		 *     number is carried for codecs that page their text but does not affect
-		 *     comparison.
+		 *     Ordering and overlap consider only the `range`; the optional page number is
+		 *     carried for codecs that page their text but does not affect comparison.
 		 */
 		TextLocation: {
-			/**
-			 * Format: uint
-			 * @description Byte offset where the range ends (exclusive).
-			 */
-			end: number;
 			/**
 			 * Format: uint32
 			 * @description 1-based page number, when known.
 			 */
 			page?: number;
+			/** @description Byte range within the (decoded) text content. */
+			range: components["schemas"]["Range_of_uint"];
 			/**
-			 * Format: uint
-			 * @description Byte offset where the range starts.
+			 * @description The exact raw source ranges this decoded span came from, for codecs whose
+			 *     decoded text differs from the source (XML/HTML/DOCX, where entities are
+			 *     decoded). Empty when the source equals the decoded text (plain text,
+			 *     JSON, CSV) or has no byte-source coordinate (rendered/scanned formats).
+			 *
+			 *     Usually one range; a reconciled span that fused several source runs (or a
+			 *     span crossing an escape) carries several, kept distinct rather than merged
+			 *     across gaps. Sorted, deduplicated.
 			 */
-			start: number;
+			source?: components["schemas"]["SourceRef"][];
 		};
 		/** @description Operator spec a `redact` text rule carries. */
 		TextRedaction:

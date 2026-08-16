@@ -8,6 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.29.0] - 2026-08-14
+
+### Added
+
+- `SourceRef` datatype, a reference back to the original source (byte range
+  plus, for a multi-file body, the container part) now carried on detections
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.28.0] - 2026-08-14
 
 ### Added
@@ -603,7 +614,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.28.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.29.0...HEAD
+[0.29.0]: https://github.com/nvisycom/sdk-ts/compare/v0.28.0...v0.29.0
 [0.28.0]: https://github.com/nvisycom/sdk-ts/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/nvisycom/sdk-ts/compare/v0.26.0...v0.27.0
 [0.26.0]: https://github.com/nvisycom/sdk-ts/compare/v0.25.0...v0.26.0
