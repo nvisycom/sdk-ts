@@ -13,7 +13,11 @@ describe("auth password helpers", () => {
 		vi.mocked(createClient).mockClear();
 	});
 
-	const credentials = { identifier: "a@b.com", password: "pw", rememberMe: false };
+	const credentials = {
+		identifier: "a@b.com",
+		password: "pw",
+		rememberMe: false,
+	};
 	const details = {
 		emailAddress: "a@b.com",
 		password: "pw",
