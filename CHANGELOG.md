@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-08-18
+
+### Added
+
+- `fetch` option on the client config and the standalone auth helpers, letting
+  a host swap in a custom `fetch` implementation for every request. Defaults to
+  the global `fetch`, so existing callers are unaffected. Useful for a desktop
+  (Tauri) app passing `@tauri-apps/plugin-http`'s `fetch`, which performs the
+  request in the native process and so is not subject to browser CORS
+
 ## [0.29.0] - 2026-08-14
 
 ### Added
@@ -614,7 +624,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.29.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.30.0...HEAD
+[0.30.0]: https://github.com/nvisycom/sdk-ts/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/nvisycom/sdk-ts/compare/v0.28.0...v0.29.0
 [0.28.0]: https://github.com/nvisycom/sdk-ts/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/nvisycom/sdk-ts/compare/v0.26.0...v0.27.0

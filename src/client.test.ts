@@ -1,4 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
+import createClient from "openapi-fetch";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Nvisy } from "@/client.js";
 import { DEFAULTS } from "@/config.js";
 import { NvisyError } from "@/errors.js";
@@ -85,6 +86,27 @@ describe("Nvisy", () => {
 		it("should throw for invalid token", () => {
 			const nvisy = new Nvisy({ apiToken: "valid-api-token-123" });
 			expect(() => nvisy.withApiToken("short")).toThrow(NvisyError);
+		});
+	});
+
+	describe("custom fetch", () => {
+		beforeEach(() => {
+			vi.mocked(createClient).mockClear();
+		});
+
+		it("should pass a custom fetch through to openapi-fetch", () => {
+			const customFetch = vi.fn();
+			new Nvisy({ apiToken: "valid-api-token-123", fetch: customFetch });
+			expect(createClient).toHaveBeenCalledWith(
+				expect.objectContaining({ fetch: customFetch }),
+			);
+		});
+
+		it("should pass fetch: undefined when none is provided", () => {
+			new Nvisy({ apiToken: "valid-api-token-123" });
+			expect(createClient).toHaveBeenCalledWith(
+				expect.objectContaining({ fetch: undefined }),
+			);
 		});
 	});
 });
