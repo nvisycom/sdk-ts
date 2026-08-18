@@ -69,6 +69,16 @@ export interface ClientConfig {
 	 * @default false
 	 */
 	withLogging?: boolean;
+
+	/**
+	 * Custom fetch implementation used for every request. Must match the WHATWG
+	 * `fetch` signature. Defaults to the global `fetch`.
+	 *
+	 * Lets a host swap in a non-browser transport — e.g. a desktop (Tauri) app
+	 * passing `@tauri-apps/plugin-http`'s `fetch`, which performs the request in
+	 * the native process and so is not subject to browser CORS.
+	 */
+	fetch?: typeof globalThis.fetch;
 }
 
 /**

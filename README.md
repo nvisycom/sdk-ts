@@ -37,6 +37,7 @@ const client = new Nvisy({
   headers: { // Optional
     "X-Custom-Header": "value",
   },
+  fetch: customFetch, // Optional, defaults to global fetch
 });
 ```
 

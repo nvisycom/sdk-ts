@@ -44,6 +44,8 @@ function createAuthClient(config?: AuthConfig) {
 	const client = createClient<paths>({
 		baseUrl: config?.baseUrl ?? DEFAULTS.BASE_URL,
 		headers,
+		// `undefined` falls back to the global fetch inside openapi-fetch.
+		fetch: config?.fetch,
 	});
 
 	client.use(errorMiddleware);
@@ -57,7 +59,7 @@ function createAuthClient(config?: AuthConfig) {
  * instance. Use the returned token to create an authenticated client.
  *
  * @param credentials - Login credentials (email and password)
- * @param config - Optional configuration (baseUrl, headers, userAgent)
+ * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
  * @returns Promise that resolves with the auth token
  * @throws {ApiError} If the credentials are invalid or the request fails
  *
@@ -92,7 +94,7 @@ export async function login(
  * instance. Use the returned token to create an authenticated client.
  *
  * @param details - Signup details (name, email, password, etc.)
- * @param config - Optional configuration (baseUrl, headers, userAgent)
+ * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
  * @returns Promise that resolves with the auth token
  * @throws {ApiError} If the signup fails (e.g., email already exists)
  *

@@ -54,7 +54,10 @@ export type ApiClient = OpenApiClient<paths>;
  *
  * @internal
  */
-type ResolvedConfig = Required<ClientConfig>;
+// `fetch` stays optional after resolution — an omitted value means "use the
+// global fetch", which openapi-fetch handles when `fetch: undefined` is passed.
+type ResolvedConfig = Required<Omit<ClientConfig, "fetch">> &
+	Pick<ClientConfig, "fetch">;
 
 /**
  * Main client class for interacting with the Nvisy document processing API.
@@ -103,6 +106,7 @@ export class Nvisy {
 			headers: config.headers ?? {},
 			userAgent: config.userAgent ?? DEFAULTS.USER_AGENT,
 			withLogging: config.withLogging ?? false,
+			fetch: config.fetch,
 		};
 
 		this.#api = this.#createApiClient();
@@ -125,6 +129,8 @@ export class Nvisy {
 		const api = createClient<paths>({
 			baseUrl: this.#config.baseUrl,
 			headers,
+			// `undefined` falls back to the global fetch inside openapi-fetch.
+			fetch: this.#config.fetch,
 		});
 
 		if (this.#config.withLogging) {
