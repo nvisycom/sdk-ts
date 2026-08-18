@@ -8,6 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.31.0] - 2026-08-18
+
+### Added
+
+- `PasswordChange` datatype, a re-authenticated password change (current plus
+  new password) now accepted on `UpdateAccount.password`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.30.0] - 2026-08-18
 
 ### Added
@@ -624,7 +635,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.30.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.31.0...HEAD
+[0.31.0]: https://github.com/nvisycom/sdk-ts/compare/v0.30.0...v0.31.0
 [0.30.0]: https://github.com/nvisycom/sdk-ts/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/nvisycom/sdk-ts/compare/v0.28.0...v0.29.0
 [0.28.0]: https://github.com/nvisycom/sdk-ts/compare/v0.27.0...v0.28.0

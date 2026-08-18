@@ -10893,6 +10893,20 @@ export interface components {
 			/** @description Operator's version at the time it was applied. */
 			version: string;
 		};
+		/**
+		 * @description A re-authenticated password change: the new password plus the current one
+		 *     that authorizes it.
+		 *
+		 *     Coupling the two in one struct makes the invariant explicit — a password
+		 *     change always carries the current password, so a hijacked session or CSRF
+		 *     cannot silently reset it (and lock out the real owner).
+		 */
+		PasswordChange: {
+			/** @description The account's current password, verified before the change is applied. */
+			currentPassword: string;
+			/** @description The new password (will be hashed before storage). */
+			newPassword: string;
+		};
 		/** @description Detail of a pattern/dictionary recognition. */
 		PatternEvent: {
 			/**
@@ -13402,8 +13416,8 @@ export interface components {
 			 * @description New email address (must be valid email format).
 			 */
 			emailAddress?: string;
-			/** @description New password (will be hashed before storage). */
-			password?: string;
+			/** @description A re-authenticated password change, when changing the password. */
+			password?: components["schemas"]["PasswordChange"];
 			/** @description New account handle. */
 			username?: components["schemas"]["Handle"];
 		};
