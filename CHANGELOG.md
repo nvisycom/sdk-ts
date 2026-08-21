@@ -25,7 +25,7 @@ and this project adheres to
   `UsageAnalytics`, `RunTimeSeries`, and their entries plus `Usage`,
   `UsageReport`, `TokenCounts`, `ModelUsage`, `ProviderType`, `RecognizerId`),
   export datatypes (`ExportFormat`, `ExportQuery`, `DateWindow`,
-  `ActivityExportQuery`), and the `OffsetPagination` datatype
+  `ActivityExportQuery`)
 
 ### Changed
 

@@ -5,7 +5,7 @@ import type {
 	ChatSessionPage,
 	ChatToken,
 	CreateChatSession,
-	OffsetPagination,
+	CursorPagination,
 	SendChatMessage,
 } from "@/datatypes/index.js";
 import { NvisyError } from "@/errors.js";
@@ -24,13 +24,13 @@ export class Chat {
 	/**
 	 * List the workspace's chat sessions, most recently active first.
 	 * @param workspaceSlug - Workspace slug
-	 * @param query - Optional pagination (limit, offset)
+	 * @param query - Optional pagination (limit, after)
 	 * @returns Promise that resolves with a paginated list of chat sessions
 	 * @throws {ApiError} if the request fails
 	 */
 	async listSessions(
 		workspaceSlug: string,
-		query?: OffsetPagination,
+		query?: CursorPagination,
 	): Promise<ChatSessionPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/chat/sessions/",

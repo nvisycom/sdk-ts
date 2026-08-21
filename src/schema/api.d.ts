@@ -487,6 +487,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -1231,6 +1237,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -1641,6 +1653,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -2113,6 +2131,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 					/**
@@ -2663,15 +2687,24 @@ export interface paths {
 		};
 		/**
 		 * List chat sessions
-		 * @description Returns the workspace's chat sessions, most recently active first.
+		 * @description Returns the workspace's chat sessions, newest first, cursor-paginated.
 		 */
 		get: {
 			parameters: {
 				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description The number of records to skip before starting to return results. */
-					offset?: number;
 				};
 				header?: never;
 				path: {
@@ -3139,6 +3172,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 					/**
@@ -3383,6 +3422,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -3692,6 +3737,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -4213,6 +4264,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 					/** @description Search by pipeline name (trigram similarity). */
@@ -4678,6 +4735,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 					/** @description Filter by the source file the run analyzes. */
@@ -4789,6 +4852,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 					/** @description Filter by the source file the run analyzes. */
@@ -5571,6 +5640,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -6151,6 +6226,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -6545,6 +6626,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -6851,6 +6938,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -7561,6 +7654,12 @@ export interface paths {
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
 				};
@@ -10121,6 +10220,13 @@ export interface components {
 			 */
 			after?: string;
 			/**
+			 * @description Whether to include the total item count in the response's `total` field.
+			 *     Defaults to `false`, since counting is an extra query; set it to `true`
+			 *     only when the count is actually needed.
+			 * @default false
+			 */
+			includeCount: boolean;
+			/**
 			 * Format: uint32
 			 * @description The maximum number of records to return (1-100, default: 20).
 			 */
@@ -11726,24 +11832,6 @@ export interface components {
 		 *     relies on the text layer only.
 		 */
 		OcrPolicy: "auto" | "force" | "never";
-		/**
-		 * @description Offset-based pagination query parameters.
-		 *
-		 *     Use this for admin dashboards or when users need to jump to specific pages.
-		 *     For infinite scroll or API iteration, prefer [`CursorPagination`].
-		 */
-		OffsetPagination: {
-			/**
-			 * Format: uint32
-			 * @description The maximum number of records to return (1-100, default: 20).
-			 */
-			limit?: number;
-			/**
-			 * Format: uint32
-			 * @description The number of records to skip before starting to return results.
-			 */
-			offset?: number;
-		};
 		/** @description OpenAI API credentials. */
 		OpenAiCredentials: {
 			/** @description OpenAI API key. */
