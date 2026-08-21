@@ -1,11 +1,14 @@
 // Re-export all schema types
 export type * from "@/datatypes/account.js";
 export type * from "@/datatypes/activity.js";
+export type * from "@/datatypes/analytics.js";
 export type * from "@/datatypes/api-token.js";
 export type * from "@/datatypes/audit.js";
 export type * from "@/datatypes/auth.js";
 export type * from "@/datatypes/catalog.js";
+export type * from "@/datatypes/chat.js";
 export type * from "@/datatypes/connection.js";
+export type * from "@/datatypes/export.js";
 export type * from "@/datatypes/error.js";
 export type * from "@/datatypes/file.js";
 export type * from "@/datatypes/health.js";

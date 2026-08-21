@@ -8,6 +8,37 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.32.0] - 2026-08-18
+
+### Added
+
+- `chat` service for the workspace assistant: `listSessions`, `createSession`,
+  `deleteSession`, `listMessages`, `streamMessage` (streams the reply as typed
+  `ChatToken` deltas over SSE), and `sendMessage` for the raw response
+- `analytics` service: `getAnalytics` (`WorkspaceAnalytics`) and
+  `getRunTimeSeries` (`RunTimeSeries`)
+- `activities.exportActivities()` to export the activity log over a date window
+  as a downloadable file
+- Chat datatypes (`ChatSession`, `ChatSessionPage`, `CreateChatSession`,
+  `ChatMessage`, `ChatRole`, `SendChatMessage`, `ChatToken`), analytics
+  datatypes (`WorkspaceAnalytics`, `StorageAnalytics`, `RunAnalytics`,
+  `UsageAnalytics`, `RunTimeSeries`, and their entries plus `Usage`,
+  `UsageReport`, `TokenCounts`, `ModelUsage`, `ProviderType`, `RecognizerId`,
+  `DateWindow`), export datatypes (`ExportFormat`, `ExportQuery`,
+  `ActivityExportQuery`), and pagination datatypes (`Cursor`,
+  `CursorPagination2`, `OffsetPagination`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** `runs.downloadAuditJson()` and `runs.downloadAuditCsv()` are
+  replaced by a single `runs.downloadAudit(workspaceSlug, runId, { format })`,
+  where `format` is `csv` (default) or `json`, matching the merged
+  `GET /runs/{runId}/audit` endpoint
+- **Breaking:** `activities.listActivities()` now takes a required `limit` and
+  accepts `after` (a `Cursor`) and `include_count`, matching the endpoint's
+  query
+
 ## [0.31.0] - 2026-08-18
 
 ### Added
@@ -635,7 +666,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.31.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.32.0...HEAD
+[0.32.0]: https://github.com/nvisycom/sdk-ts/compare/v0.31.0...v0.32.0
 [0.31.0]: https://github.com/nvisycom/sdk-ts/compare/v0.30.0...v0.31.0
 [0.30.0]: https://github.com/nvisycom/sdk-ts/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/nvisycom/sdk-ts/compare/v0.28.0...v0.29.0

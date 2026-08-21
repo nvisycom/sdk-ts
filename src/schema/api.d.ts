@@ -1221,18 +1221,20 @@ export interface paths {
 		};
 		/**
 		 * List workspace activities
-		 * @description Returns all activity log entries for a workspace.
+		 * @description Returns the workspace's activity log, most recent first, cursor-paginated.
 		 */
 		get: {
 			parameters: {
-				query?: {
+				query: {
+					/** @description Cursor pointing to the last item of the previous page. */
+					after?: components["schemas"]["Cursor"];
 					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
+					 * @description Whether to include total count in the response.
+					 *     Set to `false` to skip the count query for better performance.
 					 */
-					after?: string;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
+					include_count?: boolean;
+					/** @description Maximum number of records to return. */
+					limit: number;
 				};
 				header?: never;
 				path: {
@@ -1281,6 +1283,319 @@ export interface paths {
 				 *     information, and user-friendly messages.
 				 */
 				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/activities/export": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Export workspace activities
+		 * @description Exports a workspace's activity log over a date window as a downloadable file. The window is `from`/`to` (inclusive, YYYY-MM-DD); it defaults to the last 30 days and is capped at 366 days. `format` is `csv` (default) or `json`. Each activity is a flat row: timestamp, the type split into object/action, the actor, and the acted-on object's id and label, oldest first. At most 100,000 rows are returned (the oldest in the window); a truncated export sets the `X-Export-Truncated` response header.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/** @description Output format; defaults to `csv`. */
+					format?: components["schemas"]["ExportFormat"];
+					/**
+					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
+					 *     `DEFAULT_WINDOW_DAYS` before `to`.
+					 */
+					from?: string;
+					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
+					to?: string;
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/analytics/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Workspace analytics
+		 * @description Returns aggregate analytics for a workspace: stored-file totals with a per-kind breakdown, pipeline-run health (status mix, error rate, and durations), and inference token usage (workspace totals plus a per-model breakdown). Breakdowns list every kind/status, zero-filled, in a stable order.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Aggregate analytics for a workspace: what it stores, how its runs fare, and
+				 *     the inference tokens they spent.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceAnalytics"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/analytics/runs/timeseries/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Workspace run time series
+		 * @description Returns a workspace's daily pipeline-run activity over a date window: runs per day, plus each day's error rate and durations. Every day in the window is present (quiet days report runs: 0), so the series plots as a continuous line or a contribution-style calendar. The window is `from`/`to` (inclusive, YYYY-MM-DD); it defaults to the last 30 days and is capped at 366 days.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
+					 *     `DEFAULT_WINDOW_DAYS` before `to`.
+					 */
+					from?: string;
+					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
+					to?: string;
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description A workspace's daily run activity over a window: one point per day, dense
+				 *     (quiet days included with `runs: 0`), ready to plot as a continuous series.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["RunTimeSeries"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -2338,6 +2653,472 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/workspaces/{workspaceSlug}/chat/sessions/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List chat sessions
+		 * @description Returns the workspace's chat sessions, most recently active first.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/** @description The number of records to skip before starting to return results. */
+					offset?: number;
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ChatSessionPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Create chat session
+		 * @description Opens a new assistant chat session in the workspace.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to create a chat session. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreateChatSession"];
+				};
+			};
+			responses: {
+				/** @description A chat session. */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ChatSession"];
+					};
+				};
+				/** @description Failed to parse the request body as JSON */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/chat/sessions/{sessionId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/**
+		 * Delete chat session
+		 * @description Soft-deletes a chat session.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description The session id. */
+					sessionId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/chat/sessions/{sessionId}/messages/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List chat messages
+		 * @description Returns a session's messages in chronological order.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description The session id. */
+					sessionId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ChatMessage"][];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Send chat message
+		 * @description Sends a message and streams the assistant's reply as Server-Sent Events. Each event's `data` is a `ChatToken` delta. Authenticate with a Bearer token via a `fetch`-based client; the native `EventSource` cannot send an `Authorization` header. 409 when the workspace has no language model connection configured.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description The session id. */
+					sessionId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request to send a message and stream the assistant's reply. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["SendChatMessage"];
+				};
+			};
+			responses: {
+				/** @description Server-sent event stream; each event's `data` is the payload below. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/event-stream": components["schemas"]["ChatToken"];
+					};
+				};
+				/** @description Failed to parse the request body as JSON */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/workspaces/{workspaceSlug}/syncs/": {
 		parameters: {
 			query?: never;
@@ -3137,7 +3918,7 @@ export interface paths {
 		post?: never;
 		/**
 		 * Delete file
-		 * @description Soft deletes a file by setting a deleted timestamp. The file can be recovered within the retention period.
+		 * @description Deletes a file: the record is retired and its stored content is removed. This is permanent — the file's content cannot be recovered.
 		 */
 		delete: {
 			parameters: {
@@ -4660,7 +5441,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/audit/json": {
+	"/workspaces/{workspaceSlug}/runs/{runId}/audit": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4668,114 +5449,15 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Download run audit (JSON)
-		 * @description Downloads the run's audit as a pretty-printed JSON file.
+		 * Download run audit
+		 * @description Downloads the run's audit as a file. `format` is `csv` (default) — a zip of entities.csv, provenance.csv, and reviews.csv — or `json`, a pretty-printed JSON file.
 		 */
 		get: {
 			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description Opaque identifier of the run. */
-					runId: components["schemas"]["RunId"];
+				query?: {
+					/** @description Output format; defaults to `csv`. */
+					format?: components["schemas"]["ExportFormat"];
 				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/audit/csv": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Download run audit (CSV)
-		 * @description Downloads the run's audit as a zip of entities.csv, provenance.csv, and reviews.csv.
-		 */
-		get: {
-			parameters: {
-				query?: never;
 				header?: never;
 				path: {
 					/** @description URL-safe workspace identifier. */
@@ -7903,6 +8585,25 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
+		 * @description Query parameters for the activity export: a `from`/`to` day range (inclusive)
+		 *     and the output `format`. See [`DateWindow`] for the range defaults and bounds.
+		 */
+		ActivityExportQuery: {
+			/** @description Output format; defaults to `csv`. */
+			format?: components["schemas"]["ExportFormat"];
+			/**
+			 * Format: date
+			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
+			 *     `DEFAULT_WINDOW_DAYS` before `to`.
+			 */
+			from?: string;
+			/**
+			 * Format: date
+			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
+			 */
+			to?: string;
+		};
+		/**
 		 * @description Generic paginated response wrapper.
 		 *
 		 *     Provides a consistent structure for all paginated API responses with
@@ -8672,6 +9373,18 @@ export interface components {
 			parts?: {
 				[key: string]: components["schemas"]["EntityGroup"];
 			};
+			/**
+			 * @description What the analyze pass cost: one entry per recognizer and
+			 *     enricher that ran, each self-identifying by the name the
+			 *     deployment configured it under.
+			 *
+			 *     Empty when nothing model-backed ran, which is the common
+			 *     case for a pattern-only pass. Recorded on analyze and not
+			 *     re-derived at anonymize time, so a host that bills or rate
+			 *     limits on model spend reads it straight off the returned
+			 *     [`Audit`].
+			 */
+			usage?: components["schemas"]["UsageReport"];
 		};
 		/**
 		 * @description Recognition-side facts that travel from analyze to anonymize.
@@ -8854,6 +9567,90 @@ export interface components {
 		 *     [`tags`]: super::Label::tags
 		 */
 		Category: string;
+		/** @description A single chat message. */
+		ChatMessage: {
+			/** @description Message text. */
+			content: string;
+			/**
+			 * Format: date-time
+			 * @description When the message was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Unique message identifier.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Parent in the conversation tree; absent for a root.
+			 */
+			parentId?: string;
+			/** @description Author of the message. */
+			role: components["schemas"]["ChatRole"];
+		};
+		/**
+		 * @description The author of a chat message.
+		 *
+		 *     Corresponds to the `CHAT_ROLE` PostgreSQL enum.
+		 */
+		ChatRole: "system" | "user" | "assistant";
+		/** @description A chat session. */
+		ChatSession: {
+			/**
+			 * Format: date-time
+			 * @description When the session was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Active leaf of the message tree (the conversation's resume point).
+			 */
+			currentMessageId?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique session identifier.
+			 */
+			id: string;
+			/** @description Human-readable title. */
+			title: string;
+			/**
+			 * Format: date-time
+			 * @description When the session was last active.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ChatSessionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["ChatSession"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters for a chat session. */
+		ChatSessionPathParams: {
+			/**
+			 * Format: uuid
+			 * @description The session id.
+			 */
+			sessionId: string;
+		};
+		/** @description One streamed chunk of the assistant's reply. */
+		ChatToken: {
+			/** @description The text delta. */
+			delta: string;
+		};
 		/**
 		 * @description Text a [`TextRedaction::Clamp`] emits for out-of-range values.
 		 *
@@ -8964,6 +9761,8 @@ export interface components {
 			isActive: boolean;
 			/** @description Provider identifier (`s3`, `azure`, `gcs`, `openai`, `ollama`, ...). */
 			provider: string;
+			/** @description Capability category of the provider (object store, language model, ...). */
+			providerType: components["schemas"]["ProviderType"];
 			/** @description Sync configuration; present only for sync-capable connections. */
 			sync?: components["schemas"]["SyncSchedule"];
 			/**
@@ -9151,6 +9950,11 @@ export interface components {
 			/** @description When the token expires. */
 			expiresIn: components["schemas"]["TokenExpiration"];
 		};
+		/** @description Request to create a chat session. */
+		CreateChatSession: {
+			/** @description Optional title. Defaults to a title seeded from the first message. */
+			title?: string;
+		};
 		/** @description Request payload for creating a new workspace connection. */
 		CreateConnection: {
 			/**
@@ -9306,6 +10110,14 @@ export interface components {
 			slug?: components["schemas"]["Handle"];
 		};
 		/**
+		 * @description A cursor representing a position in a paginated result set.
+		 *
+		 *     The cursor encodes the last seen item's timestamp and ID, allowing
+		 *     efficient keyset pagination. The ID serves as a tiebreaker for items
+		 *     with identical timestamps.
+		 */
+		Cursor: string;
+		/**
 		 * @description Cursor-based pagination query parameters.
 		 *
 		 *     This is the preferred pagination method for API endpoints. It provides:
@@ -9326,6 +10138,29 @@ export interface components {
 			limit?: number;
 		};
 		/**
+		 * @description Cursor-based pagination parameters for database queries.
+		 *
+		 *     This is the preferred pagination method for API endpoints. It provides:
+		 *     - Consistent performance regardless of page depth
+		 *     - Stable results even when items are added/removed
+		 *     - Efficient "load more" / infinite scroll patterns
+		 */
+		CursorPagination2: {
+			/** @description Cursor pointing to the last item of the previous page. */
+			after?: components["schemas"]["Cursor"];
+			/**
+			 * @description Whether to include total count in the response.
+			 *     Set to `false` to skip the count query for better performance.
+			 * @default false
+			 */
+			include_count: boolean;
+			/**
+			 * Format: int64
+			 * @description Maximum number of records to return.
+			 */
+			limit: number;
+		};
+		/**
 		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
 		 *
 		 *     Every rendering is an ISO-8601 form, so the output is locale-independent
@@ -9343,6 +10178,24 @@ export interface components {
 		 *     author, who knows the corpus's convention, sets it.
 		 */
 		DateStyle: "iso" | "us";
+		/**
+		 * @description A `from`/`to` day range (inclusive), both optional. Flatten it into an
+		 *     endpoint's query struct with `#[serde(flatten)]`, or use it directly when the
+		 *     range is the only parameter.
+		 */
+		DateWindow: {
+			/**
+			 * Format: date
+			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
+			 *     `DEFAULT_WINDOW_DAYS` before `to`.
+			 */
+			from?: string;
+			/**
+			 * Format: date
+			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
+			 */
+			to?: string;
+		};
 		/**
 		 * @description Pixel dimensions of an image or any 2-D canvas.
 		 *
@@ -9446,6 +10299,17 @@ export interface components {
 			suggestion?: string;
 			/** @description Validation error details for field-specific errors */
 			validation?: components["schemas"]["ValidationErrorDetail"][];
+		};
+		/** @description The file format an export is rendered as. */
+		ExportFormat: "csv" | "json";
+		/**
+		 * @description Query parameters for an export whose only choice is the output format. Used by
+		 *     endpoints that already scope their data another way (e.g. by path), so the
+		 *     format is all the query carries.
+		 */
+		ExportQuery: {
+			/** @description Output format; defaults to `csv`. */
+			format?: components["schemas"]["ExportFormat"];
 		};
 		/** @description Represents a file in responses. */
 		File: {
@@ -10729,6 +11593,39 @@ export interface components {
 			version?: string;
 		};
 		/**
+		 * @description Model detail for a model-backed recognizer or enricher: which model it
+		 *     called and the tokens that cost. Absent from a pure-CPU component (a
+		 *     pattern recognizer, a language enricher).
+		 */
+		ModelUsage: {
+			/** @description Model name the backend called (e.g. `"gpt-4o"`, `"gliner-multi"`). */
+			model: string;
+			/** @description Tokens the call spent, as far as the provider reports them. */
+			tokens?: components["schemas"]["TokenCounts"];
+			/** @description Model version, when the backend reports one. */
+			version?: string;
+		};
+		/** @description One model's token usage across a workspace's runs. */
+		ModelUsageEntry: {
+			/**
+			 * Format: int64
+			 * @description Input/prompt tokens summed for this model (`0` if never reported).
+			 */
+			inputTokens: number;
+			/** @description The model. */
+			model: string;
+			/**
+			 * Format: int64
+			 * @description Output/completion tokens summed for this model (`0` if never reported).
+			 */
+			outputTokens: number;
+			/**
+			 * Format: int64
+			 * @description Reported total tokens summed for this model (`0` if never reported).
+			 */
+			totalTokens: number;
+		};
+		/**
 		 * @description Response type for an account notification.
 		 *
 		 *     The typed payload is nested under `payload`, so a notification is
@@ -10872,6 +11769,24 @@ export interface components {
 		 *     relies on the text layer only.
 		 */
 		OcrPolicy: "auto" | "force" | "never";
+		/**
+		 * @description Offset-based pagination query parameters.
+		 *
+		 *     Use this for admin dashboards or when users need to jump to specific pages.
+		 *     For infinite scroll or API iteration, prefer [`CursorPagination`].
+		 */
+		OffsetPagination: {
+			/**
+			 * Format: uint32
+			 * @description The maximum number of records to return (1-100, default: 20).
+			 */
+			limit?: number;
+			/**
+			 * Format: uint32
+			 * @description The number of records to skip before starting to return results.
+			 */
+			offset?: number;
+		};
 		/** @description OpenAI API credentials. */
 		OpenAiCredentials: {
 			/** @description OpenAI API key. */
@@ -11690,6 +12605,16 @@ export interface components {
 					not: components["schemas"]["Predicate"];
 			  };
 		/**
+		 * @description The capability category of a connection's provider.
+		 *
+		 *     Corresponds to the `PROVIDER_TYPE` PostgreSQL enum. A stable, closed set:
+		 *     the concrete provider (the `provider` column, e.g. `s3` or `anthropic`) stays
+		 *     open and extensible, while its capability is one of these types. Lets a
+		 *     connection be found by what it can do — e.g. a workspace's language model —
+		 *     without decrypting its config.
+		 */
+		ProviderType: "object_store" | "language_model";
+		/**
 		 * @description Public view of an account, returned when looking up someone other than the
 		 *     authenticated caller. Carries only the fields safe to share with a
 		 *     workspace peer; private details (email, account flags) are omitted
@@ -11750,6 +12675,22 @@ export interface components {
 			llm: components["schemas"]["RegisteredRecognizer"][];
 			/** @description NER (named-entity recognition) recognizers. */
 			ner: components["schemas"]["RegisteredRecognizer"][];
+		};
+		/**
+		 * @description Identifies a recognizer (name + version).
+		 *
+		 *     Pairs a stable name with a free-form version string so the audit
+		 *     trail records not just *which* recognizer fired but *which build* of
+		 *     it: a rerun against an updated ruleset or model is then
+		 *     distinguishable from the original. The version is opaque text (a
+		 *     semver, a checkpoint hash, a ruleset date); the core attaches no
+		 *     ordering or comparison semantics to it.
+		 */
+		RecognizerId: {
+			/** @description Stable, human-readable recognizer name (e.g. `"us-ssn-pattern"`). */
+			name: string;
+			/** @description Recognizer's version at the time it ran. */
+			version: string;
 		};
 		/**
 		 * @description Public view of one recognizer in the engine's NER or LLM
@@ -11920,6 +12861,80 @@ export interface components {
 			  }
 			| "predicate"
 			| "fallback";
+		/** @description Pipeline-run health for a workspace. */
+		RunAnalytics: {
+			/**
+			 * Format: int64
+			 * @description Mean completed-run duration in milliseconds; omitted until a run completes.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * @description Per-status breakdown, one entry per run status (zero-filled), in a stable
+			 *     order.
+			 */
+			byStatus: components["schemas"]["RunStatusEntry"][];
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed). Omitted when no run has reached a terminal
+			 *     state (genuinely no signal, not zero).
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-run duration in milliseconds; omitted until a run
+			 *     completes.
+			 */
+			p95DurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description Total number of runs.
+			 */
+			total: number;
+		};
+		/** @description A single day of run activity. */
+		RunDayEntry: {
+			/**
+			 * Format: int64
+			 * @description Mean completed-run duration (milliseconds) this day; omitted if none completed.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * Format: date
+			 * @description The day (`YYYY-MM-DD`, UTC).
+			 */
+			date: string;
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed) for this day; omitted when no run reached a
+			 *     terminal state that day.
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description Input/prompt tokens spent by this day's runs; omitted when none used a model.
+			 */
+			inputTokens?: number;
+			/**
+			 * Format: int64
+			 * @description Output/completion tokens spent this day; omitted when none used a model.
+			 */
+			outputTokens?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-run duration (milliseconds) this day; omitted if none.
+			 */
+			p95DurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description Runs started this day (`0` on a quiet day).
+			 */
+			runs: number;
+			/**
+			 * Format: int64
+			 * @description Reported total tokens this day; omitted when none used a model.
+			 */
+			totalTokens?: number;
+		};
 		/** @description Opaque run identifier (run_<uuid>). */
 		RunId: string;
 		/** @description Structured metadata for a pipeline run. */
@@ -11928,6 +12943,23 @@ export interface components {
 			error?: string;
 			/** @description Free-form labels attached to the run. */
 			tags?: string[];
+			/**
+			 * @description The engine's full per-recognizer usage report (durations, per-model token
+			 *     counts), stored opaquely for drill-down. Per-model token totals for
+			 *     aggregation live in the `workspace_pipeline_run_usage` table; this keeps
+			 *     the detail. Absent when the run produced no usage.
+			 */
+			usage?: unknown;
+		};
+		/** @description One status's share of a workspace's runs. */
+		RunStatusEntry: {
+			/**
+			 * Format: int64
+			 * @description Number of runs in this status.
+			 */
+			count: number;
+			/** @description The run status. */
+			status: components["schemas"]["PipelineRunStatus"];
 		};
 		/**
 		 * @description A run's status change, broadcast on the core-NATS subject [`run_subject`].
@@ -11943,6 +12975,14 @@ export interface components {
 			runId: string;
 			/** @description The run's new status. */
 			status: components["schemas"]["PipelineRunStatus"];
+		};
+		/**
+		 * @description A workspace's daily run activity over a window: one point per day, dense
+		 *     (quiet days included with `runs: 0`), ready to plot as a continuous series.
+		 */
+		RunTimeSeries: {
+			/** @description One entry per day in the requested window, oldest first. */
+			points: components["schemas"]["RunDayEntry"][];
 		};
 		/**
 		 * @description Typed credentials for S3-compatible provider.
@@ -12085,6 +13125,19 @@ export interface components {
 			 */
 			metadata?: components["schemas"]["ScopeMetadata"];
 		};
+		/** @description Request to send a message and stream the assistant's reply. */
+		SendChatMessage: {
+			/** @description The user's message. */
+			content: string;
+			/**
+			 * Format: uuid
+			 * @description The message this turn replies to (the branch being extended). Omit to
+			 *     continue from the session's current leaf; use an earlier message's id to
+			 *     branch (e.g. edit-and-resend).
+			 * @default null
+			 */
+			parentId: string;
+		};
 		/**
 		 * @description Which SHA-2 variant a hashing operator uses.
 		 *
@@ -12148,6 +13201,24 @@ export interface components {
 			/** @description The raw source byte range. */
 			range: components["schemas"]["Range_of_uint"];
 		};
+		/** @description Storage totals across a workspace's live files. */
+		StorageAnalytics: {
+			/**
+			 * @description Per-kind breakdown, one entry per `file_kind` (zero-filled), in a stable
+			 *     order.
+			 */
+			byKind: components["schemas"]["StorageKindEntry"][];
+			/**
+			 * Format: int64
+			 * @description Number of live files.
+			 */
+			fileCount: number;
+			/**
+			 * Format: int64
+			 * @description Total bytes of all live files.
+			 */
+			totalBytes: number;
+		};
 		/**
 		 * @description A fully-typed object-store connection configuration.
 		 *
@@ -12185,6 +13256,21 @@ export interface components {
 					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
 					rootPath?: string;
 			  };
+		/** @description One `file_kind`'s share of a workspace's storage. */
+		StorageKindEntry: {
+			/**
+			 * Format: int64
+			 * @description Number of live files of this kind.
+			 */
+			fileCount: number;
+			/** @description The file kind. */
+			kind: components["schemas"]["FileKind"];
+			/**
+			 * Format: int64
+			 * @description Total bytes of live files of this kind.
+			 */
+			totalBytes: number;
+		};
 		/**
 		 * @description Request payload to trigger a connection sync.
 		 *
@@ -13369,6 +14455,27 @@ export interface components {
 			 */
 			start_us: number;
 		};
+		/**
+		 * @description Token counts a model reported, each optional because providers differ in
+		 *     what they return — some give only a total, some none at all.
+		 */
+		TokenCounts: {
+			/**
+			 * Format: uint64
+			 * @description Prompt / input tokens.
+			 */
+			input?: number;
+			/**
+			 * Format: uint64
+			 * @description Completion / output tokens.
+			 */
+			output?: number;
+			/**
+			 * Format: uint64
+			 * @description Total tokens — may be reported even when the input/output split is not.
+			 */
+			total?: number;
+		};
 		/** @description Expiration options for API tokens. */
 		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
 		/**
@@ -13542,6 +14649,59 @@ export interface components {
 			 *     rules). When omitted, settings are left unchanged.
 			 */
 			settings?: components["schemas"]["WorkspaceSettings"];
+		};
+		/**
+		 * @description One recognizer's or enricher's resource usage for one payload.
+		 *
+		 *     `id` and `duration` are always present; `count` (entities or spans found,
+		 *     artifacts produced) and `model` are present only where they mean
+		 *     something. `duration` serializes as a whole number of milliseconds.
+		 */
+		Usage: {
+			/**
+			 * Format: uint64
+			 * @description Entities or spans found (recognizer) or artifacts produced (enricher);
+			 *     `None` when a count is not meaningful for the component.
+			 */
+			count?: number;
+			/**
+			 * Format: uint64
+			 * @description Wall-clock execution time. Serialized as integer milliseconds.
+			 */
+			duration: number;
+			/** @description Which recognizer / enricher this describes. */
+			id: components["schemas"]["RecognizerId"];
+			/** @description Model / token detail; `None` for a pure-CPU component. */
+			model?: components["schemas"]["ModelUsage"];
+		};
+		/** @description Inference token usage across a workspace's runs. */
+		UsageAnalytics: {
+			/** @description Per-model breakdown, one entry per model used, in a stable order. */
+			byModel: components["schemas"]["ModelUsageEntry"][];
+			/**
+			 * Format: int64
+			 * @description Total input/prompt tokens across all models.
+			 */
+			inputTokens: number;
+			/**
+			 * Format: int64
+			 * @description Total output/completion tokens across all models.
+			 */
+			outputTokens: number;
+			/**
+			 * Format: int64
+			 * @description Total tokens as reported across all models (not necessarily input +
+			 *     output).
+			 */
+			totalTokens: number;
+		};
+		/**
+		 * @description Every recognizer/enricher's [`Usage`] across a whole document analysis, in
+		 *     the order the components ran (the body first, then each part).
+		 */
+		UsageReport: {
+			/** @description The per-component usage entries, each self-identifying via its `id`. */
+			entries: components["schemas"]["Usage"][];
 		};
 		/** @description Validation error details for field-specific errors. */
 		ValidationErrorDetail: {
@@ -13786,6 +14946,18 @@ export interface components {
 		WorkspaceActivityParams: {
 			/** @description Slug of the workspace acted on. */
 			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Aggregate analytics for a workspace: what it stores, how its runs fare, and
+		 *     the inference tokens they spent.
+		 */
+		WorkspaceAnalytics: {
+			/** @description Pipeline-run health: volume, status mix, and durations. */
+			runs: components["schemas"]["RunAnalytics"];
+			/** @description Stored-file totals and their per-kind breakdown. */
+			storage: components["schemas"]["StorageAnalytics"];
+			/** @description Inference token usage: workspace totals and a per-model breakdown. */
+			usage: components["schemas"]["UsageAnalytics"];
 		};
 		/** @description Path parameters for file operations within a workspace context. */
 		WorkspaceFilePathParams: {

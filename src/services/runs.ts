@@ -3,6 +3,7 @@ import type {
 	Audit,
 	CreatePipelineRun,
 	CursorPagination,
+	ExportQuery,
 	PipelineRun,
 	PipelineRunPage,
 	PipelineRunsQuery,
@@ -123,42 +124,26 @@ export class Runs {
 	}
 
 	/**
-	 * Download a run's audit as a pretty-printed JSON file
+	 * Download a run's audit as a file.
+	 *
+	 * `format` is `csv` (default) — a zip of entities.csv, provenance.csv, and
+	 * reviews.csv — or `json`, a pretty-printed JSON file.
+	 *
 	 * @param workspaceSlug - Workspace slug
 	 * @param runId - Run ID
+	 * @param query - Optional output format (`csv` default, or `json`)
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */
-	async downloadAuditJson(
+	async downloadAudit(
 		workspaceSlug: string,
 		runId: string,
+		query?: ExportQuery,
 	): Promise<Response> {
 		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/runs/{runId}/audit/json",
+			"/workspaces/{workspaceSlug}/runs/{runId}/audit",
 			{
-				params: { path: { workspaceSlug, runId } },
-				parseAs: "stream",
-			},
-		);
-		return response;
-	}
-
-	/**
-	 * Download a run's audit as a zip of entities.csv, provenance.csv, and
-	 * reviews.csv
-	 * @param workspaceSlug - Workspace slug
-	 * @param runId - Run ID
-	 * @returns Promise that resolves with the file response
-	 * @throws {ApiError} if the request fails
-	 */
-	async downloadAuditCsv(
-		workspaceSlug: string,
-		runId: string,
-	): Promise<Response> {
-		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/runs/{runId}/audit/csv",
-			{
-				params: { path: { workspaceSlug, runId } },
+				params: { path: { workspaceSlug, runId }, query },
 				parseAs: "stream",
 			},
 		);
