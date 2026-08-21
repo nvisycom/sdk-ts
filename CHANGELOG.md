@@ -30,6 +30,10 @@ and this project adheres to
 ### Changed
 
 - Regenerated the API schema against the updated platform handlers
+- Schema generation now passes `--default-non-nullable false`, so a schema
+  field that carries a `default` (e.g. `CursorPagination.includeCount`,
+  `Login.rememberMe`) is typed as optional instead of required. Callers can
+  omit these fields, e.g. `listPolicies(slug, { limit: 20 })`
 - **Breaking:** `runs.downloadAuditJson()` and `runs.downloadAuditCsv()` are
   replaced by a single `runs.downloadAudit(workspaceSlug, runId, { format })`,
   where `format` is `csv` (default) or `json`, matching the merged

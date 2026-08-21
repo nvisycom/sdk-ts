@@ -9409,21 +9409,21 @@ export interface components {
 					 *     audible but not painful, and never clips.
 					 * @default 0.5
 					 */
-					amplitude: number;
+					amplitude?: number;
 					/**
 					 * Format: float
 					 * @description Tone frequency in Hertz. Default 1 kHz, the broadcast
 					 *     convention.
 					 * @default 1000
 					 */
-					hz: number;
+					hz?: number;
 					/** @constant */
 					kind: "beep";
 					/**
 					 * @description Tone shape. Default sine.
 					 * @default sine
 					 */
-					waveform: components["schemas"]["Waveform"];
+					waveform?: components["schemas"]["Waveform"];
 			  };
 		/**
 		 * @description What detection found in one document.
@@ -9541,7 +9541,7 @@ export interface components {
 			 *     time; anonymize re-uses them verbatim.
 			 * @default []
 			 */
-			languages: components["schemas"]["Languages"];
+			languages?: components["schemas"]["Languages"];
 			/**
 			 * @description Free-form request context: document tags, request purpose,
 			 *     output audience. See elide's [`ScopeMetadata`].
@@ -9558,7 +9558,7 @@ export interface components {
 			 *       "kind": "auto"
 			 *     }
 			 */
-			rasterMode: components["schemas"]["RasterMode"];
+			rasterMode?: components["schemas"]["RasterMode"];
 		};
 		/**
 		 * @description A 32-byte BLAKE3 digest.
@@ -10021,7 +10021,7 @@ export interface components {
 			 *     matches if it uses any of the given providers. Empty means no filter.
 			 * @default []
 			 */
-			provider: string[];
+			provider?: string[];
 		};
 		/**
 		 * @description [ISO 3166-1] country, identified by its code.
@@ -10225,7 +10225,7 @@ export interface components {
 			 *     only when the count is actually needed.
 			 * @default false
 			 */
-			includeCount: boolean;
+			includeCount?: boolean;
 			/**
 			 * Format: uint32
 			 * @description The maximum number of records to return (1-100, default: 20).
@@ -11030,7 +11030,7 @@ export interface components {
 					 *     Larger is blurrier (and harder to reverse).
 					 * @default 16
 					 */
-					sigma: number;
+					sigma?: number;
 			  }
 			| {
 					/**
@@ -11039,7 +11039,7 @@ export interface components {
 					 *     blocks are coarser (and harder to reverse).
 					 * @default 16
 					 */
-					block_size: number;
+					block_size?: number;
 					/** @constant */
 					kind: "pixelate";
 			  }
@@ -11052,7 +11052,7 @@ export interface components {
 					 *       "r": 0
 					 *     }
 					 */
-					color: components["schemas"]["Color"];
+					color?: components["schemas"]["Color"];
 					/** @constant */
 					kind: "blackbox";
 			  };
@@ -11546,7 +11546,7 @@ export interface components {
 			 * @description Whether to remember this device for extended session. Defaults to false.
 			 * @default false
 			 */
-			rememberMe: boolean;
+			rememberMe?: boolean;
 		};
 		/** @description Response type for a mark-all-read action. */
 		MarkedReadStatus: {
@@ -12538,7 +12538,7 @@ export interface components {
 					 *     addresses under the §(R) catch-all reading.
 					 * @default standard
 					 */
-					accounts: components["schemas"]["HipaaAccountNumbers"];
+					accounts?: components["schemas"]["HipaaAccountNumbers"];
 					/** @constant */
 					kind: "hipaa_deidentification";
 					/**
@@ -12560,7 +12560,7 @@ export interface components {
 					 *     Article 10 criminal-justice data.
 					 * @default article9
 					 */
-					scope: components["schemas"]["GdprSensitiveScope"];
+					scope?: components["schemas"]["GdprSensitiveScope"];
 					/**
 					 * @description Which operator to apply to matches. See
 					 *     [`GdprArticle9Treatment`] for the tradeoff.
@@ -12827,21 +12827,21 @@ export interface components {
 			 *       "mode": "forever"
 			 *     }
 			 */
-			auditLogs: components["schemas"]["Retention"];
+			auditLogs?: components["schemas"]["Retention"];
 			/**
 			 * @description Retention for uploaded/imported source documents.
 			 * @default {
 			 *       "mode": "forever"
 			 *     }
 			 */
-			originalDocuments: components["schemas"]["Retention"];
+			originalDocuments?: components["schemas"]["Retention"];
 			/**
 			 * @description Retention for generated redacted documents.
 			 * @default {
 			 *       "mode": "forever"
 			 *     }
 			 */
-			redactedDocuments: components["schemas"]["Retention"];
+			redactedDocuments?: components["schemas"]["Retention"];
 		};
 		/**
 		 * @description A reviewer-supplied redaction override with the policy
@@ -13044,7 +13044,7 @@ export interface components {
 			 * @description AWS region (defaults to `us-east-1`).
 			 * @default us-east-1
 			 */
-			region: string;
+			region?: string;
 			/** @description Secret access key for static credentials. */
 			secretAccessKey?: string;
 			/** @description Session token for temporary credentials. */
@@ -13094,7 +13094,7 @@ export interface components {
 			 *     selected differently per audience. May hold several.
 			 * @default []
 			 */
-			audience: string[];
+			audience?: string[];
 			/**
 			 * @description The caller-asserted business purpose driving this request (e.g.
 			 *     `"fraud_detection"`, `"gdpr_erasure_request"`). A scope-aware operator
@@ -13116,7 +13116,7 @@ export interface components {
 			 *     [`LabelCatalog`]: crate::entity::LabelCatalog
 			 * @default []
 			 */
-			tags: string[];
+			tags?: string[];
 		};
 		/**
 		 * @description Caller-asserted scope for one request.
@@ -13146,7 +13146,7 @@ export interface components {
 			 *     (if a language enricher runs) to fill in.
 			 * @default []
 			 */
-			languages: components["schemas"]["Languages"];
+			languages?: components["schemas"]["Languages"];
 			/**
 			 * @description Free-form request context: document tags, request purpose,
 			 *     output audience. See elide's [`ScopeMetadata`].
@@ -13191,7 +13191,7 @@ export interface components {
 			 * @description Whether to remember the device for extended session. Defaults to false.
 			 * @default false
 			 */
-			rememberMe: boolean;
+			rememberMe?: boolean;
 			/** @description Public account handle, unique across all accounts. */
 			username: components["schemas"]["Handle"];
 		};
@@ -13356,14 +13356,14 @@ export interface components {
 			 * @description How an import reconciles files whose source object was deleted.
 			 * @default ignore
 			 */
-			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
+			deletionPolicy?: components["schemas"]["SyncDeletionPolicy"];
 			/** @description Cron expression for scheduled imports; omit for manual-only. */
 			scheduleCron?: string;
 			/**
 			 * @description Whether the connection imports data in or exports data out.
 			 * @default import
 			 */
-			syncMode: components["schemas"]["SyncMode"];
+			syncMode?: components["schemas"]["SyncMode"];
 		};
 		/**
 		 * @description Defines the execution status of a connection sync run.
@@ -13876,7 +13876,7 @@ export interface components {
 					 * @description Template string. Default `[{label}]`.
 					 * @default [{label}]
 					 */
-					template: string;
+					template?: string;
 			  }
 			| {
 					/**
@@ -13895,7 +13895,7 @@ export interface components {
 					 * @description The character that replaces masked positions.
 					 * @default *
 					 */
-					mask_char: string;
+					mask_char?: string;
 			  };
 		/** @description Request payload for testing a webhook. */
 		TestWebhook: {
@@ -14321,7 +14321,7 @@ export interface components {
 					 * @description The character that replaces masked positions.
 					 * @default *
 					 */
-					mask_char: string;
+					mask_char?: string;
 			  }
 			| {
 					/** @constant */
@@ -14330,14 +14330,14 @@ export interface components {
 					 * @description Template string. Default `[{label}]`.
 					 * @default [{label}]
 					 */
-					template: string;
+					template?: string;
 			  }
 			| {
 					/**
 					 * @description SHA-256 (default) or SHA-512.
 					 * @default sha256
 					 */
-					algorithm: components["schemas"]["Sha2Algorithm"];
+					algorithm?: components["schemas"]["Sha2Algorithm"];
 					/** @constant */
 					kind: "hash";
 					/** @description Salt prepended to the value before hashing. */
@@ -14358,7 +14358,7 @@ export interface components {
 					 *     [`Replace`]: TextRedaction::Replace
 					 * @default [{label}]
 					 */
-					fallback_template: string;
+					fallback_template?: string;
 					/** @constant */
 					kind: "fake";
 					/**
@@ -14382,7 +14382,7 @@ export interface components {
 					 * @description HMAC-SHA-256 (default) or HMAC-SHA-512.
 					 * @default sha256
 					 */
-					algorithm: components["schemas"]["Sha2Algorithm"];
+					algorithm?: components["schemas"]["Sha2Algorithm"];
 					/** @constant */
 					kind: "hmac_hash";
 			  }
@@ -14441,14 +14441,14 @@ export interface components {
 					 * @description Coarseness of the output. Default `Year`.
 					 * @default year
 					 */
-					granularity: components["schemas"]["DateGranularity"];
+					granularity?: components["schemas"]["DateGranularity"];
 					/** @constant */
 					kind: "generalize_date";
 					/**
 					 * @description Which input convention to accept. Default `Iso`.
 					 * @default iso
 					 */
-					style: components["schemas"]["DateStyle"];
+					style?: components["schemas"]["DateStyle"];
 			  };
 		/**
 		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
@@ -15051,12 +15051,12 @@ export interface components {
 			 * @description How documents are rendered for OCR during detection.
 			 * @default auto
 			 */
-			ocr: components["schemas"]["OcrPolicy"];
+			ocr?: components["schemas"]["OcrPolicy"];
 			/**
 			 * @description Whether approval is required before processed files become visible.
 			 * @default true
 			 */
-			requireApproval: boolean;
+			requireApproval?: boolean;
 			/**
 			 * @description Data-retention rules for the workspace.
 			 * @default {
@@ -15071,7 +15071,7 @@ export interface components {
 			 *       }
 			 *     }
 			 */
-			retention: components["schemas"]["RetentionSettings"];
+			retention?: components["schemas"]["RetentionSettings"];
 		};
 		/** @description Query parameters for listing all syncs across a workspace. */
 		WorkspaceSyncsQuery: {
@@ -15081,7 +15081,7 @@ export interface components {
 			 *     provider filter.
 			 * @default []
 			 */
-			provider: string[];
+			provider?: string[];
 			/** @description Filter by sync status. */
 			status?: components["schemas"]["SyncStatus"];
 		};
