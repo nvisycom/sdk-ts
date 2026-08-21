@@ -1331,12 +1331,15 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
+				/** @description The exported activity log. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content?: never;
+					content: {
+						"text/csv": unknown;
+						"application/json": unknown;
+					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -4127,12 +4130,14 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
+				/** @description The file content. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content?: never;
+					content: {
+						"application/octet-stream": unknown;
+					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -5467,12 +5472,15 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description no content */
+				/** @description The run's exported audit. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content?: never;
+					content: {
+						"application/zip": unknown;
+						"application/json": unknown;
+					};
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -9509,25 +9517,16 @@ export interface components {
 		 *     responses.
 		 */
 		AzureCredentials: {
-			/**
-			 * @description Storage account access key.
-			 * @default null
-			 */
-			accessKey: string;
+			/** @description Storage account access key. */
+			accessKey?: string;
 			/** @description Azure storage account name. */
 			accountName: string;
 			/** @description Azure storage container name. */
 			container: string;
-			/**
-			 * @description Custom endpoint URL (for Azure Stack or Azurite).
-			 * @default null
-			 */
-			endpoint: string;
-			/**
-			 * @description Shared Access Signature token.
-			 * @default null
-			 */
-			sasToken: string;
+			/** @description Custom endpoint URL (for Azure Stack or Azurite). */
+			endpoint?: string;
+			/** @description Shared Access Signature token. */
+			sasToken?: string;
 		};
 		/**
 		 * @description Axis-aligned rectangle, given by its minimum and maximum corners.
@@ -10392,21 +10391,12 @@ export interface components {
 		GcsCredentials: {
 			/** @description GCS bucket name. */
 			bucket: string;
-			/**
-			 * @description Custom endpoint URL (for testing with a fake GCS server).
-			 * @default null
-			 */
-			endpoint: string;
-			/**
-			 * @description Inline service account key JSON (the file contents, not a path).
-			 * @default null
-			 */
-			serviceAccountKeyJson: string;
-			/**
-			 * @description Path to a service account key JSON file on the local filesystem.
-			 * @default null
-			 */
-			serviceAccountPath: string;
+			/** @description Custom endpoint URL (for testing with a fake GCS server). */
+			endpoint?: string;
+			/** @description Inline service account key JSON (the file contents, not a path). */
+			serviceAccountKeyJson?: string;
+			/** @description Path to a service account key JSON file on the local filesystem. */
+			serviceAccountPath?: string;
 		};
 		/**
 		 * @description Which operator to apply to Article 9 special-category entities.
@@ -12733,16 +12723,10 @@ export interface components {
 		 *     override and always follow the workspace baseline.
 		 */
 		RetentionOverride: {
-			/**
-			 * @description Overrides audit-blob retention when set.
-			 * @default null
-			 */
-			auditLogs: components["schemas"]["Retention"];
-			/**
-			 * @description Overrides redacted-document retention when set.
-			 * @default null
-			 */
-			redactedDocuments: components["schemas"]["Retention"];
+			/** @description Overrides audit-blob retention when set. */
+			auditLogs?: components["schemas"]["Retention"];
+			/** @description Overrides redacted-document retention when set. */
+			redactedDocuments?: components["schemas"]["Retention"];
 		};
 		/**
 		 * @description Retention for every scope. Missing fields default to [`Retention::Forever`],
@@ -12959,34 +12943,24 @@ export interface components {
 		 *     responses.
 		 */
 		S3Credentials: {
-			/**
-			 * @description Access key ID for static credentials.
-			 * @default null
-			 */
-			accessKeyId: string;
+			/** @description Access key ID for static credentials. */
+			accessKeyId?: string;
 			/** @description S3 bucket name. */
 			bucket: string;
 			/**
 			 * @description Endpoint URL (e.g. `http://localhost:9000` for MinIO).
 			 *     Required for non-AWS S3-compatible services.
-			 * @default null
 			 */
-			endpoint: string;
+			endpoint?: string;
 			/**
 			 * @description AWS region (defaults to `us-east-1`).
 			 * @default us-east-1
 			 */
 			region: string;
-			/**
-			 * @description Secret access key for static credentials.
-			 * @default null
-			 */
-			secretAccessKey: string;
-			/**
-			 * @description Session token for temporary credentials.
-			 * @default null
-			 */
-			sessionToken: string;
+			/** @description Secret access key for static credentials. */
+			secretAccessKey?: string;
+			/** @description Session token for temporary credentials. */
+			sessionToken?: string;
 		};
 		/**
 		 * @description Caller-asserted scope shared across every payload of one analysis.
@@ -13038,9 +13012,8 @@ export interface components {
 			 *     `"fraud_detection"`, `"gdpr_erasure_request"`). A scope-aware operator
 			 *     predicate may skip or swap a rule based on it; a recognizer may bias
 			 *     detection on it. `None` when the caller asserts no purpose.
-			 * @default null
 			 */
-			purpose: string;
+			purpose?: string;
 			/**
 			 * @description Document-level classification tags (e.g. `"medical"`,
 			 *     `"gdpr-request"`). Recognizers may use these to bias their behavior
@@ -13101,9 +13074,8 @@ export interface components {
 			 * @description The message this turn replies to (the branch being extended). Omit to
 			 *     continue from the session's current leaf; use an earlier message's id to
 			 *     branch (e.g. edit-and-resend).
-			 * @default null
 			 */
-			parentId: string;
+			parentId?: string;
 		};
 		/**
 		 * @description Which SHA-2 variant a hashing operator uses.
