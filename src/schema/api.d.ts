@@ -1225,16 +1225,14 @@ export interface paths {
 		 */
 		get: {
 			parameters: {
-				query: {
-					/** @description Cursor pointing to the last item of the previous page. */
-					after?: components["schemas"]["Cursor"];
+				query?: {
 					/**
-					 * @description Whether to include total count in the response.
-					 *     Set to `false` to skip the count query for better performance.
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
 					 */
-					include_count?: boolean;
-					/** @description Maximum number of records to return. */
-					limit: number;
+					after?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -1317,8 +1315,8 @@ export interface paths {
 					/** @description Output format; defaults to `csv`. */
 					format?: components["schemas"]["ExportFormat"];
 					/**
-					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
-					 *     `DEFAULT_WINDOW_DAYS` before `to`.
+					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
+					 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
 					 */
 					from?: string;
 					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
@@ -1515,8 +1513,8 @@ export interface paths {
 			parameters: {
 				query?: {
 					/**
-					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
-					 *     `DEFAULT_WINDOW_DAYS` before `to`.
+					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
+					 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
 					 */
 					from?: string;
 					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
@@ -8593,8 +8591,8 @@ export interface components {
 			format?: components["schemas"]["ExportFormat"];
 			/**
 			 * Format: date
-			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
-			 *     `DEFAULT_WINDOW_DAYS` before `to`.
+			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
+			 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
 			 */
 			from?: string;
 			/**
@@ -10110,14 +10108,6 @@ export interface components {
 			slug?: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description A cursor representing a position in a paginated result set.
-		 *
-		 *     The cursor encodes the last seen item's timestamp and ID, allowing
-		 *     efficient keyset pagination. The ID serves as a tiebreaker for items
-		 *     with identical timestamps.
-		 */
-		Cursor: string;
-		/**
 		 * @description Cursor-based pagination query parameters.
 		 *
 		 *     This is the preferred pagination method for API endpoints. It provides:
@@ -10136,29 +10126,6 @@ export interface components {
 			 * @description The maximum number of records to return (1-100, default: 20).
 			 */
 			limit?: number;
-		};
-		/**
-		 * @description Cursor-based pagination parameters for database queries.
-		 *
-		 *     This is the preferred pagination method for API endpoints. It provides:
-		 *     - Consistent performance regardless of page depth
-		 *     - Stable results even when items are added/removed
-		 *     - Efficient "load more" / infinite scroll patterns
-		 */
-		CursorPagination2: {
-			/** @description Cursor pointing to the last item of the previous page. */
-			after?: components["schemas"]["Cursor"];
-			/**
-			 * @description Whether to include total count in the response.
-			 *     Set to `false` to skip the count query for better performance.
-			 * @default false
-			 */
-			include_count: boolean;
-			/**
-			 * Format: int64
-			 * @description Maximum number of records to return.
-			 */
-			limit: number;
 		};
 		/**
 		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
@@ -10186,8 +10153,8 @@ export interface components {
 		DateWindow: {
 			/**
 			 * Format: date
-			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults to
-			 *     `DEFAULT_WINDOW_DAYS` before `to`.
+			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
+			 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
 			 */
 			from?: string;
 			/**

@@ -23,10 +23,9 @@ and this project adheres to
   `ChatMessage`, `ChatRole`, `SendChatMessage`, `ChatToken`), analytics
   datatypes (`WorkspaceAnalytics`, `StorageAnalytics`, `RunAnalytics`,
   `UsageAnalytics`, `RunTimeSeries`, and their entries plus `Usage`,
-  `UsageReport`, `TokenCounts`, `ModelUsage`, `ProviderType`, `RecognizerId`,
-  `DateWindow`), export datatypes (`ExportFormat`, `ExportQuery`,
-  `ActivityExportQuery`), and pagination datatypes (`Cursor`,
-  `CursorPagination2`, `OffsetPagination`)
+  `UsageReport`, `TokenCounts`, `ModelUsage`, `ProviderType`, `RecognizerId`),
+  export datatypes (`ExportFormat`, `ExportQuery`, `DateWindow`,
+  `ActivityExportQuery`), and the `OffsetPagination` datatype
 
 ### Changed
 
@@ -35,9 +34,6 @@ and this project adheres to
   replaced by a single `runs.downloadAudit(workspaceSlug, runId, { format })`,
   where `format` is `csv` (default) or `json`, matching the merged
   `GET /runs/{runId}/audit` endpoint
-- **Breaking:** `activities.listActivities()` now takes a required `limit` and
-  accepts `after` (a `Cursor`) and `include_count`, matching the endpoint's
-  query
 
 ## [0.31.0] - 2026-08-18
 

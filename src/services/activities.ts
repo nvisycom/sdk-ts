@@ -2,7 +2,7 @@ import type { ApiClient } from "@/client.js";
 import type {
 	ActivityExportQuery,
 	ActivityPage,
-	Cursor,
+	CursorPagination,
 } from "@/datatypes/index.js";
 
 /**
@@ -18,14 +18,13 @@ export class Activities {
 	/**
 	 * List activities for a workspace
 	 * @param workspaceSlug - Workspace slug
-	 * @param query - Pagination: `limit` (required), plus optional `after`
-	 *   (a `Cursor`) and `include_count`
+	 * @param query - Optional pagination (limit, after)
 	 * @returns Promise that resolves with a paginated list of activities
 	 * @throws {ApiError} if the request fails
 	 */
 	async listActivities(
 		workspaceSlug: string,
-		query: { limit: number; after?: Cursor; include_count?: boolean },
+		query?: CursorPagination,
 	): Promise<ActivityPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/activities/",
