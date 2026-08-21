@@ -1,8 +1,10 @@
 export { Account } from "@/services/account.js";
 export { Activities } from "@/services/activities.js";
+export { Analytics } from "@/services/analytics.js";
 export { ApiTokens } from "@/services/api-tokens.js";
 export { Auth } from "@/services/auth.js";
 export { Catalog } from "@/services/catalog.js";
+export { Chat } from "@/services/chat.js";
 export { Connections } from "@/services/connections.js";
 export { Files } from "@/services/files.js";
 export { Invites } from "@/services/invites.js";

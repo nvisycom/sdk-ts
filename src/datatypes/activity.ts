@@ -4,6 +4,8 @@ type Schemas = components["schemas"];
 
 export type Activity = Schemas["Activity"];
 export type ActivityPage = Schemas["ActivityPage"];
+// Query for the activity-log export (date window + output format).
+export type ActivityExportQuery = Schemas["ActivityExportQuery"];
 
 // Activity payload: a discriminated union (on `activityType`) whose per-event
 // data lives in a named `*ActivityParams` type.

@@ -24,9 +24,11 @@ import type { paths } from "@/schema/api.js";
 import {
 	Account,
 	Activities,
+	Analytics,
 	ApiTokens,
 	Auth,
 	Catalog,
+	Chat,
 	Connections,
 	Files,
 	Invites,
@@ -237,6 +239,20 @@ export class Nvisy {
 	 */
 	get activities(): Activities {
 		return new Activities(this.#api);
+	}
+
+	/**
+	 * Service for workspace analytics.
+	 */
+	get analytics(): Analytics {
+		return new Analytics(this.#api);
+	}
+
+	/**
+	 * Service for the workspace assistant chat.
+	 */
+	get chat(): Chat {
+		return new Chat(this.#api);
 	}
 
 	/**
