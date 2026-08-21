@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { Chat } from "@/services/chat.js";
 import { NvisyError } from "@/errors.js";
+import { Chat } from "@/services/chat.js";
 
 /** Build a Response whose body streams the given SSE text as one chunk. */
 function sseResponse(text: string): Response {
@@ -40,7 +40,7 @@ describe("Chat.streamMessage", () => {
 
 	it("ignores non-token frames", async () => {
 		const chat = chatWithStream(
-			": keep-alive\n\nevent: token\ndata: {\"delta\":\"x\"}\n\n",
+			': keep-alive\n\nevent: token\ndata: {"delta":"x"}\n\n',
 		);
 		const deltas: string[] = [];
 		for await (const t of chat.streamMessage("ws", "s1", send)) {

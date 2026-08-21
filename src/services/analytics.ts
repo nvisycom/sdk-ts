@@ -1,8 +1,5 @@
 import type { ApiClient } from "@/client.js";
-import type {
-	RunTimeSeries,
-	WorkspaceAnalytics,
-} from "@/datatypes/index.js";
+import type { RunTimeSeries, WorkspaceAnalytics } from "@/datatypes/index.js";
 
 /**
  * Service for workspace analytics: aggregate totals and run time series.
