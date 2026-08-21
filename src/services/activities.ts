@@ -18,7 +18,8 @@ export class Activities {
 	/**
 	 * List activities for a workspace
 	 * @param workspaceSlug - Workspace slug
-	 * @param query - Optional pagination (limit, after, includeCount)
+	 * @param query - Pagination: `limit` (required), plus optional `after`
+	 *   (a `Cursor`) and `include_count`
 	 * @returns Promise that resolves with a paginated list of activities
 	 * @throws {ApiError} if the request fails
 	 */

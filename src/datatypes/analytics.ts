@@ -23,7 +23,6 @@ export type TokenCounts = Schemas["TokenCounts"];
 export type ProviderType = Schemas["ProviderType"];
 export type RecognizerId = Schemas["RecognizerId"];
 
-// Daily pipeline-run activity over a date window.
+// Daily pipeline-run activity over a date window (`DateWindow`, in `export`).
 export type RunTimeSeries = Schemas["RunTimeSeries"];
 export type RunDayEntry = Schemas["RunDayEntry"];
-export type DateWindow = Schemas["DateWindow"];

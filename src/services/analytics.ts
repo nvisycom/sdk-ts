@@ -1,5 +1,9 @@
 import type { ApiClient } from "@/client.js";
-import type { RunTimeSeries, WorkspaceAnalytics } from "@/datatypes/index.js";
+import type {
+	DateWindow,
+	RunTimeSeries,
+	WorkspaceAnalytics,
+} from "@/datatypes/index.js";
 
 /**
  * Service for workspace analytics: aggregate totals and run time series.
@@ -36,7 +40,7 @@ export class Analytics {
 	 */
 	async getRunTimeSeries(
 		workspaceSlug: string,
-		query?: { from?: string; to?: string },
+		query?: DateWindow,
 	): Promise<RunTimeSeries> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/analytics/runs/timeseries/",
