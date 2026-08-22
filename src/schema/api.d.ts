@@ -1227,16 +1227,23 @@ export interface paths {
 		};
 		/**
 		 * List workspace activities
-		 * @description Returns the workspace's activity log, most recent first, cursor-paginated.
+		 * @description Returns the workspace's activity log, most recent first, cursor-paginated. Optional filters: `type` (repeatable, e.g. `file.created`), `actor` (an account id), and a `from`/`to` day range (each bound narrows only when given; the feed is otherwise all-time).
 		 */
 		get: {
 			parameters: {
 				query?: {
+					/** @description Keep only activities performed by this account. Omit for any actor. */
+					actor?: string;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
 					 */
 					after?: string;
+					/**
+					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
+					 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
+					 */
+					from?: string;
 					/**
 					 * @description Whether to include the total item count in the response's `total` field.
 					 *     Defaults to `false`, since counting is an extra query; set it to `true`
@@ -1245,6 +1252,14 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
+					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
+					to?: string;
+					/**
+					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+					 *     parameter for several; omit for no type constraint. The field is `types`
+					 *     since `type` is a reserved word.
+					 */
+					type?: components["schemas"]["ActivityType"][];
 				};
 				header?: never;
 				path: {
@@ -1319,11 +1334,13 @@ export interface paths {
 		};
 		/**
 		 * Export workspace activities
-		 * @description Exports a workspace's activity log over a date window as a downloadable file. The window is `from`/`to` (inclusive, YYYY-MM-DD); it defaults to the last 30 days and is capped at 366 days. `format` is `csv` (default) or `json`. Each activity is a flat row: timestamp, the type split into object/action, the actor, and the acted-on object's id and label, oldest first. At most 100,000 rows are returned (the oldest in the window); a truncated export sets the `X-Export-Truncated` response header.
+		 * @description Exports a workspace's activity log over a date window as a downloadable file. The window is `from`/`to` (inclusive, YYYY-MM-DD); it defaults to the last 30 days and is capped at 366 days. The same `type` (repeatable) and `actor` filters as the feed apply. `format` is `csv` (default) or `json`. Each activity is a flat row: timestamp, the type split into object/action, the actor, and the acted-on object's id and label, oldest first. At most 100,000 rows are returned (the oldest in the window); a truncated export sets the `X-Export-Truncated` response header.
 		 */
 		get: {
 			parameters: {
 				query?: {
+					/** @description Keep only activities performed by this account. Omit for any actor. */
+					actor?: string;
 					/** @description Output format; defaults to `csv`. */
 					format?: components["schemas"]["ExportFormat"];
 					/**
@@ -1333,6 +1350,12 @@ export interface paths {
 					from?: string;
 					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
 					to?: string;
+					/**
+					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+					 *     parameter for several; omit for no type constraint. The field is `types`
+					 *     since `type` is a reserved word.
+					 */
+					type?: components["schemas"]["ActivityType"][];
 				};
 				header?: never;
 				path: {
@@ -8690,10 +8713,16 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description Query parameters for the activity export: a `from`/`to` day range (inclusive)
-		 *     and the output `format`. See [`DateWindow`] for the range defaults and bounds.
+		 * @description Query parameters for the activity export: the type/actor filter, a bounded date
+		 *     window (defaulted and capped, since the export materializes rows), and the
+		 *     output `format`. See [`DateWindow`] for the range defaults and bounds.
 		 */
 		ActivityExportQuery: {
+			/**
+			 * Format: uuid
+			 * @description Keep only activities performed by this account. Omit for any actor.
+			 */
+			actor?: string;
 			/** @description Output format; defaults to `csv`. */
 			format?: components["schemas"]["ExportFormat"];
 			/**
@@ -8707,6 +8736,58 @@ export interface components {
 			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
 			 */
 			to?: string;
+			/**
+			 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+			 *     parameter for several; omit for no type constraint. The field is `types`
+			 *     since `type` is a reserved word.
+			 */
+			type?: components["schemas"]["ActivityType"][];
+		};
+		/**
+		 * @description Query parameters for the activity feed: the type/actor filter, an optional date
+		 *     window (narrows only when given — the feed is otherwise all-time), and cursor
+		 *     pagination.
+		 */
+		ActivityListQuery: {
+			/**
+			 * Format: uuid
+			 * @description Keep only activities performed by this account. Omit for any actor.
+			 */
+			actor?: string;
+			/**
+			 * @description Cursor pointing to the last item of the previous page.
+			 *     Obtain this from the `nextCursor` field in the response.
+			 */
+			after?: string;
+			/**
+			 * Format: date
+			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
+			 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
+			 */
+			from?: string;
+			/**
+			 * @description Whether to include the total item count in the response's `total` field.
+			 *     Defaults to `false`, since counting is an extra query; set it to `true`
+			 *     only when the count is actually needed.
+			 * @default false
+			 */
+			includeCount?: boolean;
+			/**
+			 * Format: uint32
+			 * @description The maximum number of records to return (1-100, default: 20).
+			 */
+			limit?: number;
+			/**
+			 * Format: date
+			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
+			 */
+			to?: string;
+			/**
+			 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+			 *     parameter for several; omit for no type constraint. The field is `types`
+			 *     since `type` is a reserved word.
+			 */
+			type?: components["schemas"]["ActivityType"][];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -8727,145 +8808,215 @@ export interface components {
 			total?: number;
 		};
 		/**
-		 * @description The typed payload of an audit-log activity, tagged by `activityType`.
+		 * @description The typed payload of an audit-log activity, tagged by `type` with its params
+		 *     under `data` (the same `{type, data}` envelope the notification payload and
+		 *     outbox event use).
 		 *
 		 *     Each variant is one activity type carrying its own params. No rendered text is
-		 *     included — the client localizes the copy from `activityType` and the params.
-		 *     The `activityType` values match the `ACTIVITY_TYPE` enum.
+		 *     included — the client localizes the copy from `type` and the params. The `type`
+		 *     values match the `ACTIVITY_TYPE` enum.
 		 */
 		ActivityPayload:
-			| ({
+			| {
+					data: components["schemas"]["WorkspaceActivityParams"];
 					/** @constant */
-					activityType: "workspace.created";
-			  } & components["schemas"]["WorkspaceActivityParams"])
-			| ({
+					type: "workspace.created";
+			  }
+			| {
+					data: components["schemas"]["WorkspaceActivityParams"];
 					/** @constant */
-					activityType: "workspace.updated";
-			  } & components["schemas"]["WorkspaceActivityParams"])
-			| ({
+					type: "workspace.updated";
+			  }
+			| {
+					data: components["schemas"]["WorkspaceActivityParams"];
 					/** @constant */
-					activityType: "workspace.deleted";
-			  } & components["schemas"]["WorkspaceActivityParams"])
-			| ({
+					type: "workspace.deleted";
+			  }
+			| {
+					data: components["schemas"]["MemberActivityParams"];
 					/** @constant */
-					activityType: "member.added";
-			  } & components["schemas"]["MemberActivityParams"])
-			| ({
+					type: "member.added";
+			  }
+			| {
+					data: components["schemas"]["MemberActivityParams"];
 					/** @constant */
-					activityType: "member.updated";
-			  } & components["schemas"]["MemberActivityParams"])
-			| ({
+					type: "member.updated";
+			  }
+			| {
+					data: components["schemas"]["MemberActivityParams"];
 					/** @constant */
-					activityType: "member.deleted";
-			  } & components["schemas"]["MemberActivityParams"])
-			| ({
+					type: "member.deleted";
+			  }
+			| {
+					data: components["schemas"]["InviteActivityParams"];
 					/** @constant */
-					activityType: "invite.created";
-			  } & components["schemas"]["InviteActivityParams"])
-			| ({
+					type: "invite.created";
+			  }
+			| {
+					data: components["schemas"]["InviteActivityParams"];
 					/** @constant */
-					activityType: "invite.accepted";
-			  } & components["schemas"]["InviteActivityParams"])
-			| ({
+					type: "invite.accepted";
+			  }
+			| {
+					data: components["schemas"]["InviteActivityParams"];
 					/** @constant */
-					activityType: "invite.declined";
-			  } & components["schemas"]["InviteActivityParams"])
-			| ({
+					type: "invite.declined";
+			  }
+			| {
+					data: components["schemas"]["InviteActivityParams"];
 					/** @constant */
-					activityType: "invite.canceled";
-			  } & components["schemas"]["InviteActivityParams"])
-			| ({
+					type: "invite.canceled";
+			  }
+			| {
+					data: components["schemas"]["ConnectionActivityParams"];
 					/** @constant */
-					activityType: "connection.created";
-			  } & components["schemas"]["ConnectionActivityParams"])
-			| ({
+					type: "connection.created";
+			  }
+			| {
+					data: components["schemas"]["ConnectionActivityParams"];
 					/** @constant */
-					activityType: "connection.updated";
-			  } & components["schemas"]["ConnectionActivityParams"])
-			| ({
+					type: "connection.updated";
+			  }
+			| {
+					data: components["schemas"]["ConnectionActivityParams"];
 					/** @constant */
-					activityType: "connection.deleted";
-			  } & components["schemas"]["ConnectionActivityParams"])
-			| ({
+					type: "connection.deleted";
+			  }
+			| {
+					data: components["schemas"]["ConnectionActivityParams"];
 					/** @constant */
-					activityType: "connection.sync.completed";
-			  } & components["schemas"]["ConnectionActivityParams"])
-			| ({
+					type: "connection.sync.started";
+			  }
+			| {
+					data: components["schemas"]["ConnectionActivityParams"];
 					/** @constant */
-					activityType: "connection.sync.failed";
-			  } & components["schemas"]["ConnectionActivityParams"])
-			| ({
+					type: "connection.sync.completed";
+			  }
+			| {
+					data: components["schemas"]["ConnectionActivityParams"];
 					/** @constant */
-					activityType: "webhook.created";
-			  } & components["schemas"]["WebhookActivityParams"])
-			| ({
+					type: "connection.sync.failed";
+			  }
+			| {
+					data: components["schemas"]["WebhookActivityParams"];
 					/** @constant */
-					activityType: "webhook.updated";
-			  } & components["schemas"]["WebhookActivityParams"])
-			| ({
+					type: "webhook.created";
+			  }
+			| {
+					data: components["schemas"]["WebhookActivityParams"];
 					/** @constant */
-					activityType: "webhook.deleted";
-			  } & components["schemas"]["WebhookActivityParams"])
-			| ({
+					type: "webhook.updated";
+			  }
+			| {
+					data: components["schemas"]["WebhookActivityParams"];
 					/** @constant */
-					activityType: "webhook.triggered";
-			  } & components["schemas"]["WebhookActivityParams"])
-			| ({
+					type: "webhook.deleted";
+			  }
+			| {
+					data: components["schemas"]["FileActivityParams"];
 					/** @constant */
-					activityType: "file.created";
-			  } & components["schemas"]["FileActivityParams"])
-			| ({
+					type: "file.created";
+			  }
+			| {
+					data: components["schemas"]["FileActivityParams"];
 					/** @constant */
-					activityType: "file.updated";
-			  } & components["schemas"]["FileActivityParams"])
-			| ({
+					type: "file.updated";
+			  }
+			| {
+					data: components["schemas"]["FileActivityParams"];
 					/** @constant */
-					activityType: "file.deleted";
-			  } & components["schemas"]["FileActivityParams"])
-			| ({
+					type: "file.deleted";
+			  }
+			| {
+					data: components["schemas"]["PipelineActivityParams"];
 					/** @constant */
-					activityType: "file.verified";
-			  } & components["schemas"]["FileActivityParams"])
-			| ({
+					type: "pipeline.created";
+			  }
+			| {
+					data: components["schemas"]["PipelineActivityParams"];
 					/** @constant */
-					activityType: "pipeline.created";
-			  } & components["schemas"]["PipelineActivityParams"])
-			| ({
+					type: "pipeline.updated";
+			  }
+			| {
+					data: components["schemas"]["PipelineActivityParams"];
 					/** @constant */
-					activityType: "pipeline.updated";
-			  } & components["schemas"]["PipelineActivityParams"])
-			| ({
+					type: "pipeline.deleted";
+			  }
+			| {
+					data: components["schemas"]["PipelineRunActivityParams"];
 					/** @constant */
-					activityType: "pipeline.deleted";
-			  } & components["schemas"]["PipelineActivityParams"])
-			| ({
+					type: "pipeline.run.started";
+			  }
+			| {
+					data: components["schemas"]["PipelineRunActivityParams"];
 					/** @constant */
-					activityType: "pipeline.run.started";
-			  } & components["schemas"]["PipelineRunActivityParams"])
-			| ({
+					type: "pipeline.run.analyzed";
+			  }
+			| {
+					data: components["schemas"]["PipelineRunActivityParams"];
 					/** @constant */
-					activityType: "pipeline.run.analyzed";
-			  } & components["schemas"]["PipelineRunActivityParams"])
-			| ({
+					type: "pipeline.run.completed";
+			  }
+			| {
+					data: components["schemas"]["PipelineRunActivityParams"];
 					/** @constant */
-					activityType: "pipeline.run.completed";
-			  } & components["schemas"]["PipelineRunActivityParams"])
-			| ({
+					type: "pipeline.run.failed";
+			  }
+			| {
+					data: components["schemas"]["PolicyActivityParams"];
 					/** @constant */
-					activityType: "pipeline.run.failed";
-			  } & components["schemas"]["PipelineRunActivityParams"])
-			| ({
+					type: "policy.created";
+			  }
+			| {
+					data: components["schemas"]["PolicyActivityParams"];
 					/** @constant */
-					activityType: "policy.created";
-			  } & components["schemas"]["PolicyActivityParams"])
-			| ({
+					type: "policy.updated";
+			  }
+			| {
+					data: components["schemas"]["PolicyActivityParams"];
 					/** @constant */
-					activityType: "policy.updated";
-			  } & components["schemas"]["PolicyActivityParams"])
-			| ({
-					/** @constant */
-					activityType: "policy.deleted";
-			  } & components["schemas"]["PolicyActivityParams"]);
+					type: "policy.deleted";
+			  };
+		/**
+		 * @description Defines the type of activity performed in a workspace for audit logging.
+		 *
+		 *     This enumeration corresponds to the `ACTIVITY_TYPE` PostgreSQL enum and is used
+		 *     to categorize different types of activities that occur within workspaces for comprehensive
+		 *     audit trail and activity tracking.
+		 */
+		ActivityType:
+			| "workspace.created"
+			| "workspace.updated"
+			| "workspace.deleted"
+			| "member.added"
+			| "member.updated"
+			| "member.deleted"
+			| "invite.created"
+			| "invite.accepted"
+			| "invite.declined"
+			| "invite.canceled"
+			| "connection.created"
+			| "connection.updated"
+			| "connection.deleted"
+			| "connection.sync.started"
+			| "connection.sync.completed"
+			| "connection.sync.failed"
+			| "webhook.created"
+			| "webhook.updated"
+			| "webhook.deleted"
+			| "file.created"
+			| "file.updated"
+			| "file.deleted"
+			| "pipeline.created"
+			| "pipeline.updated"
+			| "pipeline.deleted"
+			| "pipeline.run.started"
+			| "pipeline.run.analyzed"
+			| "pipeline.run.completed"
+			| "pipeline.run.failed"
+			| "policy.created"
+			| "policy.updated"
+			| "policy.deleted";
 		/** @description Anthropic API credentials. */
 		AnthropicCredentials: {
 			/** @description Anthropic API key. */
@@ -9871,11 +10022,10 @@ export interface components {
 		};
 		/** @description Params of a connection activity (`connection.*`). */
 		ConnectionActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the connection.
-			 */
-			connectionId: string;
+			/** @description Id of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Display name of the connection. */
+			connectionName: string;
 		};
 		/**
 		 * @description A fully-typed connection configuration for any capability.
@@ -9958,11 +10108,10 @@ export interface components {
 		};
 		/** @description Params of a `connection.sync.completed` notification. */
 		ConnectionSyncCompletedParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the connection that synced.
-			 */
-			connectionId: string;
+			/** @description Id of the connection that synced. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Display name of the connection that synced. */
+			connectionName: string;
 			/**
 			 * Format: int64
 			 * @description Number of records synced, if known.
@@ -9971,11 +10120,10 @@ export interface components {
 		};
 		/** @description Params of a `connection.sync.failed` notification. */
 		ConnectionSyncFailedParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the connection that failed to sync.
-			 */
-			connectionId: string;
+			/** @description Id of the connection that failed to sync. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Display name of the connection that failed to sync. */
+			connectionName: string;
 			/** @description Failure reason, if available. */
 			error?: string;
 		};
@@ -11097,8 +11245,11 @@ export interface components {
 		};
 		/** @description Params of an invite activity (`invite.*`). */
 		InviteActivityParams: {
-			/** @description Email the invite was addressed to. */
-			email: string;
+			/**
+			 * @description Email the invite was addressed to, when it recorded one. `None` keeps an
+			 *     absent address distinct from a blank one.
+			 */
+			email?: string;
 			/**
 			 * Format: uuid
 			 * @description Id of the invite.
@@ -11584,16 +11735,16 @@ export interface components {
 		/** @description Params of a `member.invited` notification. */
 		MemberInvitedParams: {
 			/** @description Username of the account that sent the invite, if known. */
-			invitedBy?: string;
+			invitedBy?: components["schemas"]["Handle"];
 			/** @description Slug of the workspace the account was invited to. */
-			workspaceSlug: string;
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Params of a `member.joined` notification. */
 		MemberJoinedParams: {
 			/** @description Username of the member that joined. */
-			memberUsername: string;
+			memberUsername: components["schemas"]["Handle"];
 			/** @description Slug of the workspace the member joined. */
-			workspaceSlug: string;
+			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -11736,9 +11887,7 @@ export interface components {
 			| "connection.sync.failed"
 			| "pipeline.run.analyzed"
 			| "pipeline.run.completed"
-			| "pipeline.run.failed"
-			| "system.announcement"
-			| "system.report";
+			| "pipeline.run.failed";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -11771,49 +11920,49 @@ export interface components {
 			notificationId: string;
 		};
 		/**
-		 * @description The typed payload of a notification, tagged by `notifyType`.
+		 * @description The typed payload of a notification, tagged by `type` with its params under
+		 *     `data` (the same `{type, data}` envelope the activity log and outbox event use).
 		 *
 		 *     Each variant is one notification type carrying its own params struct. The
-		 *     `notifyType` values match [`NotificationEvent`], so the same key drives the
-		 *     member's per-event preferences.
+		 *     `type` values match `NotificationEvent`, so the same key drives the member's
+		 *     per-event preferences.
 		 */
 		NotificationPayload:
-			| ({
+			| {
+					data: components["schemas"]["MemberInvitedParams"];
 					/** @constant */
-					notifyType: "member.invited";
-			  } & components["schemas"]["MemberInvitedParams"])
-			| ({
+					type: "member.invited";
+			  }
+			| {
+					data: components["schemas"]["MemberJoinedParams"];
 					/** @constant */
-					notifyType: "member.joined";
-			  } & components["schemas"]["MemberJoinedParams"])
-			| ({
+					type: "member.joined";
+			  }
+			| {
+					data: components["schemas"]["ConnectionSyncCompletedParams"];
 					/** @constant */
-					notifyType: "connection.sync.completed";
-			  } & components["schemas"]["ConnectionSyncCompletedParams"])
-			| ({
+					type: "connection.sync.completed";
+			  }
+			| {
+					data: components["schemas"]["ConnectionSyncFailedParams"];
 					/** @constant */
-					notifyType: "connection.sync.failed";
-			  } & components["schemas"]["ConnectionSyncFailedParams"])
-			| ({
+					type: "connection.sync.failed";
+			  }
+			| {
+					data: components["schemas"]["PipelineRunAnalyzedParams"];
 					/** @constant */
-					notifyType: "pipeline.run.analyzed";
-			  } & components["schemas"]["PipelineRunAnalyzedParams"])
-			| ({
+					type: "pipeline.run.analyzed";
+			  }
+			| {
+					data: components["schemas"]["PipelineRunCompletedParams"];
 					/** @constant */
-					notifyType: "pipeline.run.completed";
-			  } & components["schemas"]["PipelineRunCompletedParams"])
-			| ({
+					type: "pipeline.run.completed";
+			  }
+			| {
+					data: components["schemas"]["PipelineRunFailedParams"];
 					/** @constant */
-					notifyType: "pipeline.run.failed";
-			  } & components["schemas"]["PipelineRunFailedParams"])
-			| ({
-					/** @constant */
-					notifyType: "system.announcement";
-			  } & components["schemas"]["SystemAnnouncementParams"])
-			| ({
-					/** @constant */
-					notifyType: "system.report";
-			  } & components["schemas"]["SystemReportParams"]);
+					type: "pipeline.run.failed";
+			  };
 		/** @description Response for notification settings within a workspace. */
 		NotificationSettings: {
 			/** @description Notification events to receive in-app. */
@@ -12075,35 +12224,26 @@ export interface components {
 		PipelineRunActivityParams: {
 			/** @description Slug of the owning pipeline. */
 			pipelineSlug: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Id of the run.
-			 */
-			runId: string;
+			/** @description Id of the run. */
+			runId: components["schemas"]["RunId"];
 		};
 		/** @description Params of a `pipeline.run.analyzed` notification. */
 		PipelineRunAnalyzedParams: {
 			/** @description Display name of the analyzed file, if known. */
 			inputFileName?: string;
 			/** @description Slug of the owning pipeline. */
-			pipelineSlug: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the run.
-			 */
-			runId: string;
+			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Id of the run. */
+			runId: components["schemas"]["RunId"];
 		};
 		/** @description Params of a `pipeline.run.completed` notification. */
 		PipelineRunCompletedParams: {
 			/** @description Display name of the analyzed file, if known. */
 			inputFileName?: string;
 			/** @description Slug of the owning pipeline. */
-			pipelineSlug: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the run.
-			 */
-			runId: string;
+			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Id of the run. */
+			runId: components["schemas"]["RunId"];
 		};
 		/** @description Params of a `pipeline.run.failed` notification. */
 		PipelineRunFailedParams: {
@@ -12112,12 +12252,9 @@ export interface components {
 			/** @description Display name of the analyzed file, if known. */
 			inputFileName?: string;
 			/** @description Slug of the owning pipeline. */
-			pipelineSlug: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the run.
-			 */
-			runId: string;
+			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Id of the run. */
+			runId: components["schemas"]["RunId"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -12291,6 +12428,8 @@ export interface components {
 			 * @description Id of the policy.
 			 */
 			policyId: string;
+			/** @description Slug of the policy. */
+			policySlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description A named governance policy.
@@ -13379,19 +13518,6 @@ export interface components {
 		 *     to track whether a run was manually triggered, scheduled, or triggered by a webhook.
 		 */
 		SyncTriggerType: "manual" | "scheduled" | "webhook";
-		/** @description Params of a `system.announcement` notification. */
-		SystemAnnouncementParams: {
-			/** @description Announcement message key or body. */
-			message: string;
-		};
-		/** @description Params of a `system.report` notification. */
-		SystemReportParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the generated report, if any.
-			 */
-			reportId?: string;
-		};
 		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
@@ -14800,11 +14926,10 @@ export interface components {
 		};
 		/** @description Params of a webhook activity (`webhook.*`). */
 		WebhookActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the webhook.
-			 */
-			webhookId: string;
+			/** @description Id of the webhook. */
+			webhookId: components["schemas"]["WebhookId"];
+			/** @description Display name of the webhook. */
+			webhookName: string;
 		};
 		/**
 		 * @description Webhook creation response that includes the secret (visible only once).

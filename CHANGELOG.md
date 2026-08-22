@@ -8,6 +8,27 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.33.0] - 2026-08-18
+
+### Added
+
+- `ActivityListQuery` and `ActivityType` datatypes. `activities.listActivities()`
+  now accepts the feed's filters (`type`, `actor`, `from`, `to`) alongside
+  pagination (`limit`, `after`, `includeCount`); `type` is an `ActivityType[]`
+  and is also usable on `activities.exportActivities()`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** `activities.listActivities()` now takes an `ActivityListQuery`
+  (filters + pagination) rather than a plain cursor-pagination object
+
+### Removed
+
+- **Breaking:** the `SystemAnnouncementParams` and `SystemReportParams`
+  notification-payload datatypes; the platform no longer emits the
+  `system:announcement` / `system:report` notification variants
+
 ## [0.32.0] - 2026-08-18
 
 ### Added
@@ -666,7 +687,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.32.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.33.0...HEAD
+[0.33.0]: https://github.com/nvisycom/sdk-ts/compare/v0.32.0...v0.33.0
 [0.32.0]: https://github.com/nvisycom/sdk-ts/compare/v0.31.0...v0.32.0
 [0.31.0]: https://github.com/nvisycom/sdk-ts/compare/v0.30.0...v0.31.0
 [0.30.0]: https://github.com/nvisycom/sdk-ts/compare/v0.29.0...v0.30.0

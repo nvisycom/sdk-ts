@@ -23,5 +23,3 @@ export type ConnectionSyncFailedParams = Schemas["ConnectionSyncFailedParams"];
 export type PipelineRunAnalyzedParams = Schemas["PipelineRunAnalyzedParams"];
 export type PipelineRunCompletedParams = Schemas["PipelineRunCompletedParams"];
 export type PipelineRunFailedParams = Schemas["PipelineRunFailedParams"];
-export type SystemAnnouncementParams = Schemas["SystemAnnouncementParams"];
-export type SystemReportParams = Schemas["SystemReportParams"];
