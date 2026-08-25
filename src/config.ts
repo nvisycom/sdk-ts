@@ -8,11 +8,20 @@
  */
 
 /**
+ * Compile-time version token, replaced with the `package.json` version by the
+ * build (see `tsdown.config.ts`). Declared so it type-checks; the `typeof`
+ * guard below keeps it safe when the define isn't applied (tests, direct `tsc`).
+ */
+declare const __SDK_VERSION__: string | undefined;
+
+/**
  * Current SDK version.
  *
- * Used in the default user agent string and for version tracking.
+ * Injected from `package.json` at build time, so it always matches the
+ * published version. Used in the default user agent string.
  */
-export const VERSION = "0.3.0";
+export const VERSION =
+	typeof __SDK_VERSION__ === "string" ? __SDK_VERSION__ : "0.0.0-dev";
 
 /**
  * Configuration options for creating a Nvisy client.

@@ -39,9 +39,10 @@ export class Activities {
 	}
 
 	/**
-	 * Export the workspace's activity log over a date window as a file.
+	 * Export the workspace's activity log as a file.
 	 * @param workspaceSlug - Workspace slug
-	 * @param query - Optional date window and output format (`csv` default, or `json`)
+	 * @param query - Optional filters (type, actor), date window (from, to), and
+	 *   output format (`csv` default, or `json`)
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */

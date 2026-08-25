@@ -24,6 +24,9 @@ and this project adheres to
 ### Changed
 
 - Regenerated the API schema against the updated platform handlers
+- The default user-agent version is now injected from `package.json` at build
+  time, so it always matches the published version (previously a hand-maintained
+  constant that had drifted)
 - **Breaking:** the `Audit` datatype is now exported from the audit module
   (unchanged import path via the package root and `@nvisy/sdk/datatypes`)
 - **Breaking:** the activity feed's query datatypes are renamed —
