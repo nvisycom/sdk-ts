@@ -1,6 +1,15 @@
+import { createRequire } from "node:module";
 import { defineConfig } from "tsdown";
 
+const { version } = createRequire(import.meta.url)("./package.json");
+
 export default defineConfig({
+	// Inject the package version at build time so it never drifts from
+	// package.json (used for the default user agent).
+	define: {
+		__SDK_VERSION__: JSON.stringify(version),
+	},
+
 	// Entry and format configuration
 	entry: [
 		"src/index.ts",

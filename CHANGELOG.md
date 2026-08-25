@@ -8,6 +8,39 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.34.0] - 2026-08-18
+
+### Added
+
+- The redesigned detection-result model reachable from `Audit`: the document
+  container (`DocumentContext`, `CodecParams`, `Report`), reviewer edits
+  (`EditSet`), the redaction decision (`Redaction`, `Selection`, `Suppress`,
+  `ManualIntent`), attribution rationales (`CitedAttribution`,
+  `FreeformAttribution`), reconciliation events (`Conflict`, `Contested`,
+  `Deduplication`, `Calibration`), and the per-modality event kinds for text,
+  image, audio, and tabular content (`*Model`, `*Pattern`, `*Manual`, `*Edit`,
+  `*Add`, `*Redact`, `*Refinement`, `*Retag`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- The default user-agent version is now injected from `package.json` at build
+  time, so it always matches the published version (previously a hand-maintained
+  constant that had drifted)
+- **Breaking:** the `Audit` datatype is now exported from the audit module
+  (unchanged import path via the package root and `@nvisy/sdk/datatypes`)
+- **Breaking:** the activity feed's query datatypes are renamed —
+  `ActivityListQuery` → `ActivityFilterQuery` and `ActivityExportQuery` →
+  `ActivityExportOptions` — now composed with the date window and pagination by
+  `listActivities()` / `exportActivities()`
+
+### Removed
+
+- **Breaking:** detection-model datatypes the platform no longer exposes:
+  `EntityGroup`, `AuditContext`, `AttributionKind`, `Review`, the per-modality
+  `*EntityRecord` types (`TextEntityRecord`, `ImageEntityRecord`,
+  `AudioEntityRecord`, `TabularEntityRecord`), and `ScopeParams`
+
 ## [0.33.0] - 2026-08-18
 
 ### Added
@@ -687,7 +720,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.33.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.34.0...HEAD
+[0.34.0]: https://github.com/nvisycom/sdk-ts/compare/v0.33.0...v0.34.0
 [0.33.0]: https://github.com/nvisycom/sdk-ts/compare/v0.32.0...v0.33.0
 [0.32.0]: https://github.com/nvisycom/sdk-ts/compare/v0.31.0...v0.32.0
 [0.31.0]: https://github.com/nvisycom/sdk-ts/compare/v0.30.0...v0.31.0

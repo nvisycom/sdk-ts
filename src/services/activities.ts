@@ -1,8 +1,10 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	ActivityExportQuery,
-	ActivityListQuery,
+	ActivityExportOptions,
+	ActivityFilterQuery,
 	ActivityPage,
+	CursorPagination,
+	DateWindow,
 } from "@/datatypes/index.js";
 
 /**
@@ -25,7 +27,7 @@ export class Activities {
 	 */
 	async listActivities(
 		workspaceSlug: string,
-		query?: ActivityListQuery,
+		query?: ActivityFilterQuery & DateWindow & CursorPagination,
 	): Promise<ActivityPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/activities/",
@@ -37,15 +39,16 @@ export class Activities {
 	}
 
 	/**
-	 * Export the workspace's activity log over a date window as a file.
+	 * Export the workspace's activity log as a file.
 	 * @param workspaceSlug - Workspace slug
-	 * @param query - Optional date window and output format (`csv` default, or `json`)
+	 * @param query - Optional filters (type, actor), date window (from, to), and
+	 *   output format (`csv` default, or `json`)
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */
 	async exportActivities(
 		workspaceSlug: string,
-		query?: ActivityExportQuery,
+		query?: ActivityFilterQuery & DateWindow & ActivityExportOptions,
 	): Promise<Response> {
 		const { response } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/activities/export",

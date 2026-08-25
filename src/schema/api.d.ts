@@ -1227,23 +1227,30 @@ export interface paths {
 		};
 		/**
 		 * List workspace activities
-		 * @description Returns the workspace's activity log, most recent first, cursor-paginated. Optional filters: `type` (repeatable, e.g. `file.created`), `actor` (an account id), and a `from`/`to` day range (each bound narrows only when given; the feed is otherwise all-time).
+		 * @description Returns the workspace's activity log, most recent first, cursor-paginated. Optional filters: `type` (repeatable, e.g. `file.created`), `actor` (a username), and a `from`/`to` day range (each bound narrows only when given; the feed is otherwise all-time).
 		 */
 		get: {
 			parameters: {
 				query?: {
-					/** @description Keep only activities performed by this account. Omit for any actor. */
-					actor?: string;
+					/** @description Username of the account whose activities to keep. Omit for any actor. */
+					actor?: components["schemas"]["Handle"];
 					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
+					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+					 *     parameter for several; omit for no type constraint.
 					 */
-					after?: string;
+					type?: components["schemas"]["ActivityType"][];
 					/**
 					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
 					 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
 					 */
 					from?: string;
+					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
+					to?: string;
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
 					/**
 					 * @description Whether to include the total item count in the response's `total` field.
 					 *     Defaults to `false`, since counting is an extra query; set it to `true`
@@ -1252,14 +1259,6 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
-					to?: string;
-					/**
-					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
-					 *     parameter for several; omit for no type constraint. The field is `types`
-					 *     since `type` is a reserved word.
-					 */
-					type?: components["schemas"]["ActivityType"][];
 				};
 				header?: never;
 				path: {
@@ -1339,10 +1338,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Keep only activities performed by this account. Omit for any actor. */
-					actor?: string;
-					/** @description Output format; defaults to `csv`. */
-					format?: components["schemas"]["ExportFormat"];
+					/** @description Username of the account whose activities to keep. Omit for any actor. */
+					actor?: components["schemas"]["Handle"];
+					/**
+					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+					 *     parameter for several; omit for no type constraint.
+					 */
+					type?: components["schemas"]["ActivityType"][];
 					/**
 					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
 					 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
@@ -1350,12 +1352,8 @@ export interface paths {
 					from?: string;
 					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
 					to?: string;
-					/**
-					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
-					 *     parameter for several; omit for no type constraint. The field is `types`
-					 *     since `type` is a reserved word.
-					 */
-					type?: components["schemas"]["ActivityType"][];
+					/** @description Output format; defaults to `csv`. */
+					format?: components["schemas"]["ExportFormat"];
 				};
 				header?: never;
 				path: {
@@ -5441,22 +5439,34 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description What detection found in one document.
+				 * @description What detection found in one document, plus what a reviewer
+				 *     decided about it.
 				 *
-				 *     The body group plus per-container-part groups (each tagged by
-				 *     modality) plus the recognition [`AuditContext`] the entities
-				 *     were scored against.
+				 *     Wraps elide's [`Report`] with the three things elide does not
+				 *     model: the recognition [`DocumentContext`] the entities were
+				 *     scored against, how the document decoded, and the reviewer
+				 *     decisions in [`edits`](Self::edits).
 				 *
-				 *     The context travels with the entities so anonymize can rebuild
-				 *     an orchestrator against exactly the vocabulary analyze used.
-				 *     Anything a policy predicate compares against beyond the label
-				 *     catalog (asserted languages, jurisdictions, document tags) is
-				 *     here; labels are re-derived from the policy set on each
-				 *     anonymize call.
+				 *     # Serialization
 				 *
-				 *     No [`Default`]: a well-formed audit must carry a real
-				 *     [`AuditContext`] with a real correlation id. Callers building
-				 *     an audit outside the analyze path construct it explicitly.
+				 *     [`Serialize`] but deliberately **not** `Deserialize`: a
+				 *     serialized report tags entity groups by modality *name*, so
+				 *     rebuilding one needs the registry [`Engine`] holds. Read an
+				 *     audit back with [`Engine::deserialize_audit`].
+				 *
+				 *     # Schema
+				 *
+				 *     Generate under the **serialize** contract
+				 *     ([`SchemaSettings::for_serialize`]). `edits` and `usage` are
+				 *     `skip_serializing_if`, and only that contract marks them
+				 *     optional — `schema_for!` defaults to deserialize and declares
+				 *     both required, so a generated client would reject responses this
+				 *     crate really emits.
+				 *
+				 *     [`Engine`]: super::Engine
+				 *     [`Engine::deserialize_audit`]: super::Engine::deserialize_audit
+				 *     [`Report`]: elide::Report
+				 *     [`SchemaSettings::for_serialize`]: schemars::generate::SchemaSettings::for_serialize
 				 */
 				200: {
 					headers: {
@@ -8713,79 +8723,31 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description Query parameters for the activity export: the type/actor filter, a bounded date
-		 *     window (defaulted and capped, since the export materializes rows), and the
-		 *     output `format`. See [`DateWindow`] for the range defaults and bounds.
+		 * @description The export-only query parameter: the output format. Kept separate from the
+		 *     shared filter and window so each is extracted on its own (see
+		 *     [`ActivityFilterQuery`] for why flattening is avoided).
 		 */
-		ActivityExportQuery: {
-			/**
-			 * Format: uuid
-			 * @description Keep only activities performed by this account. Omit for any actor.
-			 */
-			actor?: string;
+		ActivityExportOptions: {
 			/** @description Output format; defaults to `csv`. */
 			format?: components["schemas"]["ExportFormat"];
-			/**
-			 * Format: date
-			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
-			 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
-			 */
-			from?: string;
-			/**
-			 * Format: date
-			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
-			 */
-			to?: string;
-			/**
-			 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
-			 *     parameter for several; omit for no type constraint. The field is `types`
-			 *     since `type` is a reserved word.
-			 */
-			type?: components["schemas"]["ActivityType"][];
 		};
 		/**
-		 * @description Query parameters for the activity feed: the type/actor filter, an optional date
-		 *     window (narrows only when given — the feed is otherwise all-time), and cursor
-		 *     pagination.
+		 * @description The activity-specific filter parameters: which activity types to keep and
+		 *     whose activities to keep.
+		 *
+		 *     This is its own query struct so an endpoint composes it alongside the shared
+		 *     [`CursorPagination`](crate::handler::request::CursorPagination) and
+		 *     [`DateWindow`] as separate query extractors, rather than `#[serde(flatten)]`ing
+		 *     them into one struct: the query extractor (`serde_html_form`) mis-handles
+		 *     flattened sub-structs — a flattened pagination struct fails to deserialize even
+		 *     a bare `?limit=` — so each concern is extracted on its own.
 		 */
-		ActivityListQuery: {
-			/**
-			 * Format: uuid
-			 * @description Keep only activities performed by this account. Omit for any actor.
-			 */
-			actor?: string;
-			/**
-			 * @description Cursor pointing to the last item of the previous page.
-			 *     Obtain this from the `nextCursor` field in the response.
-			 */
-			after?: string;
-			/**
-			 * Format: date
-			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
-			 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
-			 */
-			from?: string;
-			/**
-			 * @description Whether to include the total item count in the response's `total` field.
-			 *     Defaults to `false`, since counting is an extra query; set it to `true`
-			 *     only when the count is actually needed.
-			 * @default false
-			 */
-			includeCount?: boolean;
-			/**
-			 * Format: uint32
-			 * @description The maximum number of records to return (1-100, default: 20).
-			 */
-			limit?: number;
-			/**
-			 * Format: date
-			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
-			 */
-			to?: string;
+		ActivityFilterQuery: {
+			/** @description Username of the account whose activities to keep. Omit for any actor. */
+			actor?: components["schemas"]["Handle"];
 			/**
 			 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
-			 *     parameter for several; omit for no type constraint. The field is `types`
-			 *     since `type` is a reserved word.
+			 *     parameter for several; omit for no type constraint.
 			 */
 			type?: components["schemas"]["ActivityType"][];
 		};
@@ -9115,45 +9077,53 @@ export interface components {
 		 *     it on the entity's [`Redaction`] event so an audit can trace a change back to
 		 *     the policy that demanded it.
 		 *
-		 *     The rationale takes one of two [`kind`](Attribution::kind)s, by how much
-		 *     structure the author has ([`AttributionKind::Freeform`] /
-		 *     [`AttributionKind::Cited`]). Orthogonal to that, an attribution may carry a
-		 *     [`source_id`](Attribution::source_id): an opaque, caller-owned [`Uuid`] the
-		 *     policy layer uses to link back to a source record (a rule, a request, a
-		 *     document). elide-core stores and hashes it verbatim; it never resolves or
-		 *     validates it.
+		 *     The rationale takes one of two shapes, by how much structure the author has:
+		 *     a [`Freeform`](Attribution::Freeform) label or a formal
+		 *     [`Cited`](Attribution::Cited) authority. Start one with
+		 *     [`Attribution::freeform`] / [`Attribution::cited`], refine it with the
+		 *     shape's `with_*` builder, and let it convert into an `Attribution`:
+		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::Attribution;
+		 *     let attribution: Attribution =
+		 *         Attribution::freeform("gdpr-art-17")
+		 *             .with_description("right to erasure")
+		 *             .into();
+		 *     ```
 		 *
 		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
 		 */
-		Attribution: {
-			/** @description The shape of the rationale: a freeform label or a formal citation. */
-			kind: components["schemas"]["AttributionKind"];
-			/**
-			 * Format: uuid
-			 * @description Opaque, caller-owned link to a source record, when given.
-			 */
-			source_id?: string;
-		};
-		/** @description The shape of an [`Attribution`]'s rationale. */
-		AttributionKind:
-			| {
-					/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
-					description?: string;
+		Attribution:
+			| ({
 					/** @constant */
 					kind: "freeform";
-					/** @description The policy's name (e.g. `"gdpr-art-17"`, `"hipaa-safe-harbor"`). */
-					name: string;
-			  }
-			| {
-					/** @description The authority cited (e.g. `"GDPR"`, `"HIPAA"`, `"internal-policy"`). */
-					authority: string;
-					/** @description The citation within that authority (e.g. `"Art. 17(1)"`, `"§164.514"`). */
-					citation: string;
+			  } & components["schemas"]["FreeformAttribution"])
+			| ({
 					/** @constant */
 					kind: "cited";
-					/** @description Why the citation applies here (e.g. `"data subject requested erasure"`). */
-					rationale: string;
-			  };
+			  } & components["schemas"]["CitedAttribution"]);
+		/**
+		 * @description A detection recognition missed.
+		 *
+		 *     Recorded on the report with human provenance, so it is never
+		 *     mistaken for an automatic hit, then redacted under the policy set
+		 *     like any other entity: an added label the policy does not cover
+		 *     is left alone.
+		 *
+		 *     Carries no entity id — the entity does not exist yet, and the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		AudioAdd: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/** @description What the reviewer says this is. */
+			label: components["schemas"]["LabelRef"];
+			/** @description Where it sits in the document. */
+			location: components["schemas"]["AudioLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
 		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
@@ -9229,123 +9199,80 @@ export interface components {
 		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
 		 *     rationale for why it happened.
 		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
+		 *     A thin tagged union: each variant wraps one payload struct (e.g.
+		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
+		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
+		 *     payload:
 		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::AuditKind;
+		 *     # use elide_core::modality::text::Text;
+		 *     # fn show(kind: &AuditKind<Text>) {
+		 *     if let AuditKind::Redaction(redaction) = kind {
+		 *         let _ = &redaction.operator;
+		 *     }
+		 *     # }
+		 *     ```
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
+		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
+		 *     matched [`Location`]; the rest carry their own data.
+		 *
+		 *     [`AuditEvent`]: super::AuditEvent
 		 *     [`Pattern`]: AuditKind::Pattern
 		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
 		AudioAuditKind:
 			| {
+					detail: components["schemas"]["AudioPattern"];
 					/** @constant */
 					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["AudioLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
 			  }
 			| {
+					detail: components["schemas"]["AudioModel"];
 					/** @constant */
 					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["AudioLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
 			  }
 			| {
+					detail: components["schemas"]["Deduplication"];
 					/** @constant */
 					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
 			  }
 			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
+					detail: components["schemas"]["Conflict"];
 					/** @constant */
 					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
 			  }
 			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
+					detail: components["schemas"]["Contested"];
 					/** @constant */
 					kind: "contested";
 			  }
 			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
+					detail: components["schemas"]["Calibration"];
 					/** @constant */
 					kind: "calibration";
 			  }
 			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["AudioHint"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
+					detail: components["schemas"]["AudioRefinement"];
 					/** @constant */
 					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed, symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["AudioLocation"];
 			  }
 			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
+					detail: components["schemas"]["Redaction"];
 					/** @constant */
 					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator: the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-					/**
-					 * @description BLAKE3 digest of the original text the operator hid, when the
-					 *     redaction layer recorded it. Proves *what* was redacted without
-					 *     storing the plaintext; `None` when the operator did not capture it.
-					 */
-					span_hash?: components["schemas"]["AuditHash"];
-					/**
-					 * Format: uint32
-					 * @description Byte length of the original text the operator hid, paired with
-					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
-					 */
-					span_length?: number;
+			  }
+			| {
+					detail: components["schemas"]["Selection"];
+					/** @constant */
+					kind: "selection";
+			  }
+			| {
+					detail: components["schemas"]["AudioManual"];
+					/** @constant */
+					kind: "manual";
 			  };
 		/**
 		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
@@ -9403,6 +9330,30 @@ export interface components {
 			filename?: string;
 		};
 		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		AudioEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["AudioAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["AudioRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"])
+			| ({
+					/** @constant */
+					op: "redact";
+			  } & components["schemas"]["AudioRedact"]);
+		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
 		 *     Generic over the [`Modality`] `M`, which is what makes the model
@@ -9430,7 +9381,12 @@ export interface components {
 		AudioEntity: {
 			/**
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
 			 */
 			audit: components["schemas"]["AudioAuditLog"];
 			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
@@ -9476,30 +9432,6 @@ export interface components {
 			recognized_range?: components["schemas"]["Range_of_uint"];
 		};
 		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		AudioEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["AudioEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
-			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name: the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
-			 */
-			review?: components["schemas"]["Review"];
-		};
-		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
 		 *     for a nearby value.
 		 *
@@ -9539,6 +9471,85 @@ export interface components {
 			/** @description Diarization label of the speaker, when a diarizer assigned one. */
 			speaker_id?: string;
 		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		AudioManual: {
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+			/**
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["AudioLocation"];
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		AudioModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["AudioLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
+		};
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		AudioPattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["AudioLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/**
+		 * @description Redact this entity with `action` instead of the operator the
+		 *     policy picked.
+		 */
+		AudioRedact: {
+			/**
+			 * @description The operator to run, typed to the entity's own modality so a
+			 *     text entity cannot be given an image operator.
+			 */
+			action: components["schemas"]["AudioRedaction"];
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity to redact.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description The policy whose authority the reviewer exercises. Must match
+			 *     a submitted policy's `id`.
+			 *
+			 *     Not only for audit: it picks which per-policy pseudonym vault
+			 *     and `KeyProvider` the operator resolves against, so an
+			 *     override using `Pseudonymize` or `HmacHash` stays consistent
+			 *     with that policy's other rules.
+			 */
+			policyId: string;
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
 		/** @description Operator spec a `redact` audio rule carries. */
 		AudioRedaction:
 			| {
@@ -9576,140 +9587,145 @@ export interface components {
 					 */
 					waveform?: components["schemas"]["Waveform"];
 			  };
+		/** @description A context keyword near the entity lifted its confidence. */
+		AudioRefinement: {
+			/**
+			 * @description The located [`Hint`] the keyword fired from, when the match came from an
+			 *     out-of-band hint (a column header, a key) rather than the in-text word
+			 *     window. `None` for an in-text-window match.
+			 *
+			 *     [`Hint`]: crate::modality::Hint
+			 */
+			hint?: components["schemas"]["AudioHint"];
+			/** @description Keyword that fired the boost. */
+			keyword: string;
+			/**
+			 * @description Where the boosting keyword sits in the medium. For a hint match this
+			 *     mirrors the hint's own location; for an in-text-window match it is the
+			 *     keyword resolved through the modality's [`locate`]. `None` when the
+			 *     keyword's stream range could not be placed.
+			 *
+			 *     [`locate`]: crate::modality::TextRecognizable::locate
+			 */
+			location?: components["schemas"]["AudioLocation"];
+		};
 		/**
-		 * @description What detection found in one document.
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
 		 *
-		 *     The body group plus per-container-part groups (each tagged by
-		 *     modality) plus the recognition [`AuditContext`] the entities
-		 *     were scored against.
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		AudioRetag: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["AudioLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
+		/**
+		 * @description What detection found in one document, plus what a reviewer
+		 *     decided about it.
 		 *
-		 *     The context travels with the entities so anonymize can rebuild
-		 *     an orchestrator against exactly the vocabulary analyze used.
-		 *     Anything a policy predicate compares against beyond the label
-		 *     catalog (asserted languages, jurisdictions, document tags) is
-		 *     here; labels are re-derived from the policy set on each
-		 *     anonymize call.
+		 *     Wraps elide's [`Report`] with the three things elide does not
+		 *     model: the recognition [`DocumentContext`] the entities were
+		 *     scored against, how the document decoded, and the reviewer
+		 *     decisions in [`edits`](Self::edits).
 		 *
-		 *     No [`Default`]: a well-formed audit must carry a real
-		 *     [`AuditContext`] with a real correlation id. Callers building
-		 *     an audit outside the analyze path construct it explicitly.
+		 *     # Serialization
+		 *
+		 *     [`Serialize`] but deliberately **not** `Deserialize`: a
+		 *     serialized report tags entity groups by modality *name*, so
+		 *     rebuilding one needs the registry [`Engine`] holds. Read an
+		 *     audit back with [`Engine::deserialize_audit`].
+		 *
+		 *     # Schema
+		 *
+		 *     Generate under the **serialize** contract
+		 *     ([`SchemaSettings::for_serialize`]). `edits` and `usage` are
+		 *     `skip_serializing_if`, and only that contract marks them
+		 *     optional — `schema_for!` defaults to deserialize and declares
+		 *     both required, so a generated client would reject responses this
+		 *     crate really emits.
+		 *
+		 *     [`Engine`]: super::Engine
+		 *     [`Engine::deserialize_audit`]: super::Engine::deserialize_audit
+		 *     [`Report`]: elide::Report
+		 *     [`SchemaSettings::for_serialize`]: schemars::generate::SchemaSettings::for_serialize
 		 */
 		Audit: {
 			/**
-			 * @description The body group.
+			 * @description How this document was decoded when it was analyzed.
 			 *
-			 *     `None` when no body pipeline produced entities (pre-analyze,
-			 *     or the codec resolved the doc to a modality with no
-			 *     pipeline).
+			 *     Carried back so anonymize decodes identically: the entity
+			 *     offsets below are stored against the first decode, and a
+			 *     differently-rendered second one would not line up.
 			 */
-			body?: components["schemas"]["EntityGroup"];
+			codec: components["schemas"]["CodecParams"];
 			/**
-			 * @description Recognition context.
+			 * @description What the caller asserted when this document was analyzed:
+			 *     languages, jurisdictions, document tags.
 			 *
-			 *     The asserted languages, countries, document tags, and the
-			 *     analyze-side correlation id. Held so
-			 *     [`Engine::anonymize`] can compile against the same
-			 *     vocabulary analyze used without the caller re-passing an
-			 *     `AnalyzerParams`.
-			 *
-			 *     Required on the wire: a missing context on an incoming
-			 *     [`Audit`] rejects at deserialize time so the shape
-			 *     mismatch surfaces at load, not at apply.
+			 *     Carried back so [`Engine::anonymize`] compiles against the
+			 *     same vocabulary analyze used, and re-decodes under the same
+			 *     codec configuration, without the caller re-passing it.
 			 *
 			 *     [`Engine::anonymize`]: super::Engine::anonymize
 			 */
-			context: components["schemas"]["AuditContext"];
+			context: components["schemas"]["DocumentContext"];
 			/**
-			 * @description One entry per container part the orchestrator surfaced.
+			 * @description What a reviewer changed: detections they added, corrected,
+			 *     suppressed, or chose an operator for.
 			 *
-			 *     Keyed by the container-private part id (e.g. a DOCX zip
-			 *     entry name like `"word/media/image1.png"`); each value
-			 *     carries that part's modality + entities.
+			 *     A list rather than one decision per entity, because the
+			 *     operations feed independent channels — a retag and an
+			 *     operator override on the same entity are both legitimate.
+			 *
+			 *     Separate from the report because elide has no concept of a
+			 *     per-entity operator override: [`anonymize_with`] re-resolves
+			 *     operators from live policy at apply time.
+			 *
+			 *     [`anonymize_with`]: elide::Orchestrator::anonymize_with
 			 */
-			parts?: {
-				[key: string]: components["schemas"]["EntityGroup"];
-			};
+			edits: components["schemas"]["EditSet"];
+			/**
+			 * @description The detections: elide's own report, body and container
+			 *     parts, each entity carrying its provenance chain.
+			 *
+			 *     Edit it through [`Report`]'s own API — [`include`],
+			 *     [`suppress`], [`entities`] — for the decisions elide models.
+			 *     Operator overrides live in [`edits`](Self::edits).
+			 *
+			 *     [`Report`]: elide::Report
+			 *     [`include`]: elide::Report::include
+			 *     [`suppress`]: elide::Report::suppress
+			 *     [`entities`]: elide::Report::entities
+			 */
+			report: components["schemas"]["Report"];
 			/**
 			 * @description What the analyze pass cost: one entry per recognizer and
 			 *     enricher that ran, each self-identifying by the name the
 			 *     deployment configured it under.
 			 *
-			 *     Empty when nothing model-backed ran, which is the common
-			 *     case for a pattern-only pass. Recorded on analyze and not
-			 *     re-derived at anonymize time, so a host that bills or rate
-			 *     limits on model spend reads it straight off the returned
-			 *     [`Audit`].
+			 *     Carried here rather than read off the report: elide derives
+			 *     usage during analysis and drops it when a report is rebuilt
+			 *     from the wire, so a host that bills on model spend would
+			 *     lose it on the round trip.
 			 */
-			usage?: components["schemas"]["UsageReport"];
-		};
-		/**
-		 * @description Recognition-side facts that travel from analyze to anonymize.
-		 *
-		 *     Mirrors elide's [`Scope`] shape one-for-one: direct fields
-		 *     for `languages` and `countries` (typed, elide-native), a
-		 *     [`metadata`] sub-struct for free-form classification strings
-		 *     (`tags`, `purpose`, `audience`), and the analyze-time
-		 *     [`correlation_id`]. The label catalog is not on here -
-		 *     labels are policy-owned, and anonymize re-derives them from
-		 *     the policy set it was handed.
-		 *
-		 *     No [`Default`]: `correlation_id` has no meaningful default
-		 *     (a nil UUID would silently collapse unrelated audits under
-		 *     one bucket in downstream trace aggregators), so callers
-		 *     supply one explicitly. Everything else defaults to empty.
-		 *
-		 *     [`Scope`]: elide::recognition::Scope
-		 *     [`metadata`]: Self::metadata
-		 *     [`correlation_id`]: Self::correlation_id
-		 */
-		AuditContext: {
-			/**
-			 * Format: uuid
-			 * @description Analyze-time correlation id.
-			 *
-			 *     Threaded into every tracing span on the recognition path;
-			 *     carried over so the anonymize path can link its own spans
-			 *     to the same request. The anonymize call supplies a fresh
-			 *     id from the passed [`Document`] as the anonymize-side
-			 *     correlation id: this one stays as the analyze-side
-			 *     pointer.
-			 *
-			 *     Required on the wire.
-			 *
-			 *     [`Document`]: elide_wire::file::Document
-			 */
-			correlationId: string;
-			/**
-			 * @description Caller-asserted jurisdictions.
-			 *
-			 *     Recorded from `AnalyzerParams.scope.countries`.
-			 */
-			countries?: components["schemas"]["CountryCode"][];
-			/**
-			 * @description Caller-asserted languages for the analysis.
-			 *
-			 *     Recorded from `AnalyzerParams.scope.languages` at analyze
-			 *     time; anonymize re-uses them verbatim.
-			 * @default []
-			 */
-			languages?: components["schemas"]["Languages"];
-			/**
-			 * @description Free-form request context: document tags, request purpose,
-			 *     output audience. See elide's [`ScopeMetadata`].
-			 */
-			metadata?: components["schemas"]["ScopeMetadata"];
-			/**
-			 * @description OCR mode the analyze call decoded with. Recorded so the
-			 *     anonymize call re-decodes the same document under the same
-			 *     codec configuration: otherwise entity offsets stored in
-			 *     the audit wouldn't line up against a differently-rendered
-			 *     second decode. Defaults to [`RasterMode::Auto`] (the codec's
-			 *     built-in behaviour) when omitted.
-			 * @default {
-			 *       "kind": "auto"
-			 *     }
-			 */
-			rasterMode?: components["schemas"]["RasterMode"];
+			usage: components["schemas"]["UsageReport"];
 		};
 		/**
 		 * @description A 32-byte BLAKE3 digest.
@@ -9795,6 +9811,14 @@ export interface components {
 			max: components["schemas"]["Point"];
 			/** @description Minimum corner (top-left, conventionally). */
 			min: components["schemas"]["Point"];
+		};
+		/** @description The entity's confidence was rescaled by a per-recognizer factor. */
+		Calibration: {
+			/**
+			 * Format: double
+			 * @description Multiplier applied.
+			 */
+			factor: number;
 		};
 		/**
 		 * @description The coarse group a [`Label`] belongs to, for organizing detected entities
@@ -9899,6 +9923,21 @@ export interface components {
 			delta: string;
 		};
 		/**
+		 * @description A [`Cited`](Attribution::Cited) rationale: a citable authority, the citation
+		 *     within it, and an optional rationale for why it applies.
+		 */
+		CitedAttribution: {
+			/** @description The authority cited (e.g. `"GDPR"`, `"HIPAA"`, `"internal-policy"`). */
+			authority: string;
+			/** @description The citation within that authority (e.g. `"Art. 17(1)"`, `"§164.514"`). */
+			citation: string;
+			/**
+			 * @description Why the citation applies here (e.g. `"data subject requested erasure"`),
+			 *     when given.
+			 */
+			rationale?: string;
+		};
+		/**
 		 * @description Text a [`TextRedaction::Clamp`] emits for out-of-range values.
 		 *
 		 *     Three forms, deserialized untagged so callers can pick the
@@ -9927,6 +9966,24 @@ export interface components {
 			| {
 					[key: string]: string;
 			  };
+		/**
+		 * @description How the codec decodes this document.
+		 *
+		 *     Defaults to the codec's own behaviour, so a caller with no
+		 *     opinion passes [`CodecParams::default`].
+		 */
+		CodecParams: {
+			/**
+			 * @description How container formats carrying both a text layer and page
+			 *     images treat OCR.
+			 *
+			 *     Defaults to [`RasterMode::Auto`], the codec's own behaviour.
+			 * @default {
+			 *       "kind": "auto"
+			 *     }
+			 */
+			rasterMode?: components["schemas"]["RasterMode"];
+		};
 		/**
 		 * @description Color as 8-bit RGB.
 		 *
@@ -9986,6 +10043,18 @@ export interface components {
 		 *     [`Confidence`]: crate::primitive::Confidence
 		 */
 		ConfidenceThreshold: number;
+		/**
+		 * @description A competing detection of a *different* label over the same span was resolved
+		 *     against this (winning) entity — the loser is recorded, not dropped.
+		 */
+		Conflict: {
+			/** @description The loser's confidence at resolution time. */
+			competing_confidence: components["schemas"]["Confidence"];
+			/** @description The label of the detection that lost arbitration. */
+			competing_label: components["schemas"]["LabelRef"];
+			/** @description Name of the conflict policy that chose the winner. */
+			resolved_by: string;
+		};
 		/**
 		 * @description Response type for a workspace connection.
 		 *
@@ -10172,6 +10241,19 @@ export interface components {
 			provider?: string[];
 		};
 		/**
+		 * @description A competing detection of a different label over the same span was left
+		 *     *unresolved*: both entities survive, flagged for a human. Recorded on each
+		 *     entity of the contested pair, naming the other.
+		 */
+		Contested: {
+			/** @description The competing detection's confidence. */
+			competing_confidence: components["schemas"]["Confidence"];
+			/** @description The label of the competing detection. */
+			competing_label: components["schemas"]["LabelRef"];
+			/** @description Name of the policy that flagged the contest. */
+			flagged_by: string;
+		};
+		/**
 		 * @description [ISO 3166-1] country, identified by its code.
 		 *
 		 *     Wraps [`celes::Country`], a static table entry carrying the numeric,
@@ -10279,7 +10361,7 @@ export interface components {
 			 *     Overrides the pipeline's `defaultScope` when present; absent falls back to
 			 *     the pipeline default.
 			 */
-			scope?: components["schemas"]["ScopeParams"];
+			scope?: components["schemas"]["DocumentContext"];
 		};
 		/**
 		 * @description Request payload for creating a new workspace policy.
@@ -10416,6 +10498,11 @@ export interface components {
 			 */
 			to?: string;
 		};
+		/** @description Several detections were fused into one entity. */
+		Deduplication: {
+			/** @description Name of the fusion strategy that combined them. */
+			strategy: string;
+		};
 		/**
 		 * @description Pixel dimensions of an image or any 2-D canvas.
 		 *
@@ -10440,6 +10527,36 @@ export interface components {
 			width: number;
 		};
 		/**
+		 * @description What a caller asserts about the document being processed.
+		 *
+		 *     Everything defaults to empty, so a caller asserting nothing
+		 *     passes [`DocumentContext::default`] and lets the recognizers use
+		 *     their own defaults.
+		 */
+		DocumentContext: {
+			/**
+			 * @description Jurisdictions the caller asserts apply.
+			 *
+			 *     Read by policy predicates that vary by jurisdiction, so a
+			 *     rule can act on a document from one country and not another.
+			 */
+			countries?: components["schemas"]["CountryCode"][];
+			/**
+			 * @description Languages the caller asserts the document is in.
+			 *
+			 *     Recognizers that take a language hint use it; the
+			 *     language-detection enricher fills the gap when this is
+			 *     empty.
+			 * @default []
+			 */
+			languages?: components["schemas"]["Languages"];
+			/**
+			 * @description Free-form request context: document tags, request purpose,
+			 *     output audience. See elide's [`ScopeMetadata`].
+			 */
+			metadata?: components["schemas"]["ScopeMetadata"];
+		};
+		/**
 		 * Format: uint16
 		 * @description Dots-per-inch resolution for rasterizing vector content.
 		 *
@@ -10452,6 +10569,21 @@ export interface components {
 		 *     [`scale_factor`]: Self::scale_factor
 		 */
 		Dpi: number;
+		/**
+		 * @description Reviewer edits for one document, one list per modality.
+		 *
+		 *     Empty by default: an audit nobody has reviewed carries none.
+		 */
+		EditSet: {
+			/** @description Edits to audio entities. */
+			audio?: components["schemas"]["AudioEdit"][];
+			/** @description Edits to image entities. */
+			image?: components["schemas"]["ImageEdit"][];
+			/** @description Edits to tabular entities. */
+			tabular?: components["schemas"]["TabularEdit"][];
+			/** @description Edits to text entities. */
+			text?: components["schemas"]["TextEdit"][];
+		};
 		/**
 		 * @description Coreference identifier shared by entities that denote the same
 		 *     real-world thing.
@@ -10467,40 +10599,6 @@ export interface components {
 		 *     mentions, not a global key.
 		 */
 		EntityCoRef: string;
-		/**
-		 * @description A modality-tagged group of recognised entities.
-		 *
-		 *     The unit [`Audit`] stores in `body` and in every `parts`
-		 *     entry.
-		 *
-		 *     Tagged by `modality` (snake_case) so deserialization picks the
-		 *     right variant and the entity vec inside is statically typed
-		 *     per modality: apply-time we hand each variant back to elide
-		 *     as a `Vec<Entity<M>>` for the appropriate `M`.
-		 *
-		 *     [`Audit`]: crate::Audit
-		 */
-		EntityGroup:
-			| {
-					entities: components["schemas"]["TextEntityRecord"][];
-					/** @constant */
-					modality: "text";
-			  }
-			| {
-					entities: components["schemas"]["TabularEntityRecord"][];
-					/** @constant */
-					modality: "tabular";
-			  }
-			| {
-					entities: components["schemas"]["ImageEntityRecord"][];
-					/** @constant */
-					modality: "image";
-			  }
-			| {
-					entities: components["schemas"]["AudioEntityRecord"][];
-					/** @constant */
-					modality: "audio";
-			  };
 		/**
 		 * @description HTTP error response representation with security-conscious design.
 		 *
@@ -10635,6 +10733,16 @@ export interface components {
 			| "wav"
 			| "xlsx"
 			| "xml";
+		/**
+		 * @description A [`Freeform`](Attribution::Freeform) rationale: a policy label and an
+		 *     optional human description, with no formal citation.
+		 */
+		FreeformAttribution: {
+			/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
+			description?: string;
+			/** @description The policy's name (e.g. `"gdpr-art-17"`, `"hipaa-safe-harbor"`). */
+			name: string;
+		};
 		/**
 		 * @description Typed credentials for Google Cloud Storage.
 		 *
@@ -10772,6 +10880,28 @@ export interface components {
 			| "limited_data_set"
 			| "expert_determination";
 		/**
+		 * @description A detection recognition missed.
+		 *
+		 *     Recorded on the report with human provenance, so it is never
+		 *     mistaken for an automatic hit, then redacted under the policy set
+		 *     like any other entity: an added label the policy does not cover
+		 *     is left alone.
+		 *
+		 *     Carries no entity id — the entity does not exist yet, and the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		ImageAdd: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/** @description What the reviewer says this is. */
+			label: components["schemas"]["LabelRef"];
+			/** @description Where it sits in the document. */
+			location: components["schemas"]["ImageLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
+		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
 		 *
@@ -10846,123 +10976,80 @@ export interface components {
 		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
 		 *     rationale for why it happened.
 		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
+		 *     A thin tagged union: each variant wraps one payload struct (e.g.
+		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
+		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
+		 *     payload:
 		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::AuditKind;
+		 *     # use elide_core::modality::text::Text;
+		 *     # fn show(kind: &AuditKind<Text>) {
+		 *     if let AuditKind::Redaction(redaction) = kind {
+		 *         let _ = &redaction.operator;
+		 *     }
+		 *     # }
+		 *     ```
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
+		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
+		 *     matched [`Location`]; the rest carry their own data.
+		 *
+		 *     [`AuditEvent`]: super::AuditEvent
 		 *     [`Pattern`]: AuditKind::Pattern
 		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
 		ImageAuditKind:
 			| {
+					detail: components["schemas"]["ImagePattern"];
 					/** @constant */
 					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["ImageLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
 			  }
 			| {
+					detail: components["schemas"]["ImageModel"];
 					/** @constant */
 					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["ImageLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
 			  }
 			| {
+					detail: components["schemas"]["Deduplication"];
 					/** @constant */
 					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
 			  }
 			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
+					detail: components["schemas"]["Conflict"];
 					/** @constant */
 					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
 			  }
 			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
+					detail: components["schemas"]["Contested"];
 					/** @constant */
 					kind: "contested";
 			  }
 			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
+					detail: components["schemas"]["Calibration"];
 					/** @constant */
 					kind: "calibration";
 			  }
 			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["ImageHint"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
+					detail: components["schemas"]["ImageRefinement"];
 					/** @constant */
 					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed, symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["ImageLocation"];
 			  }
 			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
+					detail: components["schemas"]["Redaction"];
 					/** @constant */
 					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator: the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-					/**
-					 * @description BLAKE3 digest of the original text the operator hid, when the
-					 *     redaction layer recorded it. Proves *what* was redacted without
-					 *     storing the plaintext; `None` when the operator did not capture it.
-					 */
-					span_hash?: components["schemas"]["AuditHash"];
-					/**
-					 * Format: uint32
-					 * @description Byte length of the original text the operator hid, paired with
-					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
-					 */
-					span_length?: number;
+			  }
+			| {
+					detail: components["schemas"]["Selection"];
+					/** @constant */
+					kind: "selection";
+			  }
+			| {
+					detail: components["schemas"]["ImageManual"];
+					/** @constant */
+					kind: "manual";
 			  };
 		/**
 		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
@@ -11018,6 +11105,30 @@ export interface components {
 			filename?: string;
 		};
 		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		ImageEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["ImageAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["ImageRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"])
+			| ({
+					/** @constant */
+					op: "redact";
+			  } & components["schemas"]["ImageRedact"]);
+		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
 		 *     Generic over the [`Modality`] `M`, which is what makes the model
@@ -11045,7 +11156,12 @@ export interface components {
 		ImageEntity: {
 			/**
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
 			 */
 			audit: components["schemas"]["ImageAuditLog"];
 			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
@@ -11089,30 +11205,6 @@ export interface components {
 			 *     [`location`]: Entity::location
 			 */
 			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		ImageEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["ImageEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
-			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name: the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
-			 */
-			review?: components["schemas"]["Review"];
 		};
 		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
@@ -11159,6 +11251,85 @@ export interface components {
 			 */
 			polygon?: components["schemas"]["Polygon"];
 		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		ImageManual: {
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+			/**
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["ImageLocation"];
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		ImageModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["ImageLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
+		};
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		ImagePattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["ImageLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/**
+		 * @description Redact this entity with `action` instead of the operator the
+		 *     policy picked.
+		 */
+		ImageRedact: {
+			/**
+			 * @description The operator to run, typed to the entity's own modality so a
+			 *     text entity cannot be given an image operator.
+			 */
+			action: components["schemas"]["ImageRedaction"];
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity to redact.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description The policy whose authority the reviewer exercises. Must match
+			 *     a submitted policy's `id`.
+			 *
+			 *     Not only for audit: it picks which per-policy pseudonym vault
+			 *     and `KeyProvider` the operator resolves against, so an
+			 *     override using `Pseudonymize` or `HmacHash` stays consistent
+			 *     with that policy's other rules.
+			 */
+			policyId: string;
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
 		/** @description Operator spec a `redact` image rule carries. */
 		ImageRedaction:
 			| {
@@ -11204,6 +11375,55 @@ export interface components {
 					/** @constant */
 					kind: "blackbox";
 			  };
+		/** @description A context keyword near the entity lifted its confidence. */
+		ImageRefinement: {
+			/**
+			 * @description The located [`Hint`] the keyword fired from, when the match came from an
+			 *     out-of-band hint (a column header, a key) rather than the in-text word
+			 *     window. `None` for an in-text-window match.
+			 *
+			 *     [`Hint`]: crate::modality::Hint
+			 */
+			hint?: components["schemas"]["ImageHint"];
+			/** @description Keyword that fired the boost. */
+			keyword: string;
+			/**
+			 * @description Where the boosting keyword sits in the medium. For a hint match this
+			 *     mirrors the hint's own location; for an in-text-window match it is the
+			 *     keyword resolved through the modality's [`locate`]. `None` when the
+			 *     keyword's stream range could not be placed.
+			 *
+			 *     [`locate`]: crate::modality::TextRecognizable::locate
+			 */
+			location?: components["schemas"]["ImageLocation"];
+		};
+		/**
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
+		 *
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		ImageRetag: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["ImageLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
 		/**
 		 * @description Workspace invite with complete information.
 		 *
@@ -11487,7 +11707,7 @@ export interface components {
 			 *     categories), so this is where that mapping is recorded as
 			 *     data rather than prose.
 			 */
-			attribution?: components["schemas"]["AttributionKind"];
+			attribution?: components["schemas"]["Attribution"];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
@@ -11699,6 +11919,12 @@ export interface components {
 			 */
 			rememberMe?: boolean;
 		};
+		/**
+		 * @description Which human decision a [`Manual`] event records — the reviewer actions on a
+		 *     finding: [`Flag`](ManualIntent::Flag) a miss, [`Suppress`](ManualIntent::Suppress)
+		 *     a false positive, or [`Amend`](ManualIntent::Amend) an existing finding.
+		 */
+		ManualIntent: "flag" | "suppress" | "amend";
 		/** @description Response type for a mark-all-read action. */
 		MarkedReadStatus: {
 			/**
@@ -11797,7 +12023,7 @@ export interface components {
 		 * @enum {string}
 		 */
 		ModalityToken: "audio" | "image" | "tabular" | "text";
-		/** @description Detail of a model/NER recognition. */
+		/** @description Metadata of a model/NER recognition, carried by [`Model`]. */
 		ModelEvent: {
 			/** @description Whether contextual analysis adjusted the score for this match. */
 			contextual: boolean;
@@ -12016,11 +12242,11 @@ export interface components {
 			/** @description The new password (will be hashed before storage). */
 			newPassword: string;
 		};
-		/** @description Detail of a pattern/dictionary recognition. */
+		/** @description Metadata of a pattern/dictionary recognition, carried by [`Pattern`]. */
 		PatternEvent: {
 			/**
-			 * @description Whether contextual analysis (keyword co-occurrence) adjusted the
-			 *     score for this match.
+			 * @description Whether contextual analysis (keyword co-occurrence) adjusted the score
+			 *     for this match.
 			 */
 			contextual: boolean;
 			/** @description Name of the pattern that matched (e.g. `"ssn"`, `"email"`). */
@@ -12143,7 +12369,7 @@ export interface components {
 			 *     A document's own scope overrides this at detect time; absent here means
 			 *     the document must assert its own.
 			 */
-			defaultScope?: components["schemas"]["ScopeParams"];
+			defaultScope?: components["schemas"]["DocumentContext"];
 			/**
 			 * @description Slugs of workspace policies applied at redaction.
 			 *
@@ -12467,11 +12693,11 @@ export interface components {
 			 * @description Human-readable name. Display-only. Does not key anything.
 			 *
 			 *     Names the policy in a redaction event's [`Attribution`]
-			 *     when a rule that fired carried no [`AttributionKind::Cited`]
+			 *     when a rule that fired carried no [`Attribution::Cited`]
 			 *     attribution to render.
 			 *
 			 *     [`Attribution`]: elide_core::entity::audit::Attribution
-			 *     [`AttributionKind::Cited`]: elide_core::entity::audit::AttributionKind::Cited
+			 *     [`Attribution::Cited`]: elide_core::entity::audit::Attribution::Cited
 			 */
 			name: string;
 			/** @description Ordered rules. First match wins within this policy. */
@@ -12553,26 +12779,29 @@ export interface components {
 			 * @description Why this rule exists: the authority it answers to.
 			 *
 			 *     The engine renders it into the redaction event's
-			 *     [`Attribution`], so a reviewer sees the provision rather
-			 *     than a bare UUID. `None` falls back to recording the
-			 *     policy and rule ids alone.
+			 *     [`Attribution`] verbatim, so a reviewer sees the provision
+			 *     the rule answers to. `None` falls back to a freeform
+			 *     attribution under the enclosing policy's name and
+			 *     description — the rule itself is not named in the trail.
 			 *
 			 *     Optional so ad-hoc and hand-authored rules stay cheap to
 			 *     write; the shipped templates set it on every rule.
 			 *
 			 *     [`Attribution`]: elide_core::entity::audit::Attribution
 			 */
-			attribution?: components["schemas"]["AttributionKind"];
+			attribution?: components["schemas"]["Attribution"];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
 			 * Format: uuid
-			 * @description Stable identifier. UUIDv7 recommended. Engine stamps it
-			 *     into the redaction event's [`Attribution::source_id`] so
-			 *     reviewers can trace which rule fired. Every attachment a
-			 *     [`RuleDispatch::Table`] expands into shares this UUID.
+			 * @description Stable identifier. UUIDv7 recommended. Every attachment a
+			 *     [`RuleDispatch::Table`] expands into shares this UUID, so
+			 *     one authored rule stays one rule however many labels it
+			 *     dispatches over.
 			 *
-			 *     [`Attribution::source_id`]: elide_core::entity::audit::Attribution::source_id
+			 *     Not carried onto the audit trail: a redaction event names
+			 *     the [`attribution`](Self::attribution) the rule declared, or
+			 *     its policy's, rather than the rule's own id.
 			 */
 			id: string;
 			/** @description Human-readable name. Display-only. */
@@ -12661,7 +12890,7 @@ export interface components {
 		 *
 		 *     Serialises as an internally-tagged object under `kind`,
 		 *     matching the house pattern for option-bearing enums
-		 *     (`Predicate`, `TextRedaction`, `AnyRedaction`). A caller
+		 *     (`Predicate`, `TextRedaction`). A caller
 		 *     wire-picks a template as
 		 *     `{"kind": "hipaa_safe_harbor"}` or, for variants with
 		 *     operator options,
@@ -12876,6 +13105,40 @@ export interface components {
 			/** @description Recognizer's version at the time it ran. */
 			version: string;
 		};
+		/** @description An operator hid the entity. */
+		Redaction: {
+			/**
+			 * @description The author-supplied policy rationale, when the operator carried an
+			 *     [`Attribution`]; `None` otherwise.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+			/** @description Identifier of the key needed to reverse it, if reversible. */
+			key_id?: string;
+			/**
+			 * @description How much the output leaks about the original, when the operator claimed a
+			 *     profile; `None` when it made no claim.
+			 */
+			leak_profile?: components["schemas"]["LeakProfile"];
+			/**
+			 * @description Which selection rule chose this operator: the automatic "why" (matched a
+			 *     label, a tag, a predicate, or the fallback).
+			 */
+			matched_by: components["schemas"]["RuleMatch"];
+			/** @description Which operator (name + version) ran. */
+			operator: components["schemas"]["OperatorId"];
+			/**
+			 * @description BLAKE3 digest of the original text the operator hid, when the redaction
+			 *     layer recorded it. Proves *what* was redacted without storing the
+			 *     plaintext; `None` when the operator did not capture it.
+			 */
+			span_hash?: components["schemas"]["AuditHash"];
+			/**
+			 * Format: uint32
+			 * @description Byte length of the original text the operator hid, paired with
+			 *     [`span_hash`](Self::span_hash). `None` when not captured.
+			 */
+			span_length?: number;
+		};
 		/**
 		 * @description Public view of one recognizer in the engine's NER or LLM
 		 *     lineup.
@@ -12916,6 +13179,56 @@ export interface components {
 		ReplyInvite: {
 			/** @description Whether to accept or decline the invitation. */
 			acceptInvite: boolean;
+		};
+		Report: {
+			body:
+				| (
+						| {
+								entities: components["schemas"]["TextEntity"][];
+								/** @constant */
+								modality: "text";
+						  }
+						| {
+								entities: components["schemas"]["ImageEntity"][];
+								/** @constant */
+								modality: "image";
+						  }
+						| {
+								entities: components["schemas"]["AudioEntity"][];
+								/** @constant */
+								modality: "audio";
+						  }
+						| {
+								entities: components["schemas"]["TabularEntity"][];
+								/** @constant */
+								modality: "tabular";
+						  }
+				  )
+				| null;
+			parts: {
+				[key: string]:
+					| {
+							entities: components["schemas"]["TextEntity"][];
+							/** @constant */
+							modality: "text";
+					  }
+					| {
+							entities: components["schemas"]["ImageEntity"][];
+							/** @constant */
+							modality: "image";
+					  }
+					| {
+							entities: components["schemas"]["AudioEntity"][];
+							/** @constant */
+							modality: "audio";
+					  }
+					| {
+							entities: components["schemas"]["TabularEntity"][];
+							/** @constant */
+							modality: "tabular";
+					  };
+			};
+			usage?: components["schemas"]["UsageReport"];
 		};
 		/**
 		 * @description How long a class of data is retained.
@@ -12981,38 +13294,6 @@ export interface components {
 			 *     }
 			 */
 			redactedDocuments?: components["schemas"]["Retention"];
-		};
-		/**
-		 * @description A reviewer-supplied redaction override with the policy
-		 *     authority it draws from.
-		 *
-		 *     The `policy_id` isn't just for audit: it also picks which
-		 *     per-policy pseudonym vault and per-policy [`KeyProvider`] the
-		 *     override's operator resolves against, so an override using
-		 *     [`Pseudonymize`] or [`HmacHash`] stays consistent with the
-		 *     authoring policy's other rules.
-		 *
-		 *     [`KeyProvider`]: elide::redaction::operators::KeyProvider
-		 *     [`Pseudonymize`]: elide::redaction::operators::Pseudonymize
-		 *     [`HmacHash`]: elide::redaction::operators::HmacHash
-		 */
-		Review: {
-			/**
-			 * @description The per-modality redaction operators to run for this
-			 *     entity. Overrides whatever the policy set would have
-			 *     picked for the same entity.
-			 */
-			action: components["schemas"]["ModalityRedactions"];
-			/**
-			 * Format: uuid
-			 * @description The policy whose authority the reviewer exercises. Must
-			 *     match the `id` of a [`PolicyDefinition`] submitted with
-			 *     the anonymize request. The audit event stamps this UUID
-			 *     as the attribution `name`.
-			 *
-			 *     [`PolicyDefinition`]: elide_governance::PolicyDefinition
-			 */
-			policyId: string;
 		};
 		/**
 		 * @description A serializable summary of *which selection rule* bound an operator to an
@@ -13258,39 +13539,28 @@ export interface components {
 			tags?: string[];
 		};
 		/**
-		 * @description Caller-asserted scope for one request.
-		 *
-		 *     A narrower wire projection of `elide::recognition::Scope`:
-		 *     `languages` and `countries` (typed, elide-native), plus
-		 *     elide's [`ScopeMetadata`] block for free-form classification
-		 *     strings (`tags`, `purpose`, `audience`). The engine assembles
-		 *     this plus a server-minted `correlation_id` and a policy-derived
-		 *     label catalog into the orchestrator's `Scope` at compile time.
+		 * @description An operator was *picked* to hide the entity — the redaction decision,
+		 *     recorded before it is applied so it can be reviewed (and the entity edited)
+		 *     first. The [`Redaction`] event that follows records the operator actually
+		 *     run.
 		 */
-		ScopeParams: {
+		Selection: {
 			/**
-			 * @description Caller-asserted jurisdictions.
-			 *
-			 *     When non-empty, recognizers that carry per-rule country
-			 *     scopes skip rules that match none of them. An empty list
-			 *     means "any": rules that declare countries still run as a
-			 *     permissive fallback so callers who don't assert a
-			 *     jurisdiction don't lose detections.
+			 * @description The author-supplied policy rationale, when the matched rule carried an
+			 *     [`Attribution`]; `None` otherwise.
 			 */
-			countries?: components["schemas"]["CountryCode"][];
+			attribution?: components["schemas"]["Attribution"];
 			/**
-			 * @description Caller-asserted languages for the analysis.
-			 *
-			 *     Empty means the caller asserted none, leaving detection
-			 *     (if a language enricher runs) to fill in.
-			 * @default []
+			 * @description Which selection rule chose this operator: the automatic "why" (matched a
+			 *     label, a tag, a predicate, or the fallback).
 			 */
-			languages?: components["schemas"]["Languages"];
+			matched_by: components["schemas"]["RuleMatch"];
 			/**
-			 * @description Free-form request context: document tags, request purpose,
-			 *     output audience. See elide's [`ScopeMetadata`].
+			 * @description Identity (name + version) of the operator picked. Its *config* is not
+			 *     recorded — it lives in the policy that will run it, so apply re-resolves
+			 *     the configured operator rather than reading it here.
 			 */
-			metadata?: components["schemas"]["ScopeMetadata"];
+			operator: components["schemas"]["OperatorId"];
 		};
 		/** @description Request to send a message and stream the assistant's reply. */
 		SendChatMessage: {
@@ -13438,6 +13708,24 @@ export interface components {
 			totalBytes: number;
 		};
 		/**
+		 * @description Leave this entity alone: a reviewer calling it a false positive.
+		 *
+		 *     It keeps its place and its provenance; the redaction pass skips
+		 *     it. Recorded as a `Manual` event, so *who* decided and *why* is
+		 *     auditable rather than the detection silently disappearing.
+		 */
+		Suppress: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity to leave alone.
+			 */
+			id: string;
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
+		/**
 		 * @description Request payload to trigger a connection sync.
 		 *
 		 *     The direction is determined by the connection's configured `sync_mode`.
@@ -13519,6 +13807,28 @@ export interface components {
 		 */
 		SyncTriggerType: "manual" | "scheduled" | "webhook";
 		/**
+		 * @description A detection recognition missed.
+		 *
+		 *     Recorded on the report with human provenance, so it is never
+		 *     mistaken for an automatic hit, then redacted under the policy set
+		 *     like any other entity: an added label the policy does not cover
+		 *     is left alone.
+		 *
+		 *     Carries no entity id — the entity does not exist yet, and the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TabularAdd: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/** @description What the reviewer says this is. */
+			label: components["schemas"]["LabelRef"];
+			/** @description Where it sits in the document. */
+			location: components["schemas"]["TabularLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
+		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
 		 *
@@ -13593,123 +13903,80 @@ export interface components {
 		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
 		 *     rationale for why it happened.
 		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
+		 *     A thin tagged union: each variant wraps one payload struct (e.g.
+		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
+		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
+		 *     payload:
 		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::AuditKind;
+		 *     # use elide_core::modality::text::Text;
+		 *     # fn show(kind: &AuditKind<Text>) {
+		 *     if let AuditKind::Redaction(redaction) = kind {
+		 *         let _ = &redaction.operator;
+		 *     }
+		 *     # }
+		 *     ```
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
+		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
+		 *     matched [`Location`]; the rest carry their own data.
+		 *
+		 *     [`AuditEvent`]: super::AuditEvent
 		 *     [`Pattern`]: AuditKind::Pattern
 		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
 		TabularAuditKind:
 			| {
+					detail: components["schemas"]["TabularPattern"];
 					/** @constant */
 					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TabularLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
 			  }
 			| {
+					detail: components["schemas"]["TabularModel"];
 					/** @constant */
 					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TabularLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
 			  }
 			| {
+					detail: components["schemas"]["Deduplication"];
 					/** @constant */
 					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
 			  }
 			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
+					detail: components["schemas"]["Conflict"];
 					/** @constant */
 					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
 			  }
 			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
+					detail: components["schemas"]["Contested"];
 					/** @constant */
 					kind: "contested";
 			  }
 			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
+					detail: components["schemas"]["Calibration"];
 					/** @constant */
 					kind: "calibration";
 			  }
 			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["TabularHint"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
+					detail: components["schemas"]["TabularRefinement"];
 					/** @constant */
 					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed, symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["TabularLocation"];
 			  }
 			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
+					detail: components["schemas"]["Redaction"];
 					/** @constant */
 					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator: the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-					/**
-					 * @description BLAKE3 digest of the original text the operator hid, when the
-					 *     redaction layer recorded it. Proves *what* was redacted without
-					 *     storing the plaintext; `None` when the operator did not capture it.
-					 */
-					span_hash?: components["schemas"]["AuditHash"];
-					/**
-					 * Format: uint32
-					 * @description Byte length of the original text the operator hid, paired with
-					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
-					 */
-					span_length?: number;
+			  }
+			| {
+					detail: components["schemas"]["Selection"];
+					/** @constant */
+					kind: "selection";
+			  }
+			| {
+					detail: components["schemas"]["TabularManual"];
+					/** @constant */
+					kind: "manual";
 			  };
 		/**
 		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
@@ -13749,6 +14016,30 @@ export interface components {
 		 */
 		TabularAuditLog: components["schemas"]["TabularAuditEvent"][];
 		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TabularEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["TabularAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["TabularRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"])
+			| ({
+					/** @constant */
+					op: "redact";
+			  } & components["schemas"]["TabularRedact"]);
+		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
 		 *     Generic over the [`Modality`] `M`, which is what makes the model
@@ -13776,7 +14067,12 @@ export interface components {
 		TabularEntity: {
 			/**
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
 			 */
 			audit: components["schemas"]["TabularAuditLog"];
 			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
@@ -13820,30 +14116,6 @@ export interface components {
 			 *     [`location`]: Entity::location
 			 */
 			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		TabularEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["TabularEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
-			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name: the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
-			 */
-			review?: components["schemas"]["Review"];
 		};
 		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
@@ -13915,6 +14187,85 @@ export interface components {
 			 */
 			start_offset?: number;
 		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		TabularManual: {
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+			/**
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["TabularLocation"];
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		TabularModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TabularLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
+		};
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		TabularPattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TabularLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/**
+		 * @description Redact this entity with `action` instead of the operator the
+		 *     policy picked.
+		 */
+		TabularRedact: {
+			/**
+			 * @description The operator to run, typed to the entity's own modality so a
+			 *     text entity cannot be given an image operator.
+			 */
+			action: components["schemas"]["TabularRedaction"];
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity to redact.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description The policy whose authority the reviewer exercises. Must match
+			 *     a submitted policy's `id`.
+			 *
+			 *     Not only for audit: it picks which per-policy pseudonym vault
+			 *     and `KeyProvider` the operator resolves against, so an
+			 *     override using `Pseudonymize` or `HmacHash` stays consistent
+			 *     with that policy's other rules.
+			 */
+			policyId: string;
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
 		/** @description Operator spec a `redact` tabular rule carries. */
 		TabularRedaction:
 			| {
@@ -13935,6 +14286,55 @@ export interface components {
 					/** @constant */
 					kind: "drop_column";
 			  };
+		/** @description A context keyword near the entity lifted its confidence. */
+		TabularRefinement: {
+			/**
+			 * @description The located [`Hint`] the keyword fired from, when the match came from an
+			 *     out-of-band hint (a column header, a key) rather than the in-text word
+			 *     window. `None` for an in-text-window match.
+			 *
+			 *     [`Hint`]: crate::modality::Hint
+			 */
+			hint?: components["schemas"]["TabularHint"];
+			/** @description Keyword that fired the boost. */
+			keyword: string;
+			/**
+			 * @description Where the boosting keyword sits in the medium. For a hint match this
+			 *     mirrors the hint's own location; for an in-text-window match it is the
+			 *     keyword resolved through the modality's [`locate`]. `None` when the
+			 *     keyword's stream range could not be placed.
+			 *
+			 *     [`locate`]: crate::modality::TextRecognizable::locate
+			 */
+			location?: components["schemas"]["TabularLocation"];
+		};
+		/**
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
+		 *
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		TabularRetag: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["TabularLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
 		/**
 		 * @description The template a [`PolicyDefinition`] was built from.
 		 *
@@ -14032,6 +14432,28 @@ export interface components {
 			payload?: unknown;
 		};
 		/**
+		 * @description A detection recognition missed.
+		 *
+		 *     Recorded on the report with human provenance, so it is never
+		 *     mistaken for an automatic hit, then redacted under the policy set
+		 *     like any other entity: an added label the policy does not cover
+		 *     is left alone.
+		 *
+		 *     Carries no entity id — the entity does not exist yet, and the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TextAdd: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/** @description What the reviewer says this is. */
+			label: components["schemas"]["LabelRef"];
+			/** @description Where it sits in the document. */
+			location: components["schemas"]["TextLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
+		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
 		 *
@@ -14106,123 +14528,80 @@ export interface components {
 		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
 		 *     rationale for why it happened.
 		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …)
-		 *     can be added compatibly. The recognition kinds ([`Pattern`],
-		 *     [`Model`]) carry the matched [`Location`]; the rest carry their own
-		 *     data.
+		 *     A thin tagged union: each variant wraps one payload struct (e.g.
+		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
+		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
+		 *     payload:
 		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::AuditKind;
+		 *     # use elide_core::modality::text::Text;
+		 *     # fn show(kind: &AuditKind<Text>) {
+		 *     if let AuditKind::Redaction(redaction) = kind {
+		 *         let _ = &redaction.operator;
+		 *     }
+		 *     # }
+		 *     ```
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
+		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
+		 *     matched [`Location`]; the rest carry their own data.
+		 *
+		 *     [`AuditEvent`]: super::AuditEvent
 		 *     [`Pattern`]: AuditKind::Pattern
 		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
 		TextAuditKind:
 			| {
+					detail: components["schemas"]["TextPattern"];
 					/** @constant */
 					kind: "pattern";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TextLocation"];
-					/** @description Pattern detail. */
-					pattern: components["schemas"]["PatternEvent"];
 			  }
 			| {
+					detail: components["schemas"]["TextModel"];
 					/** @constant */
 					kind: "model";
-					/** @description Where the recognizer matched. */
-					location: components["schemas"]["TextLocation"];
-					/** @description Model detail. */
-					model: components["schemas"]["ModelEvent"];
 			  }
 			| {
+					detail: components["schemas"]["Deduplication"];
 					/** @constant */
 					kind: "deduplication";
-					/** @description Name of the fusion strategy that combined them. */
-					strategy: string;
 			  }
 			| {
-					/** @description The loser's confidence at resolution time. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the detection that lost arbitration. */
-					competing_label: components["schemas"]["LabelRef"];
+					detail: components["schemas"]["Conflict"];
 					/** @constant */
 					kind: "conflict";
-					/** @description Name of the conflict policy that chose the winner. */
-					resolved_by: string;
 			  }
 			| {
-					/** @description The competing detection's confidence. */
-					competing_confidence: components["schemas"]["Confidence"];
-					/** @description The label of the competing detection. */
-					competing_label: components["schemas"]["LabelRef"];
-					/** @description Name of the policy that flagged the contest. */
-					flagged_by: string;
+					detail: components["schemas"]["Contested"];
 					/** @constant */
 					kind: "contested";
 			  }
 			| {
-					/**
-					 * Format: double
-					 * @description Multiplier applied.
-					 */
-					factor: number;
+					detail: components["schemas"]["Calibration"];
 					/** @constant */
 					kind: "calibration";
 			  }
 			| {
-					/**
-					 * @description The located [`Hint`] the keyword fired from, when the match came
-					 *     from an out-of-band hint (a column header, a key) rather than
-					 *     the in-text word window. `None` for an in-text-window match.
-					 *
-					 *     [`Hint`]: crate::modality::Hint
-					 */
-					hint?: components["schemas"]["TextHint"];
-					/** @description Keyword that fired the boost. */
-					keyword: string;
+					detail: components["schemas"]["TextRefinement"];
 					/** @constant */
 					kind: "refinement";
-					/**
-					 * @description Where the boosting keyword sits in the medium. For a hint match
-					 *     this mirrors the hint's own location; for an in-text-window match
-					 *     it is the keyword resolved through the modality's [`locate`] (a
-					 *     pixel box for image, a time span for audio, the byte range for
-					 *     text/tabular). `None` when the keyword's stream range could not be
-					 *     placed, symmetric with a match the recognizer itself drops.
-					 *
-					 *     [`locate`]: crate::modality::TextRecognizable::locate
-					 */
-					location?: components["schemas"]["TextLocation"];
 			  }
 			| {
-					/**
-					 * @description The author-supplied policy rationale, when the operator carried an
-					 *     [`Attribution`]; `None` otherwise.
-					 */
-					attribution?: components["schemas"]["Attribution"];
-					/** @description Identifier of the key needed to reverse it, if reversible. */
-					key_id?: string;
+					detail: components["schemas"]["Redaction"];
 					/** @constant */
 					kind: "redaction";
-					/** @description How much the output leaks about the original. */
-					leak_profile: components["schemas"]["LeakProfile"];
-					/**
-					 * @description Which selection rule chose this operator: the automatic "why"
-					 *     (matched a label, a tag, a predicate, or the fallback).
-					 */
-					matched_by: components["schemas"]["RuleMatch"];
-					/** @description Which operator (name + version) ran. */
-					operator: components["schemas"]["OperatorId"];
-					/**
-					 * @description BLAKE3 digest of the original text the operator hid, when the
-					 *     redaction layer recorded it. Proves *what* was redacted without
-					 *     storing the plaintext; `None` when the operator did not capture it.
-					 */
-					span_hash?: components["schemas"]["AuditHash"];
-					/**
-					 * Format: uint32
-					 * @description Byte length of the original text the operator hid, paired with
-					 *     [`span_hash`](Self::Redaction::span_hash). `None` when not captured.
-					 */
-					span_length?: number;
+			  }
+			| {
+					detail: components["schemas"]["Selection"];
+					/** @constant */
+					kind: "selection";
+			  }
+			| {
+					detail: components["schemas"]["TextManual"];
+					/** @constant */
+					kind: "manual";
 			  };
 		/**
 		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
@@ -14273,6 +14652,30 @@ export interface components {
 		 */
 		TextData: string;
 		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TextEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["TextAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["TextRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"])
+			| ({
+					/** @constant */
+					op: "redact";
+			  } & components["schemas"]["TextRedact"]);
+		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
 		 *     Generic over the [`Modality`] `M`, which is what makes the model
@@ -14300,7 +14703,12 @@ export interface components {
 		TextEntity: {
 			/**
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG.
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
 			 */
 			audit: components["schemas"]["TextAuditLog"];
 			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
@@ -14344,30 +14752,6 @@ export interface components {
 			 *     [`location`]: Entity::location
 			 */
 			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description One recognized entity plus the optional reviewer override.
-		 *
-		 *     The bound mirrors elide's [`Entity<M>`]: serialization needs
-		 *     `M::Location` and `M::Data` (de)serializable, and JsonSchema
-		 *     derivation needs them schema-able. All four modalities elide
-		 *     ships satisfy these under the `serde` + `schema` features.
-		 */
-		TextEntityRecord: {
-			/** @description The elide entity, as recognition produced it. */
-			entity: components["schemas"]["TextEntity"];
-			/**
-			 * @description Reviewer-supplied redaction override.
-			 *
-			 *     `None` means "use the matching policy rule's decision";
-			 *     `Some(...)` overrides that rule for this specific entity
-			 *     at apply time. Reviewer overrides take precedence over
-			 *     every policy rule and inherit the authority of the
-			 *     [`Review::policy_id`] they name: the audit event's
-			 *     attribution stamps that policy so the trail names the
-			 *     authority under which the override fired.
-			 */
-			review?: components["schemas"]["Review"];
 		};
 		/**
 		 * @description Located, typed piece of context a recognizer may treat as in-context
@@ -14417,6 +14801,85 @@ export interface components {
 			 *     across gaps. Sorted, deduplicated.
 			 */
 			source?: components["schemas"]["SourceRef"][];
+		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		TextManual: {
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+			/**
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["TextLocation"];
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		TextModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TextLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
+		};
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		TextPattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TextLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/**
+		 * @description Redact this entity with `action` instead of the operator the
+		 *     policy picked.
+		 */
+		TextRedact: {
+			/**
+			 * @description The operator to run, typed to the entity's own modality so a
+			 *     text entity cannot be given an image operator.
+			 */
+			action: components["schemas"]["TextRedaction"];
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity to redact.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description The policy whose authority the reviewer exercises. Must match
+			 *     a submitted policy's `id`.
+			 *
+			 *     Not only for audit: it picks which per-policy pseudonym vault
+			 *     and `KeyProvider` the operator resolves against, so an
+			 *     override using `Pseudonymize` or `HmacHash` stays consistent
+			 *     with that policy's other rules.
+			 */
+			policyId: string;
+			/** @description The rationale, when one was given. */
+			reason?: string;
 		};
 		/** @description Operator spec a `redact` text rule carries. */
 		TextRedaction:
@@ -14576,6 +15039,55 @@ export interface components {
 					 */
 					style?: components["schemas"]["DateStyle"];
 			  };
+		/** @description A context keyword near the entity lifted its confidence. */
+		TextRefinement: {
+			/**
+			 * @description The located [`Hint`] the keyword fired from, when the match came from an
+			 *     out-of-band hint (a column header, a key) rather than the in-text word
+			 *     window. `None` for an in-text-window match.
+			 *
+			 *     [`Hint`]: crate::modality::Hint
+			 */
+			hint?: components["schemas"]["TextHint"];
+			/** @description Keyword that fired the boost. */
+			keyword: string;
+			/**
+			 * @description Where the boosting keyword sits in the medium. For a hint match this
+			 *     mirrors the hint's own location; for an in-text-window match it is the
+			 *     keyword resolved through the modality's [`locate`]. `None` when the
+			 *     keyword's stream range could not be placed.
+			 *
+			 *     [`locate`]: crate::modality::TextRecognizable::locate
+			 */
+			location?: components["schemas"]["TextLocation"];
+		};
+		/**
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
+		 *
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		TextRetag: {
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["TextLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+		};
 		/**
 		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
 		 *
