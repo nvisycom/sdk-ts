@@ -4,28 +4,42 @@ type Schemas = components["schemas"];
 
 // The detection result model: what `getDetections()` returns via `Audit`.
 // A modality-tagged tree of recognized entities, each with its full audit
-// trail (events, provenance, reviewer overrides) and location within the
-// document it was found in.
+// trail (the events in its life) and location within the document.
 
 // Audit container.
-export type EntityGroup = Schemas["EntityGroup"];
-export type AuditContext = Schemas["AuditContext"];
+export type Audit = Schemas["Audit"];
+export type DocumentContext = Schemas["DocumentContext"];
+export type CodecParams = Schemas["CodecParams"];
 export type EntityCoRef = Schemas["EntityCoRef"];
+export type Report = Schemas["Report"];
+
+// Reviewer edits applied on top of automatic detection.
+export type EditSet = Schemas["EditSet"];
 
 // Raster mode a run resolved to, with its render resolution.
 export type RasterMode = Schemas["RasterMode"];
 export type Dpi = Schemas["Dpi"];
 
-// Redaction rationale and reviewer overrides.
-export type Review = Schemas["Review"];
-export type Attribution = Schemas["Attribution"];
-export type AttributionKind = Schemas["AttributionKind"];
+// Redaction decision and reviewer overrides.
+export type Redaction = Schemas["Redaction"];
+export type Selection = Schemas["Selection"];
+export type Suppress = Schemas["Suppress"];
+export type ManualIntent = Schemas["ManualIntent"];
 export type LeakProfile = Schemas["LeakProfile"];
 export type RuleMatch = Schemas["RuleMatch"];
 
-// Recognition event detail.
+// Attribution: the rationale behind a redaction.
+export type Attribution = Schemas["Attribution"];
+export type CitedAttribution = Schemas["CitedAttribution"];
+export type FreeformAttribution = Schemas["FreeformAttribution"];
+
+// Recognition and reconciliation event detail.
 export type ModelEvent = Schemas["ModelEvent"];
 export type PatternEvent = Schemas["PatternEvent"];
+export type Conflict = Schemas["Conflict"];
+export type Contested = Schemas["Contested"];
+export type Deduplication = Schemas["Deduplication"];
+export type Calibration = Schemas["Calibration"];
 export type OperatorId = Schemas["OperatorId"];
 
 // Audit-event digest and the coarse category a label belongs to.
@@ -47,39 +61,67 @@ export type TimeSpan = Schemas["TimeSpan"];
 
 // Text modality.
 export type TextEntity = Schemas["TextEntity"];
-export type TextEntityRecord = Schemas["TextEntityRecord"];
 export type TextAuditEvent = Schemas["TextAuditEvent"];
 export type TextAuditKind = Schemas["TextAuditKind"];
+export type TextAuditLog = Schemas["TextAuditLog"];
 export type TextHint = Schemas["TextHint"];
 export type TextLocation = Schemas["TextLocation"];
-export type TextAuditLog = Schemas["TextAuditLog"];
 export type TextData = Schemas["TextData"];
+export type TextModel = Schemas["TextModel"];
+export type TextPattern = Schemas["TextPattern"];
+export type TextManual = Schemas["TextManual"];
+export type TextEdit = Schemas["TextEdit"];
+export type TextAdd = Schemas["TextAdd"];
+export type TextRedact = Schemas["TextRedact"];
+export type TextRefinement = Schemas["TextRefinement"];
+export type TextRetag = Schemas["TextRetag"];
 
 // Image modality.
 export type ImageEntity = Schemas["ImageEntity"];
-export type ImageEntityRecord = Schemas["ImageEntityRecord"];
 export type ImageAuditEvent = Schemas["ImageAuditEvent"];
 export type ImageAuditKind = Schemas["ImageAuditKind"];
+export type ImageAuditLog = Schemas["ImageAuditLog"];
 export type ImageHint = Schemas["ImageHint"];
 export type ImageLocation = Schemas["ImageLocation"];
-export type ImageAuditLog = Schemas["ImageAuditLog"];
 export type ImageData = Schemas["ImageData"];
+export type ImageModel = Schemas["ImageModel"];
+export type ImagePattern = Schemas["ImagePattern"];
+export type ImageManual = Schemas["ImageManual"];
+export type ImageEdit = Schemas["ImageEdit"];
+export type ImageAdd = Schemas["ImageAdd"];
+export type ImageRedact = Schemas["ImageRedact"];
+export type ImageRefinement = Schemas["ImageRefinement"];
+export type ImageRetag = Schemas["ImageRetag"];
 
 // Audio modality.
 export type AudioEntity = Schemas["AudioEntity"];
-export type AudioEntityRecord = Schemas["AudioEntityRecord"];
 export type AudioAuditEvent = Schemas["AudioAuditEvent"];
 export type AudioAuditKind = Schemas["AudioAuditKind"];
+export type AudioAuditLog = Schemas["AudioAuditLog"];
 export type AudioHint = Schemas["AudioHint"];
 export type AudioLocation = Schemas["AudioLocation"];
-export type AudioAuditLog = Schemas["AudioAuditLog"];
 export type AudioData = Schemas["AudioData"];
+export type AudioModel = Schemas["AudioModel"];
+export type AudioPattern = Schemas["AudioPattern"];
+export type AudioManual = Schemas["AudioManual"];
+export type AudioEdit = Schemas["AudioEdit"];
+export type AudioAdd = Schemas["AudioAdd"];
+export type AudioRedact = Schemas["AudioRedact"];
+export type AudioRefinement = Schemas["AudioRefinement"];
+export type AudioRetag = Schemas["AudioRetag"];
 
 // Tabular modality.
 export type TabularEntity = Schemas["TabularEntity"];
-export type TabularEntityRecord = Schemas["TabularEntityRecord"];
 export type TabularAuditEvent = Schemas["TabularAuditEvent"];
 export type TabularAuditKind = Schemas["TabularAuditKind"];
+export type TabularAuditLog = Schemas["TabularAuditLog"];
 export type TabularHint = Schemas["TabularHint"];
 export type TabularLocation = Schemas["TabularLocation"];
-export type TabularAuditLog = Schemas["TabularAuditLog"];
+export type TabularModel = Schemas["TabularModel"];
+export type TabularPattern = Schemas["TabularPattern"];
+export type TabularManual = Schemas["TabularManual"];
+export type TabularEdit = Schemas["TabularEdit"];
+export type TabularAdd = Schemas["TabularAdd"];
+export type TabularRedact = Schemas["TabularRedact"];
+export type TabularRefinement = Schemas["TabularRefinement"];
+export type TabularRetag = Schemas["TabularRetag"];

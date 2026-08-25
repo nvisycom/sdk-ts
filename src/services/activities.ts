@@ -1,8 +1,10 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	ActivityExportQuery,
-	ActivityListQuery,
+	ActivityExportOptions,
+	ActivityFilterQuery,
 	ActivityPage,
+	CursorPagination,
+	DateWindow,
 } from "@/datatypes/index.js";
 
 /**
@@ -25,7 +27,7 @@ export class Activities {
 	 */
 	async listActivities(
 		workspaceSlug: string,
-		query?: ActivityListQuery,
+		query?: ActivityFilterQuery & DateWindow & CursorPagination,
 	): Promise<ActivityPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/activities/",
@@ -45,7 +47,7 @@ export class Activities {
 	 */
 	async exportActivities(
 		workspaceSlug: string,
-		query?: ActivityExportQuery,
+		query?: ActivityFilterQuery & DateWindow & ActivityExportOptions,
 	): Promise<Response> {
 		const { response } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/activities/export",

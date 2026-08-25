@@ -3,7 +3,6 @@ import type { components } from "@/schema/api.js";
 type Schemas = components["schemas"];
 
 // Analysis scope and localization.
-export type ScopeParams = Schemas["ScopeParams"];
 export type ScopeMetadata = Schemas["ScopeMetadata"];
 export type CountryCode = Schemas["CountryCode"];
 export type Language = Schemas["Language"];

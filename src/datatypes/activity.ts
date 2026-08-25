@@ -6,10 +6,10 @@ export type Activity = Schemas["Activity"];
 export type ActivityPage = Schemas["ActivityPage"];
 // The kind of an activity, usable as a list/export filter.
 export type ActivityType = Schemas["ActivityType"];
-// Query for listing activities (filters + pagination).
-export type ActivityListQuery = Schemas["ActivityListQuery"];
-// Query for the activity-log export (date window + output format).
-export type ActivityExportQuery = Schemas["ActivityExportQuery"];
+// Filters for listing activities (type + actor + date window).
+export type ActivityFilterQuery = Schemas["ActivityFilterQuery"];
+// Export-only option (output format) for the activity-log export.
+export type ActivityExportOptions = Schemas["ActivityExportOptions"];
 
 // Activity payload: a discriminated union (on `activityType`) whose per-event
 // data lives in a named `*ActivityParams` type.
