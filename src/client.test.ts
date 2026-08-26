@@ -67,7 +67,8 @@ describe("Nvisy", () => {
 			expect(nvisy.notifications).toBeDefined();
 			expect(nvisy.pipelines).toBeDefined();
 			expect(nvisy.policies).toBeDefined();
-			expect(nvisy.runs).toBeDefined();
+			expect(nvisy.detections).toBeDefined();
+			expect(nvisy.redactions).toBeDefined();
 			expect(nvisy.syncs).toBeDefined();
 			expect(nvisy.webhooks).toBeDefined();
 			expect(nvisy.workspaces).toBeDefined();

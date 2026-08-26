@@ -30,13 +30,14 @@ import {
 	Catalog,
 	Chat,
 	Connections,
+	Detections,
 	Files,
 	Invites,
 	Members,
 	Notifications,
 	Pipelines,
 	Policies,
-	Runs,
+	Redactions,
 	Status,
 	Syncs,
 	Webhooks,
@@ -319,10 +320,17 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for managing pipeline runs.
+	 * Service for pipeline detections and their redactions.
 	 */
-	get runs(): Runs {
-		return new Runs(this.#api);
+	get detections(): Detections {
+		return new Detections(this.#api);
+	}
+
+	/**
+	 * Service for workspace redactions.
+	 */
+	get redactions(): Redactions {
+		return new Redactions(this.#api);
 	}
 
 	/**

@@ -1574,7 +1574,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["RunTimeSeries"];
+						"application/json": components["schemas"]["DetectionTimeSeries"];
 					};
 				};
 				/**
@@ -4737,7 +4737,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/pipelines/runs/": {
+	"/workspaces/{workspaceSlug}/pipelines/detections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4745,8 +4745,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List workspace runs
-		 * @description Returns all pipeline runs across the workspace, most recent first, with optional status, file, pipeline, trigger-account, and trigger-type filters.
+		 * List workspace detections
+		 * @description Returns all detections across the workspace, most recent first, with optional status, file, pipeline, trigger-account, and trigger-type filters.
 		 */
 		get: {
 			parameters: {
@@ -4764,15 +4764,15 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by the source file the run analyzes. */
+					/** @description Filter by the source file the detection analyzes. */
 					fileId?: string;
 					/** @description Filter by the owning pipeline. */
 					pipelineId?: string;
-					/** @description Filter by run status. */
-					status?: components["schemas"]["PipelineRunStatus"];
-					/** @description Filter by how the run was initiated (user vs system). */
+					/** @description Filter by detection status. */
+					status?: components["schemas"]["DetectionStatus"];
+					/** @description Filter by how the detection was initiated (user vs system). */
 					triggerType?: components["schemas"]["PipelineTriggerType"];
-					/** @description Filter by the account that triggered the run. */
+					/** @description Filter by the account that triggered the detection. */
 					triggeredBy?: string;
 				};
 				header?: never;
@@ -4796,7 +4796,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRunPage"];
+						"application/json": components["schemas"]["DetectionPage"];
 					};
 				};
 				/**
@@ -4854,7 +4854,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/runs/": {
+	"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/detections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4862,8 +4862,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List pipeline runs
-		 * @description Returns runs for a specific pipeline, most recent first, with optional status, file, trigger-account, and trigger-type filters.
+		 * List pipeline detections
+		 * @description Returns detections for a specific pipeline, most recent first, with optional status, file, trigger-account, and trigger-type filters.
 		 */
 		get: {
 			parameters: {
@@ -4881,13 +4881,13 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by the source file the run analyzes. */
+					/** @description Filter by the source file the detection analyzes. */
 					fileId?: string;
-					/** @description Filter by run status. */
-					status?: components["schemas"]["PipelineRunStatus"];
-					/** @description Filter by how the run was initiated (user vs system). */
+					/** @description Filter by detection status. */
+					status?: components["schemas"]["DetectionStatus"];
+					/** @description Filter by how the detection was initiated (user vs system). */
 					triggerType?: components["schemas"]["PipelineTriggerType"];
-					/** @description Filter by the account that triggered the run. */
+					/** @description Filter by the account that triggered the detection. */
 					triggeredBy?: string;
 				};
 				header?: never;
@@ -4913,7 +4913,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRunPage"];
+						"application/json": components["schemas"]["DetectionPage"];
 					};
 				};
 				/**
@@ -4965,8 +4965,8 @@ export interface paths {
 		};
 		put?: never;
 		/**
-		 * Start a run (detect)
-		 * @description Starts detection for a file and returns 202 with the run in the `running` state; the analysis runs in the background. Watch the run's status via the SSE stream at `.../runs/{runId}/events` (or re-read the run) and fetch the findings from `.../runs/{runId}/detections/` once it reaches `analyzed`. A repeated Idempotency-Key returns the existing run.
+		 * Start a detection
+		 * @description Starts analysis for a file and returns 202 with the detection in the `executing` state; the analysis runs in the background. Watch the detection's status via the SSE stream at `.../detections/{detectionId}/events` (or re-read the detection) and fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
 		 */
 		post: {
 			parameters: {
@@ -4981,43 +4981,47 @@ export interface paths {
 				cookie?: never;
 			};
 			/**
-			 * @description Request payload to start a run (detect) over a file.
+			 * @description Request payload to start a detection over a file.
 			 *
-			 *     Analyzes the file with the pipeline's configuration and returns the run,
-			 *     which holds the findings for review before redaction.
+			 *     Analyzes the file with the pipeline's configuration and returns the
+			 *     detection, which holds the findings for review before redaction.
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreatePipelineRun"];
+					"application/json": components["schemas"]["CreateDetection"];
 				};
 			};
 			responses: {
 				/**
-				 * @description Response type for a pipeline run.
+				 * @description Response type for a detection.
 				 *
-				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
-				 *     slugs are carried for context.
+				 *     A detection is addressed by its own opaque id; the owning pipeline and
+				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     detection produces many redactions, each fetched from its `redactions`
+				 *     endpoint.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRun"];
+						"application/json": components["schemas"]["Detection"];
 					};
 				};
 				/**
-				 * @description Response type for a pipeline run.
+				 * @description Response type for a detection.
 				 *
-				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
-				 *     slugs are carried for context.
+				 *     A detection is addressed by its own opaque id; the owning pipeline and
+				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     detection produces many redactions, each fetched from its `redactions`
+				 *     endpoint.
 				 */
 				202: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRun"];
+						"application/json": components["schemas"]["Detection"];
 					};
 				};
 				/**
@@ -5121,7 +5125,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/": {
+	"/workspaces/{workspaceSlug}/detections/{detectionId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5129,8 +5133,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get pipeline run
-		 * @description Returns the run and its status for review.
+		 * Get detection
+		 * @description Returns the detection and its status for review.
 		 */
 		get: {
 			parameters: {
@@ -5139,25 +5143,27 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Opaque identifier of the run. */
-					runId: components["schemas"]["RunId"];
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a pipeline run.
+				 * @description Response type for a detection.
 				 *
-				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
-				 *     slugs are carried for context.
+				 *     A detection is addressed by its own opaque id; the owning pipeline and
+				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     detection produces many redactions, each fetched from its `redactions`
+				 *     endpoint.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRun"];
+						"application/json": components["schemas"]["Detection"];
 					};
 				};
 				/**
@@ -5215,7 +5221,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/events": {
+	"/workspaces/{workspaceSlug}/detections/{detectionId}/events/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5223,8 +5229,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Stream pipeline run status
-		 * @description Opens a Server-Sent Events stream of the run's status changes. Emits the current status immediately, then each transition, and ends once the run settles (analyzed, failed, or cancelled). Each event's `data` is a `RunStatusEvent` (see the response schema). Authenticate with a Bearer token via a `fetch`-based client; the native `EventSource` cannot send an `Authorization` header.
+		 * Stream detection status
+		 * @description Opens a Server-Sent Events stream of the detection's status changes. Emits the current status immediately, then each transition, and ends once the detection settles (complete or failed). Each event's `data` is a `DetectionStatusEvent` (see the response schema). Authenticate with a Bearer token via a `fetch`-based client; the native `EventSource` cannot send an `Authorization` header.
 		 */
 		get: {
 			parameters: {
@@ -5233,8 +5239,8 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Opaque identifier of the run. */
-					runId: components["schemas"]["RunId"];
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
 				};
 				cookie?: never;
 			};
@@ -5246,7 +5252,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"text/event-stream": components["schemas"]["RunStatusEvent"];
+						"text/event-stream": components["schemas"]["DetectionStatusEvent"];
 					};
 				};
 				/**
@@ -5304,18 +5310,111 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/redactions/": {
+	"/workspaces/{workspaceSlug}/detections/{detectionId}/redactions/": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
+		/**
+		 * List detection redactions
+		 * @description Returns a detection's redactions, most recent first, cursor-paginated. Each redaction is one redact pass with its own reviewer edits, output document, and review audit.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["RedactionResultPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		put?: never;
 		/**
-		 * Redact a run
-		 * @description Applies the pipeline's policies to the run's stored analysis, stores the redacted file, and completes the run.
+		 * Redact a detection
+		 * @description Applies the pipeline's policies to the detection's stored analysis — with any reviewer `edits` layered on first (suppress a false positive, retag a detection, or add one the analysis missed) — and produces a new redaction: a redacted document plus a review audit recording what was redacted. A detection can be redacted more than once. An edit targeting a detection not in the analysis, or a set that contradicts itself, is rejected (400).
 		 */
 		post: {
 			parameters: {
@@ -5324,25 +5423,58 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Opaque identifier of the run. */
-					runId: components["schemas"]["RunId"];
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
 				};
 				cookie?: never;
 			};
-			requestBody?: never;
+			/**
+			 * @description Request payload to redact a detection.
+			 *
+			 *     The reviewer's edits layer over the detection's analysis before redaction:
+			 *     suppress a false positive, retag a detection, or add one the analysis missed.
+			 *     Omit `edits` to redact with the policy decisions exactly as detected. Each
+			 *     redact request produces a new redaction.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["RedactDetection"];
+				};
+			};
 			responses: {
 				/**
-				 * @description Response type for a pipeline run.
+				 * @description Response type for a redaction.
 				 *
-				 *     A run is addressed by its own opaque id; the owning pipeline and workspace
-				 *     slugs are carried for context.
+				 *     A redaction is one redact pass over a detection, produced with a specific set
+				 *     of reviewer edits. It owns the redacted output document (downloadable through
+				 *     the normal file endpoints) and a review audit recording what was redacted and
+				 *     why (fetched from the redaction's `review` endpoint).
+				 *
+				 *     Named `RedactionResult` rather than `Redaction` because the engine's audit
+				 *     schema already carries a `Redaction` (an audit event), and the two must not
+				 *     collide in the generated OpenAPI.
 				 */
-				200: {
+				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineRun"];
+						"application/json": components["schemas"]["RedactionResult"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
 				/**
@@ -5405,6 +5537,24 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 			};
 		};
 		delete?: never;
@@ -5413,7 +5563,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/detections/": {
+	"/workspaces/{workspaceSlug}/detections/{detectionId}/analysis/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5421,8 +5571,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get run detections
-		 * @description Returns the run's detected findings (the analyzed document) for review.
+		 * Get detection findings
+		 * @description Returns the detection's detected findings (the analyzed document) for review.
 		 */
 		get: {
 			parameters: {
@@ -5431,21 +5581,25 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Opaque identifier of the run. */
-					runId: components["schemas"]["RunId"];
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description What detection found in one document, plus what a reviewer
-				 *     decided about it.
+				 * @description What detection found in one document.
 				 *
-				 *     Wraps elide's [`Report`] with the three things elide does not
-				 *     model: the recognition [`DocumentContext`] the entities were
-				 *     scored against, how the document decoded, and the reviewer
-				 *     decisions in [`edits`](Self::edits).
+				 *     Wraps elide's [`Report`] with the things elide does not model:
+				 *     the recognition [`DocumentContext`] the entities were scored
+				 *     against, how the document decoded, and what the pass cost.
+				 *
+				 *     Reviewer edits are not here. They are the caller's own input,
+				 *     applied to the report before anonymize
+				 *     ([`EditSet::apply`](crate::entity::EditSet::apply)), so an audit
+				 *     carries what analysis found *as amended* rather than the
+				 *     amendments themselves.
 				 *
 				 *     # Serialization
 				 *
@@ -5457,10 +5611,10 @@ export interface paths {
 				 *     # Schema
 				 *
 				 *     Generate under the **serialize** contract
-				 *     ([`SchemaSettings::for_serialize`]). `edits` and `usage` are
-				 *     `skip_serializing_if`, and only that contract marks them
-				 *     optional — `schema_for!` defaults to deserialize and declares
-				 *     both required, so a generated client would reject responses this
+				 *     ([`SchemaSettings::for_serialize`]). `usage` is
+				 *     `skip_serializing_if`, and only that contract marks it optional
+				 *     — `schema_for!` defaults to deserialize and declares it
+				 *     required, so a generated client would reject responses this
 				 *     crate really emits.
 				 *
 				 *     [`Engine`]: super::Engine
@@ -5546,7 +5700,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/runs/{runId}/audit": {
+	"/workspaces/{workspaceSlug}/detections/{detectionId}/audit/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5554,8 +5708,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Download run audit
-		 * @description Downloads the run's audit as a file. `format` is `csv` (default) — a zip of entities.csv, provenance.csv, and reviews.csv — or `json`, a pretty-printed JSON file.
+		 * Download detection audit
+		 * @description Downloads the detection's audit as a file. `format` is `csv` (default) — a zip of entities.csv, provenance.csv, and reviews.csv — or `json`, a pretty-printed JSON file.
 		 */
 		get: {
 			parameters: {
@@ -5567,14 +5721,14 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Opaque identifier of the run. */
-					runId: components["schemas"]["RunId"];
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description The run's exported audit. */
+				/** @description The detection's exported audit. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -5582,6 +5736,143 @@ export interface paths {
 					content: {
 						"application/zip": unknown;
 						"application/json": unknown;
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/redactions/{redactionId}/review": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get redaction review
+		 * @description Returns the redaction's review audit: the detection analysis with the reviewer's edits applied and the per-entity redaction outcome recorded.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the redaction. */
+					redactionId: components["schemas"]["RedactionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description What detection found in one document.
+				 *
+				 *     Wraps elide's [`Report`] with the things elide does not model:
+				 *     the recognition [`DocumentContext`] the entities were scored
+				 *     against, how the document decoded, and what the pass cost.
+				 *
+				 *     Reviewer edits are not here. They are the caller's own input,
+				 *     applied to the report before anonymize
+				 *     ([`EditSet::apply`](crate::entity::EditSet::apply)), so an audit
+				 *     carries what analysis found *as amended* rather than the
+				 *     amendments themselves.
+				 *
+				 *     # Serialization
+				 *
+				 *     [`Serialize`] but deliberately **not** `Deserialize`: a
+				 *     serialized report tags entity groups by modality *name*, so
+				 *     rebuilding one needs the registry [`Engine`] holds. Read an
+				 *     audit back with [`Engine::deserialize_audit`].
+				 *
+				 *     # Schema
+				 *
+				 *     Generate under the **serialize** contract
+				 *     ([`SchemaSettings::for_serialize`]). `usage` is
+				 *     `skip_serializing_if`, and only that contract marks it optional
+				 *     — `schema_for!` defaults to deserialize and declares it
+				 *     required, so a generated client would reject responses this
+				 *     crate really emits.
+				 *
+				 *     [`Engine`]: super::Engine
+				 *     [`Engine::deserialize_audit`]: super::Engine::deserialize_audit
+				 *     [`Report`]: elide::Report
+				 *     [`SchemaSettings::for_serialize`]: schemars::generate::SchemaSettings::for_serialize
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Audit"];
 					};
 				};
 				/**
@@ -8905,24 +9196,24 @@ export interface components {
 					type: "pipeline.deleted";
 			  }
 			| {
-					data: components["schemas"]["PipelineRunActivityParams"];
+					data: components["schemas"]["DetectionActivityParams"];
 					/** @constant */
-					type: "pipeline.run.started";
+					type: "pipeline.detection.started";
 			  }
 			| {
-					data: components["schemas"]["PipelineRunActivityParams"];
+					data: components["schemas"]["DetectionActivityParams"];
 					/** @constant */
-					type: "pipeline.run.analyzed";
+					type: "pipeline.detection.completed";
 			  }
 			| {
-					data: components["schemas"]["PipelineRunActivityParams"];
+					data: components["schemas"]["DetectionActivityParams"];
 					/** @constant */
-					type: "pipeline.run.completed";
+					type: "pipeline.detection.failed";
 			  }
 			| {
-					data: components["schemas"]["PipelineRunActivityParams"];
+					data: components["schemas"]["RedactionActivityParams"];
 					/** @constant */
-					type: "pipeline.run.failed";
+					type: "pipeline.redaction.created";
 			  }
 			| {
 					data: components["schemas"]["PolicyActivityParams"];
@@ -8972,10 +9263,10 @@ export interface components {
 			| "pipeline.created"
 			| "pipeline.updated"
 			| "pipeline.deleted"
-			| "pipeline.run.started"
-			| "pipeline.run.analyzed"
-			| "pipeline.run.completed"
-			| "pipeline.run.failed"
+			| "pipeline.detection.started"
+			| "pipeline.detection.completed"
+			| "pipeline.detection.failed"
+			| "pipeline.redaction.created"
 			| "policy.created"
 			| "policy.updated"
 			| "policy.deleted";
@@ -9348,11 +9639,7 @@ export interface components {
 			| ({
 					/** @constant */
 					op: "suppress";
-			  } & components["schemas"]["Suppress"])
-			| ({
-					/** @constant */
-					op: "redact";
-			  } & components["schemas"]["AudioRedact"]);
+			  } & components["schemas"]["Suppress"]);
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
@@ -9519,37 +9806,6 @@ export interface components {
 			/** @description Pattern metadata (name, regex, validator, contextual flag). */
 			pattern: components["schemas"]["PatternEvent"];
 		};
-		/**
-		 * @description Redact this entity with `action` instead of the operator the
-		 *     policy picked.
-		 */
-		AudioRedact: {
-			/**
-			 * @description The operator to run, typed to the entity's own modality so a
-			 *     text entity cannot be given an image operator.
-			 */
-			action: components["schemas"]["AudioRedaction"];
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/**
-			 * Format: uuid
-			 * @description The entity to redact.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description The policy whose authority the reviewer exercises. Must match
-			 *     a submitted policy's `id`.
-			 *
-			 *     Not only for audit: it picks which per-policy pseudonym vault
-			 *     and `KeyProvider` the operator resolves against, so an
-			 *     override using `Pseudonymize` or `HmacHash` stays consistent
-			 *     with that policy's other rules.
-			 */
-			policyId: string;
-			/** @description The rationale, when one was given. */
-			reason?: string;
-		};
 		/** @description Operator spec a `redact` audio rule carries. */
 		AudioRedaction:
 			| {
@@ -9637,13 +9893,17 @@ export interface components {
 			reason?: string;
 		};
 		/**
-		 * @description What detection found in one document, plus what a reviewer
-		 *     decided about it.
+		 * @description What detection found in one document.
 		 *
-		 *     Wraps elide's [`Report`] with the three things elide does not
-		 *     model: the recognition [`DocumentContext`] the entities were
-		 *     scored against, how the document decoded, and the reviewer
-		 *     decisions in [`edits`](Self::edits).
+		 *     Wraps elide's [`Report`] with the things elide does not model:
+		 *     the recognition [`DocumentContext`] the entities were scored
+		 *     against, how the document decoded, and what the pass cost.
+		 *
+		 *     Reviewer edits are not here. They are the caller's own input,
+		 *     applied to the report before anonymize
+		 *     ([`EditSet::apply`](crate::entity::EditSet::apply)), so an audit
+		 *     carries what analysis found *as amended* rather than the
+		 *     amendments themselves.
 		 *
 		 *     # Serialization
 		 *
@@ -9655,10 +9915,10 @@ export interface components {
 		 *     # Schema
 		 *
 		 *     Generate under the **serialize** contract
-		 *     ([`SchemaSettings::for_serialize`]). `edits` and `usage` are
-		 *     `skip_serializing_if`, and only that contract marks them
-		 *     optional — `schema_for!` defaults to deserialize and declares
-		 *     both required, so a generated client would reject responses this
+		 *     ([`SchemaSettings::for_serialize`]). `usage` is
+		 *     `skip_serializing_if`, and only that contract marks it optional
+		 *     — `schema_for!` defaults to deserialize and declares it
+		 *     required, so a generated client would reject responses this
 		 *     crate really emits.
 		 *
 		 *     [`Engine`]: super::Engine
@@ -9687,27 +9947,11 @@ export interface components {
 			 */
 			context: components["schemas"]["DocumentContext"];
 			/**
-			 * @description What a reviewer changed: detections they added, corrected,
-			 *     suppressed, or chose an operator for.
-			 *
-			 *     A list rather than one decision per entity, because the
-			 *     operations feed independent channels — a retag and an
-			 *     operator override on the same entity are both legitimate.
-			 *
-			 *     Separate from the report because elide has no concept of a
-			 *     per-entity operator override: [`anonymize_with`] re-resolves
-			 *     operators from live policy at apply time.
-			 *
-			 *     [`anonymize_with`]: elide::Orchestrator::anonymize_with
-			 */
-			edits: components["schemas"]["EditSet"];
-			/**
 			 * @description The detections: elide's own report, body and container
 			 *     parts, each entity carrying its provenance chain.
 			 *
 			 *     Edit it through [`Report`]'s own API — [`include`],
 			 *     [`suppress`], [`entities`] — for the decisions elide models.
-			 *     Operator overrides live in [`edits`](Self::edits).
 			 *
 			 *     [`Report`]: elide::Report
 			 *     [`include`]: elide::Report::include
@@ -10302,6 +10546,26 @@ export interface components {
 			 */
 			sync?: components["schemas"]["SyncScheduleInput"];
 		};
+		/**
+		 * @description Request payload to start a detection over a file.
+		 *
+		 *     Analyzes the file with the pipeline's configuration and returns the
+		 *     detection, which holds the findings for review before redaction.
+		 */
+		CreateDetection: {
+			/**
+			 * Format: uuid
+			 * @description The file to analyze.
+			 */
+			fileId: string;
+			/**
+			 * @description Per-document scope (languages, jurisdictions, document labels).
+			 *
+			 *     Overrides the pipeline's `defaultScope` when present; absent falls back to
+			 *     the pipeline default.
+			 */
+			scope?: components["schemas"]["DocumentContext"];
+		};
 		/** @description Request payload for creating a new workspace invite. */
 		CreateInvite: {
 			/** @description When the invitation expires. */
@@ -10342,26 +10606,6 @@ export interface components {
 			 *     pipeline ready to run without a follow-up update.
 			 */
 			status?: components["schemas"]["PipelineStatus"];
-		};
-		/**
-		 * @description Request payload to start a run (detect) over a file.
-		 *
-		 *     Analyzes the file with the pipeline's configuration and returns the run,
-		 *     which holds the findings for review before redaction.
-		 */
-		CreatePipelineRun: {
-			/**
-			 * Format: uuid
-			 * @description The file to analyze.
-			 */
-			fileId: string;
-			/**
-			 * @description Per-document scope (languages, jurisdictions, document labels).
-			 *
-			 *     Overrides the pipeline's `defaultScope` when present; absent falls back to
-			 *     the pipeline default.
-			 */
-			scope?: components["schemas"]["DocumentContext"];
 		};
 		/**
 		 * @description Request payload for creating a new workspace policy.
@@ -10502,6 +10746,241 @@ export interface components {
 		Deduplication: {
 			/** @description Name of the fusion strategy that combined them. */
 			strategy: string;
+		};
+		/**
+		 * @description Response type for a detection.
+		 *
+		 *     A detection is addressed by its own opaque id; the owning pipeline and
+		 *     workspace slugs are carried for context. Redacted outputs are not here — a
+		 *     detection produces many redactions, each fetched from its `redactions`
+		 *     endpoint.
+		 */
+		Detection: {
+			/**
+			 * Format: date-time
+			 * @description When the detection completed analysis.
+			 */
+			completedAt?: string;
+			/** @description Human-readable failure reason, present only when the detection `failed`. */
+			error?: string;
+			/** @description Opaque identifier of the detection. */
+			id: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Source document this detection analyzes.
+			 */
+			inputFileId: string;
+			/**
+			 * @description Display name of the source document, for showing the detection without a
+			 *     separate file lookup. `None` if the file was removed (e.g. by retention).
+			 */
+			inputFileName?: string;
+			/** @description Non-encrypted metadata for filtering/display. */
+			metadata: components["schemas"]["DetectionMetadata"];
+			/** @description Handle of the pipeline this detection belongs to. */
+			pipelineSlug: components["schemas"]["Handle"];
+			/**
+			 * Format: date-time
+			 * @description When the detection started.
+			 */
+			startedAt: string;
+			/**
+			 * @description Current detection status.
+			 *
+			 *     The detections are available to fetch from the detection's `analysis`
+			 *     endpoint once this reaches `complete`.
+			 */
+			status: components["schemas"]["DetectionStatus"];
+			/** @description How the detection was triggered. */
+			triggerType: components["schemas"]["PipelineTriggerType"];
+			/** @description Account that triggered the detection. */
+			triggeredBy: components["schemas"]["AccountRef"];
+			/** @description Handle of the workspace this detection belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/** @description Params of a detection activity (`pipeline.detection.*`). */
+		DetectionActivityParams: {
+			/** @description Id of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: components["schemas"]["Handle"];
+		};
+		/** @description Pipeline-run health for a workspace. */
+		DetectionAnalytics: {
+			/**
+			 * Format: int64
+			 * @description Mean completed-run duration in milliseconds; omitted until a run completes.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * @description Per-status breakdown, one entry per run status (zero-filled), in a stable
+			 *     order.
+			 */
+			byStatus: components["schemas"]["DetectionStatusEntry"][];
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed). Omitted when no run has reached a terminal
+			 *     state (genuinely no signal, not zero).
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-run duration in milliseconds; omitted until a run
+			 *     completes.
+			 */
+			p95DurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description Total number of runs.
+			 */
+			total: number;
+		};
+		/** @description Params of a `pipeline.detection.completed` notification. */
+		DetectionCompletedParams: {
+			/** @description Id of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+			/** @description Display name of the analyzed file, if known. */
+			inputFileName?: string;
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: components["schemas"]["Handle"];
+		};
+		/** @description A single day of run activity. */
+		DetectionDayEntry: {
+			/**
+			 * Format: int64
+			 * @description Mean completed-run duration (milliseconds) this day; omitted if none completed.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * Format: date
+			 * @description The day (`YYYY-MM-DD`, UTC).
+			 */
+			date: string;
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed) for this day; omitted when no run reached a
+			 *     terminal state that day.
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description Input/prompt tokens spent by this day's runs; omitted when none used a model.
+			 */
+			inputTokens?: number;
+			/**
+			 * Format: int64
+			 * @description Output/completion tokens spent this day; omitted when none used a model.
+			 */
+			outputTokens?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-run duration (milliseconds) this day; omitted if none.
+			 */
+			p95DurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description Runs started this day (`0` on a quiet day).
+			 */
+			runs: number;
+			/**
+			 * Format: int64
+			 * @description Reported total tokens this day; omitted when none used a model.
+			 */
+			totalTokens?: number;
+		};
+		/** @description Params of a `pipeline.detection.failed` notification. */
+		DetectionFailedParams: {
+			/** @description Id of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+			/** @description Failure reason, if available. */
+			error?: string;
+			/** @description Display name of the analyzed file, if known. */
+			inputFileName?: string;
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: components["schemas"]["Handle"];
+		};
+		/** @description Opaque detection identifier (detection_<uuid>). */
+		DetectionId: string;
+		/** @description Structured metadata for a detection. */
+		DetectionMetadata: {
+			/** @description Failure reason recorded when the detection failed. */
+			error?: string;
+			/** @description Free-form labels attached to the detection. */
+			tags?: string[];
+			/**
+			 * @description The engine's full per-recognizer usage report (durations, per-model token
+			 *     counts), stored opaquely for drill-down. Per-model token totals for
+			 *     aggregation live in the `workspace_detection_usage` table; this keeps the
+			 *     detail. Absent when the detection produced no usage.
+			 */
+			usage?: unknown;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		DetectionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Detection"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters for detection operations. */
+		DetectionPathParams: {
+			/** @description Opaque identifier of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+		};
+		/**
+		 * @description The execution status of a detection (one analysis pass of a file).
+		 *
+		 *     Corresponds to the `DETECTION_STATUS` PostgreSQL enum. A detection is
+		 *     `Pending` (enqueued, no worker yet), then `Executing` (a worker is actively
+		 *     analyzing), then settles into `Complete` (analysis done, ready to redact) or
+		 *     `Failed`. Redaction is a separate, repeatable action over a complete
+		 *     detection and does not change this status.
+		 */
+		DetectionStatus: "pending" | "executing" | "complete" | "failed";
+		/** @description One status's share of a workspace's runs. */
+		DetectionStatusEntry: {
+			/**
+			 * Format: int64
+			 * @description Number of runs in this status.
+			 */
+			count: number;
+			/** @description The run status. */
+			status: components["schemas"]["DetectionStatus"];
+		};
+		/**
+		 * @description A detection's status change, broadcast on the core-NATS subject
+		 *     [`detection_subject`].
+		 *
+		 *     Fan-out to any watching SSE connections; the detection row in Postgres remains
+		 *     the source of truth, so a missed broadcast is recoverable by re-reading it.
+		 */
+		DetectionStatusEvent: {
+			/**
+			 * Format: uuid
+			 * @description The detection whose status changed.
+			 */
+			detectionId: string;
+			/** @description The detection's new status. */
+			status: components["schemas"]["DetectionStatus"];
+		};
+		/**
+		 * @description A workspace's daily run activity over a window: one point per day, dense
+		 *     (quiet days included with `runs: 0`), ready to plot as a continuous series.
+		 */
+		DetectionTimeSeries: {
+			/** @description One entry per day in the requested window, oldest first. */
+			points: components["schemas"]["DetectionDayEntry"][];
 		};
 		/**
 		 * @description Pixel dimensions of an image or any 2-D canvas.
@@ -10692,7 +11171,7 @@ export interface components {
 		 *     version chain (lineage); import origin (connection and remote key) lives in
 		 *     the `workspace_file_imports` satellite.
 		 */
-		FileKind: "original" | "redacted" | "audit";
+		FileKind: "original" | "redacted" | "audit" | "review";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -11123,11 +11602,7 @@ export interface components {
 			| ({
 					/** @constant */
 					op: "suppress";
-			  } & components["schemas"]["Suppress"])
-			| ({
-					/** @constant */
-					op: "redact";
-			  } & components["schemas"]["ImageRedact"]);
+			  } & components["schemas"]["Suppress"]);
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
@@ -11298,37 +11773,6 @@ export interface components {
 			location: components["schemas"]["ImageLocation"];
 			/** @description Pattern metadata (name, regex, validator, contextual flag). */
 			pattern: components["schemas"]["PatternEvent"];
-		};
-		/**
-		 * @description Redact this entity with `action` instead of the operator the
-		 *     policy picked.
-		 */
-		ImageRedact: {
-			/**
-			 * @description The operator to run, typed to the entity's own modality so a
-			 *     text entity cannot be given an image operator.
-			 */
-			action: components["schemas"]["ImageRedaction"];
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/**
-			 * Format: uuid
-			 * @description The entity to redact.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description The policy whose authority the reviewer exercises. Must match
-			 *     a submitted policy's `id`.
-			 *
-			 *     Not only for audit: it picks which per-policy pseudonym vault
-			 *     and `KeyProvider` the operator resolves against, so an
-			 *     override using `Pseudonymize` or `HmacHash` stays consistent
-			 *     with that policy's other rules.
-			 */
-			policyId: string;
-			/** @description The rationale, when one was given. */
-			reason?: string;
 		};
 		/** @description Operator spec a `redact` image rule carries. */
 		ImageRedaction:
@@ -12102,7 +12546,8 @@ export interface components {
 		 * @description Defines the type of notification event sent to a user.
 		 *
 		 *     This enumeration corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and
-		 *     is used for member, connection-sync, pipeline-run, and system notifications.
+		 *     is used for member, connection-sync, detection, redaction, and system
+		 *     notifications.
 		 *     The values mirror the [`WebhookEvent`](super::WebhookEvent) naming for the
 		 *     events the two channels share.
 		 */
@@ -12111,9 +12556,9 @@ export interface components {
 			| "member.joined"
 			| "connection.sync.completed"
 			| "connection.sync.failed"
-			| "pipeline.run.analyzed"
-			| "pipeline.run.completed"
-			| "pipeline.run.failed";
+			| "pipeline.detection.completed"
+			| "pipeline.redaction.created"
+			| "pipeline.detection.failed";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -12175,19 +12620,19 @@ export interface components {
 					type: "connection.sync.failed";
 			  }
 			| {
-					data: components["schemas"]["PipelineRunAnalyzedParams"];
+					data: components["schemas"]["DetectionCompletedParams"];
 					/** @constant */
-					type: "pipeline.run.analyzed";
+					type: "pipeline.detection.completed";
 			  }
 			| {
-					data: components["schemas"]["PipelineRunCompletedParams"];
+					data: components["schemas"]["RedactionCreatedParams"];
 					/** @constant */
-					type: "pipeline.run.completed";
+					type: "pipeline.redaction.created";
 			  }
 			| {
-					data: components["schemas"]["PipelineRunFailedParams"];
+					data: components["schemas"]["DetectionFailedParams"];
 					/** @constant */
-					type: "pipeline.run.failed";
+					type: "pipeline.detection.failed";
 			  };
 		/** @description Response for notification settings within a workspace. */
 		NotificationSettings: {
@@ -12378,6 +12823,28 @@ export interface components {
 			 */
 			policySlugs?: components["schemas"]["Handle"][];
 		};
+		/**
+		 * @description Query parameters for listing a single pipeline's detections.
+		 *
+		 *     The pipeline is fixed by the route, so it narrows only by status, file,
+		 *     trigger account, and trigger type.
+		 */
+		PipelineDetectionsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter by the source file the detection analyzes.
+			 */
+			fileId?: string;
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
+		};
 		/** @description Query parameters for filtering pipelines. */
 		PipelineFilter: {
 			/** @description Search by pipeline name (trigram similarity). */
@@ -12389,160 +12856,6 @@ export interface components {
 		PipelinePathParams: {
 			/** @description URL slug of the pipeline, unique within its workspace. */
 			pipelineSlug: string;
-		};
-		/**
-		 * @description Response type for a pipeline run.
-		 *
-		 *     A run is addressed by its own opaque id; the owning pipeline and workspace
-		 *     slugs are carried for context.
-		 */
-		PipelineRun: {
-			/**
-			 * Format: date-time
-			 * @description When the run completed.
-			 */
-			completedAt?: string;
-			/** @description Human-readable failure reason, present only when the run `failed`. */
-			error?: string;
-			/** @description Opaque identifier of the run. */
-			id: components["schemas"]["RunId"];
-			/**
-			 * Format: uuid
-			 * @description Source document this run analyzes / redacts.
-			 */
-			inputFileId: string;
-			/**
-			 * @description Display name of the source document, for showing the run without a
-			 *     separate file lookup. `None` if the file was removed (e.g. by retention).
-			 */
-			inputFileName?: string;
-			/** @description Non-encrypted metadata for filtering/display. */
-			metadata: components["schemas"]["RunMetadata"];
-			/**
-			 * Format: uuid
-			 * @description Redacted document produced by the run, once it completes.
-			 */
-			outputFileId?: string;
-			/** @description Display name of the redacted output, once the run completes. */
-			outputFileName?: string;
-			/** @description Handle of the pipeline this run belongs to. */
-			pipelineSlug: components["schemas"]["Handle"];
-			/**
-			 * Format: date-time
-			 * @description When the run started.
-			 */
-			startedAt: string;
-			/**
-			 * @description Current run status.
-			 *
-			 *     The detections are available to fetch from the run's `detections`
-			 *     endpoint once this reaches `analyzed`.
-			 */
-			status: components["schemas"]["PipelineRunStatus"];
-			/** @description How the run was triggered. */
-			triggerType: components["schemas"]["PipelineTriggerType"];
-			/** @description Account that triggered the run. */
-			triggeredBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this run belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/** @description Params of a pipeline-run activity (`pipeline.run.*`). */
-		PipelineRunActivityParams: {
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
-			/** @description Id of the run. */
-			runId: components["schemas"]["RunId"];
-		};
-		/** @description Params of a `pipeline.run.analyzed` notification. */
-		PipelineRunAnalyzedParams: {
-			/** @description Display name of the analyzed file, if known. */
-			inputFileName?: string;
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
-			/** @description Id of the run. */
-			runId: components["schemas"]["RunId"];
-		};
-		/** @description Params of a `pipeline.run.completed` notification. */
-		PipelineRunCompletedParams: {
-			/** @description Display name of the analyzed file, if known. */
-			inputFileName?: string;
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
-			/** @description Id of the run. */
-			runId: components["schemas"]["RunId"];
-		};
-		/** @description Params of a `pipeline.run.failed` notification. */
-		PipelineRunFailedParams: {
-			/** @description Failure reason, if available. */
-			error?: string;
-			/** @description Display name of the analyzed file, if known. */
-			inputFileName?: string;
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
-			/** @description Id of the run. */
-			runId: components["schemas"]["RunId"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		PipelineRunPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["PipelineRun"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for pipeline run operations. */
-		PipelineRunPathParams: {
-			/** @description Opaque identifier of the run. */
-			runId: components["schemas"]["RunId"];
-		};
-		/**
-		 * @description Defines the execution status of a pipeline run.
-		 *
-		 *     This enumeration corresponds to the `PIPELINE_RUN_STATUS` PostgreSQL enum and is used
-		 *     to track the current state of a pipeline execution.
-		 *
-		 *     The detect phase has two states: `Queued` (the run is enqueued but no worker
-		 *     has begun) and `Analyzing` (a worker is actively analyzing). They settle into
-		 *     `Analyzed` (detection done, awaiting review), then `Completed` after redaction.
-		 */
-		PipelineRunStatus:
-			| "queued"
-			| "analyzing"
-			| "analyzed"
-			| "completed"
-			| "failed"
-			| "cancelled";
-		/**
-		 * @description Query parameters for listing a single pipeline's runs.
-		 *
-		 *     The pipeline is fixed by the route, so it narrows only by status, file,
-		 *     trigger account, and trigger type.
-		 */
-		PipelineRunsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the source file the run analyzes.
-			 */
-			fileId?: string;
-			/** @description Filter by run status. */
-			status?: components["schemas"]["PipelineRunStatus"];
-			/** @description Filter by how the run was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the run.
-			 */
-			triggeredBy?: string;
 		};
 		/**
 		 * @description Defines the lifecycle status of a pipeline definition.
@@ -13105,6 +13418,21 @@ export interface components {
 			/** @description Recognizer's version at the time it ran. */
 			version: string;
 		};
+		/**
+		 * @description Request payload to redact a detection.
+		 *
+		 *     The reviewer's edits layer over the detection's analysis before redaction:
+		 *     suppress a false positive, retag a detection, or add one the analysis missed.
+		 *     Omit `edits` to redact with the policy decisions exactly as detected. Each
+		 *     redact request produces a new redaction.
+		 */
+		RedactDetection: {
+			/**
+			 * @description Reviewer edits to apply before redaction, grouped by modality. Omit to
+			 *     redact with the policy decisions exactly as detected.
+			 */
+			edits?: components["schemas"]["EditSet"];
+		};
 		/** @description An operator hid the entity. */
 		Redaction: {
 			/**
@@ -13138,6 +13466,87 @@ export interface components {
 			 *     [`span_hash`](Self::span_hash). `None` when not captured.
 			 */
 			span_length?: number;
+		};
+		/** @description Params of a redaction activity (`pipeline.redaction.*`). */
+		RedactionActivityParams: {
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Id of the redaction. */
+			redactionId: components["schemas"]["RedactionId"];
+		};
+		/** @description Params of a `pipeline.redaction.created` notification. */
+		RedactionCreatedParams: {
+			/** @description Id of the detection the redaction was produced from. */
+			detectionId: components["schemas"]["DetectionId"];
+			/** @description Display name of the redacted file, if known. */
+			inputFileName?: string;
+			/** @description Slug of the owning pipeline. */
+			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Id of the redaction. */
+			redactionId: components["schemas"]["RedactionId"];
+		};
+		/** @description Opaque redaction identifier (redaction_<uuid>). */
+		RedactionId: string;
+		/**
+		 * @description Path parameters for a redaction.
+		 *
+		 *     The redaction id is globally unique, so a redaction is addressed by id alone
+		 *     and resolved within the workspace by the query.
+		 */
+		RedactionPathParams: {
+			/** @description Opaque identifier of the redaction. */
+			redactionId: components["schemas"]["RedactionId"];
+		};
+		/**
+		 * @description Response type for a redaction.
+		 *
+		 *     A redaction is one redact pass over a detection, produced with a specific set
+		 *     of reviewer edits. It owns the redacted output document (downloadable through
+		 *     the normal file endpoints) and a review audit recording what was redacted and
+		 *     why (fetched from the redaction's `review` endpoint).
+		 *
+		 *     Named `RedactionResult` rather than `Redaction` because the engine's audit
+		 *     schema already carries a `Redaction` (an audit event), and the two must not
+		 *     collide in the generated OpenAPI.
+		 */
+		RedactionResult: {
+			/**
+			 * Format: date-time
+			 * @description When the redaction was created.
+			 */
+			createdAt: string;
+			/** @description The detection this redaction was produced from. */
+			detectionId: components["schemas"]["DetectionId"];
+			/** @description Opaque identifier of the redaction. */
+			id: components["schemas"]["RedactionId"];
+			/**
+			 * Format: uuid
+			 * @description Redacted output document this redaction produced. `None` only if the file
+			 *     was removed (e.g. by retention).
+			 */
+			outputFileId?: string;
+			/** @description Account that requested the redaction. */
+			requestedBy: components["schemas"]["AccountRef"];
+			/** @description Handle of the workspace this redaction belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		RedactionResultPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["RedactionResult"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
 		};
 		/**
 		 * @description Public view of one recognizer in the engine's NER or LLM
@@ -13320,129 +13729,6 @@ export interface components {
 			  }
 			| "predicate"
 			| "fallback";
-		/** @description Pipeline-run health for a workspace. */
-		RunAnalytics: {
-			/**
-			 * Format: int64
-			 * @description Mean completed-run duration in milliseconds; omitted until a run completes.
-			 */
-			avgDurationMs?: number;
-			/**
-			 * @description Per-status breakdown, one entry per run status (zero-filled), in a stable
-			 *     order.
-			 */
-			byStatus: components["schemas"]["RunStatusEntry"][];
-			/**
-			 * Format: double
-			 * @description Failed / (completed + failed). Omitted when no run has reached a terminal
-			 *     state (genuinely no signal, not zero).
-			 */
-			errorRate?: number;
-			/**
-			 * Format: int64
-			 * @description 95th-percentile completed-run duration in milliseconds; omitted until a run
-			 *     completes.
-			 */
-			p95DurationMs?: number;
-			/**
-			 * Format: int64
-			 * @description Total number of runs.
-			 */
-			total: number;
-		};
-		/** @description A single day of run activity. */
-		RunDayEntry: {
-			/**
-			 * Format: int64
-			 * @description Mean completed-run duration (milliseconds) this day; omitted if none completed.
-			 */
-			avgDurationMs?: number;
-			/**
-			 * Format: date
-			 * @description The day (`YYYY-MM-DD`, UTC).
-			 */
-			date: string;
-			/**
-			 * Format: double
-			 * @description Failed / (completed + failed) for this day; omitted when no run reached a
-			 *     terminal state that day.
-			 */
-			errorRate?: number;
-			/**
-			 * Format: int64
-			 * @description Input/prompt tokens spent by this day's runs; omitted when none used a model.
-			 */
-			inputTokens?: number;
-			/**
-			 * Format: int64
-			 * @description Output/completion tokens spent this day; omitted when none used a model.
-			 */
-			outputTokens?: number;
-			/**
-			 * Format: int64
-			 * @description 95th-percentile completed-run duration (milliseconds) this day; omitted if none.
-			 */
-			p95DurationMs?: number;
-			/**
-			 * Format: int64
-			 * @description Runs started this day (`0` on a quiet day).
-			 */
-			runs: number;
-			/**
-			 * Format: int64
-			 * @description Reported total tokens this day; omitted when none used a model.
-			 */
-			totalTokens?: number;
-		};
-		/** @description Opaque run identifier (run_<uuid>). */
-		RunId: string;
-		/** @description Structured metadata for a pipeline run. */
-		RunMetadata: {
-			/** @description Failure reason recorded when the run failed. */
-			error?: string;
-			/** @description Free-form labels attached to the run. */
-			tags?: string[];
-			/**
-			 * @description The engine's full per-recognizer usage report (durations, per-model token
-			 *     counts), stored opaquely for drill-down. Per-model token totals for
-			 *     aggregation live in the `workspace_pipeline_run_usage` table; this keeps
-			 *     the detail. Absent when the run produced no usage.
-			 */
-			usage?: unknown;
-		};
-		/** @description One status's share of a workspace's runs. */
-		RunStatusEntry: {
-			/**
-			 * Format: int64
-			 * @description Number of runs in this status.
-			 */
-			count: number;
-			/** @description The run status. */
-			status: components["schemas"]["PipelineRunStatus"];
-		};
-		/**
-		 * @description A run's status change, broadcast on the core-NATS subject [`run_subject`].
-		 *
-		 *     Fan-out to any watching SSE connections; the run row in Postgres remains the
-		 *     source of truth, so a missed broadcast is recoverable by re-reading the run.
-		 */
-		RunStatusEvent: {
-			/**
-			 * Format: uuid
-			 * @description The run whose status changed.
-			 */
-			runId: string;
-			/** @description The run's new status. */
-			status: components["schemas"]["PipelineRunStatus"];
-		};
-		/**
-		 * @description A workspace's daily run activity over a window: one point per day, dense
-		 *     (quiet days included with `runs: 0`), ready to plot as a continuous series.
-		 */
-		RunTimeSeries: {
-			/** @description One entry per day in the requested window, oldest first. */
-			points: components["schemas"]["RunDayEntry"][];
-		};
 		/**
 		 * @description Typed credentials for S3-compatible provider.
 		 *
@@ -14034,11 +14320,7 @@ export interface components {
 			| ({
 					/** @constant */
 					op: "suppress";
-			  } & components["schemas"]["Suppress"])
-			| ({
-					/** @constant */
-					op: "redact";
-			  } & components["schemas"]["TabularRedact"]);
+			  } & components["schemas"]["Suppress"]);
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
@@ -14234,37 +14516,6 @@ export interface components {
 			location: components["schemas"]["TabularLocation"];
 			/** @description Pattern metadata (name, regex, validator, contextual flag). */
 			pattern: components["schemas"]["PatternEvent"];
-		};
-		/**
-		 * @description Redact this entity with `action` instead of the operator the
-		 *     policy picked.
-		 */
-		TabularRedact: {
-			/**
-			 * @description The operator to run, typed to the entity's own modality so a
-			 *     text entity cannot be given an image operator.
-			 */
-			action: components["schemas"]["TabularRedaction"];
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/**
-			 * Format: uuid
-			 * @description The entity to redact.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description The policy whose authority the reviewer exercises. Must match
-			 *     a submitted policy's `id`.
-			 *
-			 *     Not only for audit: it picks which per-policy pseudonym vault
-			 *     and `KeyProvider` the operator resolves against, so an
-			 *     override using `Pseudonymize` or `HmacHash` stays consistent
-			 *     with that policy's other rules.
-			 */
-			policyId: string;
-			/** @description The rationale, when one was given. */
-			reason?: string;
 		};
 		/** @description Operator spec a `redact` tabular rule carries. */
 		TabularRedaction:
@@ -14670,11 +14921,7 @@ export interface components {
 			| ({
 					/** @constant */
 					op: "suppress";
-			  } & components["schemas"]["Suppress"])
-			| ({
-					/** @constant */
-					op: "redact";
-			  } & components["schemas"]["TextRedact"]);
+			  } & components["schemas"]["Suppress"]);
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
@@ -14849,37 +15096,6 @@ export interface components {
 			location: components["schemas"]["TextLocation"];
 			/** @description Pattern metadata (name, regex, validator, contextual flag). */
 			pattern: components["schemas"]["PatternEvent"];
-		};
-		/**
-		 * @description Redact this entity with `action` instead of the operator the
-		 *     policy picked.
-		 */
-		TextRedact: {
-			/**
-			 * @description The operator to run, typed to the entity's own modality so a
-			 *     text entity cannot be given an image operator.
-			 */
-			action: components["schemas"]["TextRedaction"];
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/**
-			 * Format: uuid
-			 * @description The entity to redact.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description The policy whose authority the reviewer exercises. Must match
-			 *     a submitted policy's `id`.
-			 *
-			 *     Not only for audit: it picks which per-policy pseudonym vault
-			 *     and `KeyProvider` the operator resolves against, so an
-			 *     override using `Pseudonymize` or `HmacHash` stays consistent
-			 *     with that policy's other rules.
-			 */
-			policyId: string;
-			/** @description The rationale, when one was given. */
-			reason?: string;
 		};
 		/** @description Operator spec a `redact` text rule carries. */
 		TextRedaction:
@@ -15526,10 +15742,10 @@ export interface components {
 			| "pipeline.created"
 			| "pipeline.updated"
 			| "pipeline.deleted"
-			| "pipeline.run.started"
-			| "pipeline.run.analyzed"
-			| "pipeline.run.completed"
-			| "pipeline.run.failed"
+			| "pipeline.detection.started"
+			| "pipeline.detection.completed"
+			| "pipeline.detection.failed"
+			| "pipeline.redaction.created"
 			| "policy.created"
 			| "policy.updated"
 			| "policy.deleted";
@@ -15616,12 +15832,38 @@ export interface components {
 		 *     the inference tokens they spent.
 		 */
 		WorkspaceAnalytics: {
-			/** @description Pipeline-run health: volume, status mix, and durations. */
-			runs: components["schemas"]["RunAnalytics"];
+			/** @description Detection health: volume, status mix, and durations. */
+			detections: components["schemas"]["DetectionAnalytics"];
 			/** @description Stored-file totals and their per-kind breakdown. */
 			storage: components["schemas"]["StorageAnalytics"];
 			/** @description Inference token usage: workspace totals and a per-model breakdown. */
 			usage: components["schemas"]["UsageAnalytics"];
+		};
+		/**
+		 * @description Query parameters for listing detections across a workspace.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
+		WorkspaceDetectionsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter by the source file the detection analyzes.
+			 */
+			fileId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the owning pipeline.
+			 */
+			pipelineId?: string;
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
 		};
 		/** @description Path parameters for file operations within a workspace context. */
 		WorkspaceFilePathParams: {
@@ -15656,32 +15898,6 @@ export interface components {
 		 *     hierarchical access control for workspace members with clearly defined capabilities.
 		 */
 		WorkspaceRole: "owner" | "admin" | "member" | "guest";
-		/**
-		 * @description Query parameters for listing runs across a workspace.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint.
-		 */
-		WorkspaceRunsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the source file the run analyzes.
-			 */
-			fileId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the owning pipeline.
-			 */
-			pipelineId?: string;
-			/** @description Filter by run status. */
-			status?: components["schemas"]["PipelineRunStatus"];
-			/** @description Filter by how the run was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the run.
-			 */
-			triggeredBy?: string;
-		};
 		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
 		WorkspaceSettings: {
 			/**
