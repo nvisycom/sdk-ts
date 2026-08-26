@@ -8,6 +8,46 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.35.0] - 2026-08-26
+
+The platform renamed the core "pipeline run" concept to "detection" and made
+redaction an independent resource. This release renames the SDK to match.
+
+### Added
+
+- `nvisy.detections` service (replaces `nvisy.runs`): `listDetections`,
+  `listPipelineDetections`, `createDetection`, `getDetection`, `getAnalysis`
+  (the audit), `downloadAudit`, `events` / `streamEvents` (SSE), plus
+  `listRedactions` and `createRedaction`
+- `nvisy.redactions` service, parallel to detections: `getReview`
+- Detection datatypes (`Detection`, `CreateDetection`, `DetectionPage`,
+  `DetectionStatus`, `DetectionId`, `DetectionMetadata`, `DetectionStatusEvent`,
+  `PipelineDetectionsQuery`) and redaction datatypes (`RedactDetection`,
+  `RedactionId`, `RedactionResult`, `RedactionResultPage`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** `nvisy.runs` is renamed to `nvisy.detections`; its methods are
+  renamed accordingly (`createRun` → `createDetection`, `getRun` →
+  `getDetection`, `getDetections` → `getAnalysis`, `redact` →
+  `createRedaction`, `listRuns` / `listPipelineRuns` → `listDetections` /
+  `listPipelineDetections`)
+- **Breaking:** `analytics.getRunTimeSeries()` is renamed to
+  `analytics.getDetectionTimeSeries()`
+- **Breaking:** the run analytics, notification-payload, and activity datatypes
+  are renamed to their detection/redaction equivalents (`RunAnalytics` →
+  `DetectionAnalytics`, `RunTimeSeries` → `DetectionTimeSeries`,
+  `PipelineRun*Params` → `Detection*Params` / `Redaction*Params`, etc.)
+
+### Removed
+
+- **Breaking:** the `PipelineRun*` / `Run*` datatypes (`PipelineRun`,
+  `CreatePipelineRun`, `PipelineRunPage`, `PipelineRunStatus`,
+  `PipelineRunsQuery`, `RunId`, `RunMetadata`, `RunStatusEvent`), and the
+  per-modality `*Redact` audit-event datatypes (`TextRedact`, `ImageRedact`,
+  `AudioRedact`, `TabularRedact`) — the platform no longer exposes them
+
 ## [0.34.0] - 2026-08-18
 
 ### Added
@@ -720,7 +760,8 @@ and this project adheres to
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.34.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.35.0...HEAD
+[0.35.0]: https://github.com/nvisycom/sdk-ts/compare/v0.34.0...v0.35.0
 [0.34.0]: https://github.com/nvisycom/sdk-ts/compare/v0.33.0...v0.34.0
 [0.33.0]: https://github.com/nvisycom/sdk-ts/compare/v0.32.0...v0.33.0
 [0.32.0]: https://github.com/nvisycom/sdk-ts/compare/v0.31.0...v0.32.0

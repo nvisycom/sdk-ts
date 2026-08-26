@@ -20,6 +20,6 @@ export type MemberJoinedParams = Schemas["MemberJoinedParams"];
 export type ConnectionSyncCompletedParams =
 	Schemas["ConnectionSyncCompletedParams"];
 export type ConnectionSyncFailedParams = Schemas["ConnectionSyncFailedParams"];
-export type PipelineRunAnalyzedParams = Schemas["PipelineRunAnalyzedParams"];
-export type PipelineRunCompletedParams = Schemas["PipelineRunCompletedParams"];
-export type PipelineRunFailedParams = Schemas["PipelineRunFailedParams"];
+export type DetectionCompletedParams = Schemas["DetectionCompletedParams"];
+export type DetectionFailedParams = Schemas["DetectionFailedParams"];
+export type RedactionCreatedParams = Schemas["RedactionCreatedParams"];

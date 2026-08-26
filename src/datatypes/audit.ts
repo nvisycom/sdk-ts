@@ -72,7 +72,6 @@ export type TextPattern = Schemas["TextPattern"];
 export type TextManual = Schemas["TextManual"];
 export type TextEdit = Schemas["TextEdit"];
 export type TextAdd = Schemas["TextAdd"];
-export type TextRedact = Schemas["TextRedact"];
 export type TextRefinement = Schemas["TextRefinement"];
 export type TextRetag = Schemas["TextRetag"];
 
@@ -89,7 +88,6 @@ export type ImagePattern = Schemas["ImagePattern"];
 export type ImageManual = Schemas["ImageManual"];
 export type ImageEdit = Schemas["ImageEdit"];
 export type ImageAdd = Schemas["ImageAdd"];
-export type ImageRedact = Schemas["ImageRedact"];
 export type ImageRefinement = Schemas["ImageRefinement"];
 export type ImageRetag = Schemas["ImageRetag"];
 
@@ -106,7 +104,6 @@ export type AudioPattern = Schemas["AudioPattern"];
 export type AudioManual = Schemas["AudioManual"];
 export type AudioEdit = Schemas["AudioEdit"];
 export type AudioAdd = Schemas["AudioAdd"];
-export type AudioRedact = Schemas["AudioRedact"];
 export type AudioRefinement = Schemas["AudioRefinement"];
 export type AudioRetag = Schemas["AudioRetag"];
 
@@ -122,6 +119,5 @@ export type TabularPattern = Schemas["TabularPattern"];
 export type TabularManual = Schemas["TabularManual"];
 export type TabularEdit = Schemas["TabularEdit"];
 export type TabularAdd = Schemas["TabularAdd"];
-export type TabularRedact = Schemas["TabularRedact"];
 export type TabularRefinement = Schemas["TabularRefinement"];
 export type TabularRetag = Schemas["TabularRetag"];
