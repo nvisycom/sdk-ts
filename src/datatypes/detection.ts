@@ -11,6 +11,7 @@ export type DetectionMetadata = Schemas["DetectionMetadata"];
 export type CreateDetection = Schemas["CreateDetection"];
 export type DetectionStatus = Schemas["DetectionStatus"];
 export type DetectionPage = Schemas["DetectionPage"];
+export type WorkspaceDetectionsQuery = Schemas["WorkspaceDetectionsQuery"];
 export type PipelineDetectionsQuery = Schemas["PipelineDetectionsQuery"];
 export type DetectionStatusEvent = Schemas["DetectionStatusEvent"];
 

@@ -11,6 +11,7 @@ import type {
 	RedactDetection,
 	RedactionResult,
 	RedactionResultPage,
+	WorkspaceDetectionsQuery,
 } from "@/datatypes/index.js";
 import { NvisyError } from "@/errors.js";
 import { parseSseStream } from "@/services/sse.js";
@@ -36,8 +37,7 @@ export class Detections {
 	 */
 	async listDetections(
 		workspaceSlug: string,
-		query?: CursorPagination &
-			PipelineDetectionsQuery & { pipelineId?: string },
+		query?: CursorPagination & WorkspaceDetectionsQuery,
 	): Promise<DetectionPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/detections/",
