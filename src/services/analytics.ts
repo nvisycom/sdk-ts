@@ -43,7 +43,7 @@ export class Analytics {
 		query?: DateWindow,
 	): Promise<DetectionTimeSeries> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/analytics/runs/timeseries/",
+			"/workspaces/{workspaceSlug}/analytics/detections/timeseries/",
 			{
 				params: { path: { workspaceSlug }, query },
 			},

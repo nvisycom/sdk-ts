@@ -1453,7 +1453,7 @@ export interface paths {
 		};
 		/**
 		 * Workspace analytics
-		 * @description Returns aggregate analytics for a workspace: stored-file totals with a per-kind breakdown, pipeline-run health (status mix, error rate, and durations), and inference token usage (workspace totals plus a per-model breakdown). Breakdowns list every kind/status, zero-filled, in a stable order.
+		 * @description Returns aggregate analytics for a workspace: stored-file totals with a per-kind breakdown, detection health (status mix, error rate, and durations), and inference token usage (workspace totals plus a per-model breakdown). Breakdowns list every kind/status, zero-filled, in a stable order.
 		 */
 		get: {
 			parameters: {
@@ -1468,7 +1468,7 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Aggregate analytics for a workspace: what it stores, how its runs fare, and
+				 * @description Aggregate analytics for a workspace: what it stores, how its detections fare, and
 				 *     the inference tokens they spent.
 				 */
 				200: {
@@ -1534,7 +1534,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/analytics/runs/timeseries/": {
+	"/workspaces/{workspaceSlug}/analytics/detections/timeseries/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1542,8 +1542,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Workspace run time series
-		 * @description Returns a workspace's daily pipeline-run activity over a date window: runs per day, plus each day's error rate and durations. Every day in the window is present (quiet days report runs: 0), so the series plots as a continuous line or a contribution-style calendar. The window is `from`/`to` (inclusive, YYYY-MM-DD); it defaults to the last 30 days and is capped at 366 days.
+		 * Workspace detection time series
+		 * @description Returns a workspace's daily detection activity over a date window: detections per day, plus each day's error rate and durations. Every day in the window is present (quiet days report detections: 0), so the series plots as a continuous line or a contribution-style calendar. The window is `from`/`to` (inclusive, YYYY-MM-DD); it defaults to the last 30 days and is capped at 366 days.
 		 */
 		get: {
 			parameters: {
@@ -1566,8 +1566,9 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description A workspace's daily run activity over a window: one point per day, dense
-				 *     (quiet days included with `runs: 0`), ready to plot as a continuous series.
+				 * @description A workspace's daily detection activity over a window: one point per day, dense
+				 *     (quiet days included with `detections: 0`), ready to plot as a continuous
+				 *     series.
 				 */
 				200: {
 					headers: {
@@ -4966,7 +4967,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Start a detection
-		 * @description Starts analysis for a file and returns 202 with the detection in the `executing` state; the analysis runs in the background. Watch the detection's status via the SSE stream at `.../detections/{detectionId}/events` (or re-read the detection) and fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
+		 * @description Starts analysis for a file and returns 202 with the detection in the `pending` state; the analysis runs in the background. Watch the detection's status via the SSE stream at `.../detections/{detectionId}/events` (or re-read the detection) and fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
 		 */
 		post: {
 			parameters: {
@@ -10805,33 +10806,34 @@ export interface components {
 			/** @description Slug of the owning pipeline. */
 			pipelineSlug: components["schemas"]["Handle"];
 		};
-		/** @description Pipeline-run health for a workspace. */
+		/** @description Detection health for a workspace. */
 		DetectionAnalytics: {
 			/**
 			 * Format: int64
-			 * @description Mean completed-run duration in milliseconds; omitted until a run completes.
+			 * @description Mean completed-detection duration in milliseconds; omitted until a
+			 *     detection completes.
 			 */
 			avgDurationMs?: number;
 			/**
-			 * @description Per-status breakdown, one entry per run status (zero-filled), in a stable
-			 *     order.
+			 * @description Per-status breakdown, one entry per detection status (zero-filled), in a
+			 *     stable order.
 			 */
 			byStatus: components["schemas"]["DetectionStatusEntry"][];
 			/**
 			 * Format: double
-			 * @description Failed / (completed + failed). Omitted when no run has reached a terminal
-			 *     state (genuinely no signal, not zero).
+			 * @description Failed / (completed + failed). Omitted when no detection has reached a
+			 *     terminal state (genuinely no signal, not zero).
 			 */
 			errorRate?: number;
 			/**
 			 * Format: int64
-			 * @description 95th-percentile completed-run duration in milliseconds; omitted until a run
-			 *     completes.
+			 * @description 95th-percentile completed-detection duration in milliseconds; omitted until
+			 *     a detection completes.
 			 */
 			p95DurationMs?: number;
 			/**
 			 * Format: int64
-			 * @description Total number of runs.
+			 * @description Total number of detections.
 			 */
 			total: number;
 		};
@@ -10844,11 +10846,11 @@ export interface components {
 			/** @description Slug of the owning pipeline. */
 			pipelineSlug: components["schemas"]["Handle"];
 		};
-		/** @description A single day of run activity. */
+		/** @description A single day of detection activity. */
 		DetectionDayEntry: {
 			/**
 			 * Format: int64
-			 * @description Mean completed-run duration (milliseconds) this day; omitted if none completed.
+			 * @description Mean completed-detection duration (milliseconds) this day; omitted if none completed.
 			 */
 			avgDurationMs?: number;
 			/**
@@ -10857,14 +10859,19 @@ export interface components {
 			 */
 			date: string;
 			/**
+			 * Format: int64
+			 * @description Detections started this day (`0` on a quiet day).
+			 */
+			detections: number;
+			/**
 			 * Format: double
-			 * @description Failed / (completed + failed) for this day; omitted when no run reached a
-			 *     terminal state that day.
+			 * @description Failed / (completed + failed) for this day; omitted when no detection
+			 *     reached a terminal state that day.
 			 */
 			errorRate?: number;
 			/**
 			 * Format: int64
-			 * @description Input/prompt tokens spent by this day's runs; omitted when none used a model.
+			 * @description Input/prompt tokens spent by this day's detections; omitted when none used a model.
 			 */
 			inputTokens?: number;
 			/**
@@ -10874,14 +10881,9 @@ export interface components {
 			outputTokens?: number;
 			/**
 			 * Format: int64
-			 * @description 95th-percentile completed-run duration (milliseconds) this day; omitted if none.
+			 * @description 95th-percentile completed-detection duration (milliseconds) this day; omitted if none.
 			 */
 			p95DurationMs?: number;
-			/**
-			 * Format: int64
-			 * @description Runs started this day (`0` on a quiet day).
-			 */
-			runs: number;
 			/**
 			 * Format: int64
 			 * @description Reported total tokens this day; omitted when none used a model.
@@ -10948,14 +10950,14 @@ export interface components {
 		 *     detection and does not change this status.
 		 */
 		DetectionStatus: "pending" | "executing" | "complete" | "failed";
-		/** @description One status's share of a workspace's runs. */
+		/** @description One status's share of a workspace's detections. */
 		DetectionStatusEntry: {
 			/**
 			 * Format: int64
-			 * @description Number of runs in this status.
+			 * @description Number of detections in this status.
 			 */
 			count: number;
-			/** @description The run status. */
+			/** @description The detection status. */
 			status: components["schemas"]["DetectionStatus"];
 		};
 		/**
@@ -10975,8 +10977,9 @@ export interface components {
 			status: components["schemas"]["DetectionStatus"];
 		};
 		/**
-		 * @description A workspace's daily run activity over a window: one point per day, dense
-		 *     (quiet days included with `runs: 0`), ready to plot as a continuous series.
+		 * @description A workspace's daily detection activity over a window: one point per day, dense
+		 *     (quiet days included with `detections: 0`), ready to plot as a continuous
+		 *     series.
 		 */
 		DetectionTimeSeries: {
 			/** @description One entry per day in the requested window, oldest first. */
@@ -12489,7 +12492,7 @@ export interface components {
 			/** @description Model version, when the backend reports one. */
 			version?: string;
 		};
-		/** @description One model's token usage across a workspace's runs. */
+		/** @description One model's token usage across a workspace's detections. */
 		ModelUsageEntry: {
 			/**
 			 * Format: int64
@@ -15040,8 +15043,9 @@ export interface components {
 			/**
 			 * @description The exact raw source ranges this decoded span came from, for codecs whose
 			 *     decoded text differs from the source (XML/HTML/DOCX, where entities are
-			 *     decoded). Empty when the source equals the decoded text (plain text,
-			 *     JSON, CSV) or has no byte-source coordinate (rendered/scanned formats).
+			 *     decoded; JSON, where `\"` / `\uXXXX` escapes collapse). Empty when the
+			 *     source equals the decoded text (plain text, CSV) or the format has no
+			 *     byte-source coordinate (rendered/scanned formats).
 			 *
 			 *     Usually one range; a reconciled span that fused several source runs (or a
 			 *     span crossing an escape) carries several, kept distinct rather than merged
@@ -15555,7 +15559,7 @@ export interface components {
 			/** @description Model / token detail; `None` for a pure-CPU component. */
 			model?: components["schemas"]["ModelUsage"];
 		};
-		/** @description Inference token usage across a workspace's runs. */
+		/** @description Inference token usage across a workspace's detections. */
 		UsageAnalytics: {
 			/** @description Per-model breakdown, one entry per model used, in a stable order. */
 			byModel: components["schemas"]["ModelUsageEntry"][];
@@ -15828,7 +15832,7 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description Aggregate analytics for a workspace: what it stores, how its runs fare, and
+		 * @description Aggregate analytics for a workspace: what it stores, how its detections fare, and
 		 *     the inference tokens they spent.
 		 */
 		WorkspaceAnalytics: {
