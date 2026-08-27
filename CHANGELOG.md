@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.36.0] - 2026-08-27
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers. The
+  detection time-series endpoint moved from `/analytics/runs/timeseries/` to
+  `/analytics/detections/timeseries/`, finishing the run-to-detection rename;
+  `analytics.getDetectionTimeSeries()` is unchanged for callers
+
 ## [0.35.0] - 2026-08-26
 
 The platform renamed the core "pipeline run" concept to "detection" and made
@@ -760,7 +769,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.35.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.36.0...HEAD
+[0.36.0]: https://github.com/nvisycom/sdk-ts/compare/v0.35.0...v0.36.0
 [0.35.0]: https://github.com/nvisycom/sdk-ts/compare/v0.34.0...v0.35.0
 [0.34.0]: https://github.com/nvisycom/sdk-ts/compare/v0.33.0...v0.34.0
 [0.33.0]: https://github.com/nvisycom/sdk-ts/compare/v0.32.0...v0.33.0
