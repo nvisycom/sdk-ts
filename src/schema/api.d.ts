@@ -9411,8 +9411,32 @@ export interface components {
 			actor?: string;
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
-			/** @description Where it sits in the document. */
+			/**
+			 * @description Where it sits, in the coordinates of the group it joins.
+			 *
+			 *     For text in a container, that is the body's decoded stream —
+			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
+			 *     A caller who has raw file bytes rather than a decoded offset
+			 *     (a reviewer selecting rendered text, say) leaves `range`
+			 *     empty and fills [`TextLocation::source`] instead, which the
+			 *     engine reverse-resolves.
+			 *
+			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 */
 			location: components["schemas"]["AudioLocation"];
+			/**
+			 * @description The container part this belongs to, e.g.
+			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 *
+			 *     For the media a container embeds, which the report holds as
+			 *     its own group: an image entity lives under its part, and an
+			 *     addition to one has nowhere to go without naming it.
+			 *
+			 *     Text does not need this. A container's text is its body, and
+			 *     where a span came from is already in `TextLocation::source`,
+			 *     which carries the part alongside the raw range.
+			 */
+			part?: string;
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
@@ -11378,8 +11402,32 @@ export interface components {
 			actor?: string;
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
-			/** @description Where it sits in the document. */
+			/**
+			 * @description Where it sits, in the coordinates of the group it joins.
+			 *
+			 *     For text in a container, that is the body's decoded stream —
+			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
+			 *     A caller who has raw file bytes rather than a decoded offset
+			 *     (a reviewer selecting rendered text, say) leaves `range`
+			 *     empty and fills [`TextLocation::source`] instead, which the
+			 *     engine reverse-resolves.
+			 *
+			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 */
 			location: components["schemas"]["ImageLocation"];
+			/**
+			 * @description The container part this belongs to, e.g.
+			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 *
+			 *     For the media a container embeds, which the report holds as
+			 *     its own group: an image entity lives under its part, and an
+			 *     addition to one has nowhere to go without naming it.
+			 *
+			 *     Text does not need this. A container's text is its body, and
+			 *     where a span came from is already in `TextLocation::source`,
+			 *     which carries the part alongside the raw range.
+			 */
+			part?: string;
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
@@ -14112,8 +14160,32 @@ export interface components {
 			actor?: string;
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
-			/** @description Where it sits in the document. */
+			/**
+			 * @description Where it sits, in the coordinates of the group it joins.
+			 *
+			 *     For text in a container, that is the body's decoded stream —
+			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
+			 *     A caller who has raw file bytes rather than a decoded offset
+			 *     (a reviewer selecting rendered text, say) leaves `range`
+			 *     empty and fills [`TextLocation::source`] instead, which the
+			 *     engine reverse-resolves.
+			 *
+			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 */
 			location: components["schemas"]["TabularLocation"];
+			/**
+			 * @description The container part this belongs to, e.g.
+			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 *
+			 *     For the media a container embeds, which the report holds as
+			 *     its own group: an image entity lives under its part, and an
+			 *     addition to one has nowhere to go without naming it.
+			 *
+			 *     Text does not need this. A container's text is its body, and
+			 *     where a span came from is already in `TextLocation::source`,
+			 *     which carries the part alongside the raw range.
+			 */
+			part?: string;
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
@@ -14702,8 +14774,32 @@ export interface components {
 			actor?: string;
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
-			/** @description Where it sits in the document. */
+			/**
+			 * @description Where it sits, in the coordinates of the group it joins.
+			 *
+			 *     For text in a container, that is the body's decoded stream —
+			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
+			 *     A caller who has raw file bytes rather than a decoded offset
+			 *     (a reviewer selecting rendered text, say) leaves `range`
+			 *     empty and fills [`TextLocation::source`] instead, which the
+			 *     engine reverse-resolves.
+			 *
+			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 */
 			location: components["schemas"]["TextLocation"];
+			/**
+			 * @description The container part this belongs to, e.g.
+			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 *
+			 *     For the media a container embeds, which the report holds as
+			 *     its own group: an image entity lives under its part, and an
+			 *     addition to one has nowhere to go without naming it.
+			 *
+			 *     Text does not need this. A container's text is its body, and
+			 *     where a span came from is already in `TextLocation::source`,
+			 *     which carries the part alongside the raw range.
+			 */
+			part?: string;
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
