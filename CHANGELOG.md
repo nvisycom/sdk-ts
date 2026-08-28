@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.37.0] - 2026-08-27
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers. The
+  per-modality `*Add` audit-event datatypes (`TextAdd`, `ImageAdd`, `AudioAdd`,
+  `TabularAdd`) now carry an optional `part` (the container-part id for a
+  multi-file document)
+
 ## [0.36.0] - 2026-08-27
 
 ### Changed
@@ -769,7 +778,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.36.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.37.0...HEAD
+[0.37.0]: https://github.com/nvisycom/sdk-ts/compare/v0.36.0...v0.37.0
 [0.36.0]: https://github.com/nvisycom/sdk-ts/compare/v0.35.0...v0.36.0
 [0.35.0]: https://github.com/nvisycom/sdk-ts/compare/v0.34.0...v0.35.0
 [0.34.0]: https://github.com/nvisycom/sdk-ts/compare/v0.33.0...v0.34.0
