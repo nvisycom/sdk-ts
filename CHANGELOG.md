@@ -8,6 +8,29 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.38.0] - 2026-08-29
+
+### Added
+
+- `checkHealth()` — a standalone health check that needs neither an API token
+  nor a `Nvisy` client, for use as a pre-auth liveness probe. The health
+  endpoint is public (unauthenticated returns a cached status, authenticated a
+  real-time one), and a degraded `503` is returned as a `Health` value rather
+  than thrown. Exported from `@nvisy/sdk/standalone` with its `HealthConfig`
+
+### Changed
+
+- **Breaking:** the standalone `login` / `signup` functions moved from
+  `@nvisy/sdk/auth` to `@nvisy/sdk/standalone`, now sharing one module with
+  `checkHealth`:
+
+  ```diff
+  - import { login, signup } from "@nvisy/sdk/auth";
+  + import { login, signup } from "@nvisy/sdk/standalone";
+  ```
+
+  `AuthConfig` is re-exported from the same subpath; behavior is unchanged.
+
 ## [0.37.0] - 2026-08-27
 
 ### Changed
@@ -778,7 +801,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.37.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.38.0...HEAD
+[0.38.0]: https://github.com/nvisycom/sdk-ts/compare/v0.37.0...v0.38.0
 [0.37.0]: https://github.com/nvisycom/sdk-ts/compare/v0.36.0...v0.37.0
 [0.36.0]: https://github.com/nvisycom/sdk-ts/compare/v0.35.0...v0.36.0
 [0.35.0]: https://github.com/nvisycom/sdk-ts/compare/v0.34.0...v0.35.0

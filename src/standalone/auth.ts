@@ -5,11 +5,11 @@
  * an existing API token. Use these to obtain an auth token, then create
  * an authenticated {@link Client} instance.
  *
- * @module auth/password
+ * @module standalone/auth
  *
  * @example
  * ```typescript
- * import { login, signup } from "@nvisy/sdk/auth";
+ * import { login, signup } from "@nvisy/sdk/standalone";
  * import { Nvisy } from "@nvisy/sdk";
  *
  * // Login to get a token
@@ -20,12 +20,9 @@
  * ```
  */
 
-import createClient from "openapi-fetch";
-import type { AuthConfig } from "@/auth/config.js";
-import { DEFAULTS } from "@/config.js";
 import type { AuthToken, Login, Signup } from "@/datatypes/index.js";
-import { errorMiddleware } from "@/middleware/index.js";
-import type { paths } from "@/schema/api.js";
+import type { AuthConfig } from "@/standalone/config.js";
+import { createPublicClient } from "@/standalone/http.js";
 
 /**
  * Creates an unauthenticated API client for auth operations.
@@ -35,21 +32,7 @@ import type { paths } from "@/schema/api.js";
  * @internal
  */
 function createAuthClient(config?: AuthConfig) {
-	const headers: Record<string, string> = {
-		"Content-Type": "application/json",
-		"User-Agent": config?.userAgent ?? DEFAULTS.USER_AGENT,
-		...config?.headers,
-	};
-
-	const client = createClient<paths>({
-		baseUrl: config?.baseUrl ?? DEFAULTS.BASE_URL,
-		headers,
-		// `undefined` falls back to the global fetch inside openapi-fetch.
-		fetch: config?.fetch,
-	});
-
-	client.use(errorMiddleware);
-	return client;
+	return createPublicClient(config, { json: true });
 }
 
 /**
@@ -65,7 +48,7 @@ function createAuthClient(config?: AuthConfig) {
  *
  * @example
  * ```typescript
- * import { login } from "@nvisy/sdk/auth";
+ * import { login } from "@nvisy/sdk/standalone";
  * import { Nvisy } from "@nvisy/sdk";
  *
  * const token = await login({
@@ -100,7 +83,7 @@ export async function login(
  *
  * @example
  * ```typescript
- * import { signup } from "@nvisy/sdk/auth";
+ * import { signup } from "@nvisy/sdk/standalone";
  * import { Nvisy } from "@nvisy/sdk";
  *
  * const token = await signup({
