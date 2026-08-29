@@ -2,7 +2,10 @@ import createClient from "openapi-fetch";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { login, signup } from "@/standalone/auth.js";
 
-const post = vi.fn(async () => ({ data: { accessToken: "tok" } }));
+// Hoisted so it's initialized before the hoisted `vi.mock` factory runs.
+const { post } = vi.hoisted(() => ({
+	post: vi.fn(async () => ({ data: { accessToken: "tok" } })),
+}));
 
 vi.mock("openapi-fetch", () => ({
 	default: vi.fn(() => ({ use: vi.fn(), POST: post })),

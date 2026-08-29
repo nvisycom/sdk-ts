@@ -2,7 +2,10 @@ import createClient from "openapi-fetch";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { checkHealth } from "@/standalone/health.js";
 
-const get = vi.fn(async () => ({ data: { status: "healthy" } }));
+// Hoisted so it's initialized before the hoisted `vi.mock` factory runs.
+const { get } = vi.hoisted(() => ({
+	get: vi.fn(async () => ({ data: { status: "healthy" } })),
+}));
 
 vi.mock("openapi-fetch", () => ({
 	default: vi.fn(() => ({ use: vi.fn(), GET: get })),
