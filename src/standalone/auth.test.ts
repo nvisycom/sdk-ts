@@ -1,6 +1,6 @@
 import createClient from "openapi-fetch";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { login, signup } from "@/auth/password.js";
+import { login, signup } from "@/standalone/auth.js";
 
 const post = vi.fn(async () => ({ data: { accessToken: "tok" } }));
 

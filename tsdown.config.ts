@@ -13,7 +13,7 @@ export default defineConfig({
 	// Entry and format configuration
 	entry: [
 		"src/index.ts",
-		"src/auth/index.ts",
+		"src/standalone/index.ts",
 		"src/services/index.ts",
 		"src/datatypes/index.ts",
 		"src/webhooks/index.ts",
