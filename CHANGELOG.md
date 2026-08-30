@@ -8,6 +8,20 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.39.0] - 2026-08-30
+
+### Added
+
+- `files.deleteFiles(workspaceSlug, fileIds)` deletes several files in one call
+  and returns the `deleted` and `skipped` ids (`DeletedFiles`); the request
+  shape is `DeleteFiles`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** renamed the `OcrPolicy` datatype to `RasterPolicy`, matching the
+  renamed `WorkspaceSettings` raster policy
+
 ## [0.38.0] - 2026-08-29
 
 ### Added
@@ -801,7 +815,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.38.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.39.0...HEAD
+[0.39.0]: https://github.com/nvisycom/sdk-ts/compare/v0.38.0...v0.39.0
 [0.38.0]: https://github.com/nvisycom/sdk-ts/compare/v0.37.0...v0.38.0
 [0.37.0]: https://github.com/nvisycom/sdk-ts/compare/v0.36.0...v0.37.0
 [0.36.0]: https://github.com/nvisycom/sdk-ts/compare/v0.35.0...v0.36.0

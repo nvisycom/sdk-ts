@@ -1,6 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
+	DeletedFiles,
 	File,
 	FilePage,
 	ListFiles,
@@ -137,5 +138,31 @@ export class Files {
 		await this.#api.DELETE("/workspaces/{workspaceSlug}/files/{fileId}/", {
 			params: { path: { workspaceSlug, fileId } },
 		});
+	}
+
+	/**
+	 * Delete several files in one call.
+	 *
+	 * Idempotent: ids resolving to live files in the workspace are removed and
+	 * returned in `deleted`; unknown, already-deleted, or out-of-workspace ids
+	 * are returned in `skipped`. Deletion is permanent.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param fileIds - The file IDs to delete
+	 * @returns Promise that resolves with the deleted and skipped ids
+	 * @throws {ApiError} if the request fails
+	 */
+	async deleteFiles(
+		workspaceSlug: string,
+		fileIds: string[],
+	): Promise<DeletedFiles> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/files/delete/",
+			{
+				params: { path: { workspaceSlug } },
+				body: { fileIds },
+			},
+		);
+		return data!;
 	}
 }
