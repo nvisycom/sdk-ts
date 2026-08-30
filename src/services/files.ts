@@ -55,7 +55,8 @@ export class Files {
 	/**
 	 * List files in a workspace
 	 * @param workspaceSlug - Workspace slug
-	 * @param query - Optional query parameters (formats, search, limit, after)
+	 * @param query - Optional query parameters (formats, modality, hash, search,
+	 *   limit, after)
 	 * @returns Promise that resolves with a paginated list of files
 	 * @throws {ApiError} if the request fails
 	 */

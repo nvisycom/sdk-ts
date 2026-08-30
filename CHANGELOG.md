@@ -8,6 +8,18 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-08-31
+
+### Added
+
+- `FileHash` datatype (a SHA-256 content hash, 64-char hex). Files now carry an
+  optional `hash`, and `files.listFiles()` accepts it as a filter to find files
+  by content hash
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.39.0] - 2026-08-30
 
 ### Added
@@ -815,7 +827,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.39.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.40.0...HEAD
+[0.40.0]: https://github.com/nvisycom/sdk-ts/compare/v0.39.0...v0.40.0
 [0.39.0]: https://github.com/nvisycom/sdk-ts/compare/v0.38.0...v0.39.0
 [0.38.0]: https://github.com/nvisycom/sdk-ts/compare/v0.37.0...v0.38.0
 [0.37.0]: https://github.com/nvisycom/sdk-ts/compare/v0.36.0...v0.37.0

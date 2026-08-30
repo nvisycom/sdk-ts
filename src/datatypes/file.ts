@@ -6,6 +6,7 @@ type Schemas = components["schemas"];
 export type File = Schemas["File"];
 export type UpdateFile = Schemas["UpdateFile"];
 export type FileKind = Schemas["FileKind"];
+export type FileHash = Schemas["FileHash"];
 export type FormatToken = Schemas["FormatToken"];
 export type ModalityToken = Schemas["ModalityToken"];
 export type ListFiles = Schemas["ListFiles"];
