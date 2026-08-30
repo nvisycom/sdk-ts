@@ -3827,7 +3827,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Upload files
-		 * @description Uploads one or more files to a workspace. Each file is encrypted, streamed to storage, and recorded.
+		 * @description Uploads one or more files to a workspace. Each file is encrypted and streamed to storage. The batch is atomic: either every file is recorded, or on any failure none are and the request fails.
 		 */
 		post: {
 			parameters: {
@@ -3897,6 +3897,143 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				413: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/files/delete/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Delete files
+		 * @description Deletes several files in one call. Idempotent: ids that resolve to live files in the workspace are removed and returned in `deleted`; ids that are unknown, already deleted, or in another workspace are returned in `skipped`. Deletion is permanent — the files' content cannot be recovered.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request to delete several files in one call.
+			 *
+			 *     The `100`-id cap bounds the work one call fans out into: the resolve query,
+			 *     the delete transaction, and one best-effort object purge per file.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["DeleteFiles"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Result of a bulk file deletion.
+				 *
+				 *     The deletion is idempotent: `deleted` holds the ids that resolved to live
+				 *     files in the workspace and were removed, and `skipped` holds the requested
+				 *     ids that did not — unknown, already deleted, in another workspace, or held by
+				 *     an in-progress detection that still needs the file.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["DeletedFiles"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
 					};
 				};
 			};
@@ -10773,6 +10910,36 @@ export interface components {
 			strategy: string;
 		};
 		/**
+		 * @description Request to delete several files in one call.
+		 *
+		 *     The `100`-id cap bounds the work one call fans out into: the resolve query,
+		 *     the delete transaction, and one best-effort object purge per file.
+		 */
+		DeleteFiles: {
+			/**
+			 * @description Ids of the files to delete. Ids that are unknown, already deleted, or in
+			 *     another workspace are skipped rather than failing the request.
+			 */
+			fileIds: string[];
+		};
+		/**
+		 * @description Result of a bulk file deletion.
+		 *
+		 *     The deletion is idempotent: `deleted` holds the ids that resolved to live
+		 *     files in the workspace and were removed, and `skipped` holds the requested
+		 *     ids that did not — unknown, already deleted, in another workspace, or held by
+		 *     an in-progress detection that still needs the file.
+		 */
+		DeletedFiles: {
+			/** @description Ids that were deleted. */
+			deleted: string[];
+			/**
+			 * @description Requested ids that were skipped: unknown, already deleted, in another
+			 *     workspace, or held by an in-progress detection.
+			 */
+			skipped: string[];
+		};
+		/**
 		 * @description Response type for a detection.
 		 *
 		 *     A detection is addressed by its own opaque id; the owning pipeline and
@@ -12694,15 +12861,6 @@ export interface components {
 			/** @description Whether to send email notifications. */
 			notifyViaEmail: boolean;
 		};
-		/**
-		 * @description How a workspace's documents are turned into images for OCR during detection.
-		 *
-		 *     A workspace-level policy over the engine's per-run OCR mode: `Auto` lets the
-		 *     engine decide from the text layer, `Force` always renders every page (for
-		 *     documents with unreliable text layers — scans, watermarks), and `Never`
-		 *     relies on the text layer only.
-		 */
-		OcrPolicy: "auto" | "force" | "never";
 		/** @description OpenAI API credentials. */
 		OpenAiCredentials: {
 			/** @description OpenAI API key. */
@@ -13446,6 +13604,16 @@ export interface components {
 					/** @constant */
 					kind: "never";
 			  };
+		/**
+		 * @description How a workspace's document pages are rasterised to images for OCR during
+		 *     detection.
+		 *
+		 *     A workspace-level policy over the engine's per-run raster mode: `Auto` lets
+		 *     the engine decide from the text layer, `Always` renders every page (for
+		 *     documents with unreliable text layers — scans, watermarks), and `Never`
+		 *     relies on the text layer only.
+		 */
+		RasterPolicy: "auto" | "always" | "never";
 		/** @description The engine's registered recognizers, grouped by kind. */
 		RecognizerCatalog: {
 			/** @description LLM recognizers. */
@@ -15912,7 +16080,13 @@ export interface components {
 			displayName: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
-			/** @description Workspace settings (approval requirement, data-retention rules). */
+			/**
+			 * @description Workspace settings (raster policy, data-retention rules, upload cap).
+			 *
+			 *     `maxUploadBytes` is resolved to the effective per-file limit — the smaller
+			 *     of the workspace's own cap and the server-wide hard limit — so a client
+			 *     always reads a concrete number to enforce.
+			 */
 			settings: components["schemas"]["WorkspaceSettings"];
 			/** @description URL-safe workspace identifier. */
 			slug: components["schemas"]["Handle"];
@@ -16001,15 +16175,19 @@ export interface components {
 		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
 		WorkspaceSettings: {
 			/**
-			 * @description How documents are rendered for OCR during detection.
+			 * Format: uint64
+			 * @description A soft per-file upload cap in bytes: an upload larger than this is
+			 *     rejected for this workspace. `None` imposes no workspace-specific cap.
+			 *
+			 *     The server-wide hard limit still applies regardless; the effective cap is
+			 *     the smaller of the two.
+			 */
+			maxUploadBytes?: number;
+			/**
+			 * @description How document pages are rasterised for OCR during detection.
 			 * @default auto
 			 */
-			ocr?: components["schemas"]["OcrPolicy"];
-			/**
-			 * @description Whether approval is required before processed files become visible.
-			 * @default true
-			 */
-			requireApproval?: boolean;
+			raster?: components["schemas"]["RasterPolicy"];
 			/**
 			 * @description Data-retention rules for the workspace.
 			 * @default {

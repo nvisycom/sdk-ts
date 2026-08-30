@@ -10,3 +10,7 @@ export type FormatToken = Schemas["FormatToken"];
 export type ModalityToken = Schemas["ModalityToken"];
 export type ListFiles = Schemas["ListFiles"];
 export type FilePage = Schemas["FilePage"];
+
+// Bulk deletion.
+export type DeleteFiles = Schemas["DeleteFiles"];
+export type DeletedFiles = Schemas["DeletedFiles"];
