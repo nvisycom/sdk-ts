@@ -3740,7 +3740,7 @@ export interface paths {
 		};
 		/**
 		 * List files
-		 * @description Lists files in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages.
+		 * @description Lists files in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages. Pass `hash` (a hex SHA-256) to find files with identical content — a non-empty result means the file already exists, so an upload can be skipped.
 		 */
 		get: {
 			parameters: {
@@ -3750,6 +3750,12 @@ export interface paths {
 					 *     extension set (so `jpg` also matches `jpeg`).
 					 */
 					formats?: components["schemas"]["FormatToken"][];
+					/**
+					 * @description Filter to files whose content is exactly this SHA-256. Lets a client check
+					 *     whether identical content already exists in the workspace before uploading
+					 *     it.
+					 */
+					hash?: components["schemas"]["FileHash"];
 					/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
 					modality?: components["schemas"]["ModalityToken"][];
 					/** @description Search by file name (case-insensitive, partial match). */
@@ -3790,6 +3796,21 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["FilePage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
 				/**
@@ -11313,6 +11334,8 @@ export interface components {
 			displayName: string;
 			/** @description File extension (without dot). */
 			fileExtension: string;
+			/** @description Lowercase hex-encoded SHA-256 of the file's plaintext content. */
+			fileHash: string;
 			/** @description The file's role (original, redacted, audit). */
 			fileKind: components["schemas"]["FileKind"];
 			/**
@@ -11357,6 +11380,8 @@ export interface components {
 			/** @description Display name of the file. */
 			fileName: string;
 		};
+		/** @description A SHA-256 content hash as a 64-character hex string. */
+		FileHash: string;
 		/**
 		 * @description The role a file plays, which drives its data-retention scope and whether it
 		 *     is a user-facing document.
@@ -12485,6 +12510,12 @@ export interface components {
 			 *     extension set (so `jpg` also matches `jpeg`).
 			 */
 			formats?: components["schemas"]["FormatToken"][];
+			/**
+			 * @description Filter to files whose content is exactly this SHA-256. Lets a client check
+			 *     whether identical content already exists in the workspace before uploading
+			 *     it.
+			 */
+			hash?: components["schemas"]["FileHash"];
 			/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
 			modality?: components["schemas"]["ModalityToken"][];
 			/** @description Search by file name (case-insensitive, partial match). */
