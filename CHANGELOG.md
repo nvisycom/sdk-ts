@@ -8,6 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-09-02
+
+### Added
+
+- `detections.getIntermediates(workspaceSlug, detectionId)` returns a
+  detection's enrichment intermediates (`ArtifactSet`) — an image's OCR layout,
+  an audio clip's transcript, or tokenized text — so a client can search the
+  extracted content and add missed entities (a detection whose analysis ran no
+  enricher has none and 404s)
+- Intermediates datatypes (`ArtifactSet`, `Layout`, `LayoutBlock`, `LayoutWord`,
+  `Transcription`, `TranscriptSegment`, `TranscriptWord`, `Tokens`, `Token`)
+- An `intermediates` retention scope on `RetentionSettings` and
+  `RetentionOverride`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
 ## [0.40.0] - 2026-08-31
 
 ### Added
@@ -827,7 +845,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.40.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.41.0...HEAD
+[0.41.0]: https://github.com/nvisycom/sdk-ts/compare/v0.40.0...v0.41.0
 [0.40.0]: https://github.com/nvisycom/sdk-ts/compare/v0.39.0...v0.40.0
 [0.39.0]: https://github.com/nvisycom/sdk-ts/compare/v0.38.0...v0.39.0
 [0.38.0]: https://github.com/nvisycom/sdk-ts/compare/v0.37.0...v0.38.0

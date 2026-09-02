@@ -5967,6 +5967,94 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/workspaces/{workspaceSlug}/detections/{detectionId}/intermediates/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get detection intermediates
+		 * @description Returns the detection's enrichment intermediates — an image's OCR layout, an audio clip's transcript, or tokenized text — as `{ body, parts }`, so a client can search the extracted content and add entities the analysis missed. A detection whose analysis ran no enricher has no intermediates (404).
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ArtifactSet"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/workspaces/{workspaceSlug}/redactions/{redactionId}/review": {
 		parameters: {
 			query?: never;
@@ -9517,6 +9605,55 @@ export interface components {
 			/** @description The JWT token string (only shown once on creation). */
 			token: string;
 		};
+		ArtifactSet: {
+			body:
+				| (
+						| {
+								artifact: components["schemas"]["Tokens"];
+								/** @constant */
+								modality: "text";
+						  }
+						| {
+								artifact: components["schemas"]["Layout"];
+								/** @constant */
+								modality: "image";
+						  }
+						| {
+								artifact: components["schemas"]["Transcription"];
+								/** @constant */
+								modality: "audio";
+						  }
+						| {
+								artifact: components["schemas"]["Tokens"];
+								/** @constant */
+								modality: "tabular";
+						  }
+				  )
+				| null;
+			parts: {
+				[key: string]:
+					| {
+							artifact: components["schemas"]["Tokens"];
+							/** @constant */
+							modality: "text";
+					  }
+					| {
+							artifact: components["schemas"]["Layout"];
+							/** @constant */
+							modality: "image";
+					  }
+					| {
+							artifact: components["schemas"]["Transcription"];
+							/** @constant */
+							modality: "audio";
+					  }
+					| {
+							artifact: components["schemas"]["Tokens"];
+							/** @constant */
+							modality: "tabular";
+					  };
+			};
+		};
 		/**
 		 * @description Author-supplied rationale for a redaction: *under what authority* it was made.
 		 *
@@ -9792,12 +9929,12 @@ export interface components {
 		 *     and encoding inference (the container format a decoder should expect).
 		 *     The recognizable text — a timestamped transcript — is *not* held here;
 		 *     a speech-to-text [`Enricher`] stamps it onto the call's
-		 *     [`artifacts`], keeping
+		 *     [`artifact`], keeping
 		 *     `AudioData` the codec's payload alone.
 		 *
 		 *     [`Audio`]: super::Audio
 		 *     [`Enricher`]: crate::recognition::Enricher
-		 *     [`artifacts`]: crate::recognition::RecognizerContext::artifacts
+		 *     [`artifact`]: crate::recognition::RecognizerContext::artifact
 		 */
 		AudioData: {
 			/** @description Original filename, when known. */
@@ -11390,7 +11527,7 @@ export interface components {
 		 *     version chain (lineage); import origin (connection and remote key) lives in
 		 *     the `workspace_file_imports` satellite.
 		 */
-		FileKind: "original" | "redacted" | "audit" | "review";
+		FileKind: "original" | "redacted" | "audit" | "review" | "intermediate";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -12493,6 +12630,52 @@ export interface components {
 		 *     [`RecognizerContext`]: crate::recognition::RecognizerContext
 		 */
 		Languages: components["schemas"]["Language"][];
+		/**
+		 * @description An image's recognized text, laid out in space.
+		 *
+		 *     An ordered set of [`LayoutBlock`]s (the recognized text regions). The flat
+		 *     [`text`] — the blocks joined — is what a recognizer
+		 *     inspects; [`resolve`] maps a byte range of that text back
+		 *     to the [`ImageLocation`] it occupies, using the blocks' (and their
+		 *     words') bounding boxes. Empty when the backend recognized nothing.
+		 *
+		 *     [`text`]: Self::text
+		 *     [`resolve`]: Self::resolve
+		 */
+		Layout: {
+			/** @description Blocks in reading order. */
+			blocks: components["schemas"]["LayoutBlock"][];
+			/**
+			 * @description The blocks' text joined by [`BLOCK_SEPARATOR`], cached so recognition
+			 *     and byte-range resolution share one flat string.
+			 */
+			text: string;
+		};
+		/**
+		 * @description One recognized region of an image: its bounding box and text, optionally
+		 *     broken into per-word boxes.
+		 */
+		LayoutBlock: {
+			/** @description Bounding region of the block in image coordinates. */
+			region: components["schemas"]["ImageLocation"];
+			/** @description Recognized text for this block. */
+			text: string;
+			/**
+			 * @description Per-word boxes within the block, when the backend emitted them.
+			 *     Empty otherwise; resolution then falls back to the block region.
+			 * @default []
+			 */
+			words?: components["schemas"]["LayoutWord"][];
+		};
+		/** @description One word within a [`LayoutBlock`], with its own bounding box. */
+		LayoutWord: {
+			/** @description Per-word confidence, when reported. */
+			confidence?: components["schemas"]["Confidence"];
+			/** @description Bounding region of the word in image coordinates. */
+			region: components["schemas"]["ImageLocation"];
+			/** @description The word text, as it appears in the block text. */
+			text: string;
+		};
 		/**
 		 * @description What a redacted output leaks about the original it replaced.
 		 *
@@ -13924,6 +14107,8 @@ export interface components {
 		RetentionOverride: {
 			/** @description Overrides audit-blob retention when set. */
 			auditLogs?: components["schemas"]["Retention"];
+			/** @description Overrides enrichment-intermediate retention when set. */
+			intermediates?: components["schemas"]["Retention"];
 			/** @description Overrides redacted-document retention when set. */
 			redactedDocuments?: components["schemas"]["Retention"];
 		};
@@ -13939,6 +14124,13 @@ export interface components {
 			 *     }
 			 */
 			auditLogs?: components["schemas"]["Retention"];
+			/**
+			 * @description Retention for enrichment intermediates (OCR layout, transcript).
+			 * @default {
+			 *       "mode": "forever"
+			 *     }
+			 */
+			intermediates?: components["schemas"]["Retention"];
 			/**
 			 * @description Retention for uploaded/imported source documents.
 			 * @default {
@@ -15636,6 +15828,31 @@ export interface components {
 			start_us: number;
 		};
 		/**
+		 * @description One token produced by an upstream tokenizer.
+		 *
+		 *     `lemma` falls back to `text` when the producer has no lemmatizer, so callers
+		 *     that want lemma-aware matching can read `token.lemma` uniformly without
+		 *     checking which engine produced the artifact.
+		 */
+		Token: {
+			/** @description Producer-asserted punctuation flag. */
+			is_punct: boolean;
+			/**
+			 * @description Producer-asserted stopword flag (e.g. "the", "a", "of" for English).
+			 *     Producers without a stopword list set this to `false`.
+			 */
+			is_stop: boolean;
+			/** @description Lemma when the producer emitted one; otherwise == [`text`](Self::text). */
+			lemma: string;
+			/**
+			 * @description Byte range this token occupies in the source text. Use this to map back
+			 *     to substrings of the original input.
+			 */
+			offset: components["schemas"]["Range_of_uint"];
+			/** @description Surface form as it appears in the source text. */
+			text: string;
+		};
+		/**
 		 * @description Token counts a model reported, each optional because providers differ in
 		 *     what they return — some give only a total, some none at all.
 		 */
@@ -15670,6 +15887,81 @@ export interface components {
 			 * @description Unique identifier of the API token.
 			 */
 			tokenId: string;
+		};
+		/**
+		 * @description Owning token sequence: the [`Text`](super::Text) modality's enrichment
+		 *     artifact, produced by a tokenizing enricher and read by a context enhancer.
+		 *
+		 *     Tokens are sorted by `offset.start` (producers should emit them in order;
+		 *     consumer-side code assumes this). A context enhancer borrows the underlying
+		 *     slice via [`as_slice`](Tokens::as_slice) and walks it by count when scoring an
+		 *     entity's neighbourhood. Empty ([`Default`]) until a tokenizing enricher fills
+		 *     it — the enhancer then tokenizes on demand instead.
+		 */
+		Tokens: components["schemas"]["Token"][];
+		/**
+		 * @description One segment of a [`Transcription`]: a span of audio and the text
+		 *     recognised within it, with optional diarization, language, confidence,
+		 *     and per-word timings.
+		 *
+		 *     `speaker_id` is populated only by backends with diarization;
+		 *     `language` by backends that emit per-segment language detection;
+		 *     `confidence` when the backend reports one; `words` when it emits a
+		 *     word-level breakdown (which is what lets a sub-segment range resolve to
+		 *     a tighter span than the whole segment).
+		 */
+		TranscriptSegment: {
+			/** @description Backend confidence in the segment, when reported. */
+			confidence?: components["schemas"]["Confidence"];
+			/** @description Detected language for this segment, when the backend reported one. */
+			language?: string;
+			/** @description Time span the segment covers within the stream. */
+			span: components["schemas"]["TimeSpan"];
+			/** @description Diarization speaker label, when the backend assigned one. */
+			speaker_id?: string;
+			/** @description Recognised text for this segment. */
+			text: string;
+			/**
+			 * @description Per-word timings within the segment, when the backend emitted them.
+			 *     Empty otherwise; resolution then falls back to the segment span.
+			 * @default []
+			 */
+			words?: components["schemas"]["TranscriptWord"][];
+		};
+		/** @description One word within a [`TranscriptSegment`], with its own time span. */
+		TranscriptWord: {
+			/** @description Per-word confidence, when reported. */
+			confidence?: components["schemas"]["Confidence"];
+			/** @description Time span the word covers within the stream. */
+			span: components["schemas"]["TimeSpan"];
+			/** @description The word text, as it appears in the segment text. */
+			text: string;
+		};
+		/**
+		 * @description Timestamped transcript of an audio stream.
+		 *
+		 *     An ordered set of [`TranscriptSegment`]s. The flat
+		 *     [`text`] — the segments joined — is what a recognizer
+		 *     inspects; [`resolve`] maps a byte range of that text back
+		 *     to the [`TimeSpan`] it occupies, using the segments' (and their words')
+		 *     timings. Empty when the backend produced nothing (silence, or a no-op
+		 *     backend).
+		 *
+		 *     [`text`]: Self::text
+		 *     [`resolve`]: Self::resolve
+		 */
+		Transcription: {
+			/** @description Segments in stream order. */
+			segments: components["schemas"]["TranscriptSegment"][];
+			/**
+			 * @description The segments' text joined by [`SEGMENT_SEPARATOR`], cached so
+			 *     recognition and byte-range resolution share one flat string. Each
+			 *     segment's text begins at a known offset within it (see
+			 *     [`segment_offsets`]).
+			 *
+			 *     [`segment_offsets`]: Self::segment_offsets
+			 */
+			text: string;
 		};
 		/**
 		 * @description An account's current unread-notification count, broadcast on the account's
@@ -16223,6 +16515,9 @@ export interface components {
 			 * @description Data-retention rules for the workspace.
 			 * @default {
 			 *       "auditLogs": {
+			 *         "mode": "forever"
+			 *       },
+			 *       "intermediates": {
 			 *         "mode": "forever"
 			 *       },
 			 *       "originalDocuments": {
