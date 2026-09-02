@@ -138,15 +138,15 @@ export class Detections {
 	/**
 	 * Get a detection's enrichment intermediates.
 	 *
-	 * Returns `{ body, parts }` — an image's OCR layout, an audio clip's
-	 * transcript, or a text document's tokens — so a client can search the
-	 * extracted content and add entities the analysis missed. Text or tabular
-	 * documents without intermediates 404.
+	 * Returns `{ body, parts }` — an image's OCR layout or an audio clip's
+	 * transcript — so a client can search the extracted content and add entities
+	 * the analysis missed. Text and tabular documents produce no intermediates
+	 * and 404.
 	 *
 	 * @param workspaceSlug - Workspace slug
 	 * @param detectionId - Detection ID
 	 * @returns Promise that resolves with the artifact set
-	 * @throws {ApiError} if the request fails (404 when there are none)
+	 * @throws {ApiError} if the request fails (404 for text/tabular detections)
 	 */
 	async getArtifacts(
 		workspaceSlug: string,
