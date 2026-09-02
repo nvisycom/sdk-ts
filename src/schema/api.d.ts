@@ -5967,7 +5967,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/{detectionId}/artifacts/": {
+	"/workspaces/{workspaceSlug}/detections/{detectionId}/intermediates/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5976,7 +5976,7 @@ export interface paths {
 		};
 		/**
 		 * Get detection intermediates
-		 * @description Returns the detection's enrichment intermediates — an image's OCR layout or an audio clip's transcript — as `{ body, parts }`, so a client can search the extracted content and add entities the analysis missed. A text or tabular document produces no intermediates (404).
+		 * @description Returns the detection's enrichment intermediates — an image's OCR layout, an audio clip's transcript, or tokenized text — as `{ body, parts }`, so a client can search the extracted content and add entities the analysis missed. A detection whose analysis ran no enricher has no intermediates (404).
 		 */
 		get: {
 			parameters: {

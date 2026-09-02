@@ -138,22 +138,22 @@ export class Detections {
 	/**
 	 * Get a detection's enrichment intermediates.
 	 *
-	 * Returns `{ body, parts }` — an image's OCR layout or an audio clip's
-	 * transcript — so a client can search the extracted content and add entities
-	 * the analysis missed. Text and tabular documents produce no intermediates
-	 * and 404.
+	 * Returns `{ body, parts }` — an image's OCR layout, an audio clip's
+	 * transcript, or tokenized text — so a client can search the extracted
+	 * content and add entities the analysis missed. A detection whose analysis
+	 * ran no enricher has no intermediates and 404s.
 	 *
 	 * @param workspaceSlug - Workspace slug
 	 * @param detectionId - Detection ID
 	 * @returns Promise that resolves with the artifact set
-	 * @throws {ApiError} if the request fails (404 for text/tabular detections)
+	 * @throws {ApiError} if the request fails (404 when there are none)
 	 */
-	async getArtifacts(
+	async getIntermediates(
 		workspaceSlug: string,
 		detectionId: string,
 	): Promise<ArtifactSet> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/detections/{detectionId}/artifacts/",
+			"/workspaces/{workspaceSlug}/detections/{detectionId}/intermediates/",
 			{
 				params: { path: { workspaceSlug, detectionId } },
 			},

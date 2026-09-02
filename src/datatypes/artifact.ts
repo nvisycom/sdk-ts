@@ -3,7 +3,7 @@ import type { components } from "@/schema/api.js";
 type Schemas = components["schemas"];
 
 // Enrichment intermediates a detection produces, returned by
-// `detections.getArtifacts()`: OCR layout for images, transcript for audio,
+// `detections.getIntermediates()`: OCR layout for images, transcript for audio,
 // and token sequences for text.
 
 // Container: `{ body, parts }` of per-part artifacts.

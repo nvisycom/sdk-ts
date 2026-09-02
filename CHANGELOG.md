@@ -12,11 +12,12 @@ and this project adheres to
 
 ### Added
 
-- `detections.getArtifacts(workspaceSlug, detectionId)` returns a detection's
-  enrichment intermediates (`ArtifactSet`) — an image's OCR layout or an audio
-  clip's transcript — so a client can search the extracted content and add
-  missed entities (text and tabular documents produce none and 404)
-- Artifact datatypes (`ArtifactSet`, `Layout`, `LayoutBlock`, `LayoutWord`,
+- `detections.getIntermediates(workspaceSlug, detectionId)` returns a
+  detection's enrichment intermediates (`ArtifactSet`) — an image's OCR layout,
+  an audio clip's transcript, or tokenized text — so a client can search the
+  extracted content and add missed entities (a detection whose analysis ran no
+  enricher has none and 404s)
+- Intermediates datatypes (`ArtifactSet`, `Layout`, `LayoutBlock`, `LayoutWord`,
   `Transcription`, `TranscriptSegment`, `TranscriptWord`, `Tokens`, `Token`)
 - An `intermediates` retention scope on `RetentionSettings` and
   `RetentionOverride`
