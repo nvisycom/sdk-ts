@@ -1,5 +1,6 @@
 import type { ApiClient } from "@/client.js";
 import type {
+	ArtifactSet,
 	Audit,
 	CreateDetection,
 	CursorPagination,
@@ -127,6 +128,32 @@ export class Detections {
 	): Promise<Audit> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/detections/{detectionId}/analysis/",
+			{
+				params: { path: { workspaceSlug, detectionId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Get a detection's enrichment intermediates.
+	 *
+	 * Returns `{ body, parts }` — an image's OCR layout, an audio clip's
+	 * transcript, or a text document's tokens — so a client can search the
+	 * extracted content and add entities the analysis missed. Text or tabular
+	 * documents without intermediates 404.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param detectionId - Detection ID
+	 * @returns Promise that resolves with the artifact set
+	 * @throws {ApiError} if the request fails (404 when there are none)
+	 */
+	async getArtifacts(
+		workspaceSlug: string,
+		detectionId: string,
+	): Promise<ArtifactSet> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceSlug}/detections/{detectionId}/artifacts/",
 			{
 				params: { path: { workspaceSlug, detectionId } },
 			},
