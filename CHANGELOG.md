@@ -8,6 +8,22 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.43.0] - 2026-09-04
+
+### Added
+
+- Text-location coordinate datatypes (`TextCoord`, `DecodedSpan`, `SourceSpan`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** `TextLocation` now carries its position in a `coord` field — a
+  tagged `TextCoord` union that is either a `decoded` byte range (`DecodedSpan`,
+  with the optional raw `source` it decodes from) or a `source`-only reference
+  (`SourceSpan`, for content with no decoded range, such as a reviewer selecting
+  rendered text). The former top-level `range` and `source` fields moved into
+  the `decoded` variant; `page` stays alongside `coord`
+
 ## [0.42.0] - 2026-09-03
 
 ### Changed
@@ -858,6 +874,7 @@ redaction an independent resource. This release renames the SDK to match.
 - Configuration validation with detailed error messages
 
 [Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[0.43.0]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...v0.43.0
 [0.42.0]: https://github.com/nvisycom/sdk-ts/compare/v0.41.0...v0.42.0
 [0.41.0]: https://github.com/nvisycom/sdk-ts/compare/v0.40.0...v0.41.0
 [0.40.0]: https://github.com/nvisycom/sdk-ts/compare/v0.39.0...v0.40.0

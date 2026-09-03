@@ -11054,6 +11054,27 @@ export interface components {
 			 */
 			to?: string;
 		};
+		/**
+		 * @description A decoded byte range and the raw source it decodes from.
+		 *
+		 *     The `range` is a half-open `[start, end)` span in the decoded text stream.
+		 *     `source` carries the exact raw byte range(s) that span came from for codecs
+		 *     whose decoded text differs from the source (XML/HTML/DOCX entity decoding,
+		 *     JSON escapes); it is empty when the source equals the decoded text.
+		 */
+		DecodedSpan: {
+			/** @description Byte range within the (decoded) text content. */
+			range: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description The exact raw source ranges this decoded span came from. Empty when the
+			 *     source equals the decoded text.
+			 *
+			 *     Usually one range; a reconciled span that fused several source runs (or a
+			 *     span crossing an escape) carries several, kept distinct rather than merged
+			 *     across gaps. Sorted, deduplicated.
+			 */
+			source?: components["schemas"]["SourceRef"][];
+		};
 		/** @description Several detections were fused into one entity. */
 		Deduplication: {
 			/** @description Name of the fusion strategy that combined them. */
@@ -14347,6 +14368,21 @@ export interface components {
 			/** @description The raw source byte range. */
 			range: components["schemas"]["Range_of_uint"];
 		};
+		/**
+		 * @description A source-only coordinate: raw byte range(s) with no decoded span.
+		 *
+		 *     The counterpart to [`DecodedSpan`] for content the pipeline never decoded (a
+		 *     reviewer selecting rendered text). A named struct rather than a bare `Vec`
+		 *     variant so the coordinate serializes as a map, which an internally tagged
+		 *     enum can inject its `kind` tag into.
+		 */
+		SourceSpan: {
+			/**
+			 * @description The raw byte range(s) the selection sits in. Sorted, deduplicated,
+			 *     non-empty by construction.
+			 */
+			source: components["schemas"]["SourceRef"][];
+		};
 		/** @description Storage totals across a workspace's live files. */
 		StorageAnalytics: {
 			/**
@@ -15386,6 +15422,25 @@ export interface components {
 		 */
 		TextAuditLog: components["schemas"]["TextAuditEvent"][];
 		/**
+		 * @description The coordinate of a [`TextLocation`]: a decoded byte range, or a source-only
+		 *     reference.
+		 *
+		 *     The distinction is whether a decoded range exists at all. A recognizer over
+		 *     decoded text produces a [`Decoded`](Self::Decoded) span (with the raw source
+		 *     it decodes from, when the codec's decoded text differs from the source). A
+		 *     reviewer marking rendered text has no decoded range, only where the selection
+		 *     sits in the raw bytes, a [`Source`](Self::Source).
+		 */
+		TextCoord:
+			| ({
+					/** @constant */
+					kind: "decoded";
+			  } & components["schemas"]["DecodedSpan"])
+			| ({
+					/** @constant */
+					kind: "source";
+			  } & components["schemas"]["SourceSpan"]);
+		/**
 		 * @description Run of text.
 		 *
 		 *     Either the payload a text recognizer inspects, or the value sliced out
@@ -15518,31 +15573,25 @@ export interface components {
 			location: components["schemas"]["TextLocation"];
 		};
 		/**
-		 * @description Half-open `[start, end)` byte range within text content.
+		 * @description Where an entity sits in text: a [coordinate](TextCoord) (a decoded byte range,
+		 *     or a source-only reference) plus an optional page number.
 		 *
-		 *     Ordering and overlap consider only the `range`; the optional page number is
-		 *     carried for codecs that page their text but does not affect comparison.
+		 *     The coordinate is either a [`Decoded`](TextCoord::Decoded) byte range in the
+		 *     pipeline's text stream, or a [`Source`](TextCoord::Source)-only reference for
+		 *     content with no decoded range (a reviewer selecting rendered text). The page
+		 *     is orthogonal to the coordinate kind, so it sits alongside rather than inside.
+		 *
+		 *     Ordering and overlap consider only the coordinate; the page is carried for
+		 *     codecs that page their text but does not affect comparison.
 		 */
 		TextLocation: {
+			/** @description The coordinate: a decoded range, or a source-only reference. */
+			coord: components["schemas"]["TextCoord"];
 			/**
 			 * Format: uint32
-			 * @description 1-based page number, when known.
+			 * @description 1-based page number, when known. Orthogonal to the coordinate kind.
 			 */
 			page?: number;
-			/** @description Byte range within the (decoded) text content. */
-			range: components["schemas"]["Range_of_uint"];
-			/**
-			 * @description The exact raw source ranges this decoded span came from, for codecs whose
-			 *     decoded text differs from the source (XML/HTML/DOCX, where entities are
-			 *     decoded; JSON, where `\"` / `\uXXXX` escapes collapse). Empty when the
-			 *     source equals the decoded text (plain text, CSV) or the format has no
-			 *     byte-source coordinate (rendered/scanned formats).
-			 *
-			 *     Usually one range; a reconciled span that fused several source runs (or a
-			 *     span crossing an escape) carries several, kept distinct rather than merged
-			 *     across gaps. Sorted, deduplicated.
-			 */
-			source?: components["schemas"]["SourceRef"][];
 		};
 		/**
 		 * @description A human override, outside automatic detection: an entity a reviewer added by
