@@ -5976,7 +5976,7 @@ export interface paths {
 		};
 		/**
 		 * Get detection intermediates
-		 * @description Returns the detection's enrichment intermediates — an image's OCR layout, an audio clip's transcript, or tokenized text — as `{ body, parts }`, so a client can search the extracted content and add entities the analysis missed. A detection whose analysis ran no enricher has no intermediates (404).
+		 * @description Returns the detection's enrichment intermediates — an image's OCR layout, an audio clip's transcript, or tokenized text — as an object with a `parts` list, each part carrying its path `id`, `modality`, and the extracted `artifact`, so a client can search the content and add entities the analysis missed. A detection whose analysis ran no enricher has no intermediates (404).
 		 */
 		get: {
 			parameters: {
@@ -9606,59 +9606,38 @@ export interface components {
 			token: string;
 		};
 		ArtifactSet: {
-			body:
-				| (
-						| {
-								artifact: components["schemas"]["Tokens"];
-								/** @constant */
-								modality: "text";
-						  }
-						| {
-								artifact: components["schemas"]["Layout"];
-								/** @constant */
-								modality: "image";
-						  }
-						| {
-								artifact: components["schemas"]["Transcription"];
-								/** @constant */
-								modality: "audio";
-						  }
-						| {
-								artifact: components["schemas"]["Tokens"];
-								/** @constant */
-								modality: "tabular";
-						  }
-				  )
-				| null;
-			parts: {
-				[key: string]:
-					| {
-							artifact: components["schemas"]["Tokens"];
-							/** @constant */
-							modality: "text";
-					  }
-					| {
-							artifact: components["schemas"]["Layout"];
-							/** @constant */
-							modality: "image";
-					  }
-					| {
-							artifact: components["schemas"]["Transcription"];
-							/** @constant */
-							modality: "audio";
-					  }
-					| {
-							artifact: components["schemas"]["Tokens"];
-							/** @constant */
-							modality: "tabular";
-					  };
-			};
+			parts: (
+				| {
+						artifact: components["schemas"]["Tokens"];
+						id: string[];
+						/** @constant */
+						modality: "text";
+				  }
+				| {
+						artifact: components["schemas"]["Layout"];
+						id: string[];
+						/** @constant */
+						modality: "image";
+				  }
+				| {
+						artifact: components["schemas"]["Transcription"];
+						id: string[];
+						/** @constant */
+						modality: "audio";
+				  }
+				| {
+						artifact: components["schemas"]["Tokens"];
+						id: string[];
+						/** @constant */
+						modality: "tabular";
+				  }
+			)[];
 		};
 		/**
 		 * @description Author-supplied rationale for a redaction: *under what authority* it was made.
 		 *
 		 *     Where the matched selection rule answers *which rule fired*, an
-		 *     `Attribution` answers *why the policy demanded it* — a compliance clause, an
+		 *     `Attribution` answers *why the policy demanded it*, a compliance clause, an
 		 *     internal policy, a data-handling rule. A policy author attaches it to a
 		 *     selection rule (`Rule::because` in `elide-redaction`); the anonymizer records
 		 *     it on the entity's [`Redaction`] event so an audit can trace a change back to
@@ -9707,31 +9686,42 @@ export interface components {
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
 			/**
-			 * @description Where it sits, in the coordinates of the group it joins.
+			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the body's decoded stream —
-			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
-			 *     A caller who has raw file bytes rather than a decoded offset
-			 *     (a reviewer selecting rendered text, say) leaves `range`
-			 *     empty and fills [`TextLocation::source`] instead, which the
-			 *     engine reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["AudioLocation"];
 			/**
-			 * @description The container part this belongs to, e.g.
-			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 * @description The part this belongs to, as a path: `["report.docx"]` for
+			 *     the document itself, `["report.docx", "word/media/image1.png"]`
+			 *     for media it embeds. `None` means the request's sole
+			 *     document, which is the common case and saves a caller
+			 *     naming what it already sent.
 			 *
-			 *     For the media a container embeds, which the report holds as
-			 *     its own group: an image entity lives under its part, and an
-			 *     addition to one has nowhere to go without naming it.
+			 *     Nested media needs this: the report holds an embedded image
+			 *     as its own part, and an addition to one has nowhere to go
+			 *     without naming it. Text usually does not — where a span came
+			 *     from is already in `TextLocation::source`, which carries the
+			 *     part alongside the raw range.
 			 *
-			 *     Text does not need this. A container's text is its body, and
-			 *     where a span came from is already in `TextLocation::source`,
-			 *     which carries the part alongside the raw range.
+			 *     `None` is an error when the request carried several
+			 *     documents, since there is then no sole document to mean.
 			 */
-			part?: string;
+			part?: string[];
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
@@ -9927,13 +9917,13 @@ export interface components {
 		 *
 		 *     Carries the encoded audio bytes; an optional filename aids diagnostics
 		 *     and encoding inference (the container format a decoder should expect).
-		 *     The recognizable text — a timestamped transcript — is *not* held here;
+		 *     The recognizable text, a timestamped transcript, is *not* held here;
 		 *     a speech-to-text [`Enricher`] stamps it onto the call's
 		 *     [`artifact`], keeping
 		 *     `AudioData` the codec's payload alone.
 		 *
 		 *     [`Audio`]: super::Audio
-		 *     [`Enricher`]: crate::recognition::Enricher
+		 *     [`Enricher`]: crate::enrichment::Enricher
 		 *     [`artifact`]: crate::recognition::RecognizerContext::artifact
 		 */
 		AudioData: {
@@ -9990,7 +9980,7 @@ export interface components {
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
 			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
 			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
 			 *     [`Manual`] event on this trail, not a separate flag.
 			 *
 			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
@@ -10027,7 +10017,7 @@ export interface components {
 			location: components["schemas"]["AudioLocation"];
 			/**
 			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     OCR layout text, the audio transcript, or the text payload itself),
 			 *     the stable key back into that enrichment artifact, where the rich
 			 *     context lives (which OCR block, which speaker) that the geometric
 			 *     [`location`] cannot hold. `None` for entities not found via text
@@ -10043,11 +10033,11 @@ export interface components {
 		 *     for a nearby value.
 		 *
 		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     informs; it lives elsewhere in the source (a table's column header, a
 		 *     JSON object key, a log field name). So `location` points at where the
 		 *     hint text actually sits, and `data` is the hint text itself. Carrying
 		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     *which* hint lifted a score and *where* it came from, provenance a
 		 *     review consumer can resolve back to the document.
 		 *
 		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
@@ -10081,7 +10071,7 @@ export interface components {
 		/**
 		 * @description A human override, outside automatic detection: an entity a reviewer added by
 		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     decision, not a recognizer's, so the trail records *why* (an
 		 *     [`Attribution`], when supplied). *Who* made the override is the event's
 		 *     [`source`], not a payload field.
 		 *
@@ -10097,7 +10087,7 @@ export interface components {
 			/**
 			 * @description Which human decision this records: including a missed entity, or
 			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
 			 *     separate flag to keep in sync.
 			 *
 			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
@@ -10267,16 +10257,18 @@ export interface components {
 			 */
 			context: components["schemas"]["DocumentContext"];
 			/**
-			 * @description The detections: elide's own report, body and container
-			 *     parts, each entity carrying its provenance chain.
+			 * @description The detections: elide's own report, every document and the
+			 *     parts nested in one, each entity carrying its provenance
+			 *     chain.
 			 *
-			 *     Edit it through [`Report`]'s own API — [`include`],
-			 *     [`suppress`], [`entities`] — for the decisions elide models.
+			 *     Edit it through [`Report`]'s own API — [`include_part`],
+			 *     [`suppress_part`], [`part_entities`] — for the decisions
+			 *     elide models.
 			 *
 			 *     [`Report`]: elide::Report
-			 *     [`include`]: elide::Report::include
-			 *     [`suppress`]: elide::Report::suppress
-			 *     [`entities`]: elide::Report::entities
+			 *     [`include_part`]: elide::Report::include_part
+			 *     [`suppress_part`]: elide::Report::suppress_part
+			 *     [`part_entities`]: elide::Report::part_entities
 			 */
 			report: components["schemas"]["Report"];
 			/**
@@ -10609,7 +10601,7 @@ export interface components {
 		ConfidenceThreshold: number;
 		/**
 		 * @description A competing detection of a *different* label over the same span was resolved
-		 *     against this (winning) entity — the loser is recorded, not dropped.
+		 *     against this (winning) entity, the loser is recorded, not dropped.
 		 */
 		Conflict: {
 			/** @description The loser's confidence at resolution time. */
@@ -11030,7 +11022,7 @@ export interface components {
 		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
 		 *
 		 *     Every rendering is an ISO-8601 form, so the output is locale-independent
-		 *     by construction — no localized month names or week markers to configure.
+		 *     by construction, no localized month names or week markers to configure.
 		 */
 		DateGranularity: "year" | "year_month" | "hour";
 		/**
@@ -11732,31 +11724,42 @@ export interface components {
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
 			/**
-			 * @description Where it sits, in the coordinates of the group it joins.
+			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the body's decoded stream —
-			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
-			 *     A caller who has raw file bytes rather than a decoded offset
-			 *     (a reviewer selecting rendered text, say) leaves `range`
-			 *     empty and fills [`TextLocation::source`] instead, which the
-			 *     engine reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["ImageLocation"];
 			/**
-			 * @description The container part this belongs to, e.g.
-			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 * @description The part this belongs to, as a path: `["report.docx"]` for
+			 *     the document itself, `["report.docx", "word/media/image1.png"]`
+			 *     for media it embeds. `None` means the request's sole
+			 *     document, which is the common case and saves a caller
+			 *     naming what it already sent.
 			 *
-			 *     For the media a container embeds, which the report holds as
-			 *     its own group: an image entity lives under its part, and an
-			 *     addition to one has nowhere to go without naming it.
+			 *     Nested media needs this: the report holds an embedded image
+			 *     as its own part, and an addition to one has nowhere to go
+			 *     without naming it. Text usually does not — where a span came
+			 *     from is already in `TextLocation::source`, which carries the
+			 *     part alongside the raw range.
 			 *
-			 *     Text does not need this. A container's text is its body, and
-			 *     where a span came from is already in `TextLocation::source`,
-			 *     which carries the part alongside the raw range.
+			 *     `None` is an error when the request carried several
+			 *     documents, since there is then no sole document to mean.
 			 */
-			part?: string;
+			part?: string[];
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
@@ -12013,7 +12016,7 @@ export interface components {
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
 			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
 			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
 			 *     [`Manual`] event on this trail, not a separate flag.
 			 *
 			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
@@ -12050,7 +12053,7 @@ export interface components {
 			location: components["schemas"]["ImageLocation"];
 			/**
 			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     OCR layout text, the audio transcript, or the text payload itself),
 			 *     the stable key back into that enrichment artifact, where the rich
 			 *     context lives (which OCR block, which speaker) that the geometric
 			 *     [`location`] cannot hold. `None` for entities not found via text
@@ -12066,11 +12069,11 @@ export interface components {
 		 *     for a nearby value.
 		 *
 		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     informs; it lives elsewhere in the source (a table's column header, a
 		 *     JSON object key, a log field name). So `location` points at where the
 		 *     hint text actually sits, and `data` is the hint text itself. Carrying
 		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     *which* hint lifted a score and *where* it came from, provenance a
 		 *     review consumer can resolve back to the document.
 		 *
 		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
@@ -12109,7 +12112,7 @@ export interface components {
 		/**
 		 * @description A human override, outside automatic detection: an entity a reviewer added by
 		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     decision, not a recognizer's, so the trail records *why* (an
 		 *     [`Attribution`], when supplied). *Who* made the override is the event's
 		 *     [`source`], not a payload field.
 		 *
@@ -12125,7 +12128,7 @@ export interface components {
 			/**
 			 * @description Which human decision this records: including a missed entity, or
 			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
 			 *     separate flag to keep in sync.
 			 *
 			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
@@ -12405,7 +12408,7 @@ export interface components {
 		 *
 		 *     # Identity
 		 *
-		 *     Labels are identified by [`id`] — a stable lowercase `snake_case`
+		 *     Labels are identified by [`id`], a stable lowercase `snake_case`
 		 *     string (`"phone_number"`), never localized, and the catalog key that a
 		 *     [`LabelRef`] resolves through. Selectors match by id. Derived equality
 		 *     is *structural*: two labels with the same id but different
@@ -12416,7 +12419,7 @@ export interface components {
 		 *     The display name and description are localized per [`LanguageTag`].
 		 *     English (`"en"`) is required at construction and is the fallback when a
 		 *     requested locale is absent, so [`localization`] always returns some
-		 *     text — NER and LLM read the analysis language's name and description to
+		 *     text, NER and LLM read the analysis language's name and description to
 		 *     prompt the model, keyed by the stable id.
 		 *
 		 *     # Category and tags
@@ -12426,7 +12429,7 @@ export interface components {
 		 *     labels ship with one; a custom label has none unless set.
 		 *
 		 *     [`tags`] is a free-form list of *cross-cutting* markers a policy selector
-		 *     matches against — sensitivity flags a label may carry several of (`pii`,
+		 *     matches against, sensitivity flags a label may carry several of (`pii`,
 		 *     `phi`, `pci`, `sad`, `secret`). Distinct from the category: a label has at
 		 *     most one category but any number of tags. Custom labels can ship with zero
 		 *     of either.
@@ -12473,7 +12476,7 @@ export interface components {
 		 * @description A label's human-facing text in one language: a display name and an
 		 *     optional fuller description.
 		 *
-		 *     The `name` is a short, natural-language phrase (`"phone number"`) — the
+		 *     The `name` is a short, natural-language phrase (`"phone number"`), the
 		 *     label a zero-shot NER model like GLiNER matches on, and the primary
 		 *     text an LLM prompt shows. The `description` is optional extra guidance
 		 *     for backends that consume it (GLiNER-2.0's bi-encoder, an LLM); leave
@@ -12634,7 +12637,7 @@ export interface components {
 		 * @description An image's recognized text, laid out in space.
 		 *
 		 *     An ordered set of [`LayoutBlock`]s (the recognized text regions). The flat
-		 *     [`text`] — the blocks joined — is what a recognizer
+		 *     [`text`], the blocks joined, is what a recognizer
 		 *     inspects; [`resolve`] maps a byte range of that text back
 		 *     to the [`ImageLocation`] it occupies, using the blocks' (and their
 		 *     words') bounding boxes. Empty when the backend recognized nothing.
@@ -12683,7 +12686,7 @@ export interface components {
 		 *     < Partial < Irrecoverable`. Surfaced through
 		 *     [`Operator::leak_profile`] for policy authoring and audit reporting.
 		 *
-		 *     [`Operator::leak_profile`]: crate::operator::Operator::leak_profile
+		 *     [`Operator::leak_profile`]: crate::redaction::Operator::leak_profile
 		 */
 		LeakProfile: "recoverable" | "partial" | "irrecoverable";
 		/** @description Query parameters for listing files. */
@@ -12766,7 +12769,7 @@ export interface components {
 		 *
 		 *     The reusable mechanism behind any text that varies by language: a
 		 *     [`Label`]'s display name and description, a redaction operator's bucket
-		 *     label, and so on. English (`"en"`) is the conventional anchor —
+		 *     label, and so on. English (`"en"`) is the conventional anchor,
 		 *     constructors seed it, and [`resolve`] falls back to it (then to any
 		 *     entry) when a requested locale is absent, so a caller that supplied
 		 *     English always gets *some* value.
@@ -12796,7 +12799,7 @@ export interface components {
 			rememberMe?: boolean;
 		};
 		/**
-		 * @description Which human decision a [`Manual`] event records — the reviewer actions on a
+		 * @description Which human decision a [`Manual`] event records, the reviewer actions on a
 		 *     finding: [`Flag`](ManualIntent::Flag) a miss, [`Suppress`](ManualIntent::Suppress)
 		 *     a false positive, or [`Amend`](ManualIntent::Amend) an existing finding.
 		 */
@@ -12909,9 +12912,9 @@ export interface components {
 			version?: string;
 		};
 		/**
-		 * @description Model detail for a model-backed recognizer or enricher: which model it
-		 *     called and the tokens that cost. Absent from a pure-CPU component (a
-		 *     pattern recognizer, a language enricher).
+		 * @description The model a model-backed recognizer or enricher called, and its token cost.
+		 *
+		 *     Absent from a pure-CPU component (a pattern recognizer, a language enricher).
 		 */
 		ModelUsage: {
 			/** @description Model name the backend called (e.g. `"gpt-4o"`, `"gliner-multi"`). */
@@ -14023,53 +14026,32 @@ export interface components {
 			acceptInvite: boolean;
 		};
 		Report: {
-			body:
-				| (
-						| {
-								entities: components["schemas"]["TextEntity"][];
-								/** @constant */
-								modality: "text";
-						  }
-						| {
-								entities: components["schemas"]["ImageEntity"][];
-								/** @constant */
-								modality: "image";
-						  }
-						| {
-								entities: components["schemas"]["AudioEntity"][];
-								/** @constant */
-								modality: "audio";
-						  }
-						| {
-								entities: components["schemas"]["TabularEntity"][];
-								/** @constant */
-								modality: "tabular";
-						  }
-				  )
-				| null;
-			parts: {
-				[key: string]:
-					| {
-							entities: components["schemas"]["TextEntity"][];
-							/** @constant */
-							modality: "text";
-					  }
-					| {
-							entities: components["schemas"]["ImageEntity"][];
-							/** @constant */
-							modality: "image";
-					  }
-					| {
-							entities: components["schemas"]["AudioEntity"][];
-							/** @constant */
-							modality: "audio";
-					  }
-					| {
-							entities: components["schemas"]["TabularEntity"][];
-							/** @constant */
-							modality: "tabular";
-					  };
-			};
+			parts: (
+				| {
+						entities: components["schemas"]["TextEntity"][];
+						id: string[];
+						/** @constant */
+						modality: "text";
+				  }
+				| {
+						entities: components["schemas"]["ImageEntity"][];
+						id: string[];
+						/** @constant */
+						modality: "image";
+				  }
+				| {
+						entities: components["schemas"]["AudioEntity"][];
+						id: string[];
+						/** @constant */
+						modality: "audio";
+				  }
+				| {
+						entities: components["schemas"]["TabularEntity"][];
+						id: string[];
+						/** @constant */
+						modality: "tabular";
+				  }
+			)[];
 			usage?: components["schemas"]["UsageReport"];
 		};
 		/**
@@ -14148,7 +14130,7 @@ export interface components {
 		};
 		/**
 		 * @description A serializable summary of *which selection rule* bound an operator to an
-		 *     entity — the automatic "why" behind a redaction.
+		 *     entity, the automatic "why" behind a redaction.
 		 *
 		 *     The anonymizer selects an operator by walking an ordered rule list and
 		 *     taking the first match. That decision is recorded on the [`Redaction`]
@@ -14204,8 +14186,8 @@ export interface components {
 		 *     Built once with the `with_*` chain and passed by reference to the
 		 *     analyzer, which borrows it into a fresh [`RecognizerContext`] per
 		 *     payload. It holds only what the *caller* asserts about the analysis as a
-		 *     whole — languages, jurisdictions, document labels, the target catalog, a
-		 *     correlation id — none of which depends on the medium, so one [`Scope`]
+		 *     whole, languages, jurisdictions, document labels, the target catalog, a
+		 *     correlation id, none of which depends on the medium, so one [`Scope`]
 		 *     drives a text, image, or audio analysis alike.
 		 *
 		 *     Per-medium regions (caller-supplied inclusions and exclusions, which are
@@ -14219,7 +14201,7 @@ export interface components {
 		 *     the *request* driving it.
 		 *
 		 *     Three axes of opaque classification strings elide neither ships nor
-		 *     interprets — a downstream policy layer chooses what `"medical"` or
+		 *     interprets, a downstream policy layer chooses what `"medical"` or
 		 *     `"fraud_detection"` or `"auditor"` mean. They are read in two places: a
 		 *     recognizer may bias its detection on them (the LLM prompt lists them so the
 		 *     model attends to the right terms), and a scope-aware operator predicate may
@@ -14229,7 +14211,7 @@ export interface components {
 		 *     - [`tags`] classify the *document* (`"medical"`, `"gdpr-request"`).
 		 *     - [`purpose`] is why the request exists (`"fraud_detection"`).
 		 *     - [`audience`] is who the redacted output is for (`"support_agent"`,
-		 *       `"auditor"`) — the axis PCI-style "same document, two masks" branches on.
+		 *       `"auditor"`), the axis PCI-style "same document, two masks" branches on.
 		 *
 		 *     [`tags`]: Self::tags
 		 *     [`purpose`]: Self::purpose
@@ -14267,7 +14249,7 @@ export interface components {
 			tags?: string[];
 		};
 		/**
-		 * @description An operator was *picked* to hide the entity — the redaction decision,
+		 * @description An operator was *picked* to hide the entity, the redaction decision,
 		 *     recorded before it is applied so it can be reviewed (and the entity edited)
 		 *     first. The [`Redaction`] event that follows records the operator actually
 		 *     run.
@@ -14285,7 +14267,7 @@ export interface components {
 			matched_by: components["schemas"]["RuleMatch"];
 			/**
 			 * @description Identity (name + version) of the operator picked. Its *config* is not
-			 *     recorded — it lives in the policy that will run it, so apply re-resolves
+			 *     recorded; it lives in the policy that will run it, so apply re-resolves
 			 *     the configured operator rather than reading it here.
 			 */
 			operator: components["schemas"]["OperatorId"];
@@ -14343,8 +14325,8 @@ export interface components {
 		/** @description Sort order direction. */
 		SortOrder: "asc" | "desc";
 		/**
-		 * @description A reference back to the original source: a byte range, and — for a container
-		 *     whose body spans several files — which part that range indexes.
+		 * @description A reference back to the original source: a byte range, and, for a container
+		 *     whose body spans several files, which part that range indexes.
 		 *
 		 *     [`TextLocation`]'s `range` indexes the *decoded* text stream a codec hands
 		 *     the pipeline (entities resolved, container parts concatenated). A `SourceRef`
@@ -14552,31 +14534,42 @@ export interface components {
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
 			/**
-			 * @description Where it sits, in the coordinates of the group it joins.
+			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the body's decoded stream —
-			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
-			 *     A caller who has raw file bytes rather than a decoded offset
-			 *     (a reviewer selecting rendered text, say) leaves `range`
-			 *     empty and fills [`TextLocation::source`] instead, which the
-			 *     engine reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["TabularLocation"];
 			/**
-			 * @description The container part this belongs to, e.g.
-			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 * @description The part this belongs to, as a path: `["report.docx"]` for
+			 *     the document itself, `["report.docx", "word/media/image1.png"]`
+			 *     for media it embeds. `None` means the request's sole
+			 *     document, which is the common case and saves a caller
+			 *     naming what it already sent.
 			 *
-			 *     For the media a container embeds, which the report holds as
-			 *     its own group: an image entity lives under its part, and an
-			 *     addition to one has nowhere to go without naming it.
+			 *     Nested media needs this: the report holds an embedded image
+			 *     as its own part, and an addition to one has nowhere to go
+			 *     without naming it. Text usually does not — where a span came
+			 *     from is already in `TextLocation::source`, which carries the
+			 *     part alongside the raw range.
 			 *
-			 *     Text does not need this. A container's text is its body, and
-			 *     where a span came from is already in `TextLocation::source`,
-			 *     which carries the part alongside the raw range.
+			 *     `None` is an error when the request carried several
+			 *     documents, since there is then no sole document to mean.
 			 */
-			part?: string;
+			part?: string[];
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
@@ -14817,7 +14810,7 @@ export interface components {
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
 			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
 			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
 			 *     [`Manual`] event on this trail, not a separate flag.
 			 *
 			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
@@ -14854,7 +14847,7 @@ export interface components {
 			location: components["schemas"]["TabularLocation"];
 			/**
 			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     OCR layout text, the audio transcript, or the text payload itself),
 			 *     the stable key back into that enrichment artifact, where the rich
 			 *     context lives (which OCR block, which speaker) that the geometric
 			 *     [`location`] cannot hold. `None` for entities not found via text
@@ -14870,11 +14863,11 @@ export interface components {
 		 *     for a nearby value.
 		 *
 		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     informs; it lives elsewhere in the source (a table's column header, a
 		 *     JSON object key, a log field name). So `location` points at where the
 		 *     hint text actually sits, and `data` is the hint text itself. Carrying
 		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     *which* hint lifted a score and *where* it came from, provenance a
 		 *     review consumer can resolve back to the document.
 		 *
 		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
@@ -14938,7 +14931,7 @@ export interface components {
 		/**
 		 * @description A human override, outside automatic detection: an entity a reviewer added by
 		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     decision, not a recognizer's, so the trail records *why* (an
 		 *     [`Attribution`], when supplied). *Who* made the override is the event's
 		 *     [`source`], not a payload field.
 		 *
@@ -14954,7 +14947,7 @@ export interface components {
 			/**
 			 * @description Which human decision this records: including a missed entity, or
 			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
 			 *     separate flag to keep in sync.
 			 *
 			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
@@ -15166,31 +15159,42 @@ export interface components {
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
 			/**
-			 * @description Where it sits, in the coordinates of the group it joins.
+			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the body's decoded stream —
-			 *     a DOCX's `word/document.xml` text *is* the body, not a part.
-			 *     A caller who has raw file bytes rather than a decoded offset
-			 *     (a reviewer selecting rendered text, say) leaves `range`
-			 *     empty and fills [`TextLocation::source`] instead, which the
-			 *     engine reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["TextLocation"];
 			/**
-			 * @description The container part this belongs to, e.g.
-			 *     `"word/media/image1.png"`. `None` puts it on the body.
+			 * @description The part this belongs to, as a path: `["report.docx"]` for
+			 *     the document itself, `["report.docx", "word/media/image1.png"]`
+			 *     for media it embeds. `None` means the request's sole
+			 *     document, which is the common case and saves a caller
+			 *     naming what it already sent.
 			 *
-			 *     For the media a container embeds, which the report holds as
-			 *     its own group: an image entity lives under its part, and an
-			 *     addition to one has nowhere to go without naming it.
+			 *     Nested media needs this: the report holds an embedded image
+			 *     as its own part, and an addition to one has nowhere to go
+			 *     without naming it. Text usually does not — where a span came
+			 *     from is already in `TextLocation::source`, which carries the
+			 *     part alongside the raw range.
 			 *
-			 *     Text does not need this. A container's text is its body, and
-			 *     where a span came from is already in `TextLocation::source`,
-			 *     which carries the part alongside the raw range.
+			 *     `None` is an error when the request carried several
+			 *     documents, since there is then no sole document to mean.
 			 */
-			part?: string;
+			part?: string[];
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
@@ -15442,7 +15446,7 @@ export interface components {
 			 * @description Tamper-evident audit trail: every contributing detection, the fusion
 			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
 			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity — a suppression is a
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
 			 *     [`Manual`] event on this trail, not a separate flag.
 			 *
 			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
@@ -15479,7 +15483,7 @@ export interface components {
 			location: components["schemas"]["TextLocation"];
 			/**
 			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself) —
+			 *     OCR layout text, the audio transcript, or the text payload itself),
 			 *     the stable key back into that enrichment artifact, where the rich
 			 *     context lives (which OCR block, which speaker) that the geometric
 			 *     [`location`] cannot hold. `None` for entities not found via text
@@ -15495,11 +15499,11 @@ export interface components {
 		 *     for a nearby value.
 		 *
 		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs — it lives elsewhere in the source (a table's column header, a
+		 *     informs; it lives elsewhere in the source (a table's column header, a
 		 *     JSON object key, a log field name). So `location` points at where the
 		 *     hint text actually sits, and `data` is the hint text itself. Carrying
 		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from — provenance a
+		 *     *which* hint lifted a score and *where* it came from, provenance a
 		 *     review consumer can resolve back to the document.
 		 *
 		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
@@ -15543,7 +15547,7 @@ export interface components {
 		/**
 		 * @description A human override, outside automatic detection: an entity a reviewer added by
 		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's — so the trail records *why* (an
+		 *     decision, not a recognizer's, so the trail records *why* (an
 		 *     [`Attribution`], when supplied). *Who* made the override is the event's
 		 *     [`source`], not a payload field.
 		 *
@@ -15559,7 +15563,7 @@ export interface components {
 			/**
 			 * @description Which human decision this records: including a missed entity, or
 			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted — [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
 			 *     separate flag to keep in sync.
 			 *
 			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
@@ -15853,8 +15857,10 @@ export interface components {
 			text: string;
 		};
 		/**
-		 * @description Token counts a model reported, each optional because providers differ in
-		 *     what they return — some give only a total, some none at all.
+		 * @description The token counts a model reported.
+		 *
+		 *     Each is optional because providers differ in what they return: some give
+		 *     only a total, some none at all.
 		 */
 		TokenCounts: {
 			/**
@@ -15869,7 +15875,7 @@ export interface components {
 			output?: number;
 			/**
 			 * Format: uint64
-			 * @description Total tokens — may be reported even when the input/output split is not.
+			 * @description Total tokens, may be reported even when the input/output split is not.
 			 */
 			total?: number;
 		};
@@ -15896,7 +15902,7 @@ export interface components {
 		 *     consumer-side code assumes this). A context enhancer borrows the underlying
 		 *     slice via [`as_slice`](Tokens::as_slice) and walks it by count when scoring an
 		 *     entity's neighbourhood. Empty ([`Default`]) until a tokenizing enricher fills
-		 *     it — the enhancer then tokenizes on demand instead.
+		 *     it, the enhancer then tokenizes on demand instead.
 		 */
 		Tokens: components["schemas"]["Token"][];
 		/**
@@ -15941,7 +15947,7 @@ export interface components {
 		 * @description Timestamped transcript of an audio stream.
 		 *
 		 *     An ordered set of [`TranscriptSegment`]s. The flat
-		 *     [`text`] — the segments joined — is what a recognizer
+		 *     [`text`], the segments joined, is what a recognizer
 		 *     inspects; [`resolve`] maps a byte range of that text back
 		 *     to the [`TimeSpan`] it occupies, using the segments' (and their words')
 		 *     timings. Empty when the backend produced nothing (silence, or a no-op

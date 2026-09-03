@@ -1,6 +1,6 @@
 {
 	"name": "@nvisy/sdk",
-	"version": "0.41.0",
+	"version": "0.42.0",
 	"description": "Official TypeScript SDK for Nvisy document processing platform",
 	"type": "module",
 	"private": false,
@@ -82,8 +82,8 @@
 		"release": "npm run prepublishOnly && npm publish",
 		"generate:check": "curl -sf https://api.nvisy.com/openapi.json -o /dev/null",
 		"generate:check:local": "curl -sf http://127.0.0.1:8080/api/openapi.json -o /dev/null",
-		"generate": "openapi-typescript https://api.nvisy.com/openapi.json --default-non-nullable false -o ./src/schema/api.d.ts",
-		"generate:local": "openapi-typescript http://127.0.0.1:8080/api/openapi.json --default-non-nullable false -o ./src/schema/api.d.ts",
+		"generate": "openapi-typescript https://api.nvisy.com/openapi.json --default-non-nullable false -o ./src/schema/api.d.ts && biome format --write ./src/schema/api.d.ts",
+		"generate:local": "openapi-typescript http://127.0.0.1:8080/api/openapi.json --default-non-nullable false -o ./src/schema/api.d.ts && biome format --write ./src/schema/api.d.ts",
 		"generate:clean": "rimraf ./src/schema/api.d.ts",
 		"audit:coverage": "node scripts/audit-coverage.mjs",
 		"audit:coverage:remote": "node scripts/audit-coverage.mjs https://api.nvisy.com/openapi.json"

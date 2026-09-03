@@ -6,7 +6,7 @@ type Schemas = components["schemas"];
 // `detections.getIntermediates()`: OCR layout for images, transcript for audio,
 // and token sequences for text.
 
-// Container: `{ body, parts }` of per-part artifacts.
+// Container: a modality-tagged `parts` array of per-part artifacts.
 export type ArtifactSet = Schemas["ArtifactSet"];
 
 // Image OCR layout.

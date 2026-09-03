@@ -138,10 +138,10 @@ export class Detections {
 	/**
 	 * Get a detection's enrichment intermediates.
 	 *
-	 * Returns `{ body, parts }` — an image's OCR layout, an audio clip's
-	 * transcript, or tokenized text — so a client can search the extracted
-	 * content and add entities the analysis missed. A detection whose analysis
-	 * ran no enricher has no intermediates and 404s.
+	 * Returns an `ArtifactSet` — the modality-tagged `parts`, each an image's
+	 * OCR layout, an audio clip's transcript, or tokenized text — so a client
+	 * can search the extracted content and add entities the analysis missed. A
+	 * detection whose analysis ran no enricher has no intermediates and 404s.
 	 *
 	 * @param workspaceSlug - Workspace slug
 	 * @param detectionId - Detection ID

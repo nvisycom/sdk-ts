@@ -8,6 +8,18 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-09-03
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** the `parts` field on `ArtifactSet` and `Report` changed from a
+  part-id-keyed object map to a tagged array (`{ id, modality, artifact }[]`),
+  each entry carrying its own `id`
+- **Breaking:** the `part` field on the per-modality `*Add` audit-event
+  datatypes is now `string[]` (an added entity may span multiple container
+  parts). `SourceRef.part` stays a single `string`
+
 ## [0.41.0] - 2026-09-02
 
 ### Added
@@ -845,7 +857,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.41.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[0.42.0]: https://github.com/nvisycom/sdk-ts/compare/v0.41.0...v0.42.0
 [0.41.0]: https://github.com/nvisycom/sdk-ts/compare/v0.40.0...v0.41.0
 [0.40.0]: https://github.com/nvisycom/sdk-ts/compare/v0.39.0...v0.40.0
 [0.39.0]: https://github.com/nvisycom/sdk-ts/compare/v0.38.0...v0.39.0
