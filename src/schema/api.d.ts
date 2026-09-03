@@ -5976,7 +5976,7 @@ export interface paths {
 		};
 		/**
 		 * Get detection intermediates
-		 * @description Returns the detection's enrichment intermediates — an image's OCR layout, an audio clip's transcript, or tokenized text — as `{ body, parts }`, so a client can search the extracted content and add entities the analysis missed. A detection whose analysis ran no enricher has no intermediates (404).
+		 * @description Returns the detection's enrichment intermediates — an image's OCR layout, an audio clip's transcript, or tokenized text — as an object with a `parts` list, each part carrying its path `id`, `modality`, and the extracted `artifact`, so a client can search the content and add entities the analysis missed. A detection whose analysis ran no enricher has no intermediates (404).
 		 */
 		get: {
 			parameters: {
@@ -9688,14 +9688,20 @@ export interface components {
 			/**
 			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the document's decoded
-			 *     stream — a DOCX's `word/document.xml` text belongs to the
-			 *     document itself, not to a nested part. A caller who has raw
-			 *     file bytes rather than a decoded offset (a reviewer
-			 *     selecting rendered text, say) leaves `range` empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["AudioLocation"];
@@ -11720,14 +11726,20 @@ export interface components {
 			/**
 			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the document's decoded
-			 *     stream — a DOCX's `word/document.xml` text belongs to the
-			 *     document itself, not to a nested part. A caller who has raw
-			 *     file bytes rather than a decoded offset (a reviewer
-			 *     selecting rendered text, say) leaves `range` empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["ImageLocation"];
@@ -14524,14 +14536,20 @@ export interface components {
 			/**
 			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the document's decoded
-			 *     stream — a DOCX's `word/document.xml` text belongs to the
-			 *     document itself, not to a nested part. A caller who has raw
-			 *     file bytes rather than a decoded offset (a reviewer
-			 *     selecting rendered text, say) leaves `range` empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["TabularLocation"];
@@ -15143,14 +15161,20 @@ export interface components {
 			/**
 			 * @description Where it sits, in the coordinates of the part it joins.
 			 *
-			 *     For text in a container, that is the document's decoded
-			 *     stream — a DOCX's `word/document.xml` text belongs to the
-			 *     document itself, not to a nested part. A caller who has raw
-			 *     file bytes rather than a decoded offset (a reviewer
-			 *     selecting rendered text, say) leaves `range` empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves.
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
 			 *
+			 *     For text specifically, a caller holding raw file bytes
+			 *     rather than a decoded offset — a reviewer selecting rendered
+			 *     text, say — leaves [`TextLocation::range`] empty and fills
+			 *     [`TextLocation::source`] instead, which the engine
+			 *     reverse-resolves. The other three have no such alternative:
+			 *     their coordinates are the only way in.
+			 *
+			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
 			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
 			 */
 			location: components["schemas"]["TextLocation"];
