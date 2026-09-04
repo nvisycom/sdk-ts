@@ -83,5 +83,6 @@ jobs:
         run: npm ci
 
       # Informational: prints the dependency-license breakdown, does not gate.
+      # `--no-install` runs the pinned devDependency, never a fetched copy.
       - name: Check licenses
-        run: npx license-checker --summary
+        run: npx --no-install license-checker-rseidelsohn --summary
