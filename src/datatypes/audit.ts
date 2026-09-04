@@ -66,6 +66,10 @@ export type TextAuditKind = Schemas["TextAuditKind"];
 export type TextAuditLog = Schemas["TextAuditLog"];
 export type TextHint = Schemas["TextHint"];
 export type TextLocation = Schemas["TextLocation"];
+// A text location's coordinate: a decoded byte range, or a source-only reference.
+export type TextCoord = Schemas["TextCoord"];
+export type DecodedSpan = Schemas["DecodedSpan"];
+export type SourceSpan = Schemas["SourceSpan"];
 export type TextData = Schemas["TextData"];
 export type TextModel = Schemas["TextModel"];
 export type TextPattern = Schemas["TextPattern"];
