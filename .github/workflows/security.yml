@@ -1,0 +1,78 @@
+name: Security
+
+env:
+  NODE_VERSION: "22"
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/security.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/security.yml"
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+# Jobs only check out code and run local commands.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      # Gate on the shipped tree; the published package must be clean.
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=moderate
+
+      # Dev tooling too, informational — an unfixable dev vuln must not block CI.
+      - name: Audit all dependencies
+        run: npm audit --audit-level=moderate || true
+
+      - name: Check for outdated dependencies
+        run: npm outdated || true
+
+  license:
+    name: License Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check licenses
+        run: npx license-checker --summary
