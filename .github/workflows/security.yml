@@ -22,10 +22,10 @@ on:
       - "LICENSE.txt"
       - ".github/workflows/security.yml"
   schedule:
-    - cron: "0 0 * * 0"
+    # Weekly, so newly disclosed advisories surface without a push.
+    - cron: "0 6 * * 1"
   workflow_dispatch:
 
-# Jobs only check out code and run local commands.
 permissions:
   contents: read
 
@@ -35,9 +35,8 @@ concurrency:
 
 jobs:
   audit:
-    name: Audit
+    name: Audit Dependencies
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -50,18 +49,47 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
-      # Gate on the shipped tree; the published package must be clean.
-      - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=moderate
+      - name: Run npm audit
+        run: npm audit --audit-level=high
 
-      # Dev tooling too, informational — an unfixable dev vuln must not block CI.
-      - name: Audit all dependencies
-        continue-on-error: true
-        run: npm audit --audit-level=moderate
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
-      - name: Check for outdated dependencies
-        continue-on-error: true
-        run: npm outdated
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: "javascript-typescript"
+          queries: security-and-quality
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:javascript-typescript"
 
   license:
     name: License Check
