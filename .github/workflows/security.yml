@@ -12,12 +12,14 @@ on:
       - "src/**"
       - "package.json"
       - "package-lock.json"
+      - "LICENSE.txt"
       - ".github/workflows/security.yml"
   pull_request:
     paths:
       - "src/**"
       - "package.json"
       - "package-lock.json"
+      - "LICENSE.txt"
       - ".github/workflows/security.yml"
   schedule:
     - cron: "0 0 * * 0"
@@ -39,6 +41,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -53,11 +57,11 @@ jobs:
       # Dev tooling too, informational — an unfixable dev vuln must not block CI.
       - name: Audit all dependencies
         continue-on-error: true
-        run: timeout 120 npm audit --audit-level=moderate
+        run: npm audit --audit-level=moderate
 
       - name: Check for outdated dependencies
         continue-on-error: true
-        run: timeout 120 npm outdated
+        run: npm outdated
 
   license:
     name: License Check
@@ -66,6 +70,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -76,5 +82,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Informational: prints the dependency-license breakdown, does not gate.
       - name: Check licenses
         run: npx license-checker --summary
