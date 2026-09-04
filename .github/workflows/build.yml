@@ -126,5 +126,19 @@ jobs:
       - name: Build package
         run: npm run build
 
+      # Only a release PR bumps the version; a version already on npm would make
+      # `npm publish --dry-run` fail on the collision, so skip it there.
+      - name: Check whether this version is unpublished
+        id: version
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "unpublished=false" >>"$GITHUB_OUTPUT"
+          else
+            echo "unpublished=true" >>"$GITHUB_OUTPUT"
+          fi
+
       - name: Publish dry run
+        if: steps.version.outputs.unpublished == 'true'
         run: npm publish --dry-run
