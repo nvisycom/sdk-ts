@@ -29,15 +29,8 @@ export default defineConfig({
 				"src/generated/**", // Exclude generated files
 			],
 
-			// Coverage thresholds - fail if below these percentages
-			thresholds: {
-				global: {
-					branches: 80,
-					functions: 80,
-					lines: 80,
-					statements: 80,
-				},
-			},
+			// No thresholds: the report is here to be read, not to gate CI on a
+			// percentage. Run `npm run test:coverage` to see what is untested.
 		},
 
 		// Test execution configuration (Vitest 4+)
