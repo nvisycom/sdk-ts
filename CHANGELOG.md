@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** the minimum supported Node.js version is now 24 (was 20)
+
 ## [0.43.0] - 2026-09-04
 
 ### Added
