@@ -35,8 +35,9 @@ concurrency:
 
 jobs:
   audit:
-    name: Audit Dependencies
+    name: Audit
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -49,12 +50,37 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
-      - name: Run npm audit
-        run: npm audit --audit-level=high
+      # Gate on the shipped tree; dev-tooling advisories never reach consumers.
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+  license:
+    name: License Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      # Informational: prints the dependency-license breakdown, does not gate.
+      - name: Check licenses
+        run: npx --no-install license-checker-rseidelsohn --summary
 
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
@@ -70,6 +96,8 @@ jobs:
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
+    # Higher than the rest: CodeQL analysis time scales with the codebase.
+    timeout-minutes: 20
     permissions:
       contents: read
       security-events: write
@@ -90,26 +118,3 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:javascript-typescript"
-
-  license:
-    name: License Check
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      # Informational: prints the dependency-license breakdown, does not gate.
-      - name: Check licenses
-        run: npx --no-install license-checker-rseidelsohn --summary
