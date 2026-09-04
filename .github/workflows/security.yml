@@ -35,7 +35,7 @@ jobs:
   audit:
     name: Audit
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -52,10 +52,12 @@ jobs:
 
       # Dev tooling too, informational — an unfixable dev vuln must not block CI.
       - name: Audit all dependencies
-        run: npm audit --audit-level=moderate || true
+        continue-on-error: true
+        run: timeout 120 npm audit --audit-level=moderate
 
       - name: Check for outdated dependencies
-        run: npm outdated || true
+        continue-on-error: true
+        run: timeout 120 npm outdated
 
   license:
     name: License Check
