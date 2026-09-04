@@ -4,7 +4,7 @@ Thank you for your interest in contributing to the Nvisy SDK.
 
 ## Requirements
 
-- Node.js 20.0.0 or higher
+- Node.js 24.0.0 or higher
 - TypeScript 5.9.0 or higher
 - npm
 

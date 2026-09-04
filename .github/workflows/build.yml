@@ -1,7 +1,7 @@
 name: Build
 
 env:
-  NODE_VERSION: "22"
+  NODE_VERSION: "24"
 
 on:
   push:
@@ -29,6 +29,9 @@ on:
       - ".github/workflows/build.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint & Format
@@ -55,17 +58,14 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20, 22]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
@@ -129,5 +129,27 @@ jobs:
       - name: Build package
         run: npm run build
 
+      # Only a release PR bumps the version; a version already on npm would make
+      # `npm publish --dry-run` fail on the collision, so run it only when the
+      # version is confirmed absent (a clean 404). Any other registry error is
+      # inconclusive, so skip rather than run a dry-run doomed to the same fault.
+      - name: Check whether this version is unpublished
+        id: version
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if out=$(npm view "$name@$version" version 2>&1); then
+            echo "Version $version already on npm; skipping dry run."
+            echo "unpublished=false" >>"$GITHUB_OUTPUT"
+          elif printf '%s' "$out" | grep -q 'E404'; then
+            echo "Version $version not on npm; will dry-run publish."
+            echo "unpublished=true" >>"$GITHUB_OUTPUT"
+          else
+            echo "::warning::Could not confirm whether $version is published; skipping dry run."
+            printf '%s\n' "$out"
+            echo "unpublished=false" >>"$GITHUB_OUTPUT"
+          fi
+
       - name: Publish dry run
+        if: steps.version.outputs.unpublished == 'true'
         run: npm publish --dry-run
