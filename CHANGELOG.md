@@ -26,8 +26,13 @@ and this project adheres to
 
 ### Changed
 
-- Regenerated the API schema against the updated platform handlers. The
-  `ProviderType` value `cloud_files` was renamed to `file_service`
+- Regenerated the API schema against the updated platform handlers. A
+  `file_service` value was added to `ProviderType` for the new cloud
+  file-service connections
+- **Breaking:** the `WorkspaceRole` values `member` and `guest` were renamed to
+  `editor` and `reviewer`. The type flows through member data, role updates,
+  invites, invite codes, and role filters; callers matching on the old string
+  values must update them
 - **Breaking:** the minimum supported Node.js version is now 24 (was 20)
 
 ## [0.43.0] - 2026-09-04
