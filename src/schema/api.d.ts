@@ -2700,6 +2700,112 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/workspaces/{workspaceSlug}/connections/oauth/{provider}/start/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Start cloud file OAuth
+		 * @description Begins the OAuth authorization for a cloud file-service connection and returns the provider authorize URL to redirect the user to. On the user's consent, the provider redirects to the callback, which creates the connection.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description The cloud file provider to connect. */
+					provider: components["schemas"]["Provider"];
+				};
+				cookie?: never;
+			};
+			/** @description Request payload for starting a cloud file-service OAuth authorization. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["StartFileServiceOAuth"];
+				};
+			};
+			responses: {
+				/** @description The response to a successful authorization start: where to send the user. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["OAuthStartResponse"];
+					};
+				};
+				/** @description Failed to parse the request body as JSON */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/workspaces/{workspaceSlug}/chat/sessions/": {
 		parameters: {
 			query?: never;
@@ -4345,7 +4451,7 @@ export interface paths {
 		};
 		/**
 		 * Download file
-		 * @description Downloads a file by ID. Returns the file content as a binary stream.
+		 * @description Downloads a file by ID. Returns the file content as a binary stream. The required permission depends on the file's kind: an original file (or an intermediate, which carries the original's content) needs DownloadOriginalFiles, a redacted output needs DownloadRedactedFiles, and an audit blob needs DownloadAudit.
 		 */
 		get: {
 			parameters: {
@@ -6751,6 +6857,67 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["RecognizerCatalog"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/catalog/connectors/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List connectors
+		 * @description Returns which connector families and providers this deployment can create: each OAuth file-service provider is available only when its app is configured on the server, while object-store and inference connections carry their own credentials and are always available. Use it to render the connect UI without probing.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Which connector families and providers this deployment can create.
+				 *
+				 *     Lets a client render the connect UI without probing: a file-service provider
+				 *     is only offered when the host has configured its OAuth app, whereas
+				 *     object-store and inference connections carry their own credentials and are
+				 *     always available.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectorCatalog"];
 					};
 				};
 				/**
@@ -10660,6 +10827,7 @@ export interface components {
 		 */
 		ConnectionConfig:
 			| components["schemas"]["StorageConfig"]
+			| components["schemas"]["FileServiceConfig"]
 			| components["schemas"]["LlmConfig"];
 		/** @description Opaque conn identifier (conn_<uuid>). */
 		ConnectionId: string;
@@ -10795,6 +10963,29 @@ export interface components {
 			 * @default []
 			 */
 			provider?: string[];
+		};
+		/**
+		 * @description Which connector families and providers this deployment can create.
+		 *
+		 *     Lets a client render the connect UI without probing: a file-service provider
+		 *     is only offered when the host has configured its OAuth app, whereas
+		 *     object-store and inference connections carry their own credentials and are
+		 *     always available.
+		 */
+		ConnectorCatalog: {
+			/** @description Availability of each OAuth file-service provider. */
+			fileServices: components["schemas"]["FileProviders"];
+			/**
+			 * @description Whether inference connections can be created. Currently always `true`, for
+			 *     the same reason as object stores.
+			 */
+			inference: boolean;
+			/**
+			 * @description Whether object-store connections can be created. Currently always `true` —
+			 *     they carry their own credentials, so nothing gates them server-side — but
+			 *     clients should read the field rather than assume it.
+			 */
+			objectStores: boolean;
 		};
 		/**
 		 * @description A competing detection of a different label over the same span was left
@@ -11558,6 +11749,36 @@ export interface components {
 			 * @description Total count of items matching the query (if requested).
 			 */
 			total?: number;
+		};
+		/**
+		 * @description Per-provider availability for the OAuth file services. Each field is `true`
+		 *     only when that provider's OAuth app is configured on the server.
+		 */
+		FileProviders: {
+			/**
+			 * @description Whether Box can be connected. (`box` is a Rust keyword, hence the field
+			 *     name; the wire name is `box`.)
+			 */
+			box: boolean;
+			/** @description Whether Dropbox can be connected. */
+			dropbox: boolean;
+			/** @description Whether Google Drive can be connected. */
+			googleDrive: boolean;
+			/** @description Whether OneDrive can be connected. */
+			oneDrive: boolean;
+		};
+		/**
+		 * @description A fully-typed cloud file-service connection configuration: a provider and its
+		 *     settings. Serialized (flat: `{ "provider": ..., "tokens": ..., "root": ... }`)
+		 *     only to persist the config encrypted at rest, never returned in API responses.
+		 */
+		FileServiceConfig: {
+			/** @description Which provider backs this connection. */
+			provider: components["schemas"]["Provider"];
+			/** @description The folder (id or path) to scope the sync to; `None` uses the root. */
+			root?: string;
+			/** @description The OAuth token set for this connection. */
+			tokens: components["schemas"]["OAuthTokens"];
 		};
 		/**
 		 * @description A supported file extension.
@@ -13099,6 +13320,38 @@ export interface components {
 			/** @description Whether to send email notifications. */
 			notifyViaEmail: boolean;
 		};
+		/**
+		 * @description Path parameters for the OAuth start endpoint: which cloud file provider to
+		 *     begin authorizing. The provider is the crate's [`Provider`], so the API and
+		 *     stored config name each provider identically.
+		 */
+		OAuthStartPathParams: {
+			/** @description The cloud file provider to connect. */
+			provider: components["schemas"]["Provider"];
+		};
+		/** @description The response to a successful authorization start: where to send the user. */
+		OAuthStartResponse: {
+			/** @description The provider authorize URL the client should redirect the user to. */
+			authorizeUrl: string;
+		};
+		/**
+		 * @description A persisted OAuth token set. Stored encrypted with the rest of a
+		 *     connection's config; never returned in API responses.
+		 */
+		OAuthTokens: {
+			/** @description The current access token, sent as a bearer credential. */
+			access_token: string;
+			/**
+			 * Format: int64
+			 * @description Unix seconds at which the access token expires, if known.
+			 */
+			expires_at?: number;
+			/**
+			 * @description The refresh token, used to mint a new access token when it expires.
+			 *     Providers may omit it on refresh, so it is retained across refreshes.
+			 */
+			refresh_token?: string;
+		};
 		/** @description OpenAI API credentials. */
 		OpenAiCredentials: {
 			/** @description OpenAI API key. */
@@ -13778,6 +14031,13 @@ export interface components {
 					not: components["schemas"]["Predicate"];
 			  };
 		/**
+		 * @description A supported cloud file-service provider.
+		 *
+		 *     The serialized form (snake_case) is the `provider` tag stored on a connection
+		 *     and used in the API, so every provider name lives in exactly one place.
+		 */
+		Provider: "google_drive" | "dropbox" | "one_drive" | "box";
+		/**
 		 * @description The capability category of a connection's provider.
 		 *
 		 *     Corresponds to the `PROVIDER_TYPE` PostgreSQL enum. A stable, closed set:
@@ -13786,7 +14046,7 @@ export interface components {
 		 *     connection be found by what it can do — e.g. a workspace's language model —
 		 *     without decrypting its config.
 		 */
-		ProviderType: "object_store" | "language_model";
+		ProviderType: "object_store" | "language_model" | "file_service";
 		/**
 		 * @description Public view of an account, returned when looking up someone other than the
 		 *     authenticated caller. Carries only the fields safe to share with a
@@ -14382,6 +14642,16 @@ export interface components {
 			 *     non-empty by construction.
 			 */
 			source: components["schemas"]["SourceRef"][];
+		};
+		/** @description Request payload for starting a cloud file-service OAuth authorization. */
+		StartFileServiceOAuth: {
+			/** @description Human-readable name for the connection to be created on success. */
+			displayName: string;
+			/**
+			 * @description Where to scope the sync: a folder id (Drive, OneDrive, Box) or a folder
+			 *     path (Dropbox). Omit to use the account root.
+			 */
+			root?: string;
 		};
 		/** @description Storage totals across a workspace's live files. */
 		StorageAnalytics: {
@@ -16549,7 +16819,7 @@ export interface components {
 		 *     This enumeration corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
 		 *     hierarchical access control for workspace members with clearly defined capabilities.
 		 */
-		WorkspaceRole: "owner" | "admin" | "member" | "guest";
+		WorkspaceRole: "owner" | "admin" | "editor" | "reviewer";
 		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
 		WorkspaceSettings: {
 			/**

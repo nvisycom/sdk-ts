@@ -34,6 +34,13 @@ export type LlmConfig = Schemas["LlmConfig"];
 export type AnthropicCredentials = Schemas["AnthropicCredentials"];
 export type OpenAiCredentials = Schemas["OpenAiCredentials"];
 
+// File-service connection config (OAuth-backed) and its OAuth start flow.
+export type Provider = Schemas["Provider"];
+export type FileServiceConfig = Schemas["FileServiceConfig"];
+export type OAuthTokens = Schemas["OAuthTokens"];
+export type StartFileServiceOAuth = Schemas["StartFileServiceOAuth"];
+export type OAuthStartResponse = Schemas["OAuthStartResponse"];
+
 // Sync scheduling.
 export type SyncSchedule = Schemas["SyncSchedule"];
 export type SyncScheduleInput = Schemas["SyncScheduleInput"];

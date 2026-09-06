@@ -11,3 +11,7 @@ export type LabelCatalog = Schemas["LabelCatalog"];
 /** The engine's registered recognizers, grouped into NER and LLM. */
 export type RecognizerCatalog = Schemas["RecognizerCatalog"];
 export type RegisteredRecognizer = Schemas["RegisteredRecognizer"];
+
+/** Which connector families and providers this deployment can create. */
+export type ConnectorCatalog = Schemas["ConnectorCatalog"];
+export type FileProviders = Schemas["FileProviders"];
