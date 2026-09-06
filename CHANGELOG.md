@@ -8,8 +8,31 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.44.0] - 2026-09-07
+
+### Added
+
+- `connections.startFileServiceOAuth(workspaceSlug, provider, request)` begins
+  the OAuth flow to connect a cloud file-service provider (Google Drive,
+  Dropbox, OneDrive, Box) and returns the provider `authorizeUrl` to send the
+  user to (`OAuthStartResponse`); the request is a `StartFileServiceOAuth`
+- `catalog.listConnectors()` returns which connector families and providers the
+  deployment can create (`ConnectorCatalog`) — a file-service provider is
+  offered only when its OAuth app is configured on the server, while
+  object-store and inference connections are always available
+- File-service connection datatypes (`Provider`, `FileServiceConfig`,
+  `OAuthTokens`, `StartFileServiceOAuth`, `OAuthStartResponse`) and connector
+  catalog datatypes (`ConnectorCatalog`, `FileProviders`)
+
 ### Changed
 
+- Regenerated the API schema against the updated platform handlers. A
+  `file_service` value was added to `ProviderType` for the new cloud
+  file-service connections
+- **Breaking:** the `WorkspaceRole` values `member` and `guest` were renamed to
+  `editor` and `reviewer`. The type flows through member data, role updates,
+  invites, invite codes, and role filters; callers matching on the old string
+  values must update them
 - **Breaking:** the minimum supported Node.js version is now 24 (was 20)
 
 ## [0.43.0] - 2026-09-04
@@ -878,6 +901,7 @@ redaction an independent resource. This release renames the SDK to match.
 - Configuration validation with detailed error messages
 
 [Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[0.44.0]: https://github.com/nvisycom/sdk-ts/compare/v0.43.0...v0.44.0
 [0.43.0]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...v0.43.0
 [0.42.0]: https://github.com/nvisycom/sdk-ts/compare/v0.41.0...v0.42.0
 [0.41.0]: https://github.com/nvisycom/sdk-ts/compare/v0.40.0...v0.41.0

@@ -5,6 +5,9 @@ import type {
 	ConnectionVerification,
 	CreateConnection,
 	CursorPagination,
+	OAuthStartResponse,
+	Provider,
+	StartFileServiceOAuth,
 	UpdateConnection,
 } from "@/datatypes/index.js";
 
@@ -136,6 +139,34 @@ export class Connections {
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/verify/",
 			{
 				params: { path: { workspaceSlug, connectionId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Start the OAuth flow to connect a file-service provider.
+	 *
+	 * Returns an `authorizeUrl` to send the user to; on their consent the
+	 * provider redirects back and the connection is created. Navigate the
+	 * browser to the URL (a full-page redirect, not a fetch) to continue.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param provider - The file-service provider to connect
+	 * @param request - Display name for the connection and optional sync root
+	 * @returns Promise that resolves with the provider authorize URL
+	 * @throws {ApiError} if the request fails
+	 */
+	async startFileServiceOAuth(
+		workspaceSlug: string,
+		provider: Provider,
+		request: StartFileServiceOAuth,
+	): Promise<OAuthStartResponse> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/connections/oauth/{provider}/start/",
+			{
+				params: { path: { workspaceSlug, provider } },
+				body: request,
 			},
 		);
 		return data!;
