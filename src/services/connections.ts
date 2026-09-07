@@ -2,9 +2,12 @@ import type { ApiClient } from "@/client.js";
 import type {
 	Connection,
 	ConnectionPage,
+	ConnectionSync,
 	ConnectionVerification,
 	CreateConnection,
 	CursorPagination,
+	ExportFiles,
+	ImportFiles,
 	OAuthStartResponse,
 	Provider,
 	StartFileServiceOAuth,
@@ -166,6 +169,62 @@ export class Connections {
 			"/workspaces/{workspaceSlug}/connections/oauth/{provider}/start/",
 			{
 				params: { path: { workspaceSlug, provider } },
+				body: request,
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Import picker-selected files from a file-service connection.
+	 *
+	 * Takes the files the user chose in the provider's picker (id + name each);
+	 * already-imported files are skipped. Returns the created sync — poll it for
+	 * completion.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param connectionId - Connection ID
+	 * @param request - The picker-selected files to import
+	 * @returns Promise that resolves with the created connection sync
+	 * @throws {ApiError} if the request fails
+	 */
+	async importFiles(
+		workspaceSlug: string,
+		connectionId: string,
+		request: ImportFiles,
+	): Promise<ConnectionSync> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/connections/{connectionId}/import/",
+			{
+				params: { path: { workspaceSlug, connectionId } },
+				body: request,
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Export workspace files to a file-service connection.
+	 *
+	 * Each file's redacted output is written to the connection as a new provider
+	 * file, never overwriting the source. Returns the created sync — poll it for
+	 * completion.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param connectionId - Connection ID
+	 * @param request - The workspace file ids to export
+	 * @returns Promise that resolves with the created connection sync
+	 * @throws {ApiError} if the request fails
+	 */
+	async exportFiles(
+		workspaceSlug: string,
+		connectionId: string,
+		request: ExportFiles,
+	): Promise<ConnectionSync> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/connections/{connectionId}/export/",
+			{
+				params: { path: { workspaceSlug, connectionId } },
 				body: request,
 			},
 		);

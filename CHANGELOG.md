@@ -8,6 +8,37 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.45.0] - 2026-09-07
+
+### Added
+
+- `connections.importFiles(workspaceSlug, connectionId, request)` imports the
+  files a user selected in a file-service provider's picker (`ImportFiles` /
+  `PickedFile`); already-imported files are skipped. Returns the created
+  `ConnectionSync`
+- `connections.exportFiles(workspaceSlug, connectionId, request)` exports
+  workspace files to a file-service connection, each written as a new provider
+  file (`ExportFiles`). Returns the created `ConnectionSync`
+- LLM provider config datatypes `AuthenticatedProvider` (API-key providers:
+  OpenAI, Anthropic) and `UnauthenticatedProvider` (base-URL providers), and an
+  `ollama` variant on `LlmConfig`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** `syncs.startSync(workspaceSlug, connectionId)` no longer takes a
+  request body — an object-store sync now runs the connection's configured
+  direction. File-service connections use `connections.importFiles` /
+  `connections.exportFiles` instead
+
+### Removed
+
+- **Breaking:** the `SyncConnection` datatype — the generic sync request was
+  split into the picker import and per-connection export flows above
+- **Breaking:** the `AnthropicCredentials` and `OpenAiCredentials` datatypes —
+  the LLM connection config now composes `AuthenticatedProvider` and
+  `UnauthenticatedProvider`
+
 ## [0.44.0] - 2026-09-07
 
 ### Added
@@ -901,6 +932,7 @@ redaction an independent resource. This release renames the SDK to match.
 - Configuration validation with detailed error messages
 
 [Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[0.45.0]: https://github.com/nvisycom/sdk-ts/compare/v0.44.0...v0.45.0
 [0.44.0]: https://github.com/nvisycom/sdk-ts/compare/v0.43.0...v0.44.0
 [0.43.0]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...v0.43.0
 [0.42.0]: https://github.com/nvisycom/sdk-ts/compare/v0.41.0...v0.42.0
