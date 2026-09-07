@@ -95,7 +95,7 @@
 		"@biomejs/biome": "^2.5.12",
 		"@types/node": "^26.4.1",
 		"@vitest/coverage-v8": "^4.1.11",
-		"@vitest/ui": "^4.1.9",
+		"@vitest/ui": "^5.0.0",
 		"license-checker-rseidelsohn": "^5.0.1",
 		"openapi-typescript": "^7.13.0",
 		"rimraf": "^6.1.3",
