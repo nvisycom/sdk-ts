@@ -3,7 +3,6 @@ import type {
 	ConnectionSync,
 	ConnectionSyncPage,
 	CursorPagination,
-	SyncConnection,
 	SyncStatus,
 } from "@/datatypes/index.js";
 
@@ -35,23 +34,26 @@ export class Syncs {
 	}
 
 	/**
-	 * Start a sync for a connection
+	 * Start a sync for an object-store connection.
+	 *
+	 * Runs the connection's configured direction — imports every new object, or
+	 * exports every redacted output not yet exported. File-service connections
+	 * use {@link Connections.importFiles} and {@link Connections.exportFiles}
+	 * instead. Returns the created sync — poll it for completion.
+	 *
 	 * @param workspaceSlug - Workspace slug
 	 * @param connectionId - Connection ID
-	 * @param sync - Sync request
 	 * @returns Promise that resolves with the started connection sync
 	 * @throws {ApiError} if the request fails
 	 */
 	async startSync(
 		workspaceSlug: string,
 		connectionId: string,
-		sync: SyncConnection,
 	): Promise<ConnectionSync> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/sync/",
 			{
 				params: { path: { workspaceSlug, connectionId } },
-				body: sync,
 			},
 		);
 		return data!;

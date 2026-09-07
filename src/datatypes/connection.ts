@@ -11,10 +11,14 @@ export type CreateConnection = Schemas["CreateConnection"];
 export type UpdateConnection = Schemas["UpdateConnection"];
 export type ConnectionsQuery = Schemas["ConnectionsQuery"];
 export type ConnectionPage = Schemas["ConnectionPage"];
-export type SyncConnection = Schemas["SyncConnection"];
 export type ConnectionSync = Schemas["ConnectionSync"];
 export type ConnectionSyncPage = Schemas["ConnectionSyncPage"];
 export type ConnectionVerification = Schemas["ConnectionVerification"];
+
+// Importing files from, and exporting workspace files to, a file-service connection.
+export type ImportFiles = Schemas["ImportFiles"];
+export type PickedFile = Schemas["PickedFile"];
+export type ExportFiles = Schemas["ExportFiles"];
 
 // Sync enums.
 export type SyncMode = Schemas["SyncMode"];
@@ -29,10 +33,10 @@ export type S3Credentials = Schemas["S3Credentials"];
 export type AzureCredentials = Schemas["AzureCredentials"];
 export type GcsCredentials = Schemas["GcsCredentials"];
 
-// LLM inference connection config (provider + credentials + model).
+// LLM inference connection config: a provider variant plus its credentials.
 export type LlmConfig = Schemas["LlmConfig"];
-export type AnthropicCredentials = Schemas["AnthropicCredentials"];
-export type OpenAiCredentials = Schemas["OpenAiCredentials"];
+export type AuthenticatedProvider = Schemas["AuthenticatedProvider"];
+export type UnauthenticatedProvider = Schemas["UnauthenticatedProvider"];
 
 // File-service connection config (OAuth-backed) and its OAuth start flow.
 export type Provider = Schemas["Provider"];

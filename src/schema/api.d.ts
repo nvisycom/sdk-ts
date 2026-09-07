@@ -3407,7 +3407,111 @@ export interface paths {
 		put?: never;
 		/**
 		 * Sync connection
-		 * @description Imports an object from or exports a file to the connection. Returns the created sync; poll it for completion.
+		 * @description Runs the object-store connection's configured direction: imports every new object, or exports every redacted output not yet exported. File services use the picker import and per-file export instead. Returns the created sync; poll it for completion.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description A connection sync (import or export). */
+				202: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionSync"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/import/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Import selected files
+		 * @description Imports the files selected in the provider's picker (file services only). Already-imported files are skipped. Returns the created sync; poll it for completion.
 		 */
 		post: {
 			parameters: {
@@ -3422,17 +3526,12 @@ export interface paths {
 				cookie?: never;
 			};
 			/**
-			 * @description Request payload to trigger a connection sync.
-			 *
-			 *     The direction is determined by the connection's configured `sync_mode`.
-			 *     - Import connections need no body: the sync fetches every not-yet-imported
-			 *       object under the connection's root path.
-			 *     - Export connections push one workspace file (`file_id`) to one object
-			 *       `key`; both are required for export and ignored for import.
+			 * @description Request payload to import a caller-selected set of files from a file-service
+			 *     connection (the provider picker returns id + name per file).
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["SyncConnection"];
+					"application/json": components["schemas"]["ImportFiles"];
 				};
 			};
 			responses: {
@@ -3498,6 +3597,167 @@ export interface paths {
 				 *     information, and user-friendly messages.
 				 */
 				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/export/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Export files to connection
+		 * @description Exports the selected workspace files to the connection, each as a new provider file. Returns the created sync; poll it for completion.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload to export a caller-selected set of workspace files to a
+			 *     connection. Each is written as a new provider file, never overwriting a
+			 *     source. Mirrors [`ImportFiles`] on the export side.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["ExportFiles"];
+				};
+			};
+			responses: {
+				/** @description A connection sync (import or export). */
+				202: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionSync"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -9684,11 +9944,6 @@ export interface components {
 			| "policy.created"
 			| "policy.updated"
 			| "policy.deleted";
-		/** @description Anthropic API credentials. */
-		AnthropicCredentials: {
-			/** @description Anthropic API key. */
-			apiKey: string;
-		};
 		/** @description API token response structure. */
 		ApiToken: {
 			/**
@@ -10481,6 +10736,20 @@ export interface components {
 			issuedAt: string;
 			/** @description Handle of the authenticated account. */
 			username: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Configuration for a provider reached with an API key (OpenAI, Anthropic).
+		 *
+		 *     The `api_key` is masked in [`Debug`], so neither this struct nor any config
+		 *     that embeds it leaks the key.
+		 */
+		AuthenticatedProvider: {
+			/** @description The provider API key. */
+			apiKey: string;
+			/** @description Override the API base URL (for a compatible endpoint or a proxy). Optional. */
+			baseUrl?: string;
+			/** @description Default model to use when a request does not specify one. Optional. */
+			defaultModel?: string;
 		};
 		/**
 		 * @description Path parameters for a public avatar route: the owner id and the avatar's
@@ -11653,6 +11922,18 @@ export interface components {
 			/** @description Validation error details for field-specific errors */
 			validation?: components["schemas"]["ValidationErrorDetail"][];
 		};
+		/**
+		 * @description Request payload to export a caller-selected set of workspace files to a
+		 *     connection. Each is written as a new provider file, never overwriting a
+		 *     source. Mirrors [`ImportFiles`] on the export side.
+		 */
+		ExportFiles: {
+			/**
+			 * @description The workspace files to export, by id. Files already exported to the
+			 *     connection are exported again (a fresh copy).
+			 */
+			fileIds: string[];
+		};
 		/** @description The file format an export is rendered as. */
 		ExportFormat: "csv" | "json";
 		/**
@@ -11775,7 +12056,10 @@ export interface components {
 		FileServiceConfig: {
 			/** @description Which provider backs this connection. */
 			provider: components["schemas"]["Provider"];
-			/** @description The folder (id or path) to scope the sync to; `None` uses the root. */
+			/**
+			 * @description The folder (id or path) new exports are written into; `None` uses the
+			 *     account root.
+			 */
 			root?: string;
 			/** @description The OAuth token set for this connection. */
 			tokens: components["schemas"]["OAuthTokens"];
@@ -12494,6 +12778,14 @@ export interface components {
 			reason?: string;
 		};
 		/**
+		 * @description Request payload to import a caller-selected set of files from a file-service
+		 *     connection (the provider picker returns id + name per file).
+		 */
+		ImportFiles: {
+			/** @description The files to import. Already-imported files are skipped. */
+			files: components["schemas"]["PickedFile"][];
+		};
+		/**
 		 * @description Workspace invite with complete information.
 		 *
 		 *     This response includes all the essential information about an
@@ -12973,39 +13265,24 @@ export interface components {
 		 * @description A fully-typed LLM inference connection configuration.
 		 *
 		 *     The `provider` tag selects the variant and thereby the credential shape, so
-		 *     an OpenAI connection cannot carry Anthropic credentials. Serialization exists
-		 *     only to persist the config encrypted at rest, never to return it in API
-		 *     responses.
+		 *     an OpenAI connection cannot carry Anthropic credentials. The key-bearing
+		 *     variants hold an [`AuthenticatedProvider`], which masks the key in `Debug`;
+		 *     serialization exists only to persist the config encrypted at rest, never to
+		 *     return it in API responses.
 		 */
 		LlmConfig:
-			| {
-					/** @description Override the API base URL (for Azure OpenAI or a proxy). Optional. */
-					baseUrl?: string;
-					/** @description OpenAI credentials. */
-					credentials: components["schemas"]["OpenAiCredentials"];
-					/** @description Default model to use when a request does not specify one. Optional. */
-					defaultModel?: string;
+			| ({
 					/** @constant */
 					provider: "openai";
-			  }
-			| {
-					/** @description Base URL of the Ollama server (e.g. `http://localhost:11434`). */
-					baseUrl: string;
-					/** @description Default model to use when a request does not specify one. Optional. */
-					defaultModel?: string;
+			  } & components["schemas"]["AuthenticatedProvider"])
+			| ({
 					/** @constant */
 					provider: "ollama";
-			  }
-			| {
-					/** @description Override the API base URL. Optional. */
-					baseUrl?: string;
-					/** @description Anthropic credentials. */
-					credentials: components["schemas"]["AnthropicCredentials"];
-					/** @description Default model to use when a request does not specify one. Optional. */
-					defaultModel?: string;
+			  } & components["schemas"]["UnauthenticatedProvider"])
+			| ({
 					/** @constant */
 					provider: "anthropic";
-			  };
+			  } & components["schemas"]["AuthenticatedProvider"]);
 		/**
 		 * @description A value localized per [`LanguageTag`], with an English-first fallback.
 		 *
@@ -13336,7 +13613,8 @@ export interface components {
 		};
 		/**
 		 * @description A persisted OAuth token set. Stored encrypted with the rest of a
-		 *     connection's config; never returned in API responses.
+		 *     connection's config; never returned in API responses. The tokens are masked
+		 *     in [`Debug`] so a connection config's derived `Debug` cannot leak them.
 		 */
 		OAuthTokens: {
 			/** @description The current access token, sent as a bearer credential. */
@@ -13351,11 +13629,6 @@ export interface components {
 			 *     Providers may omit it on refresh, so it is retained across refreshes.
 			 */
 			refresh_token?: string;
-		};
-		/** @description OpenAI API credentials. */
-		OpenAiCredentials: {
-			/** @description OpenAI API key. */
-			apiKey: string;
 		};
 		/**
 		 * @description Identifies a redaction operator, for the redaction audit a higher
@@ -13455,6 +13728,13 @@ export interface components {
 			| "truncate_last_four"
 			| "hmac_sha256"
 			| "hmac_sha512";
+		/** @description One file the user selected in the provider's picker. */
+		PickedFile: {
+			/** @description The provider's file identifier (used to fetch the bytes). */
+			id: string;
+			/** @description The file's display name, as the picker reported it. */
+			name: string;
+		};
 		/** @description Pipeline response. */
 		Pipeline: {
 			/**
@@ -14740,24 +15020,6 @@ export interface components {
 			id: string;
 			/** @description The rationale, when one was given. */
 			reason?: string;
-		};
-		/**
-		 * @description Request payload to trigger a connection sync.
-		 *
-		 *     The direction is determined by the connection's configured `sync_mode`.
-		 *     - Import connections need no body: the sync fetches every not-yet-imported
-		 *       object under the connection's root path.
-		 *     - Export connections push one workspace file (`file_id`) to one object
-		 *       `key`; both are required for export and ignored for import.
-		 */
-		SyncConnection: {
-			/**
-			 * Format: uuid
-			 * @description The workspace file to export (export connections only).
-			 */
-			fileId?: string;
-			/** @description The destination object key for an export, relative to the root path. */
-			key?: string;
 		};
 		/**
 		 * @description What an import does with a file whose source object no longer exists.
@@ -16287,6 +16549,16 @@ export interface components {
 			 *     [`segment_offsets`]: Self::segment_offsets
 			 */
 			text: string;
+		};
+		/**
+		 * @description Configuration for a provider reached without an API key (Ollama), addressed
+		 *     by a caller-supplied base URL. Carries no secret, so it derives [`Debug`].
+		 */
+		UnauthenticatedProvider: {
+			/** @description Base URL of the server (e.g. `http://localhost:11434`). */
+			baseUrl: string;
+			/** @description Default model to use when a request does not specify one. Optional. */
+			defaultModel?: string;
 		};
 		/**
 		 * @description An account's current unread-notification count, broadcast on the account's
