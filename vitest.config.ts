@@ -1,4 +1,3 @@
-import { resolve } from "node:path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -33,7 +32,7 @@ export default defineConfig({
 			// percentage. Run `npm run test:coverage` to see what is untested.
 		},
 
-		// Test execution configuration (Vitest 4+)
+		// Test execution configuration
 		maxWorkers: 4,
 
 		// Test timeout configuration
@@ -44,11 +43,11 @@ export default defineConfig({
 	// Path resolution
 	resolve: {
 		alias: {
-			"@": resolve(__dirname, "./src"),
+			"@": new URL("./src", import.meta.url).pathname,
 		},
 	},
 
-	// Build configuration for test files (Vitest 4 transforms with oxc)
+	// Build configuration for test files (transformed with oxc)
 	oxc: {
 		target: "es2022",
 	},

@@ -19,6 +19,16 @@ updates:
     versioning-strategy: "increase"
     # Group patch and minor updates together to reduce PR noise
     groups:
+      # vitest and its companion packages share a strict peer dependency and
+      # must move together, majors included, or npm ci fails on the mismatch.
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
       npm-dependencies:
         patterns:
           - "*"
