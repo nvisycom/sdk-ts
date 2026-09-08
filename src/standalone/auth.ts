@@ -20,7 +20,13 @@
  * ```
  */
 
-import type { AuthToken, Login, Signup } from "@/datatypes/index.js";
+import type {
+	AuthToken,
+	IdentityProvider,
+	Login,
+	OidcStartResponse,
+	Signup,
+} from "@/datatypes/index.js";
 import type { AuthConfig } from "@/standalone/config.js";
 import { createPublicClient } from "@/standalone/http.js";
 
@@ -102,6 +108,41 @@ export async function signup(
 	const client = createAuthClient(config);
 	const { data } = await client.POST("/auth/signup/", {
 		body: details,
+	});
+	return data!;
+}
+
+/**
+ * Begin an OpenID Connect sign-in with a provider.
+ *
+ * A standalone function that needs no existing {@link Client}. Returns the
+ * provider authorize URL to redirect the user to; on consent the provider
+ * redirects to the callback, which signs the user in.
+ *
+ * @param provider - The identity provider to sign in with
+ * @param query - Optional frontend URL to return to once done
+ * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
+ * @returns Promise that resolves with the provider authorize URL
+ * @throws {ApiError} If the request fails
+ *
+ * @example
+ * ```typescript
+ * import { startOidcSignIn } from "@nvisy/sdk/standalone";
+ *
+ * const { authorizeUrl } = await startOidcSignIn("google", {
+ *   redirectUri: "https://app.example.com/after-login",
+ * });
+ * window.location.href = authorizeUrl;
+ * ```
+ */
+export async function startOidcSignIn(
+	provider: IdentityProvider,
+	query?: { redirectUri?: string },
+	config?: AuthConfig,
+): Promise<OidcStartResponse> {
+	const client = createAuthClient(config);
+	const { data } = await client.GET("/auth/{provider}/start/", {
+		params: { path: { provider }, query },
 	});
 	return data!;
 }

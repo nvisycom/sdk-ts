@@ -11,6 +11,8 @@ export type PolicyDraft = Schemas["PolicyDraft"];
 export type CreatePolicy = Schemas["CreatePolicy"];
 export type UpdatePolicy = Schemas["UpdatePolicy"];
 export type PolicyRule = Schemas["PolicyRule"];
+// A caller-defined matcher a policy adds on top of the built-in recognizers.
+export type CustomMatcher = Schemas["CustomMatcher"];
 
 // Built-in policy template to base a new policy on.
 export type PolicyTemplate = Schemas["PolicyTemplate"];

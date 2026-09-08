@@ -9,6 +9,7 @@ import type {
 	ExportFiles,
 	ImportFiles,
 	OAuthStartResponse,
+	PickerToken,
 	Provider,
 	StartFileServiceOAuth,
 	UpdateConnection,
@@ -226,6 +227,31 @@ export class Connections {
 			{
 				params: { path: { workspaceSlug, connectionId } },
 				body: request,
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Mint a short-lived provider access token for a browser file picker.
+	 *
+	 * For file-service connections with a token-based picker only. The token is
+	 * minted from the connection's stored credentials and is short-lived; the
+	 * refresh token is never returned.
+	 *
+	 * @param workspaceSlug - Workspace slug
+	 * @param connectionId - Connection ID
+	 * @returns Promise that resolves with the short-lived picker token
+	 * @throws {ApiError} if the request fails
+	 */
+	async getPickerToken(
+		workspaceSlug: string,
+		connectionId: string,
+	): Promise<PickerToken> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/connections/{connectionId}/picker-token/",
+			{
+				params: { path: { workspaceSlug, connectionId } },
 			},
 		);
 		return data!;

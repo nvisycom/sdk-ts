@@ -117,7 +117,13 @@ export interface paths {
 				path?: never;
 				cookie?: never;
 			};
-			/** @description Request payload to update an account. */
+			/**
+			 * @description Request payload to update an account's profile.
+			 *
+			 *     Credentials are not profile fields — a password and any linked providers are
+			 *     managed through the account's identities (see the identity endpoints), never
+			 *     here.
+			 */
 			requestBody: {
 				content: {
 					"application/json": components["schemas"]["UpdateAccount"];
@@ -454,6 +460,408 @@ export interface paths {
 				 *     information, and user-friendly messages.
 				 */
 				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/account/identities/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List sign-in methods
+		 * @description Returns the authenticated account's identities: its password and any linked providers.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description The account's sign-in methods. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["AccountIdentities"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/account/identities/password/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		/**
+		 * Set or change password
+		 * @description Sets or changes the account's password. Changing an existing password requires the current password; setting a first password on an account that has none requires a step-up re-authentication proof.
+		 */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/**
+			 * @description A password set or change.
+			 *
+			 *     When the account already has a password, `current_password` is required and
+			 *     verified before the change is applied, so a hijacked session or CSRF cannot
+			 *     silently reset it (and lock out the real owner). When the account has no
+			 *     password yet (an SSO-only account setting its first one), there is nothing to
+			 *     re-authenticate against, so a fresh step-up `reauth_proof` is required instead
+			 *     — a live session alone must not mint a durable new credential.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["SetPassword"];
+				};
+			};
+			responses: {
+				/** @description Password set. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		post?: never;
+		/**
+		 * Remove password
+		 * @description Removes the account's password, leaving it able to sign in only through its linked providers. Refused if the password is the account's only sign-in method.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Password removed. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/account/identities/{provider}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Link a provider
+		 * @description Begins linking the given OpenID Connect provider to the authenticated account and returns the provider authorize URL. Requires a step-up re-authentication proof (`reauthProof`, from the reauth endpoint). On consent, the callback attaches the verified provider identity to the caller's account.
+		 */
+		post: {
+			parameters: {
+				query?: {
+					/**
+					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
+					 *     provider is a credential-adding action, so a live session alone is not
+					 *     enough); ignored for sign-in and reauth.
+					 */
+					reauthProof?: string;
+					/**
+					 * @description Frontend URL to return to once done. Carried through the flow and used to
+					 *     build the callback's redirect.
+					 */
+					redirectUri?: string;
+				};
+				header?: never;
+				path: {
+					/** @description The identity provider to act on. */
+					provider: components["schemas"]["IdentityProvider"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description The response to a successful sign-in start: where to send the user. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["OidcStartResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				503: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		/**
+		 * Unlink a provider
+		 * @description Removes a linked OIDC provider from the account. Refused if the provider is the account's only sign-in method.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The identity provider to act on. */
+					provider: components["schemas"]["IdentityProvider"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Provider unlinked. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -2645,6 +3053,117 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ConnectionVerification"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/connections/{connectionId}/picker-token/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Mint picker token
+		 * @description Returns a short-lived provider access token for a browser file picker (file services with a token-based picker only). The refresh token is never returned.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the connection. */
+					connectionId: components["schemas"]["ConnectionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description A short-lived provider OAuth access token for a browser file picker.
+				 *
+				 *     Carries only the access token and its expiry — never the refresh token, which
+				 *     stays server-side. The token is minted from the connection's stored
+				 *     credentials and is short-lived (the provider's access-token lifetime), so the
+				 *     browser holds a narrow, expiring credential rather than a durable one.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["PickerToken"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
 				/**
@@ -9217,6 +9736,105 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/auth/{provider}/reauth/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Start OIDC step-up re-authentication
+		 * @description Begins a step-up re-authentication with a provider already linked to the authenticated account, and returns the provider authorize URL. On consent, the callback mints a short-lived, single-use proof required to add a credential (set a first password, or link a new provider).
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
+					 *     provider is a credential-adding action, so a live session alone is not
+					 *     enough); ignored for sign-in and reauth.
+					 */
+					reauthProof?: string;
+					/**
+					 * @description Frontend URL to return to once done. Carried through the flow and used to
+					 *     build the callback's redirect.
+					 */
+					redirectUri?: string;
+				};
+				header?: never;
+				path: {
+					/** @description The identity provider to act on. */
+					provider: components["schemas"]["IdentityProvider"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description The response to a successful sign-in start: where to send the user. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["OidcStartResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				503: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/auth/login/": {
 		parameters: {
 			query?: never;
@@ -9453,6 +10071,90 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/auth/{provider}/start/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Start OIDC sign-in
+		 * @description Begins an OpenID Connect sign-in with the given provider and returns the provider authorize URL to redirect the user to. On consent, the provider redirects to the callback, which signs the user in.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
+					 *     provider is a credential-adding action, so a live session alone is not
+					 *     enough); ignored for sign-in and reauth.
+					 */
+					reauthProof?: string;
+					/**
+					 * @description Frontend URL to return to once done. Carried through the flow and used to
+					 *     build the callback's redirect.
+					 */
+					redirectUri?: string;
+				};
+				header?: never;
+				path: {
+					/** @description The identity provider to act on. */
+					provider: components["schemas"]["IdentityProvider"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description The response to a successful sign-in start: where to send the user. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["OidcStartResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				503: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/health/": {
 		parameters: {
 			query?: never;
@@ -9634,6 +10336,33 @@ export interface components {
 			updatedAt: string;
 			/** @description Public handle of the account. */
 			username: components["schemas"]["Handle"];
+		};
+		/** @description The account's sign-in methods. */
+		AccountIdentities: {
+			/** @description Every identity the account can sign in with. */
+			identities: components["schemas"]["AccountIdentity"][];
+		};
+		/**
+		 * @description One of an account's sign-in methods, for the identities listing.
+		 *
+		 *     Never exposes the credential itself (a password hash or a provider subject),
+		 *     only which methods exist and metadata about them.
+		 */
+		AccountIdentity: {
+			/**
+			 * Format: date-time
+			 * @description When the identity was created (the password set, or the provider linked).
+			 */
+			createdAt: string;
+			/** @description The authentication method: `password` or an OIDC provider. */
+			provider: components["schemas"]["IdentityProvider"];
+			/** @description The email the provider asserted at link time, for a linked provider. */
+			providerEmail?: string;
+			/**
+			 * Format: date-time
+			 * @description When the identity was last updated.
+			 */
+			updatedAt: string;
 		};
 		/**
 		 * @description Path parameters for account operations.
@@ -10116,15 +10845,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     For text specifically, a caller holding raw file bytes
-			 *     rather than a decoded offset — a reviewer selecting rendered
-			 *     text, say — leaves [`TextLocation::range`] empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves. The other three have no such alternative:
-			 *     their coordinates are the only way in.
+			 *     Text carries either coordinate kind of [`TextCoord`]: a
+			 *     [`Decoded`] span for a caller with an offset into the
+			 *     decoded stream, or a [`Source`] one for a caller holding
+			 *     only raw file bytes — a reviewer selecting rendered text,
+			 *     say — which the engine reverse-resolves. Source-only is its
+			 *     own kind rather than a decoded span left empty, so such a
+			 *     selection is representable as itself.
 			 *
-			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
-			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 *     The other three media have no such alternative: their
+			 *     coordinates are the only way in.
+			 *
+			 *     [`TextCoord`]: elide::modality::text::TextCoord
+			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
+			 *     [`Source`]: elide::modality::text::TextCoord::Source
 			 */
 			location: components["schemas"]["AudioLocation"];
 			/**
@@ -10136,9 +10870,9 @@ export interface components {
 			 *
 			 *     Nested media needs this: the report holds an embedded image
 			 *     as its own part, and an addition to one has nowhere to go
-			 *     without naming it. Text usually does not — where a span came
-			 *     from is already in `TextLocation::source`, which carries the
-			 *     part alongside the raw range.
+			 *     without naming it. Text usually does not — a source
+			 *     reference already names the part it came from, alongside the
+			 *     raw range.
 			 *
 			 *     `None` is an error when the request carried several
 			 *     documents, since there is then no sole document to mean.
@@ -11479,6 +12213,51 @@ export interface components {
 			limit?: number;
 		};
 		/**
+		 * @description How to detect one caller-authored label.
+		 *
+		 *     Names a label the same policy declares in [`custom`]. A matcher
+		 *     for a shipped built-in is rejected: elide already detects those,
+		 *     and two definitions for one label would race in reconciliation.
+		 *
+		 *     [`custom`]: super::PolicyDefinition::custom
+		 */
+		CustomMatcher: {
+			/**
+			 * Format: float
+			 * @description Score stamped on every match. Defaults to `0.6`.
+			 *
+			 *     Reconciliation keeps the higher-confidence entity when two
+			 *     detections overlap, so this is what decides whether a
+			 *     custom match beats a built-in one covering the same span.
+			 * @default 0.6000000238418579
+			 */
+			confidence?: number;
+			/**
+			 * @description The label this detects, which the policy must declare in
+			 *     [`custom`](super::PolicyDefinition::custom).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Human-readable name, recorded in the audit as the
+			 *     recognizer that found the entity, so a trail distinguishes
+			 *     a caller's matcher from a shipped pattern.
+			 */
+			name: string;
+		} & (
+			| {
+					/** @constant */
+					kind: "pattern";
+					/** @description The expression, in `regex` crate syntax. */
+					pattern: string;
+			  }
+			| {
+					/** @constant */
+					kind: "terms";
+					/** @description The literals to scan for. */
+					terms: string[];
+			  }
+		);
+		/**
 		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
 		 *
 		 *     Every rendering is an ISO-8601 form, so the output is locale-independent
@@ -12233,6 +13012,26 @@ export interface components {
 			| "limited_data_set"
 			| "expert_determination";
 		/**
+		 * @description Path parameters for a provider-scoped identity operation: signing in with,
+		 *     re-authenticating with, linking, or unlinking a provider. Named identically to
+		 *     the stored [`IdentityProvider`], so the API and the account's identities name
+		 *     each provider the same way.
+		 */
+		IdentityPathParams: {
+			/** @description The identity provider to act on. */
+			provider: components["schemas"]["IdentityProvider"];
+		};
+		/**
+		 * @description How an account authenticates.
+		 *
+		 *     Corresponds to the `IDENTITY_PROVIDER` PostgreSQL enum. [`Password`] is a
+		 *     locally-held Argon2 secret; the rest are external OIDC providers keyed by the
+		 *     provider's subject claim.
+		 *
+		 *     [`Password`]: Self::Password
+		 */
+		IdentityProvider: "password" | "google" | "microsoft";
+		/**
 		 * @description A detection recognition missed.
 		 *
 		 *     Recorded on the report with human provenance, so it is never
@@ -12258,15 +13057,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     For text specifically, a caller holding raw file bytes
-			 *     rather than a decoded offset — a reviewer selecting rendered
-			 *     text, say — leaves [`TextLocation::range`] empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves. The other three have no such alternative:
-			 *     their coordinates are the only way in.
+			 *     Text carries either coordinate kind of [`TextCoord`]: a
+			 *     [`Decoded`] span for a caller with an offset into the
+			 *     decoded stream, or a [`Source`] one for a caller holding
+			 *     only raw file bytes — a reviewer selecting rendered text,
+			 *     say — which the engine reverse-resolves. Source-only is its
+			 *     own kind rather than a decoded span left empty, so such a
+			 *     selection is representable as itself.
 			 *
-			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
-			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 *     The other three media have no such alternative: their
+			 *     coordinates are the only way in.
+			 *
+			 *     [`TextCoord`]: elide::modality::text::TextCoord
+			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
+			 *     [`Source`]: elide::modality::text::TextCoord::Source
 			 */
 			location: components["schemas"]["ImageLocation"];
 			/**
@@ -12278,9 +13082,9 @@ export interface components {
 			 *
 			 *     Nested media needs this: the report holds an embedded image
 			 *     as its own part, and an addition to one has nowhere to go
-			 *     without naming it. Text usually does not — where a span came
-			 *     from is already in `TextLocation::source`, which carries the
-			 *     part alongside the raw range.
+			 *     without naming it. Text usually does not — a source
+			 *     reference already names the part it came from, alongside the
+			 *     raw range.
 			 *
 			 *     `None` is an error when the request carried several
 			 *     documents, since there is then no sole document to mean.
@@ -13630,6 +14434,25 @@ export interface components {
 			 */
 			refresh_token?: string;
 		};
+		/** @description Optional query parameters for starting a sign-in, link, or reauth. */
+		OidcStartQuery: {
+			/**
+			 * @description A step-up re-authentication proof. Required to start a *link* (adding a
+			 *     provider is a credential-adding action, so a live session alone is not
+			 *     enough); ignored for sign-in and reauth.
+			 */
+			reauthProof?: string;
+			/**
+			 * @description Frontend URL to return to once done. Carried through the flow and used to
+			 *     build the callback's redirect.
+			 */
+			redirectUri?: string;
+		};
+		/** @description The response to a successful sign-in start: where to send the user. */
+		OidcStartResponse: {
+			/** @description The provider authorize URL the client should redirect the user to. */
+			authorizeUrl: string;
+		};
 		/**
 		 * @description Identifies a redaction operator, for the redaction audit a higher
 		 *     layer assembles.
@@ -13645,20 +14468,6 @@ export interface components {
 			name: string;
 			/** @description Operator's version at the time it was applied. */
 			version: string;
-		};
-		/**
-		 * @description A re-authenticated password change: the new password plus the current one
-		 *     that authorizes it.
-		 *
-		 *     Coupling the two in one struct makes the invariant explicit — a password
-		 *     change always carries the current password, so a hijacked session or CSRF
-		 *     cannot silently reset it (and lock out the real owner).
-		 */
-		PasswordChange: {
-			/** @description The account's current password, verified before the change is applied. */
-			currentPassword: string;
-			/** @description The new password (will be hashed before storage). */
-			newPassword: string;
 		};
 		/** @description Metadata of a pattern/dictionary recognition, carried by [`Pattern`]. */
 		PatternEvent: {
@@ -13734,6 +14543,24 @@ export interface components {
 			id: string;
 			/** @description The file's display name, as the picker reported it. */
 			name: string;
+		};
+		/**
+		 * @description A short-lived provider OAuth access token for a browser file picker.
+		 *
+		 *     Carries only the access token and its expiry — never the refresh token, which
+		 *     stays server-side. The token is minted from the connection's stored
+		 *     credentials and is short-lived (the provider's access-token lifetime), so the
+		 *     browser holds a narrow, expiring credential rather than a durable one.
+		 */
+		PickerToken: {
+			/** @description The provider OAuth access token to hand to the browser picker. */
+			accessToken: string;
+			/**
+			 * Format: int64
+			 * @description Unix seconds at which the access token expires, if the provider reports
+			 *     it. `None` means the provider did not return an expiry.
+			 */
+			expiresAt?: number;
 		};
 		/** @description Pipeline response. */
 		Pipeline: {
@@ -13983,6 +14810,21 @@ export interface components {
 			 */
 			id: string;
 			/**
+			 * @description How to detect the labels [`custom`] introduces.
+			 *
+			 *     A custom label declares vocabulary and nothing more, so
+			 *     without a matcher it is scoped, targeted by rules, and never
+			 *     found. Each matcher names a label this policy declares;
+			 *     naming a shipped built-in is rejected, since elide already
+			 *     detects those.
+			 *
+			 *     Compiled per request, so a policy declaring none costs
+			 *     nothing.
+			 *
+			 *     [`custom`]: Self::custom
+			 */
+			matchers?: components["schemas"]["CustomMatcher"][];
+			/**
 			 * @description Human-readable name. Display-only. Does not key anything.
 			 *
 			 *     Names the policy in a redaction event's [`Attribution`]
@@ -14041,6 +14883,11 @@ export interface components {
 			description?: string;
 			/** @description Per-policy catch-all, fired when no rule matched. */
 			fallback?: components["schemas"]["ModalityRedactions"];
+			/**
+			 * @description How to detect the custom labels this policy introduces. A custom label
+			 *     without a matcher is declared but never found.
+			 */
+			matchers?: components["schemas"]["CustomMatcher"][];
 			/** @description Human-readable name. Display-only. */
 			name: string;
 			/** @description Ordered rules. First match wins within this policy. */
@@ -14846,6 +15693,32 @@ export interface components {
 			parentId?: string;
 		};
 		/**
+		 * @description A password set or change.
+		 *
+		 *     When the account already has a password, `current_password` is required and
+		 *     verified before the change is applied, so a hijacked session or CSRF cannot
+		 *     silently reset it (and lock out the real owner). When the account has no
+		 *     password yet (an SSO-only account setting its first one), there is nothing to
+		 *     re-authenticate against, so a fresh step-up `reauth_proof` is required instead
+		 *     — a live session alone must not mint a durable new credential.
+		 */
+		SetPassword: {
+			/**
+			 * @description The account's current password. Required when the account already has a
+			 *     password; omitted when setting a first password on an account that has
+			 *     none (supply `reauth_proof` instead).
+			 */
+			currentPassword?: string;
+			/** @description The new password (will be hashed before storage). */
+			newPassword: string;
+			/**
+			 * @description A step-up re-authentication proof (from the OIDC reauth endpoint).
+			 *     Required when *setting a first password* on an account that has none;
+			 *     ignored when changing an existing password.
+			 */
+			reauthProof?: string;
+		};
+		/**
 		 * @description Which SHA-2 variant a hashing operator uses.
 		 *
 		 *     Shared by [`Sha2Hash`] (unkeyed digest) and [`HmacHash`] (keyed HMAC):
@@ -15110,15 +15983,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     For text specifically, a caller holding raw file bytes
-			 *     rather than a decoded offset — a reviewer selecting rendered
-			 *     text, say — leaves [`TextLocation::range`] empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves. The other three have no such alternative:
-			 *     their coordinates are the only way in.
+			 *     Text carries either coordinate kind of [`TextCoord`]: a
+			 *     [`Decoded`] span for a caller with an offset into the
+			 *     decoded stream, or a [`Source`] one for a caller holding
+			 *     only raw file bytes — a reviewer selecting rendered text,
+			 *     say — which the engine reverse-resolves. Source-only is its
+			 *     own kind rather than a decoded span left empty, so such a
+			 *     selection is representable as itself.
 			 *
-			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
-			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 *     The other three media have no such alternative: their
+			 *     coordinates are the only way in.
+			 *
+			 *     [`TextCoord`]: elide::modality::text::TextCoord
+			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
+			 *     [`Source`]: elide::modality::text::TextCoord::Source
 			 */
 			location: components["schemas"]["TabularLocation"];
 			/**
@@ -15130,9 +16008,9 @@ export interface components {
 			 *
 			 *     Nested media needs this: the report holds an embedded image
 			 *     as its own part, and an addition to one has nowhere to go
-			 *     without naming it. Text usually does not — where a span came
-			 *     from is already in `TextLocation::source`, which carries the
-			 *     part alongside the raw range.
+			 *     without naming it. Text usually does not — a source
+			 *     reference already names the part it came from, alongside the
+			 *     raw range.
 			 *
 			 *     `None` is an error when the request carried several
 			 *     documents, since there is then no sole document to mean.
@@ -15735,15 +16613,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     For text specifically, a caller holding raw file bytes
-			 *     rather than a decoded offset — a reviewer selecting rendered
-			 *     text, say — leaves [`TextLocation::range`] empty and fills
-			 *     [`TextLocation::source`] instead, which the engine
-			 *     reverse-resolves. The other three have no such alternative:
-			 *     their coordinates are the only way in.
+			 *     Text carries either coordinate kind of [`TextCoord`]: a
+			 *     [`Decoded`] span for a caller with an offset into the
+			 *     decoded stream, or a [`Source`] one for a caller holding
+			 *     only raw file bytes — a reviewer selecting rendered text,
+			 *     say — which the engine reverse-resolves. Source-only is its
+			 *     own kind rather than a decoded span left empty, so such a
+			 *     selection is representable as itself.
 			 *
-			 *     [`TextLocation::range`]: elide::modality::text::TextLocation::range
-			 *     [`TextLocation::source`]: elide::modality::text::TextLocation::source
+			 *     The other three media have no such alternative: their
+			 *     coordinates are the only way in.
+			 *
+			 *     [`TextCoord`]: elide::modality::text::TextCoord
+			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
+			 *     [`Source`]: elide::modality::text::TextCoord::Source
 			 */
 			location: components["schemas"]["TextLocation"];
 			/**
@@ -15755,9 +16638,9 @@ export interface components {
 			 *
 			 *     Nested media needs this: the report holds an embedded image
 			 *     as its own part, and an addition to one has nowhere to go
-			 *     without naming it. Text usually does not — where a span came
-			 *     from is already in `TextLocation::source`, which carries the
-			 *     part alongside the raw range.
+			 *     without naming it. Text usually does not — a source
+			 *     reference already names the part it came from, alongside the
+			 *     raw range.
 			 *
 			 *     `None` is an error when the request carried several
 			 *     documents, since there is then no sole document to mean.
@@ -16583,7 +17466,13 @@ export interface components {
 			 */
 			unreadCount: number;
 		};
-		/** @description Request payload to update an account. */
+		/**
+		 * @description Request payload to update an account's profile.
+		 *
+		 *     Credentials are not profile fields — a password and any linked providers are
+		 *     managed through the account's identities (see the identity endpoints), never
+		 *     here.
+		 */
 		UpdateAccount: {
 			/** @description New display name (2-32 characters). */
 			displayName?: string;
@@ -16592,8 +17481,6 @@ export interface components {
 			 * @description New email address (must be valid email format).
 			 */
 			emailAddress?: string;
-			/** @description A re-authenticated password change, when changing the password. */
-			password?: components["schemas"]["PasswordChange"];
 			/** @description New account handle. */
 			username?: components["schemas"]["Handle"];
 		};

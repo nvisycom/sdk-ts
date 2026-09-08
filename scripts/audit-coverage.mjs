@@ -79,7 +79,7 @@ function specOperations(spec) {
 
 /** Every "METHOD /path" the SDK invokes via openapi-fetch, scraped from source. */
 function sdkCalls() {
-	const dirs = ["src/services", "src/auth"];
+	const dirs = ["src/services", "src/standalone"];
 	const calls = new Set();
 	// Matches `.GET("/path"`, `.POST(\n  "/path"`, etc. (multi-line aware).
 	const re = /\.(GET|POST|PUT|PATCH|DELETE)\(\s*"([^"]+)"/g;

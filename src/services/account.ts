@@ -1,7 +1,11 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	Account as AccountData,
+	AccountIdentities,
+	IdentityProvider,
+	OidcStartResponse,
 	PublicAccount,
+	SetPassword,
 	UpdateAccount,
 } from "@/datatypes/index.js";
 
@@ -93,5 +97,101 @@ export class Account {
 		await this.#api.DELETE("/accounts/{username}/avatar/", {
 			params: { path: { username } },
 		});
+	}
+
+	/**
+	 * List the account's sign-in methods: its password and linked providers.
+	 * @returns Promise that resolves with the account's identities
+	 * @throws {ApiError} if the request fails
+	 */
+	async listIdentities(): Promise<AccountIdentities> {
+		const { data } = await this.#api.GET("/account/identities/");
+		return data!;
+	}
+
+	/**
+	 * Set or change the account's password.
+	 *
+	 * Changing an existing password requires the current one; setting a first
+	 * password on a provider-only account requires a step-up `reauthProof` (see
+	 * {@link reauth}) instead.
+	 *
+	 * @param request - The password change (current/new password or reauth proof)
+	 * @returns Promise that resolves when the password is set
+	 * @throws {ApiError} if the request fails
+	 */
+	async setPassword(request: SetPassword): Promise<void> {
+		await this.#api.PUT("/account/identities/password/", { body: request });
+	}
+
+	/**
+	 * Remove the account's password, leaving only its linked providers.
+	 *
+	 * Refused if the password is the account's only sign-in method.
+	 *
+	 * @returns Promise that resolves when the password is removed
+	 * @throws {ApiError} if the request fails
+	 */
+	async removePassword(): Promise<void> {
+		await this.#api.DELETE("/account/identities/password/");
+	}
+
+	/**
+	 * Begin linking an OIDC provider to the account.
+	 *
+	 * Requires a step-up `reauthProof` (from {@link reauth}). Returns the
+	 * provider authorize URL to send the user to; on consent the callback
+	 * attaches the verified identity to the account.
+	 *
+	 * @param provider - The identity provider to link
+	 * @param query - The reauth proof and optional post-flow redirect URI
+	 * @returns Promise that resolves with the provider authorize URL
+	 * @throws {ApiError} if the request fails
+	 */
+	async linkIdentity(
+		provider: IdentityProvider,
+		query?: { reauthProof?: string; redirectUri?: string },
+	): Promise<OidcStartResponse> {
+		const { data } = await this.#api.POST("/account/identities/{provider}/", {
+			params: { path: { provider }, query },
+		});
+		return data!;
+	}
+
+	/**
+	 * Unlink an OIDC provider from the account.
+	 *
+	 * Refused if the provider is the account's only sign-in method.
+	 *
+	 * @param provider - The identity provider to unlink
+	 * @returns Promise that resolves when the provider is unlinked
+	 * @throws {ApiError} if the request fails
+	 */
+	async unlinkIdentity(provider: IdentityProvider): Promise<void> {
+		await this.#api.DELETE("/account/identities/{provider}/", {
+			params: { path: { provider } },
+		});
+	}
+
+	/**
+	 * Begin a step-up re-authentication with an already-linked provider.
+	 *
+	 * Returns the provider authorize URL to send the user to; on consent the
+	 * callback mints a short-lived, single-use proof required to add a credential
+	 * ({@link setPassword} for a first password, or {@link linkIdentity}).
+	 *
+	 * @param provider - The linked identity provider to re-authenticate with
+	 * @param query - Optional post-flow redirect URI
+	 * @returns Promise that resolves with the provider authorize URL
+	 * @throws {ApiError} if the request fails
+	 */
+	async reauth(
+		provider: IdentityProvider,
+		query?: { redirectUri?: string },
+	): Promise<OidcStartResponse> {
+		const { data } = await this.#api.GET("/auth/{provider}/reauth/", {
+			params: { path: { provider }, query },
+		});
+		return data!;
 	}
 }
