@@ -55,7 +55,7 @@ const IGNORED_TYPES = new Set([]);
 
 /** Schema names whose bodies define the request surface consumers construct. */
 const REQUEST_ROOT =
-	/^(Create|Update|Sync|Reply|Generate|Login|Signup|Test|Import|Export|Start)/;
+	/^(Create|Update|Sync|Reply|Generate|Login|Signup|Test|Import|Export|Start|Desktop)/;
 
 /**
  * Schema names whose bodies define the response surface consumers read. Result

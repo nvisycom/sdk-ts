@@ -9835,6 +9835,113 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/auth/desktop/token/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Mint a desktop app token
+		 * @description Mints a long-lived native-app session token for the authenticated account, to be delivered to the desktop app via the given desktop deep-link. Requires an active browser session (the desktop login completes in the browser first). The `redirectUri` must be a configured desktop scheme.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload to mint a native-app (desktop) session token.
+			 *
+			 *     Called by the frontend after a normal browser (cookie) login when the login
+			 *     was initiated by the desktop app: it exchanges the just-established session for
+			 *     a long-lived `app` token the frontend then hands to the app via the
+			 *     `redirectUri` deep-link. The `redirectUri` must be a registered desktop scheme
+			 *     (e.g. `nvisy://…`), so a token cannot be minted toward a web origin.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["DesktopTokenRequest"];
+				};
+			};
+			responses: {
+				/**
+				 * @description The result of minting a native-app (desktop) session token.
+				 *
+				 *     The frontend hands `apiToken` to the desktop app via the `redirectUri`
+				 *     deep-link (`{redirectUri}?token={apiToken}`); the app stores it and sends it as
+				 *     an `Authorization: Bearer` credential. Browser web sessions use cookies
+				 *     instead and return no token.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["DesktopToken"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/auth/login/": {
 		parameters: {
 			query?: never;
@@ -10727,7 +10834,7 @@ export interface components {
 		 *     This enumeration corresponds to the `API_TOKEN_TYPE` PostgreSQL enum and is used
 		 *     to categorize different types of authentication tokens based on the client type.
 		 */
-		ApiTokenType: "web" | "api" | "cli";
+		ApiTokenType: "web" | "api" | "app";
 		/** @description API token with JWT token string (only returned on creation). */
 		ApiTokenWithJWT: {
 			/** @description Human-readable display name for the API token. */
@@ -12327,6 +12434,36 @@ export interface components {
 			 *     workspace, or held by an in-progress detection.
 			 */
 			skipped: string[];
+		};
+		/**
+		 * @description The result of minting a native-app (desktop) session token.
+		 *
+		 *     The frontend hands `apiToken` to the desktop app via the `redirectUri`
+		 *     deep-link (`{redirectUri}?token={apiToken}`); the app stores it and sends it as
+		 *     an `Authorization: Bearer` credential. Browser web sessions use cookies
+		 *     instead and return no token.
+		 */
+		DesktopToken: {
+			/** @description The signed `app` JWT to send as a Bearer token. */
+			apiToken: string;
+			/** @description The desktop deep-link the token should be delivered on, echoed back. */
+			redirectUri: string;
+		};
+		/**
+		 * @description Request payload to mint a native-app (desktop) session token.
+		 *
+		 *     Called by the frontend after a normal browser (cookie) login when the login
+		 *     was initiated by the desktop app: it exchanges the just-established session for
+		 *     a long-lived `app` token the frontend then hands to the app via the
+		 *     `redirectUri` deep-link. The `redirectUri` must be a registered desktop scheme
+		 *     (e.g. `nvisy://…`), so a token cannot be minted toward a web origin.
+		 */
+		DesktopTokenRequest: {
+			/**
+			 * @description The desktop deep-link the app will receive the token on. Must match a
+			 *     configured desktop redirect scheme.
+			 */
+			redirectUri: string;
 		};
 		/**
 		 * @description Response type for a detection.

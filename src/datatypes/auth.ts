@@ -6,3 +6,7 @@ type Schemas = components["schemas"];
 // return no body; programmatic clients use an API token from `apiTokens`.
 export type Login = Schemas["Login"];
 export type Signup = Schemas["Signup"];
+
+// Minting a long-lived native-app token from a browser session for a desktop app.
+export type DesktopTokenRequest = Schemas["DesktopTokenRequest"];
+export type DesktopToken = Schemas["DesktopToken"];

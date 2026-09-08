@@ -8,6 +8,19 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.48.0] - 2026-09-08
+
+### Added
+
+- `auth.mintDesktopToken(request)` mints a long-lived native-app token from an
+  active browser session for a desktop app, delivered via a deep-link
+  `redirectUri` (`DesktopTokenRequest` / `DesktopToken`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** the `ApiTokenType` value `cli` was renamed to `app`
+
 ## [0.47.0] - 2026-09-08
 
 ### Added
@@ -987,6 +1000,7 @@ redaction an independent resource. This release renames the SDK to match.
 - Configuration validation with detailed error messages
 
 [Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[0.48.0]: https://github.com/nvisycom/sdk-ts/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/nvisycom/sdk-ts/compare/v0.46.0...v0.47.0
 [0.46.0]: https://github.com/nvisycom/sdk-ts/compare/v0.45.0...v0.46.0
 [0.45.0]: https://github.com/nvisycom/sdk-ts/compare/v0.44.0...v0.45.0

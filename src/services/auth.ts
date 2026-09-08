@@ -1,5 +1,7 @@
 import type { ApiClient } from "@/client.js";
 import type {
+	DesktopToken,
+	DesktopTokenRequest,
 	IdentityProvider,
 	Login,
 	OidcStartResponse,
@@ -77,6 +79,25 @@ export class Auth {
 	): Promise<OidcStartResponse> {
 		const { data } = await this.#api.GET("/auth/{provider}/start/", {
 			params: { path: { provider }, query },
+		});
+		return data!;
+	}
+
+	/**
+	 * Mint a long-lived native-app token for a desktop app.
+	 *
+	 * Requires an active browser session (the desktop login completes in the
+	 * browser first). Exchanges that session for an `app` token to hand to the
+	 * desktop app via the given deep-link `redirectUri`, which must be a
+	 * configured desktop scheme; it is echoed back in the response.
+	 *
+	 * @param request - The desktop deep-link to deliver the token on
+	 * @returns Promise that resolves with the minted token and redirect URI
+	 * @throws {ApiError} if the request fails
+	 */
+	async mintDesktopToken(request: DesktopTokenRequest): Promise<DesktopToken> {
+		const { data } = await this.#api.POST("/auth/desktop/token/", {
+			body: request,
 		});
 		return data!;
 	}
