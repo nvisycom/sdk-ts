@@ -17,6 +17,6 @@
  * ```
  */
 
-export { login, signup } from "@/standalone/auth.js";
+export { login, signup, startOidcSignIn } from "@/standalone/auth.js";
 export type { AuthConfig, HealthConfig } from "@/standalone/config.js";
 export { checkHealth } from "@/standalone/health.js";

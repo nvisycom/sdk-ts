@@ -8,6 +8,38 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.46.0] - 2026-09-08
+
+### Added
+
+- Account sign-in management on the account service: `listIdentities()`
+  (`AccountIdentities` / `AccountIdentity`), `setPassword(request)`
+  (`SetPassword`), `removePassword()`, `linkIdentity(provider, query?)`,
+  `unlinkIdentity(provider)`, and `reauth(provider, query?)` — the OIDC step-up
+  that mints the proof required to set a first password or link a provider
+- OpenID Connect sign-in: `auth.startOidcSignIn(provider, query?)` and the
+  standalone `startOidcSignIn(provider, query?, config?)` (usable without a
+  client), both returning the provider authorize URL (`OidcStartResponse`)
+- `connections.getPickerToken(workspaceSlug, connectionId)` mints a short-lived
+  provider access token for a browser file picker (`PickerToken`)
+- Identity datatypes (`AccountIdentities`, `AccountIdentity`, `IdentityProvider`,
+  `SetPassword`, `OidcStartResponse`), `PickerToken`, and `CustomMatcher` — a
+  caller-defined matcher now allowed on `PolicyDefinition` / `PolicyDraft`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
+### Removed
+
+- **Breaking:** the `PasswordChange` datatype — password changes moved from
+  `UpdateAccount` to the dedicated `account.setPassword()` (`SetPassword`)
+
+### Internal
+
+- The coverage audit now scans `src/standalone` (was a stale `src/auth`), so the
+  standalone auth functions are covered by the operation gate
+
 ## [0.45.0] - 2026-09-07
 
 ### Added
@@ -932,6 +964,7 @@ redaction an independent resource. This release renames the SDK to match.
 - Configuration validation with detailed error messages
 
 [Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[0.46.0]: https://github.com/nvisycom/sdk-ts/compare/v0.45.0...v0.46.0
 [0.45.0]: https://github.com/nvisycom/sdk-ts/compare/v0.44.0...v0.45.0
 [0.44.0]: https://github.com/nvisycom/sdk-ts/compare/v0.43.0...v0.44.0
 [0.43.0]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...v0.43.0

@@ -19,6 +19,8 @@ export type ConnectionVerification = Schemas["ConnectionVerification"];
 export type ImportFiles = Schemas["ImportFiles"];
 export type PickedFile = Schemas["PickedFile"];
 export type ExportFiles = Schemas["ExportFiles"];
+// Short-lived provider access token for a browser file picker.
+export type PickerToken = Schemas["PickerToken"];
 
 // Sync enums.
 export type SyncMode = Schemas["SyncMode"];
