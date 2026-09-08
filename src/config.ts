@@ -26,26 +26,37 @@ export const VERSION =
 /**
  * Configuration options for creating a Nvisy client.
  *
- * The `apiToken` field is required for authentication. All other fields are optional
- * and will use sensible defaults when omitted.
+ * Authenticate one of two ways: pass an `apiToken` (sent as a bearer token on
+ * every request), or use a browser session — sign in with the standalone
+ * `login` / `signup`, then set `credentials: "include"` so the session cookies
+ * are sent. All other fields are optional and use sensible defaults.
  *
  * @example
  * ```typescript
- * const config: ClientConfig = {
- *   apiToken: "your-api-token",
- *   baseUrl: "https://api.nvisy.com",
- *   headers: { "X-Custom-Header": "value" },
- * };
- * const client = new Client(config);
+ * // API token
+ * const client = new Client({ apiToken: "your-api-token" });
+ *
+ * // Browser session (after `login()` set the cookies)
+ * const client = new Client({ credentials: "include" });
  * ```
  */
 export interface ClientConfig {
 	/**
-	 * API token for authentication.
+	 * API token for authentication, sent as `Authorization: Bearer <token>`.
 	 *
-	 * Tokens can be obtained from the Nvisy dashboard or via the auth endpoints.
+	 * Tokens can be obtained from the Nvisy dashboard or the api-tokens endpoint.
+	 * Omit it to authenticate with a browser session instead (see `credentials`).
 	 */
-	apiToken: string;
+	apiToken?: string;
+
+	/**
+	 * Credentials mode for every request, forwarded to `fetch`.
+	 *
+	 * Set to `"include"` to send the session cookies established by the
+	 * standalone `login` / `signup` (needed for cross-origin browser sessions).
+	 * Defaults to the platform's `fetch` default when omitted.
+	 */
+	credentials?: RequestCredentials;
 
 	/**
 	 * Base URL for the Nvisy API.

@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { login, signup } from "@/standalone/auth.js";
 
 // Hoisted so it's initialized before the hoisted `vi.mock` factory runs.
+// Login/signup return no body (a 204 that starts a cookie session).
 const { post } = vi.hoisted(() => ({
-	post: vi.fn(async () => ({ data: { accessToken: "tok" } })),
+	post: vi.fn(async () => ({ data: undefined })),
 }));
 
 vi.mock("openapi-fetch", () => ({

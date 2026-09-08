@@ -9846,7 +9846,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Login
-		 * @description Authenticates a user and returns an access token.
+		 * @description Authenticates a user and starts a browser session: sets an HttpOnly session cookie and a CSRF cookie, returning no body. (Programmatic clients authenticate with an API token created via the tokens endpoint, not this one.)
 		 */
 		post: {
 			parameters: {
@@ -9862,14 +9862,12 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response returned after successful authentication (login/signup). */
-				201: {
+				/** @description no content */
+				204: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content: {
-						"application/json": components["schemas"]["AuthToken"];
-					};
+					content?: never;
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -9938,7 +9936,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Signup
-		 * @description Creates a new account and returns an access token.
+		 * @description Creates a new account and starts a browser session: sets an HttpOnly session cookie and a CSRF cookie, returning no body.
 		 */
 		post: {
 			parameters: {
@@ -9954,14 +9952,12 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response returned after successful authentication (login/signup). */
-				201: {
+				/** @description no content */
+				204: {
 					headers: {
 						[name: string]: unknown;
 					};
-					content: {
-						"application/json": components["schemas"]["AuthToken"];
-					};
+					content?: never;
 				};
 				/**
 				 * @description HTTP error response representation with security-conscious design.
@@ -10030,7 +10026,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Logout
-		 * @description Invalidates the current access token.
+		 * @description Invalidates the current session and clears session cookies.
 		 */
 		post: {
 			parameters: {
@@ -11454,23 +11450,6 @@ export interface components {
 		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
 		 */
 		AuditHash: string;
-		/** @description Response returned after successful authentication (login/signup). */
-		AuthToken: {
-			/** @description The JWT API token for authentication. */
-			apiToken: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token expires.
-			 */
-			expiresAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token was issued.
-			 */
-			issuedAt: string;
-			/** @description Handle of the authenticated account. */
-			username: components["schemas"]["Handle"];
-		};
 		/**
 		 * @description Configuration for a provider reached with an API key (OpenAI, Anthropic).
 		 *
