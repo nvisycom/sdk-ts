@@ -1,6 +1,5 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	AuthToken,
 	IdentityProvider,
 	Login,
 	OidcStartResponse,
@@ -18,33 +17,41 @@ export class Auth {
 	}
 
 	/**
-	 * Login with email and password
+	 * Login with email and password, starting a browser session.
+	 *
+	 * Sets HttpOnly session and CSRF cookies; returns no body. Programmatic
+	 * clients should instead create an API token via {@link ApiTokens} and pass
+	 * it as `apiToken` when constructing the client.
+	 *
 	 * @param credentials - Login credentials
-	 * @returns Promise that resolves with the auth response containing access token
+	 * @returns Promise that resolves once the session is started
 	 * @throws {ApiError} if the request fails
 	 */
-	async loginAccount(credentials: Login): Promise<AuthToken> {
-		const { data } = await this.#api.POST("/auth/login/", {
+	async loginAccount(credentials: Login): Promise<void> {
+		await this.#api.POST("/auth/login/", {
 			body: credentials,
 		});
-		return data!;
 	}
 
 	/**
-	 * Sign up a new account
+	 * Sign up a new account, starting a browser session.
+	 *
+	 * Sets HttpOnly session and CSRF cookies; returns no body. Programmatic
+	 * clients should instead create an API token via {@link ApiTokens} and pass
+	 * it as `apiToken` when constructing the client.
+	 *
 	 * @param credentials - Signup details
-	 * @returns Promise that resolves with the auth response containing access token
+	 * @returns Promise that resolves once the session is started
 	 * @throws {ApiError} if the request fails
 	 */
-	async signupAccount(credentials: Signup): Promise<AuthToken> {
-		const { data } = await this.#api.POST("/auth/signup/", {
+	async signupAccount(credentials: Signup): Promise<void> {
+		await this.#api.POST("/auth/signup/", {
 			body: credentials,
 		});
-		return data!;
 	}
 
 	/**
-	 * Logout and invalidate the current access token
+	 * Logout, invalidating the current session and clearing its cookies.
 	 * @returns Promise that resolves when logout is complete
 	 * @throws {ApiError} if the request fails
 	 */

@@ -49,6 +49,43 @@ describe("Nvisy", () => {
 		it("should throw for empty API token", () => {
 			expect(() => new Nvisy({ apiToken: "" })).toThrow(NvisyError);
 		});
+
+		it("should create a client with no API token (browser session)", () => {
+			expect(() => new Nvisy()).not.toThrow();
+			expect(() => new Nvisy({ credentials: "include" })).not.toThrow();
+		});
+	});
+
+	describe("authentication headers", () => {
+		beforeEach(() => {
+			vi.mocked(createClient).mockClear();
+		});
+
+		it("should send a bearer token when an API token is given", () => {
+			new Nvisy({ apiToken: "valid-api-token-123" });
+			expect(createClient).toHaveBeenCalledWith(
+				expect.objectContaining({
+					headers: expect.objectContaining({
+						Authorization: "Bearer valid-api-token-123",
+					}),
+				}),
+			);
+		});
+
+		it("should omit the Authorization header for a browser session", () => {
+			new Nvisy({ credentials: "include" });
+			const headers = vi.mocked(createClient).mock.calls[0][0]?.headers as
+				| Record<string, string>
+				| undefined;
+			expect(headers?.Authorization).toBeUndefined();
+		});
+
+		it("should forward credentials to openapi-fetch", () => {
+			new Nvisy({ credentials: "include" });
+			expect(createClient).toHaveBeenCalledWith(
+				expect.objectContaining({ credentials: "include" }),
+			);
+		});
 	});
 
 	describe("service getters", () => {

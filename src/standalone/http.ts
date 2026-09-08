@@ -49,6 +49,9 @@ export function createPublicClient(
 		headers,
 		// `undefined` falls back to the global fetch inside openapi-fetch.
 		fetch: config?.fetch,
+		// Forward `credentials` so login/signup can establish a cross-origin
+		// cookie session (the browser stores Set-Cookie only with "include").
+		...(config?.credentials ? { credentials: config.credentials } : {}),
 	});
 
 	if (errorHandling) client.use(errorMiddleware);

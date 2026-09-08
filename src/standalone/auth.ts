@@ -1,27 +1,30 @@
 /**
- * @fileoverview Standalone password-based authentication functions.
+ * @fileoverview Standalone authentication functions.
  *
- * This module provides functions for login and signup that don't require
- * an existing API token. Use these to obtain an auth token, then create
- * an authenticated {@link Client} instance.
+ * These functions start a browser session without an existing client: login
+ * and signup set HttpOnly session and CSRF cookies (they return no body), and
+ * `startOidcSignIn` returns a provider authorize URL to redirect to.
+ *
+ * For a programmatic (non-browser) client, do not use these to obtain a
+ * credential — a cookie session is not replayed across SDK calls. Instead
+ * create an API token (via the account's api-tokens endpoint) and pass it as
+ * `apiToken` when constructing a {@link Client}.
  *
  * @module standalone/auth
  *
  * @example
  * ```typescript
- * import { login, signup } from "@nvisy/sdk/standalone";
- * import { Nvisy } from "@nvisy/sdk";
+ * import { login } from "@nvisy/sdk/standalone";
  *
- * // Login to get a token
- * const token = await login({ email: "user@example.com", password: "..." });
- *
- * // Create authenticated client
- * const nvisy = new Nvisy({ apiToken: token.accessToken });
+ * // Browser: start a cookie session
+ * await login(
+ *   { identifier: "user@example.com", password: "..." },
+ *   { credentials: "include" },
+ * );
  * ```
  */
 
 import type {
-	AuthToken,
 	IdentityProvider,
 	Login,
 	OidcStartResponse,
@@ -42,74 +45,73 @@ function createAuthClient(config?: AuthConfig) {
 }
 
 /**
- * Login with email and password to obtain an auth token.
+ * Login with email and password, starting a browser session.
  *
- * This is a standalone function that doesn't require an existing {@link Client}
- * instance. Use the returned token to create an authenticated client.
+ * A standalone function that needs no existing {@link Client}. Sets HttpOnly
+ * session and CSRF cookies; returns no body. For a programmatic client, create
+ * an API token instead and pass it as `apiToken` when constructing the client.
  *
- * @param credentials - Login credentials (email and password)
- * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
- * @returns Promise that resolves with the auth token
+ * @param credentials - Login credentials (identifier and password)
+ * @param config - Optional configuration (baseUrl, credentials, headers,
+ *   userAgent, fetch); pass `credentials: "include"` for a cross-origin session
+ * @returns Promise that resolves once the session is started
  * @throws {ApiError} If the credentials are invalid or the request fails
  *
  * @example
  * ```typescript
  * import { login } from "@nvisy/sdk/standalone";
- * import { Nvisy } from "@nvisy/sdk";
  *
- * const token = await login({
- *   email: "user@example.com",
- *   password: "your-password",
- * });
- *
- * const nvisy = new Nvisy({ apiToken: token.accessToken });
+ * await login(
+ *   { identifier: "user@example.com", password: "your-password" },
+ *   { credentials: "include" },
+ * );
  * ```
  */
 export async function login(
 	credentials: Login,
 	config?: AuthConfig,
-): Promise<AuthToken> {
+): Promise<void> {
 	const client = createAuthClient(config);
-	const { data } = await client.POST("/auth/login/", {
+	await client.POST("/auth/login/", {
 		body: credentials,
 	});
-	return data!;
 }
 
 /**
- * Sign up a new account to obtain an auth token.
+ * Sign up a new account, starting a browser session.
  *
- * This is a standalone function that doesn't require an existing {@link Client}
- * instance. Use the returned token to create an authenticated client.
+ * A standalone function that needs no existing {@link Client}. Sets HttpOnly
+ * session and CSRF cookies; returns no body. For a programmatic client, create
+ * an API token instead and pass it as `apiToken` when constructing the client.
  *
- * @param details - Signup details (name, email, password, etc.)
- * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
- * @returns Promise that resolves with the auth token
+ * @param details - Signup details (username, emailAddress, password, etc.)
+ * @param config - Optional configuration (baseUrl, credentials, headers,
+ *   userAgent, fetch); pass `credentials: "include"` for a cross-origin session
+ * @returns Promise that resolves once the session is started
  * @throws {ApiError} If the signup fails (e.g., email already exists)
  *
  * @example
  * ```typescript
  * import { signup } from "@nvisy/sdk/standalone";
- * import { Nvisy } from "@nvisy/sdk";
  *
- * const token = await signup({
- *   name: "John Doe",
- *   email: "john@example.com",
- *   password: "secure-password",
- * });
- *
- * const nvisy = new Nvisy({ apiToken: token.accessToken });
+ * await signup(
+ *   {
+ *     username: "johndoe",
+ *     emailAddress: "john@example.com",
+ *     password: "secure-password",
+ *   },
+ *   { credentials: "include" },
+ * );
  * ```
  */
 export async function signup(
 	details: Signup,
 	config?: AuthConfig,
-): Promise<AuthToken> {
+): Promise<void> {
 	const client = createAuthClient(config);
-	const { data } = await client.POST("/auth/signup/", {
+	await client.POST("/auth/signup/", {
 		body: details,
 	});
-	return data!;
 }
 
 /**

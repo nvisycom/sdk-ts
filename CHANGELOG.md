@@ -8,6 +8,29 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.47.0] - 2026-09-08
+
+### Added
+
+- The `Nvisy` client supports cookie-based browser sessions: `apiToken` is now
+  optional, and a new `credentials` option (e.g. `"include"`) is forwarded to
+  `fetch` so the session cookies set by `login` / `signup` are sent. With no
+  `apiToken`, no `Authorization` header is sent
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** `auth.loginAccount()` / `auth.signupAccount()` and the standalone
+  `login` / `signup` now return `void`. Login and signup start a browser session
+  (they set HttpOnly session and CSRF cookies) instead of returning a token.
+  Programmatic clients should create an API token (via the api-tokens endpoint)
+  and pass it as `apiToken`
+
+### Removed
+
+- **Breaking:** the `AuthToken` datatype — login and signup no longer return a
+  token body
+
 ## [0.46.0] - 2026-09-08
 
 ### Added
@@ -964,6 +987,7 @@ redaction an independent resource. This release renames the SDK to match.
 - Configuration validation with detailed error messages
 
 [Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[0.47.0]: https://github.com/nvisycom/sdk-ts/compare/v0.46.0...v0.47.0
 [0.46.0]: https://github.com/nvisycom/sdk-ts/compare/v0.45.0...v0.46.0
 [0.45.0]: https://github.com/nvisycom/sdk-ts/compare/v0.44.0...v0.45.0
 [0.44.0]: https://github.com/nvisycom/sdk-ts/compare/v0.43.0...v0.44.0

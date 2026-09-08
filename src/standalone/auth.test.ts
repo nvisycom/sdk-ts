@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { login, signup } from "@/standalone/auth.js";
 
 // Hoisted so it's initialized before the hoisted `vi.mock` factory runs.
+// Login/signup return no body (a 204 that starts a cookie session).
 const { post } = vi.hoisted(() => ({
-	post: vi.fn(async () => ({ data: { accessToken: "tok" } })),
+	post: vi.fn(async () => ({ data: undefined })),
 }));
 
 vi.mock("openapi-fetch", () => ({
@@ -48,6 +49,20 @@ describe("auth password helpers", () => {
 		await login(credentials);
 		expect(createClient).toHaveBeenCalledWith(
 			expect.objectContaining({ fetch: undefined }),
+		);
+	});
+
+	it("forwards credentials so login can establish a cookie session", async () => {
+		await login(credentials, { credentials: "include" });
+		expect(createClient).toHaveBeenCalledWith(
+			expect.objectContaining({ credentials: "include" }),
+		);
+	});
+
+	it("forwards credentials on signup too", async () => {
+		await signup(details, { credentials: "include" });
+		expect(createClient).toHaveBeenCalledWith(
+			expect.objectContaining({ credentials: "include" }),
 		);
 	});
 });
