@@ -11,7 +11,10 @@
  *
  * if ((await checkHealth()).status === "healthy") {
  *   // Browser: start a cookie session
- *   await login({ identifier: "user@example.com", password: "..." });
+ *   await login(
+ *     { identifier: "user@example.com", password: "..." },
+ *     { credentials: "include" },
+ *   );
  * }
  * ```
  */

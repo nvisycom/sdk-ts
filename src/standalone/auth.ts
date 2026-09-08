@@ -17,7 +17,10 @@
  * import { login } from "@nvisy/sdk/standalone";
  *
  * // Browser: start a cookie session
- * await login({ email: "user@example.com", password: "..." });
+ * await login(
+ *   { identifier: "user@example.com", password: "..." },
+ *   { credentials: "include" },
+ * );
  * ```
  */
 
@@ -48,8 +51,9 @@ function createAuthClient(config?: AuthConfig) {
  * session and CSRF cookies; returns no body. For a programmatic client, create
  * an API token instead and pass it as `apiToken` when constructing the client.
  *
- * @param credentials - Login credentials (email and password)
- * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
+ * @param credentials - Login credentials (identifier and password)
+ * @param config - Optional configuration (baseUrl, credentials, headers,
+ *   userAgent, fetch); pass `credentials: "include"` for a cross-origin session
  * @returns Promise that resolves once the session is started
  * @throws {ApiError} If the credentials are invalid or the request fails
  *
@@ -57,7 +61,10 @@ function createAuthClient(config?: AuthConfig) {
  * ```typescript
  * import { login } from "@nvisy/sdk/standalone";
  *
- * await login({ email: "user@example.com", password: "your-password" });
+ * await login(
+ *   { identifier: "user@example.com", password: "your-password" },
+ *   { credentials: "include" },
+ * );
  * ```
  */
 export async function login(
@@ -77,8 +84,9 @@ export async function login(
  * session and CSRF cookies; returns no body. For a programmatic client, create
  * an API token instead and pass it as `apiToken` when constructing the client.
  *
- * @param details - Signup details (name, email, password, etc.)
- * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
+ * @param details - Signup details (username, emailAddress, password, etc.)
+ * @param config - Optional configuration (baseUrl, credentials, headers,
+ *   userAgent, fetch); pass `credentials: "include"` for a cross-origin session
  * @returns Promise that resolves once the session is started
  * @throws {ApiError} If the signup fails (e.g., email already exists)
  *
@@ -86,11 +94,14 @@ export async function login(
  * ```typescript
  * import { signup } from "@nvisy/sdk/standalone";
  *
- * await signup({
- *   name: "John Doe",
- *   email: "john@example.com",
- *   password: "secure-password",
- * });
+ * await signup(
+ *   {
+ *     username: "johndoe",
+ *     emailAddress: "john@example.com",
+ *     password: "secure-password",
+ *   },
+ *   { credentials: "include" },
+ * );
  * ```
  */
 export async function signup(

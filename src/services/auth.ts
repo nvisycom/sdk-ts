@@ -51,7 +51,7 @@ export class Auth {
 	}
 
 	/**
-	 * Logout and invalidate the current access token
+	 * Logout, invalidating the current session and clearing its cookies.
 	 * @returns Promise that resolves when logout is complete
 	 * @throws {ApiError} if the request fails
 	 */

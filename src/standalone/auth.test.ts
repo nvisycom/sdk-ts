@@ -51,4 +51,18 @@ describe("auth password helpers", () => {
 			expect.objectContaining({ fetch: undefined }),
 		);
 	});
+
+	it("forwards credentials so login can establish a cookie session", async () => {
+		await login(credentials, { credentials: "include" });
+		expect(createClient).toHaveBeenCalledWith(
+			expect.objectContaining({ credentials: "include" }),
+		);
+	});
+
+	it("forwards credentials on signup too", async () => {
+		await signup(details, { credentials: "include" });
+		expect(createClient).toHaveBeenCalledWith(
+			expect.objectContaining({ credentials: "include" }),
+		);
+	});
 });
