@@ -7,6 +7,7 @@ export type ConnectionId = Schemas["ConnectionId"];
 
 // Connection resources and sync operations.
 export type Connection = Schemas["Connection"];
+export type ConnectionType = Schemas["ConnectionType"];
 export type CreateConnection = Schemas["CreateConnection"];
 export type UpdateConnection = Schemas["UpdateConnection"];
 export type ConnectionsQuery = Schemas["ConnectionsQuery"];
@@ -20,6 +21,7 @@ export type ImportFiles = Schemas["ImportFiles"];
 export type PickedFile = Schemas["PickedFile"];
 export type ExportFiles = Schemas["ExportFiles"];
 // Short-lived provider access token for a browser file picker.
+export type PickerTokenRequest = Schemas["PickerTokenRequest"];
 export type PickerToken = Schemas["PickerToken"];
 
 // Sync enums.
@@ -41,7 +43,7 @@ export type AuthenticatedProvider = Schemas["AuthenticatedProvider"];
 export type UnauthenticatedProvider = Schemas["UnauthenticatedProvider"];
 
 // File-service connection config (OAuth-backed) and its OAuth start flow.
-export type Provider = Schemas["Provider"];
+export type FileServiceProvider = Schemas["FileServiceProvider"];
 export type FileServiceConfig = Schemas["FileServiceConfig"];
 export type OAuthTokens = Schemas["OAuthTokens"];
 export type StartFileServiceOAuth = Schemas["StartFileServiceOAuth"];
