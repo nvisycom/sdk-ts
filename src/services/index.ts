@@ -13,6 +13,7 @@ export { Members } from "@/services/members.js";
 export { Notifications } from "@/services/notifications.js";
 export { Pipelines } from "@/services/pipelines.js";
 export { Policies } from "@/services/policies.js";
+export { Providers } from "@/services/providers.js";
 export { Redactions } from "@/services/redactions.js";
 export { Status } from "@/services/status.js";
 export { Syncs } from "@/services/syncs.js";

@@ -8,6 +8,31 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.49.0] - 2026-09-09
+
+### Added
+
+- `nvisy.providers` service for a workspace's inference providers (the LLM / NER
+  services the platform calls): `listProviders`, `createProvider`, `getProvider`,
+  `updateProvider`, `deleteProvider`, and `verifyProvider`
+- Provider datatypes (`Provider`, `CreateProvider`, `UpdateProvider`,
+  `ProviderPage`, `ProvidersQuery`, `ProviderId`, `ProviderConfig`,
+  `InferenceConfig`), the `ConnectionType` datatype, and a `resource` field on
+  the picker-token request (`PickerTokenRequest`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** the file-service provider enum was renamed from `Provider` to
+  `FileServiceProvider`; `Provider` now names the inference-provider resource.
+  `connections.startFileServiceOAuth(...)` takes a `FileServiceProvider`
+- **Breaking:** `ProviderType` is now the inference model type (`llm` / `ner`),
+  renamed from the former connection-category values
+- **Breaking:** the `SyncTriggerType` value `manual` was renamed to `on_demand`,
+  and `webhook` was removed
+- `connections.getPickerToken(...)` accepts an optional `PickerTokenRequest`
+  (a picker `resource`); the request body is otherwise empty
+
 ## [0.48.0] - 2026-09-08
 
 ### Added
@@ -999,7 +1024,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.42.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.49.0...HEAD
+[0.49.0]: https://github.com/nvisycom/sdk-ts/compare/v0.48.0...v0.49.0
 [0.48.0]: https://github.com/nvisycom/sdk-ts/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/nvisycom/sdk-ts/compare/v0.46.0...v0.47.0
 [0.46.0]: https://github.com/nvisycom/sdk-ts/compare/v0.45.0...v0.46.0

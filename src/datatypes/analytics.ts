@@ -20,7 +20,6 @@ export type ModelUsageEntry = Schemas["ModelUsageEntry"];
 export type Usage = Schemas["Usage"];
 export type UsageReport = Schemas["UsageReport"];
 export type TokenCounts = Schemas["TokenCounts"];
-export type ProviderType = Schemas["ProviderType"];
 export type RecognizerId = Schemas["RecognizerId"];
 
 // Daily detection activity over a date window (`DateWindow`, in `export`).

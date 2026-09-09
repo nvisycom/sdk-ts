@@ -37,6 +37,7 @@ import {
 	Notifications,
 	Pipelines,
 	Policies,
+	Providers,
 	Redactions,
 	Status,
 	Syncs,
@@ -321,6 +322,13 @@ export class Nvisy {
 	 */
 	get policies(): Policies {
 		return new Policies(this.#api);
+	}
+
+	/**
+	 * Service for managing a workspace's inference providers.
+	 */
+	get providers(): Providers {
+		return new Providers(this.#api);
 	}
 
 	/**

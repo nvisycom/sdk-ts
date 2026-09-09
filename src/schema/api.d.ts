@@ -474,408 +474,6 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/account/identities/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List sign-in methods
-		 * @description Returns the authenticated account's identities: its password and any linked providers.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description The account's sign-in methods. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["AccountIdentities"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/account/identities/password/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		/**
-		 * Set or change password
-		 * @description Sets or changes the account's password. Changing an existing password requires the current password; setting a first password on an account that has none requires a step-up re-authentication proof.
-		 */
-		put: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			/**
-			 * @description A password set or change.
-			 *
-			 *     When the account already has a password, `current_password` is required and
-			 *     verified before the change is applied, so a hijacked session or CSRF cannot
-			 *     silently reset it (and lock out the real owner). When the account has no
-			 *     password yet (an SSO-only account setting its first one), there is nothing to
-			 *     re-authenticate against, so a fresh step-up `reauth_proof` is required instead
-			 *     — a live session alone must not mint a durable new credential.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["SetPassword"];
-				};
-			};
-			responses: {
-				/** @description Password set. */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		post?: never;
-		/**
-		 * Remove password
-		 * @description Removes the account's password, leaving it able to sign in only through its linked providers. Refused if the password is the account's only sign-in method.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Password removed. */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/account/identities/{provider}/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Link a provider
-		 * @description Begins linking the given OpenID Connect provider to the authenticated account and returns the provider authorize URL. Requires a step-up re-authentication proof (`reauthProof`, from the reauth endpoint). On consent, the callback attaches the verified provider identity to the caller's account.
-		 */
-		post: {
-			parameters: {
-				query?: {
-					/**
-					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
-					 *     provider is a credential-adding action, so a live session alone is not
-					 *     enough); ignored for sign-in and reauth.
-					 */
-					reauthProof?: string;
-					/**
-					 * @description Frontend URL to return to once done. Carried through the flow and used to
-					 *     build the callback's redirect.
-					 */
-					redirectUri?: string;
-				};
-				header?: never;
-				path: {
-					/** @description The identity provider to act on. */
-					provider: components["schemas"]["IdentityProvider"];
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description The response to a successful sign-in start: where to send the user. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["OidcStartResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				503: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		/**
-		 * Unlink a provider
-		 * @description Removes a linked OIDC provider from the account. Refused if the provider is the account's only sign-in method.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description The identity provider to act on. */
-					provider: components["schemas"]["IdentityProvider"];
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Provider unlinked. */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description HTTP error response representation with security-conscious design.
-				 *
-				 *     This struct contains all the information needed to serialize an error
-				 *     response, including the error name, message, HTTP status code, resource
-				 *     information, and user-friendly messages.
-				 */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	"/workspaces/": {
 		parameters: {
 			query?: never;
@@ -3119,7 +2717,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Mint picker token
-		 * @description Returns a short-lived provider access token for a browser file picker (file services with a token-based picker only). The refresh token is never returned.
+		 * @description Returns a short-lived provider access token for a browser file picker (file services with a token-based picker only). The refresh token is never returned. An optional body `{ resource }` names the resource the picker requested (used by the OneDrive picker, which requires a SharePoint-audience token); providers whose picker takes a single token ignore it. The OneDrive picker is available only for work or school (OneDrive for Business) accounts.
 		 */
 		post: {
 			parameters: {
@@ -3133,7 +2731,19 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			requestBody?: never;
+			/**
+			 * @description Body for minting a browser file-picker token.
+			 *
+			 *     The OneDrive v8 picker requests a token per resource (it names the resource in
+			 *     each `authenticate` command); the caller passes that `resource` so the server
+			 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
+			 *     single provider token (Google Drive, Box); omit it for those.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["PickerTokenRequest"];
+				};
+			};
 			responses: {
 				/**
 				 * @description A short-lived provider OAuth access token for a browser file picker.
@@ -3219,6 +2829,573 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/workspaces/{workspaceSlug}/providers/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List providers
+		 * @description Returns all configured inference providers for the workspace. Only metadata is returned; encrypted credentials are never exposed.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/**
+					 * @description Filter by provider (`openai`, `ollama`, `anthropic`). Repeatable; a
+					 *     provider matches if it uses any of the given providers. Empty means no
+					 *     filter.
+					 */
+					provider?: string[];
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ProviderPage"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Create provider
+		 * @description Creates a new inference provider for the workspace. Provider data is encrypted and stored securely. The response includes provider metadata but never exposes the encrypted credentials.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload for creating a new workspace provider. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreateProvider"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Response type for a workspace inference provider.
+				 *
+				 *     Note: The encrypted provider data is never exposed in API responses. Only
+				 *     metadata about the provider is returned.
+				 */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Provider"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/providers/{providerId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get provider
+		 * @description Returns provider metadata without encrypted credentials.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the provider. */
+					providerId: components["schemas"]["ProviderId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Response type for a workspace inference provider.
+				 *
+				 *     Note: The encrypted provider data is never exposed in API responses. Only
+				 *     metadata about the provider is returned.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Provider"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		/**
+		 * Delete provider
+		 * @description Soft-deletes the provider from the workspace.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the provider. */
+					providerId: components["schemas"]["ProviderId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		/**
+		 * Update provider
+		 * @description Updates provider name or encrypted data.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the provider. */
+					providerId: components["schemas"]["ProviderId"];
+				};
+				cookie?: never;
+			};
+			/** @description Request payload for updating an existing workspace provider. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateProvider"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Response type for a workspace inference provider.
+				 *
+				 *     Note: The encrypted provider data is never exposed in API responses. Only
+				 *     metadata about the provider is returned.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Provider"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/providers/{providerId}/verify/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Verify provider
+		 * @description Checks whether the provider is reachable with its stored credentials.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Opaque identifier of the provider. */
+					providerId: components["schemas"]["ProviderId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Result of a connection reachability check. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ConnectionVerification"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/workspaces/{workspaceSlug}/connections/oauth/{provider}/start/": {
 		parameters: {
 			query?: never;
@@ -3240,7 +3417,7 @@ export interface paths {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
 					/** @description The cloud file provider to connect. */
-					provider: components["schemas"]["Provider"];
+					provider: components["schemas"]["FileServiceProvider"];
 				};
 				cookie?: never;
 			};
@@ -9736,6 +9913,408 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/account/identities/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List sign-in methods
+		 * @description Returns the authenticated account's identities: its password and any linked providers.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description The account's sign-in methods. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["AccountIdentities"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/account/identities/password/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		/**
+		 * Set or change password
+		 * @description Sets or changes the account's password. Changing an existing password requires the current password; setting a first password on an account that has none requires a step-up re-authentication proof.
+		 */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			/**
+			 * @description A password set or change.
+			 *
+			 *     When the account already has a password, `current_password` is required and
+			 *     verified before the change is applied, so a hijacked session or CSRF cannot
+			 *     silently reset it (and lock out the real owner). When the account has no
+			 *     password yet (an SSO-only account setting its first one), there is nothing to
+			 *     re-authenticate against, so a fresh step-up `reauth_proof` is required instead
+			 *     — a live session alone must not mint a durable new credential.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["SetPassword"];
+				};
+			};
+			responses: {
+				/** @description Password set. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		post?: never;
+		/**
+		 * Remove password
+		 * @description Removes the account's password, leaving it able to sign in only through its linked providers. Refused if the password is the account's only sign-in method.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Password removed. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/account/identities/{provider}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Link a provider
+		 * @description Begins linking the given OpenID Connect provider to the authenticated account and returns the provider authorize URL. Requires a step-up re-authentication proof (`reauthProof`, from the reauth endpoint). On consent, the callback attaches the verified provider identity to the caller's account.
+		 */
+		post: {
+			parameters: {
+				query?: {
+					/**
+					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
+					 *     provider is a credential-adding action, so a live session alone is not
+					 *     enough); ignored for sign-in and reauth.
+					 */
+					reauthProof?: string;
+					/**
+					 * @description Frontend URL to return to once done. Carried through the flow and used to
+					 *     build the callback's redirect.
+					 */
+					redirectUri?: string;
+				};
+				header?: never;
+				path: {
+					/** @description The identity provider to act on. */
+					provider: components["schemas"]["IdentityProvider"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description The response to a successful sign-in start: where to send the user. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["OidcStartResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				503: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		/**
+		 * Unlink a provider
+		 * @description Removes a linked OIDC provider from the account. Refused if the provider is the account's only sign-in method.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description The identity provider to act on. */
+					provider: components["schemas"]["IdentityProvider"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Provider unlinked. */
+				204: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description HTTP error response representation with security-conscious design.
+				 *
+				 *     This struct contains all the information needed to serialize an error
+				 *     response, including the error name, message, HTTP status code, resource
+				 *     information, and user-friendly messages.
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/auth/{provider}/reauth/": {
 		parameters: {
 			query?: never;
@@ -10657,6 +11236,21 @@ export interface components {
 					type: "connection.sync.failed";
 			  }
 			| {
+					data: components["schemas"]["ProviderActivityParams"];
+					/** @constant */
+					type: "provider.created";
+			  }
+			| {
+					data: components["schemas"]["ProviderActivityParams"];
+					/** @constant */
+					type: "provider.updated";
+			  }
+			| {
+					data: components["schemas"]["ProviderActivityParams"];
+					/** @constant */
+					type: "provider.deleted";
+			  }
+			| {
 					data: components["schemas"]["WebhookActivityParams"];
 					/** @constant */
 					type: "webhook.created";
@@ -10760,6 +11354,9 @@ export interface components {
 			| "connection.sync.started"
 			| "connection.sync.completed"
 			| "connection.sync.failed"
+			| "provider.created"
+			| "provider.updated"
+			| "provider.deleted"
 			| "webhook.created"
 			| "webhook.updated"
 			| "webhook.deleted"
@@ -11874,6 +12471,8 @@ export interface components {
 		 *     Only metadata about the connection is returned.
 		 */
 		Connection: {
+			/** @description Capability category of the connection (object store, file service). */
+			connectionType: components["schemas"]["ConnectionType"];
 			/**
 			 * Format: date-time
 			 * @description When the connection was created.
@@ -11887,11 +12486,19 @@ export interface components {
 			id: components["schemas"]["ConnectionId"];
 			/** @description Whether the connection is enabled. */
 			isActive: boolean;
-			/** @description Provider identifier (`s3`, `azure`, `gcs`, `openai`, `ollama`, ...). */
+			/**
+			 * Format: date-time
+			 * @description When the connection last synced successfully, if ever. Independent of
+			 *     `sync`: a connection with no schedule still records its on-demand syncs.
+			 */
+			lastSyncedAt?: string;
+			/** @description Provider identifier (`s3`, `azure`, `gcs`, `google_drive`, `dropbox`, ...). */
 			provider: string;
-			/** @description Capability category of the provider (object store, language model, ...). */
-			providerType: components["schemas"]["ProviderType"];
-			/** @description Sync configuration; present only for sync-capable connections. */
+			/**
+			 * @description Scheduled-sync configuration; present only for connections that sync on a
+			 *     timer. Its absence does not mean the connection cannot sync — a file
+			 *     service and an unscheduled object store both transfer on demand.
+			 */
 			sync?: components["schemas"]["SyncSchedule"];
 			/**
 			 * Format: date-time
@@ -11909,15 +12516,14 @@ export interface components {
 			connectionName: string;
 		};
 		/**
-		 * @description A fully-typed connection configuration for any capability.
+		 * @description A fully-typed transfer-connection configuration.
 		 *
 		 *     Untagged: the two inner enums have disjoint `provider` values, so serde
 		 *     resolves the variant from the flat payload without an outer discriminator.
 		 */
 		ConnectionConfig:
 			| components["schemas"]["StorageConfig"]
-			| components["schemas"]["FileServiceConfig"]
-			| components["schemas"]["LlmConfig"];
+			| components["schemas"]["FileServiceConfig"];
 		/** @description Opaque conn identifier (conn_<uuid>). */
 		ConnectionId: string;
 		/**
@@ -12037,6 +12643,17 @@ export interface components {
 			 */
 			syncId: string;
 		};
+		/**
+		 * @description The capability category of a transfer connection.
+		 *
+		 *     Corresponds to the `CONNECTION_TYPE` PostgreSQL enum. A stable, closed set:
+		 *     the concrete provider (the `provider` column, e.g. `s3`) stays open and
+		 *     extensible, while its capability is one of these types. Both categories are
+		 *     transfer-capable — an object store is enumerable and syncs on a timer; a file
+		 *     service transfers on demand. Inference services are a separate resource
+		 *     (`workspace_providers`), not a connection.
+		 */
+		ConnectionType: "object_store" | "file_service";
 		/** @description Result of a connection reachability check. */
 		ConnectionVerification: {
 			/** @description Failure reason when not reachable; omitted on success. */
@@ -12133,8 +12750,8 @@ export interface components {
 			 */
 			isActive?: boolean;
 			/**
-			 * @description Sync configuration. Applies only to sync-capable providers (object
-			 *     stores); rejected for others. Omit for manual-only defaults.
+			 * @description Scheduled-sync configuration. Accepted only for schedulable providers
+			 *     (object stores); rejected for others. Omit for on-demand only.
 			 */
 			sync?: components["schemas"]["SyncScheduleInput"];
 		};
@@ -12232,6 +12849,22 @@ export interface components {
 					source: "inline";
 			  }
 		);
+		/** @description Request payload for creating a new workspace provider. */
+		CreateProvider: {
+			/**
+			 * @description Typed provider configuration (provider tag + its credentials), encrypted at
+			 *     rest. The `provider` tag selects which credential shape is required and
+			 *     which model type the provider has.
+			 */
+			config: components["schemas"]["ProviderConfig"];
+			/** @description Human-readable provider display name. */
+			displayName: string;
+			/**
+			 * @description Whether the provider is enabled. Omit to default to active; set `false` to
+			 *     create it disabled.
+			 */
+			isActive?: boolean;
+		};
 		/** @description Request payload for creating a new workspace webhook. */
 		CreateWebhook: {
 			/** @description Detailed description of the webhook's purpose (max 500 characters). */
@@ -12950,7 +13583,7 @@ export interface components {
 		 */
 		FileServiceConfig: {
 			/** @description Which provider backs this connection. */
-			provider: components["schemas"]["Provider"];
+			provider: components["schemas"]["FileServiceProvider"];
 			/**
 			 * @description The folder (id or path) new exports are written into; `None` uses the
 			 *     account root.
@@ -12959,6 +13592,13 @@ export interface components {
 			/** @description The OAuth token set for this connection. */
 			tokens: components["schemas"]["OAuthTokens"];
 		};
+		/**
+		 * @description A supported cloud file-service provider.
+		 *
+		 *     The serialized form (snake_case) is the `provider` tag stored on a connection
+		 *     and used in the API, so every provider name lives in exactly one place.
+		 */
+		FileServiceProvider: "google_drive" | "dropbox" | "one_drive" | "box";
 		/**
 		 * @description A supported file extension.
 		 * @enum {string}
@@ -13705,6 +14345,16 @@ export interface components {
 			/** @description The files to import. Already-imported files are skipped. */
 			files: components["schemas"]["PickedFile"][];
 		};
+		/**
+		 * @description A fully-typed inference connection configuration, across every inference kind.
+		 *
+		 *     Inference is a family: a language model for chat today, and other model kinds
+		 *     (e.g. named-entity recognition) as they are added. Each kind owns its own
+		 *     config with its own `provider` tag, and this enum is untagged, so the flat
+		 *     payload's `provider` remains the sole discriminator — an inference kind is
+		 *     added as a new variant with no change to the wire format or storage.
+		 */
+		InferenceConfig: components["schemas"]["LlmConfig"];
 		/**
 		 * @description Workspace invite with complete information.
 		 *
@@ -14519,12 +15169,12 @@ export interface components {
 		};
 		/**
 		 * @description Path parameters for the OAuth start endpoint: which cloud file provider to
-		 *     begin authorizing. The provider is the crate's [`Provider`], so the API and
+		 *     begin authorizing. The provider is the crate's [`FileServiceProvider`], so the API and
 		 *     stored config name each provider identically.
 		 */
 		OAuthStartPathParams: {
 			/** @description The cloud file provider to connect. */
-			provider: components["schemas"]["Provider"];
+			provider: components["schemas"]["FileServiceProvider"];
 		};
 		/** @description The response to a successful authorization start: where to send the user. */
 		OAuthStartResponse: {
@@ -14677,6 +15327,22 @@ export interface components {
 			 *     it. `None` means the provider did not return an expiry.
 			 */
 			expiresAt?: number;
+		};
+		/**
+		 * @description Body for minting a browser file-picker token.
+		 *
+		 *     The OneDrive v8 picker requests a token per resource (it names the resource in
+		 *     each `authenticate` command); the caller passes that `resource` so the server
+		 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
+		 *     single provider token (Google Drive, Box); omit it for those.
+		 */
+		PickerTokenRequest: {
+			/**
+			 * @description The resource the picker asked for (its `authenticate` command's
+			 *     `resource`), e.g. `https://contoso-my.sharepoint.com`. Optional; when
+			 *     absent the server uses the connection's default picker resource.
+			 */
+			resource?: string;
 		};
 		/** @description Pipeline response. */
 		Pipeline: {
@@ -15274,22 +15940,105 @@ export interface components {
 					not: components["schemas"]["Predicate"];
 			  };
 		/**
-		 * @description A supported cloud file-service provider.
+		 * @description Response type for a workspace inference provider.
 		 *
-		 *     The serialized form (snake_case) is the `provider` tag stored on a connection
-		 *     and used in the API, so every provider name lives in exactly one place.
+		 *     Note: The encrypted provider data is never exposed in API responses. Only
+		 *     metadata about the provider is returned.
 		 */
-		Provider: "google_drive" | "dropbox" | "one_drive" | "box";
+		Provider: {
+			/**
+			 * Format: date-time
+			 * @description When the provider was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this provider. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Human-readable provider display name. */
+			displayName: string;
+			/** @description Opaque identifier of the provider. */
+			id: components["schemas"]["ProviderId"];
+			/** @description Whether the provider is enabled. */
+			isActive: boolean;
+			/** @description Provider identifier (`openai`, `ollama`, `anthropic`, ...). */
+			provider: string;
+			/** @description Inference model type of the provider (llm, ner). */
+			providerType: components["schemas"]["ProviderType"];
+			/**
+			 * Format: date-time
+			 * @description When the provider was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this provider belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/** @description Params of a provider activity (`provider.*`). */
+		ProviderActivityParams: {
+			/** @description Id of the provider. */
+			providerId: components["schemas"]["ProviderId"];
+			/** @description Display name of the provider. */
+			providerName: string;
+		};
 		/**
-		 * @description The capability category of a connection's provider.
+		 * @description A fully-typed inference-provider configuration.
 		 *
-		 *     Corresponds to the `PROVIDER_TYPE` PostgreSQL enum. A stable, closed set:
-		 *     the concrete provider (the `provider` column, e.g. `s3` or `anthropic`) stays
-		 *     open and extensible, while its capability is one of these types. Lets a
-		 *     connection be found by what it can do — e.g. a workspace's language model —
-		 *     without decrypting its config.
+		 *     Untagged: the inner config's `provider` tag is the sole discriminator, so the
+		 *     stored/wire form is flat. A new inference kind is added as a variant of
+		 *     [`InferenceConfig`] with no change here.
 		 */
-		ProviderType: "object_store" | "language_model" | "file_service";
+		ProviderConfig: components["schemas"]["InferenceConfig"];
+		/** @description Opaque prov identifier (prov_<uuid>). */
+		ProviderId: string;
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		ProviderPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Provider"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Path parameters for provider operations.
+		 *
+		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by the
+		 *     [`WorkspaceContext`] extractor.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
+		ProviderPathParams: {
+			/** @description Opaque identifier of the provider. */
+			providerId: components["schemas"]["ProviderId"];
+		};
+		/**
+		 * @description The inference model type backing a workspace provider.
+		 *
+		 *     Corresponds to the `PROVIDER_TYPE` PostgreSQL enum. A workspace provider is an
+		 *     inference service the platform calls; this says which kind of model it is — a
+		 *     language model for chat, or a named-entity-recognition model for extraction.
+		 *     The concrete vendor (the `provider` column, e.g. `openai`) is orthogonal and
+		 *     stays open; this type is a stable, closed set used to find a workspace's
+		 *     provider of a given type without decrypting its config.
+		 */
+		ProviderType: "llm" | "ner";
+		/** @description Query parameters for listing providers. */
+		ProvidersQuery: {
+			/**
+			 * @description Filter by provider (`openai`, `ollama`, `anthropic`). Repeatable; a
+			 *     provider matches if it uses any of the given providers. Empty means no
+			 *     filter.
+			 * @default []
+			 */
+			provider?: string[];
+		};
 		/**
 		 * @description Public view of an account, returned when looking up someone other than the
 		 *     authenticated caller. Carries only the fields safe to share with a
@@ -16011,11 +16760,16 @@ export interface components {
 			reason?: string;
 		};
 		/**
-		 * @description What an import does with a file whose source object no longer exists.
+		 * @description What a whole-listing import does with a file whose source object no longer
+		 *     exists.
 		 *
-		 *     Corresponds to the `SYNC_DELETION_POLICY` PostgreSQL enum. Deletion is opt-in
-		 *     per connection: the default `Ignore` keeps imports strictly additive so a
-		 *     transient listing error or a misconfigured root path can never remove files.
+		 *     Corresponds to the `SYNC_DELETION_POLICY` PostgreSQL enum. Only whole-listing
+		 *     import reconciles deletions (it compares the full source listing against what
+		 *     was imported), so this applies to object-store import alone; picker-driven
+		 *     file-service import transfers only the files the user selected and never
+		 *     reconciles. Deletion is opt-in per connection: the default `Ignore` keeps
+		 *     imports strictly additive so a transient listing error or a misconfigured
+		 *     root path can never remove files.
 		 */
 		SyncDeletionPolicy: "ignore" | "delete";
 		/**
@@ -16023,27 +16777,34 @@ export interface components {
 		 *
 		 *     Corresponds to the `SYNC_MODE` PostgreSQL enum: `Import` fetches objects from
 		 *     the connection into the workspace; `Export` pushes workspace files out.
+		 *
+		 *     A scheduled `Import` is an object-store concept: it enumerates the source and
+		 *     pulls the whole listing on a timer. A file service is not enumerated on a
+		 *     timer — its import is picker-driven and request-time — so only `Export` is
+		 *     scheduled for a file service.
 		 */
 		SyncMode: "import" | "export";
-		/** @description A connection's sync configuration, present only for sync-capable connections. */
+		/**
+		 * @description A connection's scheduled-sync configuration (its cron config), present only
+		 *     for connections that sync on a timer. A connection can transfer on demand
+		 *     without this — it is purely the schedule, not a capability marker. When the
+		 *     connection last synced is on [`Connection`] itself, since a connection with no
+		 *     schedule still syncs.
+		 */
 		SyncSchedule: {
 			/** @description How an import reconciles files whose source object was deleted. */
 			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
-			/**
-			 * Format: date-time
-			 * @description When the connection last synced successfully, if ever.
-			 */
-			lastSynced?: string;
 			/** @description Cron expression for scheduled imports, if configured. */
 			scheduleCron?: string;
 			/** @description Whether the connection imports data in or exports data out. */
 			syncMode: components["schemas"]["SyncMode"];
 		};
 		/**
-		 * @description Sync configuration for a sync-capable connection (object stores).
+		 * @description Scheduled-sync configuration for a schedulable connection.
 		 *
-		 *     Only meaningful for connections whose provider supports syncing; omitted for
-		 *     connections that do not (e.g. LLM inference).
+		 *     Accepted only for providers that can sync on a timer (object stores); rejected
+		 *     for others — a file service transfers on demand (picker import, per-file
+		 *     export), and an LLM does not transfer at all. Omit for on-demand only.
 		 */
 		SyncScheduleInput: {
 			/**
@@ -16069,10 +16830,12 @@ export interface components {
 		/**
 		 * @description Defines how a connection sync run was initiated.
 		 *
-		 *     This enumeration corresponds to the `SYNC_TRIGGER_TYPE` PostgreSQL enum and is used
-		 *     to track whether a run was manually triggered, scheduled, or triggered by a webhook.
+		 *     Corresponds to the `SYNC_TRIGGER_TYPE` PostgreSQL enum. The axis is who
+		 *     initiated the run: the connection's own schedule, or anything else — a user,
+		 *     the SDK, an external automation (Zapier and the like). The latter is
+		 *     `OnDemand`, which covers every non-scheduled trigger, not only a human click.
 		 */
-		SyncTriggerType: "manual" | "scheduled" | "webhook";
+		SyncTriggerType: "on_demand" | "scheduled";
 		/**
 		 * @description A detection recognition missed.
 		 *
@@ -17620,8 +18383,8 @@ export interface components {
 			 */
 			isActive?: boolean;
 			/**
-			 * @description Sync configuration. Applies only to sync-capable providers. Omit to leave
-			 *     unchanged.
+			 * @description Scheduled-sync configuration. Accepted only for schedulable providers
+			 *     (object stores); rejected for others. Omit to leave unchanged.
 			 */
 			sync?: components["schemas"]["SyncScheduleInput"];
 		};
@@ -17681,6 +18444,18 @@ export interface components {
 			description?: string;
 			/** @description Human-readable policy display name. */
 			displayName?: string;
+		};
+		/** @description Request payload for updating an existing workspace provider. */
+		UpdateProvider: {
+			/**
+			 * @description Typed provider configuration. If provided, fully replaces the stored config
+			 *     (and, with it, the provider). Omit to leave it unchanged.
+			 */
+			config?: components["schemas"]["ProviderConfig"];
+			/** @description Human-readable provider display name. */
+			displayName?: string;
+			/** @description Whether the provider is enabled. Omit to leave unchanged. */
+			isActive?: boolean;
 		};
 		/** @description Request payload for updating an existing workspace webhook. */
 		UpdateWebhook: {
@@ -17930,6 +18705,9 @@ export interface components {
 			| "connection.sync.started"
 			| "connection.sync.completed"
 			| "connection.sync.failed"
+			| "provider.created"
+			| "provider.updated"
+			| "provider.deleted"
 			| "pipeline.created"
 			| "pipeline.updated"
 			| "pipeline.deleted"

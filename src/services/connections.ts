@@ -7,10 +7,11 @@ import type {
 	CreateConnection,
 	CursorPagination,
 	ExportFiles,
+	FileServiceProvider,
 	ImportFiles,
 	OAuthStartResponse,
 	PickerToken,
-	Provider,
+	PickerTokenRequest,
 	StartFileServiceOAuth,
 	UpdateConnection,
 } from "@/datatypes/index.js";
@@ -163,7 +164,7 @@ export class Connections {
 	 */
 	async startFileServiceOAuth(
 		workspaceSlug: string,
-		provider: Provider,
+		provider: FileServiceProvider,
 		request: StartFileServiceOAuth,
 	): Promise<OAuthStartResponse> {
 		const { data } = await this.#api.POST(
@@ -241,17 +242,20 @@ export class Connections {
 	 *
 	 * @param workspaceSlug - Workspace slug
 	 * @param connectionId - Connection ID
+	 * @param request - Optional picker resource (defaults to the connection's)
 	 * @returns Promise that resolves with the short-lived picker token
 	 * @throws {ApiError} if the request fails
 	 */
 	async getPickerToken(
 		workspaceSlug: string,
 		connectionId: string,
+		request: PickerTokenRequest = {},
 	): Promise<PickerToken> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/picker-token/",
 			{
 				params: { path: { workspaceSlug, connectionId } },
+				body: request,
 			},
 		);
 		return data!;
