@@ -87,18 +87,6 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 	public readonly resource?: string;
 
 	/**
-	 * A helpful suggestion for resolving the error.
-	 * May be undefined if no suggestion is available.
-	 */
-	public readonly suggestion?: string;
-
-	/**
-	 * Field-specific validation errors.
-	 * Present when the error is due to invalid input data.
-	 */
-	public readonly validation?: ErrorResponse["validation"];
-
-	/**
 	 * HTTP status code of the response (e.g., 400, 404, 500).
 	 */
 	public readonly statusCode: number;
@@ -114,8 +102,6 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 		this.name = response.name;
 		this.message = response.message;
 		this.resource = response.resource;
-		this.suggestion = response.suggestion;
-		this.validation = response.validation;
 		this.statusCode = statusCode;
 	}
 
@@ -171,8 +157,6 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 			name: this.name,
 			message: this.message,
 			resource: this.resource,
-			suggestion: this.suggestion,
-			validation: this.validation,
 		};
 	}
 }

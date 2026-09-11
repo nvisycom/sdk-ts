@@ -8,6 +8,28 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-09-11
+
+### Added
+
+- `nvisy.assignments` service for assigning files to reviewers and tracking
+  review status (`assigned` / `in_review` / `done`): `listFileAssignments`,
+  `createAssignment`, `listAssignments`, `updateAssignment`, `deleteAssignment`
+- Assignment datatypes (`Assignment`, `CreateAssignment`, `UpdateAssignment`,
+  `AssignmentPage`, `AssignmentStatus`, `WorkspaceAssignmentsQuery`) and the
+  `FileAssignedParams` / `FileUnassignedParams` notification payloads
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+
+### Removed
+
+- **Breaking:** `ErrorResponse` no longer carries `suggestion` or `validation`,
+  and the `ValidationErrorDetail` datatype is removed. `NvisyApiError` drops its
+  `suggestion` and `validation` properties accordingly
+- **Breaking:** the `MemberInvitedParams` notification-payload datatype
+
 ## [0.49.0] - 2026-09-09
 
 ### Added
@@ -1024,7 +1046,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.49.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.50.0...HEAD
+[0.50.0]: https://github.com/nvisycom/sdk-ts/compare/v0.49.0...v0.50.0
 [0.49.0]: https://github.com/nvisycom/sdk-ts/compare/v0.48.0...v0.49.0
 [0.48.0]: https://github.com/nvisycom/sdk-ts/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/nvisycom/sdk-ts/compare/v0.46.0...v0.47.0

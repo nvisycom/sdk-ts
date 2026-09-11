@@ -17,10 +17,6 @@ describe("NvisyApiError", () => {
 				name: "ValidationError",
 				message: "Field is required",
 				resource: "account",
-				suggestion: "Please provide a valid email",
-				validation: [
-					{ field: "email", code: "required", message: "Email is required" },
-				],
 			},
 			400,
 		);
@@ -28,8 +24,6 @@ describe("NvisyApiError", () => {
 		expect(error.name).toBe("ValidationError");
 		expect(error.message).toBe("Field is required");
 		expect(error.resource).toBe("account");
-		expect(error.suggestion).toBe("Please provide a valid email");
-		expect(error.validation).toHaveLength(1);
 		expect(error.statusCode).toBe(400);
 		expect(error).toBeInstanceOf(NvisyError);
 	});
@@ -80,7 +74,6 @@ describe("NvisyApiError", () => {
 				name: "ValidationError",
 				message: "Invalid input",
 				resource: "document",
-				suggestion: "Check your input",
 			},
 			422,
 		);
@@ -89,6 +82,5 @@ describe("NvisyApiError", () => {
 		expect(json.name).toBe("ValidationError");
 		expect(json.message).toBe("Invalid input");
 		expect(json.resource).toBe("document");
-		expect(json.suggestion).toBe("Check your input");
 	});
 });
