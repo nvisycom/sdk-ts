@@ -15,7 +15,6 @@ export type UnreadCountEvent = Schemas["UnreadCountEvent"];
 // Notification payload: a discriminated union (on `notifyType`) whose per-event
 // data lives in a named `*Params` type.
 export type NotificationPayload = Schemas["NotificationPayload"];
-export type MemberInvitedParams = Schemas["MemberInvitedParams"];
 export type MemberJoinedParams = Schemas["MemberJoinedParams"];
 export type ConnectionSyncCompletedParams =
 	Schemas["ConnectionSyncCompletedParams"];
@@ -23,3 +22,5 @@ export type ConnectionSyncFailedParams = Schemas["ConnectionSyncFailedParams"];
 export type DetectionCompletedParams = Schemas["DetectionCompletedParams"];
 export type DetectionFailedParams = Schemas["DetectionFailedParams"];
 export type RedactionCreatedParams = Schemas["RedactionCreatedParams"];
+export type FileAssignedParams = Schemas["FileAssignedParams"];
+export type FileUnassignedParams = Schemas["FileUnassignedParams"];

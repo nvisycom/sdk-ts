@@ -26,6 +26,7 @@ import {
 	Activities,
 	Analytics,
 	ApiTokens,
+	Assignments,
 	Auth,
 	Catalog,
 	Chat,
@@ -294,6 +295,13 @@ export class Nvisy {
 	 */
 	get apiTokens(): ApiTokens {
 		return new ApiTokens(this.#api);
+	}
+
+	/**
+	 * Service for file assignments (assigning files to reviewers).
+	 */
+	get assignments(): Assignments {
+		return new Assignments(this.#api);
 	}
 
 	/**
