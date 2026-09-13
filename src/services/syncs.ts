@@ -18,17 +18,17 @@ export class Syncs {
 
 	/**
 	 * List all syncs across a workspace's connections
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional query parameters (provider, status, limit, after)
 	 * @returns Promise that resolves with a paginated list of connection syncs
 	 * @throws {ApiError} if the request fails
 	 */
 	async listWorkspaceSyncs(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: CursorPagination & { provider?: string[]; status?: SyncStatus },
 	): Promise<WorkspaceConnectionSyncPage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceSlug}/syncs/", {
-			params: { path: { workspaceSlug }, query },
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/syncs/", {
+			params: { path: { workspaceId }, query },
 		});
 		return data!;
 	}
@@ -41,19 +41,19 @@ export class Syncs {
 	 * use {@link Connections.importFiles} and {@link Connections.exportFiles}
 	 * instead. Returns the created sync — poll it for completion.
 	 *
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @returns Promise that resolves with the started connection sync
 	 * @throws {ApiError} if the request fails
 	 */
 	async startSync(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/sync/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/sync/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 			},
 		);
 		return data!;
@@ -61,21 +61,21 @@ export class Syncs {
 
 	/**
 	 * List syncs for a connection
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @param query - Optional pagination parameters (limit, after)
 	 * @returns Promise that resolves with a paginated list of connection syncs
 	 * @throws {ApiError} if the request fails
 	 */
 	async listSyncs(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
 		query?: CursorPagination,
 	): Promise<WorkspaceConnectionSyncPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/",
 			{
-				params: { path: { workspaceSlug, connectionId }, query },
+				params: { path: { workspaceId, connectionId }, query },
 			},
 		);
 		return data!;
@@ -83,21 +83,21 @@ export class Syncs {
 
 	/**
 	 * Get a connection sync by ID
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @param syncId - Sync ID
 	 * @returns Promise that resolves with the connection sync details
 	 * @throws {ApiError} if the request fails
 	 */
 	async getSync(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
 		syncId: string,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/",
 			{
-				params: { path: { workspaceSlug, connectionId, syncId } },
+				params: { path: { workspaceId, connectionId, syncId } },
 			},
 		);
 		return data!;
@@ -105,21 +105,21 @@ export class Syncs {
 
 	/**
 	 * Cancel a running connection sync
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @param syncId - Sync ID
 	 * @returns Promise that resolves with the canceled connection sync
 	 * @throws {ApiError} if the request fails
 	 */
 	async cancelSync(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
 		syncId: string,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/cancel/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/cancel/",
 			{
-				params: { path: { workspaceSlug, connectionId, syncId } },
+				params: { path: { workspaceId, connectionId, syncId } },
 			},
 		);
 		return data!;

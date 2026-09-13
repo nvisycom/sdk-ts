@@ -23,19 +23,19 @@ export class Providers {
 
 	/**
 	 * List a workspace's inference providers
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional pagination and filters (provider, limit, after)
 	 * @returns Promise that resolves with a paginated list of providers
 	 * @throws {ApiError} if the request fails
 	 */
 	async listProviders(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: CursorPagination & WorkspaceProvidersQuery,
 	): Promise<WorkspaceProviderPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/providers/",
+			"/workspaces/{workspaceId}/providers/",
 			{
-				params: { path: { workspaceSlug }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -43,19 +43,19 @@ export class Providers {
 
 	/**
 	 * Create an inference provider in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param provider - Provider creation request
 	 * @returns Promise that resolves with the created provider
 	 * @throws {ApiError} if the request fails
 	 */
 	async createProvider(
-		workspaceSlug: string,
+		workspaceId: string,
 		provider: CreateWorkspaceProvider,
 	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/providers/",
+			"/workspaces/{workspaceId}/providers/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				body: provider,
 			},
 		);
@@ -64,19 +64,19 @@ export class Providers {
 
 	/**
 	 * Get provider details by ID
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param providerId - Provider ID
 	 * @returns Promise that resolves with the provider details
 	 * @throws {ApiError} if the request fails
 	 */
 	async getProvider(
-		workspaceSlug: string,
+		workspaceId: string,
 		providerId: string,
 	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/providers/{providerId}/",
+			"/workspaces/{workspaceId}/providers/{providerId}/",
 			{
-				params: { path: { workspaceSlug, providerId } },
+				params: { path: { workspaceId, providerId } },
 			},
 		);
 		return data!;
@@ -84,21 +84,21 @@ export class Providers {
 
 	/**
 	 * Update an inference provider
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param providerId - Provider ID
 	 * @param updates - Provider update request
 	 * @returns Promise that resolves with the updated provider
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateProvider(
-		workspaceSlug: string,
+		workspaceId: string,
 		providerId: string,
 		updates: UpdateWorkspaceProvider,
 	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceSlug}/providers/{providerId}/",
+			"/workspaces/{workspaceId}/providers/{providerId}/",
 			{
-				params: { path: { workspaceSlug, providerId } },
+				params: { path: { workspaceId, providerId } },
 				body: updates,
 			},
 		);
@@ -107,38 +107,35 @@ export class Providers {
 
 	/**
 	 * Delete an inference provider
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param providerId - Provider ID
 	 * @returns Promise that resolves when the provider is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteProvider(
-		workspaceSlug: string,
-		providerId: string,
-	): Promise<void> {
+	async deleteProvider(workspaceId: string, providerId: string): Promise<void> {
 		await this.#api.DELETE(
-			"/workspaces/{workspaceSlug}/providers/{providerId}/",
+			"/workspaces/{workspaceId}/providers/{providerId}/",
 			{
-				params: { path: { workspaceSlug, providerId } },
+				params: { path: { workspaceId, providerId } },
 			},
 		);
 	}
 
 	/**
 	 * Verify an inference provider's configuration and credentials
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param providerId - Provider ID
 	 * @returns Promise that resolves with the verification result
 	 * @throws {ApiError} if the request fails
 	 */
 	async verifyProvider(
-		workspaceSlug: string,
+		workspaceId: string,
 		providerId: string,
 	): Promise<WorkspaceConnectionVerification> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/providers/{providerId}/verify/",
+			"/workspaces/{workspaceId}/providers/{providerId}/verify/",
 			{
-				params: { path: { workspaceSlug, providerId } },
+				params: { path: { workspaceId, providerId } },
 			},
 		);
 		return data!;

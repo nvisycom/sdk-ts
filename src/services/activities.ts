@@ -19,20 +19,20 @@ export class Activities {
 
 	/**
 	 * List activities for a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional filters and pagination (type, actor, from, to,
 	 *   limit, after, includeCount)
 	 * @returns Promise that resolves with a paginated list of activities
 	 * @throws {ApiError} if the request fails
 	 */
 	async listActivities(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: WorkspaceActivityFilterQuery & DateWindow & CursorPagination,
 	): Promise<WorkspaceActivityPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/activities/",
+			"/workspaces/{workspaceId}/activities/",
 			{
-				params: { path: { workspaceSlug }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -40,22 +40,22 @@ export class Activities {
 
 	/**
 	 * Export the workspace's activity log as a file.
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional filters (type, actor), date window (from, to), and
 	 *   output format (`csv` default, or `json`)
 	 * @returns Promise that resolves with the file response
 	 * @throws {ApiError} if the request fails
 	 */
 	async exportActivities(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: WorkspaceActivityFilterQuery &
 			DateWindow &
 			WorkspaceActivityExportOptions,
 	): Promise<Response> {
 		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/activities/export",
+			"/workspaces/{workspaceId}/activities/export",
 			{
-				params: { path: { workspaceSlug }, query },
+				params: { path: { workspaceId }, query },
 				parseAs: "stream",
 			},
 		);

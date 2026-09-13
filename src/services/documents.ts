@@ -22,13 +22,13 @@ export class Documents {
 
 	/**
 	 * Upload one or more documents to a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documents - Document or array of documents to upload
 	 * @returns Promise that resolves with the uploaded document metadata
 	 * @throws {ApiError} if the request fails
 	 */
 	async uploadDocuments(
-		workspaceSlug: string,
+		workspaceId: string,
 		documents: Blob | Blob[],
 	): Promise<WorkspaceDocument[]> {
 		const formData = new FormData();
@@ -40,9 +40,9 @@ export class Documents {
 		}
 
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/documents/",
+			"/workspaces/{workspaceId}/documents/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				// Schema types multipart as unknown[], but openapi-fetch needs FormData.
 				body: formData as unknown as unknown[],
 				bodySerializer: (formData) => formData,
@@ -56,20 +56,20 @@ export class Documents {
 
 	/**
 	 * List documents in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional query parameters (formats, modality, hash, search,
 	 *   limit, after)
 	 * @returns Promise that resolves with a paginated list of documents
 	 * @throws {ApiError} if the request fails
 	 */
 	async listDocuments(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: ListWorkspaceDocuments & CursorPagination,
 	): Promise<WorkspaceDocumentPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/documents/",
+			"/workspaces/{workspaceId}/documents/",
 			{
-				params: { path: { workspaceSlug }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -77,19 +77,19 @@ export class Documents {
 
 	/**
 	 * Get document metadata by ID
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documentId - Document ID
 	 * @returns Promise that resolves with the document metadata
 	 * @throws {ApiError} if the request fails
 	 */
 	async getDocument(
-		workspaceSlug: string,
+		workspaceId: string,
 		documentId: string,
 	): Promise<WorkspaceDocument> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/documents/{documentId}/",
+			"/workspaces/{workspaceId}/documents/{documentId}/",
 			{
-				params: { path: { workspaceSlug, documentId } },
+				params: { path: { workspaceId, documentId } },
 			},
 		);
 		return data!;
@@ -97,19 +97,19 @@ export class Documents {
 
 	/**
 	 * Download a document by ID
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documentId - Document ID
 	 * @returns Promise that resolves with the document response
 	 * @throws {ApiError} if the request fails
 	 */
 	async downloadDocument(
-		workspaceSlug: string,
+		workspaceId: string,
 		documentId: string,
 	): Promise<Response> {
 		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/documents/{documentId}/content/",
+			"/workspaces/{workspaceId}/documents/{documentId}/content/",
 			{
-				params: { path: { workspaceSlug, documentId } },
+				params: { path: { workspaceId, documentId } },
 				parseAs: "stream",
 			},
 		);
@@ -118,21 +118,21 @@ export class Documents {
 
 	/**
 	 * Update a document's metadata
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documentId - Document ID
 	 * @param updates - Document update request
 	 * @returns Promise that resolves with the updated document
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateDocument(
-		workspaceSlug: string,
+		workspaceId: string,
 		documentId: string,
 		updates: UpdateWorkspaceDocument,
 	): Promise<WorkspaceDocument> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceSlug}/documents/{documentId}/",
+			"/workspaces/{workspaceId}/documents/{documentId}/",
 			{
-				params: { path: { workspaceSlug, documentId } },
+				params: { path: { workspaceId, documentId } },
 				body: updates,
 			},
 		);
@@ -141,19 +141,16 @@ export class Documents {
 
 	/**
 	 * Delete a document
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documentId - Document ID
 	 * @returns Promise that resolves when the document is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteDocument(
-		workspaceSlug: string,
-		documentId: string,
-	): Promise<void> {
+	async deleteDocument(workspaceId: string, documentId: string): Promise<void> {
 		await this.#api.DELETE(
-			"/workspaces/{workspaceSlug}/documents/{documentId}/",
+			"/workspaces/{workspaceId}/documents/{documentId}/",
 			{
-				params: { path: { workspaceSlug, documentId } },
+				params: { path: { workspaceId, documentId } },
 			},
 		);
 	}
@@ -165,19 +162,19 @@ export class Documents {
 	 * and returned in `deleted`; unknown, already-deleted, or out-of-workspace
 	 * ids are returned in `skipped`. Deletion is permanent.
 	 *
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documentIds - The document IDs to delete
 	 * @returns Promise that resolves with the deleted and skipped ids
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteDocuments(
-		workspaceSlug: string,
+		workspaceId: string,
 		documentIds: string[],
 	): Promise<WorkspaceDeletedDocuments> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/documents/delete/",
+			"/workspaces/{workspaceId}/documents/delete/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				body: { documentIds },
 			},
 		);
@@ -186,21 +183,21 @@ export class Documents {
 
 	/**
 	 * Assign a document for review, opening a review thread.
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documentId - Document ID
 	 * @param assignment - Review assignment request
 	 * @returns Promise that resolves with the review thread
 	 * @throws {ApiError} if the request fails
 	 */
 	async assignReview(
-		workspaceSlug: string,
+		workspaceId: string,
 		documentId: string,
 		assignment: AssignWorkspaceReview,
 	): Promise<WorkspaceThread> {
 		const { data } = await this.#api.PUT(
-			"/workspaces/{workspaceSlug}/documents/{documentId}/review/assign/",
+			"/workspaces/{workspaceId}/documents/{documentId}/review/assign/",
 			{
-				params: { path: { workspaceSlug, documentId } },
+				params: { path: { workspaceId, documentId } },
 				body: assignment,
 			},
 		);
@@ -209,19 +206,19 @@ export class Documents {
 
 	/**
 	 * Mark a document's review as verified (resolved).
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param documentId - Document ID
 	 * @returns Promise that resolves with the review thread
 	 * @throws {ApiError} if the request fails
 	 */
 	async verifyReview(
-		workspaceSlug: string,
+		workspaceId: string,
 		documentId: string,
 	): Promise<WorkspaceThread> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/documents/{documentId}/review/verify/",
+			"/workspaces/{workspaceId}/documents/{documentId}/review/verify/",
 			{
-				params: { path: { workspaceSlug, documentId } },
+				params: { path: { workspaceId, documentId } },
 			},
 		);
 		return data!;

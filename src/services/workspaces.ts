@@ -34,13 +34,13 @@ export class Workspaces {
 
 	/**
 	 * Get workspace details by ID
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @returns Promise that resolves with the workspace details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getWorkspace(workspaceSlug: string): Promise<Workspace> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceSlug}/", {
-			params: { path: { workspaceSlug } },
+	async getWorkspace(workspaceId: string): Promise<Workspace> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/", {
+			params: { path: { workspaceId } },
 		});
 		return data!;
 	}
@@ -60,17 +60,17 @@ export class Workspaces {
 
 	/**
 	 * Update an existing workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param updates - Workspace update request
 	 * @returns Promise that resolves with the updated workspace
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateWorkspace(
-		workspaceSlug: string,
+		workspaceId: string,
 		updates: UpdateWorkspace,
 	): Promise<Workspace> {
-		const { data } = await this.#api.PATCH("/workspaces/{workspaceSlug}/", {
-			params: { path: { workspaceSlug } },
+		const { data } = await this.#api.PATCH("/workspaces/{workspaceId}/", {
+			params: { path: { workspaceId } },
 			body: updates,
 		});
 		return data!;
@@ -78,29 +78,29 @@ export class Workspaces {
 
 	/**
 	 * Delete a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @returns Promise that resolves when the workspace is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteWorkspace(workspaceSlug: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceSlug}/", {
-			params: { path: { workspaceSlug } },
+	async deleteWorkspace(workspaceId: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceId}/", {
+			params: { path: { workspaceId } },
 		});
 	}
 
 	/**
 	 * Get notification settings for the authenticated user in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @returns Promise that resolves with the notification settings
 	 * @throws {ApiError} if the request fails
 	 */
 	async getNotificationSettings(
-		workspaceSlug: string,
+		workspaceId: string,
 	): Promise<WorkspaceNotificationSettings> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/notifications/",
+			"/workspaces/{workspaceId}/notifications/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 			},
 		);
 		return data!;
@@ -108,19 +108,19 @@ export class Workspaces {
 
 	/**
 	 * Update notification settings for the authenticated user in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param settings - Notification settings update request
 	 * @returns Promise that resolves with the updated notification settings
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateNotificationSettings(
-		workspaceSlug: string,
+		workspaceId: string,
 		settings: UpdateWorkspaceNotificationSettings,
 	): Promise<WorkspaceNotificationSettings> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceSlug}/notifications/",
+			"/workspaces/{workspaceId}/notifications/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				body: settings,
 			},
 		);
@@ -129,18 +129,18 @@ export class Workspaces {
 
 	/**
 	 * Upload a workspace's avatar image
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param avatar - Avatar image to upload
 	 * @returns Promise that resolves when the avatar is uploaded
 	 * @throws {ApiError} if the request fails
 	 */
-	async uploadAvatar(workspaceSlug: string, avatar: Blob): Promise<void> {
+	async uploadAvatar(workspaceId: string, avatar: Blob): Promise<void> {
 		const formData = new FormData();
 		const name = avatar instanceof File ? avatar.name : "avatar";
 		formData.append("avatar", avatar, name);
 
-		await this.#api.PUT("/workspaces/{workspaceSlug}/avatar/", {
-			params: { path: { workspaceSlug } },
+		await this.#api.PUT("/workspaces/{workspaceId}/avatar/", {
+			params: { path: { workspaceId } },
 			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
 			body: formData as unknown as unknown[],
 			bodySerializer: (formData) => formData,
@@ -151,13 +151,13 @@ export class Workspaces {
 
 	/**
 	 * Delete a workspace's avatar image
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @returns Promise that resolves when the avatar is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteAvatar(workspaceSlug: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceSlug}/avatar/", {
-			params: { path: { workspaceSlug } },
+	async deleteAvatar(workspaceId: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceId}/avatar/", {
+			params: { path: { workspaceId } },
 		});
 	}
 }

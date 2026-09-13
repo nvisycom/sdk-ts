@@ -224,7 +224,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/accounts/{username}/": {
+	"/accounts/{accountId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -232,16 +232,16 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get account by username
-		 * @description Returns an account's public profile by its handle. The requester must share at least one workspace with the target account.
+		 * Get account by id
+		 * @description Returns an account's public profile by its id. The requester must share at least one workspace with the target account.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Public handle of the account. */
-					username: components["schemas"]["Handle"];
+					/** @description Id of the account. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -325,7 +325,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/accounts/{username}/avatar/": {
+	"/accounts/{accountId}/avatar/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -342,8 +342,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Public handle of the account. */
-					username: components["schemas"]["Handle"];
+					/** @description Id of the account. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -447,8 +447,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description Public handle of the account. */
-					username: components["schemas"]["Handle"];
+					/** @description Id of the account. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -686,7 +686,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/": {
+	"/workspaces/{workspaceId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -702,8 +702,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -785,8 +785,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -866,8 +866,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -968,7 +968,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/avatar/": {
+	"/workspaces/{workspaceId}/avatar/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -985,8 +985,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1088,8 +1088,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1163,7 +1163,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/notifications/": {
+	"/workspaces/{workspaceId}/notifications/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1179,8 +1179,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1247,8 +1247,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1344,7 +1344,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/activities/": {
+	"/workspaces/{workspaceId}/activities/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1353,13 +1353,13 @@ export interface paths {
 		};
 		/**
 		 * List workspace activities
-		 * @description Returns the workspace's activity log, most recent first, cursor-paginated. Optional filters: `type` (repeatable, e.g. `file.created`), `actor` (a username), and a `from`/`to` day range (each bound narrows only when given; the feed is otherwise all-time).
+		 * @description Returns the workspace's activity log, most recent first, cursor-paginated. Optional filters: `type` (repeatable, e.g. `file.created`), `actor` (an account ID), and a `from`/`to` day range (each bound narrows only when given; the feed is otherwise all-time).
 		 */
 		get: {
 			parameters: {
 				query?: {
-					/** @description Username of the account whose activities to keep. Omit for any actor. */
-					actor?: components["schemas"]["Handle"];
+					/** @description Account id whose activities to keep. Omit for any actor. */
+					actor?: string;
 					/**
 					 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
 					 *     parameter for several; omit for no type constraint.
@@ -1388,8 +1388,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1456,7 +1456,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/activities/export": {
+	"/workspaces/{workspaceId}/activities/export": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1470,8 +1470,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Username of the account whose activities to keep. Omit for any actor. */
-					actor?: components["schemas"]["Handle"];
+					/** @description Account id whose activities to keep. Omit for any actor. */
+					actor?: string;
 					/**
 					 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
 					 *     parameter for several; omit for no type constraint.
@@ -1489,8 +1489,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1588,7 +1588,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/analytics/": {
+	"/workspaces/{workspaceId}/analytics/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1604,8 +1604,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1687,7 +1687,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/analytics/detections/timeseries/": {
+	"/workspaces/{workspaceId}/analytics/detections/timeseries/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1711,8 +1711,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1813,7 +1813,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/members/": {
+	"/workspaces/{workspaceId}/members/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1849,8 +1849,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -1935,7 +1935,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/members/leave/": {
+	"/workspaces/{workspaceId}/members/leave/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1953,8 +1953,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2047,7 +2047,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/members/{username}/": {
+	"/workspaces/{workspaceId}/members/{accountId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2063,10 +2063,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description Public handle of the member's account. */
-					username: components["schemas"]["Handle"];
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the member's account. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -2148,10 +2148,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description Public handle of the member's account. */
-					username: components["schemas"]["Handle"];
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the member's account. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -2249,10 +2249,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description Public handle of the member's account. */
-					username: components["schemas"]["Handle"];
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the member's account. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -2366,7 +2366,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/documents/{documentId}/review/verify/": {
+	"/workspaces/{workspaceId}/documents/{documentId}/review/verify/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2384,8 +2384,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the document. */
 					documentId: string;
 				};
@@ -2472,7 +2472,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/documents/{documentId}/review/assign/": {
+	"/workspaces/{workspaceId}/documents/{documentId}/review/assign/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2489,8 +2489,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the document. */
 					documentId: string;
 				};
@@ -2619,7 +2619,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/threads/": {
+	"/workspaces/{workspaceId}/threads/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2628,7 +2628,7 @@ export interface paths {
 		};
 		/**
 		 * List threads
-		 * @description Returns the workspace's threads, most recent first, with optional document, author, and closed filters.
+		 * @description Returns the workspace's threads, most recent first, with optional document, author, assignee, review-status, and open/closed filters.
 		 */
 		get: {
 			parameters: {
@@ -2646,7 +2646,9 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by the thread's opening author. */
+					/** @description Filter document reviews by their assigned reviewer (account id). */
+					assignee?: string;
+					/** @description Filter by the thread's opening author (account id). */
 					author?: string;
 					/** @description Filter by open/closed state: `true` = closed only, `false` = open only. */
 					closed?: boolean;
@@ -2657,8 +2659,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2727,8 +2729,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -2842,7 +2844,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/threads/{threadId}/": {
+	"/workspaces/{workspaceId}/threads/{threadId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2861,8 +2863,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the thread. */
 					threadId: string;
 				};
@@ -2944,8 +2946,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the thread. */
 					threadId: string;
 				};
@@ -3069,7 +3071,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/threads/{threadId}/close/": {
+	"/workspaces/{workspaceId}/threads/{threadId}/close/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3087,8 +3089,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the thread. */
 					threadId: string;
 				};
@@ -3178,8 +3180,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the thread. */
 					threadId: string;
 				};
@@ -3265,7 +3267,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/threads/{threadId}/timeline/": {
+	"/workspaces/{workspaceId}/threads/{threadId}/timeline/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3295,8 +3297,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the thread. */
 					threadId: string;
 				};
@@ -3383,7 +3385,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/threads/{threadId}/comments/": {
+	"/workspaces/{workspaceId}/threads/{threadId}/comments/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3401,8 +3403,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the thread. */
 					threadId: string;
 				};
@@ -3544,7 +3546,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/comments/{commentId}/": {
+	"/workspaces/{workspaceId}/comments/{commentId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3563,8 +3565,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the comment. */
 					commentId: string;
 				};
@@ -3646,8 +3648,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the comment. */
 					commentId: string;
 				};
@@ -3763,7 +3765,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/": {
+	"/workspaces/{workspaceId}/connections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3798,8 +3800,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3868,8 +3870,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -3974,7 +3976,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3990,8 +3992,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -4080,8 +4082,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -4163,8 +4165,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -4285,7 +4287,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/verify/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/verify/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4303,8 +4305,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -4383,7 +4385,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/picker-token/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/picker-token/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4401,8 +4403,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -4518,7 +4520,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/providers/": {
+	"/workspaces/{workspaceId}/providers/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4554,8 +4556,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -4624,8 +4626,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -4730,7 +4732,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/providers/{providerId}/": {
+	"/workspaces/{workspaceId}/providers/{providerId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4746,8 +4748,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the provider. */
 					providerId: components["schemas"]["ProviderId"];
 				};
@@ -4836,8 +4838,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the provider. */
 					providerId: components["schemas"]["ProviderId"];
 				};
@@ -4919,8 +4921,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the provider. */
 					providerId: components["schemas"]["ProviderId"];
 				};
@@ -5041,7 +5043,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/providers/{providerId}/verify/": {
+	"/workspaces/{workspaceId}/providers/{providerId}/verify/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5059,8 +5061,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the provider. */
 					providerId: components["schemas"]["ProviderId"];
 				};
@@ -5139,7 +5141,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/oauth/{provider}/start/": {
+	"/workspaces/{workspaceId}/connections/oauth/{provider}/start/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5157,8 +5159,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description The cloud file provider to connect. */
 					provider: components["schemas"]["FileServiceProvider"];
 				};
@@ -5251,7 +5253,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/syncs/": {
+	"/workspaces/{workspaceId}/syncs/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5289,8 +5291,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -5375,7 +5377,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/sync/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/sync/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5393,8 +5395,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -5491,7 +5493,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/import/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/import/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5509,8 +5511,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -5651,7 +5653,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/export/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/export/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5669,8 +5671,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -5812,7 +5814,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5842,8 +5844,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 				};
@@ -5930,7 +5932,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5946,8 +5948,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 					/** @description Unique identifier of the sync run. */
@@ -6030,7 +6032,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/cancel/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/cancel/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6048,8 +6050,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the connection. */
 					connectionId: components["schemas"]["ConnectionId"];
 					/** @description Unique identifier of the sync run. */
@@ -6148,7 +6150,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/documents/": {
+	"/workspaces/{workspaceId}/documents/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6193,8 +6195,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -6281,8 +6283,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -6381,7 +6383,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/documents/delete/": {
+	"/workspaces/{workspaceId}/documents/delete/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6399,8 +6401,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -6512,7 +6514,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/documents/{documentId}/": {
+	"/workspaces/{workspaceId}/documents/{documentId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6528,8 +6530,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the document. */
 					documentId: string;
 				};
@@ -6613,8 +6615,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the document. */
 					documentId: string;
 				};
@@ -6696,8 +6698,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the document. */
 					documentId: string;
 				};
@@ -6813,7 +6815,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/documents/{documentId}/content/": {
+	"/workspaces/{workspaceId}/documents/{documentId}/content/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6829,8 +6831,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the document. */
 					documentId: string;
 				};
@@ -6911,7 +6913,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/pipelines/": {
+	"/workspaces/{workspaceId}/pipelines/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6945,8 +6947,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -7015,8 +7017,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -7121,7 +7123,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/": {
+	"/workspaces/{workspaceId}/pipelines/{pipelineId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7130,17 +7132,17 @@ export interface paths {
 		};
 		/**
 		 * Get pipeline
-		 * @description Returns a pipeline by its slug.
+		 * @description Returns a pipeline by its id.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the pipeline, unique within its workspace. */
-					pipelineSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
@@ -7222,10 +7224,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the pipeline, unique within its workspace. */
-					pipelineSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
@@ -7305,10 +7307,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the pipeline, unique within its workspace. */
-					pipelineSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
@@ -7427,7 +7429,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/pipelines/detections/": {
+	"/workspaces/{workspaceId}/pipelines/detections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7467,8 +7469,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -7553,7 +7555,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/detections/": {
+	"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7591,10 +7593,10 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the pipeline, unique within its workspace. */
-					pipelineSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
@@ -7681,10 +7683,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the pipeline, unique within its workspace. */
-					pipelineSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the pipeline. */
+					pipelineId: string;
 				};
 				cookie?: never;
 			};
@@ -7848,7 +7850,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/": {
+	"/workspaces/{workspaceId}/detections/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7866,8 +7868,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -8014,7 +8016,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/{detectionId}/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8030,8 +8032,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the detection. */
 					detectionId: components["schemas"]["DetectionId"];
 				};
@@ -8119,7 +8121,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/{detectionId}/events/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/events/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8135,8 +8137,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the detection. */
 					detectionId: components["schemas"]["DetectionId"];
 				};
@@ -8217,7 +8219,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/{detectionId}/redactions/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/redactions/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8247,8 +8249,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the detection. */
 					detectionId: components["schemas"]["DetectionId"];
 				};
@@ -8337,8 +8339,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the detection. */
 					detectionId: components["schemas"]["DetectionId"];
 				};
@@ -8494,7 +8496,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/{detectionId}/analysis/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/analysis/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8510,8 +8512,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the detection. */
 					detectionId: components["schemas"]["DetectionId"];
 				};
@@ -8643,7 +8645,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/{detectionId}/audit/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/audit/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8662,8 +8664,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the detection. */
 					detectionId: components["schemas"]["DetectionId"];
 				};
@@ -8763,7 +8765,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/detections/{detectionId}/intermediates/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/intermediates/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8779,8 +8781,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the detection. */
 					detectionId: components["schemas"]["DetectionId"];
 				};
@@ -8860,7 +8862,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/redactions/{redactionId}/review": {
+	"/workspaces/{workspaceId}/redactions/{redactionId}/review": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8876,8 +8878,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the redaction. */
 					redactionId: components["schemas"]["RedactionId"];
 				};
@@ -9009,7 +9011,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/policies/": {
+	"/workspaces/{workspaceId}/policies/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9041,8 +9043,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -9111,8 +9113,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -9227,7 +9229,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/policies/{policySlug}/": {
+	"/workspaces/{workspaceId}/policies/{policyId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9243,10 +9245,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the policy, unique within its workspace. */
-					policySlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the policy. */
+					policyId: string;
 				};
 				cookie?: never;
 			};
@@ -9328,10 +9330,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the policy, unique within its workspace. */
-					policySlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the policy. */
+					policyId: string;
 				};
 				cookie?: never;
 			};
@@ -9411,10 +9413,10 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description URL slug of the policy, unique within its workspace. */
-					policySlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the policy. */
+					policyId: string;
 				};
 				cookie?: never;
 			};
@@ -10499,7 +10501,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/invites/": {
+	"/workspaces/{workspaceId}/invites/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10535,8 +10537,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -10605,8 +10607,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -10730,7 +10732,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/invites/code/": {
+	"/workspaces/{workspaceId}/invites/code/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10748,8 +10750,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -10849,7 +10851,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/invites/{inviteId}/": {
+	"/workspaces/{workspaceId}/invites/{inviteId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10867,8 +10869,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the invite. */
 					inviteId: string;
 				};
@@ -10999,8 +11001,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Unique identifier of the invite. */
 					inviteId: string;
 				};
@@ -11270,7 +11272,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/webhooks/": {
+	"/workspaces/{workspaceId}/webhooks/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11300,8 +11302,8 @@ export interface paths {
 				};
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -11370,8 +11372,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 				};
 				cookie?: never;
 			};
@@ -11477,7 +11479,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/webhooks/{webhookId}/": {
+	"/workspaces/{workspaceId}/webhooks/{webhookId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11493,8 +11495,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the webhook. */
 					webhookId: components["schemas"]["WebhookId"];
 				};
@@ -11578,8 +11580,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the webhook. */
 					webhookId: components["schemas"]["WebhookId"];
 				};
@@ -11661,8 +11663,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the webhook. */
 					webhookId: components["schemas"]["WebhookId"];
 				};
@@ -11778,7 +11780,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/webhooks/{webhookId}/test/": {
+	"/workspaces/{workspaceId}/webhooks/{webhookId}/test/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11796,8 +11798,8 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
+					/** @description Workspace identifier. */
+					workspaceId: string;
 					/** @description Opaque identifier of the webhook. */
 					webhookId: components["schemas"]["WebhookId"];
 				};
@@ -13128,6 +13130,11 @@ export interface components {
 			displayName?: string;
 			/** @description Email address associated with the account. */
 			emailAddress: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the account.
+			 */
+			id: string;
 			/** @description Whether the account email has been verified. */
 			isActivated: boolean;
 			/** @description Whether the account is currently suspended. */
@@ -13137,7 +13144,7 @@ export interface components {
 			 * @description Timestamp when the account was last updated.
 			 */
 			updatedAt: string;
-			/** @description Public handle of the account. */
+			/** @description Public handle of the account. Display-only. */
 			username: components["schemas"]["Handle"];
 		};
 		/** @description API token response structure. */
@@ -13345,26 +13352,35 @@ export interface components {
 		/**
 		 * @description Path parameters for account operations.
 		 *
-		 *     Used when retrieving account information by handle. Access is granted
-		 *     if the requester shares at least one workspace with the target account.
+		 *     Used when retrieving account information by id. Access is granted if the
+		 *     requester shares at least one workspace with the target account.
 		 */
 		AccountPathParams: {
-			/** @description Public handle of the account. */
-			username: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the account.
+			 */
+			accountId: string;
 		};
 		/**
 		 * @description Public reference to the account behind a resource — whoever created it,
 		 *     uploaded it, triggered it, or performed it.
 		 *
 		 *     Reused across resource responses so an account is always presented the same
-		 *     way: a handle plus an optional avatar.
+		 *     way: its immutable id (the durable reference) plus a handle and optional
+		 *     avatar for display.
 		 */
 		AccountRef: {
 			/** @description Serve path of the account's avatar, when set. */
 			avatarUrl?: string;
 			/** @description Human-readable display name, when set. */
 			displayName?: string;
-			/** @description Handle of the account. */
+			/**
+			 * Format: uuid
+			 * @description Immutable id of the account.
+			 */
+			id: string;
+			/** @description Handle of the account (display). */
 			username: components["schemas"]["Handle"];
 		};
 		/** @description Response type for unread notifications status. */
@@ -14598,8 +14614,11 @@ export interface components {
 		};
 		/** @description Params of a `comment.mentioned` notification, sent to a mentioned account. */
 		CommentMentionedParams: {
-			/** @description Username of the account that wrote the comment (the mentioner). */
-			authorUsername: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the account that wrote the comment (the mentioner).
+			 */
+			authorId: string;
 			/**
 			 * Format: uuid
 			 * @description Id of the comment the account was mentioned in.
@@ -14787,8 +14806,8 @@ export interface components {
 			 * @description The document to analyze.
 			 */
 			documentId: string;
-			/** @description The policies to run against, by slug. At least one is required. */
-			policySlugs: components["schemas"]["Handle"][];
+			/** @description The policies to run against, by id. At least one is required. */
+			policyIds: string[];
 			/**
 			 * @description Retention override for the outputs this detection produces. Absent falls
 			 *     back to the workspace retention baseline.
@@ -14899,8 +14918,6 @@ export interface components {
 			 *     scope inherits the workspace retention.
 			 */
 			retention?: components["schemas"]["RetentionOverride"];
-			/** @description URL slug, unique within the workspace and immutable after creation. */
-			slug: components["schemas"]["Handle"];
 			/**
 			 * @description Optional lifecycle status. Defaults to `draft`; pass `enabled` to create a
 			 *     pipeline ready to run without a follow-up update.
@@ -14922,12 +14939,6 @@ export interface components {
 			 *     for a one-shot (labels) body, whose name is generated.
 			 */
 			displayName?: string;
-			/**
-			 * @description URL slug, unique within the workspace and immutable after creation.
-			 *     Required for a template or inline body; ignored (and generated) for a
-			 *     one-shot (labels) body.
-			 */
-			slug?: components["schemas"]["Handle"];
 		} & (
 			| {
 					/** @constant */
@@ -15160,8 +15171,11 @@ export interface components {
 		DetectionActivityParams: {
 			/** @description Id of the detection. */
 			detectionId: components["schemas"]["DetectionId"];
-			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
-			pipelineSlug?: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
 		};
 		/** @description Params of a `pipeline.detection.completed` notification. */
 		DetectionCompletedParams: {
@@ -15169,8 +15183,11 @@ export interface components {
 			detectionId: components["schemas"]["DetectionId"];
 			/** @description Display name of the analyzed document, if known. */
 			inputDocumentName?: string;
-			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
-			pipelineSlug?: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
 		};
 		/** @description Params of a `pipeline.detection.failed` notification. */
 		DetectionFailedParams: {
@@ -15180,8 +15197,11 @@ export interface components {
 			error?: string;
 			/** @description Display name of the analyzed document, if known. */
 			inputDocumentName?: string;
-			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
-			pipelineSlug?: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
 		};
 		/** @description Opaque detection identifier (detection_<uuid>). */
 		DetectionId: string;
@@ -15594,6 +15614,17 @@ export interface components {
 			| "safe_harbor"
 			| "limited_data_set"
 			| "expert_determination";
+		/**
+		 * @description The `{workspaceId}` path segment. Named to match the OpenAPI parameter and the
+		 *     route definition.
+		 */
+		IdParam: {
+			/**
+			 * Format: uuid
+			 * @description Workspace identifier.
+			 */
+			workspaceId: string;
+		};
 		/**
 		 * @description Path parameters for a provider-scoped identity operation: signing in with,
 		 *     re-authenticating with, linking, or unlinking a provider. Named identically to
@@ -16246,7 +16277,12 @@ export interface components {
 			expiresAt: string;
 			/** @description Role the user will have if they join. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description Handle of the workspace. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Fields available for sorting workspace invites. */
@@ -16651,15 +16687,24 @@ export interface components {
 		ManualIntent: "flag" | "suppress" | "amend";
 		/** @description Params of a member activity (`member.*`). */
 		MemberActivityParams: {
-			/** @description Username of the member acted on. */
-			memberUsername: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the member's account.
+			 */
+			memberId: string;
 		};
 		/** @description Params of a `member.joined` notification. */
 		MemberJoinedParams: {
-			/** @description Username of the member that joined. */
-			memberUsername: components["schemas"]["Handle"];
-			/** @description Slug of the workspace the member joined. */
-			workspaceSlug: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the member's account.
+			 */
+			memberId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the workspace the member joined.
+			 */
+			workspaceId: string;
 		};
 		/** @description Fields available for sorting workspace members. */
 		MemberSortField: "name" | "date";
@@ -16943,8 +16988,11 @@ export interface components {
 		};
 		/** @description Params of a pipeline activity (`pipeline.*`, non-run). */
 		PipelineActivityParams: {
-			/** @description Slug of the pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the pipeline.
+			 */
+			pipelineId: string;
 		};
 		/**
 		 * @description A pipeline's detection + governance intent.
@@ -16961,7 +17009,7 @@ export interface components {
 		 *     The split:
 		 *
 		 *     - `default_scope` — optional pipeline-wide scope a document may override.
-		 *     - `policy_slugs` — references to the workspace's policies, resolved at run
+		 *     - `policy_ids` — references to the workspace's policies, resolved at run
 		 *       time.
 		 */
 		PipelineDefinition: {
@@ -16973,12 +17021,12 @@ export interface components {
 			 */
 			defaultScope?: components["schemas"]["DocumentContext"];
 			/**
-			 * @description Slugs of workspace policies applied at redaction.
+			 * @description Ids of workspace policies applied at redaction.
 			 *
 			 *     Stored relationally in the `workspace_pipeline_policies` join table, not the JSON
 			 *     definition; surfaced here so the API exposes one coherent object.
 			 */
-			policySlugs?: components["schemas"]["Handle"][];
+			policyIds?: string[];
 		};
 		/**
 		 * @description The lifecycle status of a pipeline definition.
@@ -17085,8 +17133,6 @@ export interface components {
 			 * @description Id of the policy.
 			 */
 			policyId: string;
-			/** @description Slug of the policy. */
-			policySlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description A client-authored policy body: the parts of a policy definition a caller may
@@ -17366,7 +17412,12 @@ export interface components {
 			createdAt: string;
 			/** @description Display name of the account holder, when set. */
 			displayName?: string;
-			/** @description Public handle of the account. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the account.
+			 */
+			id: string;
+			/** @description Public handle of the account. Display-only. */
 			username: components["schemas"]["Handle"];
 		};
 		Range_of_uint: {
@@ -17525,8 +17576,11 @@ export interface components {
 		};
 		/** @description Params of a redaction activity (`pipeline.redaction.*`). */
 		RedactionActivityParams: {
-			/** @description Slug of the owning pipeline; absent when the detection was ad-hoc. */
-			pipelineSlug?: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent when the detection was ad-hoc.
+			 */
+			pipelineId?: string;
 			/** @description Id of the redaction. */
 			redactionId: components["schemas"]["RedactionId"];
 		};
@@ -17536,8 +17590,11 @@ export interface components {
 			detectionId: components["schemas"]["DetectionId"];
 			/** @description Display name of the redacted document, if known. */
 			inputDocumentName?: string;
-			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
-			pipelineSlug?: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
 			/** @description Id of the redaction. */
 			redactionId: components["schemas"]["RedactionId"];
 		};
@@ -17704,10 +17761,11 @@ export interface components {
 		 */
 		ReviewActivityParams: {
 			/**
-			 * @description Username of the reviewer the review is assigned to; omitted for
-			 *     verification or when clearing the assignee.
+			 * Format: uuid
+			 * @description Id of the reviewer the review is assigned to; omitted for verification or
+			 *     when clearing the assignee.
 			 */
-			assigneeUsername?: components["schemas"]["Handle"];
+			assigneeId?: string;
 			/**
 			 * Format: uuid
 			 * @description Id of the document under review.
@@ -17946,14 +18004,6 @@ export interface components {
 			rememberMe?: boolean;
 			/** @description Public account handle, unique across all accounts. */
 			username: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description The `{workspaceSlug}` path segment. Named to match the OpenAPI parameter and
-		 *     the route definition.
-		 */
-		SlugParam: {
-			/** @description URL-safe workspace identifier. */
-			workspaceSlug: string;
 		};
 		/**
 		 * @description A reference back to the original source: a byte range, and, for a container
@@ -19973,6 +20023,11 @@ export interface components {
 			description?: string;
 			/** @description Display name of the workspace. */
 			displayName: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			id: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
 			/**
@@ -19983,7 +20038,7 @@ export interface components {
 			 *     always reads a concrete number to enforce.
 			 */
 			settings: components["schemas"]["WorkspaceSettings"];
-			/** @description URL-safe workspace identifier. */
+			/** @description URL-safe workspace handle. Display-only. */
 			slug: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
@@ -20015,7 +20070,12 @@ export interface components {
 			payload?: components["schemas"]["ActivityPayload"];
 			/** @description Account that performed the activity. */
 			performedBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this activity belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -20039,8 +20099,11 @@ export interface components {
 		 *     a bare `?limit=` — so each concern is extracted on its own.
 		 */
 		WorkspaceActivityFilterQuery: {
-			/** @description Username of the account whose activities to keep. Omit for any actor. */
-			actor?: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Account id whose activities to keep. Omit for any actor.
+			 */
+			actor?: string;
 			/**
 			 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
 			 *     parameter for several; omit for no type constraint.
@@ -20067,8 +20130,11 @@ export interface components {
 		};
 		/** @description Params of a workspace-scoped activity (`workspace.*`). */
 		WorkspaceActivityParams: {
-			/** @description Slug of the workspace acted on. */
-			workspaceSlug: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the workspace acted on.
+			 */
+			workspaceId: string;
 		};
 		/**
 		 * @description Aggregate analytics for a workspace: what it stores, how its detections fare, and
@@ -20158,7 +20224,12 @@ export interface components {
 			 * @description When the connection was last updated.
 			 */
 			updatedAt: string;
-			/** @description Handle of the workspace this connection belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -20182,7 +20253,7 @@ export interface components {
 		/**
 		 * @description Path parameters for connection operations.
 		 *
-		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by
+		 *     The workspace is resolved separately from the `{workspaceId}` segment by
 		 *     the [`WorkspaceContext`] extractor.
 		 *
 		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
@@ -20321,10 +20392,11 @@ export interface components {
 			/** @description Non-encrypted metadata for filtering/display. */
 			metadata: components["schemas"]["DetectionMetadata"];
 			/**
-			 * @description Handle of the pipeline this detection belongs to; absent for an ad-hoc
-			 *     detection or once its pipeline was deleted.
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline this detection belongs to; absent for an
+			 *     ad-hoc detection.
 			 */
-			pipelineSlug?: components["schemas"]["Handle"];
+			pipelineId?: string;
 			/**
 			 * Format: date-time
 			 * @description When the detection started.
@@ -20341,7 +20413,12 @@ export interface components {
 			triggerType: components["schemas"]["PipelineTriggerType"];
 			/** @description Account that triggered the detection. */
 			triggeredBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this detection belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Detection health for a workspace. */
@@ -20524,7 +20601,12 @@ export interface components {
 			updatedAt: string;
 			/** @description Account that uploaded/created the document. */
 			uploadedBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this document belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -20587,7 +20669,12 @@ export interface components {
 			 * @description When the invitation was last updated.
 			 */
 			updatedAt: string;
-			/** @description Handle of the workspace the invitation is for. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Response containing a generated shareable invite code. */
@@ -20601,7 +20688,12 @@ export interface components {
 			inviteCode: string;
 			/** @description Role assigned when someone joins via this code. */
 			role: components["schemas"]["WorkspaceRole"];
-			/** @description Handle of the workspace this invite code is for. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -20679,8 +20771,11 @@ export interface components {
 		};
 		/** @description Path parameters for workspace member operations. */
 		WorkspaceMemberPathParams: {
-			/** @description Public handle of the member's account. */
-			username: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the member's account.
+			 */
+			accountId: string;
 		};
 		/** @description One model's token usage across a workspace's detections. */
 		WorkspaceModelUsageEntry: {
@@ -20778,10 +20873,13 @@ export interface components {
 			description?: string;
 			/** @description WorkspacePipeline display name. */
 			displayName: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline.
+			 */
+			id: string;
 			/** @description Per-scope data-retention override, when the pipeline sets one. */
 			retention?: components["schemas"]["RetentionOverride"];
-			/** @description URL slug of the pipeline, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
 			/** @description WorkspacePipeline lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
@@ -20789,7 +20887,12 @@ export interface components {
 			 * @description Timestamp when the pipeline was last updated.
 			 */
 			updatedAt: string;
-			/** @description Handle of the workspace this pipeline belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -20823,8 +20926,11 @@ export interface components {
 		};
 		/** @description Path parameters for pipeline operations. */
 		WorkspacePipelinePathParams: {
-			/** @description URL slug of the pipeline, unique within its workspace. */
-			pipelineSlug: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the pipeline.
+			 */
+			pipelineId: string;
 		};
 		/** @description Summary response for pipeline (used in lists). */
 		WorkspacePipelineSummary: {
@@ -20839,8 +20945,11 @@ export interface components {
 			description?: string;
 			/** @description WorkspacePipeline display name. */
 			displayName: string;
-			/** @description URL slug of the pipeline, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline.
+			 */
+			id: string;
 			/** @description WorkspacePipeline lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
@@ -20848,7 +20957,12 @@ export interface components {
 			 * @description Timestamp when the pipeline was last updated.
 			 */
 			updatedAt: string;
-			/** @description Handle of the workspace this pipeline belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -20894,13 +21008,16 @@ export interface components {
 			/** @description Human-readable policy display name. */
 			displayName: string;
 			/**
+			 * Format: uuid
+			 * @description Unique identifier of the policy.
+			 */
+			id: string;
+			/**
 			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
 			 *     content-addressed, deduplicated, and immutable; an authored policy is a
 			 *     normal, editable policy.
 			 */
 			kind: components["schemas"]["PolicyKind"];
-			/** @description URL slug of the policy, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
 			 * @description When the policy was last updated.
@@ -20911,20 +21028,28 @@ export interface components {
 			 * @description The current version number of the policy's definition.
 			 */
 			versionNumber: number;
-			/** @description Handle of the workspace this policy belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Path parameters for policy operations.
 		 *
 		 *     The workspace is resolved by the [`WorkspaceContext`] extractor from the
-		 *     `{workspaceSlug}` path segment.
+		 *     `{workspaceId}` path segment.
 		 *
 		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
 		 */
 		WorkspacePolicyPathParams: {
-			/** @description URL slug of the policy, unique within its workspace. */
-			policySlug: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the policy.
+			 */
+			policyId: string;
 		};
 		/**
 		 * @description Lightweight policy view for lists.
@@ -20946,19 +21071,27 @@ export interface components {
 			/** @description Human-readable policy display name. */
 			displayName: string;
 			/**
+			 * Format: uuid
+			 * @description Unique identifier of the policy.
+			 */
+			id: string;
+			/**
 			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
 			 *     content-addressed, deduplicated, and immutable; an authored policy is a
 			 *     normal, editable policy.
 			 */
 			kind: components["schemas"]["PolicyKind"];
-			/** @description URL slug of the policy, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
 			 * @description When the policy was last updated.
 			 */
 			updatedAt: string;
-			/** @description Handle of the workspace this policy belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -21008,7 +21141,12 @@ export interface components {
 			 * @description When the provider was last updated.
 			 */
 			updatedAt: string;
-			/** @description Handle of the workspace this provider belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -21032,7 +21170,7 @@ export interface components {
 		/**
 		 * @description Path parameters for provider operations.
 		 *
-		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by the
+		 *     The workspace is resolved separately from the `{workspaceId}` segment by the
 		 *     [`WorkspaceContext`] extractor.
 		 *
 		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
@@ -21091,7 +21229,12 @@ export interface components {
 			outputDocumentId?: string;
 			/** @description Account that requested the redaction. */
 			requestedBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this redaction belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -21349,12 +21492,18 @@ export interface components {
 		/**
 		 * @description Query parameters for listing a workspace's threads.
 		 *
-		 *     Every field is an optional filter; unset fields impose no constraint.
+		 *     Every field is an optional filter; unset fields impose no constraint. Accounts
+		 *     are addressed by id.
 		 */
 		WorkspaceThreadsQuery: {
 			/**
 			 * Format: uuid
-			 * @description Filter by the thread's opening author.
+			 * @description Filter document reviews by their assigned reviewer (account id).
+			 */
+			assignee?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the thread's opening author (account id).
 			 */
 			author?: string;
 			/** @description Filter by open/closed state: `true` = closed only, `false` = open only. */
@@ -21433,7 +21582,12 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
-			/** @description Handle of the workspace this webhook belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
@@ -21494,7 +21648,12 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
-			/** @description Handle of the workspace this webhook belongs to. */
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**

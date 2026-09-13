@@ -30,33 +30,30 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async listInvites(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: ListWorkspaceInvites & CursorPagination,
 	): Promise<WorkspaceInvitePage> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/invites/",
-			{
-				params: { path: { workspaceSlug }, query },
-			},
-		);
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/invites/", {
+			params: { path: { workspaceId }, query },
+		});
 		return data!;
 	}
 
 	/**
 	 * Send an invitation to join a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param invite - Invitation request
 	 * @returns Promise that resolves with the sent invitation
 	 * @throws {ApiError} if the request fails
 	 */
 	async sendInvite(
-		workspaceSlug: string,
+		workspaceId: string,
 		invite: CreateWorkspaceInvite,
 	): Promise<WorkspaceInviteSent> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/invites/",
+			"/workspaces/{workspaceId}/invites/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				body: invite,
 			},
 		);
@@ -65,34 +62,34 @@ export class Invites {
 
 	/**
 	 * Cancel a pending invitation
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param inviteId - Invite ID
 	 * @returns Promise that resolves when the invitation is canceled
 	 * @throws {ApiError} if the request fails
 	 */
-	async cancelInvite(workspaceSlug: string, inviteId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceSlug}/invites/{inviteId}/", {
-			params: { path: { workspaceSlug, inviteId } },
+	async cancelInvite(workspaceId: string, inviteId: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceId}/invites/{inviteId}/", {
+			params: { path: { workspaceId, inviteId } },
 		});
 	}
 
 	/**
 	 * Reply to an invitation (accept or decline)
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param inviteId - Invite ID
 	 * @param reply - Reply request
 	 * @returns Promise that resolves with the updated invitation
 	 * @throws {ApiError} if the request fails
 	 */
 	async replyToInvite(
-		workspaceSlug: string,
+		workspaceId: string,
 		inviteId: string,
 		reply: ReplyWorkspaceInvite,
 	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/invites/{inviteId}/",
+			"/workspaces/{workspaceId}/invites/{inviteId}/",
 			{
-				params: { path: { workspaceSlug, inviteId } },
+				params: { path: { workspaceId, inviteId } },
 				body: reply,
 			},
 		);
@@ -101,19 +98,19 @@ export class Invites {
 
 	/**
 	 * Generate a shareable invite code for a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param options - Invite code generation options
 	 * @returns Promise that resolves with the generated invite code
 	 * @throws {ApiError} if the request fails
 	 */
 	async generateInviteCode(
-		workspaceSlug: string,
+		workspaceId: string,
 		options: GenerateWorkspaceInviteCode,
 	): Promise<WorkspaceInviteCode> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/invites/code/",
+			"/workspaces/{workspaceId}/invites/code/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				body: options,
 			},
 		);

@@ -58,6 +58,10 @@ expect to update most imports and several method names — see below.
   reading from `/capabilities/*`; `ConnectorCatalog` → `ConnectorCapabilities`
 - **Breaking:** the `SortOrder` enum (`asc` / `desc`) is now `Direction`
   (`ascending` / `descending`)
+- **Breaking:** path parameters are now ids rather than slugs/usernames, and
+  the corresponding method arguments are renamed to match: `workspaceSlug` →
+  `workspaceId`, the account/member `username` → `accountId`, `pipelineSlug` →
+  `pipelineId`, `policySlug` → `policyId`
 
 ### Removed
 

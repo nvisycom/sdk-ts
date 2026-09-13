@@ -52,32 +52,32 @@ export class Account {
 	}
 
 	/**
-	 * Get a public account profile by username
-	 * @param username - Account username
+	 * Get a public account profile by account id
+	 * @param accountId - Account id
 	 * @returns Promise that resolves with the public account details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getPublicAccount(username: string): Promise<PublicAccount> {
-		const { data } = await this.#api.GET("/accounts/{username}/", {
-			params: { path: { username } },
+	async getPublicAccount(accountId: string): Promise<PublicAccount> {
+		const { data } = await this.#api.GET("/accounts/{accountId}/", {
+			params: { path: { accountId } },
 		});
 		return data!;
 	}
 
 	/**
 	 * Upload an account's avatar image
-	 * @param username - Account username
+	 * @param accountId - Account id
 	 * @param avatar - Avatar image to upload
 	 * @returns Promise that resolves with the updated account
 	 * @throws {ApiError} if the request fails
 	 */
-	async uploadAvatar(username: string, avatar: Blob): Promise<AccountData> {
+	async uploadAvatar(accountId: string, avatar: Blob): Promise<AccountData> {
 		const formData = new FormData();
 		const name = avatar instanceof File ? avatar.name : "avatar";
 		formData.append("avatar", avatar, name);
 
-		const { data } = await this.#api.PUT("/accounts/{username}/avatar/", {
-			params: { path: { username } },
+		const { data } = await this.#api.PUT("/accounts/{accountId}/avatar/", {
+			params: { path: { accountId } },
 			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
 			body: formData as unknown as unknown[],
 			bodySerializer: (formData) => formData,
@@ -89,13 +89,13 @@ export class Account {
 
 	/**
 	 * Delete an account's avatar image
-	 * @param username - Account username
+	 * @param accountId - Account id
 	 * @returns Promise that resolves when the avatar is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deleteAvatar(username: string): Promise<void> {
-		await this.#api.DELETE("/accounts/{username}/avatar/", {
-			params: { path: { username } },
+	async deleteAvatar(accountId: string): Promise<void> {
+		await this.#api.DELETE("/accounts/{accountId}/avatar/", {
+			params: { path: { accountId } },
 		});
 	}
 

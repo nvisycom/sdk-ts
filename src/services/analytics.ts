@@ -17,15 +17,15 @@ export class Analytics {
 
 	/**
 	 * Get aggregate analytics for a workspace: storage, detection health, usage.
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @returns Promise that resolves with the workspace analytics
 	 * @throws {ApiError} if the request fails
 	 */
-	async getAnalytics(workspaceSlug: string): Promise<WorkspaceAnalytics> {
+	async getAnalytics(workspaceId: string): Promise<WorkspaceAnalytics> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/analytics/",
+			"/workspaces/{workspaceId}/analytics/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 			},
 		);
 		return data!;
@@ -33,19 +33,19 @@ export class Analytics {
 
 	/**
 	 * Get a workspace's daily detection activity over a date window.
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional date window (`from` / `to`, YYYY-MM-DD)
 	 * @returns Promise that resolves with the detection time series
 	 * @throws {ApiError} if the request fails
 	 */
 	async getDetectionTimeSeries(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: DateWindow,
 	): Promise<WorkspaceDetectionTimeSeries> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/analytics/detections/timeseries/",
+			"/workspaces/{workspaceId}/analytics/detections/timeseries/",
 			{
-				params: { path: { workspaceSlug }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
