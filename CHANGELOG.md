@@ -38,7 +38,8 @@ expect to update most imports and several method names — see below.
 - Regenerated the API schema against the updated platform handlers
 - **Breaking:** the `File` resource is now `Document`. The `files` service is
   `documents` (`nvisy.documents`); its endpoints moved from
-  `/workspaces/{slug}/files/…` to `/workspaces/{slug}/documents/…`; methods are
+  `/workspaces/{workspaceId}/files/…` to `/workspaces/{workspaceId}/documents/…`;
+  methods are
   renamed (`uploadFiles` → `uploadDocuments`, `listFiles` → `listDocuments`,
   `getFile` → `getDocument`, `downloadFile` → `downloadDocument`, `updateFile` →
   `updateDocument`, `deleteFile` → `deleteDocument`, `deleteFiles` →
