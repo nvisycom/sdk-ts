@@ -1,8 +1,8 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	DateWindow,
-	DetectionTimeSeries,
 	WorkspaceAnalytics,
+	WorkspaceDetectionTimeSeries,
 } from "@/datatypes/index.js";
 
 /**
@@ -41,7 +41,7 @@ export class Analytics {
 	async getDetectionTimeSeries(
 		workspaceSlug: string,
 		query?: DateWindow,
-	): Promise<DetectionTimeSeries> {
+	): Promise<WorkspaceDetectionTimeSeries> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/analytics/detections/timeseries/",
 			{

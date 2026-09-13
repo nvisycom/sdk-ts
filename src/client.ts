@@ -26,13 +26,11 @@ import {
 	Activities,
 	Analytics,
 	ApiTokens,
-	Assignments,
 	Auth,
-	Catalog,
-	Chat,
+	Capabilities,
 	Connections,
 	Detections,
-	Files,
+	Documents,
 	Invites,
 	Members,
 	Notifications,
@@ -42,6 +40,7 @@ import {
 	Redactions,
 	Status,
 	Syncs,
+	Threads,
 	Webhooks,
 	Workspaces,
 } from "@/services/index.js";
@@ -284,24 +283,10 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for the workspace assistant chat.
-	 */
-	get chat(): Chat {
-		return new Chat(this.#api);
-	}
-
-	/**
 	 * Service for managing API tokens.
 	 */
 	get apiTokens(): ApiTokens {
 		return new ApiTokens(this.#api);
-	}
-
-	/**
-	 * Service for file assignments (assigning files to reviewers).
-	 */
-	get assignments(): Assignments {
-		return new Assignments(this.#api);
 	}
 
 	/**
@@ -312,10 +297,17 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for file operations (upload, download, delete).
+	 * Service for document operations (upload, download, delete, review).
 	 */
-	get files(): Files {
-		return new Files(this.#api);
+	get documents(): Documents {
+		return new Documents(this.#api);
+	}
+
+	/**
+	 * Service for discussion threads and comments.
+	 */
+	get threads(): Threads {
+		return new Threads(this.#api);
 	}
 
 	/**
@@ -340,10 +332,11 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for reading the deployment's label and recognizer catalogs.
+	 * Service for reading the deployment's capabilities (labels, recognizers,
+	 * connectors, auth methods).
 	 */
-	get catalog(): Catalog {
-		return new Catalog(this.#api);
+	get capabilities(): Capabilities {
+		return new Capabilities(this.#api);
 	}
 
 	/**

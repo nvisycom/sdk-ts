@@ -1,10 +1,10 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
-	ListMembers,
-	Member,
-	MemberPage,
-	UpdateMember,
+	ListWorkspaceMembers,
+	UpdateWorkspaceMember,
+	WorkspaceMember,
+	WorkspaceMemberPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -26,8 +26,8 @@ export class Members {
 	 */
 	async listMembers(
 		workspaceSlug: string,
-		query?: ListMembers & CursorPagination,
-	): Promise<MemberPage> {
+		query?: ListWorkspaceMembers & CursorPagination,
+	): Promise<WorkspaceMemberPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/members/",
 			{
@@ -44,7 +44,10 @@ export class Members {
 	 * @returns Promise that resolves with the member details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getMember(workspaceSlug: string, username: string): Promise<Member> {
+	async getMember(
+		workspaceSlug: string,
+		username: string,
+	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/members/{username}/",
 			{
@@ -67,8 +70,8 @@ export class Members {
 	async updateMember(
 		workspaceSlug: string,
 		username: string,
-		updates: UpdateMember,
-	): Promise<Member> {
+		updates: UpdateWorkspaceMember,
+	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/members/{username}/",
 			{

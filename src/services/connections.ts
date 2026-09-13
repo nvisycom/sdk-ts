@@ -1,19 +1,19 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	Connection,
-	ConnectionPage,
-	ConnectionSync,
-	ConnectionVerification,
-	CreateConnection,
+	CreateWorkspaceConnection,
 	CursorPagination,
-	ExportFiles,
+	ExportWorkspaceFiles,
 	FileServiceProvider,
-	ImportFiles,
+	ImportWorkspaceFiles,
 	OAuthStartResponse,
-	PickerToken,
-	PickerTokenRequest,
 	StartFileServiceOAuth,
-	UpdateConnection,
+	UpdateWorkspaceConnection,
+	WorkspaceConnection,
+	WorkspaceConnectionPage,
+	WorkspaceConnectionSync,
+	WorkspaceConnectionVerification,
+	WorkspacePickerToken,
+	WorkspacePickerTokenRequest,
 } from "@/datatypes/index.js";
 
 /**
@@ -36,7 +36,7 @@ export class Connections {
 	async listConnections(
 		workspaceSlug: string,
 		query?: CursorPagination & { provider?: string[] },
-	): Promise<ConnectionPage> {
+	): Promise<WorkspaceConnectionPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/connections/",
 			{
@@ -55,8 +55,8 @@ export class Connections {
 	 */
 	async createConnection(
 		workspaceSlug: string,
-		connection: CreateConnection,
-	): Promise<Connection> {
+		connection: CreateWorkspaceConnection,
+	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/",
 			{
@@ -77,7 +77,7 @@ export class Connections {
 	async getConnection(
 		workspaceSlug: string,
 		connectionId: string,
-	): Promise<Connection> {
+	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
 			{
@@ -98,8 +98,8 @@ export class Connections {
 	async updateConnection(
 		workspaceSlug: string,
 		connectionId: string,
-		updates: UpdateConnection,
-	): Promise<Connection> {
+		updates: UpdateWorkspaceConnection,
+	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
 			{
@@ -139,7 +139,7 @@ export class Connections {
 	async verifyConnection(
 		workspaceSlug: string,
 		connectionId: string,
-	): Promise<ConnectionVerification> {
+	): Promise<WorkspaceConnectionVerification> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/verify/",
 			{
@@ -193,8 +193,8 @@ export class Connections {
 	async importFiles(
 		workspaceSlug: string,
 		connectionId: string,
-		request: ImportFiles,
-	): Promise<ConnectionSync> {
+		request: ImportWorkspaceFiles,
+	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/import/",
 			{
@@ -221,8 +221,8 @@ export class Connections {
 	async exportFiles(
 		workspaceSlug: string,
 		connectionId: string,
-		request: ExportFiles,
-	): Promise<ConnectionSync> {
+		request: ExportWorkspaceFiles,
+	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/export/",
 			{
@@ -249,8 +249,8 @@ export class Connections {
 	async getPickerToken(
 		workspaceSlug: string,
 		connectionId: string,
-		request: PickerTokenRequest = {},
-	): Promise<PickerToken> {
+		request: WorkspacePickerTokenRequest = {},
+	): Promise<WorkspacePickerToken> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/picker-token/",
 			{

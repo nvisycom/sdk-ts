@@ -1,11 +1,11 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	CreatePipeline,
+	CreateWorkspacePipeline,
 	CursorPagination,
-	Pipeline,
 	PipelineStatus,
-	PipelineSummaryPage,
-	UpdatePipeline,
+	UpdateWorkspacePipeline,
+	WorkspacePipeline,
+	WorkspacePipelineSummaryPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -28,7 +28,7 @@ export class Pipelines {
 	async listPipelines(
 		workspaceSlug: string,
 		query?: CursorPagination & { search?: string; status?: PipelineStatus },
-	): Promise<PipelineSummaryPage> {
+	): Promise<WorkspacePipelineSummaryPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/",
 			{
@@ -47,8 +47,8 @@ export class Pipelines {
 	 */
 	async createPipeline(
 		workspaceSlug: string,
-		pipeline: CreatePipeline,
-	): Promise<Pipeline> {
+		pipeline: CreateWorkspacePipeline,
+	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/pipelines/",
 			{
@@ -69,7 +69,7 @@ export class Pipelines {
 	async getPipeline(
 		workspaceSlug: string,
 		pipelineSlug: string,
-	): Promise<Pipeline> {
+	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/",
 			{
@@ -90,8 +90,8 @@ export class Pipelines {
 	async updatePipeline(
 		workspaceSlug: string,
 		pipelineSlug: string,
-		updates: UpdatePipeline,
-	): Promise<Pipeline> {
+		updates: UpdateWorkspacePipeline,
+	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/",
 			{

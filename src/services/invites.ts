@@ -1,15 +1,15 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	CreateInvite,
+	CreateWorkspaceInvite,
 	CursorPagination,
-	GenerateInviteCode,
-	InviteCode,
-	InvitePage,
+	GenerateWorkspaceInviteCode,
 	InvitePreview,
-	InviteSent,
-	ListInvites,
-	Member,
-	ReplyInvite,
+	ListWorkspaceInvites,
+	ReplyWorkspaceInvite,
+	WorkspaceInviteCode,
+	WorkspaceInvitePage,
+	WorkspaceInviteSent,
+	WorkspaceMember,
 } from "@/datatypes/index.js";
 
 /**
@@ -31,8 +31,8 @@ export class Invites {
 	 */
 	async listInvites(
 		workspaceSlug: string,
-		query?: ListInvites & CursorPagination,
-	): Promise<InvitePage> {
+		query?: ListWorkspaceInvites & CursorPagination,
+	): Promise<WorkspaceInvitePage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/invites/",
 			{
@@ -51,8 +51,8 @@ export class Invites {
 	 */
 	async sendInvite(
 		workspaceSlug: string,
-		invite: CreateInvite,
-	): Promise<InviteSent> {
+		invite: CreateWorkspaceInvite,
+	): Promise<WorkspaceInviteSent> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/invites/",
 			{
@@ -87,8 +87,8 @@ export class Invites {
 	async replyToInvite(
 		workspaceSlug: string,
 		inviteId: string,
-		reply: ReplyInvite,
-	): Promise<Member> {
+		reply: ReplyWorkspaceInvite,
+	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/invites/{inviteId}/",
 			{
@@ -108,8 +108,8 @@ export class Invites {
 	 */
 	async generateInviteCode(
 		workspaceSlug: string,
-		options: GenerateInviteCode,
-	): Promise<InviteCode> {
+		options: GenerateWorkspaceInviteCode,
+	): Promise<WorkspaceInviteCode> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/invites/code/",
 			{
@@ -123,19 +123,19 @@ export class Invites {
 	/**
 	 * Reply to an invite code (accept or decline)
 	 * @param inviteCode - The invite code
-	 * @param reply - Optional reply request (defaults to accept if not provided)
+	 * @param reply - Reply request (accept or decline the invitation)
 	 * @returns Promise that resolves with the member details if accepted, null if declined
 	 * @throws {ApiError} if the request fails
 	 */
 	async replyToInviteCode(
 		inviteCode: string,
-		reply?: ReplyInvite | null,
-	): Promise<Member | null> {
+		reply: ReplyWorkspaceInvite,
+	): Promise<WorkspaceMember | null> {
 		const { data } = await this.#api.POST("/invites/code/{inviteCode}/", {
 			params: { path: { inviteCode } },
-			body: reply ?? null,
+			body: reply,
 		});
-		return data!;
+		return data ?? null;
 	}
 
 	/**

@@ -1,9 +1,9 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	ConnectionSync,
-	ConnectionSyncPage,
 	CursorPagination,
 	SyncStatus,
+	WorkspaceConnectionSync,
+	WorkspaceConnectionSyncPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -26,7 +26,7 @@ export class Syncs {
 	async listWorkspaceSyncs(
 		workspaceSlug: string,
 		query?: CursorPagination & { provider?: string[]; status?: SyncStatus },
-	): Promise<ConnectionSyncPage> {
+	): Promise<WorkspaceConnectionSyncPage> {
 		const { data } = await this.#api.GET("/workspaces/{workspaceSlug}/syncs/", {
 			params: { path: { workspaceSlug }, query },
 		});
@@ -49,7 +49,7 @@ export class Syncs {
 	async startSync(
 		workspaceSlug: string,
 		connectionId: string,
-	): Promise<ConnectionSync> {
+	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/sync/",
 			{
@@ -71,7 +71,7 @@ export class Syncs {
 		workspaceSlug: string,
 		connectionId: string,
 		query?: CursorPagination,
-	): Promise<ConnectionSyncPage> {
+	): Promise<WorkspaceConnectionSyncPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/",
 			{
@@ -93,7 +93,7 @@ export class Syncs {
 		workspaceSlug: string,
 		connectionId: string,
 		syncId: string,
-	): Promise<ConnectionSync> {
+	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/",
 			{
@@ -115,7 +115,7 @@ export class Syncs {
 		workspaceSlug: string,
 		connectionId: string,
 		syncId: string,
-	): Promise<ConnectionSync> {
+	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/connections/{connectionId}/syncs/{syncId}/cancel/",
 			{

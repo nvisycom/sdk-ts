@@ -3,12 +3,13 @@ import type { components } from "@/schema/api.js";
 type Schemas = components["schemas"];
 
 // Pipeline resources.
-export type Pipeline = Schemas["Pipeline"];
-export type CreatePipeline = Schemas["CreatePipeline"];
-export type UpdatePipeline = Schemas["UpdatePipeline"];
+export type WorkspacePipeline = Schemas["WorkspacePipeline"];
+export type CreateWorkspacePipeline = Schemas["CreateWorkspacePipeline"];
+export type UpdateWorkspacePipeline = Schemas["UpdateWorkspacePipeline"];
 export type PipelineDefinition = Schemas["PipelineDefinition"];
-export type PipelineFilter = Schemas["PipelineFilter"];
+export type WorkspacePipelineFilter = Schemas["WorkspacePipelineFilter"];
 export type PipelineStatus = Schemas["PipelineStatus"];
 export type PipelineTriggerType = Schemas["PipelineTriggerType"];
-export type PipelineSummary = Schemas["PipelineSummary"];
-export type PipelineSummaryPage = Schemas["PipelineSummaryPage"];
+export type WorkspacePipelineSummary = Schemas["WorkspacePipelineSummary"];
+export type WorkspacePipelineSummaryPage =
+	Schemas["WorkspacePipelineSummaryPage"];

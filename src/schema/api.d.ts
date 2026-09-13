@@ -1192,7 +1192,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["NotificationSettings"];
+						"application/json": components["schemas"]["WorkspaceNotificationSettings"];
 					};
 				};
 				/**
@@ -1255,7 +1255,7 @@ export interface paths {
 			/** @description Request payload for updating notification settings. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateNotificationSettings"];
+					"application/json": components["schemas"]["UpdateWorkspaceNotificationSettings"];
 				};
 			};
 			responses: {
@@ -1265,7 +1265,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["NotificationSettings"];
+						"application/json": components["schemas"]["WorkspaceNotificationSettings"];
 					};
 				};
 				/**
@@ -1361,7 +1361,7 @@ export interface paths {
 					/** @description Username of the account whose activities to keep. Omit for any actor. */
 					actor?: components["schemas"]["Handle"];
 					/**
-					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+					 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
 					 *     parameter for several; omit for no type constraint.
 					 */
 					type?: components["schemas"]["ActivityType"][];
@@ -1407,7 +1407,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ActivityPage"];
+						"application/json": components["schemas"]["WorkspaceActivityPage"];
 					};
 				};
 				/**
@@ -1473,7 +1473,7 @@ export interface paths {
 					/** @description Username of the account whose activities to keep. Omit for any actor. */
 					actor?: components["schemas"]["Handle"];
 					/**
-					 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
+					 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
 					 *     parameter for several; omit for no type constraint.
 					 */
 					type?: components["schemas"]["ActivityType"][];
@@ -1728,7 +1728,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["DetectionTimeSeries"];
+						"application/json": components["schemas"]["WorkspaceDetectionTimeSeries"];
 					};
 				};
 				/**
@@ -1827,10 +1827,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Filter by 2FA status. */
-					has2fa?: boolean;
 					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["SortOrder"];
+					order?: components["schemas"]["Direction"];
 					/** @description Filter by workspace role. */
 					role?: components["schemas"]["WorkspaceRole"];
 					/** @description Sort by field. */
@@ -1870,7 +1868,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["MemberPage"];
+						"application/json": components["schemas"]["WorkspaceMemberPage"];
 					};
 				};
 				/**
@@ -2023,6 +2021,24 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
 			};
 		};
 		delete?: never;
@@ -2062,7 +2078,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"];
+						"application/json": components["schemas"]["WorkspaceMember"];
 					};
 				};
 				/**
@@ -2243,7 +2259,7 @@ export interface paths {
 			/** @description Request to update a member's role. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateMember"];
+					"application/json": components["schemas"]["UpdateWorkspaceMember"];
 				};
 			};
 			responses: {
@@ -2253,7 +2269,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"];
+						"application/json": components["schemas"]["WorkspaceMember"];
 					};
 				};
 				/**
@@ -2350,99 +2366,18 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/files/{fileId}/assignments/": {
+	"/workspaces/{workspaceSlug}/documents/{documentId}/review/verify/": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		/**
-		 * List a file's reviewers
-		 * @description Returns the assignments on a file, most recent first.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Assignment"][];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
+		get?: never;
 		put?: never;
 		/**
-		 * Assign a file
-		 * @description Assigns a file to a workspace member for review. A file may have several reviewers; assigning the same reviewer again returns the existing assignment. Requires the AssignTasks permission.
+		 * Verify a document review
+		 * @description Verifies a document's review as a whole, moving it to `resolved`. Requires Review.
 		 */
 		post: {
 			parameters: {
@@ -2451,58 +2386,28 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Request payload to assign a file to a reviewer.
-			 *
-			 *     A file may be assigned to several reviewers at once; assigning the same
-			 *     reviewer twice is a no-op. Requires `AssignTasks`.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateAssignment"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a file review assignment.
+				 * @description Response type for a thread.
 				 *
-				 *     A file may be assigned to several reviewers at once (like GitHub assignees);
-				 *     each assignment is its own resource with its own review status.
+				 *     A thread is either a free-form workspace discussion (no `documentId`, opened
+				 *     and closed by members) or a document's review (`documentId` set, one live
+				 *     thread per document, auto-created on the document's first detection). A
+				 *     document thread carries a derived `reviewStatus` and an optional `assignee`; a
+				 *     workspace thread carries neither. Its stream is a [`WorkspaceThreadEntry`] timeline.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Assignment"];
-					};
-				};
-				/**
-				 * @description Response type for a file review assignment.
-				 *
-				 *     A file may be assigned to several reviewers at once (like GitHub assignees);
-				 *     each assignment is its own resource with its own review status.
-				 */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Assignment"];
-					};
-				};
-				/** @description Failed to parse the request body as JSON */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
+						"application/json": components["schemas"]["WorkspaceThread"];
 					};
 				};
 				/**
@@ -2557,24 +2462,6 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
 					};
 				};
 			};
@@ -2585,7 +2472,154 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/assignments/": {
+	"/workspaces/{workspaceSlug}/documents/{documentId}/review/assign/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		/**
+		 * Assign a document review
+		 * @description Assigns a document's review to a workspace member, or clears the assignee with a null `assignee`. Requires AssignReviews.
+		 */
+		put: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload to assign or unassign a document review. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["AssignWorkspaceReview"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Response type for a thread.
+				 *
+				 *     A thread is either a free-form workspace discussion (no `documentId`, opened
+				 *     and closed by members) or a document's review (`documentId` set, one live
+				 *     thread per document, auto-created on the document's first detection). A
+				 *     document thread carries a derived `reviewStatus` and an optional `assignee`; a
+				 *     workspace thread carries neither. Its stream is a [`WorkspaceThreadEntry`] timeline.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceThread"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/threads/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2593,8 +2627,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List workspace assignments
-		 * @description Returns the workspace's assignments, most recent first, with optional assignee (a member handle or `me`), status, and file filters.
+		 * List threads
+		 * @description Returns the workspace's threads, most recent first, with optional document, author, and closed filters.
 		 */
 		get: {
 			parameters: {
@@ -2612,15 +2646,14 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/**
-					 * @description Filter by the reviewer the file is assigned to (a member handle, or the
-					 *     literal `me` for the caller).
-					 */
-					assignee?: string;
-					/** @description Filter by the file under review. */
-					fileId?: string;
-					/** @description Filter by review status. */
-					status?: components["schemas"]["AssignmentStatus"];
+					/** @description Filter by the thread's opening author. */
+					author?: string;
+					/** @description Filter by open/closed state: `true` = closed only, `false` = open only. */
+					closed?: boolean;
+					/** @description Filter by the document the thread reviews. */
+					documentId?: string;
+					/** @description Filter document reviews by their derived review status. */
+					reviewStatus?: components["schemas"]["ReviewStatus"];
 				};
 				header?: never;
 				path: {
@@ -2643,7 +2676,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["AssignmentPage"];
+						"application/json": components["schemas"]["WorkspaceThreadPage"];
 					};
 				};
 				/**
@@ -2682,6 +2715,53 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+			};
+		};
+		put?: never;
+		/**
+		 * Open a workspace thread
+		 * @description Opens a workspace-level discussion thread (not tied to any document) with its first message. @username mentions notify those members. Requires the Review permission.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload to open a workspace discussion thread with its first message.
+			 *
+			 *     A workspace thread is free-form discussion pinned to no document; document
+			 *     reviews are auto-created on detection, not opened by hand. `@username`
+			 *     mentions in the opening body notify those members.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["OpenWorkspaceThread"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Response type for a thread.
+				 *
+				 *     A thread is either a free-form workspace discussion (no `documentId`, opened
+				 *     and closed by members) or a document's review (`documentId` set, one live
+				 *     thread per document, auto-created on the document's first detection). A
+				 *     document thread carries a derived `reviewStatus` and an optional `assignee`; a
+				 *     workspace thread carries neither. Its stream is a [`WorkspaceThreadEntry`] timeline.
+				 */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceThread"];
+					};
+				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
 				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
@@ -2692,7 +2772,7 @@ export interface paths {
 				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
 				 *     status line).
 				 */
-				404: {
+				400: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -2700,17 +2780,69 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
 			};
 		};
-		put?: never;
-		post?: never;
 		delete?: never;
 		options?: never;
 		head?: never;
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/assignments/{assignmentId}/": {
+	"/workspaces/{workspaceSlug}/threads/{threadId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2721,8 +2853,8 @@ export interface paths {
 		put?: never;
 		post?: never;
 		/**
-		 * Unassign a reviewer
-		 * @description Removes an assignment, unassigning the reviewer. Requires AssignTasks.
+		 * Delete a thread
+		 * @description Soft-deletes a thread and all of its comments. Requires ManageThreads.
 		 */
 		delete: {
 			parameters: {
@@ -2731,8 +2863,8 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Unique identifier of the assignment. */
-					assignmentId: string;
+					/** @description Unique identifier of the thread. */
+					threadId: string;
 				};
 				cookie?: never;
 			};
@@ -2804,8 +2936,8 @@ export interface paths {
 		options?: never;
 		head?: never;
 		/**
-		 * Change assignment status
-		 * @description Changes an assignment's review status. Allowed for the assignee or a member with the AssignTasks permission.
+		 * Rename a thread
+		 * @description Sets or clears a thread's title. Requires ManageThreads.
 		 */
 		patch: {
 			parameters: {
@@ -2814,44 +2946,745 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Unique identifier of the assignment. */
-					assignmentId: string;
+					/** @description Unique identifier of the thread. */
+					threadId: string;
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Request payload to change an assignment's review status.
-			 *
-			 *     Allowed for the assignee (their own review status) or a member with
-			 *     `AssignTasks`.
-			 */
+			/** @description Request payload to rename a thread (set or clear its title). */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateAssignment"];
+					"application/json": components["schemas"]["RenameWorkspaceThread"];
 				};
 			};
 			responses: {
 				/**
-				 * @description Response type for a file review assignment.
+				 * @description Response type for a thread.
 				 *
-				 *     A file may be assigned to several reviewers at once (like GitHub assignees);
-				 *     each assignment is its own resource with its own review status.
+				 *     A thread is either a free-form workspace discussion (no `documentId`, opened
+				 *     and closed by members) or a document's review (`documentId` set, one live
+				 *     thread per document, auto-created on the document's first detection). A
+				 *     document thread carries a derived `reviewStatus` and an optional `assignee`; a
+				 *     workspace thread carries neither. Its stream is a [`WorkspaceThreadEntry`] timeline.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Assignment"];
+						"application/json": components["schemas"]["WorkspaceThread"];
 					};
 				};
-				/** @description Failed to parse the request body as JSON */
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
 				400: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
 						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/threads/{threadId}/close/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Close a thread
+		 * @description Closes a thread, ending the discussion. Requires ManageThreads.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Unique identifier of the thread. */
+					threadId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Response type for a thread.
+				 *
+				 *     A thread is either a free-form workspace discussion (no `documentId`, opened
+				 *     and closed by members) or a document's review (`documentId` set, one live
+				 *     thread per document, auto-created on the document's first detection). A
+				 *     document thread carries a derived `reviewStatus` and an optional `assignee`; a
+				 *     workspace thread carries neither. Its stream is a [`WorkspaceThreadEntry`] timeline.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceThread"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		/**
+		 * Reopen a thread
+		 * @description Reopens a closed thread. Requires ManageThreads.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Unique identifier of the thread. */
+					threadId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Response type for a thread.
+				 *
+				 *     A thread is either a free-form workspace discussion (no `documentId`, opened
+				 *     and closed by members) or a document's review (`documentId` set, one live
+				 *     thread per document, auto-created on the document's first detection). A
+				 *     document thread carries a derived `reviewStatus` and an optional `assignee`; a
+				 *     workspace thread carries neither. Its stream is a [`WorkspaceThreadEntry`] timeline.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceThread"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/threads/{threadId}/timeline/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List a thread's timeline
+		 * @description Returns the thread's timeline — comments and lifecycle events (opened, closed, reopened, renamed, and review transitions) interleaved, oldest first, with cursor pagination.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+				};
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Unique identifier of the thread. */
+					threadId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceThreadEntryPage"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/threads/{threadId}/comments/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Post a comment
+		 * @description Posts a comment (message) in a thread. @username mentions notify those members. Requires the Review permission. Returns 409 if the thread is closed.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Unique identifier of the thread. */
+					threadId: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload to post a comment (message) in a thread.
+			 *
+			 *     `@username` mentions in the body notify those workspace members.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreateWorkspaceComment"];
+				};
+			};
+			responses: {
+				/** @description Response type for a comment: one message within a thread. */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceComment"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceSlug}/comments/{commentId}/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/**
+		 * Delete a comment
+		 * @description Soft-deletes a comment. Only the author may delete their own comment.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Unique identifier of the comment. */
+					commentId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		options?: never;
+		head?: never;
+		/**
+		 * Edit a comment
+		 * @description Edits a comment's body. Only the author may edit their own comment.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+					/** @description Unique identifier of the comment. */
+					commentId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload to edit a comment's body. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateWorkspaceComment"];
+				};
+			};
+			responses: {
+				/** @description Response type for a comment: one message within a thread. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceComment"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
 				/**
@@ -2984,7 +3817,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionPage"];
+						"application/json": components["schemas"]["WorkspaceConnectionPage"];
 					};
 				};
 				/**
@@ -3028,7 +3861,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create connection
-		 * @description Creates a new provider connection for the workspace. Connection data is encrypted and stored securely. The response includes connection metadata but never exposes the encrypted credentials.
+		 * @description Creates a new provider connection for the workspace. WorkspaceConnection data is encrypted and stored securely. The response includes connection metadata but never exposes the encrypted credentials.
 		 */
 		post: {
 			parameters: {
@@ -3043,7 +3876,7 @@ export interface paths {
 			/** @description Request payload for creating a new workspace connection. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateConnection"];
+					"application/json": components["schemas"]["CreateWorkspaceConnection"];
 				};
 			};
 			responses: {
@@ -3058,7 +3891,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Connection"];
+						"application/json": components["schemas"]["WorkspaceConnection"];
 					};
 				};
 				/**
@@ -3177,7 +4010,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Connection"];
+						"application/json": components["schemas"]["WorkspaceConnection"];
 					};
 				};
 				/**
@@ -3340,7 +4173,7 @@ export interface paths {
 			/** @description Request payload for updating an existing workspace connection. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateConnection"];
+					"application/json": components["schemas"]["UpdateWorkspaceConnection"];
 				};
 			};
 			responses: {
@@ -3355,7 +4188,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Connection"];
+						"application/json": components["schemas"]["WorkspaceConnection"];
 					};
 				};
 				/**
@@ -3485,7 +4318,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionVerification"];
+						"application/json": components["schemas"]["WorkspaceConnectionVerification"];
 					};
 				};
 				/**
@@ -3585,7 +4418,7 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["PickerTokenRequest"];
+					"application/json": components["schemas"]["WorkspacePickerTokenRequest"];
 				};
 			};
 			responses: {
@@ -3602,7 +4435,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PickerToken"];
+						"application/json": components["schemas"]["WorkspacePickerToken"];
 					};
 				};
 				/**
@@ -3740,7 +4573,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ProviderPage"];
+						"application/json": components["schemas"]["WorkspaceProviderPage"];
 					};
 				};
 				/**
@@ -3784,7 +4617,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create provider
-		 * @description Creates a new inference provider for the workspace. Provider data is encrypted and stored securely. The response includes provider metadata but never exposes the encrypted credentials.
+		 * @description Creates a new inference provider for the workspace. WorkspaceProvider data is encrypted and stored securely. The response includes provider metadata but never exposes the encrypted credentials.
 		 */
 		post: {
 			parameters: {
@@ -3799,7 +4632,7 @@ export interface paths {
 			/** @description Request payload for creating a new workspace provider. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateProvider"];
+					"application/json": components["schemas"]["CreateWorkspaceProvider"];
 				};
 			};
 			responses: {
@@ -3814,7 +4647,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Provider"];
+						"application/json": components["schemas"]["WorkspaceProvider"];
 					};
 				};
 				/**
@@ -3933,7 +4766,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Provider"];
+						"application/json": components["schemas"]["WorkspaceProvider"];
 					};
 				};
 				/**
@@ -4096,7 +4929,7 @@ export interface paths {
 			/** @description Request payload for updating an existing workspace provider. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateProvider"];
+					"application/json": components["schemas"]["UpdateWorkspaceProvider"];
 				};
 			};
 			responses: {
@@ -4111,7 +4944,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Provider"];
+						"application/json": components["schemas"]["WorkspaceProvider"];
 					};
 				};
 				/**
@@ -4241,7 +5074,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionVerification"];
+						"application/json": components["schemas"]["WorkspaceConnectionVerification"];
 					};
 				};
 				/**
@@ -4418,523 +5251,6 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/chat/sessions/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List chat sessions
-		 * @description Returns the workspace's chat sessions, newest first, cursor-paginated.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string;
-					/**
-					 * @description Whether to include the total item count in the response's `total` field.
-					 *     Defaults to `false`, since counting is an extra query; set it to `true`
-					 *     only when the count is actually needed.
-					 */
-					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-				};
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *     Provides a consistent structure for all paginated API responses with
-				 *     cursor-based pagination support. When `next_cursor` is present, there
-				 *     are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ChatSessionPage"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create chat session
-		 * @description Opens a new assistant chat session in the workspace.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to create a chat session. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateChatSession"];
-				};
-			};
-			responses: {
-				/** @description A chat session. */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ChatSession"];
-					};
-				};
-				/** @description Failed to parse the request body as JSON */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceSlug}/chat/sessions/{sessionId}/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		/**
-		 * Delete chat session
-		 * @description Soft-deletes a chat session.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description The session id. */
-					sessionId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				204: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceSlug}/chat/sessions/{sessionId}/messages/": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List chat messages
-		 * @description Returns a session's messages in chronological order.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description The session id. */
-					sessionId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ChatMessage"][];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Send chat message
-		 * @description Sends a message and streams the assistant's reply as Server-Sent Events. Each event's `data` is a `ChatToken` delta. Authenticate with a Bearer token via a `fetch`-based client; the native `EventSource` cannot send an `Authorization` header. 409 when the workspace has no language model connection configured.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description URL-safe workspace identifier. */
-					workspaceSlug: string;
-					/** @description The session id. */
-					sessionId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request to send a message and stream the assistant's reply. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["SendChatMessage"];
-				};
-			};
-			responses: {
-				/** @description Server-sent event stream; each event's `data` is the payload below. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/event-stream": components["schemas"]["ChatToken"];
-					};
-				};
-				/** @description Failed to parse the request body as JSON */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
-				 */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	"/workspaces/{workspaceSlug}/syncs/": {
 		parameters: {
 			query?: never;
@@ -4992,7 +5308,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSyncPage"];
+						"application/json": components["schemas"]["WorkspaceConnectionSyncPage"];
 					};
 				};
 				/**
@@ -5092,7 +5408,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSync"];
+						"application/json": components["schemas"]["WorkspaceConnectionSync"];
 					};
 				};
 				/**
@@ -5206,7 +5522,7 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["ImportFiles"];
+					"application/json": components["schemas"]["ImportWorkspaceFiles"];
 				};
 			};
 			responses: {
@@ -5216,7 +5532,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSync"];
+						"application/json": components["schemas"]["WorkspaceConnectionSync"];
 					};
 				};
 				/**
@@ -5363,11 +5679,11 @@ export interface paths {
 			/**
 			 * @description Request payload to export a caller-selected set of workspace files to a
 			 *     connection. Each is written as a new provider file, never overwriting a
-			 *     source. Mirrors [`ImportFiles`] on the export side.
+			 *     source. Mirrors [`ImportWorkspaceFiles`] on the export side.
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["ExportFiles"];
+					"application/json": components["schemas"]["ExportWorkspaceFiles"];
 				};
 			};
 			responses: {
@@ -5377,7 +5693,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSync"];
+						"application/json": components["schemas"]["WorkspaceConnectionSync"];
 					};
 				};
 				/**
@@ -5547,7 +5863,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSyncPage"];
+						"application/json": components["schemas"]["WorkspaceConnectionSyncPage"];
 					};
 				};
 				/**
@@ -5647,7 +5963,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSync"];
+						"application/json": components["schemas"]["WorkspaceConnectionSync"];
 					};
 				};
 				/**
@@ -5749,7 +6065,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectionSync"];
+						"application/json": components["schemas"]["WorkspaceConnectionSync"];
 					};
 				};
 				/**
@@ -5832,7 +6148,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/files/": {
+	"/workspaces/{workspaceSlug}/documents/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5840,8 +6156,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List files
-		 * @description Lists files in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages. Pass `hash` (a hex SHA-256) to find files with identical content — a non-empty result means the file already exists, so an upload can be skipped.
+		 * List documents
+		 * @description Lists documents in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages. Pass `hash` (a hex SHA-256) to find documents with identical content — a non-empty result means the document already exists, so an upload can be skipped.
 		 */
 		get: {
 			parameters: {
@@ -5852,14 +6168,14 @@ export interface paths {
 					 */
 					formats?: components["schemas"]["FormatToken"][];
 					/**
-					 * @description Filter to files whose content is exactly this SHA-256. Lets a client check
-					 *     whether identical content already exists in the workspace before uploading
-					 *     it.
+					 * @description Filter to documents whose content is exactly this SHA-256. Lets a client
+					 *     check whether identical content already exists in the workspace before
+					 *     uploading it.
 					 */
-					hash?: components["schemas"]["FileHash"];
+					hash?: components["schemas"]["DocumentHash"];
 					/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
 					modality?: components["schemas"]["ModalityToken"][];
-					/** @description Search by file name (case-insensitive, partial match). */
+					/** @description Search by document name (case-insensitive, partial match). */
 					search?: string;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
@@ -5896,7 +6212,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["FilePage"];
+						"application/json": components["schemas"]["WorkspaceDocumentPage"];
 					};
 				};
 				/**
@@ -5957,8 +6273,8 @@ export interface paths {
 		};
 		put?: never;
 		/**
-		 * Upload files
-		 * @description Uploads one or more files to a workspace. Each file is encrypted and streamed to storage. The batch is atomic: either every file is recorded, or on any failure none are and the request fails.
+		 * Upload documents
+		 * @description Uploads one or more documents to a workspace. Each document is encrypted and streamed to storage. The batch is atomic: either every document is recorded, or on any failure none are and the request fails.
 		 */
 		post: {
 			parameters: {
@@ -5982,7 +6298,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["File"][];
+						"application/json": components["schemas"]["WorkspaceDocument"][];
 					};
 				};
 				/**
@@ -6065,7 +6381,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/files/delete/": {
+	"/workspaces/{workspaceSlug}/documents/delete/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6075,8 +6391,8 @@ export interface paths {
 		get?: never;
 		put?: never;
 		/**
-		 * Delete files
-		 * @description Deletes several files in one call. Idempotent: ids that resolve to live files in the workspace are removed and returned in `deleted`; ids that are unknown, already deleted, or in another workspace are returned in `skipped`. Deletion is permanent — the files' content cannot be recovered.
+		 * Delete documents
+		 * @description Deletes several documents in one call. Idempotent: ids that resolve to live documents in the workspace are removed and returned in `deleted`; ids that are unknown, already deleted, or in another workspace are returned in `skipped`. Deletion is permanent — the documents' content cannot be recovered.
 		 */
 		post: {
 			parameters: {
@@ -6089,31 +6405,31 @@ export interface paths {
 				cookie?: never;
 			};
 			/**
-			 * @description Request to delete several files in one call.
+			 * @description Request to delete several documents in one call.
 			 *
-			 *     The `100`-id cap bounds the work one call fans out into: the resolve query,
-			 *     the delete transaction, and one best-effort object purge per file.
+			 *     The `100`-id cap bounds the work one call fans out into: the resolve query and
+			 *     the delete transaction.
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["DeleteFiles"];
+					"application/json": components["schemas"]["DeleteWorkspaceDocuments"];
 				};
 			};
 			responses: {
 				/**
-				 * @description Result of a bulk file deletion.
+				 * @description Result of a bulk document deletion.
 				 *
 				 *     The deletion is idempotent: `deleted` holds the ids that resolved to live
-				 *     files in the workspace and were removed, and `skipped` holds the requested
+				 *     documents in the workspace and were removed, and `skipped` holds the requested
 				 *     ids that did not — unknown, already deleted, in another workspace, or held by
-				 *     an in-progress detection that still needs the file.
+				 *     an in-progress detection that still needs the document.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["DeletedFiles"];
+						"application/json": components["schemas"]["WorkspaceDeletedDocuments"];
 					};
 				};
 				/**
@@ -6196,7 +6512,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/files/{fileId}/": {
+	"/workspaces/{workspaceSlug}/documents/{documentId}/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6204,8 +6520,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Get file metadata
-		 * @description Returns file metadata without downloading the file content.
+		 * Get document metadata
+		 * @description Returns document metadata without downloading the document content.
 		 */
 		get: {
 			parameters: {
@@ -6214,20 +6530,20 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Represents a file in responses. */
+				/** @description Represents a document in responses. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["File"];
+						"application/json": components["schemas"]["WorkspaceDocument"];
 					};
 				};
 				/**
@@ -6289,8 +6605,8 @@ export interface paths {
 		put?: never;
 		post?: never;
 		/**
-		 * Delete file
-		 * @description Deletes a file: the record is retired and its stored content is removed. This is permanent — the file's content cannot be recovered.
+		 * Delete document
+		 * @description Deletes a document: the record is retired and its blob reference dropped. The stored content is reclaimed later, once no other document references it and its retention window has passed. This is permanent — the document cannot be restored.
 		 */
 		delete: {
 			parameters: {
@@ -6299,8 +6615,8 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
 				};
 				cookie?: never;
 			};
@@ -6372,8 +6688,8 @@ export interface paths {
 		options?: never;
 		head?: never;
 		/**
-		 * Update file
-		 * @description Updates file metadata such as display name, tags, or metadata.
+		 * Update document
+		 * @description Updates document metadata such as display name, tags, or metadata.
 		 */
 		patch: {
 			parameters: {
@@ -6382,25 +6698,25 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request to update file metadata. */
+			/** @description Request to update document metadata. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateFile"];
+					"application/json": components["schemas"]["UpdateWorkspaceDocument"];
 				};
 			};
 			responses: {
-				/** @description Represents a file in responses. */
+				/** @description Represents a document in responses. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["File"];
+						"application/json": components["schemas"]["WorkspaceDocument"];
 					};
 				};
 				/**
@@ -6497,7 +6813,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceSlug}/files/{fileId}/content/": {
+	"/workspaces/{workspaceSlug}/documents/{documentId}/content/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6505,8 +6821,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Download file
-		 * @description Downloads a file by ID. Returns the file content as a binary stream. The required permission depends on the file's kind: an original file (or an intermediate, which carries the original's content) needs DownloadOriginalFiles, a redacted output needs DownloadRedactedFiles, and an audit blob needs DownloadAudit.
+		 * Download document
+		 * @description Downloads a document by ID. Returns the document content as a binary stream. The required permission depends on the document's kind: an original document needs DownloadOriginalDocuments, and a redacted output needs DownloadRedactedDocuments.
 		 */
 		get: {
 			parameters: {
@@ -6515,14 +6831,14 @@ export interface paths {
 				path: {
 					/** @description URL-safe workspace identifier. */
 					workspaceSlug: string;
-					/** @description Unique identifier of the file. */
-					fileId: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
 				};
 				cookie?: never;
 			};
 			requestBody?: never;
 			responses: {
-				/** @description The file content. */
+				/** @description The document content. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -6648,7 +6964,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PipelineSummaryPage"];
+						"application/json": components["schemas"]["WorkspacePipelineSummaryPage"];
 					};
 				};
 				/**
@@ -6712,17 +7028,17 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreatePipeline"];
+					"application/json": components["schemas"]["CreateWorkspacePipeline"];
 				};
 			};
 			responses: {
-				/** @description Pipeline response. */
+				/** @description WorkspacePipeline response. */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Pipeline"];
+						"application/json": components["schemas"]["WorkspacePipeline"];
 					};
 				};
 				/**
@@ -6830,13 +7146,13 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Pipeline response. */
+				/** @description WorkspacePipeline response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Pipeline"];
+						"application/json": components["schemas"]["WorkspacePipeline"];
 					};
 				};
 				/**
@@ -7004,17 +7320,17 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdatePipeline"];
+					"application/json": components["schemas"]["UpdateWorkspacePipeline"];
 				};
 			};
 			responses: {
-				/** @description Pipeline response. */
+				/** @description WorkspacePipeline response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Pipeline"];
+						"application/json": components["schemas"]["WorkspacePipeline"];
 					};
 				};
 				/**
@@ -7120,7 +7436,7 @@ export interface paths {
 		};
 		/**
 		 * List workspace detections
-		 * @description Returns all detections across the workspace, most recent first, with optional status, file, pipeline, trigger-account, and trigger-type filters.
+		 * @description Returns all detections across the workspace, most recent first, with optional status, document, pipeline, trigger-account, and trigger-type filters.
 		 */
 		get: {
 			parameters: {
@@ -7138,8 +7454,8 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by the source file the detection analyzes. */
-					fileId?: string;
+					/** @description Filter by the source document the detection analyzes. */
+					documentId?: string;
 					/** @description Filter by the owning pipeline. */
 					pipelineId?: string;
 					/** @description Filter by detection status. */
@@ -7170,7 +7486,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["DetectionPage"];
+						"application/json": components["schemas"]["WorkspaceDetectionPage"];
 					};
 				};
 				/**
@@ -7246,7 +7562,7 @@ export interface paths {
 		};
 		/**
 		 * List pipeline detections
-		 * @description Returns detections for a specific pipeline, most recent first, with optional status, file, trigger-account, and trigger-type filters.
+		 * @description Returns detections for a specific pipeline, most recent first, with optional status, document, trigger-account, and trigger-type filters.
 		 */
 		get: {
 			parameters: {
@@ -7264,8 +7580,8 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by the source file the detection analyzes. */
-					fileId?: string;
+					/** @description Filter by the source document the detection analyzes. */
+					documentId?: string;
 					/** @description Filter by detection status. */
 					status?: components["schemas"]["DetectionStatus"];
 					/** @description Filter by how the detection was initiated (user vs system). */
@@ -7296,7 +7612,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["DetectionPage"];
+						"application/json": components["schemas"]["WorkspaceDetectionPage"];
 					};
 				};
 				/**
@@ -7358,7 +7674,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Start a detection
-		 * @description Starts analysis for a file and returns 202 with the detection in the `pending` state; the analysis runs in the background. Watch the detection's status via the SSE stream at `.../detections/{detectionId}/events` (or re-read the detection) and fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
+		 * @description Starts analysis for a document and returns 202 with the detection in the `pending` state; the analysis runs in the background. Watch the detection's status via the SSE stream at `.../detections/{detectionId}/events` (or re-read the detection) and fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
 		 */
 		post: {
 			parameters: {
@@ -7373,14 +7689,14 @@ export interface paths {
 				cookie?: never;
 			};
 			/**
-			 * @description Request payload to start a detection over a file.
+			 * @description Request payload to start a detection over a document.
 			 *
-			 *     Analyzes the file with the pipeline's configuration and returns the
+			 *     Analyzes the document with the pipeline's configuration and returns the
 			 *     detection, which holds the findings for review before redaction.
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateDetection"];
+					"application/json": components["schemas"]["CreateWorkspaceDetection"];
 				};
 			};
 			responses: {
@@ -7397,7 +7713,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Detection"];
+						"application/json": components["schemas"]["WorkspaceDetection"];
 					};
 				};
 				/**
@@ -7413,7 +7729,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Detection"];
+						"application/json": components["schemas"]["WorkspaceDetection"];
 					};
 				};
 				/**
@@ -7532,6 +7848,172 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/workspaces/{workspaceSlug}/detections/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Start an ad-hoc detection
+		 * @description Starts a detection over a document against an explicit list of policies, with no pipeline. Returns 202 with the pending detection; fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description URL-safe workspace identifier. */
+					workspaceSlug: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload to start an ad-hoc detection over a document, naming its
+			 *     policies directly rather than through a pipeline.
+			 *
+			 *     Analyzes the document against the given policies (authored or one-shot) and
+			 *     returns the detection holding the findings for review before redaction.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreateAdhocWorkspaceDetection"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Response type for a detection.
+				 *
+				 *     A detection is addressed by its own opaque id; the owning pipeline and
+				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     detection produces many redactions, each fetched from its `redactions`
+				 *     endpoint.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceDetection"];
+					};
+				};
+				/**
+				 * @description Response type for a detection.
+				 *
+				 *     A detection is addressed by its own opaque id; the owning pipeline and
+				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     detection produces many redactions, each fetched from its `redactions`
+				 *     endpoint.
+				 */
+				202: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceDetection"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/workspaces/{workspaceSlug}/detections/{detectionId}/": {
 		parameters: {
 			query?: never;
@@ -7570,7 +8052,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Detection"];
+						"application/json": components["schemas"]["WorkspaceDetection"];
 					};
 				};
 				/**
@@ -7786,7 +8268,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["RedactionResultPage"];
+						"application/json": components["schemas"]["WorkspaceRedactionResultPage"];
 					};
 				};
 				/**
@@ -7872,7 +8354,7 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["RedactDetection"];
+					"application/json": components["schemas"]["RedactWorkspaceDetection"];
 				};
 			};
 			responses: {
@@ -7884,7 +8366,7 @@ export interface paths {
 				 *     the normal file endpoints) and a review audit recording what was redacted and
 				 *     why (fetched from the redaction's `review` endpoint).
 				 *
-				 *     Named `RedactionResult` rather than `Redaction` because the engine's audit
+				 *     Named `WorkspaceRedactionResult` rather than `Redaction` because the engine's audit
 				 *     schema already carries a `Redaction` (an audit event), and the two must not
 				 *     collide in the generated OpenAPI.
 				 */
@@ -7893,7 +8375,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["RedactionResult"];
+						"application/json": components["schemas"]["WorkspaceRedactionResult"];
 					};
 				};
 				/**
@@ -8536,7 +9018,7 @@ export interface paths {
 		};
 		/**
 		 * List policies
-		 * @description Returns all policies for the workspace.
+		 * @description Returns the workspace's policies. The optional `kind` query parameter narrows to a single kind (`authored` or `oneshot`).
 		 */
 		get: {
 			parameters: {
@@ -8554,6 +9036,8 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
+					/** @description Narrow the list to a single policy kind (`authored` or `oneshot`). */
+					kind?: components["schemas"]["PolicyKind"];
 				};
 				header?: never;
 				path: {
@@ -8576,7 +9060,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["PolicySummaryPage"];
+						"application/json": components["schemas"]["WorkspacePolicySummaryPage"];
 					};
 				};
 				/**
@@ -8620,7 +9104,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create policy
-		 * @description Creates a structured redaction policy for the workspace.
+		 * @description Creates a structured redaction policy for the workspace. A labels body creates (or reuses) a one-shot policy and returns 200 when an identical one already exists; a template or inline body always creates a new policy and returns 201.
 		 */
 		post: {
 			parameters: {
@@ -8641,17 +9125,26 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreatePolicy"];
+					"application/json": components["schemas"]["CreateWorkspacePolicy"];
 				};
 			};
 			responses: {
+				/** @description Response type for a workspace policy. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspacePolicy"];
+					};
+				};
 				/** @description Response type for a workspace policy. */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Policy"];
+						"application/json": components["schemas"]["WorkspacePolicy"];
 					};
 				};
 				/**
@@ -8765,7 +9258,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Policy"];
+						"application/json": components["schemas"]["WorkspacePolicy"];
 					};
 				};
 				/**
@@ -8934,7 +9427,7 @@ export interface paths {
 			 */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdatePolicy"];
+					"application/json": components["schemas"]["UpdateWorkspacePolicy"];
 				};
 			};
 			responses: {
@@ -8944,7 +9437,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Policy"];
+						"application/json": components["schemas"]["WorkspacePolicy"];
 					};
 				};
 				/**
@@ -9041,7 +9534,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/catalog/labels/": {
+	"/capabilities/labels/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9107,7 +9600,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/catalog/recognizers/": {
+	"/capabilities/recognizers/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9164,7 +9657,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/catalog/connectors/": {
+	"/capabilities/connectors/": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9197,7 +9690,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ConnectorCatalog"];
+						"application/json": components["schemas"]["ConnectorCapabilities"];
 					};
 				};
 				/**
@@ -9274,7 +9767,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiTokenPage"];
+						"application/json": components["schemas"]["AccountApiTokenPage"];
 					};
 				};
 				/**
@@ -9330,7 +9823,7 @@ export interface paths {
 			/** @description Request to create a new API token. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateApiToken"];
+					"application/json": components["schemas"]["CreateAccountApiToken"];
 				};
 			};
 			responses: {
@@ -9340,7 +9833,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiTokenWithJWT"];
+						"application/json": components["schemas"]["AccountApiTokenWithJwt"];
 					};
 				};
 				/**
@@ -9434,7 +9927,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiToken"];
+						"application/json": components["schemas"]["AccountApiToken"];
 					};
 				};
 				/**
@@ -9575,7 +10068,7 @@ export interface paths {
 			/** @description Request to update an existing API token. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateApiToken"];
+					"application/json": components["schemas"]["UpdateAccountApiToken"];
 				};
 			};
 			responses: {
@@ -9585,7 +10078,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["ApiToken"];
+						"application/json": components["schemas"]["AccountApiToken"];
 					};
 				};
 				/**
@@ -9617,6 +10110,24 @@ export interface paths {
 				 *     status line).
 				 */
 				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
+				 *     handlers construct and thread through `Result`, and it builds an
+				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
+				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
+				 *     status line).
+				 */
+				403: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -9710,7 +10221,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["NotificationPage"];
+						"application/json": components["schemas"]["AccountNotificationPage"];
 					};
 				};
 				/**
@@ -9767,7 +10278,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["UnreadStatus"];
+						"application/json": components["schemas"]["AccountUnreadStatus"];
 					};
 				};
 				/**
@@ -9883,7 +10394,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["MarkedReadStatus"];
+						"application/json": components["schemas"]["AccountMarkedReadStatus"];
 					};
 				};
 				/**
@@ -10003,7 +10514,7 @@ export interface paths {
 			parameters: {
 				query?: {
 					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["SortOrder"];
+					order?: components["schemas"]["Direction"];
 					/** @description Filter by invited role. */
 					role?: components["schemas"]["WorkspaceRole"];
 					/** @description Sort by field. */
@@ -10043,7 +10554,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InvitePage"];
+						"application/json": components["schemas"]["WorkspaceInvitePage"];
 					};
 				};
 				/**
@@ -10102,7 +10613,7 @@ export interface paths {
 			/** @description Request payload for creating a new workspace invite. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateInvite"];
+					"application/json": components["schemas"]["CreateWorkspaceInvite"];
 				};
 			};
 			responses: {
@@ -10118,7 +10629,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InviteSent"];
+						"application/json": components["schemas"]["WorkspaceInviteSent"];
 					};
 				};
 				/**
@@ -10230,7 +10741,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Generate invite code
-		 * @description Creates a shareable invite code that can be used by anyone to join the workspace.
+		 * @description Creates a shareable, single-use invite code that lets one person join the workspace. The code is consumed on first acceptance and expires if unused.
 		 */
 		post: {
 			parameters: {
@@ -10245,7 +10756,7 @@ export interface paths {
 			/** @description Request to generate a shareable invite code for a workspace. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["GenerateInviteCode"];
+					"application/json": components["schemas"]["GenerateWorkspaceInviteCode"];
 				};
 			};
 			responses: {
@@ -10255,7 +10766,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InviteCode"];
+						"application/json": components["schemas"]["WorkspaceInviteCode"];
 					};
 				};
 				/**
@@ -10366,7 +10877,7 @@ export interface paths {
 			/** @description Request to respond to a workspace invitation. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["ReplyInvite"];
+					"application/json": components["schemas"]["ReplyWorkspaceInvite"];
 				};
 			};
 			responses: {
@@ -10375,7 +10886,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"] | null;
+						"application/json": components["schemas"]["WorkspaceMember"] | null;
 					};
 				};
 				/** @description Represents a workspace member. */
@@ -10384,7 +10895,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"];
+						"application/json": components["schemas"]["WorkspaceMember"];
 					};
 				};
 				/**
@@ -10655,9 +11166,10 @@ export interface paths {
 				};
 				cookie?: never;
 			};
+			/** @description Request to respond to a workspace invitation. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["ReplyInvite"] | null;
+					"application/json": components["schemas"]["ReplyWorkspaceInvite"];
 				};
 			};
 			responses: {
@@ -10666,7 +11178,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"] | null;
+						"application/json": components["schemas"]["WorkspaceMember"] | null;
 					};
 				};
 				/** @description Represents a workspace member. */
@@ -10675,7 +11187,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Member"];
+						"application/json": components["schemas"]["WorkspaceMember"];
 					};
 				};
 				/**
@@ -10750,24 +11262,6 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
 			};
 		};
 		delete?: never;
@@ -10825,7 +11319,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WebhookPage"];
+						"application/json": components["schemas"]["WorkspaceWebhookPage"];
 					};
 				};
 				/**
@@ -10884,7 +11378,7 @@ export interface paths {
 			/** @description Request payload for creating a new workspace webhook. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["CreateWebhook"];
+					"application/json": components["schemas"]["CreateWorkspaceWebhook"];
 				};
 			};
 			responses: {
@@ -10900,7 +11394,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WebhookCreated"];
+						"application/json": components["schemas"]["WorkspaceWebhookCreated"];
 					};
 				};
 				/**
@@ -11014,7 +11508,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Webhook"];
+						"application/json": components["schemas"]["WorkspaceWebhook"];
 					};
 				};
 				/**
@@ -11177,7 +11671,7 @@ export interface paths {
 			/** @description Request payload for updating an existing workspace webhook. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["UpdateWebhook"];
+					"application/json": components["schemas"]["UpdateWorkspaceWebhook"];
 				};
 			};
 			responses: {
@@ -11187,7 +11681,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["Webhook"];
+						"application/json": components["schemas"]["WorkspaceWebhook"];
 					};
 				};
 				/**
@@ -11312,7 +11806,7 @@ export interface paths {
 			/** @description Request payload for testing a webhook. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["TestWebhook"];
+					"application/json": components["schemas"]["TestWorkspaceWebhook"];
 				};
 			};
 			responses: {
@@ -11322,7 +11816,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WebhookResult"];
+						"application/json": components["schemas"]["WorkspaceWebhookResult"];
 					};
 				};
 				/** @description Failed to parse the request body as JSON */
@@ -12011,7 +12505,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["DesktopToken"];
+						"application/json": components["schemas"]["AccountDesktopToken"];
 					};
 				};
 				/**
@@ -12413,6 +12907,53 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/capabilities/auth/": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List sign-in methods
+		 * @description Returns the deployment's available sign-in methods: whether password sign-in is enabled and which OIDC providers are configured. Unauthenticated, so a login screen can render the right buttons before anyone signs in.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description The sign-in methods this deployment offers.
+				 *
+				 *     Lets a client render the login screen without probing: one ordered list of
+				 *     the identity providers a person can sign in with — `password`, plus exactly
+				 *     the OIDC providers (`google`, `microsoft`, ...) whose apps are configured on
+				 *     the server. This is pre-authentication reference data, so the endpoint is
+				 *     unauthenticated.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["AuthCapabilities"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/health/": {
 		parameters: {
 			query?: never;
@@ -12599,6 +13140,109 @@ export interface components {
 			/** @description Public handle of the account. */
 			username: components["schemas"]["Handle"];
 		};
+		/** @description API token response structure. */
+		AccountApiToken: {
+			/**
+			 * @description Whether this token is the one the current request authenticated with.
+			 *
+			 *     Lets a client single out the active session in the list. Defaults to
+			 *     `false`; the listing handler sets it for the matching token.
+			 */
+			current: boolean;
+			/** @description Human-readable display name for the API token. */
+			displayName: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the token expires (None = never expires).
+			 */
+			expiredAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of token creation.
+			 */
+			issuedAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of most recent token activity.
+			 */
+			lastUsedAt?: string;
+			/** @description Type of token (web, api, etc.). */
+			sessionType: components["schemas"]["ApiTokenType"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		AccountApiTokenPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["AccountApiToken"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Path parameters for API token operations.
+		 *
+		 *     Since token IDs are globally unique UUIDs, account context is verified
+		 *     by comparing with the authenticated user's account ID.
+		 */
+		AccountApiTokenPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the API token.
+			 */
+			tokenId: string;
+		};
+		/** @description API token with JWT token string (only returned on creation). */
+		AccountApiTokenWithJwt: {
+			/** @description Human-readable display name for the API token. */
+			displayName: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the token expires (omitted = never expires).
+			 */
+			expiredAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of token creation.
+			 */
+			issuedAt: string;
+			/** @description Type of token (web, mobile, api, etc.). */
+			sessionType: components["schemas"]["ApiTokenType"];
+			/** @description The JWT token string (only shown once on creation). */
+			token: string;
+		};
+		/**
+		 * @description The result of minting a native-app (desktop) session token.
+		 *
+		 *     The frontend hands `apiToken` to the desktop app via the `redirectUri`
+		 *     deep-link (`{redirectUri}?token={apiToken}`); the app stores it and sends it as
+		 *     an `Authorization: Bearer` credential. Browser web sessions use cookies
+		 *     instead and return no token.
+		 */
+		AccountDesktopToken: {
+			/** @description The signed `app` JWT to send as a Bearer token. */
+			apiToken: string;
+			/** @description The desktop deep-link the token should be delivered on, echoed back. */
+			redirectUri: string;
+		};
 		/** @description The account's sign-in methods. */
 		AccountIdentities: {
 			/** @description Every identity the account can sign in with. */
@@ -12626,6 +13270,78 @@ export interface components {
 			 */
 			updatedAt: string;
 		};
+		/** @description Response type for a mark-all-read action. */
+		AccountMarkedReadStatus: {
+			/**
+			 * Format: int64
+			 * @description Number of notifications the request marked as read.
+			 */
+			markedRead: number;
+		};
+		/**
+		 * @description Response type for an account notification.
+		 *
+		 *     The typed payload is nested under `payload`, so a notification is
+		 *     `{ id, payload: { notifyType, <params...> }, readAt, ... }`.
+		 */
+		AccountNotification: {
+			/**
+			 * Format: date-time
+			 * @description When the notification was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the notification expires.
+			 */
+			expiresAt?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique notification identifier.
+			 */
+			id: string;
+			/**
+			 * @description The notification type and its typed params, absent when the stored params
+			 *     do not decode into their `notifyType`.
+			 */
+			payload?: components["schemas"]["NotificationPayload"];
+			/**
+			 * Format: date-time
+			 * @description When the notification was read; absent means unread.
+			 */
+			readAt?: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		AccountNotificationPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["AccountNotification"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Path parameters for notification operations.
+		 *
+		 *     The notification id is globally unique; account ownership is enforced in the
+		 *     query, so a notification of another account resolves to a not-found result.
+		 */
+		AccountNotificationPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the notification.
+			 */
+			notificationId: string;
+		};
 		/**
 		 * @description Path parameters for account operations.
 		 *
@@ -12651,79 +13367,13 @@ export interface components {
 			/** @description Handle of the account. */
 			username: components["schemas"]["Handle"];
 		};
-		/**
-		 * @description Response type for a workspace activity.
-		 *
-		 *     The typed payload is nested under `payload`, so an activity is
-		 *     `{ id, workspaceSlug, performedBy, payload: { activityType, <params...> }, createdAt }`.
-		 */
-		Activity: {
-			/**
-			 * Format: date-time
-			 * @description When the activity occurred.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique activity identifier.
-			 */
-			id: string;
-			/**
-			 * @description The activity type and its typed params, absent when the stored params do
-			 *     not decode into their `activityType`.
-			 */
-			payload?: components["schemas"]["ActivityPayload"];
-			/** @description Account that performed the activity. */
-			performedBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this activity belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description The export-only query parameter: the output format. Kept separate from the
-		 *     shared filter and window so each is extracted on its own (see
-		 *     [`ActivityFilterQuery`] for why flattening is avoided).
-		 */
-		ActivityExportOptions: {
-			/** @description Output format; defaults to `csv`. */
-			format?: components["schemas"]["ExportFormat"];
-		};
-		/**
-		 * @description The activity-specific filter parameters: which activity types to keep and
-		 *     whose activities to keep.
-		 *
-		 *     This is its own query struct so an endpoint composes it alongside the shared
-		 *     [`CursorPagination`](crate::handler::request::CursorPagination) and
-		 *     [`DateWindow`] as separate query extractors, rather than `#[serde(flatten)]`ing
-		 *     them into one struct: the query extractor (`serde_html_form`) mis-handles
-		 *     flattened sub-structs — a flattened pagination struct fails to deserialize even
-		 *     a bare `?limit=` — so each concern is extracted on its own.
-		 */
-		ActivityFilterQuery: {
-			/** @description Username of the account whose activities to keep. Omit for any actor. */
-			actor?: components["schemas"]["Handle"];
-			/**
-			 * @description Keep only these activity types (e.g. `file.created`). Repeat the `type`
-			 *     parameter for several; omit for no type constraint.
-			 */
-			type?: components["schemas"]["ActivityType"][];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ActivityPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Activity"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
+		/** @description Response type for unread notifications status. */
+		AccountUnreadStatus: {
 			/**
 			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
+			 * @description Number of unread notifications.
 			 */
-			total?: number;
+			unreadCount: number;
 		};
 		/**
 		 * @description The typed payload of an audit-log activity, tagged by `type` with its params
@@ -12846,34 +13496,34 @@ export interface components {
 					type: "webhook.deleted";
 			  }
 			| {
-					data: components["schemas"]["FileActivityParams"];
+					data: components["schemas"]["DocumentActivityParams"];
 					/** @constant */
-					type: "file.created";
+					type: "document.created";
 			  }
 			| {
-					data: components["schemas"]["FileActivityParams"];
+					data: components["schemas"]["DocumentActivityParams"];
 					/** @constant */
-					type: "file.updated";
+					type: "document.updated";
 			  }
 			| {
-					data: components["schemas"]["FileActivityParams"];
+					data: components["schemas"]["DocumentActivityParams"];
 					/** @constant */
-					type: "file.deleted";
+					type: "document.deleted";
 			  }
 			| {
-					data: components["schemas"]["AssignmentActivityParams"];
+					data: components["schemas"]["ReviewActivityParams"];
 					/** @constant */
-					type: "file.assigned";
+					type: "review.verified";
 			  }
 			| {
-					data: components["schemas"]["AssignmentActivityParams"];
+					data: components["schemas"]["ReviewActivityParams"];
 					/** @constant */
-					type: "file.unassigned";
+					type: "review.assigned";
 			  }
 			| {
-					data: components["schemas"]["AssignmentActivityParams"];
+					data: components["schemas"]["ReviewActivityParams"];
 					/** @constant */
-					type: "file.assignment.updated";
+					type: "review.unassigned";
 			  }
 			| {
 					data: components["schemas"]["PipelineActivityParams"];
@@ -12924,6 +13574,36 @@ export interface components {
 					data: components["schemas"]["PolicyActivityParams"];
 					/** @constant */
 					type: "policy.deleted";
+			  }
+			| {
+					data: components["schemas"]["ThreadActivityParams"];
+					/** @constant */
+					type: "thread.opened";
+			  }
+			| {
+					data: components["schemas"]["ThreadActivityParams"];
+					/** @constant */
+					type: "thread.closed";
+			  }
+			| {
+					data: components["schemas"]["ThreadActivityParams"];
+					/** @constant */
+					type: "thread.reopened";
+			  }
+			| {
+					data: components["schemas"]["ThreadActivityParams"];
+					/** @constant */
+					type: "thread.renamed";
+			  }
+			| {
+					data: components["schemas"]["ThreadActivityParams"];
+					/** @constant */
+					type: "thread.deleted";
+			  }
+			| {
+					data: components["schemas"]["ThreadCommentActivityParams"];
+					/** @constant */
+					type: "thread.comment.created";
 			  };
 		/**
 		 * @description The type of activity performed in a workspace, for audit logging.
@@ -12954,12 +13634,12 @@ export interface components {
 			| "webhook.created"
 			| "webhook.updated"
 			| "webhook.deleted"
-			| "file.created"
-			| "file.updated"
-			| "file.deleted"
-			| "file.assigned"
-			| "file.unassigned"
-			| "file.assignment.updated"
+			| "document.created"
+			| "document.updated"
+			| "document.deleted"
+			| "review.verified"
+			| "review.assigned"
+			| "review.unassigned"
 			| "pipeline.created"
 			| "pipeline.updated"
 			| "pipeline.deleted"
@@ -12969,59 +13649,13 @@ export interface components {
 			| "pipeline.redaction.created"
 			| "policy.created"
 			| "policy.updated"
-			| "policy.deleted";
-		/** @description API token response structure. */
-		ApiToken: {
-			/**
-			 * @description Whether this token is the one the current request authenticated with.
-			 *
-			 *     Lets a client single out the active session in the list. Defaults to
-			 *     `false`; the listing handler sets it for the matching token.
-			 */
-			current: boolean;
-			/** @description Human-readable display name for the API token. */
-			displayName: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token expires (None = never expires).
-			 */
-			expiredAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier for the token.
-			 */
-			id: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of token creation.
-			 */
-			issuedAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of most recent token activity.
-			 */
-			lastUsedAt?: string;
-			/** @description Type of token (web, api, etc.). */
-			sessionType: components["schemas"]["ApiTokenType"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ApiTokenPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["ApiToken"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
+			| "policy.deleted"
+			| "thread.opened"
+			| "thread.closed"
+			| "thread.reopened"
+			| "thread.renamed"
+			| "thread.deleted"
+			| "thread.comment.created";
 		/**
 		 * @description The type of API token, for authentication and tracking.
 		 *
@@ -13029,30 +13663,6 @@ export interface components {
 		 *     by the client type they authenticate.
 		 */
 		ApiTokenType: "web" | "api" | "app";
-		/** @description API token with JWT token string (only returned on creation). */
-		ApiTokenWithJWT: {
-			/** @description Human-readable display name for the API token. */
-			displayName: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token expires (omitted = never expires).
-			 */
-			expiredAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier for the token.
-			 */
-			id: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of token creation.
-			 */
-			issuedAt: string;
-			/** @description Type of token (web, mobile, api, etc.). */
-			sessionType: components["schemas"]["ApiTokenType"];
-			/** @description The JWT token string (only shown once on creation). */
-			token: string;
-		};
 		ArtifactSet: {
 			parts: (
 				| {
@@ -13081,99 +13691,14 @@ export interface components {
 				  }
 			)[];
 		};
-		/**
-		 * @description Response type for a file review assignment.
-		 *
-		 *     A file may be assigned to several reviewers at once (like GitHub assignees);
-		 *     each assignment is its own resource with its own review status.
-		 */
-		Assignment: {
-			/** @description Reviewer the file is assigned to. */
-			assignee: components["schemas"]["AccountRef"];
-			/**
-			 * Format: date-time
-			 * @description When the assignment was created.
-			 */
-			createdAt: string;
+		/** @description Request payload to assign or unassign a document review. */
+		AssignWorkspaceReview: {
 			/**
 			 * Format: uuid
-			 * @description File under review.
+			 * @description Account to assign the review to, or `null` to clear the current assignee.
 			 */
-			fileId: string;
-			/**
-			 * @description Display name of the file under review, for showing the assignment without
-			 *     a separate file lookup. `None` if the file was removed (e.g. by retention).
-			 */
-			fileName?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the assignment.
-			 */
-			id: string;
-			/** @description The reviewer's current review status for this file. */
-			status: components["schemas"]["AssignmentStatus"];
-			/**
-			 * Format: date-time
-			 * @description When the assignment was last updated.
-			 */
-			updatedAt: string;
+			assignee?: string;
 		};
-		/**
-		 * @description Params of a file-assignment activity (`file.assigned`, `file.unassigned`,
-		 *     `file.assignment.updated`).
-		 */
-		AssignmentActivityParams: {
-			/** @description Username of the reviewer the file is assigned to. */
-			assigneeUsername: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Id of the assignment.
-			 */
-			assignmentId: string;
-			/**
-			 * @description Display name of the file under review, when it still exists. `None` (and
-			 *     omitted) if the file was removed (e.g. by retention).
-			 */
-			fileName?: string;
-			/** @description The reviewer's review status at the time of the activity. */
-			status: components["schemas"]["AssignmentStatus"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		AssignmentPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Assignment"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters addressing one assignment by its opaque id. */
-		AssignmentPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the assignment.
-			 */
-			assignmentId: string;
-		};
-		/**
-		 * @description The review-workflow status of one reviewer's assignment on a file.
-		 *
-		 *     Corresponds to the `ASSIGNMENT_STATUS` PostgreSQL enum. A file may be
-		 *     assigned to several reviewers at once (like GitHub assignees); each
-		 *     reviewer's assignment carries its own status. This is the human
-		 *     review-workflow axis and is independent of a detection's execution status,
-		 *     which is driven by the analysis worker.
-		 */
-		AssignmentStatus: "assigned" | "in_review" | "done";
 		/**
 		 * @description Author-supplied rationale for a redaction: *under what authority* it was made.
 		 *
@@ -13380,6 +13905,11 @@ export interface components {
 					detail: components["schemas"]["AudioModel"];
 					/** @constant */
 					kind: "model";
+			  }
+			| {
+					detail: components["schemas"]["AudioMetadata"];
+					/** @constant */
+					kind: "metadata";
 			  }
 			| {
 					detail: components["schemas"]["Deduplication"];
@@ -13643,6 +14173,22 @@ export interface components {
 			location: components["schemas"]["AudioLocation"];
 		};
 		/**
+		 * @description Detail of a metadata-field detection: a document's out-of-band field
+		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
+		 *     redaction subject at `location`, with its source in `metadata`.
+		 *
+		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
+		 *     out of free content — it is a named field that is simply present. There is
+		 *     nothing probabilistic to weigh, so the entity carries it as its own event
+		 *     kind rather than pretending a pattern fired.
+		 */
+		AudioMetadata: {
+			/** @description The field's location (its key). */
+			location: components["schemas"]["AudioLocation"];
+			/** @description Source metadata (which reader surfaced the field). */
+			metadata: components["schemas"]["MetadataEvent"];
+		};
+		/**
 		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
 		 *     metadata in `model`.
 		 */
@@ -13803,6 +14349,18 @@ export interface components {
 			 */
 			context: components["schemas"]["DocumentContext"];
 			/**
+			 * @description The vocabularies this request introduced: labels elide does
+			 *     not ship, and how they were found.
+			 *
+			 *     Carried back for the same reason [`context`] is. Anonymize
+			 *     compiles its catalog afresh, and a custom label missing
+			 *     from it resolves to nothing — the entity would be detected
+			 *     and then silently not redacted.
+			 *
+			 *     [`context`]: Audit::context
+			 */
+			recognition?: components["schemas"]["Recognition"][];
+			/**
 			 * @description The detections: elide's own report, every document and the
 			 *     parts nested in one, each entity carrying its provenance
 			 *     chain.
@@ -13844,6 +14402,22 @@ export interface components {
 		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
 		 */
 		AuditHash: string;
+		/**
+		 * @description The sign-in methods this deployment offers.
+		 *
+		 *     Lets a client render the login screen without probing: one ordered list of
+		 *     the identity providers a person can sign in with — `password`, plus exactly
+		 *     the OIDC providers (`google`, `microsoft`, ...) whose apps are configured on
+		 *     the server. This is pre-authentication reference data, so the endpoint is
+		 *     unauthenticated.
+		 */
+		AuthCapabilities: {
+			/**
+			 * @description The available sign-in methods, in the order a client should present them:
+			 *     `password` first, then each configured OIDC provider.
+			 */
+			methods: components["schemas"]["IdentityProvider"][];
+		};
 		/**
 		 * @description Configuration for a provider reached with an API key (OpenAI, Anthropic).
 		 *
@@ -13937,90 +14511,6 @@ export interface components {
 		 *     [`tags`]: super::Label::tags
 		 */
 		Category: string;
-		/** @description A single chat message. */
-		ChatMessage: {
-			/** @description Message text. */
-			content: string;
-			/**
-			 * Format: date-time
-			 * @description When the message was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique message identifier.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description Parent in the conversation tree; absent for a root.
-			 */
-			parentId?: string;
-			/** @description Author of the message. */
-			role: components["schemas"]["ChatRole"];
-		};
-		/**
-		 * @description The author of a chat message.
-		 *
-		 *     Corresponds to the `CHAT_ROLE` PostgreSQL enum.
-		 */
-		ChatRole: "system" | "user" | "assistant";
-		/** @description A chat session. */
-		ChatSession: {
-			/**
-			 * Format: date-time
-			 * @description When the session was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Active leaf of the message tree (the conversation's resume point).
-			 */
-			currentMessageId?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique session identifier.
-			 */
-			id: string;
-			/** @description Human-readable title. */
-			title: string;
-			/**
-			 * Format: date-time
-			 * @description When the session was last active.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ChatSessionPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["ChatSession"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for a chat session. */
-		ChatSessionPathParams: {
-			/**
-			 * Format: uuid
-			 * @description The session id.
-			 */
-			sessionId: string;
-		};
-		/** @description One streamed chunk of the assistant's reply. */
-		ChatToken: {
-			/** @description The text delta. */
-			delta: string;
-		};
 		/**
 		 * @description A [`Cited`](Attribution::Cited) rationale: a citable authority, the citation
 		 *     within it, and an optional rationale for why it applies.
@@ -14106,6 +14596,27 @@ export interface components {
 			 */
 			r: number;
 		};
+		/** @description Params of a `comment.mentioned` notification, sent to a mentioned account. */
+		CommentMentionedParams: {
+			/** @description Username of the account that wrote the comment (the mentioner). */
+			authorUsername: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the comment the account was mentioned in.
+			 */
+			commentId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the document the thread is on, when it is document-pinned; `None` for
+			 *     a workspace-level thread.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the thread the comment is in.
+			 */
+			threadId: string;
+		};
 		/** @description Health of a single service component. */
 		ComponentHealth: {
 			/** @description Component name (e.g. `"postgres"`, `"nats"`). */
@@ -14154,50 +14665,6 @@ export interface components {
 			/** @description Name of the conflict policy that chose the winner. */
 			resolved_by: string;
 		};
-		/**
-		 * @description Response type for a workspace connection.
-		 *
-		 *     Note: The encrypted connection data is never exposed in API responses.
-		 *     Only metadata about the connection is returned.
-		 */
-		Connection: {
-			/** @description Capability category of the connection (object store, file service). */
-			connectionType: components["schemas"]["ConnectionType"];
-			/**
-			 * Format: date-time
-			 * @description When the connection was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this connection. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Human-readable connection display name. */
-			displayName: string;
-			/** @description Opaque identifier of the connection. */
-			id: components["schemas"]["ConnectionId"];
-			/** @description Whether the connection is enabled. */
-			isActive: boolean;
-			/**
-			 * Format: date-time
-			 * @description When the connection last synced successfully, if ever. Independent of
-			 *     `sync`: a connection with no schedule still records its on-demand syncs.
-			 */
-			lastSyncedAt?: string;
-			/** @description Provider identifier (`s3`, `azure`, `gcs`, `google_drive`, `dropbox`, ...). */
-			provider: string;
-			/**
-			 * @description Scheduled-sync configuration; present only for connections that sync on a
-			 *     timer. Its absence does not mean the connection cannot sync — a file
-			 *     service and an unscheduled object store both transfer on demand.
-			 */
-			sync?: components["schemas"]["SyncSchedule"];
-			/**
-			 * Format: date-time
-			 * @description When the connection was last updated.
-			 */
-			updatedAt: string;
-			/** @description Handle of the workspace this connection belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
 		/** @description Params of a connection activity (`connection.*`). */
 		ConnectionActivityParams: {
 			/** @description Id of the connection. */
@@ -14216,74 +14683,6 @@ export interface components {
 			| components["schemas"]["FileServiceConfig"];
 		/** @description Opaque conn identifier (conn_<uuid>). */
 		ConnectionId: string;
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ConnectionPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Connection"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Path parameters for connection operations.
-		 *
-		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by
-		 *     the [`WorkspaceContext`] extractor.
-		 *
-		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
-		 */
-		ConnectionPathParams: {
-			/** @description Opaque identifier of the connection. */
-			connectionId: components["schemas"]["ConnectionId"];
-		};
-		/** @description A connection sync (import or export). */
-		ConnectionSync: {
-			/**
-			 * Format: int32
-			 * @description 1-based attempt number; scheduled syncs may be retried on failure.
-			 */
-			attempt: number;
-			/**
-			 * Format: date-time
-			 * @description When the sync finished, if it has.
-			 */
-			completedAt?: string;
-			/** @description The connection this sync belongs to. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/** @description Failure reason when the sync failed; omitted otherwise. */
-			errorMessage?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique sync identifier.
-			 */
-			id: string;
-			/**
-			 * Format: int64
-			 * @description Number of objects transferred so far.
-			 */
-			recordsSynced: number;
-			/**
-			 * Format: date-time
-			 * @description When the sync started.
-			 */
-			startedAt: string;
-			/** @description Current status of the sync. */
-			status: components["schemas"]["SyncStatus"];
-			/** @description How the sync was triggered. */
-			triggerType: components["schemas"]["SyncTriggerType"];
-			/** @description Account that triggered the sync. */
-			triggeredBy: components["schemas"]["AccountRef"];
-		};
 		/** @description Params of a `connection.sync.completed` notification. */
 		ConnectionSyncCompletedParams: {
 			/** @description Id of the connection that synced. */
@@ -14306,34 +14705,6 @@ export interface components {
 			error?: string;
 		};
 		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ConnectionSyncPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["ConnectionSync"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for a specific connection sync. */
-		ConnectionSyncPathParams: {
-			/** @description Opaque identifier of the connection. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the sync run.
-			 */
-			syncId: string;
-		};
-		/**
 		 * @description The capability category of a transfer connection.
 		 *
 		 *     Corresponds to the `CONNECTION_TYPE` PostgreSQL enum. A stable, closed set:
@@ -14344,22 +14715,6 @@ export interface components {
 		 *     resource (`workspace_providers`), not a connection.
 		 */
 		ConnectionType: "object_store" | "file_service";
-		/** @description Result of a connection reachability check. */
-		ConnectionVerification: {
-			/** @description Failure reason when not reachable; omitted on success. */
-			error?: string;
-			/** @description Whether the backing store was reachable with the stored credentials. */
-			reachable: boolean;
-		};
-		/** @description Query parameters for listing connections. */
-		ConnectionsQuery: {
-			/**
-			 * @description Filter by provider (`s3`, `azure`, `gcs`). Repeatable; a connection
-			 *     matches if it uses any of the given providers. Empty means no filter.
-			 * @default []
-			 */
-			provider?: string[];
-		};
 		/**
 		 * @description Which connector families and providers this deployment can create.
 		 *
@@ -14368,7 +14723,7 @@ export interface components {
 		 *     object-store and inference connections carry their own credentials and are
 		 *     always available.
 		 */
-		ConnectorCatalog: {
+		ConnectorCapabilities: {
 			/** @description Availability of each OAuth file-service provider. */
 			fileServices: components["schemas"]["FileProviders"];
 			/**
@@ -14413,29 +14768,65 @@ export interface components {
 		 */
 		CountryCode: string;
 		/** @description Request to create a new API token. */
-		CreateApiToken: {
+		CreateAccountApiToken: {
 			/** @description Human-readable display name for the API token (1-100 characters). */
 			displayName: string;
 			/** @description When the token expires. */
 			expiresIn: components["schemas"]["TokenExpiration"];
 		};
 		/**
-		 * @description Request payload to assign a file to a reviewer.
+		 * @description Request payload to start an ad-hoc detection over a document, naming its
+		 *     policies directly rather than through a pipeline.
 		 *
-		 *     A file may be assigned to several reviewers at once; assigning the same
-		 *     reviewer twice is a no-op. Requires `AssignTasks`.
+		 *     Analyzes the document against the given policies (authored or one-shot) and
+		 *     returns the detection holding the findings for review before redaction.
 		 */
-		CreateAssignment: {
-			/** @description Handle of the workspace member to assign the file to. */
-			assignee: components["schemas"]["Handle"];
+		CreateAdhocWorkspaceDetection: {
+			/**
+			 * Format: uuid
+			 * @description The document to analyze.
+			 */
+			documentId: string;
+			/** @description The policies to run against, by slug. At least one is required. */
+			policySlugs: components["schemas"]["Handle"][];
+			/**
+			 * @description Retention override for the outputs this detection produces. Absent falls
+			 *     back to the workspace retention baseline.
+			 */
+			retentionOverride?: components["schemas"]["RetentionOverride"];
+			/** @description Per-document scope (languages, jurisdictions, document labels). */
+			scope?: components["schemas"]["DocumentContext"];
 		};
-		/** @description Request to create a chat session. */
-		CreateChatSession: {
-			/** @description Optional title. Defaults to a title seeded from the first message. */
-			title?: string;
+		/**
+		 * @description Request payload for creating a new workspace.
+		 *
+		 *     Creates a new workspace with the specified configuration. The creator is
+		 *     automatically added as an owner of the workspace.
+		 */
+		CreateWorkspace: {
+			/** @description Optional description of the workspace (max 500 characters). */
+			description?: string;
+			/** @description Display name of the workspace (2-32 characters). */
+			displayName: string;
+			/**
+			 * @description Workspace settings (approval requirement, data-retention rules). Defaults
+			 *     to requiring approval and keeping everything when omitted.
+			 */
+			settings?: components["schemas"]["WorkspaceSettings"];
+			/** @description Optional URL slug. Derived from the display name when omitted. */
+			slug?: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Request payload to post a comment (message) in a thread.
+		 *
+		 *     `@username` mentions in the body notify those workspace members.
+		 */
+		CreateWorkspaceComment: {
+			/** @description The comment text (1-10000 characters). */
+			body: string;
 		};
 		/** @description Request payload for creating a new workspace connection. */
-		CreateConnection: {
+		CreateWorkspaceConnection: {
 			/**
 			 * @description Typed provider configuration (provider tag + its credentials), encrypted
 			 *     at rest. The `provider` tag selects which credential shape is required and
@@ -14456,17 +14847,17 @@ export interface components {
 			sync?: components["schemas"]["SyncScheduleInput"];
 		};
 		/**
-		 * @description Request payload to start a detection over a file.
+		 * @description Request payload to start a detection over a document.
 		 *
-		 *     Analyzes the file with the pipeline's configuration and returns the
+		 *     Analyzes the document with the pipeline's configuration and returns the
 		 *     detection, which holds the findings for review before redaction.
 		 */
-		CreateDetection: {
+		CreateWorkspaceDetection: {
 			/**
 			 * Format: uuid
-			 * @description The file to analyze.
+			 * @description The document to analyze.
 			 */
-			fileId: string;
+			documentId: string;
 			/**
 			 * @description Per-document scope (languages, jurisdictions, document labels).
 			 *
@@ -14476,7 +14867,7 @@ export interface components {
 			scope?: components["schemas"]["DocumentContext"];
 		};
 		/** @description Request payload for creating a new workspace invite. */
-		CreateInvite: {
+		CreateWorkspaceInvite: {
 			/** @description When the invitation expires. */
 			expiresIn: components["schemas"]["InviteExpiration"];
 			/** @description Role the invitee will have if they accept the invitation. */
@@ -14493,7 +14884,7 @@ export interface components {
 		 *     Creates a new pipeline with the specified name and optional description.
 		 *     The definition can be added later via update.
 		 */
-		CreatePipeline: {
+		CreateWorkspacePipeline: {
 			/**
 			 * @description Optional detection + redaction configuration. Defaults to an empty
 			 *     definition that can be filled in via update.
@@ -14523,13 +14914,20 @@ export interface components {
 		 *     The body's `name` and `description` drive the stored columns unless
 		 *     overridden here.
 		 */
-		CreatePolicy: {
+		CreateWorkspacePolicy: {
 			/** @description Optional description override. Defaults to the policy's own description. */
 			description?: string;
-			/** @description Optional display name override. Defaults to the policy's own name. */
+			/**
+			 * @description Optional display name override. Defaults to the policy's own name. Ignored
+			 *     for a one-shot (labels) body, whose name is generated.
+			 */
 			displayName?: string;
-			/** @description URL slug, unique within the workspace and immutable after creation. */
-			slug: components["schemas"]["Handle"];
+			/**
+			 * @description URL slug, unique within the workspace and immutable after creation.
+			 *     Required for a template or inline body; ignored (and generated) for a
+			 *     one-shot (labels) body.
+			 */
+			slug?: components["schemas"]["Handle"];
 		} & (
 			| {
 					/** @constant */
@@ -14548,9 +14946,18 @@ export interface components {
 					/** @constant */
 					source: "inline";
 			  }
+			| {
+					/**
+					 * @description The built-in labels to detect and erase (e.g. `person_name`,
+					 *     `email_address`).
+					 */
+					labels: string[];
+					/** @constant */
+					source: "labels";
+			  }
 		);
 		/** @description Request payload for creating a new workspace provider. */
-		CreateProvider: {
+		CreateWorkspaceProvider: {
 			/**
 			 * @description Typed provider configuration (provider tag + its credentials), encrypted at
 			 *     rest. The `provider` tag selects which credential shape is required and
@@ -14566,7 +14973,7 @@ export interface components {
 			isActive?: boolean;
 		};
 		/** @description Request payload for creating a new workspace webhook. */
-		CreateWebhook: {
+		CreateWorkspaceWebhook: {
 			/** @description Detailed description of the webhook's purpose (max 500 characters). */
 			description: string;
 			/** @description Human-readable name for the webhook (1-128 characters). */
@@ -14584,25 +14991,6 @@ export interface components {
 			 * @description The URL to send webhook payloads to.
 			 */
 			url: string;
-		};
-		/**
-		 * @description Request payload for creating a new workspace.
-		 *
-		 *     Creates a new workspace with the specified configuration. The creator is
-		 *     automatically added as an owner of the workspace.
-		 */
-		CreateWorkspace: {
-			/** @description Optional description of the workspace (max 500 characters). */
-			description?: string;
-			/** @description Display name of the workspace (2-32 characters). */
-			displayName: string;
-			/**
-			 * @description Workspace settings (approval requirement, data-retention rules). Defaults
-			 *     to requiring approval and keeping everything when omitted.
-			 */
-			settings?: components["schemas"]["WorkspaceSettings"];
-			/** @description Optional URL slug. Derived from the display name when omitted. */
-			slug?: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Cursor-based pagination query parameters.
@@ -14634,11 +15022,12 @@ export interface components {
 		/**
 		 * @description How to detect one caller-authored label.
 		 *
-		 *     Names a label the same policy declares in [`custom`]. A matcher
-		 *     for a shipped built-in is rejected: elide already detects those,
-		 *     and two definitions for one label would race in reconciliation.
+		 *     Names a label the same request declares in [`custom`]. A
+		 *     matcher for a shipped built-in is rejected: elide already
+		 *     detects those, and two definitions for one label would race in
+		 *     reconciliation.
 		 *
-		 *     [`custom`]: super::PolicyDefinition::custom
+		 *     [`custom`]: super::Recognition::custom
 		 */
 		CustomMatcher: {
 			/**
@@ -14652,8 +15041,8 @@ export interface components {
 			 */
 			confidence?: number;
 			/**
-			 * @description The label this detects, which the policy must declare in
-			 *     [`custom`](super::PolicyDefinition::custom).
+			 * @description The label this detects, which the request must declare in
+			 *     [`custom`](super::Recognition::custom).
 			 */
 			label: components["schemas"]["LabelRef"];
 			/**
@@ -14739,48 +15128,17 @@ export interface components {
 			strategy: string;
 		};
 		/**
-		 * @description Request to delete several files in one call.
+		 * @description Request to delete several documents in one call.
 		 *
-		 *     The `100`-id cap bounds the work one call fans out into: the resolve query,
-		 *     the delete transaction, and one best-effort object purge per file.
+		 *     The `100`-id cap bounds the work one call fans out into: the resolve query and
+		 *     the delete transaction.
 		 */
-		DeleteFiles: {
+		DeleteWorkspaceDocuments: {
 			/**
-			 * @description Ids of the files to delete. Ids that are unknown, already deleted, or in
-			 *     another workspace are skipped rather than failing the request.
+			 * @description Ids of the documents to delete. Ids that are unknown, already deleted, or
+			 *     in another workspace are skipped rather than failing the request.
 			 */
-			fileIds: string[];
-		};
-		/**
-		 * @description Result of a bulk file deletion.
-		 *
-		 *     The deletion is idempotent: `deleted` holds the ids that resolved to live
-		 *     files in the workspace and were removed, and `skipped` holds the requested
-		 *     ids that did not — unknown, already deleted, in another workspace, or held by
-		 *     an in-progress detection that still needs the file.
-		 */
-		DeletedFiles: {
-			/** @description Ids that were deleted. */
-			deleted: string[];
-			/**
-			 * @description Requested ids that were skipped: unknown, already deleted, in another
-			 *     workspace, or held by an in-progress detection.
-			 */
-			skipped: string[];
-		};
-		/**
-		 * @description The result of minting a native-app (desktop) session token.
-		 *
-		 *     The frontend hands `apiToken` to the desktop app via the `redirectUri`
-		 *     deep-link (`{redirectUri}?token={apiToken}`); the app stores it and sends it as
-		 *     an `Authorization: Bearer` credential. Browser web sessions use cookies
-		 *     instead and return no token.
-		 */
-		DesktopToken: {
-			/** @description The signed `app` JWT to send as a Bearer token. */
-			apiToken: string;
-			/** @description The desktop deep-link the token should be delivered on, echoed back. */
-			redirectUri: string;
+			documentIds: string[];
 		};
 		/**
 		 * @description Request payload to mint a native-app (desktop) session token.
@@ -14798,147 +15156,21 @@ export interface components {
 			 */
 			redirectUri: string;
 		};
-		/**
-		 * @description Response type for a detection.
-		 *
-		 *     A detection is addressed by its own opaque id; the owning pipeline and
-		 *     workspace slugs are carried for context. Redacted outputs are not here — a
-		 *     detection produces many redactions, each fetched from its `redactions`
-		 *     endpoint.
-		 */
-		Detection: {
-			/**
-			 * Format: date-time
-			 * @description When the detection completed analysis.
-			 */
-			completedAt?: string;
-			/** @description Human-readable failure reason, present only when the detection `failed`. */
-			error?: string;
-			/** @description Opaque identifier of the detection. */
-			id: components["schemas"]["DetectionId"];
-			/**
-			 * Format: uuid
-			 * @description Source document this detection analyzes.
-			 */
-			inputFileId: string;
-			/**
-			 * @description Display name of the source document, for showing the detection without a
-			 *     separate file lookup. `None` if the file was removed (e.g. by retention).
-			 */
-			inputFileName?: string;
-			/** @description Non-encrypted metadata for filtering/display. */
-			metadata: components["schemas"]["DetectionMetadata"];
-			/** @description Handle of the pipeline this detection belongs to. */
-			pipelineSlug: components["schemas"]["Handle"];
-			/**
-			 * Format: date-time
-			 * @description When the detection started.
-			 */
-			startedAt: string;
-			/**
-			 * @description Current detection status.
-			 *
-			 *     The detections are available to fetch from the detection's `analysis`
-			 *     endpoint once this reaches `complete`.
-			 */
-			status: components["schemas"]["DetectionStatus"];
-			/** @description How the detection was triggered. */
-			triggerType: components["schemas"]["PipelineTriggerType"];
-			/** @description Account that triggered the detection. */
-			triggeredBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this detection belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
 		/** @description Params of a detection activity (`pipeline.detection.*`). */
 		DetectionActivityParams: {
 			/** @description Id of the detection. */
 			detectionId: components["schemas"]["DetectionId"];
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
-		};
-		/** @description Detection health for a workspace. */
-		DetectionAnalytics: {
-			/**
-			 * Format: int64
-			 * @description Mean completed-detection duration in milliseconds; omitted until a
-			 *     detection completes.
-			 */
-			avgDurationMs?: number;
-			/**
-			 * @description Per-status breakdown, one entry per detection status (zero-filled), in a
-			 *     stable order.
-			 */
-			byStatus: components["schemas"]["DetectionStatusEntry"][];
-			/**
-			 * Format: double
-			 * @description Failed / (completed + failed). Omitted when no detection has reached a
-			 *     terminal state (genuinely no signal, not zero).
-			 */
-			errorRate?: number;
-			/**
-			 * Format: int64
-			 * @description 95th-percentile completed-detection duration in milliseconds; omitted until
-			 *     a detection completes.
-			 */
-			p95DurationMs?: number;
-			/**
-			 * Format: int64
-			 * @description Total number of detections.
-			 */
-			total: number;
+			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
+			pipelineSlug?: components["schemas"]["Handle"];
 		};
 		/** @description Params of a `pipeline.detection.completed` notification. */
 		DetectionCompletedParams: {
 			/** @description Id of the detection. */
 			detectionId: components["schemas"]["DetectionId"];
-			/** @description Display name of the analyzed file, if known. */
-			inputFileName?: string;
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
-		};
-		/** @description A single day of detection activity. */
-		DetectionDayEntry: {
-			/**
-			 * Format: int64
-			 * @description Mean completed-detection duration (milliseconds) this day; omitted if none completed.
-			 */
-			avgDurationMs?: number;
-			/**
-			 * Format: date
-			 * @description The day (`YYYY-MM-DD`, UTC).
-			 */
-			date: string;
-			/**
-			 * Format: int64
-			 * @description Detections started this day (`0` on a quiet day).
-			 */
-			detections: number;
-			/**
-			 * Format: double
-			 * @description Failed / (completed + failed) for this day; omitted when no detection
-			 *     reached a terminal state that day.
-			 */
-			errorRate?: number;
-			/**
-			 * Format: int64
-			 * @description Input/prompt tokens spent by this day's detections; omitted when none used a model.
-			 */
-			inputTokens?: number;
-			/**
-			 * Format: int64
-			 * @description Output/completion tokens spent this day; omitted when none used a model.
-			 */
-			outputTokens?: number;
-			/**
-			 * Format: int64
-			 * @description 95th-percentile completed-detection duration (milliseconds) this day; omitted if none.
-			 */
-			p95DurationMs?: number;
-			/**
-			 * Format: int64
-			 * @description Reported total tokens this day; omitted when none used a model.
-			 */
-			totalTokens?: number;
+			/** @description Display name of the analyzed document, if known. */
+			inputDocumentName?: string;
+			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
+			pipelineSlug?: components["schemas"]["Handle"];
 		};
 		/** @description Params of a `pipeline.detection.failed` notification. */
 		DetectionFailedParams: {
@@ -14946,10 +15178,10 @@ export interface components {
 			detectionId: components["schemas"]["DetectionId"];
 			/** @description Failure reason, if available. */
 			error?: string;
-			/** @description Display name of the analyzed file, if known. */
-			inputFileName?: string;
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Display name of the analyzed document, if known. */
+			inputDocumentName?: string;
+			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
+			pipelineSlug?: components["schemas"]["Handle"];
 		};
 		/** @description Opaque detection identifier (detection_<uuid>). */
 		DetectionId: string;
@@ -14968,29 +15200,6 @@ export interface components {
 			usage?: unknown;
 		};
 		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		DetectionPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Detection"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for detection operations. */
-		DetectionPathParams: {
-			/** @description Opaque identifier of the detection. */
-			detectionId: components["schemas"]["DetectionId"];
-		};
-		/**
 		 * @description The execution status of a detection (one analysis pass of a file).
 		 *
 		 *     Corresponds to the `DETECTION_STATUS` PostgreSQL enum. A detection is
@@ -15000,16 +15209,6 @@ export interface components {
 		 *     detection and does not change this status.
 		 */
 		DetectionStatus: "pending" | "executing" | "complete" | "failed";
-		/** @description One status's share of a workspace's detections. */
-		DetectionStatusEntry: {
-			/**
-			 * Format: int64
-			 * @description Number of detections in this status.
-			 */
-			count: number;
-			/** @description The detection status. */
-			status: components["schemas"]["DetectionStatus"];
-		};
 		/**
 		 * @description A detection's status change, broadcast on the core-NATS subject
 		 *     [`detection_subject`].
@@ -15025,15 +15224,6 @@ export interface components {
 			detectionId: string;
 			/** @description The detection's new status. */
 			status: components["schemas"]["DetectionStatus"];
-		};
-		/**
-		 * @description A workspace's daily detection activity over a window: one point per day, dense
-		 *     (quiet days included with `detections: 0`), ready to plot as a continuous
-		 *     series.
-		 */
-		DetectionTimeSeries: {
-			/** @description One entry per day in the requested window, oldest first. */
-			points: components["schemas"]["DetectionDayEntry"][];
 		};
 		/**
 		 * @description Pixel dimensions of an image or any 2-D canvas.
@@ -15057,6 +15247,18 @@ export interface components {
 			 * @description Width in pixels.
 			 */
 			width: number;
+		};
+		/** @description Sort order direction. */
+		Direction: "ascending" | "descending";
+		/** @description Params of a document activity (`document.*`). */
+		DocumentActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the document.
+			 */
+			documentId: string;
+			/** @description Display name of the document. */
+			documentName: string;
 		};
 		/**
 		 * @description What a caller asserts about the document being processed.
@@ -15088,6 +15290,16 @@ export interface components {
 			 */
 			metadata?: components["schemas"]["ScopeMetadata"];
 		};
+		/** @description A SHA-256 content hash as a 64-character hex string. */
+		DocumentHash: string;
+		/**
+		 * @description The kind of a human-facing document.
+		 *
+		 *     Corresponds to the `DOCUMENT_KIND` PostgreSQL enum. Machine byproducts
+		 *     (detection audits, review audits, enrichment intermediates) are not
+		 *     documents — they reference blobs directly from their own tables.
+		 */
+		DocumentKind: "original" | "redacted";
 		/**
 		 * Format: uint16
 		 * @description Dots-per-inch resolution for rasterizing vector content.
@@ -15149,18 +15361,6 @@ export interface components {
 			/** @description The resource that the error relates to, if any. */
 			resource?: string;
 		};
-		/**
-		 * @description Request payload to export a caller-selected set of workspace files to a
-		 *     connection. Each is written as a new provider file, never overwriting a
-		 *     source. Mirrors [`ImportFiles`] on the export side.
-		 */
-		ExportFiles: {
-			/**
-			 * @description The workspace files to export, by id. Files already exported to the
-			 *     connection are exported again (a fresh copy).
-			 */
-			fileIds: string[];
-		};
 		/** @description The file format an export is rendered as. */
 		ExportFormat: "csv" | "json";
 		/**
@@ -15172,106 +15372,17 @@ export interface components {
 			/** @description Output format; defaults to `csv`. */
 			format?: components["schemas"]["ExportFormat"];
 		};
-		/** @description Represents a file in responses. */
-		File: {
-			/**
-			 * Format: date-time
-			 * @description Creation timestamp.
-			 */
-			createdAt: string;
-			/** @description Display name. */
-			displayName: string;
-			/** @description File extension (without dot). */
-			fileExtension: string;
-			/** @description Lowercase hex-encoded SHA-256 of the file's plaintext content. */
-			fileHash: string;
-			/** @description The file's role (original, redacted, audit). */
-			fileKind: components["schemas"]["FileKind"];
-			/**
-			 * Format: int64
-			 * @description File size in bytes.
-			 */
-			fileSize: number;
-			/**
-			 * Format: uuid
-			 * @description Unique file identifier.
-			 */
-			id: string;
-			/** @description Original filename when uploaded. */
-			originalFilename: string;
-			/**
-			 * Format: uuid
-			 * @description Parent file ID if this is a newer version.
-			 */
-			parentId?: string;
-			/**
-			 * Format: date-time
-			 * @description Last update timestamp.
-			 */
-			updatedAt: string;
-			/** @description Account that uploaded/created the file. */
-			uploadedBy: components["schemas"]["AccountRef"];
-			/**
-			 * Format: int32
-			 * @description Version number (1 for original, higher for newer versions).
-			 */
-			versionNumber: number;
-			/** @description Handle of the workspace this file belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/** @description Params of a file activity (`file.*`). */
-		FileActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the file.
-			 */
-			fileId: string;
-			/** @description Display name of the file. */
-			fileName: string;
-		};
-		/** @description Params of a `file.assigned` notification, sent to the reviewer. */
-		FileAssignedParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the assignment.
-			 */
-			assignmentId: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the file the reviewer was assigned.
-			 */
-			fileId: string;
-			/** @description Display name of the file the reviewer was assigned. */
-			fileName: string;
-		};
-		/** @description A SHA-256 content hash as a 64-character hex string. */
-		FileHash: string;
 		/**
-		 * @description The role a file plays, which drives its data-retention scope and whether
-		 *     it is a user-facing document.
-		 *
-		 *     Corresponds to the `FILE_KIND` PostgreSQL enum. Orthogonal to the
-		 *     `parent_id` version chain (lineage); import origin (connection and remote
-		 *     key) lives in the `workspace_file_imports` satellite.
+		 * @description Request payload to export a caller-selected set of workspace files to a
+		 *     connection. Each is written as a new provider file, never overwriting a
+		 *     source. Mirrors [`ImportWorkspaceFiles`] on the export side.
 		 */
-		FileKind: "original" | "redacted" | "audit" | "review" | "intermediate";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		FilePage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["File"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
+		ExportWorkspaceFiles: {
 			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
+			 * @description The workspace files to export, by id. Files already exported to the
+			 *     connection are exported again (a fresh copy).
 			 */
-			total?: number;
+			fileIds: string[];
 		};
 		/**
 		 * @description Per-provider availability for the OAuth file services. Each field is `true`
@@ -15313,19 +15424,6 @@ export interface components {
 		 *     and used in the API, so every provider name lives in exactly one place.
 		 */
 		FileServiceProvider: "google_drive" | "dropbox" | "one_drive" | "box";
-		/** @description Params of a `file.unassigned` notification, sent to the former reviewer. */
-		FileUnassignedParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the file the reviewer was unassigned from.
-			 */
-			fileId: string;
-			/**
-			 * @description Display name of the file the reviewer was unassigned from, when the file
-			 *     still exists. `None` (and omitted) if it was removed (e.g. by retention).
-			 */
-			fileName?: string;
-		};
 		/**
 		 * @description A supported file extension.
 		 * @enum {string}
@@ -15346,6 +15444,8 @@ export interface components {
 			| "tiff"
 			| "txt"
 			| "wav"
+			| "x-elide-docprops"
+			| "x-elide-exif"
 			| "xlsx"
 			| "xml";
 		/**
@@ -15425,7 +15525,7 @@ export interface components {
 			| "article9_with_reid_hardening"
 			| "article9_and10";
 		/** @description Request to generate a shareable invite code for a workspace. */
-		GenerateInviteCode: {
+		GenerateWorkspaceInviteCode: {
 			/** @description When the invite code expires. */
 			expiresIn: components["schemas"]["InviteExpiration"];
 			/** @description Role to assign when someone joins via this invite code. */
@@ -15685,6 +15785,11 @@ export interface components {
 					detail: components["schemas"]["ImageModel"];
 					/** @constant */
 					kind: "model";
+			  }
+			| {
+					detail: components["schemas"]["ImageMetadata"];
+					/** @constant */
+					kind: "metadata";
 			  }
 			| {
 					detail: components["schemas"]["Deduplication"];
@@ -15951,6 +16056,22 @@ export interface components {
 			location: components["schemas"]["ImageLocation"];
 		};
 		/**
+		 * @description Detail of a metadata-field detection: a document's out-of-band field
+		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
+		 *     redaction subject at `location`, with its source in `metadata`.
+		 *
+		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
+		 *     out of free content — it is a named field that is simply present. There is
+		 *     nothing probabilistic to weigh, so the entity carries it as its own event
+		 *     kind rather than pretending a pattern fired.
+		 */
+		ImageMetadata: {
+			/** @description The field's location (its key). */
+			location: components["schemas"]["ImageLocation"];
+			/** @description Source metadata (which reader surfaced the field). */
+			metadata: components["schemas"]["MetadataEvent"];
+		};
+		/**
 		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
 		 *     metadata in `model`.
 		 */
@@ -16068,7 +16189,7 @@ export interface components {
 		 * @description Request payload to import a caller-selected set of files from a file-service
 		 *     connection (the provider picker returns id + name per file).
 		 */
-		ImportFiles: {
+		ImportWorkspaceFiles: {
 			/** @description The files to import. Already-imported files are skipped. */
 			files: components["schemas"]["PickedFile"][];
 		};
@@ -16082,45 +16203,6 @@ export interface components {
 		 *     added as a new variant with no change to the wire format or storage.
 		 */
 		InferenceConfig: components["schemas"]["LlmConfig"];
-		/**
-		 * @description Workspace invite with complete information.
-		 *
-		 *     This response includes all the essential information about an
-		 *     invitation, including the unique invite ID that can be used to track or cancel
-		 *     the invitation later.
-		 */
-		Invite: {
-			/**
-			 * Format: date-time
-			 * @description When the invitation was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation expires.
-			 */
-			expiresAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invitation.
-			 */
-			inviteId: string;
-			/** @description Current status of the invitation. */
-			inviteStatus: components["schemas"]["InviteStatus"];
-			/** @description Invite token (only included for open invitations without invitee_email). */
-			inviteToken?: string;
-			/** @description Role the invitee will have if they accept. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description Email address of the invitee (omitted for open invite codes). */
-			inviteeEmail?: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation was last updated.
-			 */
-			updatedAt: string;
-			/** @description Handle of the workspace the invitation is for. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
 		/** @description Params of an invite activity (`invite.*`). */
 		InviteActivityParams: {
 			/**
@@ -16134,20 +16216,6 @@ export interface components {
 			 */
 			inviteId: string;
 		};
-		/** @description Response containing a generated shareable invite code. */
-		InviteCode: {
-			/**
-			 * Format: date-time
-			 * @description When the invite code expires.
-			 */
-			expiresAt: string;
-			/** @description The generated invite code that can be shared. */
-			inviteCode: string;
-			/** @description Role assigned when someone joins via this code. */
-			role: components["schemas"]["WorkspaceRole"];
-			/** @description Handle of the workspace this invite code is for. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
 		/** @description Path parameters for joining via invite code. */
 		InviteCodePathParams: {
 			/** @description The invite code to use for joining the workspace. */
@@ -16155,32 +16223,6 @@ export interface components {
 		};
 		/** @description Expiration options for invite codes. */
 		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		InvitePage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Invite"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for invite operations. */
-		InvitePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invite.
-			 */
-			inviteId: string;
-		};
 		/**
 		 * @description Preview of an invite with workspace details for display before joining.
 		 *
@@ -16206,17 +16248,6 @@ export interface components {
 			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Handle of the workspace. */
 			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description Acknowledgement returned after sending a workspace invitation.
-		 *
-		 *     The response is deliberately uniform: it carries no invite identifier or
-		 *     status, so it is identical whether or not the address belonged to a known
-		 *     account and cannot be used to probe for account existence.
-		 */
-		InviteSent: {
-			/** @description Human-readable confirmation message. */
-			detail: string;
 		};
 		/** @description Fields available for sorting workspace invites. */
 		InviteSortField: "email" | "date";
@@ -16338,7 +16369,7 @@ export interface components {
 		 */
 		LabelRef: string;
 		/**
-		 * @description A named set of labels a [`PolicyDefinition`] detects.
+		 * @description A named set of labels a [`Policy`] detects.
 		 *
 		 *     Scopes live on the policy that declares them and are visible
 		 *     only to that policy's own rules. Two policies that both declare
@@ -16354,7 +16385,7 @@ export interface components {
 		 *     **Unknown scope names error at request validation**, not at
 		 *     apply time. A typo doesn't silently underfire.
 		 *
-		 *     [`PolicyDefinition`]: super::PolicyDefinition
+		 *     [`Policy`]: super::Policy
 		 */
 		LabelScope: {
 			/**
@@ -16383,7 +16414,7 @@ export interface components {
 			 *     snake_case identifiers (`hipaa_safe_harbor`,
 			 *     `gdpr_article_9`): they read cleanly in audit provenance.
 			 *
-			 *     [`Predicate::LabelInScope`]: crate::Predicate::LabelInScope
+			 *     [`Predicate::LabelInScope`]: crate::policy::Predicate::LabelInScope
 			 */
 			name: string;
 		};
@@ -16520,39 +16551,37 @@ export interface components {
 		 *     [`Operator::leak_profile`]: crate::redaction::Operator::leak_profile
 		 */
 		LeakProfile: "recoverable" | "partial" | "irrecoverable";
-		/** @description Query parameters for listing files. */
-		ListFiles: {
+		/** @description Query parameters for listing documents. */
+		ListWorkspaceDocuments: {
 			/**
 			 * @description Filter by file extension. Each entry expands to its format's full
 			 *     extension set (so `jpg` also matches `jpeg`).
 			 */
 			formats?: components["schemas"]["FormatToken"][];
 			/**
-			 * @description Filter to files whose content is exactly this SHA-256. Lets a client check
-			 *     whether identical content already exists in the workspace before uploading
-			 *     it.
+			 * @description Filter to documents whose content is exactly this SHA-256. Lets a client
+			 *     check whether identical content already exists in the workspace before
+			 *     uploading it.
 			 */
-			hash?: components["schemas"]["FileHash"];
+			hash?: components["schemas"]["DocumentHash"];
 			/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
 			modality?: components["schemas"]["ModalityToken"][];
-			/** @description Search by file name (case-insensitive, partial match). */
+			/** @description Search by document name (case-insensitive, partial match). */
 			search?: string;
 		};
 		/** @description Query parameters for listing workspace invites. */
-		ListInvites: {
+		ListWorkspaceInvites: {
 			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["SortOrder"];
+			order?: components["schemas"]["Direction"];
 			/** @description Filter by invited role. */
 			role?: components["schemas"]["WorkspaceRole"];
 			/** @description Sort by field. */
 			sortBy?: components["schemas"]["InviteSortField"];
 		};
 		/** @description Query parameters for listing workspace members. */
-		ListMembers: {
-			/** @description Filter by 2FA status. */
-			has2fa?: boolean;
+		ListWorkspaceMembers: {
 			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["SortOrder"];
+			order?: components["schemas"]["Direction"];
 			/** @description Filter by workspace role. */
 			role?: components["schemas"]["WorkspaceRole"];
 			/** @description Sort by field. */
@@ -16620,34 +16649,6 @@ export interface components {
 		 *     a false positive, or [`Amend`](ManualIntent::Amend) an existing finding.
 		 */
 		ManualIntent: "flag" | "suppress" | "amend";
-		/** @description Response type for a mark-all-read action. */
-		MarkedReadStatus: {
-			/**
-			 * Format: int64
-			 * @description Number of notifications the request marked as read.
-			 */
-			markedRead: number;
-		};
-		/** @description Represents a workspace member. */
-		Member: {
-			/** @description Serve path of the member's avatar, when set. */
-			avatarUrl?: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the member joined the workspace.
-			 */
-			createdAt: string;
-			/** @description Display name of the member, when set. */
-			displayName?: string;
-			/** @description Email address of the member. */
-			emailAddress: string;
-			/** @description Whether the member has two-factor authentication enabled. */
-			has2fa: boolean;
-			/** @description Role of the member in the workspace. */
-			memberRole: components["schemas"]["WorkspaceRole"];
-			/** @description Handle of the member's account. */
-			username: components["schemas"]["Handle"];
-		};
 		/** @description Params of a member activity (`member.*`). */
 		MemberActivityParams: {
 			/** @description Username of the member acted on. */
@@ -16660,31 +16661,13 @@ export interface components {
 			/** @description Slug of the workspace the member joined. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		MemberPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Member"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for workspace member operations. */
-		MemberPathParams: {
-			/** @description Public handle of the member's account. */
-			username: components["schemas"]["Handle"];
-		};
 		/** @description Fields available for sorting workspace members. */
 		MemberSortField: "name" | "date";
+		/** @description Source detail of a metadata-field detection, carried by [`Metadata`]. */
+		MetadataEvent: {
+			/** @description The reader that surfaced the field (e.g. `"exif"`, `"docprops"`). */
+			source: string;
+		};
 		/**
 		 * @description Per-modality operator specs carried by a `redact` rule.
 		 *
@@ -16710,7 +16693,7 @@ export interface components {
 		 * @description A supported document modality.
 		 * @enum {string}
 		 */
-		ModalityToken: "audio" | "image" | "tabular" | "text";
+		ModalityToken: "audio" | "image" | "metadata" | "tabular" | "text";
 		/** @description Metadata of a model/NER recognition, carried by [`Model`]. */
 		ModelEvent: {
 			/** @description Whether contextual analysis adjusted the score for this match. */
@@ -16733,59 +16716,6 @@ export interface components {
 			/** @description Model version, when the backend reports one. */
 			version?: string;
 		};
-		/** @description One model's token usage across a workspace's detections. */
-		ModelUsageEntry: {
-			/**
-			 * Format: int64
-			 * @description Input/prompt tokens summed for this model (`0` if never reported).
-			 */
-			inputTokens: number;
-			/** @description The model. */
-			model: string;
-			/**
-			 * Format: int64
-			 * @description Output/completion tokens summed for this model (`0` if never reported).
-			 */
-			outputTokens: number;
-			/**
-			 * Format: int64
-			 * @description Reported total tokens summed for this model (`0` if never reported).
-			 */
-			totalTokens: number;
-		};
-		/**
-		 * @description Response type for an account notification.
-		 *
-		 *     The typed payload is nested under `payload`, so a notification is
-		 *     `{ id, payload: { notifyType, <params...> }, readAt, ... }`.
-		 */
-		Notification: {
-			/**
-			 * Format: date-time
-			 * @description When the notification was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the notification expires.
-			 */
-			expiresAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique notification identifier.
-			 */
-			id: string;
-			/**
-			 * @description The notification type and its typed params, absent when the stored params
-			 *     do not decode into their `notifyType`.
-			 */
-			payload?: components["schemas"]["NotificationPayload"];
-			/**
-			 * Format: date-time
-			 * @description When the notification was read; absent means unread.
-			 */
-			readAt?: string;
-		};
 		/**
 		 * @description Defines the type of notification event sent to a user.
 		 *
@@ -16801,39 +16731,8 @@ export interface components {
 			| "pipeline.detection.completed"
 			| "pipeline.redaction.created"
 			| "pipeline.detection.failed"
-			| "file.assigned"
-			| "file.unassigned";
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		NotificationPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Notification"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Path parameters for notification operations.
-		 *
-		 *     The notification id is globally unique; account ownership is enforced in the
-		 *     query, so a notification of another account resolves to a not-found result.
-		 */
-		NotificationPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the notification.
-			 */
-			notificationId: string;
-		};
+			| "review.assigned"
+			| "comment.mentioned";
 		/**
 		 * @description The typed payload of a notification, tagged by `type` with its params under
 		 *     `data` (the same `{type, data}` envelope the activity log and outbox event use).
@@ -16874,24 +16773,15 @@ export interface components {
 					type: "pipeline.detection.failed";
 			  }
 			| {
-					data: components["schemas"]["FileAssignedParams"];
+					data: components["schemas"]["ReviewAssignedParams"];
 					/** @constant */
-					type: "file.assigned";
+					type: "review.assigned";
 			  }
 			| {
-					data: components["schemas"]["FileUnassignedParams"];
+					data: components["schemas"]["CommentMentionedParams"];
 					/** @constant */
-					type: "file.unassigned";
+					type: "comment.mentioned";
 			  };
-		/** @description Response for notification settings within a workspace. */
-		NotificationSettings: {
-			/** @description Notification events to receive in-app. */
-			notificationEventsApp: components["schemas"]["NotificationEvent"][];
-			/** @description Notification events to receive via email. */
-			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
-			/** @description Whether to send email notifications. */
-			notifyViaEmail: boolean;
-		};
 		/**
 		 * @description Path parameters for the OAuth start endpoint: which cloud file provider to
 		 *     begin authorizing. The provider is the crate's [`FileServiceProvider`], so the API and
@@ -16943,6 +16833,22 @@ export interface components {
 		OidcStartResponse: {
 			/** @description The provider authorize URL the client should redirect the user to. */
 			authorizeUrl: string;
+		};
+		/**
+		 * @description Request payload to open a workspace discussion thread with its first message.
+		 *
+		 *     A workspace thread is free-form discussion pinned to no document; document
+		 *     reviews are auto-created on detection, not opened by hand. `@username`
+		 *     mentions in the opening body notify those members.
+		 */
+		OpenWorkspaceThread: {
+			/** @description The opening message text (1-10000 characters). */
+			body: string;
+			/**
+			 * @description Optional title for the thread (1-255 characters). Omit for an untitled
+			 *     thread.
+			 */
+			displayName?: string;
 		};
 		/**
 		 * @description Identifies a redaction operator, for the redaction audit a higher
@@ -17035,69 +16941,6 @@ export interface components {
 			/** @description The file's display name, as the picker reported it. */
 			name: string;
 		};
-		/**
-		 * @description A short-lived provider OAuth access token for a browser file picker.
-		 *
-		 *     Carries only the access token and its expiry — never the refresh token, which
-		 *     stays server-side. The token is minted from the connection's stored
-		 *     credentials and is short-lived (the provider's access-token lifetime), so the
-		 *     browser holds a narrow, expiring credential rather than a durable one.
-		 */
-		PickerToken: {
-			/** @description The provider OAuth access token to hand to the browser picker. */
-			accessToken: string;
-			/**
-			 * Format: int64
-			 * @description Unix seconds at which the access token expires, if the provider reports
-			 *     it. `None` means the provider did not return an expiry.
-			 */
-			expiresAt?: number;
-		};
-		/**
-		 * @description Body for minting a browser file-picker token.
-		 *
-		 *     The OneDrive v8 picker requests a token per resource (it names the resource in
-		 *     each `authenticate` command); the caller passes that `resource` so the server
-		 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
-		 *     single provider token (Google Drive, Box); omit it for those.
-		 */
-		PickerTokenRequest: {
-			/**
-			 * @description The resource the picker asked for (its `authenticate` command's
-			 *     `resource`), e.g. `https://contoso-my.sharepoint.com`. Optional; when
-			 *     absent the server uses the connection's default picker resource.
-			 */
-			resource?: string;
-		};
-		/** @description Pipeline response. */
-		Pipeline: {
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this pipeline. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Detection + redaction configuration. */
-			definition: components["schemas"]["PipelineDefinition"];
-			/** @description Pipeline description. */
-			description?: string;
-			/** @description Pipeline display name. */
-			displayName: string;
-			/** @description Per-scope data-retention override, when the pipeline sets one. */
-			retention?: components["schemas"]["RetentionOverride"];
-			/** @description URL slug of the pipeline, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
-			/** @description Pipeline lifecycle status. */
-			status: components["schemas"]["PipelineStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was last updated.
-			 */
-			updatedAt: string;
-			/** @description Handle of the workspace this pipeline belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
 		/** @description Params of a pipeline activity (`pipeline.*`, non-run). */
 		PipelineActivityParams: {
 			/** @description Slug of the pipeline. */
@@ -17138,89 +16981,12 @@ export interface components {
 			policySlugs?: components["schemas"]["Handle"][];
 		};
 		/**
-		 * @description Query parameters for listing a single pipeline's detections.
-		 *
-		 *     The pipeline is fixed by the route, so it narrows only by status, file,
-		 *     trigger account, and trigger type.
-		 */
-		PipelineDetectionsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the source file the detection analyzes.
-			 */
-			fileId?: string;
-			/** @description Filter by detection status. */
-			status?: components["schemas"]["DetectionStatus"];
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the detection.
-			 */
-			triggeredBy?: string;
-		};
-		/** @description Query parameters for filtering pipelines. */
-		PipelineFilter: {
-			/** @description Search by pipeline name (trigram similarity). */
-			search?: string;
-			/** @description Filter by pipeline status. */
-			status?: components["schemas"]["PipelineStatus"];
-		};
-		/** @description Path parameters for pipeline operations. */
-		PipelinePathParams: {
-			/** @description URL slug of the pipeline, unique within its workspace. */
-			pipelineSlug: string;
-		};
-		/**
 		 * @description The lifecycle status of a pipeline definition.
 		 *
 		 *     Corresponds to the `PIPELINE_STATUS` PostgreSQL enum and tracks whether a
 		 *     pipeline is being configured, enabled and ready to run, or disabled.
 		 */
 		PipelineStatus: "draft" | "enabled" | "disabled";
-		/** @description Summary response for pipeline (used in lists). */
-		PipelineSummary: {
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this pipeline. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Pipeline description. */
-			description?: string;
-			/** @description Pipeline display name. */
-			displayName: string;
-			/** @description URL slug of the pipeline, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
-			/** @description Pipeline lifecycle status. */
-			status: components["schemas"]["PipelineStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was last updated.
-			 */
-			updatedAt: string;
-			/** @description Handle of the workspace this pipeline belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		PipelineSummaryPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["PipelineSummary"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
 		/**
 		 * @description How a pipeline run was initiated.
 		 *
@@ -17249,57 +17015,12 @@ export interface components {
 			 */
 			y: number;
 		};
-		/** @description Response type for a workspace policy. */
-		Policy: {
-			/**
-			 * Format: date-time
-			 * @description When the policy was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this policy. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description The structured policy body consumed by the engine. */
-			definition: components["schemas"]["PolicyDefinition"];
-			/** @description Policy description. */
-			description?: string;
-			/** @description Human-readable policy display name. */
-			displayName: string;
-			/** @description URL slug of the policy, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
-			/**
-			 * Format: date-time
-			 * @description When the policy was last updated.
-			 */
-			updatedAt: string;
-			/** @description Handle of the workspace this policy belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/** @description Params of a policy activity (`policy.*`). */
-		PolicyActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the policy.
-			 */
-			policyId: string;
-			/** @description Slug of the policy. */
-			policySlug: components["schemas"]["Handle"];
-		};
 		/**
 		 * @description A named governance policy.
 		 *
 		 *     Identity is the UUID; `name` is display-only.
 		 */
-		PolicyDefinition: {
-			/**
-			 * @description Caller-authored label schemas this policy introduces.
-			 *
-			 *     Only for labels elide does not ship. These join the
-			 *     recognition vocabulary alongside [`scopes`], and a rule may
-			 *     target them the same way.
-			 *
-			 *     [`scopes`]: Self::scopes
-			 */
-			custom?: components["schemas"]["Label"][];
+		Policy: {
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/**
@@ -17317,21 +17038,6 @@ export interface components {
 			 */
 			id: string;
 			/**
-			 * @description How to detect the labels [`custom`] introduces.
-			 *
-			 *     A custom label declares vocabulary and nothing more, so
-			 *     without a matcher it is scoped, targeted by rules, and never
-			 *     found. Each matcher names a label this policy declares;
-			 *     naming a shipped built-in is rejected, since elide already
-			 *     detects those.
-			 *
-			 *     Compiled per request, so a policy declaring none costs
-			 *     nothing.
-			 *
-			 *     [`custom`]: Self::custom
-			 */
-			matchers?: components["schemas"]["CustomMatcher"][];
-			/**
 			 * @description Human-readable name. Display-only. Does not key anything.
 			 *
 			 *     Names the policy in a redaction event's [`Attribution`]
@@ -17348,17 +17054,16 @@ export interface components {
 			 * @description What this policy detects: one or more named, attributed
 			 *     label sets.
 			 *
-			 *     The union of every scope, plus [`custom`], is the policy's
-			 *     recognition vocabulary. A label no scope names is never
-			 *     detected, so no rule can fire on it and the policy is inert
-			 *     with respect to it.
+			 *     The union of every scope is what this policy acts on. A
+			 *     label no scope names is never detected, so no rule can fire
+			 *     on it and the policy is inert with respect to it — whether
+			 *     the label is one elide ships or one the request introduced.
 			 *
 			 *     Detecting more than the rules act on is deliberate: scope a
 			 *     whole regulatory category, write rules for the labels
 			 *     needing special treatment, and let [`fallback`] sweep the
 			 *     rest.
 			 *
-			 *     [`custom`]: Self::custom
 			 *     [`fallback`]: Self::fallback
 			 */
 			scopes?: components["schemas"]["LabelScope"][];
@@ -17373,28 +17078,31 @@ export interface components {
 			 */
 			template?: components["schemas"]["TemplateOrigin"];
 		};
+		/** @description Params of a policy activity (`policy.*`). */
+		PolicyActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the policy.
+			 */
+			policyId: string;
+			/** @description Slug of the policy. */
+			policySlug: components["schemas"]["Handle"];
+		};
 		/**
 		 * @description A client-authored policy body: the parts of a policy definition a caller may
 		 *     set, without the fields the server owns.
 		 *
-		 *     The engine's `PolicyDefinition` also carries an `id` and a `template` origin.
-		 *     Both are server-owned — the `id` is minted at creation and the `template`
-		 *     records which built-in a policy was seeded from (provenance). Neither is
-		 *     representable here, so a client cannot mint ids or forge provenance; the
-		 *     server stamps them in [`into_definition`](PolicyDraft::into_definition).
+		 *     The engine's `Policy` also carries an `id` and a `template` origin. Both are
+		 *     server-owned — the `id` is minted at creation and the `template` records which
+		 *     built-in a policy was seeded from (provenance). Neither is representable here,
+		 *     so a client cannot mint ids or forge provenance; the server stamps them when it
+		 *     builds the engine definition.
 		 */
 		PolicyDraft: {
-			/** @description Caller-authored custom label schemas this policy introduces. */
-			custom?: components["schemas"]["Label"][];
 			/** @description Optional description for reviewers. */
 			description?: string;
 			/** @description Per-policy catch-all, fired when no rule matched. */
 			fallback?: components["schemas"]["ModalityRedactions"];
-			/**
-			 * @description How to detect the custom labels this policy introduces. A custom label
-			 *     without a matcher is declared but never found.
-			 */
-			matchers?: components["schemas"]["CustomMatcher"][];
 			/** @description Human-readable name. Display-only. */
 			name: string;
 			/** @description Ordered rules. First match wins within this policy. */
@@ -17403,23 +17111,20 @@ export interface components {
 			scopes?: components["schemas"]["LabelScope"][];
 		};
 		/**
-		 * @description Path parameters for policy operations.
+		 * @description The kind of a redaction policy.
 		 *
-		 *     The workspace is resolved by the [`WorkspaceContext`] extractor from the
-		 *     `{workspaceSlug}` path segment.
-		 *
-		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 *     Corresponds to the `POLICY_KIND` PostgreSQL enum. An authored policy is a
+		 *     normal, editable policy created from a template or an inline definition. A
+		 *     one-shot policy is minted inline from a bare label list (the ad-hoc redact
+		 *     flow): it is content-addressed and deduplicated, and immutable once minted.
 		 */
-		PolicyPathParams: {
-			/** @description URL slug of the policy, unique within its workspace. */
-			policySlug: string;
-		};
+		PolicyKind: "authored" | "oneshot";
 		/**
-		 * @description One rule inside a [`PolicyDefinition`]. Identity is the UUID;
+		 * @description One rule inside a [`Policy`]. Identity is the UUID;
 		 *     `name` / `description` are display-only. `dispatch` picks the
 		 *     selection strategy.
 		 *
-		 *     [`PolicyDefinition`]: super::PolicyDefinition
+		 *     [`Policy`]: super::Policy
 		 */
 		PolicyRule: {
 			/**
@@ -17485,53 +17190,6 @@ export interface components {
 					operators: components["schemas"]["LabelEntry"][];
 			  }
 		);
-		/**
-		 * @description Lightweight policy view for lists.
-		 *
-		 *     Carries only the metadata available without decrypting the policy body, so a
-		 *     page of policies costs no per-item decryption. The full [`Policy`] (with its
-		 *     `definition`) is returned by the single-policy endpoint.
-		 */
-		PolicySummary: {
-			/**
-			 * Format: date-time
-			 * @description When the policy was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this policy. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Policy description. */
-			description?: string;
-			/** @description Human-readable policy display name. */
-			displayName: string;
-			/** @description URL slug of the policy, unique within its workspace. */
-			slug: components["schemas"]["Handle"];
-			/**
-			 * Format: date-time
-			 * @description When the policy was last updated.
-			 */
-			updatedAt: string;
-			/** @description Handle of the workspace this policy belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		PolicySummaryPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["PolicySummary"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
 		/**
 		 * @description A regulatory posture this crate ships a [`Template`] for.
 		 *
@@ -17664,38 +17322,6 @@ export interface components {
 					/** @description Negated predicate. */
 					not: components["schemas"]["Predicate"];
 			  };
-		/**
-		 * @description Response type for a workspace inference provider.
-		 *
-		 *     Note: The encrypted provider data is never exposed in API responses. Only
-		 *     metadata about the provider is returned.
-		 */
-		Provider: {
-			/**
-			 * Format: date-time
-			 * @description When the provider was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this provider. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Human-readable provider display name. */
-			displayName: string;
-			/** @description Opaque identifier of the provider. */
-			id: components["schemas"]["ProviderId"];
-			/** @description Whether the provider is enabled. */
-			isActive: boolean;
-			/** @description Provider identifier (`openai`, `ollama`, `anthropic`, ...). */
-			provider: string;
-			/** @description Inference model type of the provider (llm, ner). */
-			providerType: components["schemas"]["ProviderType"];
-			/**
-			 * Format: date-time
-			 * @description When the provider was last updated.
-			 */
-			updatedAt: string;
-			/** @description Handle of the workspace this provider belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
 		/** @description Params of a provider activity (`provider.*`). */
 		ProviderActivityParams: {
 			/** @description Id of the provider. */
@@ -17714,36 +17340,6 @@ export interface components {
 		/** @description Opaque prov identifier (prov_<uuid>). */
 		ProviderId: string;
 		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		ProviderPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Provider"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Path parameters for provider operations.
-		 *
-		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by the
-		 *     [`WorkspaceContext`] extractor.
-		 *
-		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
-		 */
-		ProviderPathParams: {
-			/** @description Opaque identifier of the provider. */
-			providerId: components["schemas"]["ProviderId"];
-		};
-		/**
 		 * @description The inference model type backing a workspace provider.
 		 *
 		 *     Corresponds to the `PROVIDER_TYPE` PostgreSQL enum. A workspace provider is
@@ -17754,16 +17350,6 @@ export interface components {
 		 *     workspace's provider of a given type without decrypting its config.
 		 */
 		ProviderType: "llm" | "ner";
-		/** @description Query parameters for listing providers. */
-		ProvidersQuery: {
-			/**
-			 * @description Filter by provider (`openai`, `ollama`, `anthropic`). Repeatable; a
-			 *     provider matches if it uses any of the given providers. Empty means no
-			 *     filter.
-			 * @default []
-			 */
-			provider?: string[];
-		};
 		/**
 		 * @description Public view of an account, returned when looking up someone other than the
 		 *     authenticated caller. Carries only the fields safe to share with a
@@ -17829,6 +17415,42 @@ export interface components {
 		 *     relies on the text layer only.
 		 */
 		RasterPolicy: "auto" | "always" | "never";
+		/**
+		 * @description Labels a request introduces, and how to detect them.
+		 *
+		 *     The two halves are independent, and only one pairing is an
+		 *     error.
+		 *
+		 *     A label with no matcher is legitimate: it joins the catalog, a
+		 *     policy may scope it, and a reviewer may add entities under it
+		 *     through [`Edit::Add`]. Nothing detects it automatically — there
+		 *     is no matcher to look for it — which is the point when the
+		 *     label marks something only a human can recognise.
+		 *
+		 *     A matcher with no label is refused, since it would detect into
+		 *     a vocabulary the catalog never held.
+		 *
+		 *     [`Edit::Add`]: https://docs.rs/elide-review
+		 */
+		Recognition: {
+			/**
+			 * @description Label schemas elide does not ship.
+			 *
+			 *     Only for labels outside the shipped set: one whose id
+			 *     collides with a builtin is refused, since it would shadow
+			 *     elide's own definition.
+			 */
+			custom?: components["schemas"]["Label"][];
+			/**
+			 * @description How to detect the labels [`custom`] introduces.
+			 *
+			 *     Each names a label this request declares. Compiled fresh
+			 *     per request, so a request introducing none costs nothing.
+			 *
+			 *     [`custom`]: Self::custom
+			 */
+			matchers?: components["schemas"]["CustomMatcher"][];
+		};
 		/** @description The engine's registered recognizers, grouped by kind. */
 		RecognizerCatalog: {
 			/** @description LLM recognizers. */
@@ -17860,7 +17482,7 @@ export interface components {
 		 *     Omit `edits` to redact with the policy decisions exactly as detected. Each
 		 *     redact request produces a new redaction.
 		 */
-		RedactDetection: {
+		RedactWorkspaceDetection: {
 			/**
 			 * @description Reviewer edits to apply before redaction, grouped by modality. Omit to
 			 *     redact with the policy decisions exactly as detected.
@@ -17903,8 +17525,8 @@ export interface components {
 		};
 		/** @description Params of a redaction activity (`pipeline.redaction.*`). */
 		RedactionActivityParams: {
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Slug of the owning pipeline; absent when the detection was ad-hoc. */
+			pipelineSlug?: components["schemas"]["Handle"];
 			/** @description Id of the redaction. */
 			redactionId: components["schemas"]["RedactionId"];
 		};
@@ -17912,76 +17534,15 @@ export interface components {
 		RedactionCreatedParams: {
 			/** @description Id of the detection the redaction was produced from. */
 			detectionId: components["schemas"]["DetectionId"];
-			/** @description Display name of the redacted file, if known. */
-			inputFileName?: string;
-			/** @description Slug of the owning pipeline. */
-			pipelineSlug: components["schemas"]["Handle"];
+			/** @description Display name of the redacted document, if known. */
+			inputDocumentName?: string;
+			/** @description Slug of the owning pipeline; absent for an ad-hoc detection. */
+			pipelineSlug?: components["schemas"]["Handle"];
 			/** @description Id of the redaction. */
 			redactionId: components["schemas"]["RedactionId"];
 		};
 		/** @description Opaque redaction identifier (redaction_<uuid>). */
 		RedactionId: string;
-		/**
-		 * @description Path parameters for a redaction.
-		 *
-		 *     The redaction id is globally unique, so a redaction is addressed by id alone
-		 *     and resolved within the workspace by the query.
-		 */
-		RedactionPathParams: {
-			/** @description Opaque identifier of the redaction. */
-			redactionId: components["schemas"]["RedactionId"];
-		};
-		/**
-		 * @description Response type for a redaction.
-		 *
-		 *     A redaction is one redact pass over a detection, produced with a specific set
-		 *     of reviewer edits. It owns the redacted output document (downloadable through
-		 *     the normal file endpoints) and a review audit recording what was redacted and
-		 *     why (fetched from the redaction's `review` endpoint).
-		 *
-		 *     Named `RedactionResult` rather than `Redaction` because the engine's audit
-		 *     schema already carries a `Redaction` (an audit event), and the two must not
-		 *     collide in the generated OpenAPI.
-		 */
-		RedactionResult: {
-			/**
-			 * Format: date-time
-			 * @description When the redaction was created.
-			 */
-			createdAt: string;
-			/** @description The detection this redaction was produced from. */
-			detectionId: components["schemas"]["DetectionId"];
-			/** @description Opaque identifier of the redaction. */
-			id: components["schemas"]["RedactionId"];
-			/**
-			 * Format: uuid
-			 * @description Redacted output document this redaction produced. `None` only if the file
-			 *     was removed (e.g. by retention).
-			 */
-			outputFileId?: string;
-			/** @description Account that requested the redaction. */
-			requestedBy: components["schemas"]["AccountRef"];
-			/** @description Handle of the workspace this redaction belongs to. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		RedactionResultPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["RedactionResult"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
 		/**
 		 * @description Public view of one recognizer in the engine's NER or LLM
 		 *     lineup.
@@ -18018,8 +17579,18 @@ export interface components {
 			 */
 			provider: string;
 		};
+		/** @description Request payload to rename a thread (set or clear its title). */
+		RenameWorkspaceThread: {
+			/**
+			 * @description The new title (1-255 characters), or `null` to clear it. Omitting the
+			 *     field leaves the current title unchanged; only an explicit `null` clears
+			 *     it. The outer `Option` distinguishes "absent" (`None`) from "explicit
+			 *     null" (`Some(None)`).
+			 */
+			displayName?: string;
+		};
 		/** @description Request to respond to a workspace invitation. */
-		ReplyInvite: {
+		ReplyWorkspaceInvite: {
 			/** @description Whether to accept or decline the invitation. */
 			acceptInvite: boolean;
 		};
@@ -18055,17 +17626,17 @@ export interface components {
 		/**
 		 * @description How long a class of data is retained.
 		 *
-		 *     Wire shape is internally tagged on `mode`: `{ "mode": "forever" }`,
-		 *     `{ "mode": "zeroDays" }`, `{ "mode": "days", "days": 30 }`.
+		 *     Wire shape is internally tagged on `mode`: `{ "mode": "persistent" }`,
+		 *     `{ "mode": "ephemeral" }`, `{ "mode": "fixed", "days": 30 }`.
 		 */
 		Retention:
 			| {
 					/** @constant */
-					mode: "forever";
+					mode: "persistent";
 			  }
 			| {
 					/** @constant */
-					mode: "zeroDays";
+					mode: "ephemeral";
 			  }
 			| {
 					/**
@@ -18074,7 +17645,7 @@ export interface components {
 					 */
 					days: number;
 					/** @constant */
-					mode: "days";
+					mode: "fixed";
 			  };
 		/**
 		 * @description A pipeline's optional per-scope override of the workspace retention. A `None`
@@ -18093,39 +17664,89 @@ export interface components {
 			redactedDocuments?: components["schemas"]["Retention"];
 		};
 		/**
-		 * @description Retention for every scope. Missing fields default to [`Retention::Forever`],
-		 *     so an empty settings blob keeps everything.
+		 * @description Retention for every scope. Missing fields default to [`Retention::Ephemeral`],
+		 *     so an empty settings blob deletes each class of data as soon as it has been
+		 *     processed.
 		 */
 		RetentionSettings: {
 			/**
 			 * @description Retention for audit blobs.
 			 * @default {
-			 *       "mode": "forever"
+			 *       "mode": "ephemeral"
 			 *     }
 			 */
 			auditLogs?: components["schemas"]["Retention"];
 			/**
 			 * @description Retention for enrichment intermediates (OCR layout, transcript).
 			 * @default {
-			 *       "mode": "forever"
+			 *       "mode": "ephemeral"
 			 *     }
 			 */
 			intermediates?: components["schemas"]["Retention"];
 			/**
 			 * @description Retention for uploaded/imported source documents.
 			 * @default {
-			 *       "mode": "forever"
+			 *       "mode": "ephemeral"
 			 *     }
 			 */
 			originalDocuments?: components["schemas"]["Retention"];
 			/**
 			 * @description Retention for generated redacted documents.
 			 * @default {
-			 *       "mode": "forever"
+			 *       "mode": "ephemeral"
 			 *     }
 			 */
 			redactedDocuments?: components["schemas"]["Retention"];
 		};
+		/**
+		 * @description Params of a document-review activity (`review.verified`, `review.assigned`,
+		 *     `review.unassigned`), where the review is the document's thread.
+		 */
+		ReviewActivityParams: {
+			/**
+			 * @description Username of the reviewer the review is assigned to; omitted for
+			 *     verification or when clearing the assignee.
+			 */
+			assigneeUsername?: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Id of the document under review.
+			 */
+			documentId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the document's review thread.
+			 */
+			threadId: string;
+		};
+		/**
+		 * @description Params of a `review.assigned` notification, sent to the reviewer a document's
+		 *     review was assigned to.
+		 */
+		ReviewAssignedParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the document to review.
+			 */
+			documentId: string;
+			/** @description Display name of the document to review, when it still exists. */
+			documentName?: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the document's review thread.
+			 */
+			threadId: string;
+		};
+		/**
+		 * @description The review state of a file thread (a file thread is the review of its
+		 *     file). `None` on the thread means a workspace thread, which has no review.
+		 *
+		 *     Corresponds to the `REVIEW_STATUS` PostgreSQL enum. It is derived from the
+		 *     review's events, never set by a user: a detection makes it `NeedsReview`, a
+		 *     redaction `InReview`, and verification `Resolved`; a later detection reopens
+		 *     it to `NeedsReview`.
+		 */
+		ReviewStatus: "needs_review" | "in_review" | "resolved";
 		/**
 		 * @description A serializable summary of *which selection rule* bound an operator to an
 		 *     entity, the automatic "why" behind a redaction.
@@ -18270,18 +17891,6 @@ export interface components {
 			 */
 			operator: components["schemas"]["OperatorId"];
 		};
-		/** @description Request to send a message and stream the assistant's reply. */
-		SendChatMessage: {
-			/** @description The user's message. */
-			content: string;
-			/**
-			 * Format: uuid
-			 * @description The message this turn replies to (the branch being extended). Omit to
-			 *     continue from the session's current leaf; use an earlier message's id to
-			 *     branch (e.g. edit-and-resend).
-			 */
-			parentId?: string;
-		};
 		/**
 		 * @description A password set or change.
 		 *
@@ -18346,8 +17955,6 @@ export interface components {
 			/** @description URL-safe workspace identifier. */
 			workspaceSlug: string;
 		};
-		/** @description Sort order direction. */
-		SortOrder: "asc" | "desc";
 		/**
 		 * @description A reference back to the original source: a byte range, and, for a container
 		 *     whose body spans several files, which part that range indexes.
@@ -18396,24 +18003,6 @@ export interface components {
 			 */
 			root?: string;
 		};
-		/** @description Storage totals across a workspace's live files. */
-		StorageAnalytics: {
-			/**
-			 * @description Per-kind breakdown, one entry per `file_kind` (zero-filled), in a stable
-			 *     order.
-			 */
-			byKind: components["schemas"]["StorageKindEntry"][];
-			/**
-			 * Format: int64
-			 * @description Number of live files.
-			 */
-			fileCount: number;
-			/**
-			 * Format: int64
-			 * @description Total bytes of all live files.
-			 */
-			totalBytes: number;
-		};
 		/**
 		 * @description A fully-typed object-store connection configuration.
 		 *
@@ -18451,21 +18040,6 @@ export interface components {
 					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
 					rootPath?: string;
 			  };
-		/** @description One `file_kind`'s share of a workspace's storage. */
-		StorageKindEntry: {
-			/**
-			 * Format: int64
-			 * @description Number of live files of this kind.
-			 */
-			fileCount: number;
-			/** @description The file kind. */
-			kind: components["schemas"]["FileKind"];
-			/**
-			 * Format: int64
-			 * @description Total bytes of live files of this kind.
-			 */
-			totalBytes: number;
-		};
 		/**
 		 * @description Leave this entity alone: a reviewer calling it a false positive.
 		 *
@@ -18510,21 +18084,6 @@ export interface components {
 		 *     is scheduled for a file service.
 		 */
 		SyncMode: "import" | "export";
-		/**
-		 * @description A connection's scheduled-sync configuration (its cron config), present only
-		 *     for connections that sync on a timer. A connection can transfer on demand
-		 *     without this — it is purely the schedule, not a capability marker. When the
-		 *     connection last synced is on [`Connection`] itself, since a connection with no
-		 *     schedule still syncs.
-		 */
-		SyncSchedule: {
-			/** @description How an import reconciles files whose source object was deleted. */
-			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
-			/** @description Cron expression for scheduled imports, if configured. */
-			scheduleCron?: string;
-			/** @description Whether the connection imports data in or exports data out. */
-			syncMode: components["schemas"]["SyncMode"];
-		};
 		/**
 		 * @description Scheduled-sync configuration for a schedulable connection.
 		 *
@@ -18734,6 +18293,11 @@ export interface components {
 					detail: components["schemas"]["TabularModel"];
 					/** @constant */
 					kind: "model";
+			  }
+			| {
+					detail: components["schemas"]["TabularMetadata"];
+					/** @constant */
+					kind: "metadata";
 			  }
 			| {
 					detail: components["schemas"]["Deduplication"];
@@ -19009,6 +18573,22 @@ export interface components {
 			location: components["schemas"]["TabularLocation"];
 		};
 		/**
+		 * @description Detail of a metadata-field detection: a document's out-of-band field
+		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
+		 *     redaction subject at `location`, with its source in `metadata`.
+		 *
+		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
+		 *     out of free content — it is a named field that is simply present. There is
+		 *     nothing probabilistic to weigh, so the entity carries it as its own event
+		 *     kind rather than pretending a pattern fired.
+		 */
+		TabularMetadata: {
+			/** @description The field's location (its key). */
+			location: components["schemas"]["TabularLocation"];
+			/** @description Source metadata (which reader surfaced the field). */
+			metadata: components["schemas"]["MetadataEvent"];
+		};
+		/**
 		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
 		 *     metadata in `model`.
 		 */
@@ -19098,7 +18678,7 @@ export interface components {
 			reason?: string;
 		};
 		/**
-		 * @description The template a [`PolicyDefinition`] was built from.
+		 * @description The template a [`Policy`] was built from.
 		 *
 		 *     Records **provenance, not fidelity**. Templates are plain data
 		 *     and callers are expected to mutate the returned policy before
@@ -19115,7 +18695,7 @@ export interface components {
 		 *     set, a changed operator), and an audit that records only the id
 		 *     cannot tell the two apart.
 		 *
-		 *     [`PolicyDefinition`]: super::PolicyDefinition
+		 *     [`Policy`]: super::Policy
 		 */
 		TemplateOrigin: {
 			/**
@@ -19186,7 +18766,7 @@ export interface components {
 					mask_char?: string;
 			  };
 		/** @description Request payload for testing a webhook. */
-		TestWebhook: {
+		TestWorkspaceWebhook: {
 			/**
 			 * @description Optional custom payload to send in the test request.
 			 *     If not provided, a default test payload will be used.
@@ -19364,6 +18944,11 @@ export interface components {
 					detail: components["schemas"]["TextModel"];
 					/** @constant */
 					kind: "model";
+			  }
+			| {
+					detail: components["schemas"]["TextMetadata"];
+					/** @constant */
+					kind: "metadata";
 			  }
 			| {
 					detail: components["schemas"]["Deduplication"];
@@ -19643,6 +19228,22 @@ export interface components {
 			location: components["schemas"]["TextLocation"];
 		};
 		/**
+		 * @description Detail of a metadata-field detection: a document's out-of-band field
+		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
+		 *     redaction subject at `location`, with its source in `metadata`.
+		 *
+		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
+		 *     out of free content — it is a named field that is simply present. There is
+		 *     nothing probabilistic to weigh, so the entity carries it as its own event
+		 *     kind rather than pretending a pattern fired.
+		 */
+		TextMetadata: {
+			/** @description The field's location (its key). */
+			location: components["schemas"]["TextLocation"];
+			/** @description Source metadata (which reader surfaced the field). */
+			metadata: components["schemas"]["MetadataEvent"];
+		};
+		/**
 		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
 		 *     metadata in `model`.
 		 */
@@ -19869,6 +19470,60 @@ export interface components {
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
+		/** @description Params of a comment-thread activity (`thread.*`). */
+		ThreadActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the document the thread is pinned to; omitted for a workspace-level
+			 *     thread.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the thread.
+			 */
+			threadId: string;
+		};
+		/** @description Params of a thread-comment activity (`thread.comment.created`). */
+		ThreadCommentActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the comment.
+			 */
+			commentId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the document the thread is pinned to; omitted for a workspace-level
+			 *     thread.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the thread the comment is in.
+			 */
+			threadId: string;
+		};
+		/**
+		 * @description The kind of a non-message entry in a comment thread's timeline.
+		 *
+		 *     Corresponds to the `THREAD_EVENT_KIND` PostgreSQL enum. A thread's stream
+		 *     interleaves comments (messages) with these events. A workspace thread uses
+		 *     only the discussion lifecycle (opened/closed/reopened/renamed); a file
+		 *     thread is the review of its file and also records its review transitions
+		 *     (a detection ran, a redaction was made, the review was verified or
+		 *     reopened, the assignee changed).
+		 */
+		ThreadEventKind:
+			| "thread.opened"
+			| "thread.closed"
+			| "thread.reopened"
+			| "thread.renamed"
+			| "review.detection.created"
+			| "review.redaction.created"
+			| "review.verified"
+			| "review.reopened"
+			| "review.assigned"
+			| "review.unassigned";
 		/**
 		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
 		 *
@@ -19951,19 +19606,6 @@ export interface components {
 		};
 		/** @description Expiration options for API tokens. */
 		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
-		/**
-		 * @description Path parameters for API token operations.
-		 *
-		 *     Since token IDs are globally unique UUIDs, account context is verified
-		 *     by comparing with the authenticated user's account ID.
-		 */
-		TokenPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the API token.
-			 */
-			tokenId: string;
-		};
 		/**
 		 * @description Owning token sequence: the [`Text`](super::Text) modality's enrichment
 		 *     artifact, produced by a tokenizing enricher and read by a context enhancer.
@@ -20064,14 +19706,6 @@ export interface components {
 			 */
 			unreadCount: number;
 		};
-		/** @description Response type for unread notifications status. */
-		UnreadStatus: {
-			/**
-			 * Format: int64
-			 * @description Number of unread notifications.
-			 */
-			unreadCount: number;
-		};
 		/**
 		 * @description Request payload to update an account's profile.
 		 *
@@ -20091,22 +19725,34 @@ export interface components {
 			username?: components["schemas"]["Handle"];
 		};
 		/** @description Request to update an existing API token. */
-		UpdateApiToken: {
+		UpdateAccountApiToken: {
 			/** @description Updated display name for the API token (1-100 characters). */
 			displayName?: string;
 		};
 		/**
-		 * @description Request payload to change an assignment's review status.
+		 * @description Request payload to update an existing workspace.
 		 *
-		 *     Allowed for the assignee (their own review status) or a member with
-		 *     `AssignTasks`.
+		 *     All fields are optional; only provided fields will be updated. The slug is
+		 *     immutable and set at creation, so it cannot be changed here.
 		 */
-		UpdateAssignment: {
-			/** @description The new review status. */
-			status: components["schemas"]["AssignmentStatus"];
+		UpdateWorkspace: {
+			/** @description New description for the workspace (max 500 characters). */
+			description?: string;
+			/** @description New display name for the workspace (2-32 characters). */
+			displayName?: string;
+			/**
+			 * @description Replacement workspace settings (approval requirement, data-retention
+			 *     rules). When omitted, settings are left unchanged.
+			 */
+			settings?: components["schemas"]["WorkspaceSettings"];
+		};
+		/** @description Request payload to edit a comment's body. */
+		UpdateWorkspaceComment: {
+			/** @description The new comment text (1-10000 characters). */
+			body: string;
 		};
 		/** @description Request payload for updating an existing workspace connection. */
-		UpdateConnection: {
+		UpdateWorkspaceConnection: {
 			/**
 			 * @description Typed provider configuration. If provided, fully replaces the stored
 			 *     config (and, with it, the provider). Omit to leave it unchanged.
@@ -20125,20 +19771,20 @@ export interface components {
 			 */
 			sync?: components["schemas"]["SyncScheduleInput"];
 		};
-		/** @description Request to update file metadata. */
-		UpdateFile: {
-			/** @description New display name for the file. */
+		/** @description Request to update document metadata. */
+		UpdateWorkspaceDocument: {
+			/** @description New display name for the document. */
 			displayName?: string;
 			/** @description Updated metadata. */
 			metadata?: unknown;
 		};
 		/** @description Request to update a member's role. */
-		UpdateMember: {
+		UpdateWorkspaceMember: {
 			/** @description New role for the member. */
 			role: components["schemas"]["WorkspaceRole"];
 		};
 		/** @description Request payload for updating notification settings. */
-		UpdateNotificationSettings: {
+		UpdateWorkspaceNotificationSettings: {
 			/** @description Notification events to receive in-app. */
 			notificationEventsApp?: components["schemas"]["NotificationEvent"][];
 			/** @description Notification events to receive via email. */
@@ -20152,7 +19798,7 @@ export interface components {
 		 *     All fields are optional; only provided fields will be updated. Supplying a
 		 *     `definition` replaces the whole detection + redaction configuration.
 		 */
-		UpdatePipeline: {
+		UpdateWorkspacePipeline: {
 			/** @description New detection + redaction configuration (replaces the whole definition). */
 			definition?: components["schemas"]["PipelineDefinition"];
 			/** @description New description for the pipeline (max 500 characters). */
@@ -20174,7 +19820,7 @@ export interface components {
 		 *     template origin is server-owned and preserved across updates — it is not
 		 *     settable here.
 		 */
-		UpdatePolicy: {
+		UpdateWorkspacePolicy: {
 			/** @description New policy body (replaces the stored definition). */
 			definition?: components["schemas"]["PolicyDraft"];
 			/** @description Policy description. */
@@ -20183,7 +19829,7 @@ export interface components {
 			displayName?: string;
 		};
 		/** @description Request payload for updating an existing workspace provider. */
-		UpdateProvider: {
+		UpdateWorkspaceProvider: {
 			/**
 			 * @description Typed provider configuration. If provided, fully replaces the stored config
 			 *     (and, with it, the provider). Omit to leave it unchanged.
@@ -20195,7 +19841,7 @@ export interface components {
 			isActive?: boolean;
 		};
 		/** @description Request payload for updating an existing workspace webhook. */
-		UpdateWebhook: {
+		UpdateWorkspaceWebhook: {
 			/** @description Updated description of the webhook's purpose (max 500 characters). */
 			description?: string;
 			/** @description Updated human-readable name for the webhook (1-128 characters). */
@@ -20216,23 +19862,6 @@ export interface components {
 			 * @description Updated URL to send webhook payloads to.
 			 */
 			url?: string;
-		};
-		/**
-		 * @description Request payload to update an existing workspace.
-		 *
-		 *     All fields are optional; only provided fields will be updated. The slug is
-		 *     immutable and set at creation, so it cannot be changed here.
-		 */
-		UpdateWorkspace: {
-			/** @description New description for the workspace (max 500 characters). */
-			description?: string;
-			/** @description New display name for the workspace (2-32 characters). */
-			displayName?: string;
-			/**
-			 * @description Replacement workspace settings (approval requirement, data-retention
-			 *     rules). When omitted, settings are left unchanged.
-			 */
-			settings?: components["schemas"]["WorkspaceSettings"];
 		};
 		/**
 		 * @description One recognizer's or enricher's resource usage for one payload.
@@ -20258,10 +19887,1490 @@ export interface components {
 			/** @description Model / token detail; `None` for a pure-CPU component. */
 			model?: components["schemas"]["ModelUsage"];
 		};
+		/**
+		 * @description Every recognizer/enricher's [`Usage`] across a whole document analysis, in
+		 *     the order the components ran (the body first, then each part).
+		 */
+		UsageReport: {
+			/** @description The per-component usage entries, each self-identifying via its `id`. */
+			entries: components["schemas"]["Usage"][];
+		};
+		/** @description Path parameters for version extraction. */
+		VersionParams: {
+			/** @description The API version string (e.g., "v1", "v2"). */
+			version: string;
+		};
+		/** @description Shape of a synthesized tone. */
+		Waveform: "sine" | "square";
+		/** @description Params of a webhook activity (`webhook.*`). */
+		WebhookActivityParams: {
+			/** @description Id of the webhook. */
+			webhookId: components["schemas"]["WebhookId"];
+			/** @description Display name of the webhook. */
+			webhookName: string;
+		};
+		/**
+		 * @description The types of events that can trigger webhook delivery.
+		 *
+		 *     Corresponds to the `WEBHOOK_EVENT` PostgreSQL enum and configures which
+		 *     events a webhook receives.
+		 */
+		WebhookEvent:
+			| "document.created"
+			| "document.updated"
+			| "document.deleted"
+			| "member.added"
+			| "member.deleted"
+			| "member.updated"
+			| "connection.created"
+			| "connection.updated"
+			| "connection.deleted"
+			| "connection.sync.started"
+			| "connection.sync.completed"
+			| "connection.sync.failed"
+			| "provider.created"
+			| "provider.updated"
+			| "provider.deleted"
+			| "review.verified"
+			| "review.assigned"
+			| "review.unassigned"
+			| "pipeline.created"
+			| "pipeline.updated"
+			| "pipeline.deleted"
+			| "pipeline.detection.started"
+			| "pipeline.detection.completed"
+			| "pipeline.detection.failed"
+			| "pipeline.redaction.created"
+			| "policy.created"
+			| "policy.updated"
+			| "policy.deleted"
+			| "thread.opened"
+			| "thread.closed"
+			| "thread.reopened"
+			| "thread.renamed";
+		/** @description Opaque whk identifier (whk_<uuid>). */
+		WebhookId: string;
+		/**
+		 * @description The operational status of a workspace webhook.
+		 *
+		 *     Corresponds to the `WEBHOOK_STATUS` PostgreSQL enum. The user controls
+		 *     `Enabled` / `Disabled`; `Suspended` is set by the system when a webhook
+		 *     fails repeatedly, and the user can re-enable it.
+		 */
+		WebhookStatus: "enabled" | "disabled" | "suspended";
+		/** @description Workspace response. */
+		Workspace: {
+			/** @description Serve path of the workspace's avatar (logo), when set. */
+			avatarUrl?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this workspace. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Description of the workspace. */
+			description?: string;
+			/** @description Display name of the workspace. */
+			displayName: string;
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * @description Workspace settings (raster policy, data-retention rules, upload cap).
+			 *
+			 *     `maxUploadBytes` is resolved to the effective per-file limit — the smaller
+			 *     of the workspace's own cap and the server-wide hard limit — so a client
+			 *     always reads a concrete number to enforce.
+			 */
+			settings: components["schemas"]["WorkspaceSettings"];
+			/** @description URL-safe workspace identifier. */
+			slug: components["schemas"]["Handle"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description Response type for a workspace activity.
+		 *
+		 *     The typed payload is nested under `payload`, so an activity is
+		 *     `{ id, workspaceSlug, performedBy, payload: { activityType, <params...> }, createdAt }`.
+		 */
+		WorkspaceActivity: {
+			/**
+			 * Format: date-time
+			 * @description When the activity occurred.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Unique activity identifier.
+			 */
+			id: string;
+			/**
+			 * @description The activity type and its typed params, absent when the stored params do
+			 *     not decode into their `activityType`.
+			 */
+			payload?: components["schemas"]["ActivityPayload"];
+			/** @description Account that performed the activity. */
+			performedBy: components["schemas"]["AccountRef"];
+			/** @description Handle of the workspace this activity belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description The export-only query parameter: the output format. Kept separate from the
+		 *     shared filter and window so each is extracted on its own (see
+		 *     [`WorkspaceActivityFilterQuery`] for why flattening is avoided).
+		 */
+		WorkspaceActivityExportOptions: {
+			/** @description Output format; defaults to `csv`. */
+			format?: components["schemas"]["ExportFormat"];
+		};
+		/**
+		 * @description The activity-specific filter parameters: which activity types to keep and
+		 *     whose activities to keep.
+		 *
+		 *     This is its own query struct so an endpoint composes it alongside the shared
+		 *     [`CursorPagination`](crate::handler::request::CursorPagination) and
+		 *     [`DateWindow`] as separate query extractors, rather than `#[serde(flatten)]`ing
+		 *     them into one struct: the query extractor (`serde_html_form`) mis-handles
+		 *     flattened sub-structs — a flattened pagination struct fails to deserialize even
+		 *     a bare `?limit=` — so each concern is extracted on its own.
+		 */
+		WorkspaceActivityFilterQuery: {
+			/** @description Username of the account whose activities to keep. Omit for any actor. */
+			actor?: components["schemas"]["Handle"];
+			/**
+			 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
+			 *     parameter for several; omit for no type constraint.
+			 */
+			type?: components["schemas"]["ActivityType"][];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceActivityPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceActivity"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Params of a workspace-scoped activity (`workspace.*`). */
+		WorkspaceActivityParams: {
+			/** @description Slug of the workspace acted on. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Aggregate analytics for a workspace: what it stores, how its detections fare, and
+		 *     the inference tokens they spent.
+		 */
+		WorkspaceAnalytics: {
+			/** @description Detection health: volume, status mix, and durations. */
+			detections: components["schemas"]["WorkspaceDetectionAnalytics"];
+			/** @description Stored-file totals and their per-kind breakdown. */
+			storage: components["schemas"]["WorkspaceStorageAnalytics"];
+			/** @description Inference token usage: workspace totals and a per-model breakdown. */
+			usage: components["schemas"]["WorkspaceUsageAnalytics"];
+		};
+		/** @description Response type for a comment: one message within a thread. */
+		WorkspaceComment: {
+			/** @description Account that wrote the message. */
+			author: components["schemas"]["AccountRef"];
+			/** @description The message text. */
+			body: string;
+			/**
+			 * Format: date-time
+			 * @description When the comment was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the comment.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Thread this message belongs to.
+			 */
+			threadId: string;
+			/**
+			 * Format: date-time
+			 * @description When the comment was last updated.
+			 */
+			updatedAt: string;
+		};
+		/** @description Path parameters addressing one comment by its opaque id. */
+		WorkspaceCommentPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the comment.
+			 */
+			commentId: string;
+		};
+		/**
+		 * @description Response type for a workspace connection.
+		 *
+		 *     Note: The encrypted connection data is never exposed in API responses.
+		 *     Only metadata about the connection is returned.
+		 */
+		WorkspaceConnection: {
+			/** @description Capability category of the connection (object store, file service). */
+			connectionType: components["schemas"]["ConnectionType"];
+			/**
+			 * Format: date-time
+			 * @description When the connection was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this connection. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Human-readable connection display name. */
+			displayName: string;
+			/** @description Opaque identifier of the connection. */
+			id: components["schemas"]["ConnectionId"];
+			/** @description Whether the connection is enabled. */
+			isActive: boolean;
+			/**
+			 * Format: date-time
+			 * @description When the connection last synced successfully, if ever. Independent of
+			 *     `sync`: a connection with no schedule still records its on-demand syncs.
+			 */
+			lastSyncedAt?: string;
+			/** @description Provider identifier (`s3`, `azure`, `gcs`, `google_drive`, `dropbox`, ...). */
+			provider: string;
+			/**
+			 * @description Scheduled-sync configuration; present only for connections that sync on a
+			 *     timer. Its absence does not mean the connection cannot sync — a file
+			 *     service and an unscheduled object store both transfer on demand.
+			 */
+			sync?: components["schemas"]["WorkspaceSyncSchedule"];
+			/**
+			 * Format: date-time
+			 * @description When the connection was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this connection belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceConnectionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceConnection"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Path parameters for connection operations.
+		 *
+		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by
+		 *     the [`WorkspaceContext`] extractor.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
+		WorkspaceConnectionPathParams: {
+			/** @description Opaque identifier of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+		};
+		/** @description A connection sync (import or export). */
+		WorkspaceConnectionSync: {
+			/**
+			 * Format: int32
+			 * @description 1-based attempt number; scheduled syncs may be retried on failure.
+			 */
+			attempt: number;
+			/**
+			 * Format: date-time
+			 * @description When the sync finished, if it has.
+			 */
+			completedAt?: string;
+			/** @description The connection this sync belongs to. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Failure reason when the sync failed; omitted otherwise. */
+			errorMessage?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique sync identifier.
+			 */
+			id: string;
+			/**
+			 * Format: int64
+			 * @description Number of objects transferred so far.
+			 */
+			recordsSynced: number;
+			/**
+			 * Format: date-time
+			 * @description When the sync started.
+			 */
+			startedAt: string;
+			/** @description Current status of the sync. */
+			status: components["schemas"]["SyncStatus"];
+			/** @description How the sync was triggered. */
+			triggerType: components["schemas"]["SyncTriggerType"];
+			/** @description Account that triggered the sync. */
+			triggeredBy: components["schemas"]["AccountRef"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceConnectionSyncPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceConnectionSync"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters for a specific connection sync. */
+		WorkspaceConnectionSyncPathParams: {
+			/** @description Opaque identifier of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the sync run.
+			 */
+			syncId: string;
+		};
+		/** @description Result of a connection reachability check. */
+		WorkspaceConnectionVerification: {
+			/** @description Failure reason when not reachable; omitted on success. */
+			error?: string;
+			/** @description Whether the backing store was reachable with the stored credentials. */
+			reachable: boolean;
+		};
+		/** @description Query parameters for listing connections. */
+		WorkspaceConnectionsQuery: {
+			/**
+			 * @description Filter by provider (`s3`, `azure`, `gcs`). Repeatable; a connection
+			 *     matches if it uses any of the given providers. Empty means no filter.
+			 * @default []
+			 */
+			provider?: string[];
+		};
+		/**
+		 * @description Result of a bulk document deletion.
+		 *
+		 *     The deletion is idempotent: `deleted` holds the ids that resolved to live
+		 *     documents in the workspace and were removed, and `skipped` holds the requested
+		 *     ids that did not — unknown, already deleted, in another workspace, or held by
+		 *     an in-progress detection that still needs the document.
+		 */
+		WorkspaceDeletedDocuments: {
+			/** @description Ids that were deleted. */
+			deleted: string[];
+			/**
+			 * @description Requested ids that were skipped: unknown, already deleted, in another
+			 *     workspace, or held by an in-progress detection.
+			 */
+			skipped: string[];
+		};
+		/**
+		 * @description Response type for a detection.
+		 *
+		 *     A detection is addressed by its own opaque id; the owning pipeline and
+		 *     workspace slugs are carried for context. Redacted outputs are not here — a
+		 *     detection produces many redactions, each fetched from its `redactions`
+		 *     endpoint.
+		 */
+		WorkspaceDetection: {
+			/**
+			 * Format: date-time
+			 * @description When the detection completed analysis.
+			 */
+			completedAt?: string;
+			/** @description Human-readable failure reason, present only when the detection `failed`. */
+			error?: string;
+			/** @description Opaque identifier of the detection. */
+			id: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Source document this detection analyzes.
+			 */
+			inputDocumentId: string;
+			/**
+			 * @description Display name of the source document, for showing the detection without a
+			 *     separate file lookup. `None` if the file was removed (e.g. by retention).
+			 */
+			inputDocumentName?: string;
+			/** @description Non-encrypted metadata for filtering/display. */
+			metadata: components["schemas"]["DetectionMetadata"];
+			/**
+			 * @description Handle of the pipeline this detection belongs to; absent for an ad-hoc
+			 *     detection or once its pipeline was deleted.
+			 */
+			pipelineSlug?: components["schemas"]["Handle"];
+			/**
+			 * Format: date-time
+			 * @description When the detection started.
+			 */
+			startedAt: string;
+			/**
+			 * @description Current detection status.
+			 *
+			 *     The detections are available to fetch from the detection's `analysis`
+			 *     endpoint once this reaches `complete`.
+			 */
+			status: components["schemas"]["DetectionStatus"];
+			/** @description How the detection was triggered. */
+			triggerType: components["schemas"]["PipelineTriggerType"];
+			/** @description Account that triggered the detection. */
+			triggeredBy: components["schemas"]["AccountRef"];
+			/** @description Handle of the workspace this detection belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/** @description Detection health for a workspace. */
+		WorkspaceDetectionAnalytics: {
+			/**
+			 * Format: int64
+			 * @description Mean completed-detection duration in milliseconds; omitted until a
+			 *     detection completes.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * @description Per-status breakdown, one entry per detection status (zero-filled), in a
+			 *     stable order.
+			 */
+			byStatus: components["schemas"]["WorkspaceDetectionStatusEntry"][];
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed). Omitted when no detection has reached a
+			 *     terminal state (genuinely no signal, not zero).
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-detection duration in milliseconds; omitted until
+			 *     a detection completes.
+			 */
+			p95DurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description Total number of detections.
+			 */
+			total: number;
+		};
+		/** @description A single day of detection activity. */
+		WorkspaceDetectionDayEntry: {
+			/**
+			 * Format: int64
+			 * @description Mean completed-detection duration (milliseconds) this day; omitted if none completed.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * Format: date
+			 * @description The day (`YYYY-MM-DD`, UTC).
+			 */
+			date: string;
+			/**
+			 * Format: int64
+			 * @description Detections started this day (`0` on a quiet day).
+			 */
+			detections: number;
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed) for this day; omitted when no detection
+			 *     reached a terminal state that day.
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description Input/prompt tokens spent by this day's detections; omitted when none used a model.
+			 */
+			inputTokens?: number;
+			/**
+			 * Format: int64
+			 * @description Output/completion tokens spent this day; omitted when none used a model.
+			 */
+			outputTokens?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-detection duration (milliseconds) this day; omitted if none.
+			 */
+			p95DurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description Reported total tokens this day; omitted when none used a model.
+			 */
+			totalTokens?: number;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceDetectionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceDetection"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters for detection operations. */
+		WorkspaceDetectionPathParams: {
+			/** @description Opaque identifier of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+		};
+		/** @description One status's share of a workspace's detections. */
+		WorkspaceDetectionStatusEntry: {
+			/**
+			 * Format: int64
+			 * @description Number of detections in this status.
+			 */
+			count: number;
+			/** @description The detection status. */
+			status: components["schemas"]["DetectionStatus"];
+		};
+		/**
+		 * @description A workspace's daily detection activity over a window: one point per day, dense
+		 *     (quiet days included with `detections: 0`), ready to plot as a continuous
+		 *     series.
+		 */
+		WorkspaceDetectionTimeSeries: {
+			/** @description One entry per day in the requested window, oldest first. */
+			points: components["schemas"]["WorkspaceDetectionDayEntry"][];
+		};
+		/**
+		 * @description Query parameters for listing detections across a workspace.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
+		WorkspaceDetectionsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter by the source document the detection analyzes.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the owning pipeline.
+			 */
+			pipelineId?: string;
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
+		};
+		/** @description Represents a document in responses. */
+		WorkspaceDocument: {
+			/**
+			 * Format: date-time
+			 * @description Creation timestamp.
+			 */
+			createdAt: string;
+			/** @description Display name. */
+			displayName: string;
+			/** @description File extension (without dot). Owned by the document. */
+			extension: string;
+			/**
+			 * @description Lowercase hex-encoded SHA-256 of the document's plaintext content. Resolved
+			 *     from the backing blob.
+			 */
+			hash: string;
+			/**
+			 * Format: uuid
+			 * @description Unique document identifier.
+			 */
+			id: string;
+			/** @description The document's role (original or redacted). */
+			kind: components["schemas"]["DocumentKind"];
+			/** @description Original filename when uploaded. */
+			originalFilename: string;
+			/**
+			 * Format: int64
+			 * @description Size in bytes. Resolved from the backing blob.
+			 */
+			size: number;
+			/**
+			 * Format: date-time
+			 * @description Last update timestamp.
+			 */
+			updatedAt: string;
+			/** @description Account that uploaded/created the document. */
+			uploadedBy: components["schemas"]["AccountRef"];
+			/** @description Handle of the workspace this document belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceDocumentPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceDocument"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters for document operations within a workspace context. */
+		WorkspaceDocumentPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the document.
+			 */
+			documentId: string;
+		};
+		/**
+		 * @description Workspace invite with complete information.
+		 *
+		 *     This response includes all the essential information about an
+		 *     invitation, including the unique invite ID that can be used to track or cancel
+		 *     the invitation later.
+		 */
+		WorkspaceInvite: {
+			/**
+			 * Format: date-time
+			 * @description When the invitation was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation expires.
+			 */
+			expiresAt: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the invitation.
+			 */
+			inviteId: string;
+			/** @description Current status of the invitation. */
+			inviteStatus: components["schemas"]["InviteStatus"];
+			/** @description Role the invitee will have if they accept. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description Email address of the invitee (omitted for open invite codes). */
+			inviteeEmail?: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace the invitation is for. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/** @description Response containing a generated shareable invite code. */
+		WorkspaceInviteCode: {
+			/**
+			 * Format: date-time
+			 * @description When the invite code expires.
+			 */
+			expiresAt: string;
+			/** @description The generated invite code that can be shared. */
+			inviteCode: string;
+			/** @description Role assigned when someone joins via this code. */
+			role: components["schemas"]["WorkspaceRole"];
+			/** @description Handle of the workspace this invite code is for. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceInvitePage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceInvite"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters for invite operations. */
+		WorkspaceInvitePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the invite.
+			 */
+			inviteId: string;
+		};
+		/**
+		 * @description Acknowledgement returned after sending a workspace invitation.
+		 *
+		 *     The response is deliberately uniform: it carries no invite identifier or
+		 *     status, so it is identical whether or not the address belonged to a known
+		 *     account and cannot be used to probe for account existence.
+		 */
+		WorkspaceInviteSent: {
+			/** @description Human-readable confirmation message. */
+			detail: string;
+		};
+		/** @description Represents a workspace member. */
+		WorkspaceMember: {
+			/** @description Serve path of the member's avatar, when set. */
+			avatarUrl?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the member joined the workspace.
+			 */
+			createdAt: string;
+			/** @description Display name of the member, when set. */
+			displayName?: string;
+			/** @description Email address of the member. */
+			emailAddress: string;
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
+			/** @description Handle of the member's account. */
+			username: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceMemberPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceMember"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters for workspace member operations. */
+		WorkspaceMemberPathParams: {
+			/** @description Public handle of the member's account. */
+			username: components["schemas"]["Handle"];
+		};
+		/** @description One model's token usage across a workspace's detections. */
+		WorkspaceModelUsageEntry: {
+			/**
+			 * Format: int64
+			 * @description Input/prompt tokens summed for this model (`0` if never reported).
+			 */
+			inputTokens: number;
+			/** @description The model. */
+			model: string;
+			/**
+			 * Format: int64
+			 * @description Output/completion tokens summed for this model (`0` if never reported).
+			 */
+			outputTokens: number;
+			/**
+			 * Format: int64
+			 * @description Reported total tokens summed for this model (`0` if never reported).
+			 */
+			totalTokens: number;
+		};
+		/** @description Response for notification settings within a workspace. */
+		WorkspaceNotificationSettings: {
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
+			/** @description Whether to send email notifications. */
+			notifyViaEmail: boolean;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacePage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Workspace"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description A short-lived provider OAuth access token for a browser file picker.
+		 *
+		 *     Carries only the access token and its expiry — never the refresh token, which
+		 *     stays server-side. The token is minted from the connection's stored
+		 *     credentials and is short-lived (the provider's access-token lifetime), so the
+		 *     browser holds a narrow, expiring credential rather than a durable one.
+		 */
+		WorkspacePickerToken: {
+			/** @description The provider OAuth access token to hand to the browser picker. */
+			accessToken: string;
+			/**
+			 * Format: int64
+			 * @description Unix seconds at which the access token expires, if the provider reports
+			 *     it. `None` means the provider did not return an expiry.
+			 */
+			expiresAt?: number;
+		};
+		/**
+		 * @description Body for minting a browser file-picker token.
+		 *
+		 *     The OneDrive v8 picker requests a token per resource (it names the resource in
+		 *     each `authenticate` command); the caller passes that `resource` so the server
+		 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
+		 *     single provider token (Google Drive, Box); omit it for those.
+		 */
+		WorkspacePickerTokenRequest: {
+			/**
+			 * @description The resource the picker asked for (its `authenticate` command's
+			 *     `resource`), e.g. `https://contoso-my.sharepoint.com`. Optional; when
+			 *     absent the server uses the connection's default picker resource.
+			 */
+			resource?: string;
+		};
+		/** @description WorkspacePipeline response. */
+		WorkspacePipeline: {
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this pipeline. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Detection + redaction configuration. */
+			definition: components["schemas"]["PipelineDefinition"];
+			/** @description WorkspacePipeline description. */
+			description?: string;
+			/** @description WorkspacePipeline display name. */
+			displayName: string;
+			/** @description Per-scope data-retention override, when the pipeline sets one. */
+			retention?: components["schemas"]["RetentionOverride"];
+			/** @description URL slug of the pipeline, unique within its workspace. */
+			slug: components["schemas"]["Handle"];
+			/** @description WorkspacePipeline lifecycle status. */
+			status: components["schemas"]["PipelineStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this pipeline belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Query parameters for listing a single pipeline's detections.
+		 *
+		 *     The pipeline is fixed by the route, so it narrows only by status, file,
+		 *     trigger account, and trigger type.
+		 */
+		WorkspacePipelineDetectionsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter by the source document the detection analyzes.
+			 */
+			documentId?: string;
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
+		};
+		/** @description Query parameters for filtering pipelines. */
+		WorkspacePipelineFilter: {
+			/** @description Search by pipeline name (trigram similarity). */
+			search?: string;
+			/** @description Filter by pipeline status. */
+			status?: components["schemas"]["PipelineStatus"];
+		};
+		/** @description Path parameters for pipeline operations. */
+		WorkspacePipelinePathParams: {
+			/** @description URL slug of the pipeline, unique within its workspace. */
+			pipelineSlug: string;
+		};
+		/** @description Summary response for pipeline (used in lists). */
+		WorkspacePipelineSummary: {
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this pipeline. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description WorkspacePipeline description. */
+			description?: string;
+			/** @description WorkspacePipeline display name. */
+			displayName: string;
+			/** @description URL slug of the pipeline, unique within its workspace. */
+			slug: components["schemas"]["Handle"];
+			/** @description WorkspacePipeline lifecycle status. */
+			status: components["schemas"]["PipelineStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this pipeline belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacePipelineSummaryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspacePipelineSummary"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Query parameters for listing policies.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
+		WorkspacePoliciesQuery: {
+			/** @description Narrow the list to a single policy kind (`authored` or `oneshot`). */
+			kind?: components["schemas"]["PolicyKind"];
+		};
+		/** @description Response type for a workspace policy. */
+		WorkspacePolicy: {
+			/**
+			 * Format: date-time
+			 * @description When the policy was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this policy. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description The structured policy body consumed by the engine (the current version). */
+			definition: components["schemas"]["Policy"];
+			/** @description Policy description. */
+			description?: string;
+			/** @description Human-readable policy display name. */
+			displayName: string;
+			/**
+			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
+			 *     content-addressed, deduplicated, and immutable; an authored policy is a
+			 *     normal, editable policy.
+			 */
+			kind: components["schemas"]["PolicyKind"];
+			/** @description URL slug of the policy, unique within its workspace. */
+			slug: components["schemas"]["Handle"];
+			/**
+			 * Format: date-time
+			 * @description When the policy was last updated.
+			 */
+			updatedAt: string;
+			/**
+			 * Format: int32
+			 * @description The current version number of the policy's definition.
+			 */
+			versionNumber: number;
+			/** @description Handle of the workspace this policy belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Path parameters for policy operations.
+		 *
+		 *     The workspace is resolved by the [`WorkspaceContext`] extractor from the
+		 *     `{workspaceSlug}` path segment.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
+		WorkspacePolicyPathParams: {
+			/** @description URL slug of the policy, unique within its workspace. */
+			policySlug: string;
+		};
+		/**
+		 * @description Lightweight policy view for lists.
+		 *
+		 *     Carries only the metadata, without loading the policy body, so a page of
+		 *     policies stays small. The full [`WorkspacePolicy`] (with its `definition`) is
+		 *     returned by the single-policy endpoint.
+		 */
+		WorkspacePolicySummary: {
+			/**
+			 * Format: date-time
+			 * @description When the policy was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this policy. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Policy description. */
+			description?: string;
+			/** @description Human-readable policy display name. */
+			displayName: string;
+			/**
+			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
+			 *     content-addressed, deduplicated, and immutable; an authored policy is a
+			 *     normal, editable policy.
+			 */
+			kind: components["schemas"]["PolicyKind"];
+			/** @description URL slug of the policy, unique within its workspace. */
+			slug: components["schemas"]["Handle"];
+			/**
+			 * Format: date-time
+			 * @description When the policy was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this policy belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacePolicySummaryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspacePolicySummary"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Response type for a workspace inference provider.
+		 *
+		 *     Note: The encrypted provider data is never exposed in API responses. Only
+		 *     metadata about the provider is returned.
+		 */
+		WorkspaceProvider: {
+			/**
+			 * Format: date-time
+			 * @description When the provider was created.
+			 */
+			createdAt: string;
+			/** @description Account that created this provider. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Human-readable provider display name. */
+			displayName: string;
+			/** @description Opaque identifier of the provider. */
+			id: components["schemas"]["ProviderId"];
+			/** @description Whether the provider is enabled. */
+			isActive: boolean;
+			/** @description Provider identifier (`openai`, `ollama`, `anthropic`, ...). */
+			provider: string;
+			/** @description Inference model type of the provider (llm, ner). */
+			providerType: components["schemas"]["ProviderType"];
+			/**
+			 * Format: date-time
+			 * @description When the provider was last updated.
+			 */
+			updatedAt: string;
+			/** @description Handle of the workspace this provider belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceProviderPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceProvider"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description Path parameters for provider operations.
+		 *
+		 *     The workspace is resolved separately from the `{workspaceSlug}` segment by the
+		 *     [`WorkspaceContext`] extractor.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
+		WorkspaceProviderPathParams: {
+			/** @description Opaque identifier of the provider. */
+			providerId: components["schemas"]["ProviderId"];
+		};
+		/** @description Query parameters for listing providers. */
+		WorkspaceProvidersQuery: {
+			/**
+			 * @description Filter by provider (`openai`, `ollama`, `anthropic`). Repeatable; a
+			 *     provider matches if it uses any of the given providers. Empty means no
+			 *     filter.
+			 * @default []
+			 */
+			provider?: string[];
+		};
+		/**
+		 * @description Path parameters for a redaction.
+		 *
+		 *     The redaction id is globally unique, so a redaction is addressed by id alone
+		 *     and resolved within the workspace by the query.
+		 */
+		WorkspaceRedactionPathParams: {
+			/** @description Opaque identifier of the redaction. */
+			redactionId: components["schemas"]["RedactionId"];
+		};
+		/**
+		 * @description Response type for a redaction.
+		 *
+		 *     A redaction is one redact pass over a detection, produced with a specific set
+		 *     of reviewer edits. It owns the redacted output document (downloadable through
+		 *     the normal file endpoints) and a review audit recording what was redacted and
+		 *     why (fetched from the redaction's `review` endpoint).
+		 *
+		 *     Named `WorkspaceRedactionResult` rather than `Redaction` because the engine's audit
+		 *     schema already carries a `Redaction` (an audit event), and the two must not
+		 *     collide in the generated OpenAPI.
+		 */
+		WorkspaceRedactionResult: {
+			/**
+			 * Format: date-time
+			 * @description When the redaction was created.
+			 */
+			createdAt: string;
+			/** @description The detection this redaction was produced from. */
+			detectionId: components["schemas"]["DetectionId"];
+			/** @description Opaque identifier of the redaction. */
+			id: components["schemas"]["RedactionId"];
+			/**
+			 * Format: uuid
+			 * @description Redacted output document this redaction produced. `None` only if the file
+			 *     was removed (e.g. by retention).
+			 */
+			outputDocumentId?: string;
+			/** @description Account that requested the redaction. */
+			requestedBy: components["schemas"]["AccountRef"];
+			/** @description Handle of the workspace this redaction belongs to. */
+			workspaceSlug: components["schemas"]["Handle"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceRedactionResultPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceRedactionResult"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description The role and permission level of a workspace member.
+		 *
+		 *     Corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
+		 *     hierarchical access control for workspace members with clearly defined
+		 *     capabilities.
+		 */
+		WorkspaceRole: "owner" | "admin" | "editor" | "reviewer";
+		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
+		WorkspaceSettings: {
+			/**
+			 * Format: uint64
+			 * @description A soft per-file upload cap in bytes: an upload larger than this is
+			 *     rejected for this workspace. `None` imposes no workspace-specific cap.
+			 *
+			 *     The server-wide hard limit still applies regardless; the effective cap is
+			 *     the smaller of the two.
+			 */
+			maxUploadBytes?: number;
+			/**
+			 * @description How document pages are rasterised for OCR during detection.
+			 * @default auto
+			 */
+			raster?: components["schemas"]["RasterPolicy"];
+			/**
+			 * @description Data-retention rules for the workspace.
+			 * @default {
+			 *       "auditLogs": {
+			 *         "mode": "ephemeral"
+			 *       },
+			 *       "intermediates": {
+			 *         "mode": "ephemeral"
+			 *       },
+			 *       "originalDocuments": {
+			 *         "mode": "ephemeral"
+			 *       },
+			 *       "redactedDocuments": {
+			 *         "mode": "ephemeral"
+			 *       }
+			 *     }
+			 */
+			retention?: components["schemas"]["RetentionSettings"];
+		};
+		/** @description Storage totals across a workspace's live files. */
+		WorkspaceStorageAnalytics: {
+			/**
+			 * @description Per-kind breakdown, one entry per document `kind` (zero-filled), in a
+			 *     stable order.
+			 */
+			byKind: components["schemas"]["WorkspaceStorageKindEntry"][];
+			/**
+			 * Format: int64
+			 * @description Number of live files.
+			 */
+			fileCount: number;
+			/**
+			 * Format: int64
+			 * @description Total bytes of all live files.
+			 */
+			totalBytes: number;
+		};
+		/** @description One document `kind`'s share of a workspace's storage. */
+		WorkspaceStorageKindEntry: {
+			/**
+			 * Format: int64
+			 * @description Number of live documents of this kind.
+			 */
+			fileCount: number;
+			/** @description The document kind. */
+			kind: components["schemas"]["DocumentKind"];
+			/**
+			 * Format: int64
+			 * @description Total bytes of live documents of this kind.
+			 */
+			totalBytes: number;
+		};
+		/**
+		 * @description A connection's scheduled-sync configuration (its cron config), present only
+		 *     for connections that sync on a timer. A connection can transfer on demand
+		 *     without this — it is purely the schedule, not a capability marker. When the
+		 *     connection last synced is on [`WorkspaceConnection`] itself, since a connection with no
+		 *     schedule still syncs.
+		 */
+		WorkspaceSyncSchedule: {
+			/** @description How an import reconciles files whose source object was deleted. */
+			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
+			/** @description Cron expression for scheduled imports, if configured. */
+			scheduleCron?: string;
+			/** @description Whether the connection imports data in or exports data out. */
+			syncMode: components["schemas"]["SyncMode"];
+		};
+		/** @description Query parameters for listing all syncs across a workspace. */
+		WorkspaceSyncsQuery: {
+			/**
+			 * @description Filter by connection provider (`s3`, `azure`, `gcs`). Repeatable; a sync
+			 *     matches if its connection uses any of the given providers. Empty means no
+			 *     provider filter.
+			 * @default []
+			 */
+			provider?: string[];
+			/** @description Filter by sync status. */
+			status?: components["schemas"]["SyncStatus"];
+		};
+		/**
+		 * @description Response type for a thread.
+		 *
+		 *     A thread is either a free-form workspace discussion (no `documentId`, opened
+		 *     and closed by members) or a document's review (`documentId` set, one live
+		 *     thread per document, auto-created on the document's first detection). A
+		 *     document thread carries a derived `reviewStatus` and an optional `assignee`; a
+		 *     workspace thread carries neither. Its stream is a [`WorkspaceThreadEntry`] timeline.
+		 */
+		WorkspaceThread: {
+			/**
+			 * @description Account the document review is assigned to; `None` for a workspace thread
+			 *     or an unassigned document review.
+			 */
+			assignee?: components["schemas"]["AccountRef"];
+			/** @description Account that opened the thread. */
+			author: components["schemas"]["AccountRef"];
+			/** @description Whether the thread is closed. */
+			closed: boolean;
+			/**
+			 * Format: date-time
+			 * @description When the thread was closed, when closed.
+			 */
+			closedAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the thread was created.
+			 */
+			createdAt: string;
+			/** @description The thread's title; `None` for an untitled thread. */
+			displayName?: string;
+			/**
+			 * Format: uuid
+			 * @description Document this thread reviews; `None` for a workspace-level thread.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the thread.
+			 */
+			id: string;
+			/**
+			 * @description The document review's current status, derived from the review timeline;
+			 *     `None` for a workspace thread.
+			 */
+			reviewStatus?: components["schemas"]["ReviewStatus"];
+			/**
+			 * Format: date-time
+			 * @description When the thread was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description One entry in a thread's timeline: either a message or a lifecycle event,
+		 *     tagged so a client renders them interleaved in order.
+		 */
+		WorkspaceThreadEntry:
+			| ({
+					/** @constant */
+					type: "comment";
+			  } & components["schemas"]["WorkspaceComment"])
+			| ({
+					/** @constant */
+					type: "event";
+			  } & components["schemas"]["WorkspaceThreadEvent"]);
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceThreadEntryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceThreadEntry"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description One non-message entry in a thread timeline (opened, closed, reopened,
+		 *     renamed, or a review transition).
+		 */
+		WorkspaceThreadEvent: {
+			/** @description Account that performed the action; `None` if that account was removed. */
+			actor?: components["schemas"]["AccountRef"];
+			/**
+			 * Format: date-time
+			 * @description When the event happened.
+			 */
+			createdAt: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the event.
+			 */
+			id: string;
+			/** @description What happened. */
+			kind: components["schemas"]["ThreadEventKind"];
+			/** @description Event-specific detail; `None` for events that carry none. */
+			target?: unknown;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceThreadPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceThread"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/** @description Path parameters addressing one thread by its opaque id. */
+		WorkspaceThreadPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the thread.
+			 */
+			threadId: string;
+		};
+		/**
+		 * @description Query parameters for listing a workspace's threads.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
+		WorkspaceThreadsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter by the thread's opening author.
+			 */
+			author?: string;
+			/** @description Filter by open/closed state: `true` = closed only, `false` = open only. */
+			closed?: boolean;
+			/**
+			 * Format: uuid
+			 * @description Filter by the document the thread reviews.
+			 */
+			documentId?: string;
+			/** @description Filter document reviews by their derived review status. */
+			reviewStatus?: components["schemas"]["ReviewStatus"];
+		};
 		/** @description Inference token usage across a workspace's detections. */
-		UsageAnalytics: {
+		WorkspaceUsageAnalytics: {
 			/** @description Per-model breakdown, one entry per model used, in a stable order. */
-			byModel: components["schemas"]["ModelUsageEntry"][];
+			byModel: components["schemas"]["WorkspaceModelUsageEntry"][];
 			/**
 			 * Format: int64
 			 * @description Total input/prompt tokens across all models.
@@ -20279,23 +21388,8 @@ export interface components {
 			 */
 			totalTokens: number;
 		};
-		/**
-		 * @description Every recognizer/enricher's [`Usage`] across a whole document analysis, in
-		 *     the order the components ran (the body first, then each part).
-		 */
-		UsageReport: {
-			/** @description The per-component usage entries, each self-identifying via its `id`. */
-			entries: components["schemas"]["Usage"][];
-		};
-		/** @description Path parameters for version extraction. */
-		VersionParams: {
-			/** @description The API version string (e.g., "v1", "v2"). */
-			version: string;
-		};
-		/** @description Shape of a synthesized tone. */
-		Waveform: "sine" | "square";
 		/** @description Workspace webhook response. */
-		Webhook: {
+		WorkspaceWebhook: {
 			/**
 			 * Format: int32
 			 * @description Consecutive failed deliveries since the last success.
@@ -20342,13 +21436,6 @@ export interface components {
 			/** @description Handle of the workspace this webhook belongs to. */
 			workspaceSlug: components["schemas"]["Handle"];
 		};
-		/** @description Params of a webhook activity (`webhook.*`). */
-		WebhookActivityParams: {
-			/** @description Id of the webhook. */
-			webhookId: components["schemas"]["WebhookId"];
-			/** @description Display name of the webhook. */
-			webhookName: string;
-		};
 		/**
 		 * @description Webhook creation response that includes the secret (visible only once).
 		 *
@@ -20356,7 +21443,7 @@ export interface components {
 		 *     It is only returned when the webhook is first created and cannot be retrieved
 		 *     again. Store it securely.
 		 */
-		WebhookCreated: {
+		WorkspaceWebhookCreated: {
 			/**
 			 * Format: int32
 			 * @description Consecutive failed deliveries since the last success.
@@ -20411,52 +21498,15 @@ export interface components {
 			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
-		 * @description The types of events that can trigger webhook delivery.
-		 *
-		 *     Corresponds to the `WEBHOOK_EVENT` PostgreSQL enum and configures which
-		 *     events a webhook receives.
-		 */
-		WebhookEvent:
-			| "file.created"
-			| "file.updated"
-			| "file.deleted"
-			| "member.added"
-			| "member.deleted"
-			| "member.updated"
-			| "connection.created"
-			| "connection.updated"
-			| "connection.deleted"
-			| "connection.sync.started"
-			| "connection.sync.completed"
-			| "connection.sync.failed"
-			| "provider.created"
-			| "provider.updated"
-			| "provider.deleted"
-			| "file.assigned"
-			| "file.unassigned"
-			| "file.assignment.updated"
-			| "pipeline.created"
-			| "pipeline.updated"
-			| "pipeline.deleted"
-			| "pipeline.detection.started"
-			| "pipeline.detection.completed"
-			| "pipeline.detection.failed"
-			| "pipeline.redaction.created"
-			| "policy.created"
-			| "policy.updated"
-			| "policy.deleted";
-		/** @description Opaque whk identifier (whk_<uuid>). */
-		WebhookId: string;
-		/**
 		 * @description Generic paginated response wrapper.
 		 *
 		 *     Provides a consistent structure for all paginated API responses with
 		 *     cursor-based pagination support. When `next_cursor` is present, there
 		 *     are more items to fetch.
 		 */
-		WebhookPage: {
+		WorkspaceWebhookPage: {
 			/** @description Items in this page. */
-			items: components["schemas"]["Webhook"][];
+			items: components["schemas"]["WorkspaceWebhook"][];
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
 			nextCursor?: string;
 			/**
@@ -20466,12 +21516,12 @@ export interface components {
 			total?: number;
 		};
 		/** @description Path parameters for webhook operations. */
-		WebhookPathParams: {
+		WorkspaceWebhookPathParams: {
 			/** @description Opaque identifier of the webhook. */
 			webhookId: components["schemas"]["WebhookId"];
 		};
 		/** @description Result of a webhook delivery attempt. */
-		WebhookResult: {
+		WorkspaceWebhookResult: {
 			/**
 			 * Format: int64
 			 * @description Time taken to receive a response in milliseconds.
@@ -20482,192 +21532,6 @@ export interface components {
 			 * @description HTTP status code returned by the webhook endpoint.
 			 */
 			statusCode: number;
-		};
-		/**
-		 * @description The operational status of a workspace webhook.
-		 *
-		 *     Corresponds to the `WEBHOOK_STATUS` PostgreSQL enum. The user controls
-		 *     `Enabled` / `Disabled`; `Suspended` is set by the system when a webhook
-		 *     fails repeatedly, and the user can re-enable it.
-		 */
-		WebhookStatus: "enabled" | "disabled" | "suspended";
-		/** @description Workspace response. */
-		Workspace: {
-			/** @description Serve path of the workspace's avatar (logo), when set. */
-			avatarUrl?: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this workspace. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Description of the workspace. */
-			description?: string;
-			/** @description Display name of the workspace. */
-			displayName: string;
-			/** @description Role of the member in the workspace. */
-			memberRole: components["schemas"]["WorkspaceRole"];
-			/**
-			 * @description Workspace settings (raster policy, data-retention rules, upload cap).
-			 *
-			 *     `maxUploadBytes` is resolved to the effective per-file limit — the smaller
-			 *     of the workspace's own cap and the server-wide hard limit — so a client
-			 *     always reads a concrete number to enforce.
-			 */
-			settings: components["schemas"]["WorkspaceSettings"];
-			/** @description URL-safe workspace identifier. */
-			slug: components["schemas"]["Handle"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was last updated.
-			 */
-			updatedAt: string;
-		};
-		/** @description Params of a workspace-scoped activity (`workspace.*`). */
-		WorkspaceActivityParams: {
-			/** @description Slug of the workspace acted on. */
-			workspaceSlug: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description Aggregate analytics for a workspace: what it stores, how its detections fare, and
-		 *     the inference tokens they spent.
-		 */
-		WorkspaceAnalytics: {
-			/** @description Detection health: volume, status mix, and durations. */
-			detections: components["schemas"]["DetectionAnalytics"];
-			/** @description Stored-file totals and their per-kind breakdown. */
-			storage: components["schemas"]["StorageAnalytics"];
-			/** @description Inference token usage: workspace totals and a per-model breakdown. */
-			usage: components["schemas"]["UsageAnalytics"];
-		};
-		/**
-		 * @description Query parameters for listing a workspace's assignments.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint. The
-		 *     special assignee value `me` resolves to the caller's own account and is
-		 *     handled by the handler, not carried here.
-		 */
-		WorkspaceAssignmentsQuery: {
-			/**
-			 * @description Filter by the reviewer the file is assigned to (a member handle, or the
-			 *     literal `me` for the caller).
-			 */
-			assignee?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the file under review.
-			 */
-			fileId?: string;
-			/** @description Filter by review status. */
-			status?: components["schemas"]["AssignmentStatus"];
-		};
-		/**
-		 * @description Query parameters for listing detections across a workspace.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint.
-		 */
-		WorkspaceDetectionsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the source file the detection analyzes.
-			 */
-			fileId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the owning pipeline.
-			 */
-			pipelineId?: string;
-			/** @description Filter by detection status. */
-			status?: components["schemas"]["DetectionStatus"];
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the detection.
-			 */
-			triggeredBy?: string;
-		};
-		/** @description Path parameters for file operations within a workspace context. */
-		WorkspaceFilePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the file.
-			 */
-			fileId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspacePage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Workspace"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description The role and permission level of a workspace member.
-		 *
-		 *     Corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
-		 *     hierarchical access control for workspace members with clearly defined
-		 *     capabilities.
-		 */
-		WorkspaceRole: "owner" | "admin" | "editor" | "reviewer";
-		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
-		WorkspaceSettings: {
-			/**
-			 * Format: uint64
-			 * @description A soft per-file upload cap in bytes: an upload larger than this is
-			 *     rejected for this workspace. `None` imposes no workspace-specific cap.
-			 *
-			 *     The server-wide hard limit still applies regardless; the effective cap is
-			 *     the smaller of the two.
-			 */
-			maxUploadBytes?: number;
-			/**
-			 * @description How document pages are rasterised for OCR during detection.
-			 * @default auto
-			 */
-			raster?: components["schemas"]["RasterPolicy"];
-			/**
-			 * @description Data-retention rules for the workspace.
-			 * @default {
-			 *       "auditLogs": {
-			 *         "mode": "forever"
-			 *       },
-			 *       "intermediates": {
-			 *         "mode": "forever"
-			 *       },
-			 *       "originalDocuments": {
-			 *         "mode": "forever"
-			 *       },
-			 *       "redactedDocuments": {
-			 *         "mode": "forever"
-			 *       }
-			 *     }
-			 */
-			retention?: components["schemas"]["RetentionSettings"];
-		};
-		/** @description Query parameters for listing all syncs across a workspace. */
-		WorkspaceSyncsQuery: {
-			/**
-			 * @description Filter by connection provider (`s3`, `azure`, `gcs`). Repeatable; a sync
-			 *     matches if its connection uses any of the given providers. Empty means no
-			 *     provider filter.
-			 * @default []
-			 */
-			provider?: string[];
-			/** @description Filter by sync status. */
-			status?: components["schemas"]["SyncStatus"];
 		};
 	};
 	responses: never;

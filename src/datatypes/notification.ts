@@ -3,13 +3,15 @@ import type { components } from "@/schema/api.js";
 type Schemas = components["schemas"];
 
 // Notification resources, settings, and unread-count tracking.
-export type Notification = Schemas["Notification"];
+export type AccountNotification = Schemas["AccountNotification"];
 export type NotificationEvent = Schemas["NotificationEvent"];
-export type NotificationSettings = Schemas["NotificationSettings"];
-export type UpdateNotificationSettings = Schemas["UpdateNotificationSettings"];
-export type UnreadStatus = Schemas["UnreadStatus"];
-export type NotificationPage = Schemas["NotificationPage"];
-export type MarkedReadStatus = Schemas["MarkedReadStatus"];
+export type WorkspaceNotificationSettings =
+	Schemas["WorkspaceNotificationSettings"];
+export type UpdateWorkspaceNotificationSettings =
+	Schemas["UpdateWorkspaceNotificationSettings"];
+export type AccountUnreadStatus = Schemas["AccountUnreadStatus"];
+export type AccountNotificationPage = Schemas["AccountNotificationPage"];
+export type AccountMarkedReadStatus = Schemas["AccountMarkedReadStatus"];
 export type UnreadCountEvent = Schemas["UnreadCountEvent"];
 
 // Notification payload: a discriminated union (on `notifyType`) whose per-event
@@ -22,5 +24,5 @@ export type ConnectionSyncFailedParams = Schemas["ConnectionSyncFailedParams"];
 export type DetectionCompletedParams = Schemas["DetectionCompletedParams"];
 export type DetectionFailedParams = Schemas["DetectionFailedParams"];
 export type RedactionCreatedParams = Schemas["RedactionCreatedParams"];
-export type FileAssignedParams = Schemas["FileAssignedParams"];
-export type FileUnassignedParams = Schemas["FileUnassignedParams"];
+export type ReviewAssignedParams = Schemas["ReviewAssignedParams"];
+export type CommentMentionedParams = Schemas["CommentMentionedParams"];

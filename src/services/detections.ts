@@ -2,17 +2,18 @@ import type { ApiClient } from "@/client.js";
 import type {
 	ArtifactSet,
 	Audit,
-	CreateDetection,
+	CreateAdhocWorkspaceDetection,
+	CreateWorkspaceDetection,
 	CursorPagination,
-	Detection,
-	DetectionPage,
 	DetectionStatusEvent,
 	ExportQuery,
-	PipelineDetectionsQuery,
-	RedactDetection,
-	RedactionResult,
-	RedactionResultPage,
+	RedactWorkspaceDetection,
+	WorkspaceDetection,
+	WorkspaceDetectionPage,
 	WorkspaceDetectionsQuery,
+	WorkspacePipelineDetectionsQuery,
+	WorkspaceRedactionResult,
+	WorkspaceRedactionResultPage,
 } from "@/datatypes/index.js";
 import { NvisyError } from "@/errors.js";
 import { parseSseStream } from "@/services/sse.js";
@@ -39,7 +40,7 @@ export class Detections {
 	async listDetections(
 		workspaceSlug: string,
 		query?: CursorPagination & WorkspaceDetectionsQuery,
-	): Promise<DetectionPage> {
+	): Promise<WorkspaceDetectionPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/detections/",
 			{
@@ -61,8 +62,8 @@ export class Detections {
 	async listPipelineDetections(
 		workspaceSlug: string,
 		pipelineSlug: string,
-		query?: CursorPagination & PipelineDetectionsQuery,
-	): Promise<DetectionPage> {
+		query?: CursorPagination & WorkspacePipelineDetectionsQuery,
+	): Promise<WorkspaceDetectionPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/detections/",
 			{
@@ -83,12 +84,33 @@ export class Detections {
 	async createDetection(
 		workspaceSlug: string,
 		pipelineSlug: string,
-		detection: CreateDetection,
-	): Promise<Detection> {
+		detection: CreateWorkspaceDetection,
+	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/detections/",
 			{
 				params: { path: { workspaceSlug, pipelineSlug } },
+				body: detection,
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Start an ad-hoc detection over a document without a saved pipeline.
+	 * @param workspaceSlug - Workspace slug
+	 * @param detection - Ad-hoc detection creation request
+	 * @returns Promise that resolves with the created detection
+	 * @throws {ApiError} if the request fails
+	 */
+	async createAdhocDetection(
+		workspaceSlug: string,
+		detection: CreateAdhocWorkspaceDetection,
+	): Promise<WorkspaceDetection> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceSlug}/detections/",
+			{
+				params: { path: { workspaceSlug } },
 				body: detection,
 			},
 		);
@@ -105,7 +127,7 @@ export class Detections {
 	async getDetection(
 		workspaceSlug: string,
 		detectionId: string,
-	): Promise<Detection> {
+	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/detections/{detectionId}/",
 			{
@@ -253,7 +275,7 @@ export class Detections {
 		workspaceSlug: string,
 		detectionId: string,
 		query?: CursorPagination,
-	): Promise<RedactionResultPage> {
+	): Promise<WorkspaceRedactionResultPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/detections/{detectionId}/redactions/",
 			{
@@ -274,8 +296,8 @@ export class Detections {
 	async createRedaction(
 		workspaceSlug: string,
 		detectionId: string,
-		redaction: RedactDetection,
-	): Promise<RedactionResult> {
+		redaction: RedactWorkspaceDetection,
+	): Promise<WorkspaceRedactionResult> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/detections/{detectionId}/redactions/",
 			{

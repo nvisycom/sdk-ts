@@ -1,6 +1,6 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	DesktopToken,
+	AccountDesktopToken,
 	DesktopTokenRequest,
 	IdentityProvider,
 	Login,
@@ -95,7 +95,9 @@ export class Auth {
 	 * @returns Promise that resolves with the minted token and redirect URI
 	 * @throws {ApiError} if the request fails
 	 */
-	async mintDesktopToken(request: DesktopTokenRequest): Promise<DesktopToken> {
+	async mintDesktopToken(
+		request: DesktopTokenRequest,
+	): Promise<AccountDesktopToken> {
 		const { data } = await this.#api.POST("/auth/desktop/token/", {
 			body: request,
 		});

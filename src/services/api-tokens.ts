@@ -1,11 +1,11 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	ApiToken,
-	ApiTokenPage,
-	ApiTokenWithJWT,
-	CreateApiToken,
+	AccountApiToken,
+	AccountApiTokenPage,
+	AccountApiTokenWithJwt,
+	CreateAccountApiToken,
 	CursorPagination,
-	UpdateApiToken,
+	UpdateAccountApiToken,
 } from "@/datatypes/index.js";
 
 /**
@@ -24,7 +24,7 @@ export class ApiTokens {
 	 * @returns Promise that resolves with a paginated list of API tokens
 	 * @throws {ApiError} if the request fails
 	 */
-	async listApiTokens(query?: CursorPagination): Promise<ApiTokenPage> {
+	async listApiTokens(query?: CursorPagination): Promise<AccountApiTokenPage> {
 		const { data } = await this.#api.GET("/api-tokens/", {
 			params: { query },
 		});
@@ -37,7 +37,7 @@ export class ApiTokens {
 	 * @returns Promise that resolves with the API token details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getApiToken(tokenId: string): Promise<ApiToken> {
+	async getApiToken(tokenId: string): Promise<AccountApiToken> {
 		const { data } = await this.#api.GET("/api-tokens/{tokenId}/", {
 			params: { path: { tokenId } },
 		});
@@ -50,7 +50,9 @@ export class ApiTokens {
 	 * @returns Promise that resolves with the created token (includes JWT, shown only once)
 	 * @throws {ApiError} if the request fails
 	 */
-	async createApiToken(token: CreateApiToken): Promise<ApiTokenWithJWT> {
+	async createApiToken(
+		token: CreateAccountApiToken,
+	): Promise<AccountApiTokenWithJwt> {
 		const { data } = await this.#api.POST("/api-tokens/", {
 			body: token,
 		});
@@ -66,8 +68,8 @@ export class ApiTokens {
 	 */
 	async updateApiToken(
 		tokenId: string,
-		updates: UpdateApiToken,
-	): Promise<ApiToken> {
+		updates: UpdateAccountApiToken,
+	): Promise<AccountApiToken> {
 		const { data } = await this.#api.PATCH("/api-tokens/{tokenId}/", {
 			params: { path: { tokenId } },
 			body: updates,

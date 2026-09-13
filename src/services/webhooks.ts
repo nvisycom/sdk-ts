@@ -1,13 +1,13 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	CreateWebhook,
+	CreateWorkspaceWebhook,
 	CursorPagination,
-	TestWebhook,
-	UpdateWebhook,
-	Webhook,
-	WebhookCreated,
-	WebhookPage,
-	WebhookResult,
+	TestWorkspaceWebhook,
+	UpdateWorkspaceWebhook,
+	WorkspaceWebhook,
+	WorkspaceWebhookCreated,
+	WorkspaceWebhookPage,
+	WorkspaceWebhookResult,
 } from "@/datatypes/index.js";
 
 /**
@@ -30,7 +30,7 @@ export class Webhooks {
 	async listWebhooks(
 		workspaceSlug: string,
 		query?: CursorPagination,
-	): Promise<WebhookPage> {
+	): Promise<WorkspaceWebhookPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/webhooks/",
 			{
@@ -49,8 +49,8 @@ export class Webhooks {
 	 */
 	async createWebhook(
 		workspaceSlug: string,
-		webhook: CreateWebhook,
-	): Promise<WebhookCreated> {
+		webhook: CreateWorkspaceWebhook,
+	): Promise<WorkspaceWebhookCreated> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/webhooks/",
 			{
@@ -68,7 +68,10 @@ export class Webhooks {
 	 * @returns Promise that resolves with the webhook details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getWebhook(workspaceSlug: string, webhookId: string): Promise<Webhook> {
+	async getWebhook(
+		workspaceSlug: string,
+		webhookId: string,
+	): Promise<WorkspaceWebhook> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/",
 			{
@@ -89,8 +92,8 @@ export class Webhooks {
 	async updateWebhook(
 		workspaceSlug: string,
 		webhookId: string,
-		updates: UpdateWebhook,
-	): Promise<Webhook> {
+		updates: UpdateWorkspaceWebhook,
+	): Promise<WorkspaceWebhook> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/",
 			{
@@ -128,8 +131,8 @@ export class Webhooks {
 	async testWebhook(
 		workspaceSlug: string,
 		webhookId: string,
-		options?: TestWebhook,
-	): Promise<WebhookResult> {
+		options?: TestWorkspaceWebhook,
+	): Promise<WorkspaceWebhookResult> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/webhooks/{webhookId}/test/",
 			{

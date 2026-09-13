@@ -1,12 +1,12 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	ConnectionVerification,
-	CreateProvider,
+	CreateWorkspaceProvider,
 	CursorPagination,
-	Provider,
-	ProviderPage,
-	ProvidersQuery,
-	UpdateProvider,
+	UpdateWorkspaceProvider,
+	WorkspaceConnectionVerification,
+	WorkspaceProvider,
+	WorkspaceProviderPage,
+	WorkspaceProvidersQuery,
 } from "@/datatypes/index.js";
 
 /**
@@ -30,8 +30,8 @@ export class Providers {
 	 */
 	async listProviders(
 		workspaceSlug: string,
-		query?: CursorPagination & ProvidersQuery,
-	): Promise<ProviderPage> {
+		query?: CursorPagination & WorkspaceProvidersQuery,
+	): Promise<WorkspaceProviderPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/providers/",
 			{
@@ -50,8 +50,8 @@ export class Providers {
 	 */
 	async createProvider(
 		workspaceSlug: string,
-		provider: CreateProvider,
-	): Promise<Provider> {
+		provider: CreateWorkspaceProvider,
+	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/providers/",
 			{
@@ -72,7 +72,7 @@ export class Providers {
 	async getProvider(
 		workspaceSlug: string,
 		providerId: string,
-	): Promise<Provider> {
+	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/providers/{providerId}/",
 			{
@@ -93,8 +93,8 @@ export class Providers {
 	async updateProvider(
 		workspaceSlug: string,
 		providerId: string,
-		updates: UpdateProvider,
-	): Promise<Provider> {
+		updates: UpdateWorkspaceProvider,
+	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/providers/{providerId}/",
 			{
@@ -134,7 +134,7 @@ export class Providers {
 	async verifyProvider(
 		workspaceSlug: string,
 		providerId: string,
-	): Promise<ConnectionVerification> {
+	): Promise<WorkspaceConnectionVerification> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/providers/{providerId}/verify/",
 			{

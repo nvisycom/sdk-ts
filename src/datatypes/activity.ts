@@ -2,14 +2,16 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
-export type Activity = Schemas["Activity"];
-export type ActivityPage = Schemas["ActivityPage"];
+export type WorkspaceActivity = Schemas["WorkspaceActivity"];
+export type WorkspaceActivityPage = Schemas["WorkspaceActivityPage"];
 // The kind of an activity, usable as a list/export filter.
 export type ActivityType = Schemas["ActivityType"];
 // Filters for listing activities (type + actor + date window).
-export type ActivityFilterQuery = Schemas["ActivityFilterQuery"];
+export type WorkspaceActivityFilterQuery =
+	Schemas["WorkspaceActivityFilterQuery"];
 // Export-only option (output format) for the activity-log export.
-export type ActivityExportOptions = Schemas["ActivityExportOptions"];
+export type WorkspaceActivityExportOptions =
+	Schemas["WorkspaceActivityExportOptions"];
 
 // Activity payload: a discriminated union (on `activityType`) whose per-event
 // data lives in a named `*ActivityParams` type.
@@ -22,5 +24,10 @@ export type PipelineActivityParams = Schemas["PipelineActivityParams"];
 export type DetectionActivityParams = Schemas["DetectionActivityParams"];
 export type RedactionActivityParams = Schemas["RedactionActivityParams"];
 export type PolicyActivityParams = Schemas["PolicyActivityParams"];
-export type FileActivityParams = Schemas["FileActivityParams"];
+export type ProviderActivityParams = Schemas["ProviderActivityParams"];
+export type DocumentActivityParams = Schemas["DocumentActivityParams"];
 export type WebhookActivityParams = Schemas["WebhookActivityParams"];
+export type ReviewActivityParams = Schemas["ReviewActivityParams"];
+export type ThreadActivityParams = Schemas["ThreadActivityParams"];
+export type ThreadCommentActivityParams =
+	Schemas["ThreadCommentActivityParams"];

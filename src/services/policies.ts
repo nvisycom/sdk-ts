@@ -1,10 +1,11 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	CreatePolicy,
+	CreateWorkspacePolicy,
 	CursorPagination,
-	Policy,
-	PolicySummaryPage,
-	UpdatePolicy,
+	UpdateWorkspacePolicy,
+	WorkspacePoliciesQuery,
+	WorkspacePolicy,
+	WorkspacePolicySummaryPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -26,8 +27,8 @@ export class Policies {
 	 */
 	async listPolicies(
 		workspaceSlug: string,
-		query?: CursorPagination,
-	): Promise<PolicySummaryPage> {
+		query?: CursorPagination & WorkspacePoliciesQuery,
+	): Promise<WorkspacePolicySummaryPage> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/policies/",
 			{
@@ -46,8 +47,8 @@ export class Policies {
 	 */
 	async createPolicy(
 		workspaceSlug: string,
-		policy: CreatePolicy,
-	): Promise<Policy> {
+		policy: CreateWorkspacePolicy,
+	): Promise<WorkspacePolicy> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceSlug}/policies/",
 			{
@@ -65,7 +66,10 @@ export class Policies {
 	 * @returns Promise that resolves with the policy details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getPolicy(workspaceSlug: string, policySlug: string): Promise<Policy> {
+	async getPolicy(
+		workspaceSlug: string,
+		policySlug: string,
+	): Promise<WorkspacePolicy> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/policies/{policySlug}/",
 			{
@@ -86,8 +90,8 @@ export class Policies {
 	async updatePolicy(
 		workspaceSlug: string,
 		policySlug: string,
-		updates: UpdatePolicy,
-	): Promise<Policy> {
+		updates: UpdateWorkspacePolicy,
+	): Promise<WorkspacePolicy> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/policies/{policySlug}/",
 			{

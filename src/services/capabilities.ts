@@ -1,15 +1,17 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	ConnectorCatalog,
+	AuthCapabilities,
+	ConnectorCapabilities,
 	LabelCatalog,
 	RecognizerCatalog,
 } from "@/datatypes/index.js";
 
 /**
- * Service for reading the deployment's built-in catalogs: the label taxonomy
- * and the registered recognizers that policies and pipelines can target.
+ * Service for reading the deployment's capabilities: the label taxonomy, the
+ * registered recognizers, the connectors it can create, and the auth methods
+ * it offers. Read-only; served by the `/capabilities/*` endpoints.
  */
-export class Catalog {
+export class Capabilities {
 	#api: ApiClient;
 
 	constructor(api: ApiClient) {
@@ -21,7 +23,7 @@ export class Catalog {
 	 * @returns Promise that resolves with the label catalog.
 	 */
 	async listLabels(): Promise<LabelCatalog> {
-		const { data } = await this.#api.GET("/catalog/labels/");
+		const { data } = await this.#api.GET("/capabilities/labels/");
 		return data!;
 	}
 
@@ -30,7 +32,7 @@ export class Catalog {
 	 * @returns Promise that resolves with the recognizer catalog.
 	 */
 	async listRecognizers(): Promise<RecognizerCatalog> {
-		const { data } = await this.#api.GET("/catalog/recognizers/");
+		const { data } = await this.#api.GET("/capabilities/recognizers/");
 		return data!;
 	}
 
@@ -42,10 +44,19 @@ export class Catalog {
 	 * credentials and are always available. Use it to render the connect UI
 	 * without probing.
 	 *
-	 * @returns Promise that resolves with the connector catalog.
+	 * @returns Promise that resolves with the connector capabilities.
 	 */
-	async listConnectors(): Promise<ConnectorCatalog> {
-		const { data } = await this.#api.GET("/catalog/connectors/");
+	async listConnectors(): Promise<ConnectorCapabilities> {
+		const { data } = await this.#api.GET("/capabilities/connectors/");
+		return data!;
+	}
+
+	/**
+	 * List which authentication methods this deployment offers.
+	 * @returns Promise that resolves with the auth capabilities.
+	 */
+	async getAuthCapabilities(): Promise<AuthCapabilities> {
+		const { data } = await this.#api.GET("/capabilities/auth/");
 		return data!;
 	}
 }

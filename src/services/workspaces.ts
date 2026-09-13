@@ -2,10 +2,10 @@ import type { ApiClient } from "@/client.js";
 import type {
 	CreateWorkspace,
 	CursorPagination,
-	NotificationSettings,
-	UpdateNotificationSettings,
 	UpdateWorkspace,
+	UpdateWorkspaceNotificationSettings,
 	Workspace,
+	WorkspaceNotificationSettings,
 	WorkspacePage,
 } from "@/datatypes/index.js";
 
@@ -96,7 +96,7 @@ export class Workspaces {
 	 */
 	async getNotificationSettings(
 		workspaceSlug: string,
-	): Promise<NotificationSettings> {
+	): Promise<WorkspaceNotificationSettings> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceSlug}/notifications/",
 			{
@@ -115,8 +115,8 @@ export class Workspaces {
 	 */
 	async updateNotificationSettings(
 		workspaceSlug: string,
-		settings: UpdateNotificationSettings,
-	): Promise<NotificationSettings> {
+		settings: UpdateWorkspaceNotificationSettings,
+	): Promise<WorkspaceNotificationSettings> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceSlug}/notifications/",
 			{

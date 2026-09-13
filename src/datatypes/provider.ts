@@ -8,11 +8,11 @@ type Schemas = components["schemas"];
 export type ProviderId = Schemas["ProviderId"];
 
 // Provider resources.
-export type Provider = Schemas["Provider"];
-export type CreateProvider = Schemas["CreateProvider"];
-export type UpdateProvider = Schemas["UpdateProvider"];
-export type ProvidersQuery = Schemas["ProvidersQuery"];
-export type ProviderPage = Schemas["ProviderPage"];
+export type WorkspaceProvider = Schemas["WorkspaceProvider"];
+export type CreateWorkspaceProvider = Schemas["CreateWorkspaceProvider"];
+export type UpdateWorkspaceProvider = Schemas["UpdateWorkspaceProvider"];
+export type WorkspaceProvidersQuery = Schemas["WorkspaceProvidersQuery"];
+export type WorkspaceProviderPage = Schemas["WorkspaceProviderPage"];
 
 // The inference model type backing a provider, and its typed config.
 export type ProviderType = Schemas["ProviderType"];
