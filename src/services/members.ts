@@ -1,10 +1,10 @@
 import type { ApiClient } from "@/client.js";
 import type {
 	CursorPagination,
-	ListMembers,
-	Member,
-	MemberPage,
-	UpdateMember,
+	ListWorkspaceMembers,
+	UpdateWorkspaceMember,
+	WorkspaceMember,
+	WorkspaceMemberPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -19,37 +19,37 @@ export class Members {
 
 	/**
 	 * List members of a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional query parameters (role, has2fa, sortBy, order, limit, after)
 	 * @returns Promise that resolves with a paginated list of members
 	 * @throws {ApiError} if the request fails
 	 */
 	async listMembers(
-		workspaceSlug: string,
-		query?: ListMembers & CursorPagination,
-	): Promise<MemberPage> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/members/",
-			{
-				params: { path: { workspaceSlug }, query },
-			},
-		);
+		workspaceId: string,
+		query?: ListWorkspaceMembers & CursorPagination,
+	): Promise<WorkspaceMemberPage> {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/members/", {
+			params: { path: { workspaceId }, query },
+		});
 		return data!;
 	}
 
 	/**
-	 * Get member details by username
-	 * @param workspaceSlug - Workspace slug
-	 * @param username - Member username
+	 * Get member details by account id
+	 * @param workspaceId - Workspace id
+	 * @param accountId - Member account id
 	 * @returns Promise that resolves with the member details
 	 * @throws {ApiError} if the request fails
 	 */
-	async getMember(workspaceSlug: string, username: string): Promise<Member> {
+	async getMember(
+		workspaceId: string,
+		accountId: string,
+	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/members/{username}/",
+			"/workspaces/{workspaceId}/members/{accountId}/",
 			{
 				params: {
-					path: { workspaceSlug, username },
+					path: { workspaceId, accountId },
 				},
 			},
 		);
@@ -58,22 +58,22 @@ export class Members {
 
 	/**
 	 * Update a member's role
-	 * @param workspaceSlug - Workspace slug
-	 * @param username - Member username
+	 * @param workspaceId - Workspace id
+	 * @param accountId - Member account id
 	 * @param updates - New role for the member
 	 * @returns Promise that resolves with the updated member
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateMember(
-		workspaceSlug: string,
-		username: string,
-		updates: UpdateMember,
-	): Promise<Member> {
+		workspaceId: string,
+		accountId: string,
+		updates: UpdateWorkspaceMember,
+	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceSlug}/members/{username}/",
+			"/workspaces/{workspaceId}/members/{accountId}/",
 			{
 				params: {
-					path: { workspaceSlug, username },
+					path: { workspaceId, accountId },
 				},
 				body: updates,
 			},
@@ -83,26 +83,26 @@ export class Members {
 
 	/**
 	 * Remove a member from a workspace
-	 * @param workspaceSlug - Workspace slug
-	 * @param username - Member username
+	 * @param workspaceId - Workspace id
+	 * @param accountId - Member account id
 	 * @returns Promise that resolves when the member is removed
 	 * @throws {ApiError} if the request fails
 	 */
-	async removeMember(workspaceSlug: string, username: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceSlug}/members/{username}/", {
-			params: { path: { workspaceSlug, username } },
+	async removeMember(workspaceId: string, accountId: string): Promise<void> {
+		await this.#api.DELETE("/workspaces/{workspaceId}/members/{accountId}/", {
+			params: { path: { workspaceId, accountId } },
 		});
 	}
 
 	/**
 	 * Leave a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @returns Promise that resolves when the member has left
 	 * @throws {ApiError} if the request fails
 	 */
-	async leaveWorkspace(workspaceSlug: string): Promise<void> {
-		await this.#api.POST("/workspaces/{workspaceSlug}/members/leave/", {
-			params: { path: { workspaceSlug } },
+	async leaveWorkspace(workspaceId: string): Promise<void> {
+		await this.#api.POST("/workspaces/{workspaceId}/members/leave/", {
+			params: { path: { workspaceId } },
 		});
 	}
 }

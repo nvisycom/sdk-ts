@@ -1,11 +1,11 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	CreatePipeline,
+	CreateWorkspacePipeline,
 	CursorPagination,
-	Pipeline,
 	PipelineStatus,
-	PipelineSummaryPage,
-	UpdatePipeline,
+	UpdateWorkspacePipeline,
+	WorkspacePipeline,
+	WorkspacePipelineSummaryPage,
 } from "@/datatypes/index.js";
 
 /**
@@ -20,19 +20,19 @@ export class Pipelines {
 
 	/**
 	 * List pipelines in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional query parameters (search, status, limit, after)
 	 * @returns Promise that resolves with a paginated list of pipeline summaries
 	 * @throws {ApiError} if the request fails
 	 */
 	async listPipelines(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: CursorPagination & { search?: string; status?: PipelineStatus },
-	): Promise<PipelineSummaryPage> {
+	): Promise<WorkspacePipelineSummaryPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/pipelines/",
+			"/workspaces/{workspaceId}/pipelines/",
 			{
-				params: { path: { workspaceSlug }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -40,19 +40,19 @@ export class Pipelines {
 
 	/**
 	 * Create a pipeline in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param pipeline - Pipeline creation request
 	 * @returns Promise that resolves with the created pipeline
 	 * @throws {ApiError} if the request fails
 	 */
 	async createPipeline(
-		workspaceSlug: string,
-		pipeline: CreatePipeline,
-	): Promise<Pipeline> {
+		workspaceId: string,
+		pipeline: CreateWorkspacePipeline,
+	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/pipelines/",
+			"/workspaces/{workspaceId}/pipelines/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				body: pipeline,
 			},
 		);
@@ -60,20 +60,20 @@ export class Pipelines {
 	}
 
 	/**
-	 * Get pipeline details by slug
-	 * @param workspaceSlug - Workspace slug
-	 * @param pipelineSlug - Pipeline slug
+	 * Get pipeline details by id
+	 * @param workspaceId - Workspace id
+	 * @param pipelineId - Pipeline id
 	 * @returns Promise that resolves with the pipeline details
 	 * @throws {ApiError} if the request fails
 	 */
 	async getPipeline(
-		workspaceSlug: string,
-		pipelineSlug: string,
-	): Promise<Pipeline> {
+		workspaceId: string,
+		pipelineId: string,
+	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/",
+			"/workspaces/{workspaceId}/pipelines/{pipelineId}/",
 			{
-				params: { path: { workspaceSlug, pipelineSlug } },
+				params: { path: { workspaceId, pipelineId } },
 			},
 		);
 		return data!;
@@ -81,21 +81,21 @@ export class Pipelines {
 
 	/**
 	 * Update a pipeline
-	 * @param workspaceSlug - Workspace slug
-	 * @param pipelineSlug - Pipeline slug
+	 * @param workspaceId - Workspace id
+	 * @param pipelineId - Pipeline id
 	 * @param updates - Pipeline update request
 	 * @returns Promise that resolves with the updated pipeline
 	 * @throws {ApiError} if the request fails
 	 */
 	async updatePipeline(
-		workspaceSlug: string,
-		pipelineSlug: string,
-		updates: UpdatePipeline,
-	): Promise<Pipeline> {
+		workspaceId: string,
+		pipelineId: string,
+		updates: UpdateWorkspacePipeline,
+	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/",
+			"/workspaces/{workspaceId}/pipelines/{pipelineId}/",
 			{
-				params: { path: { workspaceSlug, pipelineSlug } },
+				params: { path: { workspaceId, pipelineId } },
 				body: updates,
 			},
 		);
@@ -104,19 +104,16 @@ export class Pipelines {
 
 	/**
 	 * Delete a pipeline
-	 * @param workspaceSlug - Workspace slug
-	 * @param pipelineSlug - Pipeline slug
+	 * @param workspaceId - Workspace id
+	 * @param pipelineId - Pipeline id
 	 * @returns Promise that resolves when the pipeline is deleted
 	 * @throws {ApiError} if the request fails
 	 */
-	async deletePipeline(
-		workspaceSlug: string,
-		pipelineSlug: string,
-	): Promise<void> {
+	async deletePipeline(workspaceId: string, pipelineId: string): Promise<void> {
 		await this.#api.DELETE(
-			"/workspaces/{workspaceSlug}/pipelines/{pipelineSlug}/",
+			"/workspaces/{workspaceId}/pipelines/{pipelineId}/",
 			{
-				params: { path: { workspaceSlug, pipelineSlug } },
+				params: { path: { workspaceId, pipelineId } },
 			},
 		);
 	}

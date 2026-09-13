@@ -1,19 +1,19 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	Connection,
-	ConnectionPage,
-	ConnectionSync,
-	ConnectionVerification,
-	CreateConnection,
+	CreateWorkspaceConnection,
 	CursorPagination,
-	ExportFiles,
+	ExportWorkspaceFiles,
 	FileServiceProvider,
-	ImportFiles,
+	ImportWorkspaceFiles,
 	OAuthStartResponse,
-	PickerToken,
-	PickerTokenRequest,
 	StartFileServiceOAuth,
-	UpdateConnection,
+	UpdateWorkspaceConnection,
+	WorkspaceConnection,
+	WorkspaceConnectionPage,
+	WorkspaceConnectionSync,
+	WorkspaceConnectionVerification,
+	WorkspacePickerToken,
+	WorkspacePickerTokenRequest,
 } from "@/datatypes/index.js";
 
 /**
@@ -28,19 +28,19 @@ export class Connections {
 
 	/**
 	 * List connections in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param query - Optional query parameters (provider, limit, after)
 	 * @returns Promise that resolves with a paginated list of connections
 	 * @throws {ApiError} if the request fails
 	 */
 	async listConnections(
-		workspaceSlug: string,
+		workspaceId: string,
 		query?: CursorPagination & { provider?: string[] },
-	): Promise<ConnectionPage> {
+	): Promise<WorkspaceConnectionPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/connections/",
+			"/workspaces/{workspaceId}/connections/",
 			{
-				params: { path: { workspaceSlug }, query },
+				params: { path: { workspaceId }, query },
 			},
 		);
 		return data!;
@@ -48,19 +48,19 @@ export class Connections {
 
 	/**
 	 * Create a connection in a workspace
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connection - Connection creation request
 	 * @returns Promise that resolves with the created connection
 	 * @throws {ApiError} if the request fails
 	 */
 	async createConnection(
-		workspaceSlug: string,
-		connection: CreateConnection,
-	): Promise<Connection> {
+		workspaceId: string,
+		connection: CreateWorkspaceConnection,
+	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/",
+			"/workspaces/{workspaceId}/connections/",
 			{
-				params: { path: { workspaceSlug } },
+				params: { path: { workspaceId } },
 				body: connection,
 			},
 		);
@@ -69,19 +69,19 @@ export class Connections {
 
 	/**
 	 * Get connection details by ID
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @returns Promise that resolves with the connection details
 	 * @throws {ApiError} if the request fails
 	 */
 	async getConnection(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
-	): Promise<Connection> {
+	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 			},
 		);
 		return data!;
@@ -89,21 +89,21 @@ export class Connections {
 
 	/**
 	 * Update a connection
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @param updates - Connection update request
 	 * @returns Promise that resolves with the updated connection
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateConnection(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
-		updates: UpdateConnection,
-	): Promise<Connection> {
+		updates: UpdateWorkspaceConnection,
+	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 				body: updates,
 			},
 		);
@@ -112,38 +112,38 @@ export class Connections {
 
 	/**
 	 * Delete a connection
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @returns Promise that resolves when the connection is deleted
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteConnection(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
 	): Promise<void> {
 		await this.#api.DELETE(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 			},
 		);
 	}
 
 	/**
 	 * Verify a connection's configuration and credentials
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @returns Promise that resolves with the verification result
 	 * @throws {ApiError} if the request fails
 	 */
 	async verifyConnection(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
-	): Promise<ConnectionVerification> {
+	): Promise<WorkspaceConnectionVerification> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/verify/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/verify/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 			},
 		);
 		return data!;
@@ -156,21 +156,21 @@ export class Connections {
 	 * provider redirects back and the connection is created. Navigate the
 	 * browser to the URL (a full-page redirect, not a fetch) to continue.
 	 *
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param provider - The file-service provider to connect
 	 * @param request - Display name for the connection and optional sync root
 	 * @returns Promise that resolves with the provider authorize URL
 	 * @throws {ApiError} if the request fails
 	 */
 	async startFileServiceOAuth(
-		workspaceSlug: string,
+		workspaceId: string,
 		provider: FileServiceProvider,
 		request: StartFileServiceOAuth,
 	): Promise<OAuthStartResponse> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/oauth/{provider}/start/",
+			"/workspaces/{workspaceId}/connections/oauth/{provider}/start/",
 			{
-				params: { path: { workspaceSlug, provider } },
+				params: { path: { workspaceId, provider } },
 				body: request,
 			},
 		);
@@ -184,21 +184,21 @@ export class Connections {
 	 * already-imported files are skipped. Returns the created sync — poll it for
 	 * completion.
 	 *
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @param request - The picker-selected files to import
 	 * @returns Promise that resolves with the created connection sync
 	 * @throws {ApiError} if the request fails
 	 */
 	async importFiles(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
-		request: ImportFiles,
-	): Promise<ConnectionSync> {
+		request: ImportWorkspaceFiles,
+	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/import/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/import/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 				body: request,
 			},
 		);
@@ -212,21 +212,21 @@ export class Connections {
 	 * file, never overwriting the source. Returns the created sync — poll it for
 	 * completion.
 	 *
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @param request - The workspace file ids to export
 	 * @returns Promise that resolves with the created connection sync
 	 * @throws {ApiError} if the request fails
 	 */
 	async exportFiles(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
-		request: ExportFiles,
-	): Promise<ConnectionSync> {
+		request: ExportWorkspaceFiles,
+	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/export/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/export/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 				body: request,
 			},
 		);
@@ -240,21 +240,21 @@ export class Connections {
 	 * minted from the connection's stored credentials and is short-lived; the
 	 * refresh token is never returned.
 	 *
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param connectionId - Connection ID
 	 * @param request - Optional picker resource (defaults to the connection's)
 	 * @returns Promise that resolves with the short-lived picker token
 	 * @throws {ApiError} if the request fails
 	 */
 	async getPickerToken(
-		workspaceSlug: string,
+		workspaceId: string,
 		connectionId: string,
-		request: PickerTokenRequest = {},
-	): Promise<PickerToken> {
+		request: WorkspacePickerTokenRequest = {},
+	): Promise<WorkspacePickerToken> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceSlug}/connections/{connectionId}/picker-token/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/picker-token/",
 			{
-				params: { path: { workspaceSlug, connectionId } },
+				params: { path: { workspaceId, connectionId } },
 				body: request,
 			},
 		);

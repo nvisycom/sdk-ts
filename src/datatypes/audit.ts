@@ -12,6 +12,8 @@ export type DocumentContext = Schemas["DocumentContext"];
 export type CodecParams = Schemas["CodecParams"];
 export type EntityCoRef = Schemas["EntityCoRef"];
 export type Report = Schemas["Report"];
+// Custom labels and matchers a request introduces on top of the built-ins.
+export type Recognition = Schemas["Recognition"];
 
 // Reviewer edits applied on top of automatic detection.
 export type EditSet = Schemas["EditSet"];
@@ -125,3 +127,11 @@ export type TabularEdit = Schemas["TabularEdit"];
 export type TabularAdd = Schemas["TabularAdd"];
 export type TabularRefinement = Schemas["TabularRefinement"];
 export type TabularRetag = Schemas["TabularRetag"];
+
+// Extracted document/media metadata, per modality, and the reader that
+// surfaced it (`MetadataEvent`, carried on each modality's audit event).
+export type MetadataEvent = Schemas["MetadataEvent"];
+export type AudioMetadata = Schemas["AudioMetadata"];
+export type ImageMetadata = Schemas["ImageMetadata"];
+export type TabularMetadata = Schemas["TabularMetadata"];
+export type TextMetadata = Schemas["TextMetadata"];

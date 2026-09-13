@@ -8,6 +8,69 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-09-13
+
+A platform-wide rename and restructure. Nearly every exported type and several
+service names changed; the `File` resource is now `Document`. Callers should
+expect to update most imports and several method names — see below.
+
+### Added
+
+- `nvisy.threads` service for review discussion: threads and their comments
+  (`listThreads`, `openThread`, `getThread`, `renameThread`, `closeThread`,
+  `reopenThread`, `getTimeline`, `addComment`, `updateComment`, `deleteComment`),
+  with thread/comment datatypes (`WorkspaceThread`, `WorkspaceThreadPage`,
+  `WorkspaceThreadEntry`, `WorkspaceThreadEvent`, `WorkspaceThreadsQuery`,
+  `OpenWorkspaceThread`, `RenameWorkspaceThread`, `ThreadEventKind`,
+  `WorkspaceComment`, `CreateWorkspaceComment`, `UpdateWorkspaceComment`)
+- Document review on the documents service: `assignReview` and `verifyReview`
+  (`AssignWorkspaceReview`, `ReviewStatus`), plus the `ReviewAssignedParams` /
+  `CommentMentionedParams` notification payloads
+- `capabilities.getAuthCapabilities()` (`AuthCapabilities`) alongside the
+  labels / recognizers / connectors capability reads
+- `detections.createAdhocDetection()` (`CreateAdhocWorkspaceDetection`)
+- Per-modality metadata datatypes (`AudioMetadata`, `ImageMetadata`,
+  `TabularMetadata`, `TextMetadata`, `MetadataEvent`, `Recognition`); the
+  `metadata` value on `ModalityToken`; and `PolicyKind`
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** the `File` resource is now `Document`. The `files` service is
+  `documents` (`nvisy.documents`); its endpoints moved from
+  `/workspaces/{workspaceId}/files/…` to `/workspaces/{workspaceId}/documents/…`;
+  methods are
+  renamed (`uploadFiles` → `uploadDocuments`, `listFiles` → `listDocuments`,
+  `getFile` → `getDocument`, `downloadFile` → `downloadDocument`, `updateFile` →
+  `updateDocument`, `deleteFile` → `deleteDocument`, `deleteFiles` →
+  `deleteDocuments`); the bulk-delete body is `{ documentIds }`; and the
+  datatypes are renamed (`File` → `WorkspaceDocument`, `FileKind` →
+  `DocumentKind`, etc.)
+- **Breaking:** most workspace resource datatypes gained a `Workspace` prefix
+  (e.g. `Connection` → `WorkspaceConnection`, `Detection` → `WorkspaceDetection`,
+  `Invite` → `WorkspaceInvite`, `Pipeline` → `WorkspacePipeline`, `Policy` →
+  `WorkspacePolicy`, `Provider` → `WorkspaceProvider`, `Webhook` →
+  `WorkspaceWebhook`, `Member` → `WorkspaceMember`, and their `Create*` /
+  `Update*` / `*Page` / `*Query` variants); account-scoped types gained an
+  `Account` prefix (`ApiToken` → `AccountApiToken`, `Notification` →
+  `AccountNotification`, `DesktopToken` → `AccountDesktopToken`). Service class
+  and method names keep their short form
+- **Breaking:** the `catalog` service is now `capabilities` (`nvisy.capabilities`),
+  reading from `/capabilities/*`; `ConnectorCatalog` → `ConnectorCapabilities`
+- **Breaking:** the `SortOrder` enum (`asc` / `desc`) is now `Direction`
+  (`ascending` / `descending`)
+- **Breaking:** path parameters are now ids rather than slugs/usernames, and
+  the corresponding method arguments are renamed to match: `workspaceSlug` →
+  `workspaceId`, the account/member `username` → `accountId`, `pipelineSlug` →
+  `pipelineId`, `policySlug` → `policyId`
+
+### Removed
+
+- **Breaking:** the `chat` service and its datatypes (`ChatSession`,
+  `ChatMessage`, `ChatRole`, `ChatToken`, `SendChatMessage`, `CreateChatSession`)
+- **Breaking:** the `assignments` service and its datatypes (added in 0.50.0) —
+  superseded by document review on the documents service
+
 ## [0.50.0] - 2026-09-11
 
 ### Added
@@ -1046,7 +1109,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.50.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.51.0...HEAD
+[0.51.0]: https://github.com/nvisycom/sdk-ts/compare/v0.50.0...v0.51.0
 [0.50.0]: https://github.com/nvisycom/sdk-ts/compare/v0.49.0...v0.50.0
 [0.49.0]: https://github.com/nvisycom/sdk-ts/compare/v0.48.0...v0.49.0
 [0.48.0]: https://github.com/nvisycom/sdk-ts/compare/v0.47.0...v0.48.0

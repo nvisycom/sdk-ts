@@ -2,8 +2,9 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
-// Deployment catalogs: the built-in vocabularies a workspace's policies and
-// pipelines can target. Read-only; served by the `/catalog/*` endpoints.
+// Deployment capabilities: the built-in vocabularies a workspace's policies and
+// pipelines can target, plus what connectors and auth methods are available.
+// Read-only; served by the `/capabilities/*` endpoints.
 
 /** Registry of the deployment's built-in labels, keyed by id. */
 export type LabelCatalog = Schemas["LabelCatalog"];
@@ -13,5 +14,8 @@ export type RecognizerCatalog = Schemas["RecognizerCatalog"];
 export type RegisteredRecognizer = Schemas["RegisteredRecognizer"];
 
 /** Which connector families and providers this deployment can create. */
-export type ConnectorCatalog = Schemas["ConnectorCatalog"];
+export type ConnectorCapabilities = Schemas["ConnectorCapabilities"];
 export type FileProviders = Schemas["FileProviders"];
+
+/** Which authentication methods this deployment offers. */
+export type AuthCapabilities = Schemas["AuthCapabilities"];

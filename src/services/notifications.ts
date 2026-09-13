@@ -1,10 +1,10 @@
 import type { ApiClient } from "@/client.js";
 import type {
+	AccountMarkedReadStatus,
+	AccountNotificationPage,
+	AccountUnreadStatus,
 	CursorPagination,
-	MarkedReadStatus,
-	NotificationPage,
 	UnreadCountEvent,
-	UnreadStatus,
 } from "@/datatypes/index.js";
 import { NvisyError } from "@/errors.js";
 import { parseSseStream } from "@/services/sse.js";
@@ -25,7 +25,9 @@ export class Notifications {
 	 * @returns Promise that resolves with a paginated list of notifications
 	 * @throws {ApiError} if the request fails
 	 */
-	async listNotifications(query?: CursorPagination): Promise<NotificationPage> {
+	async listNotifications(
+		query?: CursorPagination,
+	): Promise<AccountNotificationPage> {
 		const { data } = await this.#api.GET("/notifications/", {
 			params: { query },
 		});
@@ -37,7 +39,7 @@ export class Notifications {
 	 * @returns Promise that resolves with the unread status
 	 * @throws {ApiError} if the request fails
 	 */
-	async getUnreadNotificationsStatus(): Promise<UnreadStatus> {
+	async getUnreadNotificationsStatus(): Promise<AccountUnreadStatus> {
 		const { data } = await this.#api.GET("/notifications/unread/");
 		return data!;
 	}
@@ -47,7 +49,7 @@ export class Notifications {
 	 * @returns Promise that resolves with how many were marked read
 	 * @throws {ApiError} if the request fails
 	 */
-	async markAllRead(): Promise<MarkedReadStatus> {
+	async markAllRead(): Promise<AccountMarkedReadStatus> {
 		const { data } = await this.#api.POST("/notifications/read/");
 		return data!;
 	}

@@ -3,13 +3,15 @@ import type { components } from "@/schema/api.js";
 type Schemas = components["schemas"];
 
 // Policy resources.
+export type WorkspacePolicy = Schemas["WorkspacePolicy"];
 export type Policy = Schemas["Policy"];
-export type PolicySummary = Schemas["PolicySummary"];
-export type PolicySummaryPage = Schemas["PolicySummaryPage"];
-export type PolicyDefinition = Schemas["PolicyDefinition"];
+export type PolicyKind = Schemas["PolicyKind"];
+export type WorkspacePolicySummary = Schemas["WorkspacePolicySummary"];
+export type WorkspacePolicySummaryPage = Schemas["WorkspacePolicySummaryPage"];
+export type WorkspacePoliciesQuery = Schemas["WorkspacePoliciesQuery"];
 export type PolicyDraft = Schemas["PolicyDraft"];
-export type CreatePolicy = Schemas["CreatePolicy"];
-export type UpdatePolicy = Schemas["UpdatePolicy"];
+export type CreateWorkspacePolicy = Schemas["CreateWorkspacePolicy"];
+export type UpdateWorkspacePolicy = Schemas["UpdateWorkspacePolicy"];
 export type PolicyRule = Schemas["PolicyRule"];
 // A caller-defined matcher a policy adds on top of the built-in recognizers.
 export type CustomMatcher = Schemas["CustomMatcher"];

@@ -6,23 +6,27 @@ type Schemas = components["schemas"];
 export type ConnectionId = Schemas["ConnectionId"];
 
 // Connection resources and sync operations.
-export type Connection = Schemas["Connection"];
+export type WorkspaceConnection = Schemas["WorkspaceConnection"];
 export type ConnectionType = Schemas["ConnectionType"];
-export type CreateConnection = Schemas["CreateConnection"];
-export type UpdateConnection = Schemas["UpdateConnection"];
-export type ConnectionsQuery = Schemas["ConnectionsQuery"];
-export type ConnectionPage = Schemas["ConnectionPage"];
-export type ConnectionSync = Schemas["ConnectionSync"];
-export type ConnectionSyncPage = Schemas["ConnectionSyncPage"];
-export type ConnectionVerification = Schemas["ConnectionVerification"];
+export type CreateWorkspaceConnection = Schemas["CreateWorkspaceConnection"];
+export type UpdateWorkspaceConnection = Schemas["UpdateWorkspaceConnection"];
+export type WorkspaceConnectionsQuery = Schemas["WorkspaceConnectionsQuery"];
+export type WorkspaceConnectionPage = Schemas["WorkspaceConnectionPage"];
+export type WorkspaceConnectionSync = Schemas["WorkspaceConnectionSync"];
+export type WorkspaceConnectionSyncPage =
+	Schemas["WorkspaceConnectionSyncPage"];
+export type WorkspaceConnectionVerification =
+	Schemas["WorkspaceConnectionVerification"];
 
-// Importing files from, and exporting workspace files to, a file-service connection.
-export type ImportFiles = Schemas["ImportFiles"];
+// Importing documents from, and exporting workspace documents to, a
+// file-service connection.
+export type ImportWorkspaceFiles = Schemas["ImportWorkspaceFiles"];
 export type PickedFile = Schemas["PickedFile"];
-export type ExportFiles = Schemas["ExportFiles"];
+export type ExportWorkspaceFiles = Schemas["ExportWorkspaceFiles"];
 // Short-lived provider access token for a browser file picker.
-export type PickerTokenRequest = Schemas["PickerTokenRequest"];
-export type PickerToken = Schemas["PickerToken"];
+export type WorkspacePickerTokenRequest =
+	Schemas["WorkspacePickerTokenRequest"];
+export type WorkspacePickerToken = Schemas["WorkspacePickerToken"];
 
 // Sync enums.
 export type SyncMode = Schemas["SyncMode"];
@@ -50,5 +54,5 @@ export type StartFileServiceOAuth = Schemas["StartFileServiceOAuth"];
 export type OAuthStartResponse = Schemas["OAuthStartResponse"];
 
 // Sync scheduling.
-export type SyncSchedule = Schemas["SyncSchedule"];
+export type WorkspaceSyncSchedule = Schemas["WorkspaceSyncSchedule"];
 export type SyncScheduleInput = Schemas["SyncScheduleInput"];

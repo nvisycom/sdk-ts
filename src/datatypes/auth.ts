@@ -9,4 +9,4 @@ export type Signup = Schemas["Signup"];
 
 // Minting a long-lived native-app token from a browser session for a desktop app.
 export type DesktopTokenRequest = Schemas["DesktopTokenRequest"];
-export type DesktopToken = Schemas["DesktopToken"];
+export type AccountDesktopToken = Schemas["AccountDesktopToken"];

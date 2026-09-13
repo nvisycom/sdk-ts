@@ -14,16 +14,16 @@ export class Redactions {
 
 	/**
 	 * Get a redaction's review audit
-	 * @param workspaceSlug - Workspace slug
+	 * @param workspaceId - Workspace id
 	 * @param redactionId - Redaction ID
 	 * @returns Promise that resolves with the audit
 	 * @throws {ApiError} if the request fails
 	 */
-	async getReview(workspaceSlug: string, redactionId: string): Promise<Audit> {
+	async getReview(workspaceId: string, redactionId: string): Promise<Audit> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceSlug}/redactions/{redactionId}/review",
+			"/workspaces/{workspaceId}/redactions/{redactionId}/review",
 			{
-				params: { path: { workspaceSlug, redactionId } },
+				params: { path: { workspaceId, redactionId } },
 			},
 		);
 		return data!;

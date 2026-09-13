@@ -97,9 +97,9 @@ describe("Nvisy", () => {
 			expect(nvisy.account).toBeDefined();
 			expect(nvisy.activities).toBeDefined();
 			expect(nvisy.apiTokens).toBeDefined();
-			expect(nvisy.assignments).toBeDefined();
+			expect(nvisy.capabilities).toBeDefined();
 			expect(nvisy.connections).toBeDefined();
-			expect(nvisy.files).toBeDefined();
+			expect(nvisy.documents).toBeDefined();
 			expect(nvisy.invites).toBeDefined();
 			expect(nvisy.members).toBeDefined();
 			expect(nvisy.notifications).toBeDefined();
@@ -109,6 +109,7 @@ describe("Nvisy", () => {
 			expect(nvisy.detections).toBeDefined();
 			expect(nvisy.redactions).toBeDefined();
 			expect(nvisy.syncs).toBeDefined();
+			expect(nvisy.threads).toBeDefined();
 			expect(nvisy.webhooks).toBeDefined();
 			expect(nvisy.workspaces).toBeDefined();
 		});
