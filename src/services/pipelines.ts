@@ -30,7 +30,7 @@ export class Pipelines {
 		query?: CursorPagination & { search?: string; status?: PipelineStatus },
 	): Promise<WorkspacePipelineSummaryPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/pipelines/",
+			"/workspaces/{workspaceId}/pipelines",
 			{
 				params: { path: { workspaceId }, query },
 			},
@@ -50,7 +50,7 @@ export class Pipelines {
 		pipeline: CreateWorkspacePipeline,
 	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/pipelines/",
+			"/workspaces/{workspaceId}/pipelines",
 			{
 				params: { path: { workspaceId } },
 				body: pipeline,
@@ -71,7 +71,7 @@ export class Pipelines {
 		pipelineId: string,
 	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/pipelines/{pipelineId}/",
+			"/workspaces/{workspaceId}/pipelines/{pipelineId}",
 			{
 				params: { path: { workspaceId, pipelineId } },
 			},
@@ -93,7 +93,7 @@ export class Pipelines {
 		updates: UpdateWorkspacePipeline,
 	): Promise<WorkspacePipeline> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/pipelines/{pipelineId}/",
+			"/workspaces/{workspaceId}/pipelines/{pipelineId}",
 			{
 				params: { path: { workspaceId, pipelineId } },
 				body: updates,
@@ -110,11 +110,8 @@ export class Pipelines {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deletePipeline(workspaceId: string, pipelineId: string): Promise<void> {
-		await this.#api.DELETE(
-			"/workspaces/{workspaceId}/pipelines/{pipelineId}/",
-			{
-				params: { path: { workspaceId, pipelineId } },
-			},
-		);
+		await this.#api.DELETE("/workspaces/{workspaceId}/pipelines/{pipelineId}", {
+			params: { path: { workspaceId, pipelineId } },
+		});
 	}
 }

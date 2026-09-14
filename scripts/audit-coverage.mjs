@@ -40,8 +40,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
  *   `avatarUrl` field on the account/workspace directly, not an SDK call.
  */
 const IGNORED_OPERATIONS = new Set([
-	"GET /avatars/accounts/{id}/{version}/",
-	"GET /avatars/workspaces/{id}/{version}/",
+	"GET /avatars/accounts/{id}/{version}",
+	"GET /avatars/workspaces/{id}/{version}",
 ]);
 
 /**

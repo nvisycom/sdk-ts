@@ -18,14 +18,6 @@ export type AuthConfig = PublicConfig;
 /**
  * Configuration for the standalone {@link checkHealth} function.
  *
- * Omits `apiToken`: the health endpoint is public. Adds the API `version`
- * segment of the health route.
+ * Omits `apiToken`: the health endpoint is public.
  */
-export type HealthConfig = PublicConfig & {
-	/**
-	 * API version segment of the health route.
-	 *
-	 * @default "v1"
-	 */
-	version?: string;
-};
+export type HealthConfig = PublicConfig;

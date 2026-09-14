@@ -42,7 +42,7 @@ export class Detections {
 		query?: CursorPagination & WorkspaceDetectionsQuery,
 	): Promise<WorkspaceDetectionPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/pipelines/detections/",
+			"/workspaces/{workspaceId}/pipelines/detections",
 			{
 				params: { path: { workspaceId }, query },
 			},
@@ -65,7 +65,7 @@ export class Detections {
 		query?: CursorPagination & WorkspacePipelineDetectionsQuery,
 	): Promise<WorkspaceDetectionPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections/",
+			"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections",
 			{
 				params: { path: { workspaceId, pipelineId }, query },
 			},
@@ -87,7 +87,7 @@ export class Detections {
 		detection: CreateWorkspaceDetection,
 	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections/",
+			"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections",
 			{
 				params: { path: { workspaceId, pipelineId } },
 				body: detection,
@@ -108,7 +108,7 @@ export class Detections {
 		detection: CreateAdhocWorkspaceDetection,
 	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/detections/",
+			"/workspaces/{workspaceId}/detections",
 			{
 				params: { path: { workspaceId } },
 				body: detection,
@@ -129,7 +129,7 @@ export class Detections {
 		detectionId: string,
 	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/detections/{detectionId}/",
+			"/workspaces/{workspaceId}/detections/{detectionId}",
 			{
 				params: { path: { workspaceId, detectionId } },
 			},
@@ -146,7 +146,7 @@ export class Detections {
 	 */
 	async getAnalysis(workspaceId: string, detectionId: string): Promise<Audit> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/detections/{detectionId}/analysis/",
+			"/workspaces/{workspaceId}/detections/{detectionId}/analysis",
 			{
 				params: { path: { workspaceId, detectionId } },
 			},
@@ -172,7 +172,7 @@ export class Detections {
 		detectionId: string,
 	): Promise<ArtifactSet> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/detections/{detectionId}/intermediates/",
+			"/workspaces/{workspaceId}/detections/{detectionId}/intermediates",
 			{
 				params: { path: { workspaceId, detectionId } },
 			},
@@ -198,7 +198,7 @@ export class Detections {
 		query?: ExportQuery,
 	): Promise<Response> {
 		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceId}/detections/{detectionId}/audit/",
+			"/workspaces/{workspaceId}/detections/{detectionId}/audit",
 			{
 				params: { path: { workspaceId, detectionId }, query },
 				parseAs: "stream",
@@ -222,7 +222,7 @@ export class Detections {
 	 */
 	async events(workspaceId: string, detectionId: string): Promise<Response> {
 		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceId}/detections/{detectionId}/events/",
+			"/workspaces/{workspaceId}/detections/{detectionId}/events",
 			{
 				params: { path: { workspaceId, detectionId } },
 				parseAs: "stream",
@@ -274,7 +274,7 @@ export class Detections {
 		query?: CursorPagination,
 	): Promise<WorkspaceRedactionResultPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/detections/{detectionId}/redactions/",
+			"/workspaces/{workspaceId}/detections/{detectionId}/redactions",
 			{
 				params: { path: { workspaceId, detectionId }, query },
 			},
@@ -296,7 +296,7 @@ export class Detections {
 		redaction: RedactWorkspaceDetection,
 	): Promise<WorkspaceRedactionResult> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/detections/{detectionId}/redactions/",
+			"/workspaces/{workspaceId}/detections/{detectionId}/redactions",
 			{
 				params: { path: { workspaceId, detectionId } },
 				body: redaction,

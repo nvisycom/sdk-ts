@@ -30,7 +30,7 @@ export class Activities {
 		query?: WorkspaceActivityFilterQuery & DateWindow & CursorPagination,
 	): Promise<WorkspaceActivityPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/activities/",
+			"/workspaces/{workspaceId}/activities",
 			{
 				params: { path: { workspaceId }, query },
 			},

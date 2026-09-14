@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-	"/account/": {
+	"/account": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -35,13 +35,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -77,13 +78,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -95,13 +97,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -150,13 +153,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -168,13 +172,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -186,13 +191,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -224,7 +230,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/accounts/{accountId}/": {
+	"/accounts/{accountId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -263,13 +269,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -281,13 +288,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -299,13 +307,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -325,7 +334,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/accounts/{accountId}/avatar/": {
+	"/accounts/{accountId}/avatar": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -365,13 +374,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -383,13 +393,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -401,13 +412,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -419,13 +431,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -463,13 +476,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -481,13 +495,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -499,13 +514,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -522,7 +538,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/": {
+	"/workspaces": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -573,13 +589,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -626,13 +643,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -644,13 +662,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -686,7 +705,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/": {
+	"/workspaces/{workspaceId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -720,13 +739,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -738,13 +758,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -756,13 +777,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -801,13 +823,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -819,13 +842,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -837,13 +861,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -874,7 +899,7 @@ export interface paths {
 			/**
 			 * @description Request payload to update an existing workspace.
 			 *
-			 *     All fields are optional; only provided fields will be updated. The slug is
+			 *     All fields are optional; only provided fields will be updated. The handle is
 			 *     immutable and set at creation, so it cannot be changed here.
 			 */
 			requestBody: {
@@ -894,13 +919,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -912,13 +938,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -930,13 +957,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -968,7 +996,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/avatar/": {
+	"/workspaces/{workspaceId}/avatar": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1006,13 +1034,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -1024,13 +1053,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1042,13 +1072,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -1060,13 +1091,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1104,13 +1136,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1122,13 +1155,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -1140,13 +1174,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1163,7 +1198,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/notifications/": {
+	"/workspaces/{workspaceId}/notifications": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1197,13 +1232,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1215,13 +1251,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1270,13 +1307,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -1288,13 +1326,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1306,13 +1345,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1344,7 +1384,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/activities/": {
+	"/workspaces/{workspaceId}/activities": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1412,13 +1452,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1430,13 +1471,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -1508,13 +1550,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -1526,13 +1569,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1544,13 +1588,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -1562,13 +1607,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1588,7 +1634,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/analytics/": {
+	"/workspaces/{workspaceId}/analytics": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1625,13 +1671,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1643,13 +1690,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -1661,13 +1709,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1687,7 +1736,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/analytics/detections/timeseries/": {
+	"/workspaces/{workspaceId}/analytics/detections/timeseries": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1733,13 +1782,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -1751,13 +1801,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1769,13 +1820,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -1787,13 +1839,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1813,7 +1866,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/members/": {
+	"/workspaces/{workspaceId}/members": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1873,13 +1926,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -1891,13 +1945,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -1909,13 +1964,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -1935,7 +1991,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/members/leave/": {
+	"/workspaces/{workspaceId}/members/leave": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -1969,13 +2025,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -1987,13 +2044,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2005,13 +2063,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -2023,13 +2082,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -2047,7 +2107,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/members/{accountId}/": {
+	"/workspaces/{workspaceId}/members/{accountId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2083,13 +2143,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2101,13 +2162,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2119,13 +2181,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -2166,13 +2229,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -2184,13 +2248,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2202,13 +2267,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2220,13 +2286,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -2274,13 +2341,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -2292,13 +2360,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2310,13 +2379,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2328,13 +2398,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -2366,7 +2437,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/documents/{documentId}/review/verify/": {
+	"/workspaces/{workspaceId}/documents/{documentId}/review/verify": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2412,13 +2483,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2430,13 +2502,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2448,13 +2521,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -2472,7 +2546,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/documents/{documentId}/review/assign/": {
+	"/workspaces/{workspaceId}/documents/{documentId}/review/assign": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2522,13 +2596,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -2540,13 +2615,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2558,13 +2634,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2576,13 +2653,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -2619,7 +2697,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads/": {
+	"/workspaces/{workspaceId}/threads": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2683,13 +2761,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2701,13 +2780,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2766,13 +2846,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -2784,13 +2865,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2802,13 +2884,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2844,7 +2927,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads/{threadId}/": {
+	"/workspaces/{workspaceId}/threads/{threadId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2881,13 +2964,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -2899,13 +2983,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -2917,13 +3002,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -2979,13 +3065,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -2997,13 +3084,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3015,13 +3103,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3033,13 +3122,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -3071,7 +3161,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads/{threadId}/close/": {
+	"/workspaces/{workspaceId}/threads/{threadId}/close": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3117,13 +3207,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3135,13 +3226,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3153,13 +3245,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -3208,13 +3301,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3226,13 +3320,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3244,13 +3339,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -3267,7 +3363,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads/{threadId}/timeline/": {
+	"/workspaces/{workspaceId}/threads/{threadId}/timeline": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3323,13 +3419,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3341,13 +3438,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3359,13 +3457,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -3385,7 +3484,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads/{threadId}/comments/": {
+	"/workspaces/{workspaceId}/threads/{threadId}/comments": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3432,13 +3531,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -3450,13 +3550,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3468,13 +3569,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3486,13 +3588,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -3504,13 +3607,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -3546,7 +3650,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/comments/{commentId}/": {
+	"/workspaces/{workspaceId}/comments/{commentId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3583,13 +3687,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3601,13 +3706,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3619,13 +3725,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -3673,13 +3780,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -3691,13 +3799,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3709,13 +3818,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3727,13 +3837,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -3765,7 +3876,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/": {
+	"/workspaces/{workspaceId}/connections": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3824,13 +3935,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3842,13 +3954,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3898,13 +4011,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -3916,13 +4030,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -3934,13 +4049,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -3976,7 +4092,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4017,13 +4133,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4035,13 +4152,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4053,13 +4171,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -4100,13 +4219,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4118,13 +4238,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4136,13 +4257,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -4195,13 +4317,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -4213,13 +4336,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4231,13 +4355,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4249,13 +4374,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -4287,7 +4413,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/verify/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/verify": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4325,13 +4451,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4343,13 +4470,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4361,13 +4489,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -4385,7 +4514,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/picker-token/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/picker-token": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4413,7 +4542,7 @@ export interface paths {
 			/**
 			 * @description Body for minting a browser file-picker token.
 			 *
-			 *     The OneDrive v8 picker requests a token per resource (it names the resource in
+			 *     The `OneDrive` v8 picker requests a token per resource (it names the resource in
 			 *     each `authenticate` command); the caller passes that `resource` so the server
 			 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
 			 *     single provider token (Google Drive, Box); omit it for those.
@@ -4442,13 +4571,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -4460,13 +4590,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4478,13 +4609,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4496,13 +4628,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -4520,7 +4653,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/providers/": {
+	"/workspaces/{workspaceId}/providers": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4580,13 +4713,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4598,13 +4732,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4654,13 +4789,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -4672,13 +4808,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4690,13 +4827,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4732,7 +4870,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/providers/{providerId}/": {
+	"/workspaces/{workspaceId}/providers/{providerId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4773,13 +4911,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4791,13 +4930,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4809,13 +4949,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -4856,13 +4997,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4874,13 +5016,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -4892,13 +5035,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -4951,13 +5095,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -4969,13 +5114,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -4987,13 +5133,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5005,13 +5152,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -5043,7 +5191,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/providers/{providerId}/verify/": {
+	"/workspaces/{workspaceId}/providers/{providerId}/verify": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5081,13 +5229,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5099,13 +5248,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5117,13 +5267,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -5141,7 +5292,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/oauth/{provider}/start/": {
+	"/workspaces/{workspaceId}/connections/oauth/{provider}/start": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5193,13 +5344,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5211,13 +5363,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5253,7 +5406,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/syncs/": {
+	"/workspaces/{workspaceId}/syncs": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5315,13 +5468,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5333,13 +5487,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5351,13 +5506,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -5377,7 +5533,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/sync/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/sync": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5415,13 +5571,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -5433,13 +5590,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5451,13 +5609,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5469,13 +5628,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -5493,7 +5653,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/import/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/import": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5539,13 +5699,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -5557,13 +5718,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5575,13 +5737,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5593,13 +5756,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -5611,13 +5775,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -5653,7 +5818,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/export/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/export": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5700,13 +5865,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -5718,13 +5884,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5736,13 +5903,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5754,13 +5922,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -5772,13 +5941,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -5814,7 +5984,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/syncs": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5870,13 +6040,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5888,13 +6059,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -5906,13 +6078,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -5932,7 +6105,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -5970,13 +6143,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -5988,13 +6162,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6006,13 +6181,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -6032,7 +6208,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/cancel/": {
+	"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/cancel": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6072,13 +6248,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6090,13 +6267,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6108,13 +6286,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -6126,13 +6305,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -6150,7 +6330,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/documents/": {
+	"/workspaces/{workspaceId}/documents": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6219,13 +6399,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -6237,13 +6418,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6255,13 +6437,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6305,13 +6488,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -6323,13 +6507,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6341,13 +6526,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6359,13 +6545,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				413: {
 					headers: {
@@ -6383,7 +6570,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/documents/delete/": {
+	"/workspaces/{workspaceId}/documents/delete": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6436,13 +6623,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -6454,13 +6642,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6472,13 +6661,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6514,7 +6704,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/documents/{documentId}/": {
+	"/workspaces/{workspaceId}/documents/{documentId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6550,13 +6740,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6568,13 +6759,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6586,13 +6778,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -6633,13 +6826,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6651,13 +6845,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6669,13 +6864,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -6723,13 +6919,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -6741,13 +6938,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6759,13 +6957,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6777,13 +6976,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -6815,7 +7015,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/documents/{documentId}/content/": {
+	"/workspaces/{workspaceId}/documents/{documentId}/content": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6851,13 +7051,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6869,13 +7070,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -6887,13 +7089,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -6913,7 +7116,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/pipelines/": {
+	"/workspaces/{workspaceId}/pipelines": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -6971,13 +7174,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -6989,13 +7193,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7034,7 +7239,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description WorkspacePipeline response. */
+				/** @description `WorkspacePipeline` response. */
 				201: {
 					headers: {
 						[name: string]: unknown;
@@ -7045,13 +7250,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -7063,13 +7269,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7081,13 +7288,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7123,7 +7331,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/pipelines/{pipelineId}/": {
+	"/workspaces/{workspaceId}/pipelines/{pipelineId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7148,7 +7356,7 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description WorkspacePipeline response. */
+				/** @description `WorkspacePipeline` response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -7159,13 +7367,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7177,13 +7386,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7195,13 +7405,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -7242,13 +7453,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7260,13 +7472,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7278,13 +7491,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -7326,7 +7540,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description WorkspacePipeline response. */
+				/** @description `WorkspacePipeline` response. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -7337,13 +7551,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -7355,13 +7570,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7373,13 +7589,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7391,13 +7608,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -7429,7 +7647,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/pipelines/detections/": {
+	"/workspaces/{workspaceId}/pipelines/detections": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7493,13 +7711,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7511,13 +7730,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7529,13 +7749,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -7555,7 +7776,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections/": {
+	"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7619,13 +7840,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7637,13 +7859,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7655,13 +7878,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -7706,7 +7930,7 @@ export interface paths {
 				 * @description Response type for a detection.
 				 *
 				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     workspace handles are carried for context. Redacted outputs are not here — a
 				 *     detection produces many redactions, each fetched from its `redactions`
 				 *     endpoint.
 				 */
@@ -7722,7 +7946,7 @@ export interface paths {
 				 * @description Response type for a detection.
 				 *
 				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     workspace handles are carried for context. Redacted outputs are not here — a
 				 *     detection produces many redactions, each fetched from its `redactions`
 				 *     endpoint.
 				 */
@@ -7736,13 +7960,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -7754,13 +7979,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7772,13 +7998,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7790,13 +8017,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -7808,13 +8036,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -7850,7 +8079,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections/": {
+	"/workspaces/{workspaceId}/detections": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7890,7 +8119,7 @@ export interface paths {
 				 * @description Response type for a detection.
 				 *
 				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     workspace handles are carried for context. Redacted outputs are not here — a
 				 *     detection produces many redactions, each fetched from its `redactions`
 				 *     endpoint.
 				 */
@@ -7906,7 +8135,7 @@ export interface paths {
 				 * @description Response type for a detection.
 				 *
 				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     workspace handles are carried for context. Redacted outputs are not here — a
 				 *     detection produces many redactions, each fetched from its `redactions`
 				 *     endpoint.
 				 */
@@ -7920,13 +8149,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -7938,13 +8168,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -7956,13 +8187,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -7974,13 +8206,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8016,7 +8249,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections/{detectionId}/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8045,7 +8278,7 @@ export interface paths {
 				 * @description Response type for a detection.
 				 *
 				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace slugs are carried for context. Redacted outputs are not here — a
+				 *     workspace handles are carried for context. Redacted outputs are not here — a
 				 *     detection produces many redactions, each fetched from its `redactions`
 				 *     endpoint.
 				 */
@@ -8059,13 +8292,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8077,13 +8311,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8095,13 +8330,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8121,7 +8357,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections/{detectionId}/events/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/events": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8157,13 +8393,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8175,13 +8412,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8193,13 +8431,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8219,7 +8458,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections/{detectionId}/redactions/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/redactions": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8275,13 +8514,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8293,13 +8533,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8311,13 +8552,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8370,7 +8612,7 @@ export interface paths {
 				 *
 				 *     Named `WorkspaceRedactionResult` rather than `Redaction` because the engine's audit
 				 *     schema already carries a `Redaction` (an audit event), and the two must not
-				 *     collide in the generated OpenAPI.
+				 *     collide in the generated `OpenAPI`.
 				 */
 				201: {
 					headers: {
@@ -8382,13 +8624,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -8400,13 +8643,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8418,13 +8662,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8436,13 +8681,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8454,13 +8700,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -8496,7 +8743,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections/{detectionId}/analysis/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/analysis": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8565,13 +8812,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8583,13 +8831,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8601,13 +8850,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8619,13 +8869,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -8645,7 +8896,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections/{detectionId}/audit/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/audit": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8685,13 +8936,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8703,13 +8955,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8721,13 +8974,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8739,13 +8993,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -8765,7 +9020,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections/{detectionId}/intermediates/": {
+	"/workspaces/{workspaceId}/detections/{detectionId}/intermediates": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -8800,13 +9055,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8818,13 +9074,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8836,13 +9093,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8931,13 +9189,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -8949,13 +9208,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -8967,13 +9227,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -8985,13 +9246,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -9011,7 +9273,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/policies/": {
+	"/workspaces/{workspaceId}/policies": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9067,13 +9329,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9085,13 +9348,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -9151,13 +9415,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -9169,13 +9434,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9187,13 +9453,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -9229,7 +9496,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/policies/{policyId}/": {
+	"/workspaces/{workspaceId}/policies/{policyId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9265,13 +9532,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9283,13 +9551,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -9301,13 +9570,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -9348,13 +9618,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9366,13 +9637,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -9384,13 +9656,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -9444,13 +9717,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -9462,13 +9736,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9480,13 +9755,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -9498,13 +9774,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -9536,7 +9813,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/capabilities/labels/": {
+	"/capabilities/labels": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9576,13 +9853,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9602,7 +9880,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/capabilities/recognizers/": {
+	"/capabilities/recognizers": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9633,13 +9911,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9659,7 +9938,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/capabilities/connectors/": {
+	"/capabilities/connectors": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9697,13 +9976,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9723,7 +10003,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/api-tokens/": {
+	"/api-tokens": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9774,13 +10054,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -9792,13 +10073,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9840,13 +10122,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -9858,13 +10141,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9900,7 +10184,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/api-tokens/{tokenId}/": {
+	"/api-tokens/{tokenId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -9934,13 +10218,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -9952,13 +10237,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -9997,13 +10283,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -10015,13 +10302,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10033,13 +10321,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -10085,13 +10374,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -10103,13 +10393,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10121,13 +10412,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -10139,13 +10431,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -10177,7 +10470,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/notifications/": {
+	"/notifications": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10228,13 +10521,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10254,7 +10548,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/notifications/unread/": {
+	"/notifications/unread": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10285,13 +10579,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10311,7 +10606,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/notifications/unread/events/": {
+	"/notifications/unread/events": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10342,13 +10637,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10368,7 +10664,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/notifications/read/": {
+	"/notifications/read": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10401,13 +10697,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10425,7 +10722,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/notifications/{notificationId}/read/": {
+	"/notifications/{notificationId}/read": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10459,13 +10756,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10477,13 +10775,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -10501,7 +10800,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/invites/": {
+	"/workspaces/{workspaceId}/invites": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10561,13 +10860,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10579,13 +10879,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -10636,13 +10937,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -10654,13 +10956,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10672,13 +10975,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -10690,13 +10994,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -10732,7 +11037,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/invites/code/": {
+	"/workspaces/{workspaceId}/invites/code": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10773,13 +11078,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -10791,13 +11097,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10809,13 +11116,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -10851,7 +11159,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/invites/{inviteId}/": {
+	"/workspaces/{workspaceId}/invites/{inviteId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -10902,13 +11210,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -10920,13 +11229,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -10938,13 +11248,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -10956,13 +11267,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -11019,13 +11331,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11037,13 +11350,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -11055,13 +11369,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -11078,7 +11393,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/invites/code/{inviteCode}/": {
+	"/invites/code/{inviteCode}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11117,13 +11432,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -11135,13 +11451,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -11194,13 +11511,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -11212,13 +11530,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11230,13 +11549,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -11248,13 +11568,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -11272,7 +11593,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/webhooks/": {
+	"/workspaces/{workspaceId}/webhooks": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11326,13 +11647,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11344,13 +11666,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -11401,13 +11724,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -11419,13 +11743,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11437,13 +11762,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -11479,7 +11805,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/webhooks/{webhookId}/": {
+	"/workspaces/{workspaceId}/webhooks/{webhookId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11515,13 +11841,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11533,13 +11860,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -11551,13 +11879,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -11598,13 +11927,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11616,13 +11946,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -11634,13 +11965,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -11688,13 +12020,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -11706,13 +12039,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11724,13 +12058,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -11742,13 +12077,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -11780,7 +12116,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/webhooks/{webhookId}/test/": {
+	"/workspaces/{workspaceId}/webhooks/{webhookId}/test": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11832,13 +12168,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11850,13 +12187,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				403: {
 					headers: {
@@ -11868,13 +12206,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -11910,7 +12249,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/account/identities/": {
+	"/account/identities": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -11941,13 +12280,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -11967,7 +12307,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/account/identities/password/": {
+	"/account/identities/password": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12011,13 +12351,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -12029,13 +12370,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12088,13 +12430,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12106,13 +12449,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -12124,13 +12468,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -12147,7 +12492,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/account/identities/{provider}/": {
+	"/account/identities/{provider}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12195,13 +12540,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12213,13 +12559,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -12231,13 +12578,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				503: {
 					headers: {
@@ -12274,13 +12622,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -12292,13 +12641,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12310,13 +12660,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -12328,13 +12679,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -12351,7 +12703,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/{provider}/reauth/": {
+	"/auth/{provider}/reauth": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12397,13 +12749,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12415,13 +12768,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -12433,13 +12787,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				503: {
 					headers: {
@@ -12459,7 +12814,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/desktop/token/": {
+	"/auth/desktop/token": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12512,13 +12867,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -12530,13 +12886,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12572,7 +12929,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/logout/": {
+	"/auth/logout": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12603,13 +12960,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12627,7 +12985,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/login/": {
+	"/auth/login": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12663,13 +13021,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -12681,13 +13040,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				401: {
 					headers: {
@@ -12723,7 +13083,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/signup/": {
+	"/auth/signup": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12759,13 +13119,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				400: {
 					headers: {
@@ -12777,13 +13138,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				409: {
 					headers: {
@@ -12819,7 +13181,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/auth/{provider}/start/": {
+	"/auth/{provider}/start": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12865,13 +13227,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -12883,13 +13246,14 @@ export interface paths {
 				};
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				503: {
 					headers: {
@@ -12909,7 +13273,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/capabilities/auth/": {
+	"/capabilities/auth": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12956,7 +13320,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/health/": {
+	"/health/live": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -12964,17 +13328,51 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * Health status
-		 * @description Returns system health status. Unauthenticated requests use cache; authenticated requests perform real-time checks.
+		 * Liveness probe
+		 * @description Returns 200 if the process is running. Probes no dependencies.
 		 */
 		get: {
 			parameters: {
 				query?: never;
 				header?: never;
-				path: {
-					/** @description The API version string (e.g., "v1", "v2"). */
-					version: string;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description no content */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content?: never;
 				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/health/ready": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Readiness probe
+		 * @description Reports the server's health and that of its dependencies, served from a short-lived cache. 200 when healthy or degraded, 503 when unhealthy. Safe to poll frequently.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
 				cookie?: never;
 			};
 			requestBody?: never;
@@ -13007,7 +13405,55 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/avatars/accounts/{id}/{version}/": {
+	"/health": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Readiness probe
+		 * @description Reports the server's health and that of its dependencies, served from a short-lived cache. 200 when healthy or degraded, 503 when unhealthy. Safe to poll frequently.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Response body for `GET /health/`. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Health"];
+					};
+				};
+				/** @description Response body for `GET /health/`. */
+				503: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Health"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/avatars/accounts/{id}/{version}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -13034,13 +13480,14 @@ export interface paths {
 			responses: {
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -13060,7 +13507,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/avatars/workspaces/{id}/{version}/": {
+	"/avatars/workspaces/{id}/{version}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -13087,13 +13534,14 @@ export interface paths {
 			responses: {
 				/**
 				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+				 *     that [`Error`] renders to at the response boundary.
 				 *
-				 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-				 *     handlers construct and thread through `Result`, and it builds an
-				 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-				 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-				 *     status line).
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
 				 */
 				404: {
 					headers: {
@@ -13624,7 +14072,7 @@ export interface components {
 		/**
 		 * @description The type of activity performed in a workspace, for audit logging.
 		 *
-		 *     Corresponds to the `ACTIVITY_TYPE` PostgreSQL enum and categorizes the
+		 *     Corresponds to the `ACTIVITY_TYPE` `PostgreSQL` enum and categorizes the
 		 *     activities that occur within workspaces for a comprehensive audit trail.
 		 */
 		ActivityType:
@@ -13675,7 +14123,7 @@ export interface components {
 		/**
 		 * @description The type of API token, for authentication and tracking.
 		 *
-		 *     Corresponds to the `API_TOKEN_TYPE` PostgreSQL enum and categorizes tokens
+		 *     Corresponds to the `API_TOKEN_TYPE` `PostgreSQL` enum and categorizes tokens
 		 *     by the client type they authenticate.
 		 */
 		ApiTokenType: "web" | "api" | "app";
@@ -14435,7 +14883,7 @@ export interface components {
 			methods: components["schemas"]["IdentityProvider"][];
 		};
 		/**
-		 * @description Configuration for a provider reached with an API key (OpenAI, Anthropic).
+		 * @description Configuration for a provider reached with an API key (`OpenAI`, Anthropic).
 		 *
 		 *     The `api_key` is masked in [`Debug`], so neither this struct nor any config
 		 *     that embeds it leaks the key.
@@ -14726,7 +15174,7 @@ export interface components {
 		/**
 		 * @description The capability category of a transfer connection.
 		 *
-		 *     Corresponds to the `CONNECTION_TYPE` PostgreSQL enum. A stable, closed set:
+		 *     Corresponds to the `CONNECTION_TYPE` `PostgreSQL` enum. A stable, closed set:
 		 *     the concrete provider (the `provider` column, e.g. `s3`) stays open and
 		 *     extensible, while its capability is one of these types. Both categories are
 		 *     transfer-capable — an object store is enumerable and syncs on a timer; a
@@ -14827,13 +15275,13 @@ export interface components {
 			description?: string;
 			/** @description Display name of the workspace (2-32 characters). */
 			displayName: string;
+			/** @description Optional handle. Derived from the display name when omitted. */
+			handle?: components["schemas"]["Handle"];
 			/**
 			 * @description Workspace settings (approval requirement, data-retention rules). Defaults
 			 *     to requiring approval and keeping everything when omitted.
 			 */
 			settings?: components["schemas"]["WorkspaceSettings"];
-			/** @description Optional URL slug. Derived from the display name when omitted. */
-			slug?: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Request payload to post a comment (message) in a thread.
@@ -15222,7 +15670,7 @@ export interface components {
 		/**
 		 * @description The execution status of a detection (one analysis pass of a file).
 		 *
-		 *     Corresponds to the `DETECTION_STATUS` PostgreSQL enum. A detection is
+		 *     Corresponds to the `DETECTION_STATUS` `PostgreSQL` enum. A detection is
 		 *     `Pending` (enqueued, no worker yet), then `Executing` (a worker is actively
 		 *     analyzing), then settles into `Complete` (analysis done, ready to redact)
 		 *     or `Failed`. Redaction is a separate, repeatable action over a complete
@@ -15315,7 +15763,7 @@ export interface components {
 		/**
 		 * @description The kind of a human-facing document.
 		 *
-		 *     Corresponds to the `DOCUMENT_KIND` PostgreSQL enum. Machine byproducts
+		 *     Corresponds to the `DOCUMENT_KIND` `PostgreSQL` enum. Machine byproducts
 		 *     (detection audits, review audits, enrichment intermediates) are not
 		 *     documents — they reference blobs directly from their own tables.
 		 */
@@ -15365,21 +15813,20 @@ export interface components {
 		EntityCoRef: string;
 		/**
 		 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-		 *     that [`Error`](crate::response::Error) renders to at the response boundary.
+		 *     that [`Error`] renders to at the response boundary.
 		 *
-		 *     It carries no builder logic — [`Error`](crate::response::Error) is the type
-		 *     handlers construct and thread through `Result`, and it builds an
-		 *     `ErrorResponse` directly in its `IntoResponse` impl. `context` and `status`
-		 *     are not part of the JSON body (`context` is logged, `status` sets the HTTP
-		 *     status line).
+		 *     It carries no builder logic — [`Error`] is the type handlers construct and
+		 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+		 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+		 *     (`context` is logged, `status` sets the HTTP status line).
+		 *
+		 *     [`Error`]: crate::response::Error
 		 */
 		ErrorResponse: {
 			/** @description User-friendly error message safe for client display. */
 			message: string;
 			/** @description The error name/type identifier. */
 			name: string;
-			/** @description The resource that the error relates to, if any. */
-			resource?: string;
 		};
 		/** @description The file format an export is rendered as. */
 		ExportFormat: "csv" | "json";
@@ -15418,7 +15865,7 @@ export interface components {
 			dropbox: boolean;
 			/** @description Whether Google Drive can be connected. */
 			googleDrive: boolean;
-			/** @description Whether OneDrive can be connected. */
+			/** @description Whether `OneDrive` can be connected. */
 			oneDrive: boolean;
 		};
 		/**
@@ -15440,7 +15887,7 @@ export interface components {
 		/**
 		 * @description A supported cloud file-service provider.
 		 *
-		 *     The serialized form (snake_case) is the `provider` tag stored on a connection
+		 *     The serialized form (`snake_case`) is the `provider` tag stored on a connection
 		 *     and used in the API, so every provider name lives in exactly one place.
 		 */
 		FileServiceProvider: "google_drive" | "dropbox" | "one_drive" | "box";
@@ -15615,7 +16062,7 @@ export interface components {
 			| "limited_data_set"
 			| "expert_determination";
 		/**
-		 * @description The `{workspaceId}` path segment. Named to match the OpenAPI parameter and the
+		 * @description The `{workspaceId}` path segment. Named to match the `OpenAPI` parameter and the
 		 *     route definition.
 		 */
 		IdParam: {
@@ -15638,7 +16085,7 @@ export interface components {
 		/**
 		 * @description How an account authenticates.
 		 *
-		 *     Corresponds to the `IDENTITY_PROVIDER` PostgreSQL enum. [`Password`] is a
+		 *     Corresponds to the `IDENTITY_PROVIDER` `PostgreSQL` enum. [`Password`] is a
 		 *     locally-held Argon2 secret; the rest are external OIDC providers keyed by
 		 *     the provider's subject claim.
 		 *
@@ -16277,20 +16724,20 @@ export interface components {
 			expiresAt: string;
 			/** @description Role the user will have if they join. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Fields available for sorting workspace invites. */
 		InviteSortField: "email" | "date";
 		/**
 		 * @description The current status of a workspace invitation.
 		 *
-		 *     Corresponds to the `INVITE_STATUS` PostgreSQL enum and tracks the lifecycle
+		 *     Corresponds to the `INVITE_STATUS` `PostgreSQL` enum and tracks the lifecycle
 		 *     of an invitation from creation to resolution.
 		 */
 		InviteStatus:
@@ -16627,7 +17074,7 @@ export interface components {
 		 * @description A fully-typed LLM inference connection configuration.
 		 *
 		 *     The `provider` tag selects the variant and thereby the credential shape, so
-		 *     an OpenAI connection cannot carry Anthropic credentials. The key-bearing
+		 *     an `OpenAI` connection cannot carry Anthropic credentials. The key-bearing
 		 *     variants hold an [`AuthenticatedProvider`], which masks the key in `Debug`;
 		 *     serialization exists only to persist the config encrypted at rest, never to
 		 *     return it in API responses.
@@ -16764,10 +17211,12 @@ export interface components {
 		/**
 		 * @description Defines the type of notification event sent to a user.
 		 *
-		 *     Corresponds to the `NOTIFICATION_EVENT` PostgreSQL enum and is used for
+		 *     Corresponds to the `NOTIFICATION_EVENT` `PostgreSQL` enum and is used for
 		 *     member, connection-sync, detection, redaction, and system notifications.
-		 *     The values mirror the [`WebhookEvent`](super::WebhookEvent) naming for the
-		 *     events the two channels share.
+		 *     The values mirror the [`WebhookEvent`] naming for the events the two
+		 *     channels share.
+		 *
+		 *     [`WebhookEvent`]: super::WebhookEvent
 		 */
 		NotificationEvent:
 			| "member.joined"
@@ -17031,14 +17480,14 @@ export interface components {
 		/**
 		 * @description The lifecycle status of a pipeline definition.
 		 *
-		 *     Corresponds to the `PIPELINE_STATUS` PostgreSQL enum and tracks whether a
+		 *     Corresponds to the `PIPELINE_STATUS` `PostgreSQL` enum and tracks whether a
 		 *     pipeline is being configured, enabled and ready to run, or disabled.
 		 */
 		PipelineStatus: "draft" | "enabled" | "disabled";
 		/**
 		 * @description How a pipeline run was initiated.
 		 *
-		 *     Corresponds to the `PIPELINE_TRIGGER_TYPE` PostgreSQL enum: a run is either
+		 *     Corresponds to the `PIPELINE_TRIGGER_TYPE` `PostgreSQL` enum: a run is either
 		 *     started directly by a user or automatically by the system (for example, a
 		 *     file upload that the pipeline auto-redacts).
 		 */
@@ -17159,7 +17608,7 @@ export interface components {
 		/**
 		 * @description The kind of a redaction policy.
 		 *
-		 *     Corresponds to the `POLICY_KIND` PostgreSQL enum. An authored policy is a
+		 *     Corresponds to the `POLICY_KIND` `PostgreSQL` enum. An authored policy is a
 		 *     normal, editable policy created from a template or an inline definition. A
 		 *     one-shot policy is minted inline from a bare label list (the ad-hoc redact
 		 *     flow): it is content-addressed and deduplicated, and immutable once minted.
@@ -17388,7 +17837,7 @@ export interface components {
 		/**
 		 * @description The inference model type backing a workspace provider.
 		 *
-		 *     Corresponds to the `PROVIDER_TYPE` PostgreSQL enum. A workspace provider is
+		 *     Corresponds to the `PROVIDER_TYPE` `PostgreSQL` enum. A workspace provider is
 		 *     an inference service the platform calls; this says which kind of model it
 		 *     is — a language model for chat, or a named-entity-recognition model for
 		 *     extraction. The concrete vendor (the `provider` column, e.g. `openai`) is
@@ -17799,7 +18248,7 @@ export interface components {
 		 * @description The review state of a file thread (a file thread is the review of its
 		 *     file). `None` on the thread means a workspace thread, which has no review.
 		 *
-		 *     Corresponds to the `REVIEW_STATUS` PostgreSQL enum. It is derived from the
+		 *     Corresponds to the `REVIEW_STATUS` `PostgreSQL` enum. It is derived from the
 		 *     review's events, never set by a user: a detection makes it `NeedsReview`, a
 		 *     redaction `InReview`, and verification `Resolved`; a later detection reopens
 		 *     it to `NeedsReview`.
@@ -17843,7 +18292,7 @@ export interface components {
 			/** @description S3 bucket name. */
 			bucket: string;
 			/**
-			 * @description Endpoint URL (e.g. `http://localhost:9000` for MinIO).
+			 * @description Endpoint URL (e.g. `http://localhost:9000` for `MinIO`).
 			 *     Required for non-AWS S3-compatible services.
 			 */
 			endpoint?: string;
@@ -18048,7 +18497,7 @@ export interface components {
 			/** @description Human-readable name for the connection to be created on success. */
 			displayName: string;
 			/**
-			 * @description Where to scope the sync: a folder id (Drive, OneDrive, Box) or a folder
+			 * @description Where to scope the sync: a folder id (Drive, `OneDrive`, Box) or a folder
 			 *     path (Dropbox). Omit to use the account root.
 			 */
 			root?: string;
@@ -18112,7 +18561,7 @@ export interface components {
 		 * @description What a whole-listing import does with a file whose source object no longer
 		 *     exists.
 		 *
-		 *     Corresponds to the `SYNC_DELETION_POLICY` PostgreSQL enum. Only
+		 *     Corresponds to the `SYNC_DELETION_POLICY` `PostgreSQL` enum. Only
 		 *     whole-listing import reconciles deletions (it compares the full source
 		 *     listing against what was imported), so this applies to object-store import
 		 *     alone; picker-driven file-service import transfers only the files the user
@@ -18124,7 +18573,7 @@ export interface components {
 		/**
 		 * @description The direction a connection syncs data.
 		 *
-		 *     Corresponds to the `SYNC_MODE` PostgreSQL enum: `Import` fetches objects
+		 *     Corresponds to the `SYNC_MODE` `PostgreSQL` enum: `Import` fetches objects
 		 *     from the connection into the workspace; `Export` pushes workspace files
 		 *     out.
 		 *
@@ -18158,14 +18607,14 @@ export interface components {
 		/**
 		 * @description Defines the execution status of a connection sync run.
 		 *
-		 *     Corresponds to the `SYNC_STATUS` PostgreSQL enum and tracks the state of an
+		 *     Corresponds to the `SYNC_STATUS` `PostgreSQL` enum and tracks the state of an
 		 *     individual synchronization run.
 		 */
 		SyncStatus: "pending" | "running" | "completed" | "failed" | "cancelled";
 		/**
 		 * @description How a connection sync run was initiated.
 		 *
-		 *     Corresponds to the `SYNC_TRIGGER_TYPE` PostgreSQL enum. The axis is who
+		 *     Corresponds to the `SYNC_TRIGGER_TYPE` `PostgreSQL` enum. The axis is who
 		 *     initiated the run: the connection's own schedule, or anything else — a
 		 *     user, the SDK, an external automation (Zapier and the like). The latter is
 		 *     `OnDemand`, which covers every non-scheduled trigger, not only a human
@@ -19556,7 +20005,7 @@ export interface components {
 		/**
 		 * @description The kind of a non-message entry in a comment thread's timeline.
 		 *
-		 *     Corresponds to the `THREAD_EVENT_KIND` PostgreSQL enum. A thread's stream
+		 *     Corresponds to the `THREAD_EVENT_KIND` `PostgreSQL` enum. A thread's stream
 		 *     interleaves comments (messages) with these events. A workspace thread uses
 		 *     only the discussion lifecycle (opened/closed/reopened/renamed); a file
 		 *     thread is the review of its file and also records its review transitions
@@ -19782,7 +20231,7 @@ export interface components {
 		/**
 		 * @description Request payload to update an existing workspace.
 		 *
-		 *     All fields are optional; only provided fields will be updated. The slug is
+		 *     All fields are optional; only provided fields will be updated. The handle is
 		 *     immutable and set at creation, so it cannot be changed here.
 		 */
 		UpdateWorkspace: {
@@ -19945,11 +20394,6 @@ export interface components {
 			/** @description The per-component usage entries, each self-identifying via its `id`. */
 			entries: components["schemas"]["Usage"][];
 		};
-		/** @description Path parameters for version extraction. */
-		VersionParams: {
-			/** @description The API version string (e.g., "v1", "v2"). */
-			version: string;
-		};
 		/** @description Shape of a synthesized tone. */
 		Waveform: "sine" | "square";
 		/** @description Params of a webhook activity (`webhook.*`). */
@@ -19962,7 +20406,7 @@ export interface components {
 		/**
 		 * @description The types of events that can trigger webhook delivery.
 		 *
-		 *     Corresponds to the `WEBHOOK_EVENT` PostgreSQL enum and configures which
+		 *     Corresponds to the `WEBHOOK_EVENT` `PostgreSQL` enum and configures which
 		 *     events a webhook receives.
 		 */
 		WebhookEvent:
@@ -20003,7 +20447,7 @@ export interface components {
 		/**
 		 * @description The operational status of a workspace webhook.
 		 *
-		 *     Corresponds to the `WEBHOOK_STATUS` PostgreSQL enum. The user controls
+		 *     Corresponds to the `WEBHOOK_STATUS` `PostgreSQL` enum. The user controls
 		 *     `Enabled` / `Disabled`; `Suspended` is set by the system when a webhook
 		 *     fails repeatedly, and the user can re-enable it.
 		 */
@@ -20023,6 +20467,8 @@ export interface components {
 			description?: string;
 			/** @description Display name of the workspace. */
 			displayName: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			handle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
@@ -20038,8 +20484,6 @@ export interface components {
 			 *     always reads a concrete number to enforce.
 			 */
 			settings: components["schemas"]["WorkspaceSettings"];
-			/** @description URL-safe workspace handle. Display-only. */
-			slug: components["schemas"]["Handle"];
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the workspace was last updated.
@@ -20050,7 +20494,7 @@ export interface components {
 		 * @description Response type for a workspace activity.
 		 *
 		 *     The typed payload is nested under `payload`, so an activity is
-		 *     `{ id, workspaceSlug, performedBy, payload: { activityType, <params...> }, createdAt }`.
+		 *     `{ id, workspaceHandle, performedBy, payload: { activityType, <params...> }, createdAt }`.
 		 */
 		WorkspaceActivity: {
 			/**
@@ -20070,13 +20514,13 @@ export interface components {
 			payload?: components["schemas"]["ActivityPayload"];
 			/** @description Account that performed the activity. */
 			performedBy: components["schemas"]["AccountRef"];
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description The export-only query parameter: the output format. Kept separate from the
@@ -20092,11 +20536,13 @@ export interface components {
 		 *     whose activities to keep.
 		 *
 		 *     This is its own query struct so an endpoint composes it alongside the shared
-		 *     [`CursorPagination`](crate::handler::request::CursorPagination) and
-		 *     [`DateWindow`] as separate query extractors, rather than `#[serde(flatten)]`ing
-		 *     them into one struct: the query extractor (`serde_html_form`) mis-handles
-		 *     flattened sub-structs — a flattened pagination struct fails to deserialize even
-		 *     a bare `?limit=` — so each concern is extracted on its own.
+		 *     [`CursorPagination`] and [`DateWindow`] as separate query extractors, rather
+		 *     than `#[serde(flatten)]`ing them into one struct: the query extractor
+		 *     (`serde_html_form`) mis-handles flattened sub-structs — a flattened pagination
+		 *     struct fails to deserialize even a bare `?limit=` — so each concern is
+		 *     extracted on its own.
+		 *
+		 *     [`CursorPagination`]: crate::handler::request::CursorPagination
 		 */
 		WorkspaceActivityFilterQuery: {
 			/**
@@ -20224,13 +20670,13 @@ export interface components {
 			 * @description When the connection was last updated.
 			 */
 			updatedAt: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -20365,7 +20811,7 @@ export interface components {
 		 * @description Response type for a detection.
 		 *
 		 *     A detection is addressed by its own opaque id; the owning pipeline and
-		 *     workspace slugs are carried for context. Redacted outputs are not here — a
+		 *     workspace handles are carried for context. Redacted outputs are not here — a
 		 *     detection produces many redactions, each fetched from its `redactions`
 		 *     endpoint.
 		 */
@@ -20413,13 +20859,13 @@ export interface components {
 			triggerType: components["schemas"]["PipelineTriggerType"];
 			/** @description Account that triggered the detection. */
 			triggeredBy: components["schemas"]["AccountRef"];
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Detection health for a workspace. */
 		WorkspaceDetectionAnalytics: {
@@ -20601,13 +21047,13 @@ export interface components {
 			updatedAt: string;
 			/** @description Account that uploaded/created the document. */
 			uploadedBy: components["schemas"]["AccountRef"];
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -20669,13 +21115,13 @@ export interface components {
 			 * @description When the invitation was last updated.
 			 */
 			updatedAt: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/** @description Response containing a generated shareable invite code. */
 		WorkspaceInviteCode: {
@@ -20688,13 +21134,13 @@ export interface components {
 			inviteCode: string;
 			/** @description Role assigned when someone joins via this code. */
 			role: components["schemas"]["WorkspaceRole"];
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -20746,6 +21192,12 @@ export interface components {
 			displayName?: string;
 			/** @description Email address of the member. */
 			emailAddress: string;
+			/**
+			 * Format: uuid
+			 * @description Account id of the member — the durable reference used to address the
+			 *     account (e.g. as a review `assignee`), stable across handle changes.
+			 */
+			id: string;
 			/** @description Role of the member in the workspace. */
 			memberRole: components["schemas"]["WorkspaceRole"];
 			/** @description Handle of the member's account. */
@@ -20845,7 +21297,7 @@ export interface components {
 		/**
 		 * @description Body for minting a browser file-picker token.
 		 *
-		 *     The OneDrive v8 picker requests a token per resource (it names the resource in
+		 *     The `OneDrive` v8 picker requests a token per resource (it names the resource in
 		 *     each `authenticate` command); the caller passes that `resource` so the server
 		 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
 		 *     single provider token (Google Drive, Box); omit it for those.
@@ -20858,7 +21310,7 @@ export interface components {
 			 */
 			resource?: string;
 		};
-		/** @description WorkspacePipeline response. */
+		/** @description `WorkspacePipeline` response. */
 		WorkspacePipeline: {
 			/**
 			 * Format: date-time
@@ -20869,9 +21321,9 @@ export interface components {
 			createdBy: components["schemas"]["AccountRef"];
 			/** @description Detection + redaction configuration. */
 			definition: components["schemas"]["PipelineDefinition"];
-			/** @description WorkspacePipeline description. */
+			/** @description `WorkspacePipeline` description. */
 			description?: string;
-			/** @description WorkspacePipeline display name. */
+			/** @description `WorkspacePipeline` display name. */
 			displayName: string;
 			/**
 			 * Format: uuid
@@ -20880,20 +21332,20 @@ export interface components {
 			id: string;
 			/** @description Per-scope data-retention override, when the pipeline sets one. */
 			retention?: components["schemas"]["RetentionOverride"];
-			/** @description WorkspacePipeline lifecycle status. */
+			/** @description `WorkspacePipeline` lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the pipeline was last updated.
 			 */
 			updatedAt: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Query parameters for listing a single pipeline's detections.
@@ -20941,29 +21393,29 @@ export interface components {
 			createdAt: string;
 			/** @description Account that created this pipeline. */
 			createdBy: components["schemas"]["AccountRef"];
-			/** @description WorkspacePipeline description. */
+			/** @description `WorkspacePipeline` description. */
 			description?: string;
-			/** @description WorkspacePipeline display name. */
+			/** @description `WorkspacePipeline` display name. */
 			displayName: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the pipeline.
 			 */
 			id: string;
-			/** @description WorkspacePipeline lifecycle status. */
+			/** @description `WorkspacePipeline` lifecycle status. */
 			status: components["schemas"]["PipelineStatus"];
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the pipeline was last updated.
 			 */
 			updatedAt: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -21028,13 +21480,13 @@ export interface components {
 			 * @description The current version number of the policy's definition.
 			 */
 			versionNumber: number;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Path parameters for policy operations.
@@ -21086,13 +21538,13 @@ export interface components {
 			 * @description When the policy was last updated.
 			 */
 			updatedAt: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -21141,13 +21593,13 @@ export interface components {
 			 * @description When the provider was last updated.
 			 */
 			updatedAt: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -21209,7 +21661,7 @@ export interface components {
 		 *
 		 *     Named `WorkspaceRedactionResult` rather than `Redaction` because the engine's audit
 		 *     schema already carries a `Redaction` (an audit event), and the two must not
-		 *     collide in the generated OpenAPI.
+		 *     collide in the generated `OpenAPI`.
 		 */
 		WorkspaceRedactionResult: {
 			/**
@@ -21229,13 +21681,13 @@ export interface components {
 			outputDocumentId?: string;
 			/** @description Account that requested the redaction. */
 			requestedBy: components["schemas"]["AccountRef"];
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -21258,7 +21710,7 @@ export interface components {
 		/**
 		 * @description The role and permission level of a workspace member.
 		 *
-		 *     Corresponds to the `WORKSPACE_ROLE` PostgreSQL enum and provides
+		 *     Corresponds to the `WORKSPACE_ROLE` `PostgreSQL` enum and provides
 		 *     hierarchical access control for workspace members with clearly defined
 		 *     capabilities.
 		 */
@@ -21582,13 +22034,13 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Webhook creation response that includes the secret (visible only once).
@@ -21648,13 +22100,13 @@ export interface components {
 			updatedAt: string;
 			/** @description The URL to send webhook payloads to. */
 			url: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
 			 */
 			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceSlug: components["schemas"]["Handle"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.

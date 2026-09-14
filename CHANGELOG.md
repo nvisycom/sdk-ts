@@ -8,6 +8,30 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.52.0] - 2026-09-14
+
+### Added
+
+- `status.checkLiveness()` (`GET /health/live`) — a liveness probe that resolves
+  when the process is running; returns the raw `Response`
+- `status.checkReadiness()` (`GET /health/ready`) — a readiness probe reporting
+  the server and its dependencies (`Health`; 200 healthy/degraded, 503 unhealthy)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** endpoint paths no longer have a trailing slash (e.g.
+  `/workspaces/{workspaceId}/documents`, `/account`). This is transparent to
+  callers using the service methods
+- **Breaking:** `checkHealth()` (both the client `status` service and the
+  standalone `checkHealth`) no longer takes a version segment — the health route
+  is `/health`. The `version` option on `HealthConfig` is removed
+
+### Removed
+
+- **Breaking:** `ErrorResponse` no longer carries `resource`; `NvisyApiError`
+  drops its `resource` property accordingly
+
 ## [0.51.0] - 2026-09-13
 
 A platform-wide rename and restructure. Nearly every exported type and several
@@ -1109,7 +1133,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.51.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.52.0...HEAD
+[0.52.0]: https://github.com/nvisycom/sdk-ts/compare/v0.51.0...v0.52.0
 [0.51.0]: https://github.com/nvisycom/sdk-ts/compare/v0.50.0...v0.51.0
 [0.50.0]: https://github.com/nvisycom/sdk-ts/compare/v0.49.0...v0.50.0
 [0.49.0]: https://github.com/nvisycom/sdk-ts/compare/v0.48.0...v0.49.0

@@ -16,14 +16,12 @@ describe("NvisyApiError", () => {
 			{
 				name: "ValidationError",
 				message: "Field is required",
-				resource: "account",
 			},
 			400,
 		);
 
 		expect(error.name).toBe("ValidationError");
 		expect(error.message).toBe("Field is required");
-		expect(error.resource).toBe("account");
 		expect(error.statusCode).toBe(400);
 		expect(error).toBeInstanceOf(NvisyError);
 	});
@@ -73,7 +71,6 @@ describe("NvisyApiError", () => {
 			{
 				name: "ValidationError",
 				message: "Invalid input",
-				resource: "document",
 			},
 			422,
 		);
@@ -81,6 +78,5 @@ describe("NvisyApiError", () => {
 		const json = error.toJSON();
 		expect(json.name).toBe("ValidationError");
 		expect(json.message).toBe("Invalid input");
-		expect(json.resource).toBe("document");
 	});
 });

@@ -23,7 +23,7 @@ export class Capabilities {
 	 * @returns Promise that resolves with the label catalog.
 	 */
 	async listLabels(): Promise<LabelCatalog> {
-		const { data } = await this.#api.GET("/capabilities/labels/");
+		const { data } = await this.#api.GET("/capabilities/labels");
 		return data!;
 	}
 
@@ -32,7 +32,7 @@ export class Capabilities {
 	 * @returns Promise that resolves with the recognizer catalog.
 	 */
 	async listRecognizers(): Promise<RecognizerCatalog> {
-		const { data } = await this.#api.GET("/capabilities/recognizers/");
+		const { data } = await this.#api.GET("/capabilities/recognizers");
 		return data!;
 	}
 
@@ -47,7 +47,7 @@ export class Capabilities {
 	 * @returns Promise that resolves with the connector capabilities.
 	 */
 	async listConnectors(): Promise<ConnectorCapabilities> {
-		const { data } = await this.#api.GET("/capabilities/connectors/");
+		const { data } = await this.#api.GET("/capabilities/connectors");
 		return data!;
 	}
 
@@ -56,7 +56,7 @@ export class Capabilities {
 	 * @returns Promise that resolves with the auth capabilities.
 	 */
 	async getAuthCapabilities(): Promise<AuthCapabilities> {
-		const { data } = await this.#api.GET("/capabilities/auth/");
+		const { data } = await this.#api.GET("/capabilities/auth");
 		return data!;
 	}
 }

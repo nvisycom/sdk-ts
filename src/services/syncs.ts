@@ -27,7 +27,7 @@ export class Syncs {
 		workspaceId: string,
 		query?: CursorPagination & { provider?: string[]; status?: SyncStatus },
 	): Promise<WorkspaceConnectionSyncPage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/syncs/", {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/syncs", {
 			params: { path: { workspaceId }, query },
 		});
 		return data!;
@@ -51,7 +51,7 @@ export class Syncs {
 		connectionId: string,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/{connectionId}/sync/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/sync",
 			{
 				params: { path: { workspaceId, connectionId } },
 			},
@@ -73,7 +73,7 @@ export class Syncs {
 		query?: CursorPagination,
 	): Promise<WorkspaceConnectionSyncPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/syncs",
 			{
 				params: { path: { workspaceId, connectionId }, query },
 			},
@@ -95,7 +95,7 @@ export class Syncs {
 		syncId: string,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}",
 			{
 				params: { path: { workspaceId, connectionId, syncId } },
 			},
@@ -117,7 +117,7 @@ export class Syncs {
 		syncId: string,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/cancel/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/syncs/{syncId}/cancel",
 			{
 				params: { path: { workspaceId, connectionId, syncId } },
 			},

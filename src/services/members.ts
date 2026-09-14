@@ -28,7 +28,7 @@ export class Members {
 		workspaceId: string,
 		query?: ListWorkspaceMembers & CursorPagination,
 	): Promise<WorkspaceMemberPage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/members/", {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/members", {
 			params: { path: { workspaceId }, query },
 		});
 		return data!;
@@ -46,7 +46,7 @@ export class Members {
 		accountId: string,
 	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/members/{accountId}/",
+			"/workspaces/{workspaceId}/members/{accountId}",
 			{
 				params: {
 					path: { workspaceId, accountId },
@@ -70,7 +70,7 @@ export class Members {
 		updates: UpdateWorkspaceMember,
 	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/members/{accountId}/",
+			"/workspaces/{workspaceId}/members/{accountId}",
 			{
 				params: {
 					path: { workspaceId, accountId },
@@ -89,7 +89,7 @@ export class Members {
 	 * @throws {ApiError} if the request fails
 	 */
 	async removeMember(workspaceId: string, accountId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/members/{accountId}/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}/members/{accountId}", {
 			params: { path: { workspaceId, accountId } },
 		});
 	}
@@ -101,7 +101,7 @@ export class Members {
 	 * @throws {ApiError} if the request fails
 	 */
 	async leaveWorkspace(workspaceId: string): Promise<void> {
-		await this.#api.POST("/workspaces/{workspaceId}/members/leave/", {
+		await this.#api.POST("/workspaces/{workspaceId}/members/leave", {
 			params: { path: { workspaceId } },
 		});
 	}

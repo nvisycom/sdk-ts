@@ -38,7 +38,7 @@ export class Connections {
 		query?: CursorPagination & { provider?: string[] },
 	): Promise<WorkspaceConnectionPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/connections/",
+			"/workspaces/{workspaceId}/connections",
 			{
 				params: { path: { workspaceId }, query },
 			},
@@ -58,7 +58,7 @@ export class Connections {
 		connection: CreateWorkspaceConnection,
 	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/",
+			"/workspaces/{workspaceId}/connections",
 			{
 				params: { path: { workspaceId } },
 				body: connection,
@@ -79,7 +79,7 @@ export class Connections {
 		connectionId: string,
 	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/connections/{connectionId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}",
 			{
 				params: { path: { workspaceId, connectionId } },
 			},
@@ -101,7 +101,7 @@ export class Connections {
 		updates: UpdateWorkspaceConnection,
 	): Promise<WorkspaceConnection> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/connections/{connectionId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}",
 			{
 				params: { path: { workspaceId, connectionId } },
 				body: updates,
@@ -122,7 +122,7 @@ export class Connections {
 		connectionId: string,
 	): Promise<void> {
 		await this.#api.DELETE(
-			"/workspaces/{workspaceId}/connections/{connectionId}/",
+			"/workspaces/{workspaceId}/connections/{connectionId}",
 			{
 				params: { path: { workspaceId, connectionId } },
 			},
@@ -141,7 +141,7 @@ export class Connections {
 		connectionId: string,
 	): Promise<WorkspaceConnectionVerification> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/{connectionId}/verify/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/verify",
 			{
 				params: { path: { workspaceId, connectionId } },
 			},
@@ -168,7 +168,7 @@ export class Connections {
 		request: StartFileServiceOAuth,
 	): Promise<OAuthStartResponse> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/oauth/{provider}/start/",
+			"/workspaces/{workspaceId}/connections/oauth/{provider}/start",
 			{
 				params: { path: { workspaceId, provider } },
 				body: request,
@@ -196,7 +196,7 @@ export class Connections {
 		request: ImportWorkspaceFiles,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/{connectionId}/import/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/import",
 			{
 				params: { path: { workspaceId, connectionId } },
 				body: request,
@@ -224,7 +224,7 @@ export class Connections {
 		request: ExportWorkspaceFiles,
 	): Promise<WorkspaceConnectionSync> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/{connectionId}/export/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/export",
 			{
 				params: { path: { workspaceId, connectionId } },
 				body: request,
@@ -252,7 +252,7 @@ export class Connections {
 		request: WorkspacePickerTokenRequest = {},
 	): Promise<WorkspacePickerToken> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/connections/{connectionId}/picker-token/",
+			"/workspaces/{workspaceId}/connections/{connectionId}/picker-token",
 			{
 				params: { path: { workspaceId, connectionId } },
 				body: request,
