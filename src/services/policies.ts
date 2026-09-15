@@ -29,12 +29,9 @@ export class Policies {
 		workspaceId: string,
 		query?: CursorPagination & WorkspacePoliciesQuery,
 	): Promise<WorkspacePolicySummaryPage> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/policies/",
-			{
-				params: { path: { workspaceId }, query },
-			},
-		);
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/policies", {
+			params: { path: { workspaceId }, query },
+		});
 		return data!;
 	}
 
@@ -50,7 +47,7 @@ export class Policies {
 		policy: CreateWorkspacePolicy,
 	): Promise<WorkspacePolicy> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/policies/",
+			"/workspaces/{workspaceId}/policies",
 			{
 				params: { path: { workspaceId } },
 				body: policy,
@@ -71,7 +68,7 @@ export class Policies {
 		policyId: string,
 	): Promise<WorkspacePolicy> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/policies/{policyId}/",
+			"/workspaces/{workspaceId}/policies/{policyId}",
 			{
 				params: { path: { workspaceId, policyId } },
 			},
@@ -93,7 +90,7 @@ export class Policies {
 		updates: UpdateWorkspacePolicy,
 	): Promise<WorkspacePolicy> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/policies/{policyId}/",
+			"/workspaces/{workspaceId}/policies/{policyId}",
 			{
 				params: { path: { workspaceId, policyId } },
 				body: updates,
@@ -110,7 +107,7 @@ export class Policies {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deletePolicy(workspaceId: string, policyId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/policies/{policyId}/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}/policies/{policyId}", {
 			params: { path: { workspaceId, policyId } },
 		});
 	}

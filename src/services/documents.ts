@@ -40,7 +40,7 @@ export class Documents {
 		}
 
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/documents/",
+			"/workspaces/{workspaceId}/documents",
 			{
 				params: { path: { workspaceId } },
 				// Schema types multipart as unknown[], but openapi-fetch needs FormData.
@@ -67,7 +67,7 @@ export class Documents {
 		query?: ListWorkspaceDocuments & CursorPagination,
 	): Promise<WorkspaceDocumentPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/documents/",
+			"/workspaces/{workspaceId}/documents",
 			{
 				params: { path: { workspaceId }, query },
 			},
@@ -87,7 +87,7 @@ export class Documents {
 		documentId: string,
 	): Promise<WorkspaceDocument> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/documents/{documentId}/",
+			"/workspaces/{workspaceId}/documents/{documentId}",
 			{
 				params: { path: { workspaceId, documentId } },
 			},
@@ -107,7 +107,7 @@ export class Documents {
 		documentId: string,
 	): Promise<Response> {
 		const { response } = await this.#api.GET(
-			"/workspaces/{workspaceId}/documents/{documentId}/content/",
+			"/workspaces/{workspaceId}/documents/{documentId}/content",
 			{
 				params: { path: { workspaceId, documentId } },
 				parseAs: "stream",
@@ -130,7 +130,7 @@ export class Documents {
 		updates: UpdateWorkspaceDocument,
 	): Promise<WorkspaceDocument> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/documents/{documentId}/",
+			"/workspaces/{workspaceId}/documents/{documentId}",
 			{
 				params: { path: { workspaceId, documentId } },
 				body: updates,
@@ -147,12 +147,9 @@ export class Documents {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteDocument(workspaceId: string, documentId: string): Promise<void> {
-		await this.#api.DELETE(
-			"/workspaces/{workspaceId}/documents/{documentId}/",
-			{
-				params: { path: { workspaceId, documentId } },
-			},
-		);
+		await this.#api.DELETE("/workspaces/{workspaceId}/documents/{documentId}", {
+			params: { path: { workspaceId, documentId } },
+		});
 	}
 
 	/**
@@ -172,7 +169,7 @@ export class Documents {
 		documentIds: string[],
 	): Promise<WorkspaceDeletedDocuments> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/documents/delete/",
+			"/workspaces/{workspaceId}/documents/delete",
 			{
 				params: { path: { workspaceId } },
 				body: { documentIds },
@@ -195,7 +192,7 @@ export class Documents {
 		assignment: AssignWorkspaceReview,
 	): Promise<WorkspaceThread> {
 		const { data } = await this.#api.PUT(
-			"/workspaces/{workspaceId}/documents/{documentId}/review/assign/",
+			"/workspaces/{workspaceId}/documents/{documentId}/review/assign",
 			{
 				params: { path: { workspaceId, documentId } },
 				body: assignment,
@@ -216,7 +213,7 @@ export class Documents {
 		documentId: string,
 	): Promise<WorkspaceThread> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/documents/{documentId}/review/verify/",
+			"/workspaces/{workspaceId}/documents/{documentId}/review/verify",
 			{
 				params: { path: { workspaceId, documentId } },
 			},

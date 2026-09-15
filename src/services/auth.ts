@@ -30,7 +30,7 @@ export class Auth {
 	 * @throws {ApiError} if the request fails
 	 */
 	async loginAccount(credentials: Login): Promise<void> {
-		await this.#api.POST("/auth/login/", {
+		await this.#api.POST("/auth/login", {
 			body: credentials,
 		});
 	}
@@ -47,7 +47,7 @@ export class Auth {
 	 * @throws {ApiError} if the request fails
 	 */
 	async signupAccount(credentials: Signup): Promise<void> {
-		await this.#api.POST("/auth/signup/", {
+		await this.#api.POST("/auth/signup", {
 			body: credentials,
 		});
 	}
@@ -58,7 +58,7 @@ export class Auth {
 	 * @throws {ApiError} if the request fails
 	 */
 	async logoutAccount(): Promise<void> {
-		await this.#api.POST("/auth/logout/");
+		await this.#api.POST("/auth/logout");
 	}
 
 	/**
@@ -77,7 +77,7 @@ export class Auth {
 		provider: IdentityProvider,
 		query?: { redirectUri?: string },
 	): Promise<OidcStartResponse> {
-		const { data } = await this.#api.GET("/auth/{provider}/start/", {
+		const { data } = await this.#api.GET("/auth/{provider}/start", {
 			params: { path: { provider }, query },
 		});
 		return data!;
@@ -98,7 +98,7 @@ export class Auth {
 	async mintDesktopToken(
 		request: DesktopTokenRequest,
 	): Promise<AccountDesktopToken> {
-		const { data } = await this.#api.POST("/auth/desktop/token/", {
+		const { data } = await this.#api.POST("/auth/desktop/token", {
 			body: request,
 		});
 		return data!;

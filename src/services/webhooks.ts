@@ -31,12 +31,9 @@ export class Webhooks {
 		workspaceId: string,
 		query?: CursorPagination,
 	): Promise<WorkspaceWebhookPage> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/webhooks/",
-			{
-				params: { path: { workspaceId }, query },
-			},
-		);
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/webhooks", {
+			params: { path: { workspaceId }, query },
+		});
 		return data!;
 	}
 
@@ -52,7 +49,7 @@ export class Webhooks {
 		webhook: CreateWorkspaceWebhook,
 	): Promise<WorkspaceWebhookCreated> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/webhooks/",
+			"/workspaces/{workspaceId}/webhooks",
 			{
 				params: { path: { workspaceId } },
 				body: webhook,
@@ -73,7 +70,7 @@ export class Webhooks {
 		webhookId: string,
 	): Promise<WorkspaceWebhook> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/webhooks/{webhookId}/",
+			"/workspaces/{workspaceId}/webhooks/{webhookId}",
 			{
 				params: { path: { workspaceId, webhookId } },
 			},
@@ -95,7 +92,7 @@ export class Webhooks {
 		updates: UpdateWorkspaceWebhook,
 	): Promise<WorkspaceWebhook> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/webhooks/{webhookId}/",
+			"/workspaces/{workspaceId}/webhooks/{webhookId}",
 			{
 				params: { path: { workspaceId, webhookId } },
 				body: updates,
@@ -112,7 +109,7 @@ export class Webhooks {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteWebhook(workspaceId: string, webhookId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/webhooks/{webhookId}/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}/webhooks/{webhookId}", {
 			params: { path: { workspaceId, webhookId } },
 		});
 	}
@@ -131,7 +128,7 @@ export class Webhooks {
 		options?: TestWorkspaceWebhook,
 	): Promise<WorkspaceWebhookResult> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/webhooks/{webhookId}/test/",
+			"/workspaces/{workspaceId}/webhooks/{webhookId}/test",
 			{
 				params: { path: { workspaceId, webhookId } },
 				body: options ?? {},

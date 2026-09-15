@@ -23,7 +23,7 @@ export class Analytics {
 	 */
 	async getAnalytics(workspaceId: string): Promise<WorkspaceAnalytics> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/analytics/",
+			"/workspaces/{workspaceId}/analytics",
 			{
 				params: { path: { workspaceId } },
 			},
@@ -43,7 +43,7 @@ export class Analytics {
 		query?: DateWindow,
 	): Promise<WorkspaceDetectionTimeSeries> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/analytics/detections/timeseries/",
+			"/workspaces/{workspaceId}/analytics/detections/timeseries",
 			{
 				params: { path: { workspaceId }, query },
 			},

@@ -81,12 +81,6 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 	public readonly message: string;
 
 	/**
-	 * The resource type that the error relates to (e.g., "account", "project").
-	 * May be undefined if the error is not resource-specific.
-	 */
-	public readonly resource?: string;
-
-	/**
 	 * HTTP status code of the response (e.g., 400, 404, 500).
 	 */
 	public readonly statusCode: number;
@@ -101,7 +95,6 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 		super(response.message);
 		this.name = response.name;
 		this.message = response.message;
-		this.resource = response.resource;
 		this.statusCode = statusCode;
 	}
 
@@ -156,7 +149,6 @@ export class NvisyApiError extends NvisyError implements ErrorResponse {
 		return {
 			name: this.name,
 			message: this.message,
-			resource: this.resource,
 		};
 	}
 }

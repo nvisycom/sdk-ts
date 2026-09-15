@@ -25,7 +25,7 @@ export class ApiTokens {
 	 * @throws {ApiError} if the request fails
 	 */
 	async listApiTokens(query?: CursorPagination): Promise<AccountApiTokenPage> {
-		const { data } = await this.#api.GET("/api-tokens/", {
+		const { data } = await this.#api.GET("/api-tokens", {
 			params: { query },
 		});
 		return data!;
@@ -38,7 +38,7 @@ export class ApiTokens {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getApiToken(tokenId: string): Promise<AccountApiToken> {
-		const { data } = await this.#api.GET("/api-tokens/{tokenId}/", {
+		const { data } = await this.#api.GET("/api-tokens/{tokenId}", {
 			params: { path: { tokenId } },
 		});
 		return data!;
@@ -53,7 +53,7 @@ export class ApiTokens {
 	async createApiToken(
 		token: CreateAccountApiToken,
 	): Promise<AccountApiTokenWithJwt> {
-		const { data } = await this.#api.POST("/api-tokens/", {
+		const { data } = await this.#api.POST("/api-tokens", {
 			body: token,
 		});
 		return data!;
@@ -70,7 +70,7 @@ export class ApiTokens {
 		tokenId: string,
 		updates: UpdateAccountApiToken,
 	): Promise<AccountApiToken> {
-		const { data } = await this.#api.PATCH("/api-tokens/{tokenId}/", {
+		const { data } = await this.#api.PATCH("/api-tokens/{tokenId}", {
 			params: { path: { tokenId } },
 			body: updates,
 		});
@@ -84,7 +84,7 @@ export class ApiTokens {
 	 * @throws {ApiError} if the request fails
 	 */
 	async revokeApiToken(tokenId: string): Promise<void> {
-		await this.#api.DELETE("/api-tokens/{tokenId}/", {
+		await this.#api.DELETE("/api-tokens/{tokenId}", {
 			params: { path: { tokenId } },
 		});
 	}

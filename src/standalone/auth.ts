@@ -72,7 +72,7 @@ export async function login(
 	config?: AuthConfig,
 ): Promise<void> {
 	const client = createAuthClient(config);
-	await client.POST("/auth/login/", {
+	await client.POST("/auth/login", {
 		body: credentials,
 	});
 }
@@ -109,7 +109,7 @@ export async function signup(
 	config?: AuthConfig,
 ): Promise<void> {
 	const client = createAuthClient(config);
-	await client.POST("/auth/signup/", {
+	await client.POST("/auth/signup", {
 		body: details,
 	});
 }
@@ -143,7 +143,7 @@ export async function startOidcSignIn(
 	config?: AuthConfig,
 ): Promise<OidcStartResponse> {
 	const client = createAuthClient(config);
-	const { data } = await client.GET("/auth/{provider}/start/", {
+	const { data } = await client.GET("/auth/{provider}/start", {
 		params: { path: { provider }, query },
 	});
 	return data!;

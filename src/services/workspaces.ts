@@ -26,7 +26,7 @@ export class Workspaces {
 	 * @throws {ApiError} if the request fails
 	 */
 	async listWorkspaces(query?: CursorPagination): Promise<WorkspacePage> {
-		const { data } = await this.#api.GET("/workspaces/", {
+		const { data } = await this.#api.GET("/workspaces", {
 			params: { query },
 		});
 		return data!;
@@ -39,7 +39,7 @@ export class Workspaces {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getWorkspace(workspaceId: string): Promise<Workspace> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/", {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}", {
 			params: { path: { workspaceId } },
 		});
 		return data!;
@@ -52,7 +52,7 @@ export class Workspaces {
 	 * @throws {ApiError} if the request fails
 	 */
 	async createWorkspace(workspace: CreateWorkspace): Promise<Workspace> {
-		const { data } = await this.#api.POST("/workspaces/", {
+		const { data } = await this.#api.POST("/workspaces", {
 			body: workspace,
 		});
 		return data!;
@@ -69,7 +69,7 @@ export class Workspaces {
 		workspaceId: string,
 		updates: UpdateWorkspace,
 	): Promise<Workspace> {
-		const { data } = await this.#api.PATCH("/workspaces/{workspaceId}/", {
+		const { data } = await this.#api.PATCH("/workspaces/{workspaceId}", {
 			params: { path: { workspaceId } },
 			body: updates,
 		});
@@ -83,7 +83,7 @@ export class Workspaces {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteWorkspace(workspaceId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}", {
 			params: { path: { workspaceId } },
 		});
 	}
@@ -98,7 +98,7 @@ export class Workspaces {
 		workspaceId: string,
 	): Promise<WorkspaceNotificationSettings> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/notifications/",
+			"/workspaces/{workspaceId}/notifications",
 			{
 				params: { path: { workspaceId } },
 			},
@@ -118,7 +118,7 @@ export class Workspaces {
 		settings: UpdateWorkspaceNotificationSettings,
 	): Promise<WorkspaceNotificationSettings> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/notifications/",
+			"/workspaces/{workspaceId}/notifications",
 			{
 				params: { path: { workspaceId } },
 				body: settings,
@@ -139,7 +139,7 @@ export class Workspaces {
 		const name = avatar instanceof File ? avatar.name : "avatar";
 		formData.append("avatar", avatar, name);
 
-		await this.#api.PUT("/workspaces/{workspaceId}/avatar/", {
+		await this.#api.PUT("/workspaces/{workspaceId}/avatar", {
 			params: { path: { workspaceId } },
 			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
 			body: formData as unknown as unknown[],
@@ -156,7 +156,7 @@ export class Workspaces {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteAvatar(workspaceId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/avatar/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}/avatar", {
 			params: { path: { workspaceId } },
 		});
 	}

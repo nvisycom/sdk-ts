@@ -28,7 +28,7 @@ export class Notifications {
 	async listNotifications(
 		query?: CursorPagination,
 	): Promise<AccountNotificationPage> {
-		const { data } = await this.#api.GET("/notifications/", {
+		const { data } = await this.#api.GET("/notifications", {
 			params: { query },
 		});
 		return data!;
@@ -40,7 +40,7 @@ export class Notifications {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getUnreadNotificationsStatus(): Promise<AccountUnreadStatus> {
-		const { data } = await this.#api.GET("/notifications/unread/");
+		const { data } = await this.#api.GET("/notifications/unread");
 		return data!;
 	}
 
@@ -50,7 +50,7 @@ export class Notifications {
 	 * @throws {ApiError} if the request fails
 	 */
 	async markAllRead(): Promise<AccountMarkedReadStatus> {
-		const { data } = await this.#api.POST("/notifications/read/");
+		const { data } = await this.#api.POST("/notifications/read");
 		return data!;
 	}
 
@@ -60,7 +60,7 @@ export class Notifications {
 	 * @throws {ApiError} if the request fails
 	 */
 	async markRead(notificationId: string): Promise<void> {
-		await this.#api.POST("/notifications/{notificationId}/read/", {
+		await this.#api.POST("/notifications/{notificationId}/read", {
 			params: { path: { notificationId } },
 		});
 	}
@@ -77,7 +77,7 @@ export class Notifications {
 	 * @throws {ApiError} if the request fails
 	 */
 	async events(): Promise<Response> {
-		const { response } = await this.#api.GET("/notifications/unread/events/", {
+		const { response } = await this.#api.GET("/notifications/unread/events", {
 			parseAs: "stream",
 		});
 		return response;

@@ -33,7 +33,7 @@ export class Threads {
 		workspaceId: string,
 		query?: CursorPagination & WorkspaceThreadsQuery,
 	): Promise<WorkspaceThreadPage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/threads/", {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/threads", {
 			params: { path: { workspaceId }, query },
 		});
 		return data!;
@@ -50,13 +50,10 @@ export class Threads {
 		workspaceId: string,
 		thread: OpenWorkspaceThread,
 	): Promise<WorkspaceThread> {
-		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/threads/",
-			{
-				params: { path: { workspaceId } },
-				body: thread,
-			},
-		);
+		const { data } = await this.#api.POST("/workspaces/{workspaceId}/threads", {
+			params: { path: { workspaceId } },
+			body: thread,
+		});
 		return data!;
 	}
 
@@ -74,7 +71,7 @@ export class Threads {
 		updates: RenameWorkspaceThread,
 	): Promise<WorkspaceThread> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/threads/{threadId}/",
+			"/workspaces/{workspaceId}/threads/{threadId}",
 			{
 				params: { path: { workspaceId, threadId } },
 				body: updates,
@@ -91,7 +88,7 @@ export class Threads {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteThread(workspaceId: string, threadId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/threads/{threadId}/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}/threads/{threadId}", {
 			params: { path: { workspaceId, threadId } },
 		});
 	}
@@ -108,7 +105,7 @@ export class Threads {
 		threadId: string,
 	): Promise<WorkspaceThread> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/threads/{threadId}/close/",
+			"/workspaces/{workspaceId}/threads/{threadId}/close",
 			{
 				params: { path: { workspaceId, threadId } },
 			},
@@ -128,7 +125,7 @@ export class Threads {
 		threadId: string,
 	): Promise<WorkspaceThread> {
 		const { data } = await this.#api.DELETE(
-			"/workspaces/{workspaceId}/threads/{threadId}/close/",
+			"/workspaces/{workspaceId}/threads/{threadId}/close",
 			{
 				params: { path: { workspaceId, threadId } },
 			},
@@ -150,7 +147,7 @@ export class Threads {
 		query?: CursorPagination,
 	): Promise<WorkspaceThreadEntryPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/threads/{threadId}/timeline/",
+			"/workspaces/{workspaceId}/threads/{threadId}/timeline",
 			{
 				params: { path: { workspaceId, threadId }, query },
 			},
@@ -172,7 +169,7 @@ export class Threads {
 		comment: CreateWorkspaceComment,
 	): Promise<WorkspaceComment> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/threads/{threadId}/comments/",
+			"/workspaces/{workspaceId}/threads/{threadId}/comments",
 			{
 				params: { path: { workspaceId, threadId } },
 				body: comment,
@@ -195,7 +192,7 @@ export class Threads {
 		updates: UpdateWorkspaceComment,
 	): Promise<WorkspaceComment> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/comments/{commentId}/",
+			"/workspaces/{workspaceId}/comments/{commentId}",
 			{
 				params: { path: { workspaceId, commentId } },
 				body: updates,
@@ -212,7 +209,7 @@ export class Threads {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteComment(workspaceId: string, commentId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/comments/{commentId}/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}/comments/{commentId}", {
 			params: { path: { workspaceId, commentId } },
 		});
 	}

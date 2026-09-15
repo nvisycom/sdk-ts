@@ -28,8 +28,7 @@ import { createPublicClient } from "@/standalone/http.js";
  * status, an authenticated one performs a real-time check. This function sends
  * no token; pass one via `config.headers` if a real-time check is desired.
  *
- * @param config - Optional configuration (baseUrl, headers, userAgent, fetch,
- *   version)
+ * @param config - Optional configuration (baseUrl, headers, userAgent, fetch)
  * @returns Promise that resolves with the API health status (for both the
  *   healthy `200` and degraded `503` responses)
  */
@@ -39,9 +38,7 @@ export async function checkHealth(config?: HealthConfig): Promise<Health> {
 	// result to return, not an error to throw.
 	const client = createPublicClient(config, { errorHandling: false });
 
-	const { data, error } = await client.GET("/health/", {
-		params: { path: { version: config?.version ?? "v1" } },
-	});
+	const { data, error } = await client.GET("/health");
 	// `data` on 200, `error` on 503 — both carry a `Health` body.
 	return (data ?? error) as Health;
 }

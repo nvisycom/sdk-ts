@@ -25,7 +25,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getAccount(): Promise<AccountData> {
-		const { data } = await this.#api.GET("/account/");
+		const { data } = await this.#api.GET("/account");
 		return data!;
 	}
 
@@ -36,7 +36,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async updateAccount(updates: UpdateAccount): Promise<AccountData> {
-		const { data } = await this.#api.PATCH("/account/", {
+		const { data } = await this.#api.PATCH("/account", {
 			body: updates,
 		});
 		return data!;
@@ -48,7 +48,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteAccount(): Promise<void> {
-		await this.#api.DELETE("/account/");
+		await this.#api.DELETE("/account");
 	}
 
 	/**
@@ -58,7 +58,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async getPublicAccount(accountId: string): Promise<PublicAccount> {
-		const { data } = await this.#api.GET("/accounts/{accountId}/", {
+		const { data } = await this.#api.GET("/accounts/{accountId}", {
 			params: { path: { accountId } },
 		});
 		return data!;
@@ -76,7 +76,7 @@ export class Account {
 		const name = avatar instanceof File ? avatar.name : "avatar";
 		formData.append("avatar", avatar, name);
 
-		const { data } = await this.#api.PUT("/accounts/{accountId}/avatar/", {
+		const { data } = await this.#api.PUT("/accounts/{accountId}/avatar", {
 			params: { path: { accountId } },
 			// Schema types multipart as unknown[], but openapi-fetch needs FormData.
 			body: formData as unknown as unknown[],
@@ -94,7 +94,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteAvatar(accountId: string): Promise<void> {
-		await this.#api.DELETE("/accounts/{accountId}/avatar/", {
+		await this.#api.DELETE("/accounts/{accountId}/avatar", {
 			params: { path: { accountId } },
 		});
 	}
@@ -105,7 +105,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async listIdentities(): Promise<AccountIdentities> {
-		const { data } = await this.#api.GET("/account/identities/");
+		const { data } = await this.#api.GET("/account/identities");
 		return data!;
 	}
 
@@ -121,7 +121,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async setPassword(request: SetPassword): Promise<void> {
-		await this.#api.PUT("/account/identities/password/", { body: request });
+		await this.#api.PUT("/account/identities/password", { body: request });
 	}
 
 	/**
@@ -133,7 +133,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async removePassword(): Promise<void> {
-		await this.#api.DELETE("/account/identities/password/");
+		await this.#api.DELETE("/account/identities/password");
 	}
 
 	/**
@@ -152,7 +152,7 @@ export class Account {
 		provider: IdentityProvider,
 		query?: { reauthProof?: string; redirectUri?: string },
 	): Promise<OidcStartResponse> {
-		const { data } = await this.#api.POST("/account/identities/{provider}/", {
+		const { data } = await this.#api.POST("/account/identities/{provider}", {
 			params: { path: { provider }, query },
 		});
 		return data!;
@@ -168,7 +168,7 @@ export class Account {
 	 * @throws {ApiError} if the request fails
 	 */
 	async unlinkIdentity(provider: IdentityProvider): Promise<void> {
-		await this.#api.DELETE("/account/identities/{provider}/", {
+		await this.#api.DELETE("/account/identities/{provider}", {
 			params: { path: { provider } },
 		});
 	}
@@ -189,7 +189,7 @@ export class Account {
 		provider: IdentityProvider,
 		query?: { redirectUri?: string },
 	): Promise<OidcStartResponse> {
-		const { data } = await this.#api.GET("/auth/{provider}/reauth/", {
+		const { data } = await this.#api.GET("/auth/{provider}/reauth", {
 			params: { path: { provider }, query },
 		});
 		return data!;

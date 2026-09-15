@@ -33,7 +33,7 @@ export class Invites {
 		workspaceId: string,
 		query?: ListWorkspaceInvites & CursorPagination,
 	): Promise<WorkspaceInvitePage> {
-		const { data } = await this.#api.GET("/workspaces/{workspaceId}/invites/", {
+		const { data } = await this.#api.GET("/workspaces/{workspaceId}/invites", {
 			params: { path: { workspaceId }, query },
 		});
 		return data!;
@@ -50,13 +50,10 @@ export class Invites {
 		workspaceId: string,
 		invite: CreateWorkspaceInvite,
 	): Promise<WorkspaceInviteSent> {
-		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/invites/",
-			{
-				params: { path: { workspaceId } },
-				body: invite,
-			},
-		);
+		const { data } = await this.#api.POST("/workspaces/{workspaceId}/invites", {
+			params: { path: { workspaceId } },
+			body: invite,
+		});
 		return data!;
 	}
 
@@ -68,7 +65,7 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async cancelInvite(workspaceId: string, inviteId: string): Promise<void> {
-		await this.#api.DELETE("/workspaces/{workspaceId}/invites/{inviteId}/", {
+		await this.#api.DELETE("/workspaces/{workspaceId}/invites/{inviteId}", {
 			params: { path: { workspaceId, inviteId } },
 		});
 	}
@@ -87,7 +84,7 @@ export class Invites {
 		reply: ReplyWorkspaceInvite,
 	): Promise<WorkspaceMember> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/invites/{inviteId}/",
+			"/workspaces/{workspaceId}/invites/{inviteId}",
 			{
 				params: { path: { workspaceId, inviteId } },
 				body: reply,
@@ -108,7 +105,7 @@ export class Invites {
 		options: GenerateWorkspaceInviteCode,
 	): Promise<WorkspaceInviteCode> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/invites/code/",
+			"/workspaces/{workspaceId}/invites/code",
 			{
 				params: { path: { workspaceId } },
 				body: options,
@@ -128,7 +125,7 @@ export class Invites {
 		inviteCode: string,
 		reply: ReplyWorkspaceInvite,
 	): Promise<WorkspaceMember | null> {
-		const { data } = await this.#api.POST("/invites/code/{inviteCode}/", {
+		const { data } = await this.#api.POST("/invites/code/{inviteCode}", {
 			params: { path: { inviteCode } },
 			body: reply,
 		});
@@ -142,7 +139,7 @@ export class Invites {
 	 * @throws {ApiError} if the request fails
 	 */
 	async previewInvite(inviteCode: string): Promise<InvitePreview> {
-		const { data } = await this.#api.GET("/invites/code/{inviteCode}/", {
+		const { data } = await this.#api.GET("/invites/code/{inviteCode}", {
 			params: { path: { inviteCode } },
 		});
 		return data!;

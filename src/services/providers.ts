@@ -33,7 +33,7 @@ export class Providers {
 		query?: CursorPagination & WorkspaceProvidersQuery,
 	): Promise<WorkspaceProviderPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/providers/",
+			"/workspaces/{workspaceId}/providers",
 			{
 				params: { path: { workspaceId }, query },
 			},
@@ -53,7 +53,7 @@ export class Providers {
 		provider: CreateWorkspaceProvider,
 	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/providers/",
+			"/workspaces/{workspaceId}/providers",
 			{
 				params: { path: { workspaceId } },
 				body: provider,
@@ -74,7 +74,7 @@ export class Providers {
 		providerId: string,
 	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/providers/{providerId}/",
+			"/workspaces/{workspaceId}/providers/{providerId}",
 			{
 				params: { path: { workspaceId, providerId } },
 			},
@@ -96,7 +96,7 @@ export class Providers {
 		updates: UpdateWorkspaceProvider,
 	): Promise<WorkspaceProvider> {
 		const { data } = await this.#api.PATCH(
-			"/workspaces/{workspaceId}/providers/{providerId}/",
+			"/workspaces/{workspaceId}/providers/{providerId}",
 			{
 				params: { path: { workspaceId, providerId } },
 				body: updates,
@@ -113,12 +113,9 @@ export class Providers {
 	 * @throws {ApiError} if the request fails
 	 */
 	async deleteProvider(workspaceId: string, providerId: string): Promise<void> {
-		await this.#api.DELETE(
-			"/workspaces/{workspaceId}/providers/{providerId}/",
-			{
-				params: { path: { workspaceId, providerId } },
-			},
-		);
+		await this.#api.DELETE("/workspaces/{workspaceId}/providers/{providerId}", {
+			params: { path: { workspaceId, providerId } },
+		});
 	}
 
 	/**
@@ -133,7 +130,7 @@ export class Providers {
 		providerId: string,
 	): Promise<WorkspaceConnectionVerification> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/providers/{providerId}/verify/",
+			"/workspaces/{workspaceId}/providers/{providerId}/verify",
 			{
 				params: { path: { workspaceId, providerId } },
 			},

@@ -17,21 +17,10 @@ describe("checkHealth", () => {
 		get.mockClear();
 	});
 
-	it("calls the health route with the default version", async () => {
+	it("calls the health route", async () => {
 		const health = await checkHealth();
-		expect(get).toHaveBeenCalledWith(
-			"/health/",
-			expect.objectContaining({ params: { path: { version: "v1" } } }),
-		);
+		expect(get).toHaveBeenCalledWith("/health");
 		expect(health).toEqual({ status: "healthy" });
-	});
-
-	it("uses a custom version", async () => {
-		await checkHealth({ version: "v2" });
-		expect(get).toHaveBeenCalledWith(
-			"/health/",
-			expect.objectContaining({ params: { path: { version: "v2" } } }),
-		);
 	});
 
 	it("passes a custom fetch through to openapi-fetch", async () => {
