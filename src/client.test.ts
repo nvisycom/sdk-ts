@@ -51,6 +51,7 @@ describe("Nvisy", () => {
 		});
 
 		it("should throw when no API token is given", () => {
+			// @ts-expect-error apiToken is required on the authenticated client
 			expect(() => new Nvisy({})).toThrow(NvisyError);
 		});
 	});

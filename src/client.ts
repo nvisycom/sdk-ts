@@ -13,7 +13,7 @@
  * ```
  */
 
-import type { ClientConfig } from "@/config.js";
+import type { NvisyConfig } from "@/config.js";
 import { NvisyError } from "@/errors.js";
 import { type ApiClient, createApiClient, resolveDefaults } from "@/http.js";
 import {
@@ -59,7 +59,7 @@ export type { ApiClient } from "@/http.js";
  */
 export class Nvisy {
 	/** The config this client was built from (for {@link withApiToken}). @internal */
-	readonly #config: ClientConfig;
+	readonly #config: NvisyConfig;
 
 	/** The resolved base URL. @internal */
 	readonly #baseUrl: string;
@@ -86,7 +86,7 @@ export class Nvisy {
 	 * const account = await nvisy.account.getAccount();
 	 * ```
 	 */
-	constructor(config: ClientConfig) {
+	constructor(config: NvisyConfig) {
 		this.#config = config;
 		const resolved = resolveDefaults(config);
 		this.#baseUrl = resolved.baseUrl;
@@ -106,7 +106,7 @@ export class Nvisy {
 	 * @throws {NvisyError} If the API token is invalid
 	 * @internal
 	 */
-	#validateApiToken(apiToken: string | undefined): string {
+	#validateApiToken(apiToken: string): string {
 		if (typeof apiToken !== "string" || apiToken.trim().length === 0) {
 			throw new NvisyError("API token must be a non-empty string");
 		}

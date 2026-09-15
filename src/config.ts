@@ -98,6 +98,12 @@ export interface ClientConfig {
 }
 
 /**
+ * Configuration for the authenticated {@link Nvisy} client: {@link ClientConfig}
+ * with a required `apiToken`.
+ */
+export type NvisyConfig = ClientConfig & { apiToken: string };
+
+/**
  * Default configuration values used when options are not explicitly provided.
  */
 export const DEFAULTS = {

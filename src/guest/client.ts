@@ -20,7 +20,7 @@
 
 import type { ClientConfig } from "@/config.js";
 import { type ApiClient, createApiClient, resolveDefaults } from "@/http.js";
-import { Capabilities, GuestAuth, Status } from "@/services/index.js";
+import { GuestAuth, GuestCapabilities, Status } from "@/services/index.js";
 
 /**
  * Configuration for {@link NvisyGuest}. Same as {@link ClientConfig} but without
@@ -72,11 +72,11 @@ export class NvisyGuest {
 	}
 
 	/**
-	 * The deployment's capabilities. Pre-auth, only `getAuthCapabilities()` is
-	 * public; the other reads require an authenticated {@link Nvisy} client.
+	 * The pre-auth capabilities read: `getAuthCapabilities()`. The label /
+	 * recognizer / connector reads require an authenticated {@link Nvisy} client.
 	 */
-	get capabilities(): Capabilities {
-		return new Capabilities(this.#api);
+	get capabilities(): GuestCapabilities {
+		return new GuestCapabilities(this.#api);
 	}
 
 	/** Health checks (liveness / readiness). */
