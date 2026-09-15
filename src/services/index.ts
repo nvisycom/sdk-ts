@@ -7,6 +7,8 @@ export { Capabilities } from "@/services/capabilities.js";
 export { Connections } from "@/services/connections.js";
 export { Detections } from "@/services/detections.js";
 export { Documents } from "@/services/documents.js";
+export { GuestAuth } from "@/services/guest-auth.js";
+export { GuestCapabilities } from "@/services/guest-capabilities.js";
 export { Invites } from "@/services/invites.js";
 export { Members } from "@/services/members.js";
 export { Notifications } from "@/services/notifications.js";

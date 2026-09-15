@@ -8,7 +8,6 @@ type Schemas = components["schemas"];
 // Review resources.
 export type WorkspaceReview = Schemas["WorkspaceReview"];
 export type CreateWorkspaceReview = Schemas["CreateWorkspaceReview"];
-export type AssignWorkspaceReview = Schemas["AssignWorkspaceReview"];
 export type WorkspaceReviewPage = Schemas["WorkspaceReviewPage"];
 export type WorkspaceReviewsQuery = Schemas["WorkspaceReviewsQuery"];
 

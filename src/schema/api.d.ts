@@ -3821,8 +3821,8 @@ export interface paths {
 				 *
 				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-				 *     `assignee`.
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
 				 */
 				201: {
 					headers: {
@@ -3964,8 +3964,8 @@ export interface paths {
 				 *
 				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-				 *     `assignee`.
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
 				 */
 				200: {
 					headers: {
@@ -4195,8 +4195,8 @@ export interface paths {
 				 *
 				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-				 *     `assignee`.
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
 				 */
 				200: {
 					headers: {
@@ -4322,8 +4322,8 @@ export interface paths {
 				 *
 				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-				 *     `assignee`.
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
 				 */
 				200: {
 					headers: {
@@ -4398,7 +4398,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/reviews/{reviewId}/assign": {
+	"/workspaces/{workspaceId}/reviews/{reviewId}/assignees/{accountId}": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4406,36 +4406,34 @@ export interface paths {
 			cookie?: never;
 		};
 		get?: never;
+		put?: never;
 		/**
-		 * Assign a review
-		 * @description Assigns a review to a workspace member, or clears the assignee with a null `assignee`. Requires AssignReviews.
+		 * Assign a reviewer
+		 * @description Assigns a workspace member as a reviewer of a review (idempotent). The first assignee moves a needs-review review to in-review. Requires AssignReviews.
 		 */
-		put: {
+		post: {
 			parameters: {
 				query?: never;
 				header?: never;
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
+					/** @description Account id of the reviewer to assign or unassign. */
+					accountId: string;
 					/** @description Unique identifier of the review. */
 					reviewId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload to assign or unassign a review. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["AssignWorkspaceReview"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				/**
 				 * @description Response type for a document's review.
 				 *
 				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-				 *     `assignee`.
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
 				 */
 				200: {
 					headers: {
@@ -4443,25 +4441,6 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["WorkspaceReview"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
 				/**
@@ -4521,28 +4500,103 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
+			};
+		};
+		/**
+		 * Unassign a reviewer
+		 * @description Removes a reviewer from a review. Removing the last assignee returns an in-review review to needs-review. Requires AssignReviews.
+		 */
+		delete: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Account id of the reviewer to assign or unassign. */
+					accountId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Response type for a document's review.
+				 *
+				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
+				 *     document), opened explicitly. It owns a discussion thread (referenced by
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
+				 */
+				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"text/plain": string;
+						"application/json": components["schemas"]["WorkspaceReview"];
 					};
 				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"text/plain": string;
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
 			};
 		};
-		post?: never;
-		delete?: never;
 		options?: never;
 		head?: never;
 		patch?: never;
@@ -4582,8 +4636,8 @@ export interface paths {
 				 *
 				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-				 *     `assignee`.
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
 				 */
 				200: {
 					headers: {
@@ -4692,8 +4746,8 @@ export interface paths {
 				 *
 				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-				 *     `assignee`.
+				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+				 *     `assignees` (0..N reviewers).
 				 */
 				200: {
 					headers: {
@@ -15047,14 +15101,6 @@ export interface components {
 				  }
 			)[];
 		};
-		/** @description Request payload to assign or unassign a review. */
-		AssignWorkspaceReview: {
-			/**
-			 * Format: uuid
-			 * @description Account to assign the review to, or `null` to clear the current assignee.
-			 */
-			assignee?: string;
-		};
 		/**
 		 * @description Author-supplied rationale for a redaction: *under what authority* it was made.
 		 *
@@ -22598,12 +22644,12 @@ export interface components {
 		 *
 		 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
 		 *     document), opened explicitly. It owns a discussion thread (referenced by
-		 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and an optional
-		 *     `assignee`.
+		 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
+		 *     `assignees` (0..N reviewers).
 		 */
 		WorkspaceReview: {
-			/** @description Account the review is assigned to; `None` when unassigned. */
-			assignee?: components["schemas"]["AccountRef"];
+			/** @description The reviewers assigned to this review (empty when unassigned). */
+			assignees: components["schemas"]["AccountRef"][];
 			/**
 			 * Format: date-time
 			 * @description When the review was created.
@@ -22633,6 +22679,19 @@ export interface components {
 			 * @description When the review was last updated.
 			 */
 			updatedAt: string;
+		};
+		/** @description Path parameters addressing a reviewer assignment on a review. */
+		WorkspaceReviewAssigneePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Account id of the reviewer to assign or unassign.
+			 */
+			accountId: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the review.
+			 */
+			reviewId: string;
 		};
 		/** @description Path parameters addressing a review-to-detection link. */
 		WorkspaceReviewDetectionPathParams: {

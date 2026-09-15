@@ -13,14 +13,9 @@
  * ```
  */
 
-import createClient, { type Client as OpenApiClient } from "openapi-fetch";
-import { type ClientConfig, DEFAULTS } from "@/config.js";
+import type { NvisyConfig } from "@/config.js";
 import { NvisyError } from "@/errors.js";
-import {
-	createLoggingMiddleware,
-	errorMiddleware,
-} from "@/middleware/index.js";
-import type { paths } from "@/schema/api.js";
+import { type ApiClient, createApiClient, resolveDefaults } from "@/http.js";
 import {
 	Account,
 	Activities,
@@ -47,26 +42,10 @@ import {
 } from "@/services/index.js";
 
 /**
- * Typed openapi-fetch client for the Nvisy API.
- *
- * This type represents the low-level HTTP client configured with the Nvisy API schema.
- * It's exposed via {@link Nvisy.api} for advanced use cases requiring direct API access.
+ * Typed openapi-fetch client for the Nvisy API. Exposed via {@link Nvisy.api}
+ * for advanced use cases requiring direct API access.
  */
-export type ApiClient = OpenApiClient<paths>;
-
-/**
- * Internal configuration state for the client with all fields resolved.
- *
- * @internal
- */
-// `fetch`, `apiToken`, and `credentials` stay optional after resolution: an
-// omitted `fetch` means "use the global fetch"; an omitted `apiToken` means a
-// browser-session client (no bearer header); an omitted `credentials` uses the
-// platform default.
-type ResolvedConfig = Required<
-	Omit<ClientConfig, "fetch" | "apiToken" | "credentials">
-> &
-	Pick<ClientConfig, "fetch" | "apiToken" | "credentials">;
+export type { ApiClient } from "@/http.js";
 
 /**
  * Main client class for interacting with the Nvisy document processing API.
@@ -79,11 +58,11 @@ type ResolvedConfig = Required<
  * ```
  */
 export class Nvisy {
-	/**
-	 * The resolved client configuration with defaults applied.
-	 * @internal
-	 */
-	readonly #config: ResolvedConfig;
+	/** The config this client was built from (for {@link withApiToken}). @internal */
+	readonly #config: NvisyConfig;
+
+	/** The resolved base URL. @internal */
+	readonly #baseUrl: string;
 
 	/**
 	 * The underlying openapi-fetch client instance.
@@ -92,90 +71,31 @@ export class Nvisy {
 	readonly #api: ApiClient;
 
 	/**
-	 * Creates a new Nvisy client instance.
+	 * Creates a new authenticated Nvisy client.
 	 *
-	 * Authenticate with an `apiToken` (bearer token) or, for a browser session
-	 * started by the standalone `login` / `signup`, with `credentials: "include"`
-	 * and no token.
+	 * Requires an `apiToken` (sent as `Authorization: Bearer <token>`). For the
+	 * pre-auth surface (login / signup / OIDC start, auth capabilities, health),
+	 * use {@link NvisyGuest} from `@nvisy/sdk/guest`.
 	 *
-	 * @param config - Configuration options; omit `apiToken` for a cookie session
-	 * @throws {NvisyError} If an `apiToken` is provided but invalid
+	 * @param config - Configuration options with a required `apiToken`
+	 * @throws {NvisyError} If the API token is missing or invalid
 	 *
 	 * @example
 	 * ```typescript
-	 * // API token
 	 * const nvisy = new Nvisy({ apiToken: "your-api-token" });
-	 *
-	 * // Browser session
-	 * const nvisy = new Nvisy({ credentials: "include" });
-	 *
 	 * const account = await nvisy.account.getAccount();
 	 * ```
 	 */
-	constructor(config: ClientConfig = {}) {
-		this.#config = {
-			apiToken: this.#resolveApiToken(config.apiToken),
+	constructor(config: NvisyConfig) {
+		this.#config = config;
+		const resolved = resolveDefaults(config);
+		this.#baseUrl = resolved.baseUrl;
+		this.#api = createApiClient({
+			apiToken: this.#validateApiToken(config.apiToken),
 			credentials: config.credentials,
-			baseUrl: config.baseUrl ?? DEFAULTS.BASE_URL,
-			headers: config.headers ?? {},
-			userAgent: config.userAgent ?? DEFAULTS.USER_AGENT,
-			withLogging: config.withLogging ?? false,
 			fetch: config.fetch,
-		};
-
-		this.#api = this.#createApiClient();
-	}
-
-	/**
-	 * Creates and configures the underlying openapi-fetch client.
-	 *
-	 * @returns A configured ApiClient instance
-	 * @internal
-	 */
-	#createApiClient(): ApiClient {
-		const headers: Record<string, string> = {
-			"Content-Type": "application/json",
-			"User-Agent": this.#config.userAgent,
-			// Only send a bearer token when one is configured; a browser-session
-			// client authenticates with cookies instead.
-			...(this.#config.apiToken
-				? { Authorization: `Bearer ${this.#config.apiToken}` }
-				: {}),
-			...this.#config.headers,
-		};
-
-		const api = createClient<paths>({
-			baseUrl: this.#config.baseUrl,
-			headers,
-			// `undefined` falls back to the global fetch inside openapi-fetch.
-			fetch: this.#config.fetch,
-			// Omitted `credentials` uses the platform default.
-			...(this.#config.credentials
-				? { credentials: this.#config.credentials }
-				: {}),
+			...resolved,
 		});
-
-		if (this.#config.withLogging) {
-			api.use(createLoggingMiddleware());
-		}
-
-		api.use(errorMiddleware);
-		return api;
-	}
-
-	/**
-	 * Resolves the configured API token: validated when present, or `undefined`
-	 * for a browser-session client that authenticates with cookies instead.
-	 *
-	 * @param apiToken - The configured API token, if any
-	 * @returns The trimmed, validated token, or `undefined` when none is given
-	 * @throws {NvisyError} If a token is given but invalid
-	 * @internal
-	 */
-	#resolveApiToken(apiToken: string | undefined): string | undefined {
-		return apiToken === undefined
-			? undefined
-			: this.#validateApiToken(apiToken);
 	}
 
 	/**
@@ -233,7 +153,7 @@ export class Nvisy {
 	 * @returns The configured base URL
 	 */
 	get baseUrl(): string {
-		return this.#config.baseUrl;
+		return this.#baseUrl;
 	}
 
 	/**
@@ -249,7 +169,8 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for authentication operations (login, signup, logout).
+	 * Service for authenticated auth operations (logout, desktop token). Pre-auth
+	 * sign-in lives on {@link NvisyGuest}.
 	 */
 	get auth(): Auth {
 		return new Auth(this.#api);

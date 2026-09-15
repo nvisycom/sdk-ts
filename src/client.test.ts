@@ -50,9 +50,9 @@ describe("Nvisy", () => {
 			expect(() => new Nvisy({ apiToken: "" })).toThrow(NvisyError);
 		});
 
-		it("should create a client with no API token (browser session)", () => {
-			expect(() => new Nvisy()).not.toThrow();
-			expect(() => new Nvisy({ credentials: "include" })).not.toThrow();
+		it("should throw when no API token is given", () => {
+			// @ts-expect-error apiToken is required on the authenticated client
+			expect(() => new Nvisy({})).toThrow(NvisyError);
 		});
 	});
 
@@ -72,16 +72,8 @@ describe("Nvisy", () => {
 			);
 		});
 
-		it("should omit the Authorization header for a browser session", () => {
-			new Nvisy({ credentials: "include" });
-			const headers = vi.mocked(createClient).mock.calls[0][0]?.headers as
-				| Record<string, string>
-				| undefined;
-			expect(headers?.Authorization).toBeUndefined();
-		});
-
 		it("should forward credentials to openapi-fetch", () => {
-			new Nvisy({ credentials: "include" });
+			new Nvisy({ apiToken: "valid-api-token-123", credentials: "include" });
 			expect(createClient).toHaveBeenCalledWith(
 				expect.objectContaining({ credentials: "include" }),
 			);
