@@ -24,20 +24,14 @@ export const VERSION =
 	typeof __SDK_VERSION__ === "string" ? __SDK_VERSION__ : "0.0.0-dev";
 
 /**
- * Configuration options for creating a Nvisy client.
- *
- * Authenticate one of two ways: pass an `apiToken` (sent as a bearer token on
- * every request), or use a browser session — sign in with the standalone
- * `login` / `signup`, then set `credentials: "include"` so the session cookies
- * are sent. All other fields are optional and use sensible defaults.
+ * Configuration for a Nvisy client. The authenticated {@link Nvisy} client
+ * requires `apiToken`; the pre-auth `NvisyGuest` client (`@nvisy/sdk/guest`)
+ * uses the same fields minus `apiToken`. All other fields are optional and use
+ * sensible defaults.
  *
  * @example
  * ```typescript
- * // API token
- * const client = new Client({ apiToken: "your-api-token" });
- *
- * // Browser session (after `login()` set the cookies)
- * const client = new Client({ credentials: "include" });
+ * const nvisy = new Nvisy({ apiToken: "your-api-token" });
  * ```
  */
 export interface ClientConfig {
@@ -45,15 +39,17 @@ export interface ClientConfig {
 	 * API token for authentication, sent as `Authorization: Bearer <token>`.
 	 *
 	 * Tokens can be obtained from the Nvisy dashboard or the api-tokens endpoint.
-	 * Omit it to authenticate with a browser session instead (see `credentials`).
+	 * Required by the authenticated {@link Nvisy} client; omitted by the guest
+	 * client (which authenticates with a cookie session, if any — see
+	 * `credentials`).
 	 */
 	apiToken?: string;
 
 	/**
 	 * Credentials mode for every request, forwarded to `fetch`.
 	 *
-	 * Set to `"include"` to send the session cookies established by the
-	 * standalone `login` / `signup` (needed for cross-origin browser sessions).
+	 * Set to `"include"` to send the session cookies established by the guest
+	 * client's `login` / `signup` (needed for cross-origin browser sessions).
 	 * Defaults to the platform's `fetch` default when omitted.
 	 */
 	credentials?: RequestCredentials;

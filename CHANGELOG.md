@@ -8,6 +8,38 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.54.0] - 2026-09-15
+
+### Added
+
+- `NvisyGuest`, a dedicated pre-auth client exported from `@nvisy/sdk/guest`,
+  for the endpoints that work without an API token: `guest.auth`
+  (`loginAccount`, `signupAccount`, `startOidcSignIn`), `guest.capabilities`
+  (`getAuthCapabilities`), and `guest.health` (`checkHealth`, `checkLiveness`,
+  `checkReadiness`). This fixes the auth capabilities and health probes being
+  reachable only through the authenticated client
+- `reviews.unassignReviewer(workspaceId, reviewId, accountId)` removes a
+  reviewer from a review
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** review assignment is now a path-addressed subcollection.
+  `reviews.assignReview(ws, reviewId, body)` is replaced by
+  `reviews.assignReviewer(ws, reviewId, accountId)`; the `AssignWorkspaceReview`
+  datatype is removed
+- **Breaking:** the `Nvisy` client again requires an `apiToken`. Pre-auth flows
+  (login / signup / OIDC start, auth capabilities, health) moved to `NvisyGuest`.
+  Sign-in methods (`loginAccount`, `signupAccount`, `startOidcSignIn`) are no
+  longer on `nvisy.auth`; `nvisy.auth` now covers `logoutAccount` and
+  `mintDesktopToken`
+
+### Removed
+
+- **Breaking:** the `@nvisy/sdk/standalone` entry and its free functions
+  (`login`, `signup`, `startOidcSignIn`, `getAuthCapabilities`, `checkHealth`).
+  Use `NvisyGuest` from `@nvisy/sdk/guest` instead
+
 ## [0.53.0] - 2026-09-15
 
 ### Added
@@ -1154,7 +1186,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.53.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.54.0...HEAD
+[0.54.0]: https://github.com/nvisycom/sdk-ts/compare/v0.53.0...v0.54.0
 [0.53.0]: https://github.com/nvisycom/sdk-ts/compare/v0.52.0...v0.53.0
 [0.52.0]: https://github.com/nvisycom/sdk-ts/compare/v0.51.0...v0.52.0
 [0.51.0]: https://github.com/nvisycom/sdk-ts/compare/v0.50.0...v0.51.0

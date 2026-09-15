@@ -1,6 +1,5 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	AssignWorkspaceReview,
 	CreateWorkspaceReview,
 	CursorPagination,
 	WorkspaceReview,
@@ -102,23 +101,44 @@ export class Reviews {
 	}
 
 	/**
-	 * Assign (or reassign) a review to a reviewer.
+	 * Assign a reviewer to a review (idempotent).
 	 * @param workspaceId - Workspace id
 	 * @param reviewId - Review ID
-	 * @param assignment - Review assignment request (assignee)
+	 * @param accountId - Account id of the reviewer to assign
 	 * @returns Promise that resolves with the updated review
 	 * @throws {ApiError} if the request fails
 	 */
-	async assignReview(
+	async assignReviewer(
 		workspaceId: string,
 		reviewId: string,
-		assignment: AssignWorkspaceReview,
+		accountId: string,
 	): Promise<WorkspaceReview> {
-		const { data } = await this.#api.PUT(
-			"/workspaces/{workspaceId}/reviews/{reviewId}/assign",
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceId}/reviews/{reviewId}/assignees/{accountId}",
 			{
-				params: { path: { workspaceId, reviewId } },
-				body: assignment,
+				params: { path: { workspaceId, reviewId, accountId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Remove a reviewer from a review.
+	 * @param workspaceId - Workspace id
+	 * @param reviewId - Review ID
+	 * @param accountId - Account id of the reviewer to remove
+	 * @returns Promise that resolves with the updated review
+	 * @throws {ApiError} if the request fails
+	 */
+	async unassignReviewer(
+		workspaceId: string,
+		reviewId: string,
+		accountId: string,
+	): Promise<WorkspaceReview> {
+		const { data } = await this.#api.DELETE(
+			"/workspaces/{workspaceId}/reviews/{reviewId}/assignees/{accountId}",
+			{
+				params: { path: { workspaceId, reviewId, accountId } },
 			},
 		);
 		return data!;
