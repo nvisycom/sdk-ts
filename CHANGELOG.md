@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.54.0] - 2026-09-15
+
+### Added
+
+- Standalone `getAuthCapabilities(config?)` (exported from `@nvisy/sdk/standalone`)
+  reads the deployment's available sign-in methods without an API token or a
+  client, so a login screen can render the right buttons before anyone signs in.
+  Fixes the auth capabilities being reachable only through the authenticated
+  client. Also remains available as `capabilities.getAuthCapabilities()`
+
 ## [0.53.0] - 2026-09-15
 
 ### Added
@@ -1154,7 +1164,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.53.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.54.0...HEAD
+[0.54.0]: https://github.com/nvisycom/sdk-ts/compare/v0.53.0...v0.54.0
 [0.53.0]: https://github.com/nvisycom/sdk-ts/compare/v0.52.0...v0.53.0
 [0.52.0]: https://github.com/nvisycom/sdk-ts/compare/v0.51.0...v0.52.0
 [0.51.0]: https://github.com/nvisycom/sdk-ts/compare/v0.50.0...v0.51.0
