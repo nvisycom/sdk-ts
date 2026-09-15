@@ -18,20 +18,16 @@
  * ```
  */
 
-import type { ClientConfig } from "@/config.js";
+import type { NvisyGuestOptions } from "@/config.js";
 import { type ApiClient, createApiClient, resolveDefaults } from "@/http.js";
 import { GuestAuth, GuestCapabilities, Status } from "@/services/index.js";
 
 /**
- * Configuration for {@link NvisyGuest}. Same as {@link ClientConfig} but without
- * `apiToken` — a guest client never authenticates with a bearer token. Pass
- * `credentials: "include"` to send the session cookies set by login / signup.
- */
-export type GuestConfig = Omit<ClientConfig, "apiToken">;
-
-/**
  * Pre-auth Nvisy client. Wraps a token-less {@link ApiClient} and exposes the
- * public surface: {@link GuestAuth}, {@link Capabilities}, and {@link Status}.
+ * public surface: {@link GuestAuth}, {@link GuestCapabilities}, and
+ * {@link Status}. Configured with the shared {@link NvisyGuestOptions} (no auth); a
+ * guest client never sends a token. Pass `credentials: "include"` to send the
+ * session cookies set by login / signup on a cross-origin app.
  */
 export class NvisyGuest {
 	/** The resolved base URL. @internal */
@@ -46,7 +42,7 @@ export class NvisyGuest {
 	 * @param config - Optional configuration (baseUrl, credentials, headers,
 	 *   userAgent, fetch)
 	 */
-	constructor(config: GuestConfig = {}) {
+	constructor(config: NvisyGuestOptions = {}) {
 		const resolved = resolveDefaults(config);
 		this.#baseUrl = resolved.baseUrl;
 		this.#api = createApiClient({

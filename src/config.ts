@@ -24,36 +24,11 @@ export const VERSION =
 	typeof __SDK_VERSION__ === "string" ? __SDK_VERSION__ : "0.0.0-dev";
 
 /**
- * Configuration for a Nvisy client. The authenticated {@link Nvisy} client
- * requires `apiToken`; the pre-auth `NvisyGuest` client (`@nvisy/sdk/guest`)
- * uses the same fields minus `apiToken`. All other fields are optional and use
- * sensible defaults.
- *
- * @example
- * ```typescript
- * const nvisy = new Nvisy({ apiToken: "your-api-token" });
- * ```
+ * Options for the pre-auth {@link NvisyGuest} client — the transport settings
+ * shared by every client, with no authentication. All fields are optional and
+ * use sensible defaults.
  */
-export interface ClientConfig {
-	/**
-	 * API token for authentication, sent as `Authorization: Bearer <token>`.
-	 *
-	 * Tokens can be obtained from the Nvisy dashboard or the api-tokens endpoint.
-	 * Required by the authenticated {@link Nvisy} client; omitted by the guest
-	 * client (which authenticates with a cookie session, if any — see
-	 * `credentials`).
-	 */
-	apiToken?: string;
-
-	/**
-	 * Credentials mode for every request, forwarded to `fetch`.
-	 *
-	 * Set to `"include"` to send the session cookies established by the guest
-	 * client's `login` / `signup` (needed for cross-origin browser sessions).
-	 * Defaults to the platform's `fetch` default when omitted.
-	 */
-	credentials?: RequestCredentials;
-
+export interface NvisyGuestOptions {
 	/**
 	 * Base URL for the Nvisy API.
 	 *
@@ -64,9 +39,8 @@ export interface ClientConfig {
 	/**
 	 * Custom headers to include with every request.
 	 *
-	 * These headers are merged with the default headers (Content-Type, User-Agent,
-	 * and Authorization). Custom headers take precedence over defaults if there
-	 * are conflicts.
+	 * Merged over the default headers (Content-Type, User-Agent, and, for token
+	 * auth, Authorization). Custom headers take precedence on conflict.
 	 */
 	headers?: Record<string, string>;
 
@@ -78,9 +52,14 @@ export interface ClientConfig {
 	userAgent?: string;
 
 	/**
+	 * Credentials mode forwarded to `fetch`. Session auth sets this to
+	 * `"include"` automatically; set it here only to override the transport
+	 * behaviour (e.g. a same-origin app that wants a different mode).
+	 */
+	credentials?: RequestCredentials;
+
+	/**
 	 * Enable logging for requests and responses.
-	 *
-	 * When enabled, logs request method, URL, status, and timing to console.
 	 *
 	 * @default false
 	 */
@@ -98,10 +77,27 @@ export interface ClientConfig {
 }
 
 /**
- * Configuration for the authenticated {@link Nvisy} client: {@link ClientConfig}
- * with a required `apiToken`.
+ * Configuration for the authenticated {@link Nvisy} client. Authenticate one of
+ * two ways, chosen explicitly:
+ *
+ * - `apiToken` — send an API token as `Authorization: Bearer <token>`.
+ * - `session: true` — use the browser cookie session established by the guest
+ *   client's `login` / `signup`; requests are sent credentialed
+ *   (`credentials: "include"`).
+ *
+ * The two are mutually exclusive.
+ *
+ * @example
+ * ```typescript
+ * // API token
+ * new Nvisy({ apiToken: "your-api-token" });
+ *
+ * // Browser cookie session (after the guest client logged in)
+ * new Nvisy({ session: true });
+ * ```
  */
-export type NvisyConfig = ClientConfig & { apiToken: string };
+export type NvisyOptions = NvisyGuestOptions &
+	({ apiToken: string; session?: never } | { session: true; apiToken?: never });
 
 /**
  * Default configuration values used when options are not explicitly provided.

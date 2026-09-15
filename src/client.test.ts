@@ -50,13 +50,17 @@ describe("Nvisy", () => {
 			expect(() => new Nvisy({ apiToken: "" })).toThrow(NvisyError);
 		});
 
-		it("should throw when no API token is given", () => {
-			// @ts-expect-error apiToken is required on the authenticated client
+		it("should throw when neither apiToken nor session is given", () => {
+			// @ts-expect-error must provide either apiToken or session
 			expect(() => new Nvisy({})).toThrow(NvisyError);
+		});
+
+		it("should create a session-mode client", () => {
+			expect(() => new Nvisy({ session: true })).not.toThrow();
 		});
 	});
 
-	describe("authentication headers", () => {
+	describe("authentication", () => {
 		beforeEach(() => {
 			vi.mocked(createClient).mockClear();
 		});
@@ -77,6 +81,15 @@ describe("Nvisy", () => {
 			expect(createClient).toHaveBeenCalledWith(
 				expect.objectContaining({ credentials: "include" }),
 			);
+		});
+
+		it("should omit Authorization and default credentials to include for a session", () => {
+			new Nvisy({ session: true });
+			const [call] = vi.mocked(createClient).mock.calls[0] as [
+				{ headers: Record<string, string>; credentials?: string },
+			];
+			expect(call.headers.Authorization).toBeUndefined();
+			expect(call.credentials).toBe("include");
 		});
 	});
 

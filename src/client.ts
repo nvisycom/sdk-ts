@@ -13,7 +13,7 @@
  * ```
  */
 
-import type { NvisyConfig } from "@/config.js";
+import type { NvisyOptions } from "@/config.js";
 import { NvisyError } from "@/errors.js";
 import { type ApiClient, createApiClient, resolveDefaults } from "@/http.js";
 import {
@@ -59,7 +59,7 @@ export type { ApiClient } from "@/http.js";
  */
 export class Nvisy {
 	/** The config this client was built from (for {@link withApiToken}). @internal */
-	readonly #config: NvisyConfig;
+	readonly #config: NvisyOptions;
 
 	/** The resolved base URL. @internal */
 	readonly #baseUrl: string;
@@ -73,26 +73,36 @@ export class Nvisy {
 	/**
 	 * Creates a new authenticated Nvisy client.
 	 *
-	 * Requires an `apiToken` (sent as `Authorization: Bearer <token>`). For the
+	 * Authenticate with an `apiToken` (bearer) or `session: true` (the browser
+	 * cookie session established by the guest client's login / signup). For the
 	 * pre-auth surface (login / signup / OIDC start, auth capabilities, health),
 	 * use {@link NvisyGuest} from `@nvisy/sdk/guest`.
 	 *
-	 * @param config - Configuration options with a required `apiToken`
-	 * @throws {NvisyError} If the API token is missing or invalid
+	 * @param config - Configuration; provide either `apiToken` or `session: true`
+	 * @throws {NvisyError} If an `apiToken` is provided but invalid
 	 *
 	 * @example
 	 * ```typescript
 	 * const nvisy = new Nvisy({ apiToken: "your-api-token" });
-	 * const account = await nvisy.account.getAccount();
+	 * // or, after a browser login:
+	 * const nvisy = new Nvisy({ session: true });
 	 * ```
 	 */
-	constructor(config: NvisyConfig) {
+	constructor(config: NvisyOptions) {
 		this.#config = config;
 		const resolved = resolveDefaults(config);
 		this.#baseUrl = resolved.baseUrl;
+
+		const usesSession = config.session === true;
 		this.#api = createApiClient({
-			apiToken: this.#validateApiToken(config.apiToken),
-			credentials: config.credentials,
+			apiToken: usesSession
+				? undefined
+				: this.#validateApiToken(config.apiToken),
+			// Session auth sends cookies; default to "include" unless the caller
+			// overrode `credentials` explicitly.
+			credentials: usesSession
+				? (config.credentials ?? "include")
+				: config.credentials,
 			fetch: config.fetch,
 			...resolved,
 		});
@@ -106,7 +116,7 @@ export class Nvisy {
 	 * @throws {NvisyError} If the API token is invalid
 	 * @internal
 	 */
-	#validateApiToken(apiToken: string): string {
+	#validateApiToken(apiToken: string | undefined): string {
 		if (typeof apiToken !== "string" || apiToken.trim().length === 0) {
 			throw new NvisyError("API token must be a non-empty string");
 		}
@@ -144,7 +154,17 @@ export class Nvisy {
 	 * ```
 	 */
 	withApiToken(apiToken: string): Nvisy {
-		return new Nvisy({ ...this.#config, apiToken });
+		const { baseUrl, headers, userAgent, credentials, withLogging, fetch } =
+			this.#config;
+		return new Nvisy({
+			apiToken,
+			baseUrl,
+			headers,
+			userAgent,
+			credentials,
+			withLogging,
+			fetch,
+		});
 	}
 
 	/**
