@@ -38,6 +38,7 @@ import {
 	Policies,
 	Providers,
 	Redactions,
+	Reviews,
 	Status,
 	Syncs,
 	Threads,
@@ -372,6 +373,13 @@ export class Nvisy {
 	 */
 	get redactions(): Redactions {
 		return new Redactions(this.#api);
+	}
+
+	/**
+	 * Service for document reviews (assigning documents to reviewers).
+	 */
+	get reviews(): Reviews {
+		return new Reviews(this.#api);
 	}
 
 	/**

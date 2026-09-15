@@ -14,6 +14,7 @@ export { Pipelines } from "@/services/pipelines.js";
 export { Policies } from "@/services/policies.js";
 export { Providers } from "@/services/providers.js";
 export { Redactions } from "@/services/redactions.js";
+export { Reviews } from "@/services/reviews.js";
 export { Status } from "@/services/status.js";
 export { Syncs } from "@/services/syncs.js";
 export { Threads } from "@/services/threads.js";

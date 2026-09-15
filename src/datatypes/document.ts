@@ -15,7 +15,3 @@ export type WorkspaceDocumentPage = Schemas["WorkspaceDocumentPage"];
 // Bulk deletion.
 export type DeleteWorkspaceDocuments = Schemas["DeleteWorkspaceDocuments"];
 export type WorkspaceDeletedDocuments = Schemas["WorkspaceDeletedDocuments"];
-
-// Document review: assigning a document to a reviewer and its review status.
-export type AssignWorkspaceReview = Schemas["AssignWorkspaceReview"];
-export type ReviewStatus = Schemas["ReviewStatus"];
