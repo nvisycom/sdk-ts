@@ -8,6 +8,21 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.55.0] - 2026-09-15
+
+### Changed
+
+- **Breaking:** the authenticated `Nvisy` client now authenticates explicitly
+  with either `apiToken` or `session: true` (mutually exclusive at the type
+  level). `session: true` uses the browser cookie session established by the
+  guest client's login / signup and sends credentialed requests automatically
+  (`credentials: "include"`). This restores driving the full authenticated API
+  from a browser session, which the 0.54.0 apiToken-required change had removed
+- **Breaking:** the client config types are renamed for consistency:
+  `ClientConfig` / `NvisyConfig` → `NvisyOptions` (the authenticated client) and
+  `NvisyGuestOptions` (the guest client, transport-only). The `GuestConfig` alias
+  is removed — `NvisyGuest` takes `NvisyGuestOptions`
+
 ## [0.54.0] - 2026-09-15
 
 ### Added
@@ -1186,7 +1201,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.54.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.55.0...HEAD
+[0.55.0]: https://github.com/nvisycom/sdk-ts/compare/v0.54.0...v0.55.0
 [0.54.0]: https://github.com/nvisycom/sdk-ts/compare/v0.53.0...v0.54.0
 [0.53.0]: https://github.com/nvisycom/sdk-ts/compare/v0.52.0...v0.53.0
 [0.52.0]: https://github.com/nvisycom/sdk-ts/compare/v0.51.0...v0.52.0

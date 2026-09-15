@@ -4,4 +4,5 @@
  * @module guest
  */
 
-export { type GuestConfig, NvisyGuest } from "@/guest/client.js";
+export type { NvisyGuestOptions } from "@/config.js";
+export { NvisyGuest } from "@/guest/client.js";
