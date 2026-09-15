@@ -1,17 +1,15 @@
 import type { ApiClient } from "@/client.js";
 import type {
-	AssignWorkspaceReview,
 	CursorPagination,
 	ListWorkspaceDocuments,
 	UpdateWorkspaceDocument,
 	WorkspaceDeletedDocuments,
 	WorkspaceDocument,
 	WorkspaceDocumentPage,
-	WorkspaceThread,
 } from "@/datatypes/index.js";
 
 /**
- * Service for handling document operations, including review assignment.
+ * Service for handling document operations.
  */
 export class Documents {
 	#api: ApiClient;
@@ -173,49 +171,6 @@ export class Documents {
 			{
 				params: { path: { workspaceId } },
 				body: { documentIds },
-			},
-		);
-		return data!;
-	}
-
-	/**
-	 * Assign a document for review, opening a review thread.
-	 * @param workspaceId - Workspace id
-	 * @param documentId - Document ID
-	 * @param assignment - Review assignment request
-	 * @returns Promise that resolves with the review thread
-	 * @throws {ApiError} if the request fails
-	 */
-	async assignReview(
-		workspaceId: string,
-		documentId: string,
-		assignment: AssignWorkspaceReview,
-	): Promise<WorkspaceThread> {
-		const { data } = await this.#api.PUT(
-			"/workspaces/{workspaceId}/documents/{documentId}/review/assign",
-			{
-				params: { path: { workspaceId, documentId } },
-				body: assignment,
-			},
-		);
-		return data!;
-	}
-
-	/**
-	 * Mark a document's review as verified (resolved).
-	 * @param workspaceId - Workspace id
-	 * @param documentId - Document ID
-	 * @returns Promise that resolves with the review thread
-	 * @throws {ApiError} if the request fails
-	 */
-	async verifyReview(
-		workspaceId: string,
-		documentId: string,
-	): Promise<WorkspaceThread> {
-		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/documents/{documentId}/review/verify",
-			{
-				params: { path: { workspaceId, documentId } },
 			},
 		);
 		return data!;

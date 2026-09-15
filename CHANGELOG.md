@@ -8,6 +8,27 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.53.0] - 2026-09-15
+
+### Added
+
+- `nvisy.reviews` service for document reviews as a first-class resource:
+  `listForDocument`, `createForDocument`, `listReviews`, `getReview`,
+  `assignReview`, `verifyReview`, `reopenReview`, `getTimeline`, `linkDetection`,
+  and `linkRedaction`, with the review datatypes (`WorkspaceReview`,
+  `CreateWorkspaceReview`, `WorkspaceReviewPage`, `WorkspaceReviewEvent`,
+  `WorkspaceReviewEventPage`, `WorkspaceReviewsQuery`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** document review moved from the documents service to the new
+  reviews service. `documents.assignReview` / `documents.verifyReview` are
+  removed; use `reviews.assignReview` / `reviews.verifyReview` (which now act on
+  a review id, via `reviews.createForDocument` first). The `AssignWorkspaceReview`
+  and `ReviewStatus` datatypes moved from the document datatypes to the review
+  datatypes (same names, same import path via the package root)
+
 ## [0.52.0] - 2026-09-14
 
 ### Added
@@ -1133,7 +1154,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.52.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.53.0...HEAD
+[0.53.0]: https://github.com/nvisycom/sdk-ts/compare/v0.52.0...v0.53.0
 [0.52.0]: https://github.com/nvisycom/sdk-ts/compare/v0.51.0...v0.52.0
 [0.51.0]: https://github.com/nvisycom/sdk-ts/compare/v0.50.0...v0.51.0
 [0.50.0]: https://github.com/nvisycom/sdk-ts/compare/v0.49.0...v0.50.0

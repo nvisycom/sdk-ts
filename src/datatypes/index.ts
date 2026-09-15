@@ -20,6 +20,7 @@ export type * from "@/datatypes/pagination.js";
 export type * from "@/datatypes/pipeline.js";
 export type * from "@/datatypes/policy.js";
 export type * from "@/datatypes/provider.js";
+export type * from "@/datatypes/review.js";
 export type * from "@/datatypes/scope.js";
 export type * from "@/datatypes/thread.js";
 export type * from "@/datatypes/webhook.js";
