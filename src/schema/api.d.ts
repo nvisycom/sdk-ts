@@ -2437,7 +2437,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads": {
+	"/workspaces/{workspaceId}/reviews": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -2445,8 +2445,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List threads
-		 * @description Returns the workspace's threads, most recent first, with optional author and open/closed filters.
+		 * List reviews
+		 * @description Returns the workspace's reviews, most recent first, with optional document, author, assignee, and review-status filters (the review queue). Requires ViewReviews.
 		 */
 		get: {
 			parameters: {
@@ -2464,10 +2464,14 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by the thread's opening author (account id). */
+					/** @description Filter by the assigned reviewer (account id). */
+					assignee?: string;
+					/** @description Filter by the review's opening author (account id). */
 					author?: string;
-					/** @description Filter by open/closed state: `true` = closed only, `false` = open only. */
-					closed?: boolean;
+					/** @description Filter to the reviews of a specific document. */
+					documentId?: string;
+					/** @description Filter by review status. */
+					reviewStatus?: components["schemas"]["ReviewStatus"];
 				};
 				header?: never;
 				path: {
@@ -2490,7 +2494,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspaceThreadPage"];
+						"application/json": components["schemas"]["WorkspaceReviewPage"];
 					};
 				};
 				/**
@@ -2534,9 +2538,109 @@ export interface paths {
 			};
 		};
 		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/documents/{documentId}/reviews": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
 		/**
-		 * Open a workspace thread
-		 * @description Opens a workspace-level discussion thread (not tied to any document) with its first message. @username mentions notify those members. Requires the Review permission.
+		 * List a document's reviews
+		 * @description Returns a document's reviews, most recent first. Requires ViewReviews.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceReview"][];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Open a review
+		 * @description Opens a review on a document, with a title. A document may have many reviews. Requires Review.
 		 */
 		post: {
 			parameters: {
@@ -2545,33 +2649,30 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
+					/** @description Unique identifier of the document. */
+					documentId: string;
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Request payload to open a workspace discussion thread with its first message.
-			 *
-			 *     A workspace thread is free-form discussion pinned to no document; document
-			 *     reviews are auto-created on detection, not opened by hand. `@username`
-			 *     mentions in the opening body notify those members.
-			 */
+			/** @description Request payload to open a review on a document. */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["OpenWorkspaceThread"];
+					"application/json": components["schemas"]["CreateWorkspaceReview"];
 				};
 			};
 			responses: {
 				/**
-				 * @description Response type for a thread: a discussion with an author, an optional title, and
-				 *     an open/closed lifecycle. Its stream is a [`WorkspaceThreadEntry`] timeline. A
-				 *     document review (see the reviews endpoints) references a thread by its id.
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				201: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspaceThread"];
+						"application/json": components["schemas"]["WorkspaceReview"];
 					};
 				};
 				/**
@@ -2631,6 +2732,25 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
 				/** @description Expected request with `Content-Type: application/json` */
 				415: {
 					headers: {
@@ -2657,19 +2777,109 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads/{threadId}": {
+	"/workspaces/{workspaceId}/reviews/{reviewId}": {
 		parameters: {
 			query?: never;
 			header?: never;
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
+		/**
+		 * Get a review
+		 * @description Returns a review by id. Requires ViewReviews.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceReview"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		put?: never;
 		post?: never;
 		/**
-		 * Delete a thread
-		 * @description Soft-deletes a thread and all of its comments. Requires ManageThreads.
+		 * Delete a review
+		 * @description Soft-deletes a review and all of its comments. Requires ManageReviews.
 		 */
 		delete: {
 			parameters: {
@@ -2678,8 +2888,8 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Unique identifier of the thread. */
-					threadId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
 				};
 				cookie?: never;
 			};
@@ -2754,8 +2964,8 @@ export interface paths {
 		options?: never;
 		head?: never;
 		/**
-		 * Rename a thread
-		 * @description Sets or clears a thread's title. Requires ManageThreads.
+		 * Rename a review
+		 * @description Sets a review's title. Requires ManageReviews.
 		 */
 		patch: {
 			parameters: {
@@ -2764,29 +2974,30 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Unique identifier of the thread. */
-					threadId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
 				};
 				cookie?: never;
 			};
-			/** @description Request payload to rename a thread (set or clear its title). */
+			/** @description Request payload to rename a review (set its title). */
 			requestBody: {
 				content: {
-					"application/json": components["schemas"]["RenameWorkspaceThread"];
+					"application/json": components["schemas"]["RenameWorkspaceReview"];
 				};
 			};
 			responses: {
 				/**
-				 * @description Response type for a thread: a discussion with an author, an optional title, and
-				 *     an open/closed lifecycle. Its stream is a [`WorkspaceThreadEntry`] timeline. A
-				 *     document review (see the reviews endpoints) references a thread by its id.
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspaceThread"];
+						"application/json": components["schemas"]["WorkspaceReview"];
 					};
 				};
 				/**
@@ -2887,322 +3098,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/threads/{threadId}/close": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Close a thread
-		 * @description Closes a thread, ending the discussion. Requires ManageThreads.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Unique identifier of the thread. */
-					threadId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Response type for a thread: a discussion with an author, an optional title, and
-				 *     an open/closed lifecycle. Its stream is a [`WorkspaceThreadEntry`] timeline. A
-				 *     document review (see the reviews endpoints) references a thread by its id.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceThread"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		/**
-		 * Reopen a thread
-		 * @description Reopens a closed thread. Requires ManageThreads.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Unique identifier of the thread. */
-					threadId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Response type for a thread: a discussion with an author, an optional title, and
-				 *     an open/closed lifecycle. Its stream is a [`WorkspaceThreadEntry`] timeline. A
-				 *     document review (see the reviews endpoints) references a thread by its id.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceThread"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/threads/{threadId}/timeline": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List a thread's timeline
-		 * @description Returns the thread's timeline — comments and lifecycle events (opened, closed, reopened, renamed) interleaved, oldest first, with cursor pagination.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string;
-					/**
-					 * @description Whether to include the total item count in the response's `total` field.
-					 *     Defaults to `false`, since counting is an extra query; set it to `true`
-					 *     only when the count is actually needed.
-					 */
-					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-				};
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Unique identifier of the thread. */
-					threadId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *     Provides a consistent structure for all paginated API responses with
-				 *     cursor-based pagination support. When `next_cursor` is present, there
-				 *     are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceThreadEntryPage"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/threads/{threadId}/comments": {
+	"/workspaces/{workspaceId}/reviews/{reviewId}/comments": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3213,7 +3109,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Post a comment
-		 * @description Posts a comment (message) in a thread. @username mentions notify those members. Requires the Review permission. Returns 409 if the thread is closed.
+		 * @description Posts a comment (message) in a review. @username mentions notify those members. Requires the Review permission. Returns 409 if the review is resolved.
 		 */
 		post: {
 			parameters: {
@@ -3222,13 +3118,13 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Unique identifier of the thread. */
-					threadId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
 				};
 				cookie?: never;
 			};
 			/**
-			 * @description Request payload to post a comment (message) in a thread.
+			 * @description Request payload to post a comment (message) in a review.
 			 *
 			 *     `@username` mentions in the body notify those workspace members.
 			 */
@@ -3238,7 +3134,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response type for a comment: one message within a thread. */
+				/** @description Response type for a comment: one message within a review's discussion. */
 				201: {
 					headers: {
 						[name: string]: unknown;
@@ -3487,7 +3383,7 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response type for a comment: one message within a thread. */
+				/** @description Response type for a comment: one message within a review's discussion. */
 				200: {
 					headers: {
 						[name: string]: unknown;
@@ -3594,7 +3490,7 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/reviews": {
+	"/workspaces/{workspaceId}/reviews/{reviewId}/timeline": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3602,8 +3498,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List reviews
-		 * @description Returns the workspace's reviews, most recent first, with optional document, assignee, and review-status filters (the review queue). Requires ViewReviews.
+		 * List a review's timeline
+		 * @description Returns the review's timeline — comments and lifecycle events (opened, renamed, linked, assigned, verified, reopened) interleaved, oldest first, with cursor pagination. Requires ViewReviews.
 		 */
 		get: {
 			parameters: {
@@ -3621,17 +3517,13 @@ export interface paths {
 					includeCount?: boolean;
 					/** @description The maximum number of records to return (1-100, default: 20). */
 					limit?: number;
-					/** @description Filter by the assigned reviewer (account id). */
-					assignee?: string;
-					/** @description Filter to the reviews of a specific document. */
-					documentId?: string;
-					/** @description Filter by review status. */
-					reviewStatus?: components["schemas"]["ReviewStatus"];
 				};
 				header?: never;
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
 				};
 				cookie?: never;
 			};
@@ -3649,330 +3541,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspaceReviewPage"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/documents/{documentId}/reviews": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List a document's reviews
-		 * @description Returns a document's reviews, most recent first. Requires ViewReviews.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Unique identifier of the document. */
-					documentId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceReview"][];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Open a document review
-		 * @description Opens a review on a document, with an optional purpose label. A document may have many reviews (one per purpose). Requires Review.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Unique identifier of the document. */
-					documentId: string;
-				};
-				cookie?: never;
-			};
-			/** @description Request payload to open a review on a document. */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateWorkspaceReview"];
-				};
-			};
-			responses: {
-				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
-				 */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceReview"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/reviews/{reviewId}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get a review
-		 * @description Returns a review by id. Requires ViewReviews.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Unique identifier of the review. */
-					reviewId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceReview"];
+						"application/json": components["schemas"]["WorkspaceReviewEntryPage"];
 					};
 				};
 				/**
@@ -4042,7 +3611,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/reviews/{reviewId}/timeline": {
+	"/workspaces/{workspaceId}/reviews/{reviewId}/events": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -4050,8 +3619,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List a review's timeline
-		 * @description Returns a review's activity timeline (links, assignment, verification, reopen), oldest first. Requires ViewReviews.
+		 * List a review's events
+		 * @description Returns a review's activity events only (links, assignment, verification, reopen), oldest first. Requires ViewReviews.
 		 */
 		get: {
 			parameters: {
@@ -4191,12 +3760,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
 					headers: {
@@ -4318,12 +3885,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
 					headers: {
@@ -4428,12 +3993,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
 					headers: {
@@ -4523,12 +4086,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
 					headers: {
@@ -4632,12 +4193,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
 					headers: {
@@ -4742,12 +4301,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a document's review.
-				 *
-				 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-				 *     document), opened explicitly. It owns a discussion thread (referenced by
-				 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-				 *     `assignees` (0..N reviewers).
+				 * @description Response type for a review: a named discussion on a document with a manual
+				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
 					headers: {
@@ -14923,6 +14480,31 @@ export interface components {
 			| {
 					data: components["schemas"]["ReviewActivityParams"];
 					/** @constant */
+					type: "review.opened";
+			  }
+			| {
+					data: components["schemas"]["ReviewActivityParams"];
+					/** @constant */
+					type: "review.reopened";
+			  }
+			| {
+					data: components["schemas"]["ReviewActivityParams"];
+					/** @constant */
+					type: "review.renamed";
+			  }
+			| {
+					data: components["schemas"]["ReviewActivityParams"];
+					/** @constant */
+					type: "review.deleted";
+			  }
+			| {
+					data: components["schemas"]["ReviewCommentActivityParams"];
+					/** @constant */
+					type: "review.comment.created";
+			  }
+			| {
+					data: components["schemas"]["ReviewActivityParams"];
+					/** @constant */
 					type: "review.verified";
 			  }
 			| {
@@ -14984,36 +14566,6 @@ export interface components {
 					data: components["schemas"]["PolicyActivityParams"];
 					/** @constant */
 					type: "policy.deleted";
-			  }
-			| {
-					data: components["schemas"]["ThreadActivityParams"];
-					/** @constant */
-					type: "thread.opened";
-			  }
-			| {
-					data: components["schemas"]["ThreadActivityParams"];
-					/** @constant */
-					type: "thread.closed";
-			  }
-			| {
-					data: components["schemas"]["ThreadActivityParams"];
-					/** @constant */
-					type: "thread.reopened";
-			  }
-			| {
-					data: components["schemas"]["ThreadActivityParams"];
-					/** @constant */
-					type: "thread.renamed";
-			  }
-			| {
-					data: components["schemas"]["ThreadActivityParams"];
-					/** @constant */
-					type: "thread.deleted";
-			  }
-			| {
-					data: components["schemas"]["ThreadCommentActivityParams"];
-					/** @constant */
-					type: "thread.comment.created";
 			  };
 		/**
 		 * @description The type of activity performed in a workspace, for audit logging.
@@ -15047,6 +14599,11 @@ export interface components {
 			| "document.created"
 			| "document.updated"
 			| "document.deleted"
+			| "review.opened"
+			| "review.reopened"
+			| "review.renamed"
+			| "review.deleted"
+			| "review.comment.created"
 			| "review.verified"
 			| "review.assigned"
 			| "review.unassigned"
@@ -15059,13 +14616,7 @@ export interface components {
 			| "pipeline.redaction.created"
 			| "policy.created"
 			| "policy.updated"
-			| "policy.deleted"
-			| "thread.opened"
-			| "thread.closed"
-			| "thread.reopened"
-			| "thread.renamed"
-			| "thread.deleted"
-			| "thread.comment.created";
+			| "policy.deleted";
 		/**
 		 * @description The type of API token, for authentication and tracking.
 		 *
@@ -16012,9 +15563,9 @@ export interface components {
 			commentId: string;
 			/**
 			 * Format: uuid
-			 * @description Id of the thread the comment is in.
+			 * @description Id of the review the comment is in.
 			 */
-			threadId: string;
+			reviewId: string;
 		};
 		/** @description Health of a single service component. */
 		ComponentHealth: {
@@ -16216,7 +15767,7 @@ export interface components {
 			settings?: components["schemas"]["WorkspaceSettings"];
 		};
 		/**
-		 * @description Request payload to post a comment (message) in a thread.
+		 * @description Request payload to post a comment (message) in a review.
 		 *
 		 *     `@username` mentions in the body notify those workspace members.
 		 */
@@ -16365,8 +15916,8 @@ export interface components {
 		};
 		/** @description Request payload to open a review on a document. */
 		CreateWorkspaceReview: {
-			/** @description Optional free-text label for the review's purpose/audience (1-255 chars). */
-			purpose?: string;
+			/** @description The review's title (1-255 characters). */
+			displayName: string;
 		};
 		/** @description Request payload for creating a new workspace webhook. */
 		CreateWorkspaceWebhook: {
@@ -18266,22 +17817,6 @@ export interface components {
 			authorizeUrl: string;
 		};
 		/**
-		 * @description Request payload to open a workspace discussion thread with its first message.
-		 *
-		 *     A workspace thread is free-form discussion pinned to no document; document
-		 *     reviews are auto-created on detection, not opened by hand. `@username`
-		 *     mentions in the opening body notify those members.
-		 */
-		OpenWorkspaceThread: {
-			/** @description The opening message text (1-10000 characters). */
-			body: string;
-			/**
-			 * @description Optional title for the thread (1-255 characters). Omit for an untitled
-			 *     thread.
-			 */
-			displayName?: string;
-		};
-		/**
 		 * @description Identifies a redaction operator, for the redaction audit a higher
 		 *     layer assembles.
 		 *
@@ -19022,13 +18557,11 @@ export interface components {
 			 */
 			provider: string;
 		};
-		/** @description Request payload to rename a thread (set or clear its title). */
-		RenameWorkspaceThread: {
+		/** @description Request payload to rename a review (set its title). */
+		RenameWorkspaceReview: {
 			/**
-			 * @description The new title (1-255 characters), or `null` to clear it. Omitting the
-			 *     field leaves the current title unchanged; only an explicit `null` clears
-			 *     it. The outer `Option` distinguishes "absent" (`None`) from "explicit
-			 *     null" (`Some(None)`).
+			 * @description The new title (1-255 characters). Omitting the field leaves the current
+			 *     title unchanged.
 			 */
 			displayName?: string;
 		};
@@ -19142,14 +18675,15 @@ export interface components {
 			redactedDocuments?: components["schemas"]["Retention"];
 		};
 		/**
-		 * @description Params of a document-review activity (`review.verified`, `review.assigned`,
-		 *     `review.unassigned`), where the review is the document's thread.
+		 * @description Params of a review activity (`review.opened`, `review.reopened`,
+		 *     `review.renamed`, `review.deleted`, `review.verified`, `review.assigned`,
+		 *     `review.unassigned`).
 		 */
 		ReviewActivityParams: {
 			/**
 			 * Format: uuid
-			 * @description Id of the reviewer the review is assigned to; omitted for verification or
-			 *     when clearing the assignee.
+			 * @description Id of the reviewer assigned or unassigned; omitted for the events that carry
+			 *     no reviewer.
 			 */
 			assigneeId?: string;
 			/**
@@ -19159,13 +18693,13 @@ export interface components {
 			documentId: string;
 			/**
 			 * Format: uuid
-			 * @description Id of the document's review thread.
+			 * @description Id of the review.
 			 */
-			threadId: string;
+			reviewId: string;
 		};
 		/**
-		 * @description Params of a `review.assigned` notification, sent to the reviewer a document's
-		 *     review was assigned to.
+		 * @description Params of a `review.assigned` notification, sent to the reviewer a review was
+		 *     assigned to.
 		 */
 		ReviewAssignedParams: {
 			/**
@@ -19177,19 +18711,34 @@ export interface components {
 			documentName?: string;
 			/**
 			 * Format: uuid
-			 * @description Id of the document's review thread.
+			 * @description Id of the review.
 			 */
-			threadId: string;
+			reviewId: string;
+		};
+		/** @description Params of a review-comment activity (`review.comment.created`). */
+		ReviewCommentActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the comment.
+			 */
+			commentId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the review the comment is in.
+			 */
+			reviewId: string;
 		};
 		/**
-		 * @description The kind of an entry in a document review's activity log.
+		 * @description The kind of a non-message entry in a review's timeline.
 		 *
-		 *     Corresponds to the `REVIEW_EVENT_KIND` `PostgreSQL` enum. A review's timeline
-		 *     records what was done to the review: artifacts referenced, the assignee
-		 *     changing, and the verification lifecycle. Distinct from a thread's discussion
-		 *     timeline ([`ThreadEventKind`](super::ThreadEventKind)).
+		 *     Corresponds to the `REVIEW_EVENT_KIND` `PostgreSQL` enum. A review's stream
+		 *     interleaves comments (messages) with these events: the lifecycle (opened,
+		 *     renamed, verified, reopened) and the sign-off workflow (detections and
+		 *     redactions referenced, assignment changes).
 		 */
 		ReviewEventKind:
+			| "review.opened"
+			| "review.renamed"
 			| "detection.linked"
 			| "redaction.linked"
 			| "assigned"
@@ -20921,40 +20470,6 @@ export interface components {
 			/** @description The rationale, when one was given. */
 			reason?: string;
 		};
-		/** @description Params of a comment-thread activity (`thread.*`). */
-		ThreadActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the thread.
-			 */
-			threadId: string;
-		};
-		/** @description Params of a thread-comment activity (`thread.comment.created`). */
-		ThreadCommentActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the comment.
-			 */
-			commentId: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the thread the comment is in.
-			 */
-			threadId: string;
-		};
-		/**
-		 * @description The kind of a non-message entry in a discussion thread's timeline.
-		 *
-		 *     Corresponds to the `THREAD_EVENT_KIND` `PostgreSQL` enum. A thread's stream
-		 *     interleaves comments (messages) with these events. A thread is a pure
-		 *     discussion primitive, so this is only the discussion lifecycle; review
-		 *     activity lives in [`ReviewEventKind`](super::ReviewEventKind).
-		 */
-		ThreadEventKind:
-			| "thread.opened"
-			| "thread.closed"
-			| "thread.reopened"
-			| "thread.renamed";
 		/**
 		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
 		 *
@@ -21357,6 +20872,9 @@ export interface components {
 			| "provider.created"
 			| "provider.updated"
 			| "provider.deleted"
+			| "review.opened"
+			| "review.renamed"
+			| "review.reopened"
 			| "review.verified"
 			| "review.assigned"
 			| "review.unassigned"
@@ -21369,11 +20887,7 @@ export interface components {
 			| "pipeline.redaction.created"
 			| "policy.created"
 			| "policy.updated"
-			| "policy.deleted"
-			| "thread.opened"
-			| "thread.closed"
-			| "thread.reopened"
-			| "thread.renamed";
+			| "policy.deleted";
 		/** @description Opaque whk identifier (whk_<uuid>). */
 		WebhookId: string;
 		/**
@@ -21526,7 +21040,7 @@ export interface components {
 			/** @description Inference token usage: workspace totals and a per-model breakdown. */
 			usage: components["schemas"]["WorkspaceUsageAnalytics"];
 		};
-		/** @description Response type for a comment: one message within a thread. */
+		/** @description Response type for a comment: one message within a review's discussion. */
 		WorkspaceComment: {
 			/** @description Account that wrote the message. */
 			author: components["schemas"]["AccountRef"];
@@ -21544,16 +21058,16 @@ export interface components {
 			id: string;
 			/**
 			 * Format: uuid
-			 * @description Thread this message belongs to.
+			 * @description Review this message belongs to.
 			 */
-			threadId: string;
+			reviewId: string;
 			/**
 			 * Format: date-time
 			 * @description When the comment was last updated.
 			 */
 			updatedAt: string;
 		};
-		/** @description Path parameters addressing one comment by its opaque id. */
+		/** @description Path parameters addressing one comment by its id. */
 		WorkspaceCommentPathParams: {
 			/**
 			 * Format: uuid
@@ -22640,21 +22154,23 @@ export interface components {
 			total?: number;
 		};
 		/**
-		 * @description Response type for a document's review.
-		 *
-		 *     A review is an optional, purpose-scoped sign-off effort on a document (0..N per
-		 *     document), opened explicitly. It owns a discussion thread (referenced by
-		 *     `threadId`) and carries a `reviewStatus`, an optional `purpose`, and its
-		 *     `assignees` (0..N reviewers).
+		 * @description Response type for a review: a named discussion on a document with a manual
+		 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+		 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+		 *     stream is a [`WorkspaceReviewEntry`] timeline.
 		 */
 		WorkspaceReview: {
 			/** @description The reviewers assigned to this review (empty when unassigned). */
 			assignees: components["schemas"]["AccountRef"][];
+			/** @description Account that opened the review. */
+			author: components["schemas"]["AccountRef"];
 			/**
 			 * Format: date-time
 			 * @description When the review was created.
 			 */
 			createdAt: string;
+			/** @description The review's title. */
+			displayName: string;
 			/**
 			 * Format: uuid
 			 * @description Document under review.
@@ -22665,15 +22181,8 @@ export interface components {
 			 * @description Unique identifier of the review.
 			 */
 			id: string;
-			/** @description Optional purpose/audience label. */
-			purpose?: string;
 			/** @description The review's current status. */
 			reviewStatus: components["schemas"]["ReviewStatus"];
-			/**
-			 * Format: uuid
-			 * @description Discussion thread this review owns.
-			 */
-			threadId: string;
 			/**
 			 * Format: date-time
 			 * @description When the review was last updated.
@@ -22707,8 +22216,39 @@ export interface components {
 			reviewId: string;
 		};
 		/**
-		 * @description One entry in a review's activity timeline (a link, assignment, verification,
-		 *     or reopen).
+		 * @description One entry in a review's timeline: either a message or a lifecycle event, tagged
+		 *     so a client renders them interleaved in order.
+		 */
+		WorkspaceReviewEntry:
+			| ({
+					/** @constant */
+					type: "comment";
+			  } & components["schemas"]["WorkspaceComment"])
+			| ({
+					/** @constant */
+					type: "event";
+			  } & components["schemas"]["WorkspaceReviewEvent"]);
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceReviewEntryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceReviewEntry"][];
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+		};
+		/**
+		 * @description One non-message entry in a review timeline (opened, renamed, a detection or
+		 *     redaction linked, an assignment change, verified, or reopened).
 		 */
 		WorkspaceReviewEvent: {
 			/** @description Account that performed the action; `None` if that account was removed. */
@@ -22725,7 +22265,10 @@ export interface components {
 			id: string;
 			/** @description What happened. */
 			kind: components["schemas"]["ReviewEventKind"];
-			/** @description Event-specific detail (the linked id, the assignee); `None` when none. */
+			/**
+			 * @description Event-specific detail (the new name, a linked id, an assignee); `None` when
+			 *     none.
+			 */
 			target?: unknown;
 		};
 		/**
@@ -22797,6 +22340,11 @@ export interface components {
 			 * @description Filter by the assigned reviewer (account id).
 			 */
 			assignee?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the review's opening author (account id).
+			 */
+			author?: string;
 			/**
 			 * Format: uuid
 			 * @description Filter to the reviews of a specific document.
@@ -22907,133 +22455,6 @@ export interface components {
 			provider?: string[];
 			/** @description Filter by sync status. */
 			status?: components["schemas"]["SyncStatus"];
-		};
-		/**
-		 * @description Response type for a thread: a discussion with an author, an optional title, and
-		 *     an open/closed lifecycle. Its stream is a [`WorkspaceThreadEntry`] timeline. A
-		 *     document review (see the reviews endpoints) references a thread by its id.
-		 */
-		WorkspaceThread: {
-			/** @description Account that opened the thread. */
-			author: components["schemas"]["AccountRef"];
-			/** @description Whether the thread is closed. */
-			closed: boolean;
-			/**
-			 * Format: date-time
-			 * @description When the thread was closed, when closed.
-			 */
-			closedAt?: string;
-			/**
-			 * Format: date-time
-			 * @description When the thread was created.
-			 */
-			createdAt: string;
-			/** @description The thread's title; `None` for an untitled thread. */
-			displayName?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the thread.
-			 */
-			id: string;
-			/**
-			 * Format: date-time
-			 * @description When the thread was last updated.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description One entry in a thread's timeline: either a message or a lifecycle event,
-		 *     tagged so a client renders them interleaved in order.
-		 */
-		WorkspaceThreadEntry:
-			| ({
-					/** @constant */
-					type: "comment";
-			  } & components["schemas"]["WorkspaceComment"])
-			| ({
-					/** @constant */
-					type: "event";
-			  } & components["schemas"]["WorkspaceThreadEvent"]);
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceThreadEntryPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceThreadEntry"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description One non-message entry in a thread timeline (opened, closed, reopened,
-		 *     renamed).
-		 */
-		WorkspaceThreadEvent: {
-			/** @description Account that performed the action; `None` if that account was removed. */
-			actor?: components["schemas"]["AccountRef"];
-			/**
-			 * Format: date-time
-			 * @description When the event happened.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the event.
-			 */
-			id: string;
-			/** @description What happened. */
-			kind: components["schemas"]["ThreadEventKind"];
-			/** @description Event-specific detail; `None` for events that carry none. */
-			target?: unknown;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceThreadPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceThread"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters addressing one thread by its opaque id. */
-		WorkspaceThreadPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the thread.
-			 */
-			threadId: string;
-		};
-		/**
-		 * @description Query parameters for listing a workspace's threads.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint. Accounts
-		 *     are addressed by id.
-		 */
-		WorkspaceThreadsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the thread's opening author (account id).
-			 */
-			author?: string;
-			/** @description Filter by open/closed state: `true` = closed only, `false` = open only. */
-			closed?: boolean;
 		};
 		/** @description Inference token usage across a workspace's detections. */
 		WorkspaceUsageAnalytics: {

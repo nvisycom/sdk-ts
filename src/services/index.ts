@@ -19,6 +19,5 @@ export { Redactions } from "@/services/redactions.js";
 export { Reviews } from "@/services/reviews.js";
 export { Status } from "@/services/status.js";
 export { Syncs } from "@/services/syncs.js";
-export { Threads } from "@/services/threads.js";
 export { Webhooks } from "@/services/webhooks.js";
 export { Workspaces } from "@/services/workspaces.js";

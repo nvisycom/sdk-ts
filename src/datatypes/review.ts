@@ -8,12 +8,20 @@ type Schemas = components["schemas"];
 // Review resources.
 export type WorkspaceReview = Schemas["WorkspaceReview"];
 export type CreateWorkspaceReview = Schemas["CreateWorkspaceReview"];
+export type RenameWorkspaceReview = Schemas["RenameWorkspaceReview"];
 export type WorkspaceReviewPage = Schemas["WorkspaceReviewPage"];
 export type WorkspaceReviewsQuery = Schemas["WorkspaceReviewsQuery"];
 
-// Review timeline: the events in a review's life.
+// Review timeline: comments interleaved with lifecycle events.
 export type WorkspaceReviewEvent = Schemas["WorkspaceReviewEvent"];
 export type WorkspaceReviewEventPage = Schemas["WorkspaceReviewEventPage"];
+export type WorkspaceReviewEntry = Schemas["WorkspaceReviewEntry"];
+export type WorkspaceReviewEntryPage = Schemas["WorkspaceReviewEntryPage"];
 
 // The review status of a document.
 export type ReviewStatus = Schemas["ReviewStatus"];
+
+// Comments on a review.
+export type WorkspaceComment = Schemas["WorkspaceComment"];
+export type CreateWorkspaceComment = Schemas["CreateWorkspaceComment"];
+export type UpdateWorkspaceComment = Schemas["UpdateWorkspaceComment"];

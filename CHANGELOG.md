@@ -8,6 +8,30 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.56.0] - 2026-09-17
+
+### Added
+
+- Review discussion and lifecycle on the `reviews` service: `updateReview`
+  (rename), `deleteReview`, `addComment`, `updateComment`, `deleteComment`, and
+  `getEvents` (a review's lifecycle events). Comment and entry datatypes
+  (`WorkspaceComment`, `CreateWorkspaceComment`, `UpdateWorkspaceComment`,
+  `WorkspaceReviewEntry`, `WorkspaceReviewEntryPage`, `RenameWorkspaceReview`)
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** `reviews.getTimeline()` now returns a `WorkspaceReviewEntryPage`
+  (comments interleaved with lifecycle events) rather than an event page; a
+  review's events alone are available via `reviews.getEvents()`
+
+### Removed
+
+- **Breaking:** the standalone `threads` service and its datatypes
+  (`WorkspaceThread*`, `OpenWorkspaceThread`, `RenameWorkspaceThread`,
+  `ThreadEventKind`, and the thread activity payloads) — discussion is now
+  scoped to reviews via the comment methods above
+
 ## [0.55.0] - 2026-09-15
 
 ### Changed
@@ -1201,7 +1225,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.55.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.56.0...HEAD
+[0.56.0]: https://github.com/nvisycom/sdk-ts/compare/v0.55.0...v0.56.0
 [0.55.0]: https://github.com/nvisycom/sdk-ts/compare/v0.54.0...v0.55.0
 [0.54.0]: https://github.com/nvisycom/sdk-ts/compare/v0.53.0...v0.54.0
 [0.53.0]: https://github.com/nvisycom/sdk-ts/compare/v0.52.0...v0.53.0
