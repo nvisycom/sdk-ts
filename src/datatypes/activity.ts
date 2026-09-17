@@ -28,6 +28,5 @@ export type ProviderActivityParams = Schemas["ProviderActivityParams"];
 export type DocumentActivityParams = Schemas["DocumentActivityParams"];
 export type WebhookActivityParams = Schemas["WebhookActivityParams"];
 export type ReviewActivityParams = Schemas["ReviewActivityParams"];
-export type ThreadActivityParams = Schemas["ThreadActivityParams"];
-export type ThreadCommentActivityParams =
-	Schemas["ThreadCommentActivityParams"];
+export type ReviewCommentActivityParams =
+	Schemas["ReviewCommentActivityParams"];

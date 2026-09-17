@@ -115,7 +115,6 @@ describe("Nvisy", () => {
 			expect(nvisy.redactions).toBeDefined();
 			expect(nvisy.reviews).toBeDefined();
 			expect(nvisy.syncs).toBeDefined();
-			expect(nvisy.threads).toBeDefined();
 			expect(nvisy.webhooks).toBeDefined();
 			expect(nvisy.workspaces).toBeDefined();
 		});

@@ -36,7 +36,6 @@ import {
 	Reviews,
 	Status,
 	Syncs,
-	Threads,
 	Webhooks,
 	Workspaces,
 } from "@/services/index.js";
@@ -243,13 +242,6 @@ export class Nvisy {
 	 */
 	get documents(): Documents {
 		return new Documents(this.#api);
-	}
-
-	/**
-	 * Service for discussion threads and comments.
-	 */
-	get threads(): Threads {
-		return new Threads(this.#api);
 	}
 
 	/**
