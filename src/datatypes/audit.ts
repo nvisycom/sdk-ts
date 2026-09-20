@@ -10,10 +10,14 @@ type Schemas = components["schemas"];
 export type Audit = Schemas["Audit"];
 export type DocumentContext = Schemas["DocumentContext"];
 export type CodecParams = Schemas["CodecParams"];
+// EXIF-metadata handling a codec resolved to.
+export type ExifPolicy = Schemas["ExifPolicy"];
 export type EntityCoRef = Schemas["EntityCoRef"];
 export type Report = Schemas["Report"];
-// Custom labels and matchers a request introduces on top of the built-ins.
+// Custom labels and matchers a request introduces on top of the built-ins, and
+// the recognizer components selected to run.
 export type Recognition = Schemas["Recognition"];
+export type ComponentSelection = Schemas["ComponentSelection"];
 
 // Reviewer edits applied on top of automatic detection.
 export type EditSet = Schemas["EditSet"];
