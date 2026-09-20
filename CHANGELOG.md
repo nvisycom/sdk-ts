@@ -8,6 +8,18 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.58.0] - 2026-09-20
+
+### Changed
+
+- Regenerated the API schema against the updated platform handlers
+- **Breaking:** the generate-invite-code response (`WorkspaceInviteCode`) now
+  carries the full invite alongside the raw code — `inviteId`, `inviteStatus`,
+  `invitedRole`, `inviteeEmail`, `respondedAt`, `createdAt`, `updatedAt` (the
+  former bare `role` field is replaced by `invitedRole`) — so a client can
+  correlate a code to its listing row. `invites.generateInviteCode(...)` is
+  unchanged for callers (same signature and return type name)
+
 ## [0.57.0] - 2026-09-20
 
 ### Added
@@ -1244,7 +1256,8 @@ redaction an independent resource. This release renames the SDK to match.
 - Network error handling for timeouts, DNS resolution, and connection issues
 - Configuration validation with detailed error messages
 
-[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.57.0...HEAD
+[Unreleased]: https://github.com/nvisycom/sdk-ts/compare/v0.58.0...HEAD
+[0.58.0]: https://github.com/nvisycom/sdk-ts/compare/v0.57.0...v0.58.0
 [0.57.0]: https://github.com/nvisycom/sdk-ts/compare/v0.56.0...v0.57.0
 [0.56.0]: https://github.com/nvisycom/sdk-ts/compare/v0.55.0...v0.56.0
 [0.55.0]: https://github.com/nvisycom/sdk-ts/compare/v0.54.0...v0.55.0
