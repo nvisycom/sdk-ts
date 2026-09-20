@@ -11658,7 +11658,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Generate invite code
-		 * @description Creates a shareable, single-use invite code that lets one person join the workspace. The code is consumed on first acceptance and expires if unused.
+		 * @description Creates a shareable, single-use invite code that lets one person join the workspace. The code is consumed on first acceptance and expires if unused. The response carries the raw code (shown once, never returned again) alongside the full invite — including its `inviteId` and `inviteStatus`, so a client can correlate the code to its listing row and tell an active code from a consumed one.
 		 */
 		post: {
 			parameters: {
@@ -11677,7 +11677,18 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Response containing a generated shareable invite code. */
+				/**
+				 * @description Response for a freshly generated shareable invite code: the full invite plus
+				 *     its raw, show-once code.
+				 *
+				 *     The `inviteCode` is a single-use bearer secret returned **only here**, never
+				 *     from the list or any other endpoint — treat it like the webhook signing
+				 *     secret and store it at once. The flattened invite fields (notably `inviteId`
+				 *     and `inviteStatus`) let a client correlate this code to its listing row and
+				 *     track its lifecycle: once redeemed the code is consumed, and the row's
+				 *     `inviteStatus` becomes `accepted` (with `respondedAt` set) — so a client can
+				 *     tell an active code from a spent one without ever re-fetching the secret.
+				 */
 				201: {
 					headers: {
 						[name: string]: unknown;
@@ -21747,12 +21758,23 @@ export interface components {
 			 * @description Unique identifier of the invitation.
 			 */
 			inviteId: string;
-			/** @description Current status of the invitation. */
+			/**
+			 * @description Current status of the invitation.
+			 *
+			 *     For a single-use open code, `accepted` means the code has been consumed;
+			 *     `pending` (and unexpired) means it is still active.
+			 */
 			inviteStatus: components["schemas"]["InviteStatus"];
 			/** @description Role the invitee will have if they accept. */
 			invitedRole: components["schemas"]["WorkspaceRole"];
 			/** @description Email address of the invitee (omitted for open invite codes). */
 			inviteeEmail?: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitee responded (accepted or declined), if they have. For a
+			 *     consumed single-use code, this is when it was used.
+			 */
+			respondedAt?: string;
 			/**
 			 * Format: date-time
 			 * @description When the invitation was last updated.
@@ -21766,17 +21788,58 @@ export interface components {
 			 */
 			workspaceId: string;
 		};
-		/** @description Response containing a generated shareable invite code. */
+		/**
+		 * @description Response for a freshly generated shareable invite code: the full invite plus
+		 *     its raw, show-once code.
+		 *
+		 *     The `inviteCode` is a single-use bearer secret returned **only here**, never
+		 *     from the list or any other endpoint — treat it like the webhook signing
+		 *     secret and store it at once. The flattened invite fields (notably `inviteId`
+		 *     and `inviteStatus`) let a client correlate this code to its listing row and
+		 *     track its lifecycle: once redeemed the code is consumed, and the row's
+		 *     `inviteStatus` becomes `accepted` (with `respondedAt` set) — so a client can
+		 *     tell an active code from a spent one without ever re-fetching the secret.
+		 */
 		WorkspaceInviteCode: {
 			/**
 			 * Format: date-time
-			 * @description When the invite code expires.
+			 * @description When the invitation was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation expires.
 			 */
 			expiresAt: string;
-			/** @description The generated invite code that can be shared. */
+			/** @description The generated invite code to share. Shown once and never returned again. */
 			inviteCode: string;
-			/** @description Role assigned when someone joins via this code. */
-			role: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the invitation.
+			 */
+			inviteId: string;
+			/**
+			 * @description Current status of the invitation.
+			 *
+			 *     For a single-use open code, `accepted` means the code has been consumed;
+			 *     `pending` (and unexpired) means it is still active.
+			 */
+			inviteStatus: components["schemas"]["InviteStatus"];
+			/** @description Role the invitee will have if they accept. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description Email address of the invitee (omitted for open invite codes). */
+			inviteeEmail?: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitee responded (accepted or declined), if they have. For a
+			 *     consumed single-use code, this is when it was used.
+			 */
+			respondedAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation was last updated.
+			 */
+			updatedAt: string;
 			/** @description URL-safe workspace handle. Display-only. */
 			workspaceHandle: components["schemas"]["Handle"];
 			/**
