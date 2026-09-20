@@ -24,3 +24,4 @@ export type RedactWorkspaceDetection = Schemas["RedactWorkspaceDetection"];
 export type WorkspaceRedactionResult = Schemas["WorkspaceRedactionResult"];
 export type WorkspaceRedactionResultPage =
 	Schemas["WorkspaceRedactionResultPage"];
+export type WorkspaceRedactionsQuery = Schemas["WorkspaceRedactionsQuery"];

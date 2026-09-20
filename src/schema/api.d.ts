@@ -8150,135 +8150,6 @@ export interface paths {
 		};
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/pipelines/detections": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List workspace detections
-		 * @description Returns all detections across the workspace, most recent first, with optional status, document, pipeline, trigger-account, and trigger-type filters.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string;
-					/**
-					 * @description Whether to include the total item count in the response's `total` field.
-					 *     Defaults to `false`, since counting is an extra query; set it to `true`
-					 *     only when the count is actually needed.
-					 */
-					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-					/** @description Filter by the source document the detection analyzes. */
-					documentId?: string;
-					/** @description Filter by the owning pipeline. */
-					pipelineId?: string;
-					/** @description Filter by detection status. */
-					status?: components["schemas"]["DetectionStatus"];
-					/** @description Filter by how the detection was initiated (user vs system). */
-					triggerType?: components["schemas"]["PipelineTriggerType"];
-					/** @description Filter by the account that triggered the detection. */
-					triggeredBy?: string;
-				};
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *     Provides a consistent structure for all paginated API responses with
-				 *     cursor-based pagination support. When `next_cursor` is present, there
-				 *     are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceDetectionPage"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections": {
 		parameters: {
 			query?: never;
@@ -8589,7 +8460,120 @@ export interface paths {
 			path?: never;
 			cookie?: never;
 		};
-		get?: never;
+		/**
+		 * List workspace detections
+		 * @description Returns all detections across the workspace, most recent first, with optional status, document, pipeline, trigger-account, and trigger-type filters.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/** @description Filter by the source document the detection analyzes. */
+					documentId?: string;
+					/** @description Filter by the owning pipeline. */
+					pipelineId?: string;
+					/** @description Filter by detection status. */
+					status?: components["schemas"]["DetectionStatus"];
+					/** @description Filter by how the detection was initiated (user vs system). */
+					triggerType?: components["schemas"]["PipelineTriggerType"];
+					/** @description Filter by the account that triggered the detection. */
+					triggeredBy?: string;
+				};
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceDetectionPage"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
 		put?: never;
 		/**
 		 * Start an ad-hoc detection
@@ -9554,6 +9538,129 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ArtifactSet"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/redactions": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List workspace redactions
+		 * @description Returns all redactions across the workspace, most recent first, cursor-paginated, with optional detection and document filters. Each redaction is one redact pass with its own reviewer edits, output document, and review audit.
+		 */
+		get: {
+			parameters: {
+				query?: {
+					/**
+					 * @description Cursor pointing to the last item of the previous page.
+					 *     Obtain this from the `nextCursor` field in the response.
+					 */
+					after?: string;
+					/**
+					 * @description Whether to include the total item count in the response's `total` field.
+					 *     Defaults to `false`, since counting is an extra query; set it to `true`
+					 *     only when the count is actually needed.
+					 */
+					includeCount?: boolean;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
+					/** @description Filter to the redactions produced from a specific detection. */
+					detectionId?: string;
+					/** @description Filter to the redactions of detections analyzing a specific document. */
+					documentId?: string;
+				};
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Generic paginated response wrapper.
+				 *
+				 *     Provides a consistent structure for all paginated API responses with
+				 *     cursor-based pagination support. When `next_cursor` is present, there
+				 *     are more items to fetch.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceRedactionResultPage"];
 					};
 				};
 				/**
@@ -15329,6 +15436,17 @@ export interface components {
 			 */
 			report: components["schemas"]["Report"];
 			/**
+			 * @description Which recognizers this request selected.
+			 *
+			 *     Carried back for the same reason [`codec`] is. Anonymize
+			 *     compiles its analyzers afresh, and a lineup narrower than
+			 *     the one analyze detected with would leave an entity found
+			 *     and then silently not redacted.
+			 *
+			 *     [`codec`]: Audit::codec
+			 */
+			selection?: components["schemas"]["ComponentSelection"];
+			/**
 			 * @description What the analyze pass cost: one entry per recognizer and
 			 *     enricher that ran, each self-identifying by the name the
 			 *     deployment configured it under.
@@ -15516,6 +15634,44 @@ export interface components {
 		 */
 		CodecParams: {
 			/**
+			 * Format: uint8
+			 * @description The CSV field separator, or [`None`] to auto-detect it.
+			 *
+			 *     Defaults to [`None`], the codec's own behaviour. Detection
+			 *     falls back to a comma when nothing stands out, which can
+			 *     misread a TSV or semicolon-delimited file, so pass the byte
+			 *     when the format is known.
+			 */
+			csvDelimiter?: number;
+			/**
+			 * @description Whether a CSV's first row is its header.
+			 *
+			 *     Defaults to `true`, the codec's own behaviour. A header row
+			 *     gains column-name context hints for the data below it, but
+			 *     is protected from a row-drop redaction — so a *headerless*
+			 *     file needs `false`, or its first row of real data cannot be
+			 *     dropped.
+			 * @default true
+			 */
+			csvHasHeaders?: boolean;
+			/**
+			 * @description What happens to an image's EXIF metadata on re-encode.
+			 *
+			 *     Defaults to [`ExifPolicy::default`], which the codec also
+			 *     registers — [`Strip`](ExifPolicy::Strip) today: metadata
+			 *     goes unless a request asks to keep it. Deferring to the
+			 *     enum rather than naming a variant keeps this from drifting
+			 *     if the codec's own bias changes again.
+			 *
+			 *     This governs the output only when no metadata pipeline ran:
+			 *     a wired EXIF recognizer and anonymizer strip through the
+			 *     `#exif` sub-part and always win. It is the knob for
+			 *     stripping — or deliberately preserving — *without* wiring
+			 *     one.
+			 * @default strip
+			 */
+			exifPolicy?: components["schemas"]["ExifPolicy"];
+			/**
 			 * @description How container formats carrying both a text layer and page
 			 *     images treat OCR.
 			 *
@@ -15573,6 +15729,32 @@ export interface components {
 			name: string;
 			/** @description Status of this component. */
 			status: components["schemas"]["HealthStatus"];
+		};
+		/**
+		 * @description Which of the available components one request wants to run.
+		 *
+		 *     Empty by default, meaning every component the caller has
+		 *     available. A request that expresses no opinion gets full
+		 *     detection — the opposite would let an omitted field quietly
+		 *     disable redaction.
+		 */
+		ComponentSelection: {
+			/**
+			 * @description Names or tags to run, or [`None`] for all available.
+			 *
+			 *     An empty `Vec` is not the same as [`None`]: it selects
+			 *     nothing and is refused, because a request that can detect
+			 *     nothing is a mistake rather than a request for an empty
+			 *     report.
+			 */
+			only?: string[];
+			/**
+			 * @description Names or tags to skip, applied after `only`.
+			 *
+			 *     Lets a caller run everything but one component without
+			 *     enumerating the rest.
+			 */
+			skip?: string[];
 		};
 		/**
 		 * Format: float
@@ -16316,6 +16498,14 @@ export interface components {
 			/** @description The error name/type identifier. */
 			name: string;
 		};
+		/**
+		 * @description What to do with an image's EXIF metadata when re-encoding it.
+		 *
+		 *     EXIF mixes privacy-sensitive fields (GPS, device serial, capture timestamp)
+		 *     with benign ones (orientation, colour profile) that a viewer needs to render
+		 *     the image correctly, so the choice is a policy, not a fixed behaviour.
+		 */
+		ExifPolicy: "strip" | "strip_sensitive" | "retain";
 		/** @description The file format an export is rendered as. */
 		ExportFormat: "csv" | "json";
 		/**
@@ -18536,8 +18726,6 @@ export interface components {
 		 *     header.
 		 */
 		RegisteredRecognizer: {
-			/** @description Optional human-readable description. */
-			description?: string;
 			/**
 			 * @description Recognizer name: the identifier a request's allowlist
 			 *     picks by.
@@ -18556,6 +18744,15 @@ export interface components {
 			 *     engine-side construction stays free.
 			 */
 			provider: string;
+			/**
+			 * @description The groupings this component belongs to, as the deployment
+			 *     tagged it.
+			 *
+			 *     What a request's selection and the engine's availability
+			 *     match on besides the name, so a caller listing components
+			 *     can see which families it may ask for.
+			 */
+			tags?: string[];
 		};
 		/** @description Request payload to rename a review (set its title). */
 		RenameWorkspaceReview: {
@@ -22152,6 +22349,25 @@ export interface components {
 			 * @description Total count of items matching the query (if requested).
 			 */
 			total?: number;
+		};
+		/**
+		 * @description Query parameters for listing a workspace's redactions.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint. A
+		 *     redaction has no status of its own, so it narrows by its owning detection and
+		 *     the document that detection analyzed.
+		 */
+		WorkspaceRedactionsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter to the redactions produced from a specific detection.
+			 */
+			detectionId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter to the redactions of detections analyzing a specific document.
+			 */
+			documentId?: string;
 		};
 		/**
 		 * @description Response type for a review: a named discussion on a document with a manual

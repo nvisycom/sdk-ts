@@ -42,7 +42,7 @@ export class Detections {
 		query?: CursorPagination & WorkspaceDetectionsQuery,
 	): Promise<WorkspaceDetectionPage> {
 		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/pipelines/detections",
+			"/workspaces/{workspaceId}/detections",
 			{
 				params: { path: { workspaceId }, query },
 			},
