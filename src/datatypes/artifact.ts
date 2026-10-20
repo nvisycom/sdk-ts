@@ -9,10 +9,9 @@ type Schemas = components["schemas"];
 // Container: a modality-tagged `parts` array of per-part artifacts.
 export type ArtifactSet = Schemas["ArtifactSet"];
 
-// Image OCR layout.
+// Image OCR layout: regions in reading order, each a recognized run of text.
 export type Layout = Schemas["Layout"];
-export type LayoutBlock = Schemas["LayoutBlock"];
-export type LayoutWord = Schemas["LayoutWord"];
+export type LayoutRegion = Schemas["LayoutRegion"];
 
 // Audio transcript.
 export type Transcription = Schemas["Transcription"];

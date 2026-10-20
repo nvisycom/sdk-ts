@@ -15,14 +15,22 @@ export type WorkspaceDetectionAnalytics =
 export type WorkspaceDetectionStatusEntry =
 	Schemas["WorkspaceDetectionStatusEntry"];
 
-// Inference token usage: workspace totals plus a per-model breakdown.
+// Inference usage: workspace totals (per meter) plus a per-model breakdown.
 export type WorkspaceUsageAnalytics = Schemas["WorkspaceUsageAnalytics"];
 export type ModelUsage = Schemas["ModelUsage"];
 export type WorkspaceModelUsageEntry = Schemas["WorkspaceModelUsageEntry"];
+
+// Per-call usage: the outcome, duration, model/meter cost, and output count of a
+// single backend call. An `Audit` carries a `usage?: Usage[]` for its run.
 export type Usage = Schemas["Usage"];
-export type UsageReport = Schemas["UsageReport"];
+// Whether a backend call succeeded (`"Ok"`) or failed with an `ErrorKind`.
+export type Outcome = Schemas["Outcome"];
+export type ErrorKind = Schemas["ErrorKind"];
+// The billing meters a call spent: `Units` is a list of `Meter`s (tokens, audio
+// seconds, pages, images, characters); `TokenCounts` is the token-meter detail.
+export type Units = Schemas["Units"];
+export type Meter = Schemas["Meter"];
 export type TokenCounts = Schemas["TokenCounts"];
-export type RecognizerId = Schemas["RecognizerId"];
 
 // Daily detection activity over a date window (`DateWindow`, in `export`).
 export type WorkspaceDetectionTimeSeries =

@@ -5,10 +5,15 @@ type Schemas = components["schemas"];
 // Analysis scope and localization.
 export type ScopeMetadata = Schemas["ScopeMetadata"];
 export type CountryCode = Schemas["CountryCode"];
-export type Language = Schemas["Language"];
-export type Languages = Schemas["Languages"];
-export type LanguageSpan = Schemas["LanguageSpan"];
-export type LanguageProvenance = Schemas["LanguageProvenance"];
+
+// Language claims: a caller-asserted or detector-found language, carried on the
+// document context. The language itself is a BCP 47 `LanguageTag` (re-exported
+// from `policy`); `LanguageSource` records how a claim was obtained (asserted, or
+// detected with a confidence); the optional span is a byte-offset range
+// (`Range_of_uint`, re-exported from `audit` as `RangeOfUint`).
+export type LanguageClaim = Schemas["LanguageClaim"];
+export type LanguageClaims = Schemas["LanguageClaim"][];
+export type LanguageSource = Schemas["LanguageSource"];
 
 // Detection confidence.
 export type Confidence = Schemas["Confidence"];
