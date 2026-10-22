@@ -58,11 +58,10 @@ export type RangeOfUint = Schemas["Range_of_uint"];
 // Reference back to the original source (byte range + optional container part).
 export type SourceRef = Schemas["SourceRef"];
 
-// Geometry / spans, shared across modalities.
-export type BoundingBox = Schemas["BoundingBox"];
-export type Point = Schemas["Point"];
-export type Polygon = Schemas["Polygon"];
-export type Dimensions = Schemas["Dimensions"];
+// Geometry / spans, shared across modalities. Coordinates are f64.
+export type BoundingBox = Schemas["BoundingBoxF64"];
+export type Point = Schemas["PointF64"];
+export type Polygon = Schemas["PolygonF64"];
 export type TimeSpan = Schemas["TimeSpan"];
 
 // Text modality.
@@ -76,7 +75,6 @@ export type TextLocation = Schemas["TextLocation"];
 export type TextCoord = Schemas["TextCoord"];
 export type DecodedSpan = Schemas["DecodedSpan"];
 export type SourceSpan = Schemas["SourceSpan"];
-export type TextData = Schemas["TextData"];
 export type TextModel = Schemas["TextModel"];
 export type TextPattern = Schemas["TextPattern"];
 export type TextManual = Schemas["TextManual"];
@@ -92,7 +90,6 @@ export type ImageAuditKind = Schemas["ImageAuditKind"];
 export type ImageAuditLog = Schemas["ImageAuditLog"];
 export type ImageHint = Schemas["ImageHint"];
 export type ImageLocation = Schemas["ImageLocation"];
-export type ImageData = Schemas["ImageData"];
 export type ImageModel = Schemas["ImageModel"];
 export type ImagePattern = Schemas["ImagePattern"];
 export type ImageManual = Schemas["ImageManual"];
@@ -108,7 +105,6 @@ export type AudioAuditKind = Schemas["AudioAuditKind"];
 export type AudioAuditLog = Schemas["AudioAuditLog"];
 export type AudioHint = Schemas["AudioHint"];
 export type AudioLocation = Schemas["AudioLocation"];
-export type AudioData = Schemas["AudioData"];
 export type AudioModel = Schemas["AudioModel"];
 export type AudioPattern = Schemas["AudioPattern"];
 export type AudioManual = Schemas["AudioManual"];

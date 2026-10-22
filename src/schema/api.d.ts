@@ -552,6 +552,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -563,8 +565,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path?: never;
@@ -1398,13 +1398,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Account id whose activities to keep. Omit for any actor. */
-					actor?: string;
 					/**
 					 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
 					 *     parameter for several; omit for no type constraint.
 					 */
 					type?: components["schemas"]["ActivityType"][];
+					/** @description Account id whose activities to keep. Omit for any actor. */
+					actor?: string;
 					/**
 					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
 					 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
@@ -1412,6 +1412,8 @@ export interface paths {
 					from?: string;
 					/** @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC). */
 					to?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -1423,8 +1425,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -1512,13 +1512,13 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Account id whose activities to keep. Omit for any actor. */
-					actor?: string;
 					/**
 					 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
 					 *     parameter for several; omit for no type constraint.
 					 */
 					type?: components["schemas"]["ActivityType"][];
+					/** @description Account id whose activities to keep. Omit for any actor. */
+					actor?: string;
 					/**
 					 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
 					 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
@@ -1643,7 +1643,7 @@ export interface paths {
 		};
 		/**
 		 * Workspace analytics
-		 * @description Returns aggregate analytics for a workspace: stored-file totals with a per-kind breakdown, detection health (status mix, error rate, and durations), and inference token usage (workspace totals plus a per-model breakdown). Breakdowns list every kind/status, zero-filled, in a stable order.
+		 * @description Returns aggregate analytics for a workspace: stored-file totals with a per-kind breakdown, detection health (status mix, error rate, and durations), and inference usage metered per unit (tokens, media seconds, pages, images, characters) as workspace totals plus a per-model breakdown with call and error counts. Breakdowns list every kind/status, zero-filled, in a stable order.
 		 */
 		get: {
 			parameters: {
@@ -1658,8 +1658,8 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Aggregate analytics for a workspace: what it stores, how its detections fare, and
-				 *     the inference tokens they spent.
+				 * @description Aggregate analytics for a workspace: what it stores, how its detections fare,
+				 *     and the inference usage they metered.
 				 */
 				200: {
 					headers: {
@@ -1880,12 +1880,14 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["Direction"];
 					/** @description Filter by workspace role. */
 					role?: components["schemas"]["WorkspaceRole"];
 					/** @description Sort by field. */
 					sortBy?: components["schemas"]["MemberSortField"];
+					/** @description Sort order (asc or desc). */
+					order?: components["schemas"]["Direction"];
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -1897,8 +1899,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -2451,6 +2451,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -2462,14 +2464,12 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-					/** @description Filter by the assigned reviewer (account id). */
-					assignee?: string;
-					/** @description Filter by the review's opening author (account id). */
-					author?: string;
 					/** @description Filter to the reviews of a specific document. */
 					documentId?: string;
+					/** @description Filter by the review's opening author (account id). */
+					author?: string;
+					/** @description Filter by the assigned reviewer (account id). */
+					assignee?: string;
 					/** @description Filter by review status. */
 					reviewStatus?: components["schemas"]["ReviewStatus"];
 				};
@@ -3504,6 +3504,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -3515,8 +3517,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -3625,6 +3625,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -3636,8 +3638,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -3983,10 +3983,10 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Account id of the reviewer to assign or unassign. */
-					accountId: string;
 					/** @description Unique identifier of the review. */
 					reviewId: string;
+					/** @description Account id of the reviewer to assign or unassign. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -4076,10 +4076,10 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Account id of the reviewer to assign or unassign. */
-					accountId: string;
 					/** @description Unique identifier of the review. */
 					reviewId: string;
+					/** @description Account id of the reviewer to assign or unassign. */
+					accountId: string;
 				};
 				cookie?: never;
 			};
@@ -4183,10 +4183,10 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Unique identifier of the detection to reference. */
-					detectionId: string;
 					/** @description Unique identifier of the review. */
 					reviewId: string;
+					/** @description Unique identifier of the detection to reference. */
+					detectionId: string;
 				};
 				cookie?: never;
 			};
@@ -4291,10 +4291,10 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Unique identifier of the redaction to reference. */
-					redactionId: string;
 					/** @description Unique identifier of the review. */
 					reviewId: string;
+					/** @description Unique identifier of the redaction to reference. */
+					redactionId: string;
 				};
 				cookie?: never;
 			};
@@ -4393,6 +4393,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -4404,8 +4406,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 					/**
 					 * @description Filter by provider (`s3`, `azure`, `gcs`). Repeatable; a connection
 					 *     matches if it uses any of the given providers. Empty means no filter.
@@ -5170,6 +5170,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -5181,8 +5183,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 					/**
 					 * @description Filter by provider (`openai`, `ollama`, `anthropic`). Repeatable; a
 					 *     provider matches if it uses any of the given providers. Empty means no
@@ -5923,6 +5923,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -5934,16 +5936,14 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
+					/** @description Filter by sync status. */
+					status?: components["schemas"]["SyncStatus"];
 					/**
 					 * @description Filter by connection provider (`s3`, `azure`, `gcs`). Repeatable; a sync
 					 *     matches if its connection uses any of the given providers. Empty means no
 					 *     provider filter.
 					 */
 					provider?: string[];
-					/** @description Filter by sync status. */
-					status?: components["schemas"]["SyncStatus"];
 				};
 				header?: never;
 				path: {
@@ -6501,6 +6501,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -6512,8 +6514,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -6847,21 +6847,23 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description Search by document name (case-insensitive, partial match). */
+					search?: string;
 					/**
 					 * @description Filter by file extension. Each entry expands to its format's full
 					 *     extension set (so `jpg` also matches `jpeg`).
 					 */
 					formats?: components["schemas"]["FormatToken"][];
+					/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
+					modality?: components["schemas"]["ModalityToken"][];
 					/**
 					 * @description Filter to documents whose content is exactly this SHA-256. Lets a client
 					 *     check whether identical content already exists in the workspace before
 					 *     uploading it.
 					 */
 					hash?: components["schemas"]["DocumentHash"];
-					/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
-					modality?: components["schemas"]["ModalityToken"][];
-					/** @description Search by document name (case-insensitive, partial match). */
-					search?: string;
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -6873,8 +6875,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -7633,6 +7633,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -7644,12 +7646,10 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-					/** @description Search by pipeline name (trigram similarity). */
-					search?: string;
 					/** @description Filter by pipeline status. */
 					status?: components["schemas"]["PipelineStatus"];
+					/** @description Search by pipeline name (trigram similarity). */
+					search?: string;
 				};
 				header?: never;
 				path: {
@@ -8164,6 +8164,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -8175,16 +8177,14 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-					/** @description Filter by the source document the detection analyzes. */
-					documentId?: string;
 					/** @description Filter by detection status. */
 					status?: components["schemas"]["DetectionStatus"];
-					/** @description Filter by how the detection was initiated (user vs system). */
-					triggerType?: components["schemas"]["PipelineTriggerType"];
+					/** @description Filter by the source document the detection analyzes. */
+					documentId?: string;
 					/** @description Filter by the account that triggered the detection. */
 					triggeredBy?: string;
+					/** @description Filter by how the detection was initiated (user vs system). */
+					triggerType?: components["schemas"]["PipelineTriggerType"];
 				};
 				header?: never;
 				path: {
@@ -8467,6 +8467,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -8478,18 +8480,16 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
+					/** @description Filter by detection status. */
+					status?: components["schemas"]["DetectionStatus"];
 					/** @description Filter by the source document the detection analyzes. */
 					documentId?: string;
 					/** @description Filter by the owning pipeline. */
 					pipelineId?: string;
-					/** @description Filter by detection status. */
-					status?: components["schemas"]["DetectionStatus"];
-					/** @description Filter by how the detection was initiated (user vs system). */
-					triggerType?: components["schemas"]["PipelineTriggerType"];
 					/** @description Filter by the account that triggered the detection. */
 					triggeredBy?: string;
+					/** @description Filter by how the detection was initiated (user vs system). */
+					triggerType?: components["schemas"]["PipelineTriggerType"];
 				};
 				header?: never;
 				path: {
@@ -8959,6 +8959,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -8970,8 +8972,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -9284,8 +9284,8 @@ export interface paths {
 				 *     required, so a generated client would reject responses this
 				 *     crate really emits.
 				 *
-				 *     [`Engine`]: super::Engine
-				 *     [`Engine::deserialize_audit`]: super::Engine::deserialize_audit
+				 *     [`Engine`]: crate::Engine
+				 *     [`Engine::deserialize_audit`]: crate::Engine::deserialize_audit
 				 *     [`Report`]: elide::Report
 				 *     [`SchemaSettings::for_serialize`]: schemars::generate::SchemaSettings::for_serialize
 				 */
@@ -9621,6 +9621,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -9632,8 +9634,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 					/** @description Filter to the redactions produced from a specific detection. */
 					detectionId?: string;
 					/** @description Filter to the redactions of detections analyzing a specific document. */
@@ -9784,8 +9784,8 @@ export interface paths {
 				 *     required, so a generated client would reject responses this
 				 *     crate really emits.
 				 *
-				 *     [`Engine`]: super::Engine
-				 *     [`Engine::deserialize_audit`]: super::Engine::deserialize_audit
+				 *     [`Engine`]: crate::Engine
+				 *     [`Engine::deserialize_audit`]: crate::Engine::deserialize_audit
 				 *     [`Report`]: elide::Report
 				 *     [`SchemaSettings::for_serialize`]: schemars::generate::SchemaSettings::for_serialize
 				 */
@@ -9897,6 +9897,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -9908,8 +9910,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 					/** @description Narrow the list to a single policy kind (`authored` or `oneshot`). */
 					kind?: components["schemas"]["PolicyKind"];
 				};
@@ -10627,6 +10627,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -10638,8 +10640,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path?: never;
@@ -11094,6 +11094,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -11105,8 +11107,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path?: never;
@@ -11424,12 +11424,14 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
-					/** @description Sort order (asc or desc). */
-					order?: components["schemas"]["Direction"];
 					/** @description Filter by invited role. */
 					role?: components["schemas"]["WorkspaceRole"];
 					/** @description Sort by field. */
 					sortBy?: components["schemas"]["InviteSortField"];
+					/** @description Sort order (asc or desc). */
+					order?: components["schemas"]["Direction"];
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -11441,8 +11443,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -12228,6 +12228,8 @@ export interface paths {
 		get: {
 			parameters: {
 				query?: {
+					/** @description The maximum number of records to return (1-100, default: 20). */
+					limit?: number;
 					/**
 					 * @description Cursor pointing to the last item of the previous page.
 					 *     Obtain this from the `nextCursor` field in the response.
@@ -12239,8 +12241,6 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
 				};
 				header?: never;
 				path: {
@@ -13130,16 +13130,16 @@ export interface paths {
 			parameters: {
 				query?: {
 					/**
+					 * @description Frontend URL to return to once done. Carried through the flow and used to
+					 *     build the callback's redirect.
+					 */
+					redirectUri?: string;
+					/**
 					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
 					 *     provider is a credential-adding action, so a live session alone is not
 					 *     enough); ignored for sign-in and reauth.
 					 */
 					reauthProof?: string;
-					/**
-					 * @description Frontend URL to return to once done. Carried through the flow and used to
-					 *     build the callback's redirect.
-					 */
-					redirectUri?: string;
 				};
 				header?: never;
 				path: {
@@ -13339,16 +13339,16 @@ export interface paths {
 			parameters: {
 				query?: {
 					/**
+					 * @description Frontend URL to return to once done. Carried through the flow and used to
+					 *     build the callback's redirect.
+					 */
+					redirectUri?: string;
+					/**
 					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
 					 *     provider is a credential-adding action, so a live session alone is not
 					 *     enough); ignored for sign-in and reauth.
 					 */
 					reauthProof?: string;
-					/**
-					 * @description Frontend URL to return to once done. Carried through the flow and used to
-					 *     build the callback's redirect.
-					 */
-					redirectUri?: string;
 				};
 				header?: never;
 				path: {
@@ -13817,16 +13817,16 @@ export interface paths {
 			parameters: {
 				query?: {
 					/**
+					 * @description Frontend URL to return to once done. Carried through the flow and used to
+					 *     build the callback's redirect.
+					 */
+					redirectUri?: string;
+					/**
 					 * @description A step-up re-authentication proof. Required to start a *link* (adding a
 					 *     provider is a credential-adding action, so a live session alone is not
 					 *     enough); ignored for sign-in and reauth.
 					 */
 					reauthProof?: string;
-					/**
-					 * @description Frontend URL to return to once done. Carried through the flow and used to
-					 *     build the callback's redirect.
-					 */
-					redirectUri?: string;
 				};
 				header?: never;
 				path: {
@@ -14188,6 +14188,21 @@ export interface components {
 	schemas: {
 		/** @description Represents an account. */
 		Account: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the account.
+			 */
+			id: string;
+			/** @description Public handle of the account. Display-only. */
+			username: components["schemas"]["Handle"];
+			/** @description Whether the account email has been verified. */
+			isActivated: boolean;
+			/** @description Whether the account is currently suspended. */
+			isSuspended: boolean;
+			/** @description Display name of the account holder, when set. */
+			displayName?: string;
+			/** @description Email address associated with the account. */
+			emailAddress: string;
 			/** @description Serve path of the account's avatar, when set. */
 			avatarUrl?: string;
 			/**
@@ -14195,228 +14210,48 @@ export interface components {
 			 * @description Timestamp when the account was created.
 			 */
 			createdAt: string;
-			/** @description Display name of the account holder, when set. */
-			displayName?: string;
-			/** @description Email address associated with the account. */
-			emailAddress: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the account.
-			 */
-			id: string;
-			/** @description Whether the account email has been verified. */
-			isActivated: boolean;
-			/** @description Whether the account is currently suspended. */
-			isSuspended: boolean;
 			/**
 			 * Format: date-time
 			 * @description Timestamp when the account was last updated.
 			 */
 			updatedAt: string;
-			/** @description Public handle of the account. Display-only. */
-			username: components["schemas"]["Handle"];
 		};
-		/** @description API token response structure. */
-		AccountApiToken: {
-			/**
-			 * @description Whether this token is the one the current request authenticated with.
-			 *
-			 *     Lets a client single out the active session in the list. Defaults to
-			 *     `false`; the listing handler sets it for the matching token.
-			 */
-			current: boolean;
-			/** @description Human-readable display name for the API token. */
-			displayName: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token expires (None = never expires).
-			 */
-			expiredAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier for the token.
-			 */
-			id: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of token creation.
-			 */
-			issuedAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of most recent token activity.
-			 */
-			lastUsedAt?: string;
-			/** @description Type of token (web, api, etc.). */
-			sessionType: components["schemas"]["ApiTokenType"];
+		/** @description Lowercase, dash-separated identifier used in URLs and as account handles. */
+		Handle: string;
+		/**
+		 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+		 *     that [`Error`] renders to at the response boundary.
+		 *
+		 *     It carries no builder logic — [`Error`] is the type handlers construct and
+		 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+		 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+		 *     (`context` is logged, `status` sets the HTTP status line).
+		 *
+		 *     [`Error`]: crate::response::Error
+		 */
+		ErrorResponse: {
+			/** @description The error name/type identifier. */
+			name: string;
+			/** @description User-friendly error message safe for client display. */
+			message: string;
 		};
 		/**
-		 * @description Generic paginated response wrapper.
+		 * @description Request payload to update an account's profile.
 		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
+		 *     Credentials are not profile fields — a password and any linked providers are
+		 *     managed through the account's identities (see the identity endpoints), never
+		 *     here.
 		 */
-		AccountApiTokenPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["AccountApiToken"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
+		UpdateAccount: {
+			/** @description New account handle. */
+			username?: components["schemas"]["Handle"];
+			/** @description New display name (2-32 characters). */
+			displayName?: string;
 			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
+			 * Format: email
+			 * @description New email address (must be valid email format).
 			 */
-			total?: number;
-		};
-		/**
-		 * @description Path parameters for API token operations.
-		 *
-		 *     Since token IDs are globally unique UUIDs, account context is verified
-		 *     by comparing with the authenticated user's account ID.
-		 */
-		AccountApiTokenPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the API token.
-			 */
-			tokenId: string;
-		};
-		/** @description API token with JWT token string (only returned on creation). */
-		AccountApiTokenWithJwt: {
-			/** @description Human-readable display name for the API token. */
-			displayName: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the token expires (omitted = never expires).
-			 */
-			expiredAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier for the token.
-			 */
-			id: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of token creation.
-			 */
-			issuedAt: string;
-			/** @description Type of token (web, mobile, api, etc.). */
-			sessionType: components["schemas"]["ApiTokenType"];
-			/** @description The JWT token string (only shown once on creation). */
-			token: string;
-		};
-		/**
-		 * @description The result of minting a native-app (desktop) session token.
-		 *
-		 *     The frontend hands `apiToken` to the desktop app via the `redirectUri`
-		 *     deep-link (`{redirectUri}?token={apiToken}`); the app stores it and sends it as
-		 *     an `Authorization: Bearer` credential. Browser web sessions use cookies
-		 *     instead and return no token.
-		 */
-		AccountDesktopToken: {
-			/** @description The signed `app` JWT to send as a Bearer token. */
-			apiToken: string;
-			/** @description The desktop deep-link the token should be delivered on, echoed back. */
-			redirectUri: string;
-		};
-		/** @description The account's sign-in methods. */
-		AccountIdentities: {
-			/** @description Every identity the account can sign in with. */
-			identities: components["schemas"]["AccountIdentity"][];
-		};
-		/**
-		 * @description One of an account's sign-in methods, for the identities listing.
-		 *
-		 *     Never exposes the credential itself (a password hash or a provider subject),
-		 *     only which methods exist and metadata about them.
-		 */
-		AccountIdentity: {
-			/**
-			 * Format: date-time
-			 * @description When the identity was created (the password set, or the provider linked).
-			 */
-			createdAt: string;
-			/** @description The authentication method: `password` or an OIDC provider. */
-			provider: components["schemas"]["IdentityProvider"];
-			/** @description The email the provider asserted at link time, for a linked provider. */
-			providerEmail?: string;
-			/**
-			 * Format: date-time
-			 * @description When the identity was last updated.
-			 */
-			updatedAt: string;
-		};
-		/** @description Response type for a mark-all-read action. */
-		AccountMarkedReadStatus: {
-			/**
-			 * Format: int64
-			 * @description Number of notifications the request marked as read.
-			 */
-			markedRead: number;
-		};
-		/**
-		 * @description Response type for an account notification.
-		 *
-		 *     The typed payload is nested under `payload`, so a notification is
-		 *     `{ id, payload: { notifyType, <params...> }, readAt, ... }`.
-		 */
-		AccountNotification: {
-			/**
-			 * Format: date-time
-			 * @description When the notification was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the notification expires.
-			 */
-			expiresAt?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique notification identifier.
-			 */
-			id: string;
-			/**
-			 * @description The notification type and its typed params, absent when the stored params
-			 *     do not decode into their `notifyType`.
-			 */
-			payload?: components["schemas"]["NotificationPayload"];
-			/**
-			 * Format: date-time
-			 * @description When the notification was read; absent means unread.
-			 */
-			readAt?: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		AccountNotificationPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["AccountNotification"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Path parameters for notification operations.
-		 *
-		 *     The notification id is globally unique; account ownership is enforced in the
-		 *     query, so a notification of another account resolves to a not-found result.
-		 */
-		AccountNotificationPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the notification.
-			 */
-			notificationId: string;
+			emailAddress?: string;
 		};
 		/**
 		 * @description Path parameters for account operations.
@@ -14432,6 +14267,191 @@ export interface components {
 			accountId: string;
 		};
 		/**
+		 * @description Public view of an account, returned when looking up someone other than the
+		 *     authenticated caller. Carries only the fields safe to share with a
+		 *     workspace peer; private details (email, account flags) are omitted
+		 *     and remain available solely through the caller's own `/account/` view.
+		 */
+		PublicAccount: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the account.
+			 */
+			id: string;
+			/** @description Public handle of the account. Display-only. */
+			username: components["schemas"]["Handle"];
+			/** @description Display name of the account holder, when set. */
+			displayName?: string;
+			/** @description Serve path of the account's avatar, when set. */
+			avatarUrl?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the account was created.
+			 */
+			createdAt: string;
+		};
+		/**
+		 * @description Request payload for creating a new workspace.
+		 *
+		 *     Creates a new workspace with the specified configuration. The creator is
+		 *     automatically added as an owner of the workspace.
+		 */
+		CreateWorkspace: {
+			/** @description Display name of the workspace (2-32 characters). */
+			displayName: string;
+			/** @description Optional handle. Derived from the display name when omitted. */
+			handle?: components["schemas"]["Handle"];
+			/** @description Optional description of the workspace (max 500 characters). */
+			description?: string;
+			/**
+			 * @description Workspace settings (approval requirement, data-retention rules). Defaults
+			 *     to requiring approval and keeping everything when omitted.
+			 */
+			settings?: components["schemas"]["WorkspaceSettings"];
+		};
+		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
+		WorkspaceSettings: {
+			/**
+			 * @description How document pages are rasterised for OCR during detection.
+			 * @default auto
+			 */
+			raster?: components["schemas"]["RasterPolicy"];
+			/**
+			 * @description Data-retention rules for the workspace.
+			 * @default {
+			 *       "originalDocuments": {
+			 *         "mode": "ephemeral"
+			 *       },
+			 *       "redactedDocuments": {
+			 *         "mode": "ephemeral"
+			 *       },
+			 *       "auditLogs": {
+			 *         "mode": "ephemeral"
+			 *       },
+			 *       "intermediates": {
+			 *         "mode": "ephemeral"
+			 *       }
+			 *     }
+			 */
+			retention?: components["schemas"]["RetentionSettings"];
+			/**
+			 * Format: uint64
+			 * @description A soft per-file upload cap in bytes: an upload larger than this is
+			 *     rejected for this workspace. `None` imposes no workspace-specific cap.
+			 *
+			 *     The server-wide hard limit still applies regardless; the effective cap is
+			 *     the smaller of the two.
+			 */
+			maxUploadBytes?: number;
+		};
+		/**
+		 * @description How a workspace's document pages are rasterised to images for OCR during
+		 *     detection.
+		 *
+		 *     A workspace-level policy over the engine's per-run raster mode: `Auto` lets
+		 *     the engine decide from the text layer, `Always` renders every page (for
+		 *     documents with unreliable text layers — scans, watermarks), and `Never`
+		 *     relies on the text layer only.
+		 */
+		RasterPolicy: "auto" | "always" | "never";
+		/**
+		 * @description Retention for every scope. Missing fields default to [`Retention::Ephemeral`],
+		 *     so an empty settings blob deletes each class of data as soon as it has been
+		 *     processed.
+		 */
+		RetentionSettings: {
+			/**
+			 * @description Retention for uploaded/imported source documents.
+			 * @default {
+			 *       "mode": "ephemeral"
+			 *     }
+			 */
+			originalDocuments?: components["schemas"]["Retention"];
+			/**
+			 * @description Retention for generated redacted documents.
+			 * @default {
+			 *       "mode": "ephemeral"
+			 *     }
+			 */
+			redactedDocuments?: components["schemas"]["Retention"];
+			/**
+			 * @description Retention for audit blobs.
+			 * @default {
+			 *       "mode": "ephemeral"
+			 *     }
+			 */
+			auditLogs?: components["schemas"]["Retention"];
+			/**
+			 * @description Retention for enrichment intermediates (OCR layout, transcript).
+			 * @default {
+			 *       "mode": "ephemeral"
+			 *     }
+			 */
+			intermediates?: components["schemas"]["Retention"];
+		};
+		/**
+		 * @description How long a class of data is retained.
+		 *
+		 *     Wire shape is internally tagged on `mode`: `{ "mode": "persistent" }`,
+		 *     `{ "mode": "ephemeral" }`, `{ "mode": "fixed", "days": 30 }`.
+		 */
+		Retention:
+			| {
+					/** @constant */
+					mode: "persistent";
+			  }
+			| {
+					/** @constant */
+					mode: "ephemeral";
+			  }
+			| {
+					/** @constant */
+					mode: "fixed";
+					/**
+					 * Format: uint32
+					 * @description Number of days to retain data.
+					 */
+					days: number;
+			  };
+		/** @description Workspace response. */
+		Workspace: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			id: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			handle: components["schemas"]["Handle"];
+			/** @description Display name of the workspace. */
+			displayName: string;
+			/** @description Description of the workspace. */
+			description?: string;
+			/** @description Serve path of the workspace's avatar (logo), when set. */
+			avatarUrl?: string;
+			/**
+			 * @description Workspace settings (raster policy, data-retention rules, upload cap).
+			 *
+			 *     `maxUploadBytes` is resolved to the effective per-file limit — the smaller
+			 *     of the workspace's own cap and the server-wide hard limit — so a client
+			 *     always reads a concrete number to enforce.
+			 */
+			settings: components["schemas"]["WorkspaceSettings"];
+			/** @description Account that created this workspace. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
 		 * @description Public reference to the account behind a resource — whoever created it,
 		 *     uploaded it, triggered it, or performed it.
 		 *
@@ -14440,10 +14460,6 @@ export interface components {
 		 *     avatar for display.
 		 */
 		AccountRef: {
-			/** @description Serve path of the account's avatar, when set. */
-			avatarUrl?: string;
-			/** @description Human-readable display name, when set. */
-			displayName?: string;
 			/**
 			 * Format: uuid
 			 * @description Immutable id of the account.
@@ -14451,240 +14467,154 @@ export interface components {
 			id: string;
 			/** @description Handle of the account (display). */
 			username: components["schemas"]["Handle"];
-		};
-		/** @description Response type for unread notifications status. */
-		AccountUnreadStatus: {
-			/**
-			 * Format: int64
-			 * @description Number of unread notifications.
-			 */
-			unreadCount: number;
+			/** @description Human-readable display name, when set. */
+			displayName?: string;
+			/** @description Serve path of the account's avatar, when set. */
+			avatarUrl?: string;
 		};
 		/**
-		 * @description The typed payload of an audit-log activity, tagged by `type` with its params
-		 *     under `data` (the same `{type, data}` envelope the notification payload and
-		 *     outbox event use).
+		 * @description The role and permission level of a workspace member.
 		 *
-		 *     Each variant is one activity type carrying its own params. No rendered text is
-		 *     included — the client localizes the copy from `type` and the params. The `type`
-		 *     values match the `ACTIVITY_TYPE` enum.
+		 *     Corresponds to the `WORKSPACE_ROLE` `PostgreSQL` enum and provides
+		 *     hierarchical access control for workspace members with clearly defined
+		 *     capabilities.
 		 */
-		ActivityPayload:
-			| {
-					data: components["schemas"]["WorkspaceActivityParams"];
-					/** @constant */
-					type: "workspace.created";
-			  }
-			| {
-					data: components["schemas"]["WorkspaceActivityParams"];
-					/** @constant */
-					type: "workspace.updated";
-			  }
-			| {
-					data: components["schemas"]["WorkspaceActivityParams"];
-					/** @constant */
-					type: "workspace.deleted";
-			  }
-			| {
-					data: components["schemas"]["MemberActivityParams"];
-					/** @constant */
-					type: "member.added";
-			  }
-			| {
-					data: components["schemas"]["MemberActivityParams"];
-					/** @constant */
-					type: "member.updated";
-			  }
-			| {
-					data: components["schemas"]["MemberActivityParams"];
-					/** @constant */
-					type: "member.deleted";
-			  }
-			| {
-					data: components["schemas"]["InviteActivityParams"];
-					/** @constant */
-					type: "invite.created";
-			  }
-			| {
-					data: components["schemas"]["InviteActivityParams"];
-					/** @constant */
-					type: "invite.accepted";
-			  }
-			| {
-					data: components["schemas"]["InviteActivityParams"];
-					/** @constant */
-					type: "invite.declined";
-			  }
-			| {
-					data: components["schemas"]["InviteActivityParams"];
-					/** @constant */
-					type: "invite.canceled";
-			  }
-			| {
-					data: components["schemas"]["ConnectionActivityParams"];
-					/** @constant */
-					type: "connection.created";
-			  }
-			| {
-					data: components["schemas"]["ConnectionActivityParams"];
-					/** @constant */
-					type: "connection.updated";
-			  }
-			| {
-					data: components["schemas"]["ConnectionActivityParams"];
-					/** @constant */
-					type: "connection.deleted";
-			  }
-			| {
-					data: components["schemas"]["ConnectionActivityParams"];
-					/** @constant */
-					type: "connection.sync.started";
-			  }
-			| {
-					data: components["schemas"]["ConnectionActivityParams"];
-					/** @constant */
-					type: "connection.sync.completed";
-			  }
-			| {
-					data: components["schemas"]["ConnectionActivityParams"];
-					/** @constant */
-					type: "connection.sync.failed";
-			  }
-			| {
-					data: components["schemas"]["ProviderActivityParams"];
-					/** @constant */
-					type: "provider.created";
-			  }
-			| {
-					data: components["schemas"]["ProviderActivityParams"];
-					/** @constant */
-					type: "provider.updated";
-			  }
-			| {
-					data: components["schemas"]["ProviderActivityParams"];
-					/** @constant */
-					type: "provider.deleted";
-			  }
-			| {
-					data: components["schemas"]["WebhookActivityParams"];
-					/** @constant */
-					type: "webhook.created";
-			  }
-			| {
-					data: components["schemas"]["WebhookActivityParams"];
-					/** @constant */
-					type: "webhook.updated";
-			  }
-			| {
-					data: components["schemas"]["WebhookActivityParams"];
-					/** @constant */
-					type: "webhook.deleted";
-			  }
-			| {
-					data: components["schemas"]["DocumentActivityParams"];
-					/** @constant */
-					type: "document.created";
-			  }
-			| {
-					data: components["schemas"]["DocumentActivityParams"];
-					/** @constant */
-					type: "document.updated";
-			  }
-			| {
-					data: components["schemas"]["DocumentActivityParams"];
-					/** @constant */
-					type: "document.deleted";
-			  }
-			| {
-					data: components["schemas"]["ReviewActivityParams"];
-					/** @constant */
-					type: "review.opened";
-			  }
-			| {
-					data: components["schemas"]["ReviewActivityParams"];
-					/** @constant */
-					type: "review.reopened";
-			  }
-			| {
-					data: components["schemas"]["ReviewActivityParams"];
-					/** @constant */
-					type: "review.renamed";
-			  }
-			| {
-					data: components["schemas"]["ReviewActivityParams"];
-					/** @constant */
-					type: "review.deleted";
-			  }
-			| {
-					data: components["schemas"]["ReviewCommentActivityParams"];
-					/** @constant */
-					type: "review.comment.created";
-			  }
-			| {
-					data: components["schemas"]["ReviewActivityParams"];
-					/** @constant */
-					type: "review.verified";
-			  }
-			| {
-					data: components["schemas"]["ReviewActivityParams"];
-					/** @constant */
-					type: "review.assigned";
-			  }
-			| {
-					data: components["schemas"]["ReviewActivityParams"];
-					/** @constant */
-					type: "review.unassigned";
-			  }
-			| {
-					data: components["schemas"]["PipelineActivityParams"];
-					/** @constant */
-					type: "pipeline.created";
-			  }
-			| {
-					data: components["schemas"]["PipelineActivityParams"];
-					/** @constant */
-					type: "pipeline.updated";
-			  }
-			| {
-					data: components["schemas"]["PipelineActivityParams"];
-					/** @constant */
-					type: "pipeline.deleted";
-			  }
-			| {
-					data: components["schemas"]["DetectionActivityParams"];
-					/** @constant */
-					type: "pipeline.detection.started";
-			  }
-			| {
-					data: components["schemas"]["DetectionActivityParams"];
-					/** @constant */
-					type: "pipeline.detection.completed";
-			  }
-			| {
-					data: components["schemas"]["DetectionActivityParams"];
-					/** @constant */
-					type: "pipeline.detection.failed";
-			  }
-			| {
-					data: components["schemas"]["RedactionActivityParams"];
-					/** @constant */
-					type: "pipeline.redaction.created";
-			  }
-			| {
-					data: components["schemas"]["PolicyActivityParams"];
-					/** @constant */
-					type: "policy.created";
-			  }
-			| {
-					data: components["schemas"]["PolicyActivityParams"];
-					/** @constant */
-					type: "policy.updated";
-			  }
-			| {
-					data: components["schemas"]["PolicyActivityParams"];
-					/** @constant */
-					type: "policy.deleted";
-			  };
+		WorkspaceRole: "owner" | "admin" | "editor" | "reviewer";
+		/**
+		 * @description Cursor-based pagination query parameters.
+		 *
+		 *     This is the preferred pagination method for API endpoints. It provides:
+		 *     - Consistent performance regardless of page depth
+		 *     - Stable results even when items are added/removed
+		 *     - Efficient "load more" / infinite scroll patterns
+		 */
+		CursorPagination: {
+			/**
+			 * Format: uint32
+			 * @description The maximum number of records to return (1-100, default: 20).
+			 */
+			limit?: number;
+			/**
+			 * @description Cursor pointing to the last item of the previous page.
+			 *     Obtain this from the `nextCursor` field in the response.
+			 */
+			after?: string;
+			/**
+			 * @description Whether to include the total item count in the response's `total` field.
+			 *     Defaults to `false`, since counting is an extra query; set it to `true`
+			 *     only when the count is actually needed.
+			 * @default false
+			 */
+			includeCount?: boolean;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacePage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["Workspace"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description The `{workspaceId}` path segment. Named to match the `OpenAPI` parameter and the
+		 *     route definition.
+		 */
+		IdParam: {
+			/**
+			 * Format: uuid
+			 * @description Workspace identifier.
+			 */
+			workspaceId: string;
+		};
+		/**
+		 * @description Request payload to update an existing workspace.
+		 *
+		 *     All fields are optional; only provided fields will be updated. The handle is
+		 *     immutable and set at creation, so it cannot be changed here.
+		 */
+		UpdateWorkspace: {
+			/** @description New display name for the workspace (2-32 characters). */
+			displayName?: string;
+			/** @description New description for the workspace (max 500 characters). */
+			description?: string;
+			/**
+			 * @description Replacement workspace settings (approval requirement, data-retention
+			 *     rules). When omitted, settings are left unchanged.
+			 */
+			settings?: components["schemas"]["WorkspaceSettings"];
+		};
+		/** @description Response for notification settings within a workspace. */
+		WorkspaceNotificationSettings: {
+			/** @description Whether to send email notifications. */
+			notifyViaEmail: boolean;
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
+		};
+		/**
+		 * @description Defines the type of notification event sent to a user.
+		 *
+		 *     Corresponds to the `NOTIFICATION_EVENT` `PostgreSQL` enum and is used for
+		 *     member, connection-sync, detection, redaction, and system notifications.
+		 *     The values mirror the [`WebhookEvent`] naming for the events the two
+		 *     channels share.
+		 *
+		 *     [`WebhookEvent`]: super::WebhookEvent
+		 */
+		NotificationEvent:
+			| "member.joined"
+			| "connection.sync.completed"
+			| "connection.sync.failed"
+			| "pipeline.detection.completed"
+			| "pipeline.redaction.created"
+			| "pipeline.detection.failed"
+			| "review.assigned"
+			| "comment.mentioned";
+		/** @description Request payload for updating notification settings. */
+		UpdateWorkspaceNotificationSettings: {
+			/** @description Whether to send email notifications. */
+			notifyViaEmail?: boolean;
+			/** @description Notification events to receive in-app. */
+			notificationEventsApp?: components["schemas"]["NotificationEvent"][];
+			/** @description Notification events to receive via email. */
+			notificationEventsEmail?: components["schemas"]["NotificationEvent"][];
+		};
+		/**
+		 * @description The activity-specific filter parameters: which activity types to keep and
+		 *     whose activities to keep.
+		 *
+		 *     This is its own query struct so an endpoint composes it alongside the shared
+		 *     [`CursorPagination`] and [`DateWindow`] as separate query extractors, rather
+		 *     than `#[serde(flatten)]`ing them into one struct: the query extractor
+		 *     (`serde_html_form`) mis-handles flattened sub-structs — a flattened pagination
+		 *     struct fails to deserialize even a bare `?limit=` — so each concern is
+		 *     extracted on its own.
+		 *
+		 *     [`CursorPagination`]: crate::handler::request::CursorPagination
+		 */
+		WorkspaceActivityFilterQuery: {
+			/**
+			 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
+			 *     parameter for several; omit for no type constraint.
+			 */
+			type?: components["schemas"]["ActivityType"][];
+			/**
+			 * Format: uuid
+			 * @description Account id whose activities to keep. Omit for any actor.
+			 */
+			actor?: string;
+		};
 		/**
 		 * @description The type of activity performed in a workspace, for audit logging.
 		 *
@@ -14736,75 +14666,3133 @@ export interface components {
 			| "policy.updated"
 			| "policy.deleted";
 		/**
-		 * @description The type of API token, for authentication and tracking.
-		 *
-		 *     Corresponds to the `API_TOKEN_TYPE` `PostgreSQL` enum and categorizes tokens
-		 *     by the client type they authenticate.
+		 * @description A `from`/`to` day range (inclusive), both optional. Flatten it into an
+		 *     endpoint's query struct with `#[serde(flatten)]`, or use it directly when the
+		 *     range is the only parameter.
 		 */
-		ApiTokenType: "web" | "api" | "app";
-		ArtifactSet: {
-			parts: (
-				| {
-						artifact: components["schemas"]["Tokens"];
-						id: string[];
-						/** @constant */
-						modality: "text";
-				  }
-				| {
-						artifact: components["schemas"]["Layout"];
-						id: string[];
-						/** @constant */
-						modality: "image";
-				  }
-				| {
-						artifact: components["schemas"]["Transcription"];
-						id: string[];
-						/** @constant */
-						modality: "audio";
-				  }
-				| {
-						artifact: components["schemas"]["Tokens"];
-						id: string[];
-						/** @constant */
-						modality: "tabular";
-				  }
-			)[];
+		DateWindow: {
+			/**
+			 * Format: date
+			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
+			 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
+			 */
+			from?: string;
+			/**
+			 * Format: date
+			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
+			 */
+			to?: string;
 		};
 		/**
-		 * @description Author-supplied rationale for a redaction: *under what authority* it was made.
+		 * @description Generic paginated response wrapper.
 		 *
-		 *     Where the matched selection rule answers *which rule fired*, an
-		 *     `Attribution` answers *why the policy demanded it*, a compliance clause, an
-		 *     internal policy, a data-handling rule. A policy author attaches it to a
-		 *     selection rule (`Rule::because` in `elide-redaction`); the anonymizer records
-		 *     it on the entity's [`Redaction`] event so an audit can trace a change back to
-		 *     the policy that demanded it.
-		 *
-		 *     The rationale takes one of two shapes, by how much structure the author has:
-		 *     a [`Freeform`](Attribution::Freeform) label or a formal
-		 *     [`Cited`](Attribution::Cited) authority. Start one with
-		 *     [`Attribution::freeform`] / [`Attribution::cited`], refine it with the
-		 *     shape's `with_*` builder, and let it convert into an `Attribution`:
-		 *
-		 *     ```
-		 *     # use elide_core::entity::audit::Attribution;
-		 *     let attribution: Attribution =
-		 *         Attribution::freeform("gdpr-art-17")
-		 *             .with_description("right to erasure")
-		 *             .into();
-		 *     ```
-		 *
-		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
 		 */
-		Attribution:
+		WorkspaceActivityPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceActivity"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Response type for a workspace activity.
+		 *
+		 *     The typed payload is nested under `payload`, so an activity is
+		 *     `{ id, workspaceHandle, performedBy, payload: { activityType, <params...> }, createdAt }`.
+		 */
+		WorkspaceActivity: {
+			/**
+			 * Format: uuid
+			 * @description Unique activity identifier.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Account that performed the activity. */
+			performedBy: components["schemas"]["AccountRef"];
+			/**
+			 * @description The activity type and its typed params, absent when the stored params do
+			 *     not decode into their `activityType`.
+			 */
+			payload?: components["schemas"]["ActivityPayload"];
+			/**
+			 * Format: date-time
+			 * @description When the activity occurred.
+			 */
+			createdAt: string;
+		};
+		/**
+		 * @description The typed payload of an audit-log activity, tagged by `type` with its params
+		 *     under `data` (the same `{type, data}` envelope the notification payload and
+		 *     outbox event use).
+		 *
+		 *     Each variant is one activity type carrying its own params. No rendered text is
+		 *     included — the client localizes the copy from `type` and the params. The `type`
+		 *     values match the `ACTIVITY_TYPE` enum.
+		 */
+		ActivityPayload:
+			| {
+					/** @constant */
+					type: "workspace.created";
+					data: components["schemas"]["WorkspaceActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "workspace.updated";
+					data: components["schemas"]["WorkspaceActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "workspace.deleted";
+					data: components["schemas"]["WorkspaceActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "member.added";
+					data: components["schemas"]["MemberActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "member.updated";
+					data: components["schemas"]["MemberActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "member.deleted";
+					data: components["schemas"]["MemberActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "invite.created";
+					data: components["schemas"]["InviteActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "invite.accepted";
+					data: components["schemas"]["InviteActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "invite.declined";
+					data: components["schemas"]["InviteActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "invite.canceled";
+					data: components["schemas"]["InviteActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.created";
+					data: components["schemas"]["ConnectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.updated";
+					data: components["schemas"]["ConnectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.deleted";
+					data: components["schemas"]["ConnectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.sync.started";
+					data: components["schemas"]["ConnectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.sync.completed";
+					data: components["schemas"]["ConnectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.sync.failed";
+					data: components["schemas"]["ConnectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "provider.created";
+					data: components["schemas"]["ProviderActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "provider.updated";
+					data: components["schemas"]["ProviderActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "provider.deleted";
+					data: components["schemas"]["ProviderActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "webhook.created";
+					data: components["schemas"]["WebhookActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "webhook.updated";
+					data: components["schemas"]["WebhookActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "webhook.deleted";
+					data: components["schemas"]["WebhookActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "document.created";
+					data: components["schemas"]["DocumentActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "document.updated";
+					data: components["schemas"]["DocumentActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "document.deleted";
+					data: components["schemas"]["DocumentActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.opened";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.reopened";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.renamed";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.deleted";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.comment.created";
+					data: components["schemas"]["ReviewCommentActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.verified";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.assigned";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.unassigned";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.created";
+					data: components["schemas"]["PipelineActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.updated";
+					data: components["schemas"]["PipelineActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.deleted";
+					data: components["schemas"]["PipelineActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.detection.started";
+					data: components["schemas"]["DetectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.detection.completed";
+					data: components["schemas"]["DetectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.detection.failed";
+					data: components["schemas"]["DetectionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.redaction.created";
+					data: components["schemas"]["RedactionActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "policy.created";
+					data: components["schemas"]["PolicyActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "policy.updated";
+					data: components["schemas"]["PolicyActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "policy.deleted";
+					data: components["schemas"]["PolicyActivityParams"];
+			  };
+		/** @description Params of a workspace-scoped activity (`workspace.*`). */
+		WorkspaceActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the workspace acted on.
+			 */
+			workspaceId: string;
+		};
+		/** @description Params of a member activity (`member.*`). */
+		MemberActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the member's account.
+			 */
+			memberId: string;
+		};
+		/** @description Params of an invite activity (`invite.*`). */
+		InviteActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the invite.
+			 */
+			inviteId: string;
+			/**
+			 * @description Email the invite was addressed to, when it recorded one. `None` keeps an
+			 *     absent address distinct from a blank one.
+			 */
+			email?: string;
+		};
+		/** @description Params of a connection activity (`connection.*`). */
+		ConnectionActivityParams: {
+			/** @description Id of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Display name of the connection. */
+			connectionName: string;
+		};
+		/** @description Opaque conn identifier (conn_<uuid>). */
+		ConnectionId: string;
+		/** @description Params of a provider activity (`provider.*`). */
+		ProviderActivityParams: {
+			/** @description Id of the provider. */
+			providerId: components["schemas"]["ProviderId"];
+			/** @description Display name of the provider. */
+			providerName: string;
+		};
+		/** @description Opaque prov identifier (prov_<uuid>). */
+		ProviderId: string;
+		/** @description Params of a webhook activity (`webhook.*`). */
+		WebhookActivityParams: {
+			/** @description Id of the webhook. */
+			webhookId: components["schemas"]["WebhookId"];
+			/** @description Display name of the webhook. */
+			webhookName: string;
+		};
+		/** @description Opaque whk identifier (whk_<uuid>). */
+		WebhookId: string;
+		/** @description Params of a document activity (`document.*`). */
+		DocumentActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the document.
+			 */
+			documentId: string;
+			/** @description Display name of the document. */
+			documentName: string;
+		};
+		/**
+		 * @description Params of a review activity (`review.opened`, `review.reopened`,
+		 *     `review.renamed`, `review.deleted`, `review.verified`, `review.assigned`,
+		 *     `review.unassigned`).
+		 */
+		ReviewActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the review.
+			 */
+			reviewId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the document under review.
+			 */
+			documentId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the reviewer assigned or unassigned; omitted for the events that carry
+			 *     no reviewer.
+			 */
+			assigneeId?: string;
+		};
+		/** @description Params of a review-comment activity (`review.comment.created`). */
+		ReviewCommentActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the comment.
+			 */
+			commentId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the review the comment is in.
+			 */
+			reviewId: string;
+		};
+		/** @description Params of a pipeline activity (`pipeline.*`, non-run). */
+		PipelineActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the pipeline.
+			 */
+			pipelineId: string;
+		};
+		/** @description Params of a detection activity (`pipeline.detection.*`). */
+		DetectionActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
+			/** @description Id of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+		};
+		/** @description Opaque detection identifier (detection_<uuid>). */
+		DetectionId: string;
+		/** @description Params of a redaction activity (`pipeline.redaction.*`). */
+		RedactionActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent when the detection was ad-hoc.
+			 */
+			pipelineId?: string;
+			/** @description Id of the redaction. */
+			redactionId: components["schemas"]["RedactionId"];
+		};
+		/** @description Opaque redaction identifier (redaction_<uuid>). */
+		RedactionId: string;
+		/** @description Params of a policy activity (`policy.*`). */
+		PolicyActivityParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the policy.
+			 */
+			policyId: string;
+		};
+		/**
+		 * @description The export-only query parameter: the output format. Kept separate from the
+		 *     shared filter and window so each is extracted on its own (see
+		 *     [`WorkspaceActivityFilterQuery`] for why flattening is avoided).
+		 */
+		WorkspaceActivityExportOptions: {
+			/** @description Output format; defaults to `csv`. */
+			format?: components["schemas"]["ExportFormat"];
+		};
+		/** @description The file format an export is rendered as. */
+		ExportFormat: "csv" | "json";
+		/**
+		 * @description Aggregate analytics for a workspace: what it stores, how its detections fare,
+		 *     and the inference usage they metered.
+		 */
+		WorkspaceAnalytics: {
+			/** @description Stored-file totals and their per-kind breakdown. */
+			storage: components["schemas"]["WorkspaceStorageAnalytics"];
+			/** @description Detection health: volume, status mix, and durations. */
+			detections: components["schemas"]["WorkspaceDetectionAnalytics"];
+			/** @description Inference usage: per-meter workspace totals and a per-model breakdown. */
+			usage: components["schemas"]["WorkspaceUsageAnalytics"];
+		};
+		/** @description Storage totals across a workspace's live files. */
+		WorkspaceStorageAnalytics: {
+			/**
+			 * Format: int64
+			 * @description Total bytes of all live files.
+			 */
+			totalBytes: number;
+			/**
+			 * Format: int64
+			 * @description Number of live files.
+			 */
+			fileCount: number;
+			/**
+			 * @description Per-kind breakdown, one entry per document `kind` (zero-filled), in a
+			 *     stable order.
+			 */
+			byKind: components["schemas"]["WorkspaceStorageKindEntry"][];
+		};
+		/** @description One document `kind`'s share of a workspace's storage. */
+		WorkspaceStorageKindEntry: {
+			/** @description The document kind. */
+			kind: components["schemas"]["DocumentKind"];
+			/**
+			 * Format: int64
+			 * @description Number of live documents of this kind.
+			 */
+			fileCount: number;
+			/**
+			 * Format: int64
+			 * @description Total bytes of live documents of this kind.
+			 */
+			totalBytes: number;
+		};
+		/**
+		 * @description The kind of a human-facing document.
+		 *
+		 *     Corresponds to the `DOCUMENT_KIND` `PostgreSQL` enum. Machine byproducts
+		 *     (detection audits, review audits, enrichment intermediates) are not
+		 *     documents — they reference blobs directly from their own tables.
+		 */
+		DocumentKind: "original" | "redacted";
+		/** @description Detection health for a workspace. */
+		WorkspaceDetectionAnalytics: {
+			/**
+			 * Format: int64
+			 * @description Total number of detections.
+			 */
+			total: number;
+			/**
+			 * @description Per-status breakdown, one entry per detection status (zero-filled), in a
+			 *     stable order.
+			 */
+			byStatus: components["schemas"]["WorkspaceDetectionStatusEntry"][];
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed). Omitted when no detection has reached a
+			 *     terminal state (genuinely no signal, not zero).
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description Mean completed-detection duration in milliseconds; omitted until a
+			 *     detection completes.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-detection duration in milliseconds; omitted until
+			 *     a detection completes.
+			 */
+			p95DurationMs?: number;
+		};
+		/** @description One status's share of a workspace's detections. */
+		WorkspaceDetectionStatusEntry: {
+			/** @description The detection status. */
+			status: components["schemas"]["DetectionStatus"];
+			/**
+			 * Format: int64
+			 * @description Number of detections in this status.
+			 */
+			count: number;
+		};
+		/**
+		 * @description The execution status of a detection (one analysis pass of a file).
+		 *
+		 *     Corresponds to the `DETECTION_STATUS` `PostgreSQL` enum. A detection is
+		 *     `Pending` (enqueued, no worker yet), then `Executing` (a worker is actively
+		 *     analyzing), then settles into `Complete` (analysis done, ready to redact)
+		 *     or `Failed`. Redaction is a separate, repeatable action over a complete
+		 *     detection and does not change this status.
+		 */
+		DetectionStatus: "pending" | "executing" | "complete" | "failed";
+		/** @description Inference usage across a workspace's detections. */
+		WorkspaceUsageAnalytics: {
+			/**
+			 * @description Workspace-wide total per meter, keyed by meter name (`tokensInput`,
+			 *     `seconds`, …). Only meters actually reported appear.
+			 */
+			meters: {
+				[key: string]: number;
+			};
+			/**
+			 * Format: int64
+			 * @description Total model calls across all detections.
+			 */
+			calls: number;
+			/**
+			 * Format: int64
+			 * @description How many of those calls failed.
+			 */
+			errors: number;
+			/** @description Per-model breakdown, one entry per model used, in a stable order. */
+			byModel: components["schemas"]["WorkspaceModelUsageEntry"][];
+		};
+		/** @description One model's usage across a workspace's detections. */
+		WorkspaceModelUsageEntry: {
+			/** @description The model. */
+			model: string;
+			/**
+			 * @description Summed amount per meter for this model, keyed by meter name. Only meters
+			 *     this model reported appear; a value may be fractional (seconds).
+			 */
+			meters: {
+				[key: string]: number;
+			};
+			/**
+			 * Format: int64
+			 * @description Calls made to this model.
+			 */
+			calls: number;
+			/**
+			 * Format: int64
+			 * @description How many of those calls failed.
+			 */
+			errors: number;
+		};
+		/**
+		 * @description A workspace's daily detection activity over a window: one point per day, dense
+		 *     (quiet days included with `detections: 0`), ready to plot as a continuous
+		 *     series.
+		 */
+		WorkspaceDetectionTimeSeries: {
+			/** @description One entry per day in the requested window, oldest first. */
+			points: components["schemas"]["WorkspaceDetectionDayEntry"][];
+		};
+		/** @description A single day of detection activity. */
+		WorkspaceDetectionDayEntry: {
+			/**
+			 * Format: date
+			 * @description The day (`YYYY-MM-DD`, UTC).
+			 */
+			date: string;
+			/**
+			 * Format: int64
+			 * @description Detections started this day (`0` on a quiet day).
+			 */
+			detections: number;
+			/**
+			 * Format: double
+			 * @description Failed / (completed + failed) for this day; omitted when no detection
+			 *     reached a terminal state that day.
+			 */
+			errorRate?: number;
+			/**
+			 * Format: int64
+			 * @description Mean completed-detection duration (milliseconds) this day; omitted if none completed.
+			 */
+			avgDurationMs?: number;
+			/**
+			 * Format: int64
+			 * @description 95th-percentile completed-detection duration (milliseconds) this day; omitted if none.
+			 */
+			p95DurationMs?: number;
+			/**
+			 * @description Amount per meter spent by this day's detections, keyed by meter name.
+			 *     Empty on a day with no metered usage.
+			 */
+			meters: {
+				[key: string]: number;
+			};
+		};
+		/** @description Query parameters for listing workspace members. */
+		ListWorkspaceMembers: {
+			/** @description Filter by workspace role. */
+			role?: components["schemas"]["WorkspaceRole"];
+			/** @description Sort by field. */
+			sortBy?: components["schemas"]["MemberSortField"];
+			/** @description Sort order (asc or desc). */
+			order?: components["schemas"]["Direction"];
+		};
+		/** @description Fields available for sorting workspace members. */
+		MemberSortField: "name" | "date";
+		/** @description Sort order direction. */
+		Direction: "ascending" | "descending";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceMemberPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceMember"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/** @description Represents a workspace member. */
+		WorkspaceMember: {
+			/**
+			 * Format: uuid
+			 * @description Account id of the member — the durable reference used to address the
+			 *     account (e.g. as a review `assignee`), stable across handle changes.
+			 */
+			id: string;
+			/** @description Handle of the member's account. */
+			username: components["schemas"]["Handle"];
+			/** @description Email address of the member. */
+			emailAddress: string;
+			/** @description Display name of the member, when set. */
+			displayName?: string;
+			/** @description Serve path of the member's avatar, when set. */
+			avatarUrl?: string;
+			/** @description Role of the member in the workspace. */
+			memberRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the member joined the workspace.
+			 */
+			createdAt: string;
+		};
+		/** @description Path parameters for workspace member operations. */
+		WorkspaceMemberPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the member's account.
+			 */
+			accountId: string;
+		};
+		/** @description Request to update a member's role. */
+		UpdateWorkspaceMember: {
+			/** @description New role for the member. */
+			role: components["schemas"]["WorkspaceRole"];
+		};
+		/**
+		 * @description Query parameters for listing a workspace's reviews (the review queue).
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint. Accounts
+		 *     are addressed by id.
+		 */
+		WorkspaceReviewsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter to the reviews of a specific document.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the review's opening author (account id).
+			 */
+			author?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the assigned reviewer (account id).
+			 */
+			assignee?: string;
+			/** @description Filter by review status. */
+			reviewStatus?: components["schemas"]["ReviewStatus"];
+		};
+		/**
+		 * @description The review state of a file thread (a file thread is the review of its
+		 *     file). `None` on the thread means a workspace thread, which has no review.
+		 *
+		 *     Corresponds to the `REVIEW_STATUS` `PostgreSQL` enum. It is derived from the
+		 *     review's events, never set by a user: a detection makes it `NeedsReview`, a
+		 *     redaction `InReview`, and verification `Resolved`; a later detection reopens
+		 *     it to `NeedsReview`.
+		 */
+		ReviewStatus: "needs_review" | "in_review" | "resolved";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceReviewPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceReview"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Response type for a review: a named discussion on a document with a manual
+		 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
+		 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+		 *     stream is a [`WorkspaceReviewEntry`] timeline.
+		 */
+		WorkspaceReview: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the review.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Document under review.
+			 */
+			documentId: string;
+			/** @description The review's title. */
+			displayName: string;
+			/** @description Account that opened the review. */
+			author: components["schemas"]["AccountRef"];
+			/** @description The review's current status. */
+			reviewStatus: components["schemas"]["ReviewStatus"];
+			/** @description The reviewers assigned to this review (empty when unassigned). */
+			assignees: components["schemas"]["AccountRef"][];
+			/**
+			 * Format: date-time
+			 * @description When the review was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the review was last updated.
+			 */
+			updatedAt: string;
+		};
+		/** @description Path parameters for document operations within a workspace context. */
+		WorkspaceDocumentPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the document.
+			 */
+			documentId: string;
+		};
+		/** @description Request payload to open a review on a document. */
+		CreateWorkspaceReview: {
+			/** @description The review's title (1-255 characters). */
+			displayName: string;
+		};
+		/** @description Path parameters addressing one review by its id. */
+		WorkspaceReviewPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the review.
+			 */
+			reviewId: string;
+		};
+		/** @description Request payload to rename a review (set its title). */
+		RenameWorkspaceReview: {
+			/**
+			 * @description The new title (1-255 characters). Omitting the field leaves the current
+			 *     title unchanged.
+			 */
+			displayName?: string;
+		};
+		/**
+		 * @description Request payload to post a comment (message) in a review.
+		 *
+		 *     `@username` mentions in the body notify those workspace members.
+		 */
+		CreateWorkspaceComment: {
+			/** @description The comment text (1-10000 characters). */
+			body: string;
+		};
+		/** @description Response type for a comment: one message within a review's discussion. */
+		WorkspaceComment: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the comment.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Review this message belongs to.
+			 */
+			reviewId: string;
+			/** @description Account that wrote the message. */
+			author: components["schemas"]["AccountRef"];
+			/** @description The message text. */
+			body: string;
+			/**
+			 * Format: date-time
+			 * @description When the comment was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the comment was last updated.
+			 */
+			updatedAt: string;
+		};
+		/** @description Path parameters addressing one comment by its id. */
+		WorkspaceCommentPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the comment.
+			 */
+			commentId: string;
+		};
+		/** @description Request payload to edit a comment's body. */
+		UpdateWorkspaceComment: {
+			/** @description The new comment text (1-10000 characters). */
+			body: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceReviewEntryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceReviewEntry"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description One entry in a review's timeline: either a message or a lifecycle event, tagged
+		 *     so a client renders them interleaved in order.
+		 */
+		WorkspaceReviewEntry:
 			| ({
 					/** @constant */
-					kind: "freeform";
-			  } & components["schemas"]["FreeformAttribution"])
+					type: "comment";
+			  } & components["schemas"]["WorkspaceComment"])
 			| ({
 					/** @constant */
-					kind: "cited";
-			  } & components["schemas"]["CitedAttribution"]);
+					type: "event";
+			  } & components["schemas"]["WorkspaceReviewEvent"]);
+		/**
+		 * @description The kind of a non-message entry in a review's timeline.
+		 *
+		 *     Corresponds to the `REVIEW_EVENT_KIND` `PostgreSQL` enum. A review's stream
+		 *     interleaves comments (messages) with these events: the lifecycle (opened,
+		 *     renamed, verified, reopened) and the sign-off workflow (detections and
+		 *     redactions referenced, assignment changes).
+		 */
+		ReviewEventKind:
+			| "review.opened"
+			| "review.renamed"
+			| "detection.linked"
+			| "redaction.linked"
+			| "assigned"
+			| "unassigned"
+			| "verified"
+			| "reopened";
+		/**
+		 * @description One non-message entry in a review timeline (opened, renamed, a detection or
+		 *     redaction linked, an assignment change, verified, or reopened).
+		 */
+		WorkspaceReviewEvent: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the event.
+			 */
+			id: string;
+			/** @description What happened. */
+			kind: components["schemas"]["ReviewEventKind"];
+			/** @description Account that performed the action; `None` if that account was removed. */
+			actor?: components["schemas"]["AccountRef"];
+			/**
+			 * @description Event-specific detail (the new name, a linked id, an assignee); `None` when
+			 *     none.
+			 */
+			target?: unknown;
+			/**
+			 * Format: date-time
+			 * @description When the event happened.
+			 */
+			createdAt: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceReviewEventPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceReviewEvent"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/** @description Path parameters addressing a reviewer assignment on a review. */
+		WorkspaceReviewAssigneePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the review.
+			 */
+			reviewId: string;
+			/**
+			 * Format: uuid
+			 * @description Account id of the reviewer to assign or unassign.
+			 */
+			accountId: string;
+		};
+		/** @description Path parameters addressing a review-to-detection link. */
+		WorkspaceReviewDetectionPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the review.
+			 */
+			reviewId: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the detection to reference.
+			 */
+			detectionId: string;
+		};
+		/** @description Path parameters addressing a review-to-redaction link. */
+		WorkspaceReviewRedactionPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the review.
+			 */
+			reviewId: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the redaction to reference.
+			 */
+			redactionId: string;
+		};
+		/** @description Request payload for creating a new workspace connection. */
+		CreateWorkspaceConnection: {
+			/** @description Human-readable connection display name. */
+			displayName: string;
+			/**
+			 * @description Whether the connection is enabled. Omit to default to active; set `false`
+			 *     to create it disabled.
+			 */
+			isActive?: boolean;
+			/**
+			 * @description Typed provider configuration (provider tag + its credentials), encrypted
+			 *     at rest. The `provider` tag selects which credential shape is required and
+			 *     which capability the connection has.
+			 */
+			config: components["schemas"]["ConnectionConfig"];
+			/**
+			 * @description Scheduled-sync configuration. Accepted only for schedulable providers
+			 *     (object stores); rejected for others. Omit for on-demand only.
+			 */
+			sync?: components["schemas"]["SyncScheduleInput"];
+		};
+		/**
+		 * @description A fully-typed transfer-connection configuration.
+		 *
+		 *     Untagged: the two inner enums have disjoint `provider` values, so serde
+		 *     resolves the variant from the flat payload without an outer discriminator.
+		 */
+		ConnectionConfig:
+			| components["schemas"]["StorageConfig"]
+			| components["schemas"]["FileServiceConfig"];
+		/**
+		 * @description A fully-typed object-store connection configuration.
+		 *
+		 *     The `provider` tag selects the variant and thereby the credential shape, so
+		 *     an S3 connection cannot carry Azure credentials. Each variant carries a
+		 *     shared optional `root_path` and a nested `credentials` object, giving a wire
+		 *     shape like
+		 *     `{ "provider": "s3", "rootPath": "in/", "credentials": { "bucket": "b", "accessKeyId": "..." } }`.
+		 *
+		 *     Secrets are masked in [`Debug`]; serialization exists only to persist the
+		 *     config encrypted at rest, never to return it in API responses.
+		 */
+		StorageConfig:
+			| {
+					/** @constant */
+					provider: "s3";
+					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
+					rootPath?: string;
+					/** @description S3 credentials. */
+					credentials: components["schemas"]["S3Credentials"];
+			  }
+			| {
+					/** @constant */
+					provider: "azure";
+					/** @description Optional root prefix within the container; keys resolve relative to it. */
+					rootPath?: string;
+					/** @description Azure credentials. */
+					credentials: components["schemas"]["AzureCredentials"];
+			  }
+			| {
+					/** @constant */
+					provider: "gcs";
+					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
+					rootPath?: string;
+					/** @description GCS credentials. */
+					credentials: components["schemas"]["GcsCredentials"];
+			  };
+		/**
+		 * @description Typed credentials for S3-compatible provider.
+		 *
+		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
+		 *     to persist the credentials encrypted at rest; they are never returned in API
+		 *     responses.
+		 */
+		S3Credentials: {
+			/** @description S3 bucket name. */
+			bucket: string;
+			/**
+			 * @description AWS region (defaults to `us-east-1`).
+			 * @default us-east-1
+			 */
+			region?: string;
+			/**
+			 * @description Endpoint URL (e.g. `http://localhost:9000` for `MinIO`).
+			 *     Required for non-AWS S3-compatible services.
+			 */
+			endpoint?: string;
+			/** @description Access key ID for static credentials. */
+			accessKeyId?: string;
+			/** @description Secret access key for static credentials. */
+			secretAccessKey?: string;
+			/** @description Session token for temporary credentials. */
+			sessionToken?: string;
+		};
+		/**
+		 * @description Typed credentials for Azure Blob Storage.
+		 *
+		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
+		 *     to persist the credentials encrypted at rest; they are never returned in API
+		 *     responses.
+		 */
+		AzureCredentials: {
+			/** @description Azure storage container name. */
+			container: string;
+			/** @description Azure storage account name. */
+			accountName: string;
+			/** @description Storage account access key. */
+			accessKey?: string;
+			/** @description Shared Access Signature token. */
+			sasToken?: string;
+			/** @description Custom endpoint URL (for Azure Stack or Azurite). */
+			endpoint?: string;
+		};
+		/**
+		 * @description Typed credentials for Google Cloud Storage.
+		 *
+		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
+		 *     to persist the credentials encrypted at rest; they are never returned in API
+		 *     responses.
+		 */
+		GcsCredentials: {
+			/** @description GCS bucket name. */
+			bucket: string;
+			/** @description Path to a service account key JSON file on the local filesystem. */
+			serviceAccountPath?: string;
+			/** @description Inline service account key JSON (the file contents, not a path). */
+			serviceAccountKeyJson?: string;
+			/** @description Custom endpoint URL (for testing with a fake GCS server). */
+			endpoint?: string;
+		};
+		/**
+		 * @description A fully-typed cloud file-service connection configuration: a provider and its
+		 *     settings. Serialized (flat: `{ "provider": ..., "tokens": ..., "root": ... }`)
+		 *     only to persist the config encrypted at rest, never returned in API responses.
+		 */
+		FileServiceConfig: {
+			/** @description Which provider backs this connection. */
+			provider: components["schemas"]["FileServiceProvider"];
+			/** @description The OAuth token set for this connection. */
+			tokens: components["schemas"]["OAuthTokens"];
+			/**
+			 * @description The folder (id or path) new exports are written into; `None` uses the
+			 *     account root.
+			 */
+			root?: string;
+		};
+		/**
+		 * @description A supported cloud file-service provider.
+		 *
+		 *     The serialized form (`snake_case`) is the `provider` tag stored on a connection
+		 *     and used in the API, so every provider name lives in exactly one place.
+		 */
+		FileServiceProvider: "google_drive" | "dropbox" | "one_drive" | "box";
+		/**
+		 * @description A persisted OAuth token set. Stored encrypted with the rest of a
+		 *     connection's config; never returned in API responses. The tokens are masked
+		 *     in [`Debug`] so a connection config's derived `Debug` cannot leak them.
+		 */
+		OAuthTokens: {
+			/** @description The current access token, sent as a bearer credential. */
+			access_token: string;
+			/**
+			 * @description The refresh token, used to mint a new access token when it expires.
+			 *     Providers may omit it on refresh, so it is retained across refreshes.
+			 */
+			refresh_token?: string;
+			/**
+			 * Format: int64
+			 * @description Unix seconds at which the access token expires, if known.
+			 */
+			expires_at?: number;
+		};
+		/**
+		 * @description Scheduled-sync configuration for a schedulable connection.
+		 *
+		 *     Accepted only for providers that can sync on a timer (object stores); rejected
+		 *     for others — a file service transfers on demand (picker import, per-file
+		 *     export), and an LLM does not transfer at all. Omit for on-demand only.
+		 */
+		SyncScheduleInput: {
+			/**
+			 * @description Whether the connection imports data in or exports data out. Required: the
+			 *     caller states the direction explicitly rather than defaulting to one.
+			 */
+			syncMode: components["schemas"]["SyncMode"];
+			/** @description Cron expression for scheduled imports; omit for manual-only. */
+			scheduleCron?: string;
+			/**
+			 * @description How an import reconciles files whose source object was deleted.
+			 * @default ignore
+			 */
+			deletionPolicy?: components["schemas"]["SyncDeletionPolicy"];
+		};
+		/**
+		 * @description The direction a connection syncs data.
+		 *
+		 *     Corresponds to the `SYNC_MODE` `PostgreSQL` enum: `Import` fetches objects
+		 *     from the connection into the workspace; `Export` pushes workspace files
+		 *     out.
+		 *
+		 *     A scheduled `Import` is an object-store concept: it enumerates the source
+		 *     and pulls the whole listing on a timer. A file service is not enumerated on
+		 *     a timer — its import is picker-driven and request-time — so only `Export`
+		 *     is scheduled for a file service.
+		 */
+		SyncMode: "import" | "export";
+		/**
+		 * @description What a whole-listing import does with a file whose source object no longer
+		 *     exists.
+		 *
+		 *     Corresponds to the `SYNC_DELETION_POLICY` `PostgreSQL` enum. Only
+		 *     whole-listing import reconciles deletions (it compares the full source
+		 *     listing against what was imported), so this applies to object-store import
+		 *     alone; picker-driven file-service import transfers only the files the user
+		 *     selected and never reconciles. Deletion is opt-in per connection: the
+		 *     default `Ignore` keeps imports strictly additive so a transient listing
+		 *     error or a misconfigured root path can never remove files.
+		 */
+		SyncDeletionPolicy: "ignore" | "delete";
+		/**
+		 * @description Response type for a workspace connection.
+		 *
+		 *     Note: The encrypted connection data is never exposed in API responses.
+		 *     Only metadata about the connection is returned.
+		 */
+		WorkspaceConnection: {
+			/** @description Opaque identifier of the connection. */
+			id: components["schemas"]["ConnectionId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Account that created this connection. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Human-readable connection display name. */
+			displayName: string;
+			/** @description Provider identifier (`s3`, `azure`, `gcs`, `google_drive`, `dropbox`, ...). */
+			provider: string;
+			/** @description Capability category of the connection (object store, file service). */
+			connectionType: components["schemas"]["ConnectionType"];
+			/** @description Whether the connection is enabled. */
+			isActive: boolean;
+			/**
+			 * @description Scheduled-sync configuration; present only for connections that sync on a
+			 *     timer. Its absence does not mean the connection cannot sync — a file
+			 *     service and an unscheduled object store both transfer on demand.
+			 */
+			sync?: components["schemas"]["WorkspaceSyncSchedule"];
+			/**
+			 * Format: date-time
+			 * @description When the connection last synced successfully, if ever. Independent of
+			 *     `sync`: a connection with no schedule still records its on-demand syncs.
+			 */
+			lastSyncedAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the connection was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the connection was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description The capability category of a transfer connection.
+		 *
+		 *     Corresponds to the `CONNECTION_TYPE` `PostgreSQL` enum. A stable, closed set:
+		 *     the concrete provider (the `provider` column, e.g. `s3`) stays open and
+		 *     extensible, while its capability is one of these types. Both categories are
+		 *     transfer-capable — an object store is enumerable and syncs on a timer; a
+		 *     file service transfers on demand. Inference services are a separate
+		 *     resource (`workspace_providers`), not a connection.
+		 */
+		ConnectionType: "object_store" | "file_service";
+		/**
+		 * @description A connection's scheduled-sync configuration (its cron config), present only
+		 *     for connections that sync on a timer. A connection can transfer on demand
+		 *     without this — it is purely the schedule, not a capability marker. When the
+		 *     connection last synced is on [`WorkspaceConnection`] itself, since a connection with no
+		 *     schedule still syncs.
+		 */
+		WorkspaceSyncSchedule: {
+			/** @description Whether the connection imports data in or exports data out. */
+			syncMode: components["schemas"]["SyncMode"];
+			/** @description Cron expression for scheduled imports, if configured. */
+			scheduleCron?: string;
+			/** @description How an import reconciles files whose source object was deleted. */
+			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
+		};
+		/** @description Query parameters for listing connections. */
+		WorkspaceConnectionsQuery: {
+			/**
+			 * @description Filter by provider (`s3`, `azure`, `gcs`). Repeatable; a connection
+			 *     matches if it uses any of the given providers. Empty means no filter.
+			 * @default []
+			 */
+			provider?: string[];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceConnectionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceConnection"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Path parameters for connection operations.
+		 *
+		 *     The workspace is resolved separately from the `{workspaceId}` segment by
+		 *     the [`WorkspaceContext`] extractor.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
+		WorkspaceConnectionPathParams: {
+			/** @description Opaque identifier of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+		};
+		/** @description Request payload for updating an existing workspace connection. */
+		UpdateWorkspaceConnection: {
+			/** @description Human-readable connection display name. */
+			displayName?: string;
+			/**
+			 * @description Whether the connection is enabled. `false` disables it (pausing scheduled
+			 *     syncs and rejecting manual ones); omit to leave unchanged.
+			 */
+			isActive?: boolean;
+			/**
+			 * @description Typed provider configuration. If provided, fully replaces the stored
+			 *     config (and, with it, the provider). Omit to leave it unchanged.
+			 */
+			config?: components["schemas"]["ConnectionConfig"];
+			/**
+			 * @description Scheduled-sync configuration. Accepted only for schedulable providers
+			 *     (object stores); rejected for others. Omit to leave unchanged.
+			 */
+			sync?: components["schemas"]["SyncScheduleInput"];
+		};
+		/** @description Result of a connection reachability check. */
+		WorkspaceConnectionVerification: {
+			/** @description Whether the backing store was reachable with the stored credentials. */
+			reachable: boolean;
+			/** @description Failure reason when not reachable; omitted on success. */
+			error?: string;
+		};
+		/**
+		 * @description Body for minting a browser file-picker token.
+		 *
+		 *     The `OneDrive` v8 picker requests a token per resource (it names the resource in
+		 *     each `authenticate` command); the caller passes that `resource` so the server
+		 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
+		 *     single provider token (Google Drive, Box); omit it for those.
+		 */
+		WorkspacePickerTokenRequest: {
+			/**
+			 * @description The resource the picker asked for (its `authenticate` command's
+			 *     `resource`), e.g. `https://contoso-my.sharepoint.com`. Optional; when
+			 *     absent the server uses the connection's default picker resource.
+			 */
+			resource?: string;
+		};
+		/**
+		 * @description A short-lived provider OAuth access token for a browser file picker.
+		 *
+		 *     Carries only the access token and its expiry — never the refresh token, which
+		 *     stays server-side. The token is minted from the connection's stored
+		 *     credentials and is short-lived (the provider's access-token lifetime), so the
+		 *     browser holds a narrow, expiring credential rather than a durable one.
+		 */
+		WorkspacePickerToken: {
+			/** @description The provider OAuth access token to hand to the browser picker. */
+			accessToken: string;
+			/**
+			 * Format: int64
+			 * @description Unix seconds at which the access token expires, if the provider reports
+			 *     it. `None` means the provider did not return an expiry.
+			 */
+			expiresAt?: number;
+		};
+		/** @description Request payload for creating a new workspace provider. */
+		CreateWorkspaceProvider: {
+			/** @description Human-readable provider display name. */
+			displayName: string;
+			/**
+			 * @description Whether the provider is enabled. Omit to default to active; set `false` to
+			 *     create it disabled.
+			 */
+			isActive?: boolean;
+			/**
+			 * @description Typed provider configuration (provider tag + its credentials), encrypted at
+			 *     rest. The `provider` tag selects which credential shape is required and
+			 *     which model type the provider has.
+			 */
+			config: components["schemas"]["ProviderConfig"];
+		};
+		/**
+		 * @description A fully-typed inference-provider configuration.
+		 *
+		 *     Untagged: the inner config's `provider` tag is the sole discriminator, so the
+		 *     stored/wire form is flat. A new inference kind is added as a variant of
+		 *     [`InferenceConfig`] with no change here.
+		 */
+		ProviderConfig: components["schemas"]["InferenceConfig"];
+		/**
+		 * @description A fully-typed inference connection configuration, across every inference kind.
+		 *
+		 *     Inference is a family: a language model for chat today, and other model kinds
+		 *     (e.g. named-entity recognition) as they are added. Each kind owns its own
+		 *     config with its own `provider` tag, and this enum is untagged, so the flat
+		 *     payload's `provider` remains the sole discriminator — an inference kind is
+		 *     added as a new variant with no change to the wire format or storage.
+		 */
+		InferenceConfig: components["schemas"]["LlmConfig"];
+		/**
+		 * @description A fully-typed LLM inference connection configuration.
+		 *
+		 *     The `provider` tag selects the variant and thereby the credential shape, so
+		 *     an `OpenAI` connection cannot carry Anthropic credentials. The key-bearing
+		 *     variants hold an [`AuthenticatedProvider`], which masks the key in `Debug`;
+		 *     serialization exists only to persist the config encrypted at rest, never to
+		 *     return it in API responses.
+		 */
+		LlmConfig:
+			| ({
+					/** @constant */
+					provider: "openai";
+			  } & components["schemas"]["AuthenticatedProvider"])
+			| ({
+					/** @constant */
+					provider: "ollama";
+			  } & components["schemas"]["UnauthenticatedProvider"])
+			| ({
+					/** @constant */
+					provider: "anthropic";
+			  } & components["schemas"]["AuthenticatedProvider"]);
+		/**
+		 * @description Configuration for a provider reached with an API key (`OpenAI`, Anthropic).
+		 *
+		 *     The `api_key` is masked in [`Debug`], so neither this struct nor any config
+		 *     that embeds it leaks the key.
+		 */
+		AuthenticatedProvider: {
+			/** @description The provider API key. */
+			apiKey: string;
+			/** @description Override the API base URL (for a compatible endpoint or a proxy). Optional. */
+			baseUrl?: string;
+			/** @description Default model to use when a request does not specify one. Optional. */
+			defaultModel?: string;
+		};
+		/**
+		 * @description Configuration for a provider reached without an API key (Ollama), addressed
+		 *     by a caller-supplied base URL. Carries no secret, so it derives [`Debug`].
+		 */
+		UnauthenticatedProvider: {
+			/** @description Base URL of the server (e.g. `http://localhost:11434`). */
+			baseUrl: string;
+			/** @description Default model to use when a request does not specify one. Optional. */
+			defaultModel?: string;
+		};
+		/**
+		 * @description Response type for a workspace inference provider.
+		 *
+		 *     Note: The encrypted provider data is never exposed in API responses. Only
+		 *     metadata about the provider is returned.
+		 */
+		WorkspaceProvider: {
+			/** @description Opaque identifier of the provider. */
+			id: components["schemas"]["ProviderId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Account that created this provider. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Human-readable provider display name. */
+			displayName: string;
+			/** @description Provider identifier (`openai`, `ollama`, `anthropic`, ...). */
+			provider: string;
+			/** @description Inference model type of the provider (llm, ner). */
+			providerType: components["schemas"]["ProviderType"];
+			/** @description Whether the provider is enabled. */
+			isActive: boolean;
+			/**
+			 * Format: date-time
+			 * @description When the provider was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the provider was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description The inference model type backing a workspace provider.
+		 *
+		 *     Corresponds to the `PROVIDER_TYPE` `PostgreSQL` enum. A workspace provider is
+		 *     an inference service the platform calls; this says which kind of model it
+		 *     is — a language model for chat, or a named-entity-recognition model for
+		 *     extraction. The concrete vendor (the `provider` column, e.g. `openai`) is
+		 *     orthogonal and stays open; this type is a stable, closed set used to find a
+		 *     workspace's provider of a given type without decrypting its config.
+		 */
+		ProviderType: "llm" | "ner";
+		/** @description Query parameters for listing providers. */
+		WorkspaceProvidersQuery: {
+			/**
+			 * @description Filter by provider (`openai`, `ollama`, `anthropic`). Repeatable; a
+			 *     provider matches if it uses any of the given providers. Empty means no
+			 *     filter.
+			 * @default []
+			 */
+			provider?: string[];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceProviderPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceProvider"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Path parameters for provider operations.
+		 *
+		 *     The workspace is resolved separately from the `{workspaceId}` segment by the
+		 *     [`WorkspaceContext`] extractor.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
+		WorkspaceProviderPathParams: {
+			/** @description Opaque identifier of the provider. */
+			providerId: components["schemas"]["ProviderId"];
+		};
+		/** @description Request payload for updating an existing workspace provider. */
+		UpdateWorkspaceProvider: {
+			/** @description Human-readable provider display name. */
+			displayName?: string;
+			/** @description Whether the provider is enabled. Omit to leave unchanged. */
+			isActive?: boolean;
+			/**
+			 * @description Typed provider configuration. If provided, fully replaces the stored config
+			 *     (and, with it, the provider). Omit to leave it unchanged.
+			 */
+			config?: components["schemas"]["ProviderConfig"];
+		};
+		/**
+		 * @description Path parameters for the OAuth start endpoint: which cloud file provider to
+		 *     begin authorizing. The provider is the crate's [`FileServiceProvider`], so the API and
+		 *     stored config name each provider identically.
+		 */
+		OAuthStartPathParams: {
+			/** @description The cloud file provider to connect. */
+			provider: components["schemas"]["FileServiceProvider"];
+		};
+		/** @description Request payload for starting a cloud file-service OAuth authorization. */
+		StartFileServiceOAuth: {
+			/** @description Human-readable name for the connection to be created on success. */
+			displayName: string;
+			/**
+			 * @description Where to scope the sync: a folder id (Drive, `OneDrive`, Box) or a folder
+			 *     path (Dropbox). Omit to use the account root.
+			 */
+			root?: string;
+		};
+		/** @description The response to a successful authorization start: where to send the user. */
+		OAuthStartResponse: {
+			/** @description The provider authorize URL the client should redirect the user to. */
+			authorizeUrl: string;
+		};
+		/** @description Query parameters for listing all syncs across a workspace. */
+		WorkspaceSyncsQuery: {
+			/** @description Filter by sync status. */
+			status?: components["schemas"]["SyncStatus"];
+			/**
+			 * @description Filter by connection provider (`s3`, `azure`, `gcs`). Repeatable; a sync
+			 *     matches if its connection uses any of the given providers. Empty means no
+			 *     provider filter.
+			 * @default []
+			 */
+			provider?: string[];
+		};
+		/**
+		 * @description Defines the execution status of a connection sync run.
+		 *
+		 *     Corresponds to the `SYNC_STATUS` `PostgreSQL` enum and tracks the state of an
+		 *     individual synchronization run.
+		 */
+		SyncStatus: "pending" | "running" | "completed" | "failed" | "cancelled";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceConnectionSyncPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceConnectionSync"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/** @description A connection sync (import or export). */
+		WorkspaceConnectionSync: {
+			/**
+			 * Format: uuid
+			 * @description Unique sync identifier.
+			 */
+			id: string;
+			/** @description The connection this sync belongs to. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Account that triggered the sync. */
+			triggeredBy: components["schemas"]["AccountRef"];
+			/** @description How the sync was triggered. */
+			triggerType: components["schemas"]["SyncTriggerType"];
+			/** @description Current status of the sync. */
+			status: components["schemas"]["SyncStatus"];
+			/**
+			 * Format: int64
+			 * @description Number of objects transferred so far.
+			 */
+			recordsSynced: number;
+			/**
+			 * Format: int32
+			 * @description 1-based attempt number; scheduled syncs may be retried on failure.
+			 */
+			attempt: number;
+			/** @description Failure reason when the sync failed; omitted otherwise. */
+			errorMessage?: string;
+			/**
+			 * Format: date-time
+			 * @description When the sync started.
+			 */
+			startedAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the sync finished, if it has.
+			 */
+			completedAt?: string;
+		};
+		/**
+		 * @description How a connection sync run was initiated.
+		 *
+		 *     Corresponds to the `SYNC_TRIGGER_TYPE` `PostgreSQL` enum. The axis is who
+		 *     initiated the run: the connection's own schedule, or anything else — a
+		 *     user, the SDK, an external automation (Zapier and the like). The latter is
+		 *     `OnDemand`, which covers every non-scheduled trigger, not only a human
+		 *     click.
+		 */
+		SyncTriggerType: "on_demand" | "scheduled";
+		/**
+		 * @description Request payload to import a caller-selected set of files from a file-service
+		 *     connection (the provider picker returns id + name per file).
+		 */
+		ImportWorkspaceFiles: {
+			/** @description The files to import. Already-imported files are skipped. */
+			files: components["schemas"]["PickedFile"][];
+		};
+		/** @description One file the user selected in the provider's picker. */
+		PickedFile: {
+			/** @description The provider's file identifier (used to fetch the bytes). */
+			id: string;
+			/** @description The file's display name, as the picker reported it. */
+			name: string;
+		};
+		/**
+		 * @description Request payload to export a caller-selected set of workspace files to a
+		 *     connection. Each is written as a new provider file, never overwriting a
+		 *     source. Mirrors [`ImportWorkspaceFiles`] on the export side.
+		 */
+		ExportWorkspaceFiles: {
+			/**
+			 * @description The workspace files to export, by id. Files already exported to the
+			 *     connection are exported again (a fresh copy).
+			 */
+			fileIds: string[];
+		};
+		/** @description Path parameters for a specific connection sync. */
+		WorkspaceConnectionSyncPathParams: {
+			/** @description Opaque identifier of the connection. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the sync run.
+			 */
+			syncId: string;
+		};
+		/** @description Represents a document in responses. */
+		WorkspaceDocument: {
+			/**
+			 * Format: uuid
+			 * @description Unique document identifier.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Display name. */
+			displayName: string;
+			/** @description Original filename when uploaded. */
+			originalFilename: string;
+			/** @description File extension (without dot). Owned by the document. */
+			extension: string;
+			/**
+			 * Format: int64
+			 * @description Size in bytes. Resolved from the backing blob.
+			 */
+			size: number;
+			/**
+			 * @description Lowercase hex-encoded SHA-256 of the document's plaintext content. Resolved
+			 *     from the backing blob.
+			 */
+			hash: string;
+			/** @description The document's role (original or redacted). */
+			kind: components["schemas"]["DocumentKind"];
+			/** @description Account that uploaded/created the document. */
+			uploadedBy: components["schemas"]["AccountRef"];
+			/**
+			 * Format: date-time
+			 * @description Creation timestamp.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Last update timestamp.
+			 */
+			updatedAt: string;
+		};
+		/** @description Query parameters for listing documents. */
+		ListWorkspaceDocuments: {
+			/** @description Search by document name (case-insensitive, partial match). */
+			search?: string;
+			/**
+			 * @description Filter by file extension. Each entry expands to its format's full
+			 *     extension set (so `jpg` also matches `jpeg`).
+			 */
+			formats?: components["schemas"]["FormatToken"][];
+			/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
+			modality?: components["schemas"]["ModalityToken"][];
+			/**
+			 * @description Filter to documents whose content is exactly this SHA-256. Lets a client
+			 *     check whether identical content already exists in the workspace before
+			 *     uploading it.
+			 */
+			hash?: components["schemas"]["DocumentHash"];
+		};
+		/**
+		 * @description A supported file extension.
+		 * @enum {string}
+		 */
+		FormatToken:
+			| "csv"
+			| "docx"
+			| "htm"
+			| "html"
+			| "jpeg"
+			| "jpg"
+			| "json"
+			| "log"
+			| "pdf"
+			| "png"
+			| "pptx"
+			| "tif"
+			| "tiff"
+			| "txt"
+			| "wav"
+			| "x-elide-docprops"
+			| "x-elide-exif"
+			| "xlsx"
+			| "xml";
+		/**
+		 * @description A supported document modality.
+		 * @enum {string}
+		 */
+		ModalityToken: "audio" | "image" | "tabular" | "text";
+		/** @description A SHA-256 content hash as a 64-character hex string. */
+		DocumentHash: string;
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceDocumentPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceDocument"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Request to delete several documents in one call.
+		 *
+		 *     The `100`-id cap bounds the work one call fans out into: the resolve query and
+		 *     the delete transaction.
+		 */
+		DeleteWorkspaceDocuments: {
+			/**
+			 * @description Ids of the documents to delete. Ids that are unknown, already deleted, or
+			 *     in another workspace are skipped rather than failing the request.
+			 */
+			documentIds: string[];
+		};
+		/**
+		 * @description Result of a bulk document deletion.
+		 *
+		 *     The deletion is idempotent: `deleted` holds the ids that resolved to live
+		 *     documents in the workspace and were removed, and `skipped` holds the requested
+		 *     ids that did not — unknown, already deleted, in another workspace, or held by
+		 *     an in-progress detection that still needs the document.
+		 */
+		WorkspaceDeletedDocuments: {
+			/** @description Ids that were deleted. */
+			deleted: string[];
+			/**
+			 * @description Requested ids that were skipped: unknown, already deleted, in another
+			 *     workspace, or held by an in-progress detection.
+			 */
+			skipped: string[];
+		};
+		/** @description Request to update document metadata. */
+		UpdateWorkspaceDocument: {
+			/** @description New display name for the document. */
+			displayName?: string;
+			/** @description Updated metadata. */
+			metadata?: unknown;
+		};
+		/**
+		 * @description Request payload for creating a new pipeline.
+		 *
+		 *     Creates a new pipeline with the specified name and optional description.
+		 *     The definition can be added later via update.
+		 */
+		CreateWorkspacePipeline: {
+			/** @description Pipeline display name (2-128 characters). */
+			displayName: string;
+			/** @description Optional description of the pipeline (max 500 characters). */
+			description?: string;
+			/**
+			 * @description Optional detection + redaction configuration. Defaults to an empty
+			 *     definition that can be filled in via update.
+			 */
+			definition?: components["schemas"]["PipelineDefinition"];
+			/**
+			 * @description Optional lifecycle status. Defaults to `draft`; pass `enabled` to create a
+			 *     pipeline ready to run without a follow-up update.
+			 */
+			status?: components["schemas"]["PipelineStatus"];
+			/**
+			 * @description Optional per-scope data-retention override for this pipeline. Each unset
+			 *     scope inherits the workspace retention.
+			 */
+			retention?: components["schemas"]["RetentionOverride"];
+		};
+		/**
+		 * @description A pipeline's detection + governance intent.
+		 *
+		 *     Holds what a pipeline author decides — the default scope and the policies to
+		 *     apply. Recognition is entirely server-wide: the built-in pattern set plus the
+		 *     deployment's NER/LLM lineups and enrichment backends live in the engine
+		 *     config, not here. Stored as JSON in the pipeline's `definition` column but
+		 *     validated against this schema at the API boundary.
+		 *
+		 *     The label catalog is not part of this: the policies own the label vocabulary,
+		 *     and the engine derives the detection catalog from them at run time.
+		 *
+		 *     The split:
+		 *
+		 *     - `default_scope` — optional pipeline-wide scope a document may override.
+		 *     - `policy_ids` — references to the workspace's policies, resolved at run
+		 *       time.
+		 */
+		PipelineDefinition: {
+			/**
+			 * @description Optional pipeline-wide scope (languages, jurisdictions, document labels).
+			 *
+			 *     A document's own scope overrides this at detect time; absent here means
+			 *     the document must assert its own.
+			 */
+			defaultScope?: components["schemas"]["DocumentContext"];
+			/**
+			 * @description Ids of workspace policies applied at redaction.
+			 *
+			 *     Stored relationally in the `workspace_pipeline_policies` join table, not the JSON
+			 *     definition; surfaced here so the API exposes one coherent object.
+			 */
+			policyIds?: string[];
+		};
+		/**
+		 * @description What a caller asserts about the document being processed.
+		 *
+		 *     Everything defaults to empty, so a caller asserting nothing
+		 *     passes [`DocumentContext::default`] and lets the recognizers use
+		 *     their own defaults.
+		 */
+		DocumentContext: {
+			/**
+			 * @description Languages the caller asserts the document is in.
+			 *
+			 *     Recognizers that take a language hint use it; the
+			 *     language-detection enricher fills the gap when this is
+			 *     empty.
+			 *
+			 *     Each entry is a [`LanguageClaim`], which records *why* a
+			 *     language is claimed. A caller builds them with
+			 *     [`LanguageClaim::asserted`]: an assertion is authoritative,
+			 *     and the enricher skips detection rather than second-guessing
+			 *     it. Detected claims — the ones carrying a confidence — are
+			 *     the enricher's to write, not a request's to supply.
+			 */
+			languages?: components["schemas"]["LanguageClaim"][];
+			/**
+			 * @description Jurisdictions the caller asserts apply.
+			 *
+			 *     Read by policy predicates that vary by jurisdiction, so a
+			 *     rule can act on a document from one country and not another.
+			 */
+			countries?: components["schemas"]["CountryCode"][];
+			/**
+			 * @description Free-form request context: document tags, request purpose,
+			 *     output audience. See elide's [`ScopeMetadata`].
+			 */
+			metadata?: components["schemas"]["ScopeMetadata"];
+		};
+		/**
+		 * @description A single claim that a span of text is in a [`language`](Self::language).
+		 *
+		 *     Its [`source`](Self::source) records whether the caller asserted it or a
+		 *     detector found it (with a score), and [`span`](Self::span) the byte range it
+		 *     covers when a detector reports per-region results — a whole-text or asserted
+		 *     claim leaves it `None`.
+		 */
+		LanguageClaim: {
+			/** @description The claimed language. */
+			language: components["schemas"]["LanguageTag"];
+			/** @description Where the claim came from and how much to trust it. */
+			source: components["schemas"]["LanguageSource"];
+			/**
+			 * @description Byte-offset range this claim applies to, when known. `None` means the
+			 *     whole text.
+			 */
+			span?: components["schemas"]["Range_of_uint"];
+		};
+		/**
+		 * @description Well-formed [BCP 47] language tag, such as `en`, `en-US`, or
+		 *     `zh-Hant-HK`.
+		 *
+		 *     Wraps [`oxilangtag::LanguageTag`] over a [`HipStr`] backing store, so
+		 *     short tags (the overwhelming common case) stay inline without a heap
+		 *     allocation. Parsing validates the tag's structure up front; the
+		 *     newtype therefore guarantees that any `LanguageTag` value in the
+		 *     model is syntactically valid.
+		 *
+		 *     Used to record the language a recognizer is scoped to, or the
+		 *     detected language of a span of content.
+		 *
+		 *     [BCP 47]: https://www.rfc-editor.org/info/bcp47
+		 */
+		LanguageTag: string;
+		/**
+		 * @description Where a [`LanguageClaim`] came from, and how much to trust it.
+		 *
+		 *     A caller [`Asserted`](Self::Asserted) language is ground truth — treated as
+		 *     full [`Confidence`], so it outranks any detector guess. A
+		 *     [`Detected`](Self::Detected) language carries the detector's own score.
+		 */
+		LanguageSource:
+			| "asserted"
+			| {
+					detected: components["schemas"]["Confidence"];
+			  };
+		/**
+		 * Format: float
+		 * @description Confidence score in the closed range `0.0..=1.0`.
+		 *
+		 *     Carried by every provenance [`AuditEvent`] (the `before`/`after` of a
+		 *     recognition, fusion, or calibration) and by the effective confidence
+		 *     of an [`Entity`]. The newtype enforces the range at construction so
+		 *     no downstream code has to defend against values outside `[0, 1]`.
+		 *
+		 *     Distinct from [`ConfidenceThreshold`] so the two cannot be confused
+		 *     at a call site: a score is *produced* by detection, a threshold is a
+		 *     *cutoff* configured to filter scores. Compare the two with
+		 *     [`ConfidenceThreshold::passes`].
+		 *
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		Confidence: number;
+		Range_of_uint: {
+			/** Format: uint */
+			start: number;
+			/** Format: uint */
+			end: number;
+		};
+		/**
+		 * @description [ISO 3166-1] country, identified by its code.
+		 *
+		 *     Wraps [`celes::Country`], a static table entry carrying the numeric,
+		 *     alpha-2, and alpha-3 codes together with the country's name. Because
+		 *     every value comes from that fixed table, a `CountryCode` is always a
+		 *     real, recognised country; there is no way to hold an invalid one.
+		 *
+		 *     Used to scope region-sensitive recognizers (a phone-number or
+		 *     national-id pattern, say) to the country whose format they target.
+		 *
+		 *     Serializes as its alpha-2 code (e.g. `"US"`).
+		 *
+		 *     [ISO 3166-1]: https://www.iso.org/iso-3166-country-codes.html
+		 */
+		CountryCode: string;
+		/**
+		 * @description Caller-asserted scope shared across every payload of one analysis.
+		 *
+		 *     Built once with the `with_*` chain and passed by reference to the
+		 *     analyzer, which borrows it into a fresh [`Context`] per
+		 *     payload. It holds only what the *caller* asserts about the analysis as a
+		 *     whole, languages, jurisdictions, document labels, the target catalog, a
+		 *     correlation id, none of which depends on the medium, so one [`Scope`]
+		 *     drives a text, image, or audio analysis alike.
+		 *
+		 *     Per-medium regions (caller-supplied inclusions and exclusions, which are
+		 *     `M::Location`-typed) live in [`Annotations`], attached to the analyzer
+		 *     of that modality. The per-payload working state (NLP artifacts, detected
+		 *     languages) lives on the context, not here.
+		 *
+		 *     [`Context`]: super::Context
+		 *     [`Annotations`]: super::annotation::Annotations
+		 *     Free-form, caller-asserted request context: the *document* it is about and
+		 *     the *request* driving it.
+		 *
+		 *     Three axes of opaque classification strings elide neither ships nor
+		 *     interprets, a downstream policy layer chooses what `"medical"` or
+		 *     `"fraud_detection"` or `"auditor"` mean. They are read in two places: a
+		 *     recognizer may bias its detection on them (the LLM prompt lists them so the
+		 *     model attends to the right terms), and a scope-aware operator predicate may
+		 *     branch on them at selection time (redact the same document differently per
+		 *     [`audience`]).
+		 *
+		 *     - [`tags`] classify the *document* (`"medical"`, `"gdpr-request"`).
+		 *     - [`purpose`] is why the request exists (`"fraud_detection"`).
+		 *     - [`audience`] is who the redacted output is for (`"support_agent"`,
+		 *       `"auditor"`), the axis PCI-style "same document, two masks" branches on.
+		 *
+		 *     [`tags`]: Self::tags
+		 *     [`purpose`]: Self::purpose
+		 *     [`audience`]: Self::audience
+		 */
+		ScopeMetadata: {
+			/**
+			 * @description Document-level classification tags (e.g. `"medical"`,
+			 *     `"gdpr-request"`). Recognizers may use these to bias their behavior
+			 *     for domain-specific terms; those that don't ignore the field.
+			 *
+			 *     Named `tags`, not `labels`, to keep "label" reserved for the entity
+			 *     taxonomy ([`LabelRef`]/[`LabelCatalog`]): these classify the
+			 *     *document*, whereas the scope's catalog names the entity *types* to
+			 *     emit.
+			 *
+			 *     [`LabelRef`]: crate::entity::LabelRef
+			 *     [`LabelCatalog`]: crate::entity::LabelCatalog
+			 * @default []
+			 */
+			tags?: string[];
+			/**
+			 * @description The caller-asserted business purpose driving this request (e.g.
+			 *     `"fraud_detection"`, `"gdpr_erasure_request"`). A scope-aware operator
+			 *     predicate may skip or swap a rule based on it; a recognizer may bias
+			 *     detection on it. `None` when the caller asserts no purpose.
+			 */
+			purpose?: string;
+			/**
+			 * @description Who the redacted output is for (e.g. `"support_agent"`, `"auditor"`).
+			 *     The axis a per-audience redaction branches on: one detected document,
+			 *     selected differently per audience. May hold several.
+			 * @default []
+			 */
+			audience?: string[];
+		};
+		/**
+		 * @description The lifecycle status of a pipeline definition.
+		 *
+		 *     Corresponds to the `PIPELINE_STATUS` `PostgreSQL` enum and tracks whether a
+		 *     pipeline is being configured, enabled and ready to run, or disabled.
+		 */
+		PipelineStatus: "draft" | "enabled" | "disabled";
+		/**
+		 * @description A pipeline's optional per-scope override of the workspace retention. A `None`
+		 *     field inherits the workspace value for that scope.
+		 *
+		 *     Only scopes a pipeline actually produces are overridable — original documents
+		 *     are ingested, not produced by a pipeline, so they have no per-pipeline
+		 *     override and always follow the workspace baseline.
+		 */
+		RetentionOverride: {
+			/** @description Overrides redacted-document retention when set. */
+			redactedDocuments?: components["schemas"]["Retention"];
+			/** @description Overrides audit-blob retention when set. */
+			auditLogs?: components["schemas"]["Retention"];
+			/** @description Overrides enrichment-intermediate retention when set. */
+			intermediates?: components["schemas"]["Retention"];
+		};
+		/** @description `WorkspacePipeline` response. */
+		WorkspacePipeline: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Account that created this pipeline. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description `WorkspacePipeline` display name. */
+			displayName: string;
+			/** @description `WorkspacePipeline` description. */
+			description?: string;
+			/** @description `WorkspacePipeline` lifecycle status. */
+			status: components["schemas"]["PipelineStatus"];
+			/** @description Detection + redaction configuration. */
+			definition: components["schemas"]["PipelineDefinition"];
+			/** @description Per-scope data-retention override, when the pipeline sets one. */
+			retention?: components["schemas"]["RetentionOverride"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was last updated.
+			 */
+			updatedAt: string;
+		};
+		/** @description Query parameters for filtering pipelines. */
+		WorkspacePipelineFilter: {
+			/** @description Filter by pipeline status. */
+			status?: components["schemas"]["PipelineStatus"];
+			/** @description Search by pipeline name (trigram similarity). */
+			search?: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacePipelineSummaryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspacePipelineSummary"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/** @description Summary response for pipeline (used in lists). */
+		WorkspacePipelineSummary: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Account that created this pipeline. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description `WorkspacePipeline` display name. */
+			displayName: string;
+			/** @description `WorkspacePipeline` description. */
+			description?: string;
+			/** @description `WorkspacePipeline` lifecycle status. */
+			status: components["schemas"]["PipelineStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the pipeline was last updated.
+			 */
+			updatedAt: string;
+		};
+		/** @description Path parameters for pipeline operations. */
+		WorkspacePipelinePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the pipeline.
+			 */
+			pipelineId: string;
+		};
+		/**
+		 * @description Request payload to update an existing pipeline.
+		 *
+		 *     All fields are optional; only provided fields will be updated. Supplying a
+		 *     `definition` replaces the whole detection + redaction configuration.
+		 */
+		UpdateWorkspacePipeline: {
+			/** @description New display name for the pipeline (2-128 characters). */
+			displayName?: string;
+			/** @description New description for the pipeline (max 500 characters). */
+			description?: string;
+			/** @description New status for the pipeline. */
+			status?: components["schemas"]["PipelineStatus"];
+			/** @description New detection + redaction configuration (replaces the whole definition). */
+			definition?: components["schemas"]["PipelineDefinition"];
+			/**
+			 * @description Replacement per-scope data-retention override. When omitted, the
+			 *     pipeline's retention override is left unchanged.
+			 */
+			retention?: components["schemas"]["RetentionOverride"];
+		};
+		/**
+		 * @description Request payload to start a detection over a document.
+		 *
+		 *     Analyzes the document with the pipeline's configuration and returns the
+		 *     detection, which holds the findings for review before redaction.
+		 */
+		CreateWorkspaceDetection: {
+			/**
+			 * Format: uuid
+			 * @description The document to analyze.
+			 */
+			documentId: string;
+			/**
+			 * @description Per-document scope (languages, jurisdictions, document labels).
+			 *
+			 *     Overrides the pipeline's `defaultScope` when present; absent falls back to
+			 *     the pipeline default.
+			 */
+			scope?: components["schemas"]["DocumentContext"];
+		};
+		/**
+		 * @description Response type for a detection.
+		 *
+		 *     A detection is addressed by its own opaque id; the owning pipeline and
+		 *     workspace handles are carried for context. Redacted outputs are not here — a
+		 *     detection produces many redactions, each fetched from its `redactions`
+		 *     endpoint.
+		 */
+		WorkspaceDetection: {
+			/** @description Opaque identifier of the detection. */
+			id: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the pipeline this detection belongs to; absent for an
+			 *     ad-hoc detection.
+			 */
+			pipelineId?: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Source document this detection analyzes.
+			 */
+			inputDocumentId: string;
+			/**
+			 * @description Display name of the source document, for showing the detection without a
+			 *     separate file lookup. `None` if the file was removed (e.g. by retention).
+			 */
+			inputDocumentName?: string;
+			/** @description Account that triggered the detection. */
+			triggeredBy: components["schemas"]["AccountRef"];
+			/** @description How the detection was triggered. */
+			triggerType: components["schemas"]["PipelineTriggerType"];
+			/**
+			 * @description Current detection status.
+			 *
+			 *     The detections are available to fetch from the detection's `analysis`
+			 *     endpoint once this reaches `complete`.
+			 */
+			status: components["schemas"]["DetectionStatus"];
+			/** @description Human-readable failure reason, present only when the detection `failed`. */
+			error?: string;
+			/** @description Non-encrypted metadata for filtering/display. */
+			metadata: components["schemas"]["DetectionMetadata"];
+			/**
+			 * Format: date-time
+			 * @description When the detection started.
+			 */
+			startedAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the detection completed analysis.
+			 */
+			completedAt?: string;
+		};
+		/**
+		 * @description How a pipeline run was initiated.
+		 *
+		 *     Corresponds to the `PIPELINE_TRIGGER_TYPE` `PostgreSQL` enum: a run is either
+		 *     started directly by a user or automatically by the system (for example, a
+		 *     file upload that the pipeline auto-redacts).
+		 */
+		PipelineTriggerType: "user" | "system";
+		/** @description Structured metadata for a detection. */
+		DetectionMetadata: {
+			/** @description Free-form labels attached to the detection. */
+			tags?: string[];
+			/** @description Failure reason recorded when the detection failed. */
+			error?: string;
+			/**
+			 * @description The engine's full per-call usage report (outcomes, durations, and the
+			 *     billing units each call spent), stored opaquely for drill-down. The
+			 *     structured per-call and per-meter rows for aggregation live in the
+			 *     `workspace_detection_call` / `workspace_detection_call_meter` tables; this
+			 *     keeps the raw detail. Absent when the detection made no model calls.
+			 */
+			usage?: unknown;
+		};
+		/**
+		 * @description Query parameters for listing a single pipeline's detections.
+		 *
+		 *     The pipeline is fixed by the route, so it narrows only by status, file,
+		 *     trigger account, and trigger type.
+		 */
+		WorkspacePipelineDetectionsQuery: {
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the source document the detection analyzes.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceDetectionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceDetection"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Request payload to start an ad-hoc detection over a document, naming its
+		 *     policies directly rather than through a pipeline.
+		 *
+		 *     Analyzes the document against the given policies (authored or one-shot) and
+		 *     returns the detection holding the findings for review before redaction.
+		 */
+		CreateAdhocWorkspaceDetection: {
+			/**
+			 * Format: uuid
+			 * @description The document to analyze.
+			 */
+			documentId: string;
+			/** @description The policies to run against, by id. At least one is required. */
+			policyIds: string[];
+			/** @description Per-document scope (languages, jurisdictions, document labels). */
+			scope?: components["schemas"]["DocumentContext"];
+			/**
+			 * @description Retention override for the outputs this detection produces. Absent falls
+			 *     back to the workspace retention baseline.
+			 */
+			retentionOverride?: components["schemas"]["RetentionOverride"];
+		};
+		/**
+		 * @description Query parameters for listing detections across a workspace.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
+		WorkspaceDetectionsQuery: {
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the source document the detection analyzes.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the owning pipeline.
+			 */
+			pipelineId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+		};
+		/** @description Path parameters for detection operations. */
+		WorkspaceDetectionPathParams: {
+			/** @description Opaque identifier of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+		};
+		/**
+		 * @description A detection's status change, broadcast on the core-NATS subject
+		 *     [`detection_subject`].
+		 *
+		 *     Fan-out to any watching SSE connections; the detection row in Postgres remains
+		 *     the source of truth, so a missed broadcast is recoverable by re-reading it.
+		 */
+		DetectionStatusEvent: {
+			/**
+			 * Format: uuid
+			 * @description The detection whose status changed.
+			 */
+			detectionId: string;
+			/** @description The detection's new status. */
+			status: components["schemas"]["DetectionStatus"];
+		};
+		/**
+		 * @description Request payload to redact a detection.
+		 *
+		 *     The reviewer's edits layer over the detection's analysis before redaction:
+		 *     suppress a false positive, retag a detection, or add one the analysis missed.
+		 *     Omit `edits` to redact with the policy decisions exactly as detected. Each
+		 *     redact request produces a new redaction.
+		 */
+		RedactWorkspaceDetection: {
+			/**
+			 * @description Reviewer edits to apply before redaction, grouped by modality. Omit to
+			 *     redact with the policy decisions exactly as detected.
+			 */
+			edits?: components["schemas"]["EditSet"];
+		};
+		/**
+		 * @description Reviewer edits for one document, one list per modality.
+		 *
+		 *     Empty by default: an audit nobody has reviewed carries none.
+		 */
+		EditSet: {
+			/** @description Edits to text entities. */
+			text?: components["schemas"]["TextEdit"][];
+			/** @description Edits to tabular entities. */
+			tabular?: components["schemas"]["TabularEdit"][];
+			/** @description Edits to image entities. */
+			image?: components["schemas"]["ImageEdit"][];
+			/** @description Edits to audio entities. */
+			audio?: components["schemas"]["AudioEdit"][];
+		};
+		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TextEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["TextAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["TextRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"]);
+		/**
+		 * @description Lightweight reference to a [`Label`], carrying only its id.
+		 *
+		 *     This is what detections and entities hold: cloning is cheap (short
+		 *     ids inline into the [`HipStr`]), and the full [`Label`], with its
+		 *     localized names and descriptions, is resolved on demand from a
+		 *     [`LabelCatalog`].
+		 *
+		 *     [`Label`]: crate::entity::Label
+		 *     [`LabelCatalog`]: crate::entity::LabelCatalog
+		 */
+		LabelRef: string;
+		/**
+		 * @description Where an entity sits in text: a [coordinate](TextCoord) (a decoded byte range,
+		 *     or a source-only reference) plus an optional page number.
+		 *
+		 *     The coordinate is either a [`Decoded`](TextCoord::Decoded) byte range in the
+		 *     pipeline's text stream, or a [`Source`](TextCoord::Source)-only reference for
+		 *     content with no decoded range (a reviewer selecting rendered text). The page
+		 *     is orthogonal to the coordinate kind, so it sits alongside rather than inside.
+		 *
+		 *     Ordering and overlap consider only the coordinate; the page is carried for
+		 *     codecs that page their text but does not affect comparison.
+		 */
+		TextLocation: {
+			/** @description The coordinate: a decoded range, or a source-only reference. */
+			coord: components["schemas"]["TextCoord"];
+			/**
+			 * Format: uint32
+			 * @description 1-based page number, when known. Orthogonal to the coordinate kind.
+			 */
+			page?: number;
+		};
+		/**
+		 * @description The coordinate of a [`TextLocation`]: a decoded byte range, or a source-only
+		 *     reference.
+		 *
+		 *     The distinction is whether a decoded range exists at all. A recognizer over
+		 *     decoded text produces a [`Decoded`](Self::Decoded) span (with the raw source
+		 *     it decodes from, when the codec's decoded text differs from the source). A
+		 *     reviewer marking rendered text has no decoded range, only where the selection
+		 *     sits in the raw bytes, a [`Source`](Self::Source).
+		 */
+		TextCoord:
+			| ({
+					/** @constant */
+					kind: "decoded";
+			  } & components["schemas"]["DecodedSpan"])
+			| ({
+					/** @constant */
+					kind: "source";
+			  } & components["schemas"]["SourceSpan"]);
+		/**
+		 * @description A reference back to the original source: a byte range, and, for a container
+		 *     whose body spans several files, which part that range indexes.
+		 *
+		 *     [`TextLocation`]'s `range` indexes the *decoded* text stream a codec hands
+		 *     the pipeline (entities resolved, container parts concatenated). A `SourceRef`
+		 *     is the *exact raw* byte range the decoded range came from, accounting for XML
+		 *     escapes where `&amp;` (5 raw bytes) decodes to `&` (1). `part` names the
+		 *     container file the range is in (`word/header1.xml`) for a multi-file body
+		 *     like DOCX, and is `None` for a single-file source (XML, HTML). It lets a
+		 *     consumer point back at the untouched source bytes.
+		 *
+		 *     [`TextLocation`]: super::TextLocation
+		 */
+		SourceRef: {
+			/** @description The raw source byte range. */
+			range: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description The container part the range indexes, for a multi-file body; `None` for a
+			 *     single-file source.
+			 */
+			part?: string;
+		};
+		/**
+		 * @description A decoded byte range and the raw source it decodes from.
+		 *
+		 *     The `range` is a half-open `[start, end)` span in the decoded text stream.
+		 *     `source` carries the exact raw byte range(s) that span came from for codecs
+		 *     whose decoded text differs from the source (XML/HTML/DOCX entity decoding,
+		 *     JSON escapes); it is empty when the source equals the decoded text.
+		 */
+		DecodedSpan: {
+			/** @description Byte range within the (decoded) text content. */
+			range: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description The exact raw source ranges this decoded span came from. Empty when the
+			 *     source equals the decoded text.
+			 *
+			 *     Usually one range; a reconciled span that fused several source runs (or a
+			 *     span crossing an escape) carries several, kept distinct rather than merged
+			 *     across gaps. Sorted, deduplicated.
+			 */
+			source?: components["schemas"]["SourceRef"][];
+		};
+		/**
+		 * @description A source-only coordinate: raw byte range(s) with no decoded span.
+		 *
+		 *     The counterpart to [`DecodedSpan`] for content the pipeline never decoded (a
+		 *     reviewer selecting rendered text). A named struct rather than a bare `Vec`
+		 *     variant so the coordinate serializes as a map, which an internally tagged
+		 *     enum can inject its `kind` tag into.
+		 */
+		SourceSpan: {
+			/**
+			 * @description The raw byte range(s) the selection sits in. Sorted, deduplicated,
+			 *     non-empty by construction.
+			 */
+			source: components["schemas"]["SourceRef"][];
+		};
+		/**
+		 * @description A detection recognition missed.
+		 *
+		 *     Recorded on the report with human provenance, so it is never
+		 *     mistaken for an automatic hit, then redacted under the policy set
+		 *     like any other entity: an added label the policy does not cover
+		 *     is left alone.
+		 *
+		 *     Carries no entity id — the entity does not exist yet, and the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TextAdd: {
+			/** @description What the reviewer says this is. */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Where it sits, in the coordinates of the part it joins.
+			 *
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
+			 *
+			 *     Text carries either coordinate kind of [`TextCoord`]: a
+			 *     [`Decoded`] span for a caller with an offset into the
+			 *     decoded stream, or a [`Source`] one for a caller holding
+			 *     only raw file bytes — a reviewer selecting rendered text,
+			 *     say — which the engine reverse-resolves. Source-only is its
+			 *     own kind rather than a decoded span left empty, so such a
+			 *     selection is representable as itself.
+			 *
+			 *     The other three media have no such alternative: their
+			 *     coordinates are the only way in.
+			 *
+			 *     [`TextCoord`]: elide::modality::text::TextCoord
+			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
+			 *     [`Source`]: elide::modality::text::TextCoord::Source
+			 */
+			location: components["schemas"]["TextLocation"];
+			/**
+			 * @description The part this belongs to, as a path: `["report.docx"]` for
+			 *     the document itself, `["report.docx", "word/media/image1.png"]`
+			 *     for media it embeds. `None` means the request's sole
+			 *     document, which is the common case and saves a caller
+			 *     naming what it already sent.
+			 *
+			 *     Nested media needs this: the report holds an embedded image
+			 *     as its own part, and an addition to one has nowhere to go
+			 *     without naming it. Text usually does not — a source
+			 *     reference already names the part it came from, alongside the
+			 *     raw range.
+			 *
+			 *     `None` is an error when the request carried several
+			 *     documents, since there is then no sole document to mean.
+			 */
+			part?: string[];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
+		 *
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		TextRetag: {
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["TextLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description Leave this entity alone: a reviewer calling it a false positive.
+		 *
+		 *     It keeps its place and its provenance; the redaction pass skips
+		 *     it. Recorded as a `Manual` event, so *who* decided and *why* is
+		 *     auditable rather than the detection silently disappearing.
+		 */
+		Suppress: {
+			/**
+			 * Format: uuid
+			 * @description The entity to leave alone.
+			 */
+			id: string;
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TabularEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["TabularAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["TabularRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"]);
+		/**
+		 * @description Cell-addressed location within tabular content.
+		 *
+		 *     Identifies a cell by zero-based [`row_index`] and
+		 *     [`column_index`], optionally narrowed to a byte
+		 *     range within the cell text for an entity that spans only part of the
+		 *     cell. [`sheet_name`] scopes the cell to one sheet of
+		 *     a multi-sheet workbook; [`column_name`] is a
+		 *     human-readable header carried for provenance.
+		 *
+		 *     Overlap and ordering treat the sheet, cell, and byte range as
+		 *     coordinates. The column name is redundant with the column index, so it
+		 *     is carried but excluded from comparison.
+		 *
+		 *     [`row_index`]: Self::row_index
+		 *     [`column_index`]: Self::column_index
+		 *     [`sheet_name`]: Self::sheet_name
+		 *     [`column_name`]: Self::column_name
+		 */
+		TabularLocation: {
+			/**
+			 * Format: uint32
+			 * @description Zero-based row index of the cell.
+			 */
+			row_index: number;
+			/**
+			 * Format: uint32
+			 * @description Zero-based column index of the cell.
+			 */
+			column_index: number;
+			/**
+			 * Format: uint
+			 * @description Byte offset within the cell text where the entity starts. Unset
+			 *     means the whole cell.
+			 */
+			start_offset?: number;
+			/**
+			 * Format: uint
+			 * @description Byte offset within the cell text where the entity ends (exclusive).
+			 *     Unset means the whole cell.
+			 */
+			end_offset?: number;
+			/** @description Header label of the column, when known. */
+			column_name?: string;
+			/** @description Sheet name within a multi-sheet workbook, when known. */
+			sheet_name?: string;
+		};
+		/**
+		 * @description A detection recognition missed.
+		 *
+		 *     Recorded on the report with human provenance, so it is never
+		 *     mistaken for an automatic hit, then redacted under the policy set
+		 *     like any other entity: an added label the policy does not cover
+		 *     is left alone.
+		 *
+		 *     Carries no entity id — the entity does not exist yet, and the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		TabularAdd: {
+			/** @description What the reviewer says this is. */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Where it sits, in the coordinates of the part it joins.
+			 *
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
+			 *
+			 *     Text carries either coordinate kind of [`TextCoord`]: a
+			 *     [`Decoded`] span for a caller with an offset into the
+			 *     decoded stream, or a [`Source`] one for a caller holding
+			 *     only raw file bytes — a reviewer selecting rendered text,
+			 *     say — which the engine reverse-resolves. Source-only is its
+			 *     own kind rather than a decoded span left empty, so such a
+			 *     selection is representable as itself.
+			 *
+			 *     The other three media have no such alternative: their
+			 *     coordinates are the only way in.
+			 *
+			 *     [`TextCoord`]: elide::modality::text::TextCoord
+			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
+			 *     [`Source`]: elide::modality::text::TextCoord::Source
+			 */
+			location: components["schemas"]["TabularLocation"];
+			/**
+			 * @description The part this belongs to, as a path: `["report.docx"]` for
+			 *     the document itself, `["report.docx", "word/media/image1.png"]`
+			 *     for media it embeds. `None` means the request's sole
+			 *     document, which is the common case and saves a caller
+			 *     naming what it already sent.
+			 *
+			 *     Nested media needs this: the report holds an embedded image
+			 *     as its own part, and an addition to one has nowhere to go
+			 *     without naming it. Text usually does not — a source
+			 *     reference already names the part it came from, alongside the
+			 *     raw range.
+			 *
+			 *     `None` is an error when the request carried several
+			 *     documents, since there is then no sole document to mean.
+			 */
+			part?: string[];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
+		 *
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		TabularRetag: {
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["TabularLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		ImageEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["ImageAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["ImageRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"]);
+		/**
+		 * @description Region within image content.
+		 *
+		 *     An axis-aligned [`BoundingBox`] in pixel coordinates locates the
+		 *     region; an optional [`Polygon`] captures a rotated or quadrilateral
+		 *     shape when the source produced one (OCR engines that emit 4-point
+		 *     polygons), and an optional page number addresses multi-page documents.
+		 */
+		ImageLocation: {
+			/** @description Axis-aligned bounding box of the region, in pixel coordinates. */
+			bounding_box: components["schemas"]["BoundingBoxF64"];
+			/**
+			 * @description Polygon vertices when the region is rotated or quadrilateral.
+			 *     Axis-aligned-only sources leave this unset.
+			 */
+			polygon?: components["schemas"]["PolygonF64"];
+			/**
+			 * Format: uint32
+			 * @description 1-based page number, for multi-page documents like PDFs.
+			 */
+			page?: number;
+		};
+		BoundingBoxF64: {
+			/** @description Minimum corner (top-left, conventionally). */
+			min: components["schemas"]["PointF64"];
+			/** @description Maximum corner (bottom-right, conventionally). */
+			max: components["schemas"]["PointF64"];
+		};
+		PointF64: {
+			/**
+			 * Format: double
+			 * @description Horizontal coordinate.
+			 */
+			x: number;
+			/**
+			 * Format: double
+			 * @description Vertical coordinate.
+			 */
+			y: number;
+		};
+		PolygonF64: components["schemas"]["PointF64"][];
+		/**
+		 * @description A detection recognition missed.
+		 *
+		 *     Recorded on the report with human provenance, so it is never
+		 *     mistaken for an automatic hit, then redacted under the policy set
+		 *     like any other entity: an added label the policy does not cover
+		 *     is left alone.
+		 *
+		 *     Carries no entity id — the entity does not exist yet, and the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		ImageAdd: {
+			/** @description What the reviewer says this is. */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Where it sits, in the coordinates of the part it joins.
+			 *
+			 *     Each medium addresses its own way: text a character range
+			 *     over the decoded stream, images a bounding box, audio a time
+			 *     span, tabular a row and column. A DOCX's
+			 *     `word/document.xml` text belongs to the document part
+			 *     itself, not to a nested one.
+			 *
+			 *     Text carries either coordinate kind of [`TextCoord`]: a
+			 *     [`Decoded`] span for a caller with an offset into the
+			 *     decoded stream, or a [`Source`] one for a caller holding
+			 *     only raw file bytes — a reviewer selecting rendered text,
+			 *     say — which the engine reverse-resolves. Source-only is its
+			 *     own kind rather than a decoded span left empty, so such a
+			 *     selection is representable as itself.
+			 *
+			 *     The other three media have no such alternative: their
+			 *     coordinates are the only way in.
+			 *
+			 *     [`TextCoord`]: elide::modality::text::TextCoord
+			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
+			 *     [`Source`]: elide::modality::text::TextCoord::Source
+			 */
+			location: components["schemas"]["ImageLocation"];
+			/**
+			 * @description The part this belongs to, as a path: `["report.docx"]` for
+			 *     the document itself, `["report.docx", "word/media/image1.png"]`
+			 *     for media it embeds. `None` means the request's sole
+			 *     document, which is the common case and saves a caller
+			 *     naming what it already sent.
+			 *
+			 *     Nested media needs this: the report holds an embedded image
+			 *     as its own part, and an addition to one has nowhere to go
+			 *     without naming it. Text usually does not — a source
+			 *     reference already names the part it came from, alongside the
+			 *     raw range.
+			 *
+			 *     `None` is an error when the request carried several
+			 *     documents, since there is then no sole document to mean.
+			 */
+			part?: string[];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
+		 *
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		ImageRetag: {
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["ImageLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description One change to an analyzed document.
+		 *
+		 *     `Add` carries no id because the entity does not exist yet; the
+		 *     engine mints one when the edit is applied, so a client cannot
+		 *     collide with a real detection or shadow an existing entity.
+		 */
+		AudioEdit:
+			| ({
+					/** @constant */
+					op: "add";
+			  } & components["schemas"]["AudioAdd"])
+			| ({
+					/** @constant */
+					op: "retag";
+			  } & components["schemas"]["AudioRetag"])
+			| ({
+					/** @constant */
+					op: "suppress";
+			  } & components["schemas"]["Suppress"]);
+		/**
+		 * @description A [`TimeSpan`] within audio content, with an optional speaker label.
+		 *
+		 *     The time span is the coordinate; ordering and overlap consider only it.
+		 *     The optional [`speaker_id`] is a diarization label,
+		 *     not a coordinate: two utterances from different speakers at the same
+		 *     instant still overlap in time, so the speaker is carried for provenance
+		 *     but excluded from comparison.
+		 *
+		 *     [`speaker_id`]: Self::speaker_id
+		 */
+		AudioLocation: {
+			/** @description Time span the location covers, in the stream's timeline. */
+			span: components["schemas"]["TimeSpan"];
+			/** @description Diarization label of the speaker, when a diarizer assigned one. */
+			speaker_id?: string;
+		};
+		/**
+		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
+		 *
+		 *     The coordinate a time-addressed medium (audio, video) uses to locate a
+		 *     region: a transcribed segment, a redacted span. Microsecond precision
+		 *     is finer than both word-level speech timings and per-sample audio
+		 *     resolution, so a span never loses precision being carried as a
+		 *     `TimeSpan`; the endpoints are non-negative offsets by construction.
+		 *
+		 *     Half-open like a byte range: `[start, end)`, so two intervals that
+		 *     merely touch (`a.end == b.start`) do not [`overlap`].
+		 *
+		 *     [`from_millis`] and [`as_millis`] bridge the millisecond-based APIs
+		 *     that surround it (audio durations, provider timings reported in ms).
+		 *
+		 *     [`overlap`]: Self::overlaps
+		 *     [`from_millis`]: Self::from_millis
+		 *     [`as_millis`]: Self::start_millis
+		 */
+		TimeSpan: {
+			/**
+			 * Format: uint64
+			 * @description Microseconds from the start of the stream where the interval begins.
+			 */
+			start_us: number;
+			/**
+			 * Format: uint64
+			 * @description Microseconds from the start of the stream where the interval ends
+			 *     (exclusive).
+			 */
+			end_us: number;
+		};
 		/**
 		 * @description A detection recognition missed.
 		 *
@@ -14818,8 +17806,6 @@ export interface components {
 		 *     collide with a real detection or shadow an existing entity.
 		 */
 		AudioAdd: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
 			/** @description What the reviewer says this is. */
 			label: components["schemas"]["LabelRef"];
 			/**
@@ -14866,7 +17852,341 @@ export interface components {
 			part?: string[];
 			/** @description The rationale, when one was given. */
 			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
 		};
+		/**
+		 * @description Correct what an existing detection *is* or *covers*, then redact
+		 *     it under the policy set as corrected.
+		 *
+		 *     A reviewer fixing recognition's mistake rather than overriding
+		 *     its consequence. Retagging into a label the policy does not cover
+		 *     leaves the entity alone, exactly as if it had been detected that
+		 *     way — which is why it is auditable rather than a mutable field.
+		 */
+		AudioRetag: {
+			/**
+			 * Format: uuid
+			 * @description The entity being corrected.
+			 */
+			id: string;
+			/** @description The corrected label, when recognition got it wrong. */
+			label?: components["schemas"]["LabelRef"];
+			/**
+			 * @description The corrected location, when the span clipped the value or
+			 *     ran past it.
+			 */
+			location?: components["schemas"]["AudioLocation"];
+			/** @description The rationale, when one was given. */
+			reason?: string;
+			/** @description Who made it, when the caller said. */
+			actor?: string;
+		};
+		/**
+		 * @description Response type for a redaction.
+		 *
+		 *     A redaction is one redact pass over a detection, produced with a specific set
+		 *     of reviewer edits. It owns the redacted output document (downloadable through
+		 *     the normal file endpoints) and a review audit recording what was redacted and
+		 *     why (fetched from the redaction's `review` endpoint).
+		 *
+		 *     Named `WorkspaceRedactionResult` rather than `Redaction` because the engine's audit
+		 *     schema already carries a `Redaction` (an audit event), and the two must not
+		 *     collide in the generated `OpenAPI`.
+		 */
+		WorkspaceRedactionResult: {
+			/** @description Opaque identifier of the redaction. */
+			id: components["schemas"]["RedactionId"];
+			/** @description The detection this redaction was produced from. */
+			detectionId: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Redacted output document this redaction produced. `None` only if the file
+			 *     was removed (e.g. by retention).
+			 */
+			outputDocumentId?: string;
+			/** @description Account that requested the redaction. */
+			requestedBy: components["schemas"]["AccountRef"];
+			/**
+			 * Format: date-time
+			 * @description When the redaction was created.
+			 */
+			createdAt: string;
+		};
+		/**
+		 * @description What detection found in one document.
+		 *
+		 *     Wraps elide's [`Report`] with the things elide does not model:
+		 *     the recognition [`DocumentContext`] the entities were scored
+		 *     against, how the document decoded, and what the pass cost.
+		 *
+		 *     Reviewer edits are not here. They are the caller's own input,
+		 *     applied to the report before anonymize
+		 *     ([`EditSet::apply`](crate::entity::EditSet::apply)), so an audit
+		 *     carries what analysis found *as amended* rather than the
+		 *     amendments themselves.
+		 *
+		 *     # Serialization
+		 *
+		 *     [`Serialize`] but deliberately **not** `Deserialize`: a
+		 *     serialized report tags entity groups by modality *name*, so
+		 *     rebuilding one needs the registry [`Engine`] holds. Read an
+		 *     audit back with [`Engine::deserialize_audit`].
+		 *
+		 *     # Schema
+		 *
+		 *     Generate under the **serialize** contract
+		 *     ([`SchemaSettings::for_serialize`]). `usage` is
+		 *     `skip_serializing_if`, and only that contract marks it optional
+		 *     — `schema_for!` defaults to deserialize and declares it
+		 *     required, so a generated client would reject responses this
+		 *     crate really emits.
+		 *
+		 *     [`Engine`]: crate::Engine
+		 *     [`Engine::deserialize_audit`]: crate::Engine::deserialize_audit
+		 *     [`Report`]: elide::Report
+		 *     [`SchemaSettings::for_serialize`]: schemars::generate::SchemaSettings::for_serialize
+		 */
+		Audit: {
+			/**
+			 * @description The detections: elide's own report, every document and the
+			 *     parts nested in one, each entity carrying its provenance
+			 *     chain.
+			 *
+			 *     Edit it through [`Report`]'s own API — [`include_part`],
+			 *     [`suppress_part`], [`part_entities`] — for the decisions
+			 *     elide models.
+			 *
+			 *     [`Report`]: elide::Report
+			 *     [`include_part`]: elide::Report::include_part
+			 *     [`suppress_part`]: elide::Report::suppress_part
+			 *     [`part_entities`]: elide::Report::part_entities
+			 */
+			report: components["schemas"]["Report"];
+			/**
+			 * @description What the caller asserted when this document was analyzed:
+			 *     languages, jurisdictions, document tags.
+			 *
+			 *     Carried back so [`Engine::anonymize`] compiles against the
+			 *     same vocabulary analyze used, and re-decodes under the same
+			 *     codec configuration, without the caller re-passing it.
+			 *
+			 *     [`Engine::anonymize`]: crate::Engine::anonymize
+			 */
+			context: components["schemas"]["DocumentContext"];
+			/**
+			 * @description The vocabularies this request introduced: labels elide does
+			 *     not ship, and how they were found.
+			 *
+			 *     Carried back for the same reason [`context`] is. Anonymize
+			 *     compiles its catalog afresh, and a custom label missing
+			 *     from it resolves to nothing — the entity would be detected
+			 *     and then silently not redacted.
+			 *
+			 *     [`context`]: Audit::context
+			 */
+			recognition?: components["schemas"]["Recognition"][];
+			/**
+			 * @description How this document was decoded when it was analyzed.
+			 *
+			 *     Carried back so anonymize decodes identically: the entity
+			 *     offsets below are stored against the first decode, and a
+			 *     differently-rendered second one would not line up.
+			 */
+			codec: components["schemas"]["CodecParams"];
+			/**
+			 * @description Which recognizers this request selected.
+			 *
+			 *     Carried back for the same reason [`codec`] is. Anonymize
+			 *     compiles its analyzers afresh, and a lineup narrower than
+			 *     the one analyze detected with would leave an entity found
+			 *     and then silently not redacted.
+			 *
+			 *     [`codec`]: Audit::codec
+			 */
+			selection?: components["schemas"]["ComponentSelection"];
+			/**
+			 * @description What the analyze pass cost: one entry per *backend call*,
+			 *     each carrying its outcome, duration, the model it called and
+			 *     the units it spent.
+			 *
+			 *     Carried here rather than recomputed: a model call happens
+			 *     once, during analysis, and nothing downstream can reconstruct
+			 *     what it cost — so a host that bills on model spend would
+			 *     lose it when the audit round-trips.
+			 *
+			 *     Per call rather than one aggregate: the same model may be
+			 *     called several times for one document (a page each, a
+			 *     segment each), and a failed call still costs wall-clock time
+			 *     a host may want to see. Summing is the reader's to do.
+			 */
+			usage?: components["schemas"]["Usage"][];
+		};
+		Report: {
+			parts: (
+				| {
+						id: string[];
+						/** @constant */
+						modality: "text";
+						entities: components["schemas"]["TextEntity"][];
+				  }
+				| {
+						id: string[];
+						/** @constant */
+						modality: "image";
+						entities: components["schemas"]["ImageEntity"][];
+				  }
+				| {
+						id: string[];
+						/** @constant */
+						modality: "audio";
+						entities: components["schemas"]["AudioEntity"][];
+				  }
+				| {
+						id: string[];
+						/** @constant */
+						modality: "tabular";
+						entities: components["schemas"]["TabularEntity"][];
+				  }
+			)[];
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its audit trail. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`audit`]: Entity::audit
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		TextEntity: {
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TextLocation"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself),
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
+			 */
+			audit: components["schemas"]["TextAuditLog"];
+		};
+		/**
+		 * @description Coreference identifier shared by entities that denote the same
+		 *     real-world thing.
+		 *
+		 *     Assigned by a recognizer that performs coreference resolution: an
+		 *     NER model or LLM that recognises "Alice", "she", and "Ms. Smith" as
+		 *     the same person within one detection call. Two entities carrying the
+		 *     same `EntityCoRef` are coreferent: they refer to the same underlying
+		 *     entity even though each is a distinct mention with its own span.
+		 *
+		 *     The identifier is opaque and only meaningful *within* a single
+		 *     detection call: it is the recognizer's local handle for a cluster of
+		 *     mentions, not a global key.
+		 */
+		EntityCoRef: string;
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
+		 *     tamper-evident DAG.
+		 *
+		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
+		 *     stripped by default, an `AuditLog` is always present and records the
+		 *     entity's *entire* life: each recognizer that found it, the deduplication
+		 *     that fused them, any confidence calibration, and the redaction that hid it.
+		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
+		 *     its location and score.
+		 *
+		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
+		 *     records a birth event (no parents); each later step links to the event it
+		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
+		 *     once: the heads of the trails it combines. This is the true shape of a
+		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
+		 *     The events are stored in the order they were recorded, which is a
+		 *     topological order of the DAG (a parent is always recorded before its
+		 *     children).
+		 *
+		 *     Two chains ride the DAG's edges:
+		 *
+		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
+		 *       effective score after it; the score flowing *in* is its parents'
+		 *       confidence, so [`final_confidence`] and the full history are recoverable;
+		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
+		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
+		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
+		 *       and reports the first break.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`confidence`]: AuditEvent::confidence
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`final_confidence`]: Self::final_confidence
+		 *     [`verify`]: Self::verify
+		 */
+		TextAuditLog: components["schemas"]["TextAuditEvent"][];
 		/**
 		 * @description One node in an entity's audit DAG: a thing that happened, with its
 		 *     effect on confidence and its tamper-evident links.
@@ -14898,25 +18218,21 @@ export interface components {
 		 *     [`hash`]: AuditEvent::hash
 		 *     [`confidence`]: AuditEvent::confidence
 		 */
-		AudioAuditEvent: {
+		TextAuditEvent: {
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
 			/**
 			 * @description Confidence after this event: the entity's effective confidence once it
 			 *     has happened.
 			 */
 			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
-			 *     [`AuditLog`] when the event is recorded; read it through
-			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
-			 *
-			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
-			 *     forge a self-consistent event outside the recording path.
-			 *
-			 *     [`AuditLog`]: crate::entity::audit::AuditLog
-			 */
-			hash: components["schemas"]["AuditHash"];
+			/** @description When the event happened (UTC). */
+			timestamp: string;
 			/** @description Kind of event, with its event-specific detail and its rationale. */
-			kind: components["schemas"]["AudioAuditKind"];
+			kind: components["schemas"]["TextAuditKind"];
 			/**
 			 * @description The events this one follows, by their hash. Empty for a birth event, one
 			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
@@ -14931,12 +18247,16 @@ export interface components {
 			 */
 			parents: components["schemas"]["AuditHash"][];
 			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
+			 *
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
 			 */
-			source: string;
-			/** @description When the event happened (UTC). */
-			timestamp: string;
+			hash: components["schemas"]["AuditHash"];
 		};
 		/**
 		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
@@ -14966,62 +18286,872 @@ export interface components {
 		 *     [`Model`]: AuditKind::Model
 		 *     [`Location`]: Modality::Location
 		 */
-		AudioAuditKind:
+		TextAuditKind:
 			| {
-					detail: components["schemas"]["AudioPattern"];
 					/** @constant */
 					kind: "pattern";
+					detail: components["schemas"]["TextPattern"];
 			  }
 			| {
-					detail: components["schemas"]["AudioModel"];
 					/** @constant */
 					kind: "model";
+					detail: components["schemas"]["TextModel"];
 			  }
 			| {
-					detail: components["schemas"]["AudioMetadata"];
 					/** @constant */
 					kind: "metadata";
+					detail: components["schemas"]["TextMetadata"];
 			  }
 			| {
-					detail: components["schemas"]["Deduplication"];
 					/** @constant */
 					kind: "deduplication";
+					detail: components["schemas"]["Deduplication"];
 			  }
 			| {
-					detail: components["schemas"]["Conflict"];
 					/** @constant */
 					kind: "conflict";
+					detail: components["schemas"]["Conflict"];
 			  }
 			| {
-					detail: components["schemas"]["Contested"];
 					/** @constant */
 					kind: "contested";
+					detail: components["schemas"]["Contested"];
 			  }
 			| {
-					detail: components["schemas"]["Calibration"];
 					/** @constant */
 					kind: "calibration";
+					detail: components["schemas"]["Calibration"];
 			  }
 			| {
-					detail: components["schemas"]["AudioRefinement"];
 					/** @constant */
 					kind: "refinement";
+					detail: components["schemas"]["TextRefinement"];
 			  }
 			| {
-					detail: components["schemas"]["Redaction"];
 					/** @constant */
 					kind: "redaction";
+					detail: components["schemas"]["Redaction"];
 			  }
 			| {
-					detail: components["schemas"]["Selection"];
 					/** @constant */
 					kind: "selection";
+					detail: components["schemas"]["Selection"];
 			  }
 			| {
-					detail: components["schemas"]["AudioManual"];
 					/** @constant */
 					kind: "manual";
+					detail: components["schemas"]["TextManual"];
 			  };
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		TextPattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TextLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/** @description Metadata of a pattern/dictionary recognition, carried by [`Pattern`]. */
+		PatternEvent: {
+			/** @description Name of the pattern that matched (e.g. `"ssn"`, `"email"`). */
+			name: string;
+			/** @description Literal regex source that matched, when exposed. */
+			regex?: string;
+			/** @description Name of the validator that confirmed the match (e.g. `"luhn"`). */
+			validator?: string;
+			/**
+			 * @description Whether contextual analysis (keyword co-occurrence) adjusted the score
+			 *     for this match.
+			 */
+			contextual: boolean;
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		TextModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TextLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
+		};
+		/** @description Metadata of a model/NER recognition, carried by [`Model`]. */
+		ModelEvent: {
+			/** @description Model name (e.g. `"spacy-en-core-web-lg"`, `"gpt-4"`). */
+			name: string;
+			/** @description Model version string, when known. */
+			version?: string;
+			/** @description Whether contextual analysis adjusted the score for this match. */
+			contextual: boolean;
+		};
+		/**
+		 * @description Detail of a metadata-field detection: a document's out-of-band field
+		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
+		 *     redaction subject at `location`, with its source in `metadata`.
+		 *
+		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
+		 *     out of free content — it is a named field that is simply present. There is
+		 *     nothing probabilistic to weigh, so the entity carries it as its own event
+		 *     kind rather than pretending a pattern fired.
+		 */
+		TextMetadata: {
+			/** @description The field's location (its key). */
+			location: components["schemas"]["TextLocation"];
+			/** @description Source metadata (which reader surfaced the field). */
+			metadata: components["schemas"]["MetadataEvent"];
+		};
+		/** @description Source detail of a metadata-field detection, carried by [`Metadata`]. */
+		MetadataEvent: {
+			/** @description The reader that surfaced the field (e.g. `"exif"`, `"docprops"`). */
+			source: string;
+		};
+		/** @description Several detections were fused into one entity. */
+		Deduplication: {
+			/** @description Name of the fusion strategy that combined them. */
+			strategy: string;
+		};
+		/**
+		 * @description A competing detection of a *different* label over the same span was resolved
+		 *     against this (winning) entity, the loser is recorded, not dropped.
+		 */
+		Conflict: {
+			/** @description The label of the detection that lost arbitration. */
+			competing_label: components["schemas"]["LabelRef"];
+			/** @description The loser's confidence at resolution time. */
+			competing_confidence: components["schemas"]["Confidence"];
+			/** @description Name of the conflict policy that chose the winner. */
+			resolved_by: string;
+		};
+		/**
+		 * @description A competing detection of a different label over the same span was left
+		 *     *unresolved*: both entities survive, flagged for a human. Recorded on each
+		 *     entity of the contested pair, naming the other.
+		 */
+		Contested: {
+			/** @description The label of the competing detection. */
+			competing_label: components["schemas"]["LabelRef"];
+			/** @description The competing detection's confidence. */
+			competing_confidence: components["schemas"]["Confidence"];
+			/** @description Name of the policy that flagged the contest. */
+			flagged_by: string;
+		};
+		/** @description The entity's confidence was rescaled by a per-recognizer factor. */
+		Calibration: {
+			/**
+			 * Format: double
+			 * @description Multiplier applied.
+			 */
+			factor: number;
+		};
+		/** @description A context keyword near the entity lifted its confidence. */
+		TextRefinement: {
+			/** @description Keyword that fired the boost. */
+			keyword: string;
+			/**
+			 * @description The located [`Hint`] the keyword fired from, when the match came from an
+			 *     out-of-band hint (a column header, a key) rather than the in-text word
+			 *     window. `None` for an in-text-window match.
+			 *
+			 *     [`Hint`]: crate::modality::Hint
+			 */
+			hint?: components["schemas"]["TextHint"];
+			/**
+			 * @description Where the boosting keyword sits in the medium. For a hint match this
+			 *     mirrors the hint's own location; for an in-text-window match it is the
+			 *     keyword resolved through the modality's [`locate`]. `None` when the
+			 *     keyword's stream range could not be placed.
+			 *
+			 *     [`locate`]: crate::modality::TextRecognizable::locate
+			 */
+			location?: components["schemas"]["TextLocation"];
+		};
+		/**
+		 * @description Located, out-of-band context a recognizer may treat as in-context for a
+		 *     nearby value.
+		 *
+		 *     A hint is *not* a sub-span of the value it informs; it lives elsewhere in
+		 *     the source (a table's column header, a JSON object key, a log field name).
+		 *     It carries only the `location` where that context sits: a recognizer or
+		 *     prompt reads the hint's text back from the source at that location, and a
+		 *     confidence boost records *which* hint lifted a score and *where* it came
+		 *     from — provenance a review consumer can resolve back to the document.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		TextHint: {
+			/** @description Where the hint's context sits in the source (the header cell, the key). */
+			location: components["schemas"]["TextLocation"];
+		};
+		/** @description An operator hid the entity. */
+		Redaction: {
+			/** @description Which operator (name + version) ran. */
+			operator: components["schemas"]["OperatorId"];
+			/**
+			 * @description How much the output leaks about the original, when the operator claimed a
+			 *     profile; `None` when it made no claim.
+			 */
+			leak_profile?: components["schemas"]["LeakProfile"];
+			/** @description Identifier of the key needed to reverse it, if reversible. */
+			key_id?: string;
+			/**
+			 * @description Which selection rule chose this operator: the automatic "why" (matched a
+			 *     label, a tag, a predicate, or the fallback).
+			 */
+			matched_by: components["schemas"]["RuleMatch"];
+			/**
+			 * @description The author-supplied policy rationale, when the operator carried an
+			 *     [`Attribution`]; `None` otherwise.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+			/**
+			 * @description BLAKE3 digest of the original text the operator hid, when the redaction
+			 *     layer recorded it. Proves *what* was redacted without storing the
+			 *     plaintext; `None` when the operator did not capture it.
+			 */
+			span_hash?: components["schemas"]["AuditHash"];
+			/**
+			 * Format: uint32
+			 * @description Byte length of the original text the operator hid, paired with
+			 *     [`span_hash`](Self::span_hash). `None` when not captured.
+			 */
+			span_length?: number;
+		};
+		/**
+		 * @description Identifies a redaction operator, for the redaction audit a higher
+		 *     layer assembles.
+		 *
+		 *     As with [`ComponentId`], the version is part of the identity so the
+		 *     audit trail records which build of the operator ran. The version is
+		 *     opaque text; the core attaches no ordering semantics to it.
+		 *
+		 *     [`ComponentId`]: crate::primitive::ComponentId
+		 */
+		OperatorId: {
+			/** @description Stable operator name (e.g. `"mask"`, `"aes-gcm-encrypt"`). */
+			name: string;
+			/** @description Operator's version at the time it was applied. */
+			version: string;
+		};
+		/**
+		 * @description What a redacted output leaks about the original it replaced.
+		 *
+		 *     Variants are ordered from most-leaky to least-leaky, so `Recoverable
+		 *     < Partial < Irrecoverable`. Surfaced through
+		 *     [`Operator::leak_profile`] for policy authoring and audit reporting.
+		 *
+		 *     [`Operator::leak_profile`]: crate::redaction::Operator::leak_profile
+		 */
+		LeakProfile: "recoverable" | "partial" | "irrecoverable";
+		/**
+		 * @description A serializable summary of *which selection rule* bound an operator to an
+		 *     entity, the automatic "why" behind a redaction.
+		 *
+		 *     The anonymizer selects an operator by walking an ordered rule list and
+		 *     taking the first match. That decision is recorded on the [`Redaction`]
+		 *     event as a `RuleMatch` so an audit can see *why* this operator ran
+		 *     ("matched label EMAIL_ADDRESS", "carried tag financial", "the fallback").
+		 *
+		 *     This is a summary, not the live rule: a predicate rule can't carry its
+		 *     closure into provenance, so [`Predicate`] records only that a predicate
+		 *     matched, not which one.
+		 *
+		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
+		 *     [`Predicate`]: RuleMatch::Predicate
+		 */
+		RuleMatch:
+			| {
+					label: components["schemas"]["LabelRef"];
+			  }
+			| {
+					tag: string;
+			  }
+			| "predicate"
+			| "fallback";
+		/**
+		 * @description Author-supplied rationale for a redaction: *under what authority* it was made.
+		 *
+		 *     Where the matched selection rule answers *which rule fired*, an
+		 *     `Attribution` answers *why the policy demanded it*, a compliance clause, an
+		 *     internal policy, a data-handling rule. A policy author attaches it to a
+		 *     selection rule (`Rule::because` in `elide-redaction`); the anonymizer records
+		 *     it on the entity's [`Redaction`] event so an audit can trace a change back to
+		 *     the policy that demanded it.
+		 *
+		 *     The rationale takes one of two shapes, by how much structure the author has:
+		 *     a [`Freeform`](Attribution::Freeform) label or a formal
+		 *     [`Cited`](Attribution::Cited) authority. Start one with
+		 *     [`Attribution::freeform`] / [`Attribution::cited`], refine it with the
+		 *     shape's `with_*` builder, and let it convert into an `Attribution`:
+		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::Attribution;
+		 *     let attribution: Attribution =
+		 *         Attribution::freeform("gdpr-art-17")
+		 *             .with_description("right to erasure")
+		 *             .into();
+		 *     ```
+		 *
+		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
+		 */
+		Attribution:
+			| ({
+					/** @constant */
+					kind: "freeform";
+			  } & components["schemas"]["FreeformAttribution"])
+			| ({
+					/** @constant */
+					kind: "cited";
+			  } & components["schemas"]["CitedAttribution"]);
+		/**
+		 * @description A [`Freeform`](Attribution::Freeform) rationale: a policy label and an
+		 *     optional human description, with no formal citation.
+		 */
+		FreeformAttribution: {
+			/** @description The policy's name (e.g. `"gdpr-art-17"`, `"hipaa-safe-harbor"`). */
+			name: string;
+			/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
+			description?: string;
+		};
+		/**
+		 * @description A [`Cited`](Attribution::Cited) rationale: a citable authority, the citation
+		 *     within it, and an optional rationale for why it applies.
+		 */
+		CitedAttribution: {
+			/** @description The authority cited (e.g. `"GDPR"`, `"HIPAA"`, `"internal-policy"`). */
+			authority: string;
+			/** @description The citation within that authority (e.g. `"Art. 17(1)"`, `"§164.514"`). */
+			citation: string;
+			/**
+			 * @description Why the citation applies here (e.g. `"data subject requested erasure"`),
+			 *     when given.
+			 */
+			rationale?: string;
+		};
+		/**
+		 * @description A 32-byte BLAKE3 digest.
+		 *
+		 *     The tamper-evident link in an [`AuditLog`] DAG: each [`AuditEvent`] hashes
+		 *     its payload together with its parents' hashes, so altering any event breaks
+		 *     every event downstream of it. Displays and (with the `serde` feature)
+		 *     (de)serializes as lowercase hex.
+		 *
+		 *     The all-zero hash is [`GENESIS`](AuditHash::GENESIS), the link a birth event
+		 *     (one with no parents) chains from.
+		 *
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 */
+		AuditHash: string;
+		/**
+		 * @description An operator was *picked* to hide the entity, the redaction decision,
+		 *     recorded before it is applied so it can be reviewed (and the entity edited)
+		 *     first. The [`Redaction`] event that follows records the operator actually
+		 *     run.
+		 */
+		Selection: {
+			/**
+			 * @description Identity (name + version) of the operator picked. Its *config* is not
+			 *     recorded; it lives in the policy that will run it, so apply re-resolves
+			 *     the configured operator rather than reading it here.
+			 */
+			operator: components["schemas"]["OperatorId"];
+			/**
+			 * @description Which selection rule chose this operator: the automatic "why" (matched a
+			 *     label, a tag, a predicate, or the fallback).
+			 */
+			matched_by: components["schemas"]["RuleMatch"];
+			/**
+			 * @description The author-supplied policy rationale, when the matched rule carried an
+			 *     [`Attribution`]; `None` otherwise.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's, so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		TextManual: {
+			/**
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["TextLocation"];
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+		};
+		/**
+		 * @description Which human decision a [`Manual`] event records, the reviewer actions on a
+		 *     finding: [`Flag`](ManualIntent::Flag) a miss, [`Suppress`](ManualIntent::Suppress)
+		 *     a false positive, or [`Amend`](ManualIntent::Amend) an existing finding.
+		 */
+		ManualIntent: "flag" | "suppress" | "amend";
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its audit trail. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`audit`]: Entity::audit
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		ImageEntity: {
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["ImageLocation"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself),
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
+			 */
+			audit: components["schemas"]["ImageAuditLog"];
+		};
+		/**
+		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
+		 *     tamper-evident DAG.
+		 *
+		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
+		 *     stripped by default, an `AuditLog` is always present and records the
+		 *     entity's *entire* life: each recognizer that found it, the deduplication
+		 *     that fused them, any confidence calibration, and the redaction that hid it.
+		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
+		 *     its location and score.
+		 *
+		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
+		 *     records a birth event (no parents); each later step links to the event it
+		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
+		 *     once: the heads of the trails it combines. This is the true shape of a
+		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
+		 *     The events are stored in the order they were recorded, which is a
+		 *     topological order of the DAG (a parent is always recorded before its
+		 *     children).
+		 *
+		 *     Two chains ride the DAG's edges:
+		 *
+		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
+		 *       effective score after it; the score flowing *in* is its parents'
+		 *       confidence, so [`final_confidence`] and the full history are recoverable;
+		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
+		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
+		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
+		 *       and reports the first break.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 *     [`confidence`]: AuditEvent::confidence
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`final_confidence`]: Self::final_confidence
+		 *     [`verify`]: Self::verify
+		 */
+		ImageAuditLog: components["schemas"]["ImageAuditEvent"][];
+		/**
+		 * @description One node in an entity's audit DAG: a thing that happened, with its
+		 *     effect on confidence and its tamper-evident links.
+		 *
+		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
+		 *     trail of its life: each recognizer that found it, the deduplication that
+		 *     fused them, any score calibration, and the redaction that hid it. The
+		 *     uniform spine (who, resulting score, when) is the same for every event; the
+		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
+		 *     event happened.
+		 *
+		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
+		 *     recognizer's first detection) has no parents, a normal step has one, and a
+		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
+		 *     [`hash`] folds the
+		 *     payload together with the parents' hashes, so altering any event breaks
+		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
+		 *     reports the first break.
+		 *
+		 *     `entity.confidence` always equals the [`confidence`] of the most recent
+		 *     event. The confidence *flowing in* is not stored: it is the parents'
+		 *     [`confidence`], recovered from the DAG.
+		 *
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
+		 *     [`kind`]: AuditEvent::kind
+		 *     [`parents`]: AuditEvent::parents
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`confidence`]: AuditEvent::confidence
+		 */
+		ImageAuditEvent: {
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+			/**
+			 * @description Confidence after this event: the entity's effective confidence once it
+			 *     has happened.
+			 */
+			confidence: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			timestamp: string;
+			/** @description Kind of event, with its event-specific detail and its rationale. */
+			kind: components["schemas"]["ImageAuditKind"];
+			/**
+			 * @description The events this one follows, by their hash. Empty for a birth event, one
+			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
+			 *     when the event is recorded; read it through [`parents`](Self::parents).
+			 *
+			 *     Not publicly settable: the links are the tamper-evident structure, so
+			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
+			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+			 */
+			parents: components["schemas"]["AuditHash"][];
+			/**
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
+			 *
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 */
+			hash: components["schemas"]["AuditHash"];
+		};
+		/**
+		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
+		 *     rationale for why it happened.
+		 *
+		 *     A thin tagged union: each variant wraps one payload struct (e.g.
+		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
+		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
+		 *     payload:
+		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::AuditKind;
+		 *     # use elide_core::modality::text::Text;
+		 *     # fn show(kind: &AuditKind<Text>) {
+		 *     if let AuditKind::Redaction(redaction) = kind {
+		 *         let _ = &redaction.operator;
+		 *     }
+		 *     # }
+		 *     ```
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
+		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
+		 *     matched [`Location`]; the rest carry their own data.
+		 *
+		 *     [`AuditEvent`]: super::AuditEvent
+		 *     [`Pattern`]: AuditKind::Pattern
+		 *     [`Model`]: AuditKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		ImageAuditKind:
+			| {
+					/** @constant */
+					kind: "pattern";
+					detail: components["schemas"]["ImagePattern"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					detail: components["schemas"]["ImageModel"];
+			  }
+			| {
+					/** @constant */
+					kind: "metadata";
+					detail: components["schemas"]["ImageMetadata"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					detail: components["schemas"]["Deduplication"];
+			  }
+			| {
+					/** @constant */
+					kind: "conflict";
+					detail: components["schemas"]["Conflict"];
+			  }
+			| {
+					/** @constant */
+					kind: "contested";
+					detail: components["schemas"]["Contested"];
+			  }
+			| {
+					/** @constant */
+					kind: "calibration";
+					detail: components["schemas"]["Calibration"];
+			  }
+			| {
+					/** @constant */
+					kind: "refinement";
+					detail: components["schemas"]["ImageRefinement"];
+			  }
+			| {
+					/** @constant */
+					kind: "redaction";
+					detail: components["schemas"]["Redaction"];
+			  }
+			| {
+					/** @constant */
+					kind: "selection";
+					detail: components["schemas"]["Selection"];
+			  }
+			| {
+					/** @constant */
+					kind: "manual";
+					detail: components["schemas"]["ImageManual"];
+			  };
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		ImagePattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["ImageLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		ImageModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["ImageLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
+		};
+		/**
+		 * @description Detail of a metadata-field detection: a document's out-of-band field
+		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
+		 *     redaction subject at `location`, with its source in `metadata`.
+		 *
+		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
+		 *     out of free content — it is a named field that is simply present. There is
+		 *     nothing probabilistic to weigh, so the entity carries it as its own event
+		 *     kind rather than pretending a pattern fired.
+		 */
+		ImageMetadata: {
+			/** @description The field's location (its key). */
+			location: components["schemas"]["ImageLocation"];
+			/** @description Source metadata (which reader surfaced the field). */
+			metadata: components["schemas"]["MetadataEvent"];
+		};
+		/** @description A context keyword near the entity lifted its confidence. */
+		ImageRefinement: {
+			/** @description Keyword that fired the boost. */
+			keyword: string;
+			/**
+			 * @description The located [`Hint`] the keyword fired from, when the match came from an
+			 *     out-of-band hint (a column header, a key) rather than the in-text word
+			 *     window. `None` for an in-text-window match.
+			 *
+			 *     [`Hint`]: crate::modality::Hint
+			 */
+			hint?: components["schemas"]["ImageHint"];
+			/**
+			 * @description Where the boosting keyword sits in the medium. For a hint match this
+			 *     mirrors the hint's own location; for an in-text-window match it is the
+			 *     keyword resolved through the modality's [`locate`]. `None` when the
+			 *     keyword's stream range could not be placed.
+			 *
+			 *     [`locate`]: crate::modality::TextRecognizable::locate
+			 */
+			location?: components["schemas"]["ImageLocation"];
+		};
+		/**
+		 * @description Located, out-of-band context a recognizer may treat as in-context for a
+		 *     nearby value.
+		 *
+		 *     A hint is *not* a sub-span of the value it informs; it lives elsewhere in
+		 *     the source (a table's column header, a JSON object key, a log field name).
+		 *     It carries only the `location` where that context sits: a recognizer or
+		 *     prompt reads the hint's text back from the source at that location, and a
+		 *     confidence boost records *which* hint lifted a score and *where* it came
+		 *     from — provenance a review consumer can resolve back to the document.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		ImageHint: {
+			/** @description Where the hint's context sits in the source (the header cell, the key). */
+			location: components["schemas"]["ImageLocation"];
+		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's, so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		ImageManual: {
+			/**
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["ImageLocation"];
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+		};
+		/**
+		 * @description Detected piece of sensitive information within some medium.
+		 *
+		 *     Generic over the [`Modality`] `M`, which is what makes the model
+		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
+		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
+		 *     [`Location`] type, `M::Location`.
+		 *
+		 *     # Birth and fusion
+		 *
+		 *     A recognizer emits an entity directly, carrying a single recognition
+		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
+		 *     several recognizers find the same thing, a fusion step (in
+		 *     `elide`) combines their entities into one: the survivor's
+		 *     [`location`] and [`confidence`] are the *fused* values, and every
+		 *     contributing recognition event, plus a deduplication event, is
+		 *     retained in its audit trail. The entity therefore carries its full
+		 *     audit trail with it.
+		 *
+		 *     [`Location`]: Modality::Location
+		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     [`audit`]: Entity::audit
+		 *     [`location`]: Entity::location
+		 *     [`confidence`]: Entity::confidence
+		 */
+		AudioEntity: {
+			/**
+			 * Format: uuid
+			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
+			 *     when the entity is assembled.
+			 */
+			id: string;
+			/**
+			 * @description What kind of sensitive information this is (resolved via a
+			 *     [`LabelCatalog`]).
+			 */
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["AudioLocation"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
+			 * @description The language of this entity's surrounding text, when a recognizer
+			 *     resolved one. `None` when unknown or language-agnostic.
+			 */
+			language?: string;
+			/**
+			 * @description Byte range of the match in the *recognized text* it was found in (the
+			 *     OCR layout text, the audio transcript, or the text payload itself),
+			 *     the stable key back into that enrichment artifact, where the rich
+			 *     context lives (which OCR block, which speaker) that the geometric
+			 *     [`location`] cannot hold. `None` for entities not found via text
+			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
+			 *     uses [`location`]; an audit uses this with the artifact.
+			 *
+			 *     [`location`]: Entity::location
+			 */
+			recognized_range?: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
+			 */
+			audit: components["schemas"]["AudioAuditLog"];
+		};
 		/**
 		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
 		 *     tamper-evident DAG.
@@ -15060,43 +19190,263 @@ export interface components {
 		 */
 		AudioAuditLog: components["schemas"]["AudioAuditEvent"][];
 		/**
-		 * @description Per-call payload a recognizer inspects for the [`Audio`] modality.
+		 * @description One node in an entity's audit DAG: a thing that happened, with its
+		 *     effect on confidence and its tamper-evident links.
 		 *
-		 *     Carries the encoded audio bytes; an optional filename aids diagnostics
-		 *     and encoding inference (the container format a decoder should expect).
-		 *     The recognizable text, a timestamped transcript, is *not* held here;
-		 *     a speech-to-text [`Enricher`] stamps it onto the call's
-		 *     [`artifact`], keeping
-		 *     `AudioData` the codec's payload alone.
+		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
+		 *     trail of its life: each recognizer that found it, the deduplication that
+		 *     fused them, any score calibration, and the redaction that hid it. The
+		 *     uniform spine (who, resulting score, when) is the same for every event; the
+		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
+		 *     event happened.
 		 *
-		 *     [`Audio`]: super::Audio
-		 *     [`Enricher`]: crate::enrichment::Enricher
-		 *     [`artifact`]: crate::recognition::RecognizerContext::artifact
+		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
+		 *     recognizer's first detection) has no parents, a normal step has one, and a
+		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
+		 *     [`hash`] folds the
+		 *     payload together with the parents' hashes, so altering any event breaks
+		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
+		 *     reports the first break.
+		 *
+		 *     `entity.confidence` always equals the [`confidence`] of the most recent
+		 *     event. The confidence *flowing in* is not stored: it is the parents'
+		 *     [`confidence`], recovered from the DAG.
+		 *
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
+		 *     [`kind`]: AuditEvent::kind
+		 *     [`parents`]: AuditEvent::parents
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`confidence`]: AuditEvent::confidence
 		 */
-		AudioData: {
-			/** @description Original filename, when known. */
-			filename?: string;
+		AudioAuditEvent: {
+			/**
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
+			 */
+			source: string;
+			/**
+			 * @description Confidence after this event: the entity's effective confidence once it
+			 *     has happened.
+			 */
+			confidence: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			timestamp: string;
+			/** @description Kind of event, with its event-specific detail and its rationale. */
+			kind: components["schemas"]["AudioAuditKind"];
+			/**
+			 * @description The events this one follows, by their hash. Empty for a birth event, one
+			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
+			 *     when the event is recorded; read it through [`parents`](Self::parents).
+			 *
+			 *     Not publicly settable: the links are the tamper-evident structure, so
+			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
+			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+			 */
+			parents: components["schemas"]["AuditHash"][];
+			/**
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
+			 *
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 */
+			hash: components["schemas"]["AuditHash"];
 		};
 		/**
-		 * @description One change to an analyzed document.
+		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
+		 *     rationale for why it happened.
 		 *
-		 *     `Add` carries no id because the entity does not exist yet; the
-		 *     engine mints one when the edit is applied, so a client cannot
-		 *     collide with a real detection or shadow an existing entity.
+		 *     A thin tagged union: each variant wraps one payload struct (e.g.
+		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
+		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
+		 *     payload:
+		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::AuditKind;
+		 *     # use elide_core::modality::text::Text;
+		 *     # fn show(kind: &AuditKind<Text>) {
+		 *     if let AuditKind::Redaction(redaction) = kind {
+		 *         let _ = &redaction.operator;
+		 *     }
+		 *     # }
+		 *     ```
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
+		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
+		 *     matched [`Location`]; the rest carry their own data.
+		 *
+		 *     [`AuditEvent`]: super::AuditEvent
+		 *     [`Pattern`]: AuditKind::Pattern
+		 *     [`Model`]: AuditKind::Model
+		 *     [`Location`]: Modality::Location
 		 */
-		AudioEdit:
-			| ({
+		AudioAuditKind:
+			| {
 					/** @constant */
-					op: "add";
-			  } & components["schemas"]["AudioAdd"])
-			| ({
+					kind: "pattern";
+					detail: components["schemas"]["AudioPattern"];
+			  }
+			| {
 					/** @constant */
-					op: "retag";
-			  } & components["schemas"]["AudioRetag"])
-			| ({
+					kind: "model";
+					detail: components["schemas"]["AudioModel"];
+			  }
+			| {
 					/** @constant */
-					op: "suppress";
-			  } & components["schemas"]["Suppress"]);
+					kind: "metadata";
+					detail: components["schemas"]["AudioMetadata"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					detail: components["schemas"]["Deduplication"];
+			  }
+			| {
+					/** @constant */
+					kind: "conflict";
+					detail: components["schemas"]["Conflict"];
+			  }
+			| {
+					/** @constant */
+					kind: "contested";
+					detail: components["schemas"]["Contested"];
+			  }
+			| {
+					/** @constant */
+					kind: "calibration";
+					detail: components["schemas"]["Calibration"];
+			  }
+			| {
+					/** @constant */
+					kind: "refinement";
+					detail: components["schemas"]["AudioRefinement"];
+			  }
+			| {
+					/** @constant */
+					kind: "redaction";
+					detail: components["schemas"]["Redaction"];
+			  }
+			| {
+					/** @constant */
+					kind: "selection";
+					detail: components["schemas"]["Selection"];
+			  }
+			| {
+					/** @constant */
+					kind: "manual";
+					detail: components["schemas"]["AudioManual"];
+			  };
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		AudioPattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["AudioLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		AudioModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["AudioLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
+		};
+		/**
+		 * @description Detail of a metadata-field detection: a document's out-of-band field
+		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
+		 *     redaction subject at `location`, with its source in `metadata`.
+		 *
+		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
+		 *     out of free content — it is a named field that is simply present. There is
+		 *     nothing probabilistic to weigh, so the entity carries it as its own event
+		 *     kind rather than pretending a pattern fired.
+		 */
+		AudioMetadata: {
+			/** @description The field's location (its key). */
+			location: components["schemas"]["AudioLocation"];
+			/** @description Source metadata (which reader surfaced the field). */
+			metadata: components["schemas"]["MetadataEvent"];
+		};
+		/** @description A context keyword near the entity lifted its confidence. */
+		AudioRefinement: {
+			/** @description Keyword that fired the boost. */
+			keyword: string;
+			/**
+			 * @description The located [`Hint`] the keyword fired from, when the match came from an
+			 *     out-of-band hint (a column header, a key) rather than the in-text word
+			 *     window. `None` for an in-text-window match.
+			 *
+			 *     [`Hint`]: crate::modality::Hint
+			 */
+			hint?: components["schemas"]["AudioHint"];
+			/**
+			 * @description Where the boosting keyword sits in the medium. For a hint match this
+			 *     mirrors the hint's own location; for an in-text-window match it is the
+			 *     keyword resolved through the modality's [`locate`]. `None` when the
+			 *     keyword's stream range could not be placed.
+			 *
+			 *     [`locate`]: crate::modality::TextRecognizable::locate
+			 */
+			location?: components["schemas"]["AudioLocation"];
+		};
+		/**
+		 * @description Located, out-of-band context a recognizer may treat as in-context for a
+		 *     nearby value.
+		 *
+		 *     A hint is *not* a sub-span of the value it informs; it lives elsewhere in
+		 *     the source (a table's column header, a JSON object key, a log field name).
+		 *     It carries only the `location` where that context sits: a recognizer or
+		 *     prompt reads the hint's text back from the source at that location, and a
+		 *     confidence boost records *which* hint lifted a score and *where* it came
+		 *     from — provenance a review consumer can resolve back to the document.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
+		 */
+		AudioHint: {
+			/** @description Where the hint's context sits in the source (the header cell, the key). */
+			location: components["schemas"]["AudioLocation"];
+		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's, so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		AudioManual: {
+			/**
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["AudioLocation"];
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+		};
 		/**
 		 * @description Detected piece of sensitive information within some medium.
 		 *
@@ -15122,25 +19472,7 @@ export interface components {
 		 *     [`location`]: Entity::location
 		 *     [`confidence`]: Entity::confidence
 		 */
-		AudioEntity: {
-			/**
-			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
-			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
-			 *     [`Manual`] event on this trail, not a separate flag.
-			 *
-			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
-			 */
-			audit: components["schemas"]["AudioAuditLog"];
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
+		TabularEntity: {
 			/**
 			 * Format: uuid
 			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
@@ -15153,15 +19485,23 @@ export interface components {
 			 */
 			label: components["schemas"]["LabelRef"];
 			/**
+			 * @description Location of the entity within the medium (fused, if it came from more
+			 *     than one detection).
+			 */
+			location: components["schemas"]["TabularLocation"];
+			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
+			confidence: components["schemas"]["Confidence"];
+			/**
+			 * @description Coreference identifier, if a recognizer resolved this entity as one
+			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
+			 *     same real-world thing.
+			 */
+			coref?: components["schemas"]["EntityCoRef"];
+			/**
 			 * @description The language of this entity's surrounding text, when a recognizer
 			 *     resolved one. `None` when unknown or language-agnostic.
 			 */
 			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["AudioLocation"];
 			/**
 			 * @description Byte range of the match in the *recognized text* it was found in (the
 			 *     OCR layout text, the audio transcript, or the text payload itself),
@@ -15174,74 +19514,228 @@ export interface components {
 			 *     [`location`]: Entity::location
 			 */
 			recognized_range?: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description Tamper-evident audit trail: every contributing detection, the fusion
+			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
+			 *     also the single source of truth for whether a reviewer
+			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
+			 *     [`Manual`] event on this trail, not a separate flag.
+			 *
+			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
+			 */
+			audit: components["schemas"]["TabularAuditLog"];
 		};
 		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
+		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
+		 *     tamper-evident DAG.
 		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs; it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from, provenance a
-		 *     review consumer can resolve back to the document.
+		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
+		 *     stripped by default, an `AuditLog` is always present and records the
+		 *     entity's *entire* life: each recognizer that found it, the deduplication
+		 *     that fused them, any confidence calibration, and the redaction that hid it.
+		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
+		 *     its location and score.
 		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
+		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
+		 *     records a birth event (no parents); each later step links to the event it
+		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
+		 *     once: the heads of the trails it combines. This is the true shape of a
+		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
+		 *     The events are stored in the order they were recorded, which is a
+		 *     topological order of the DAG (a parent is always recorded before its
+		 *     children).
+		 *
+		 *     Two chains ride the DAG's edges:
+		 *
+		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
+		 *       effective score after it; the score flowing *in* is its parents'
+		 *       confidence, so [`final_confidence`] and the full history are recoverable;
+		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
+		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
+		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
+		 *       and reports the first break.
 		 *
 		 *     [`Entity`]: crate::entity::Entity
+		 *     [`confidence`]: AuditEvent::confidence
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`final_confidence`]: Self::final_confidence
+		 *     [`verify`]: Self::verify
 		 */
-		AudioHint: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["AudioData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["AudioLocation"];
-		};
+		TabularAuditLog: components["schemas"]["TabularAuditEvent"][];
 		/**
-		 * @description A [`TimeSpan`] within audio content, with an optional speaker label.
+		 * @description One node in an entity's audit DAG: a thing that happened, with its
+		 *     effect on confidence and its tamper-evident links.
 		 *
-		 *     The time span is the coordinate; ordering and overlap consider only it.
-		 *     The optional [`speaker_id`] is a diarization label,
-		 *     not a coordinate: two utterances from different speakers at the same
-		 *     instant still overlap in time, so the speaker is carried for provenance
-		 *     but excluded from comparison.
+		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
+		 *     trail of its life: each recognizer that found it, the deduplication that
+		 *     fused them, any score calibration, and the redaction that hid it. The
+		 *     uniform spine (who, resulting score, when) is the same for every event; the
+		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
+		 *     event happened.
 		 *
-		 *     [`speaker_id`]: Self::speaker_id
+		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
+		 *     recognizer's first detection) has no parents, a normal step has one, and a
+		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
+		 *     [`hash`] folds the
+		 *     payload together with the parents' hashes, so altering any event breaks
+		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
+		 *     reports the first break.
+		 *
+		 *     `entity.confidence` always equals the [`confidence`] of the most recent
+		 *     event. The confidence *flowing in* is not stored: it is the parents'
+		 *     [`confidence`], recovered from the DAG.
+		 *
+		 *     [`AuditLog`]: crate::entity::audit::AuditLog
+		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
+		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
+		 *     [`kind`]: AuditEvent::kind
+		 *     [`parents`]: AuditEvent::parents
+		 *     [`hash`]: AuditEvent::hash
+		 *     [`confidence`]: AuditEvent::confidence
 		 */
-		AudioLocation: {
-			/** @description Time span the location covers, in the stream's timeline. */
-			span: components["schemas"]["TimeSpan"];
-			/** @description Diarization label of the speaker, when a diarizer assigned one. */
-			speaker_id?: string;
-		};
-		/**
-		 * @description A human override, outside automatic detection: an entity a reviewer added by
-		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's, so the trail records *why* (an
-		 *     [`Attribution`], when supplied). *Who* made the override is the event's
-		 *     [`source`], not a payload field.
-		 *
-		 *     [`source`]: super::AuditEvent::source
-		 */
-		AudioManual: {
+		TabularAuditEvent: {
 			/**
-			 * @description The reviewer's rationale, when supplied (e.g. a freeform
-			 *     `"false positive"`, or a cited authority). `None` for an unexplained
-			 *     override.
+			 * @description Who produced this event: a recognizer name, a deduplication strategy,
+			 *     an operator, or whatever acted.
 			 */
-			attribution?: components["schemas"]["Attribution"];
+			source: string;
 			/**
-			 * @description Which human decision this records: including a missed entity, or
-			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
-			 *     separate flag to keep in sync.
+			 * @description Confidence after this event: the entity's effective confidence once it
+			 *     has happened.
+			 */
+			confidence: components["schemas"]["Confidence"];
+			/** @description When the event happened (UTC). */
+			timestamp: string;
+			/** @description Kind of event, with its event-specific detail and its rationale. */
+			kind: components["schemas"]["TabularAuditKind"];
+			/**
+			 * @description The events this one follows, by their hash. Empty for a birth event, one
+			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
+			 *     when the event is recorded; read it through [`parents`](Self::parents).
 			 *
-			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
+			 *     Not publicly settable: the links are the tamper-evident structure, so
+			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
+			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
 			 */
-			intent: components["schemas"]["ManualIntent"];
-			/** @description Where the override applies, in modality-native coordinates. */
-			location: components["schemas"]["AudioLocation"];
+			parents: components["schemas"]["AuditHash"][];
+			/**
+			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
+			 *     [`AuditLog`] when the event is recorded; read it through
+			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
+			 *
+			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
+			 *     forge a self-consistent event outside the recording path.
+			 *
+			 *     [`AuditLog`]: crate::entity::audit::AuditLog
+			 */
+			hash: components["schemas"]["AuditHash"];
+		};
+		/**
+		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
+		 *     rationale for why it happened.
+		 *
+		 *     A thin tagged union: each variant wraps one payload struct (e.g.
+		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
+		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
+		 *     payload:
+		 *
+		 *     ```
+		 *     # use elide_core::entity::audit::AuditKind;
+		 *     # use elide_core::modality::text::Text;
+		 *     # fn show(kind: &AuditKind<Text>) {
+		 *     if let AuditKind::Redaction(redaction) = kind {
+		 *         let _ = &redaction.operator;
+		 *     }
+		 *     # }
+		 *     ```
+		 *
+		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
+		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
+		 *     matched [`Location`]; the rest carry their own data.
+		 *
+		 *     [`AuditEvent`]: super::AuditEvent
+		 *     [`Pattern`]: AuditKind::Pattern
+		 *     [`Model`]: AuditKind::Model
+		 *     [`Location`]: Modality::Location
+		 */
+		TabularAuditKind:
+			| {
+					/** @constant */
+					kind: "pattern";
+					detail: components["schemas"]["TabularPattern"];
+			  }
+			| {
+					/** @constant */
+					kind: "model";
+					detail: components["schemas"]["TabularModel"];
+			  }
+			| {
+					/** @constant */
+					kind: "metadata";
+					detail: components["schemas"]["TabularMetadata"];
+			  }
+			| {
+					/** @constant */
+					kind: "deduplication";
+					detail: components["schemas"]["Deduplication"];
+			  }
+			| {
+					/** @constant */
+					kind: "conflict";
+					detail: components["schemas"]["Conflict"];
+			  }
+			| {
+					/** @constant */
+					kind: "contested";
+					detail: components["schemas"]["Contested"];
+			  }
+			| {
+					/** @constant */
+					kind: "calibration";
+					detail: components["schemas"]["Calibration"];
+			  }
+			| {
+					/** @constant */
+					kind: "refinement";
+					detail: components["schemas"]["TabularRefinement"];
+			  }
+			| {
+					/** @constant */
+					kind: "redaction";
+					detail: components["schemas"]["Redaction"];
+			  }
+			| {
+					/** @constant */
+					kind: "selection";
+					detail: components["schemas"]["Selection"];
+			  }
+			| {
+					/** @constant */
+					kind: "manual";
+					detail: components["schemas"]["TabularManual"];
+			  };
+		/**
+		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
+		 *     `location`, with the pattern metadata in `pattern`.
+		 */
+		TabularPattern: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TabularLocation"];
+			/** @description Pattern metadata (name, regex, validator, contextual flag). */
+			pattern: components["schemas"]["PatternEvent"];
+		};
+		/**
+		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
+		 *     metadata in `model`.
+		 */
+		TabularModel: {
+			/** @description Where the recognizer matched. */
+			location: components["schemas"]["TabularLocation"];
+			/** @description Model metadata (name, version, contextual flag). */
+			model: components["schemas"]["ModelEvent"];
 		};
 		/**
 		 * @description Detail of a metadata-field detection: a document's out-of-band field
@@ -15253,71 +19747,16 @@ export interface components {
 		 *     nothing probabilistic to weigh, so the entity carries it as its own event
 		 *     kind rather than pretending a pattern fired.
 		 */
-		AudioMetadata: {
+		TabularMetadata: {
 			/** @description The field's location (its key). */
-			location: components["schemas"]["AudioLocation"];
+			location: components["schemas"]["TabularLocation"];
 			/** @description Source metadata (which reader surfaced the field). */
 			metadata: components["schemas"]["MetadataEvent"];
 		};
-		/**
-		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
-		 *     metadata in `model`.
-		 */
-		AudioModel: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["AudioLocation"];
-			/** @description Model metadata (name, version, contextual flag). */
-			model: components["schemas"]["ModelEvent"];
-		};
-		/**
-		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
-		 *     `location`, with the pattern metadata in `pattern`.
-		 */
-		AudioPattern: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["AudioLocation"];
-			/** @description Pattern metadata (name, regex, validator, contextual flag). */
-			pattern: components["schemas"]["PatternEvent"];
-		};
-		/** @description Operator spec a `redact` audio rule carries. */
-		AudioRedaction:
-			| {
-					/** @constant */
-					kind: "erase";
-			  }
-			| {
-					/** @constant */
-					kind: "keep";
-			  }
-			| {
-					/** @constant */
-					kind: "silence";
-			  }
-			| {
-					/**
-					 * Format: float
-					 * @description Peak amplitude in `0.0..=1.0` of full scale. Default 0.5:
-					 *     audible but not painful, and never clips.
-					 * @default 0.5
-					 */
-					amplitude?: number;
-					/**
-					 * Format: float
-					 * @description Tone frequency in Hertz. Default 1 kHz, the broadcast
-					 *     convention.
-					 * @default 1000
-					 */
-					hz?: number;
-					/** @constant */
-					kind: "beep";
-					/**
-					 * @description Tone shape. Default sine.
-					 * @default sine
-					 */
-					waveform?: components["schemas"]["Waveform"];
-			  };
 		/** @description A context keyword near the entity lifted its confidence. */
-		AudioRefinement: {
+		TabularRefinement: {
+			/** @description Keyword that fired the boost. */
+			keyword: string;
 			/**
 			 * @description The located [`Hint`] the keyword fired from, when the match came from an
 			 *     out-of-band hint (a column header, a key) rather than the in-text word
@@ -15325,9 +19764,7 @@ export interface components {
 			 *
 			 *     [`Hint`]: crate::modality::Hint
 			 */
-			hint?: components["schemas"]["AudioHint"];
-			/** @description Keyword that fired the boost. */
-			keyword: string;
+			hint?: components["schemas"]["TabularHint"];
 			/**
 			 * @description Where the boosting keyword sits in the medium. For a hint match this
 			 *     mirrors the hint's own location; for an in-text-window match it is the
@@ -15336,244 +19773,175 @@ export interface components {
 			 *
 			 *     [`locate`]: crate::modality::TextRecognizable::locate
 			 */
-			location?: components["schemas"]["AudioLocation"];
+			location?: components["schemas"]["TabularLocation"];
 		};
 		/**
-		 * @description Correct what an existing detection *is* or *covers*, then redact
-		 *     it under the policy set as corrected.
+		 * @description Located, out-of-band context a recognizer may treat as in-context for a
+		 *     nearby value.
 		 *
-		 *     A reviewer fixing recognition's mistake rather than overriding
-		 *     its consequence. Retagging into a label the policy does not cover
-		 *     leaves the entity alone, exactly as if it had been detected that
-		 *     way — which is why it is auditable rather than a mutable field.
+		 *     A hint is *not* a sub-span of the value it informs; it lives elsewhere in
+		 *     the source (a table's column header, a JSON object key, a log field name).
+		 *     It carries only the `location` where that context sits: a recognizer or
+		 *     prompt reads the hint's text back from the source at that location, and a
+		 *     confidence boost records *which* hint lifted a score and *where* it came
+		 *     from — provenance a review consumer can resolve back to the document.
+		 *
+		 *     [`Entity`]: crate::entity::Entity
 		 */
-		AudioRetag: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
+		TabularHint: {
+			/** @description Where the hint's context sits in the source (the header cell, the key). */
+			location: components["schemas"]["TabularLocation"];
+		};
+		/**
+		 * @description A human override, outside automatic detection: an entity a reviewer added by
+		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
+		 *     decision, not a recognizer's, so the trail records *why* (an
+		 *     [`Attribution`], when supplied). *Who* made the override is the event's
+		 *     [`source`], not a payload field.
+		 *
+		 *     [`source`]: super::AuditEvent::source
+		 */
+		TabularManual: {
 			/**
-			 * Format: uuid
-			 * @description The entity being corrected.
+			 * @description Which human decision this records: including a missed entity, or
+			 *     suppressing a detected one. This is the authority on whether the entity
+			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
+			 *     separate flag to keep in sync.
+			 *
+			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
 			 */
+			intent: components["schemas"]["ManualIntent"];
+			/** @description Where the override applies, in modality-native coordinates. */
+			location: components["schemas"]["TabularLocation"];
+			/**
+			 * @description The reviewer's rationale, when supplied (e.g. a freeform
+			 *     `"false positive"`, or a cited authority). `None` for an unexplained
+			 *     override.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+		};
+		/**
+		 * @description Labels a request introduces, and how to detect them.
+		 *
+		 *     The two halves are independent, and only one pairing is an
+		 *     error.
+		 *
+		 *     A label with no matcher is legitimate: it joins the catalog, a
+		 *     policy may scope it, and a reviewer may add entities under it
+		 *     through [`Edit::Add`]. Nothing detects it automatically — there
+		 *     is no matcher to look for it — which is the point when the
+		 *     label marks something only a human can recognise.
+		 *
+		 *     A matcher with no label is refused, since it would detect into
+		 *     a vocabulary the catalog never held.
+		 *
+		 *     [`Edit::Add`]: https://docs.rs/elide-review
+		 */
+		Recognition: {
+			/**
+			 * @description Label schemas elide does not ship.
+			 *
+			 *     Only for labels outside the shipped set: one whose id
+			 *     collides with a builtin is refused, since it would shadow
+			 *     elide's own definition.
+			 */
+			custom?: components["schemas"]["Label"][];
+			/**
+			 * @description How to detect the labels [`custom`] introduces.
+			 *
+			 *     Each names a label this request declares. Compiled fresh
+			 *     per request, so a request introducing none costs nothing.
+			 *
+			 *     [`custom`]: Self::custom
+			 */
+			matchers?: components["schemas"]["CustomMatcher"][];
+		};
+		/**
+		 * @description Kind of sensitive information: a stable [`id`], per-language
+		 *     [`LabelLocale`]s, an optional [`category`], and zero or more tags.
+		 *
+		 *     # Identity
+		 *
+		 *     Labels are identified by [`id`], a stable lowercase `snake_case`
+		 *     string (`"phone_number"`), never localized, and the catalog key that a
+		 *     [`LabelRef`] resolves through. Selectors match by id. Derived equality
+		 *     is *structural*: two labels with the same id but different
+		 *     localizations or tags are not `==`; compare [`id`] for identity.
+		 *
+		 *     # Localization
+		 *
+		 *     The display name and description are localized per [`LanguageTag`].
+		 *     English (`"en"`) is required at construction and is the fallback when a
+		 *     requested locale is absent, so [`localization`] always returns some
+		 *     text, NER and LLM read the analysis language's name and description to
+		 *     prompt the model, keyed by the stable id.
+		 *
+		 *     # Category and tags
+		 *
+		 *     [`category`] is the single coarse group a label belongs to (`financial`,
+		 *     `health`, `identity`, …), for organizing detected entities by kind. Built-in
+		 *     labels ship with one; a custom label has none unless set.
+		 *
+		 *     [`tags`] is a free-form list of *cross-cutting* markers a policy selector
+		 *     matches against, sensitivity flags a label may carry several of (`pii`,
+		 *     `phi`, `pci`, `sad`, `secret`). Distinct from the category: a label has at
+		 *     most one category but any number of tags. Custom labels can ship with zero
+		 *     of either.
+		 *
+		 *     [`id`]: Label::id
+		 *     [`localization`]: Label::localization
+		 *     [`category`]: Label::category
+		 *     [`tags`]: Label::tags
+		 */
+		Label: {
 			id: string;
-			/** @description The corrected label, when recognition got it wrong. */
-			label?: components["schemas"]["LabelRef"];
-			/**
-			 * @description The corrected location, when the span clipped the value or
-			 *     ran past it.
-			 */
-			location?: components["schemas"]["AudioLocation"];
-			/** @description The rationale, when one was given. */
-			reason?: string;
+			localizations: components["schemas"]["LocalizedText"];
+			category?: components["schemas"]["Category"];
+			tags: string[];
 		};
 		/**
-		 * @description What detection found in one document.
+		 * @description A value localized per [`LanguageTag`], with an English-first fallback.
 		 *
-		 *     Wraps elide's [`Report`] with the things elide does not model:
-		 *     the recognition [`DocumentContext`] the entities were scored
-		 *     against, how the document decoded, and what the pass cost.
+		 *     The reusable mechanism behind any text that varies by language: a
+		 *     [`Label`]'s display name and description, a redaction operator's bucket
+		 *     label, and so on. English (`"en"`) is the conventional anchor,
+		 *     constructors seed it, and [`resolve`] falls back to it (then to any
+		 *     entry) when a requested locale is absent, so a caller that supplied
+		 *     English always gets *some* value.
 		 *
-		 *     Reviewer edits are not here. They are the caller's own input,
-		 *     applied to the report before anonymize
-		 *     ([`EditSet::apply`](crate::entity::EditSet::apply)), so an audit
-		 *     carries what analysis found *as amended* rather than the
-		 *     amendments themselves.
+		 *     Generic over the stored value `T`, so it carries a bare `HipStr`
+		 *     (a bucket label) or a richer struct (a label's name-plus-description)
+		 *     equally. It is a thin wrapper over a `HashMap<LanguageTag, T>`; the
+		 *     added value is the fallback policy in [`resolve`], kept in one place
+		 *     rather than reimplemented at each use site.
 		 *
-		 *     # Serialization
-		 *
-		 *     [`Serialize`] but deliberately **not** `Deserialize`: a
-		 *     serialized report tags entity groups by modality *name*, so
-		 *     rebuilding one needs the registry [`Engine`] holds. Read an
-		 *     audit back with [`Engine::deserialize_audit`].
-		 *
-		 *     # Schema
-		 *
-		 *     Generate under the **serialize** contract
-		 *     ([`SchemaSettings::for_serialize`]). `usage` is
-		 *     `skip_serializing_if`, and only that contract marks it optional
-		 *     — `schema_for!` defaults to deserialize and declares it
-		 *     required, so a generated client would reject responses this
-		 *     crate really emits.
-		 *
-		 *     [`Engine`]: super::Engine
-		 *     [`Engine::deserialize_audit`]: super::Engine::deserialize_audit
-		 *     [`Report`]: elide::Report
-		 *     [`SchemaSettings::for_serialize`]: schemars::generate::SchemaSettings::for_serialize
+		 *     [`Label`]: crate::entity::Label
+		 *     [`resolve`]: LocalizedText::resolve
 		 */
-		Audit: {
-			/**
-			 * @description How this document was decoded when it was analyzed.
-			 *
-			 *     Carried back so anonymize decodes identically: the entity
-			 *     offsets below are stored against the first decode, and a
-			 *     differently-rendered second one would not line up.
-			 */
-			codec: components["schemas"]["CodecParams"];
-			/**
-			 * @description What the caller asserted when this document was analyzed:
-			 *     languages, jurisdictions, document tags.
-			 *
-			 *     Carried back so [`Engine::anonymize`] compiles against the
-			 *     same vocabulary analyze used, and re-decodes under the same
-			 *     codec configuration, without the caller re-passing it.
-			 *
-			 *     [`Engine::anonymize`]: super::Engine::anonymize
-			 */
-			context: components["schemas"]["DocumentContext"];
-			/**
-			 * @description The vocabularies this request introduced: labels elide does
-			 *     not ship, and how they were found.
-			 *
-			 *     Carried back for the same reason [`context`] is. Anonymize
-			 *     compiles its catalog afresh, and a custom label missing
-			 *     from it resolves to nothing — the entity would be detected
-			 *     and then silently not redacted.
-			 *
-			 *     [`context`]: Audit::context
-			 */
-			recognition?: components["schemas"]["Recognition"][];
-			/**
-			 * @description The detections: elide's own report, every document and the
-			 *     parts nested in one, each entity carrying its provenance
-			 *     chain.
-			 *
-			 *     Edit it through [`Report`]'s own API — [`include_part`],
-			 *     [`suppress_part`], [`part_entities`] — for the decisions
-			 *     elide models.
-			 *
-			 *     [`Report`]: elide::Report
-			 *     [`include_part`]: elide::Report::include_part
-			 *     [`suppress_part`]: elide::Report::suppress_part
-			 *     [`part_entities`]: elide::Report::part_entities
-			 */
-			report: components["schemas"]["Report"];
-			/**
-			 * @description Which recognizers this request selected.
-			 *
-			 *     Carried back for the same reason [`codec`] is. Anonymize
-			 *     compiles its analyzers afresh, and a lineup narrower than
-			 *     the one analyze detected with would leave an entity found
-			 *     and then silently not redacted.
-			 *
-			 *     [`codec`]: Audit::codec
-			 */
-			selection?: components["schemas"]["ComponentSelection"];
-			/**
-			 * @description What the analyze pass cost: one entry per recognizer and
-			 *     enricher that ran, each self-identifying by the name the
-			 *     deployment configured it under.
-			 *
-			 *     Carried here rather than read off the report: elide derives
-			 *     usage during analysis and drops it when a report is rebuilt
-			 *     from the wire, so a host that bills on model spend would
-			 *     lose it on the round trip.
-			 */
-			usage: components["schemas"]["UsageReport"];
+		LocalizedText: {
+			[key: string]: components["schemas"]["LabelLocale"];
 		};
 		/**
-		 * @description A 32-byte BLAKE3 digest.
+		 * @description A label's human-facing text in one language: a display name and an
+		 *     optional fuller description.
 		 *
-		 *     The tamper-evident link in an [`AuditLog`] DAG: each [`AuditEvent`] hashes
-		 *     its payload together with its parents' hashes, so altering any event breaks
-		 *     every event downstream of it. Displays and (with the `serde` feature)
-		 *     (de)serializes as lowercase hex.
-		 *
-		 *     The all-zero hash is [`GENESIS`](AuditHash::GENESIS), the link a birth event
-		 *     (one with no parents) chains from.
-		 *
-		 *     [`AuditLog`]: crate::entity::audit::AuditLog
-		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
+		 *     The `name` is a short, natural-language phrase (`"phone number"`), the
+		 *     label a zero-shot NER model like GLiNER matches on, and the primary
+		 *     text an LLM prompt shows. The `description` is optional extra guidance
+		 *     for backends that consume it (GLiNER-2.0's bi-encoder, an LLM); leave
+		 *     it `None` when the name alone is clear.
 		 */
-		AuditHash: string;
-		/**
-		 * @description The sign-in methods this deployment offers.
-		 *
-		 *     Lets a client render the login screen without probing: one ordered list of
-		 *     the identity providers a person can sign in with — `password`, plus exactly
-		 *     the OIDC providers (`google`, `microsoft`, ...) whose apps are configured on
-		 *     the server. This is pre-authentication reference data, so the endpoint is
-		 *     unauthenticated.
-		 */
-		AuthCapabilities: {
+		LabelLocale: {
 			/**
-			 * @description The available sign-in methods, in the order a client should present them:
-			 *     `password` first, then each configured OIDC provider.
+			 * @description Short natural-language display name (e.g. `"phone number"`). What a
+			 *     zero-shot NER model matches on and an LLM prompt surfaces.
 			 */
-			methods: components["schemas"]["IdentityProvider"][];
-		};
-		/**
-		 * @description Configuration for a provider reached with an API key (`OpenAI`, Anthropic).
-		 *
-		 *     The `api_key` is masked in [`Debug`], so neither this struct nor any config
-		 *     that embeds it leaks the key.
-		 */
-		AuthenticatedProvider: {
-			/** @description The provider API key. */
-			apiKey: string;
-			/** @description Override the API base URL (for a compatible endpoint or a proxy). Optional. */
-			baseUrl?: string;
-			/** @description Default model to use when a request does not specify one. Optional. */
-			defaultModel?: string;
-		};
-		/**
-		 * @description Path parameters for a public avatar route: the owner id and the avatar's
-		 *     content-hash version.
-		 *
-		 *     Each version is a distinct stored object, so an unknown version simply does
-		 *     not resolve — the version needs no separate validation.
-		 */
-		AvatarPathParams: {
+			name: string;
 			/**
-			 * Format: uuid
-			 * @description Opaque id of the avatar's owner.
+			 * @description Optional fuller description, for description-capable backends
+			 *     (GLiNER-2.0, LLM). `None` when the name suffices.
 			 */
-			id: string;
-			/** @description Content-hash version segment identifying the exact stored object. */
-			version: string;
-		};
-		/**
-		 * @description Typed credentials for Azure Blob Storage.
-		 *
-		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
-		 *     to persist the credentials encrypted at rest; they are never returned in API
-		 *     responses.
-		 */
-		AzureCredentials: {
-			/** @description Storage account access key. */
-			accessKey?: string;
-			/** @description Azure storage account name. */
-			accountName: string;
-			/** @description Azure storage container name. */
-			container: string;
-			/** @description Custom endpoint URL (for Azure Stack or Azurite). */
-			endpoint?: string;
-			/** @description Shared Access Signature token. */
-			sasToken?: string;
-		};
-		/**
-		 * @description Axis-aligned rectangle, given by its minimum and maximum corners.
-		 *
-		 *     The location type for the image and document modalities: where a
-		 *     detected entity sits within a rendered page. [`min`] is the top-left
-		 *     corner and [`max`] the bottom-right under the usual screen convention
-		 *     (y grows downward), though the box itself is agnostic to coordinate
-		 *     orientation.
-		 *
-		 *     [`min`]: Self::min
-		 *     [`max`]: Self::max
-		 */
-		BoundingBox: {
-			/** @description Maximum corner (bottom-right, conventionally). */
-			max: components["schemas"]["Point"];
-			/** @description Minimum corner (top-left, conventionally). */
-			min: components["schemas"]["Point"];
-		};
-		/** @description The entity's confidence was rescaled by a per-recognizer factor. */
-		Calibration: {
-			/**
-			 * Format: double
-			 * @description Multiplier applied.
-			 */
-			factor: number;
+			description?: string;
 		};
 		/**
 		 * @description The coarse group a [`Label`] belongs to, for organizing detected entities
@@ -15594,49 +19962,51 @@ export interface components {
 		 */
 		Category: string;
 		/**
-		 * @description A [`Cited`](Attribution::Cited) rationale: a citable authority, the citation
-		 *     within it, and an optional rationale for why it applies.
+		 * @description How to detect one caller-authored label.
+		 *
+		 *     Names a label the same request declares in [`custom`]. A
+		 *     matcher for a shipped built-in is rejected: elide already
+		 *     detects those, and two definitions for one label would race in
+		 *     reconciliation.
+		 *
+		 *     [`custom`]: super::Recognition::custom
 		 */
-		CitedAttribution: {
-			/** @description The authority cited (e.g. `"GDPR"`, `"HIPAA"`, `"internal-policy"`). */
-			authority: string;
-			/** @description The citation within that authority (e.g. `"Art. 17(1)"`, `"§164.514"`). */
-			citation: string;
+		CustomMatcher: {
 			/**
-			 * @description Why the citation applies here (e.g. `"data subject requested erasure"`),
-			 *     when given.
+			 * @description The label this detects, which the request must declare in
+			 *     [`custom`](super::Recognition::custom).
 			 */
-			rationale?: string;
-		};
-		/**
-		 * @description Text a [`TextRedaction::Clamp`] emits for out-of-range values.
-		 *
-		 *     Three forms, deserialized untagged so callers can pick the
-		 *     terser one for the case at hand:
-		 *
-		 *     - **Plain string** (`"90 or older"`): English-only shorthand.
-		 *     - **Localized map** (`{"en": "90 or older", "fr": "90 ou plus"}`):
-		 *       one entry per language the deployment ships; missing locales
-		 *       fall back to English at render time.
-		 *     - **Format template** (`{"format": "{n} or older"}`): the
-		 *       engine substitutes `{n}` for the threshold, so a ceiling of
-		 *       `90` renders `"90 or older"` without the caller repeating the
-		 *       number. Same rendering in every language.
-		 *
-		 *     Round-trips through serde as whichever form the caller wrote.
-		 */
-		ClampBucket:
-			| string
+			label: components["schemas"]["LabelRef"];
+			/**
+			 * @description Human-readable name, recorded in the audit as the
+			 *     recognizer that found the entity, so a trail distinguishes
+			 *     a caller's matcher from a shipped pattern.
+			 */
+			name: string;
+			/**
+			 * Format: float
+			 * @description Score stamped on every match. Defaults to `0.6`.
+			 *
+			 *     Reconciliation keeps the higher-confidence entity when two
+			 *     detections overlap, so this is what decides whether a
+			 *     custom match beats a built-in one covering the same span.
+			 * @default 0.6000000238418579
+			 */
+			confidence?: number;
+		} & (
 			| {
-					/**
-					 * @description The template string. `{n}` is substituted; other text
-					 *     is literal.
-					 */
-					format: string;
+					/** @constant */
+					kind: "pattern";
+					/** @description The expression, in `regex` crate syntax. */
+					pattern: string;
 			  }
 			| {
-					[key: string]: string;
-			  };
+					/** @constant */
+					kind: "terms";
+					/** @description The literals to scan for. */
+					terms: string[];
+			  }
+		);
 		/**
 		 * @description How the codec decodes this document.
 		 *
@@ -15645,15 +20015,15 @@ export interface components {
 		 */
 		CodecParams: {
 			/**
-			 * Format: uint8
-			 * @description The CSV field separator, or [`None`] to auto-detect it.
+			 * @description How container formats carrying both a text layer and page
+			 *     images treat OCR.
 			 *
-			 *     Defaults to [`None`], the codec's own behaviour. Detection
-			 *     falls back to a comma when nothing stands out, which can
-			 *     misread a TSV or semicolon-delimited file, so pass the byte
-			 *     when the format is known.
+			 *     Defaults to [`RasterMode::Auto`], the codec's own behaviour.
+			 * @default {
+			 *       "kind": "auto"
+			 *     }
 			 */
-			csvDelimiter?: number;
+			rasterMode?: components["schemas"]["RasterMode"];
 			/**
 			 * @description Whether a CSV's first row is its header.
 			 *
@@ -15665,6 +20035,16 @@ export interface components {
 			 * @default true
 			 */
 			csvHasHeaders?: boolean;
+			/**
+			 * Format: uint8
+			 * @description The CSV field separator, or [`None`] to auto-detect it.
+			 *
+			 *     Defaults to [`None`], the codec's own behaviour. Detection
+			 *     falls back to a comma when nothing stands out, which can
+			 *     misread a TSV or semicolon-delimited file, so pass the byte
+			 *     when the format is known.
+			 */
+			csvDelimiter?: number;
 			/**
 			 * @description What happens to an image's EXIF metadata on re-encode.
 			 *
@@ -15682,65 +20062,58 @@ export interface components {
 			 * @default strip
 			 */
 			exifPolicy?: components["schemas"]["ExifPolicy"];
-			/**
-			 * @description How container formats carrying both a text layer and page
-			 *     images treat OCR.
-			 *
-			 *     Defaults to [`RasterMode::Auto`], the codec's own behaviour.
-			 * @default {
-			 *       "kind": "auto"
-			 *     }
-			 */
-			rasterMode?: components["schemas"]["RasterMode"];
 		};
 		/**
-		 * @description Color as 8-bit RGB.
+		 * @description Policy for rendering a document's pages to images.
 		 *
-		 *     Used by visual redaction (a solid-fill block over an image region) and
-		 *     any other rendering instruction that needs a color.
+		 *     [`Auto`] is the default: use the text layer where it exists (redact by
+		 *     deleting glyphs) and render only where it is absent. [`Always`] renders
+		 *     every page regardless of the text layer, for documents whose text is
+		 *     missing, garbled, or a watermark. [`Never`] relies on the text layer only.
+		 *
+		 *     Serializes with an internal `kind` tag (`{"kind": "auto"}`,
+		 *     `{"kind": "always", "dpi": 300}`, `{"kind": "never"}`).
+		 *
+		 *     [`Auto`]: RasterMode::Auto
+		 *     [`Always`]: RasterMode::Always
+		 *     [`Never`]: RasterMode::Never
 		 */
-		Color: {
-			/**
-			 * Format: uint8
-			 * @description Blue channel.
-			 */
-			b: number;
-			/**
-			 * Format: uint8
-			 * @description Green channel.
-			 */
-			g: number;
-			/**
-			 * Format: uint8
-			 * @description Red channel.
-			 */
-			r: number;
-		};
-		/** @description Params of a `comment.mentioned` notification, sent to a mentioned account. */
-		CommentMentionedParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the account that wrote the comment (the mentioner).
-			 */
-			authorId: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the comment the account was mentioned in.
-			 */
-			commentId: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the review the comment is in.
-			 */
-			reviewId: string;
-		};
-		/** @description Health of a single service component. */
-		ComponentHealth: {
-			/** @description Component name (e.g. `"postgres"`, `"nats"`). */
-			name: string;
-			/** @description Status of this component. */
-			status: components["schemas"]["HealthStatus"];
-		};
+		RasterMode:
+			| {
+					/** @constant */
+					kind: "auto";
+			  }
+			| {
+					/** @constant */
+					kind: "always";
+					/** @description Resolution to render pages at; [`Dpi::OCR`] (300) is typical. */
+					dpi: components["schemas"]["Dpi"];
+			  }
+			| {
+					/** @constant */
+					kind: "never";
+			  };
+		/**
+		 * Format: uint16
+		 * @description Dots-per-inch resolution for rasterizing vector content.
+		 *
+		 *     Used e.g. for rendering PDF pages to images for OCR.
+		 *
+		 *     PDF coordinates are in points (1 pt = 1/72 in), so
+		 *     [`scale_factor`] gives the multiplier from points to
+		 *     pixels at this resolution.
+		 *
+		 *     [`scale_factor`]: Self::scale_factor
+		 */
+		Dpi: number;
+		/**
+		 * @description What to do with an image's EXIF metadata when re-encoding it.
+		 *
+		 *     EXIF mixes privacy-sensitive fields (GPS, device serial, capture timestamp)
+		 *     with benign ones (orientation, colour profile) that a viewer needs to render
+		 *     the image correctly, so the choice is a policy, not a fixed behaviour.
+		 */
+		ExifPolicy: "strip" | "strip_sensitive" | "retain";
 		/**
 		 * @description Which of the available components one request wants to run.
 		 *
@@ -15768,757 +20141,171 @@ export interface components {
 			skip?: string[];
 		};
 		/**
-		 * Format: float
-		 * @description Confidence score in the closed range `0.0..=1.0`.
-		 *
-		 *     Carried by every provenance [`AuditEvent`] (the `before`/`after` of a
-		 *     recognition, fusion, or calibration) and by the effective confidence
-		 *     of an [`Entity`]. The newtype enforces the range at construction so
-		 *     no downstream code has to defend against values outside `[0, 1]`.
-		 *
-		 *     Distinct from [`ConfidenceThreshold`] so the two cannot be confused
-		 *     at a call site: a score is *produced* by detection, a threshold is a
-		 *     *cutoff* configured to filter scores. Compare the two with
-		 *     [`ConfidenceThreshold::passes`].
-		 *
-		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
-		 *     [`Entity`]: crate::entity::Entity
+		 * @description One backend call's resource usage: whether it succeeded, how long it took, the
+		 *     model it called and the units it spent, and how much it produced.
 		 */
-		Confidence: number;
-		/**
-		 * Format: float
-		 * @description Minimum-confidence cutoff in the closed range `0.0..=1.0`.
-		 *
-		 *     A [`Confidence`] at or above the threshold *passes*; below it is
-		 *     filtered out. Kept a separate type from [`Confidence`] so a cutoff
-		 *     can never be passed where a score is expected, or vice versa.
-		 *
-		 *     [`Confidence`]: crate::primitive::Confidence
-		 */
-		ConfidenceThreshold: number;
-		/**
-		 * @description A competing detection of a *different* label over the same span was resolved
-		 *     against this (winning) entity, the loser is recorded, not dropped.
-		 */
-		Conflict: {
-			/** @description The loser's confidence at resolution time. */
-			competing_confidence: components["schemas"]["Confidence"];
-			/** @description The label of the detection that lost arbitration. */
-			competing_label: components["schemas"]["LabelRef"];
-			/** @description Name of the conflict policy that chose the winner. */
-			resolved_by: string;
-		};
-		/** @description Params of a connection activity (`connection.*`). */
-		ConnectionActivityParams: {
-			/** @description Id of the connection. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/** @description Display name of the connection. */
-			connectionName: string;
+		Usage: {
+			/** @description Whether the call succeeded or failed. */
+			outcome: components["schemas"]["Outcome"];
+			/**
+			 * Format: uint64
+			 * @description Wall-clock time the call took (the model round-trip), measured on both the
+			 *     success and the failure path.
+			 */
+			duration: number;
+			/**
+			 * @description The model and unit cost the call incurred. On a failure the units are
+			 *     whatever the (absent) response reported, i.e. none.
+			 */
+			model: components["schemas"]["ModelUsage"];
+			/**
+			 * Format: uint64
+			 * @description What the call produced (entities, segments, regions, candidates), when the
+			 *     response reports a count; `None` on failure or for a response with no
+			 *     meaningful count.
+			 */
+			output_count?: number;
 		};
 		/**
-		 * @description A fully-typed transfer-connection configuration.
+		 * @description Whether a backend call succeeded, so a sink can track error rate.
 		 *
-		 *     Untagged: the two inner enums have disjoint `provider` values, so serde
-		 *     resolves the variant from the flat payload without an outer discriminator.
+		 *     A failed call is recorded like a successful one — with its duration and model
+		 *     — carrying [`Error`](Outcome::Error) and the [`ErrorKind`] it failed with, so
+		 *     latency-on-failure and error rate are visible rather than lost.
 		 */
-		ConnectionConfig:
-			| components["schemas"]["StorageConfig"]
-			| components["schemas"]["FileServiceConfig"];
-		/** @description Opaque conn identifier (conn_<uuid>). */
-		ConnectionId: string;
-		/** @description Params of a `connection.sync.completed` notification. */
-		ConnectionSyncCompletedParams: {
-			/** @description Id of the connection that synced. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/** @description Display name of the connection that synced. */
-			connectionName: string;
-			/**
-			 * Format: int64
-			 * @description Number of records synced, if known.
-			 */
-			recordsSynced?: number;
-		};
-		/** @description Params of a `connection.sync.failed` notification. */
-		ConnectionSyncFailedParams: {
-			/** @description Id of the connection that failed to sync. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/** @description Display name of the connection that failed to sync. */
-			connectionName: string;
-			/** @description Failure reason, if available. */
-			error?: string;
-		};
-		/**
-		 * @description The capability category of a transfer connection.
-		 *
-		 *     Corresponds to the `CONNECTION_TYPE` `PostgreSQL` enum. A stable, closed set:
-		 *     the concrete provider (the `provider` column, e.g. `s3`) stays open and
-		 *     extensible, while its capability is one of these types. Both categories are
-		 *     transfer-capable — an object store is enumerable and syncs on a timer; a
-		 *     file service transfers on demand. Inference services are a separate
-		 *     resource (`workspace_providers`), not a connection.
-		 */
-		ConnectionType: "object_store" | "file_service";
-		/**
-		 * @description Which connector families and providers this deployment can create.
-		 *
-		 *     Lets a client render the connect UI without probing: a file-service provider
-		 *     is only offered when the host has configured its OAuth app, whereas
-		 *     object-store and inference connections carry their own credentials and are
-		 *     always available.
-		 */
-		ConnectorCapabilities: {
-			/** @description Availability of each OAuth file-service provider. */
-			fileServices: components["schemas"]["FileProviders"];
-			/**
-			 * @description Whether inference connections can be created. Currently always `true`, for
-			 *     the same reason as object stores.
-			 */
-			inference: boolean;
-			/**
-			 * @description Whether object-store connections can be created. Currently always `true` —
-			 *     they carry their own credentials, so nothing gates them server-side — but
-			 *     clients should read the field rather than assume it.
-			 */
-			objectStores: boolean;
-		};
-		/**
-		 * @description A competing detection of a different label over the same span was left
-		 *     *unresolved*: both entities survive, flagged for a human. Recorded on each
-		 *     entity of the contested pair, naming the other.
-		 */
-		Contested: {
-			/** @description The competing detection's confidence. */
-			competing_confidence: components["schemas"]["Confidence"];
-			/** @description The label of the competing detection. */
-			competing_label: components["schemas"]["LabelRef"];
-			/** @description Name of the policy that flagged the contest. */
-			flagged_by: string;
-		};
-		/**
-		 * @description [ISO 3166-1] country, identified by its code.
-		 *
-		 *     Wraps [`celes::Country`], a static table entry carrying the numeric,
-		 *     alpha-2, and alpha-3 codes together with the country's name. Because
-		 *     every value comes from that fixed table, a `CountryCode` is always a
-		 *     real, recognised country; there is no way to hold an invalid one.
-		 *
-		 *     Used to scope region-sensitive recognizers (a phone-number or
-		 *     national-id pattern, say) to the country whose format they target.
-		 *
-		 *     Serializes as its alpha-2 code (e.g. `"US"`).
-		 *
-		 *     [ISO 3166-1]: https://www.iso.org/iso-3166-country-codes.html
-		 */
-		CountryCode: string;
-		/** @description Request to create a new API token. */
-		CreateAccountApiToken: {
-			/** @description Human-readable display name for the API token (1-100 characters). */
-			displayName: string;
-			/** @description When the token expires. */
-			expiresIn: components["schemas"]["TokenExpiration"];
-		};
-		/**
-		 * @description Request payload to start an ad-hoc detection over a document, naming its
-		 *     policies directly rather than through a pipeline.
-		 *
-		 *     Analyzes the document against the given policies (authored or one-shot) and
-		 *     returns the detection holding the findings for review before redaction.
-		 */
-		CreateAdhocWorkspaceDetection: {
-			/**
-			 * Format: uuid
-			 * @description The document to analyze.
-			 */
-			documentId: string;
-			/** @description The policies to run against, by id. At least one is required. */
-			policyIds: string[];
-			/**
-			 * @description Retention override for the outputs this detection produces. Absent falls
-			 *     back to the workspace retention baseline.
-			 */
-			retentionOverride?: components["schemas"]["RetentionOverride"];
-			/** @description Per-document scope (languages, jurisdictions, document labels). */
-			scope?: components["schemas"]["DocumentContext"];
-		};
-		/**
-		 * @description Request payload for creating a new workspace.
-		 *
-		 *     Creates a new workspace with the specified configuration. The creator is
-		 *     automatically added as an owner of the workspace.
-		 */
-		CreateWorkspace: {
-			/** @description Optional description of the workspace (max 500 characters). */
-			description?: string;
-			/** @description Display name of the workspace (2-32 characters). */
-			displayName: string;
-			/** @description Optional handle. Derived from the display name when omitted. */
-			handle?: components["schemas"]["Handle"];
-			/**
-			 * @description Workspace settings (approval requirement, data-retention rules). Defaults
-			 *     to requiring approval and keeping everything when omitted.
-			 */
-			settings?: components["schemas"]["WorkspaceSettings"];
-		};
-		/**
-		 * @description Request payload to post a comment (message) in a review.
-		 *
-		 *     `@username` mentions in the body notify those workspace members.
-		 */
-		CreateWorkspaceComment: {
-			/** @description The comment text (1-10000 characters). */
-			body: string;
-		};
-		/** @description Request payload for creating a new workspace connection. */
-		CreateWorkspaceConnection: {
-			/**
-			 * @description Typed provider configuration (provider tag + its credentials), encrypted
-			 *     at rest. The `provider` tag selects which credential shape is required and
-			 *     which capability the connection has.
-			 */
-			config: components["schemas"]["ConnectionConfig"];
-			/** @description Human-readable connection display name. */
-			displayName: string;
-			/**
-			 * @description Whether the connection is enabled. Omit to default to active; set `false`
-			 *     to create it disabled.
-			 */
-			isActive?: boolean;
-			/**
-			 * @description Scheduled-sync configuration. Accepted only for schedulable providers
-			 *     (object stores); rejected for others. Omit for on-demand only.
-			 */
-			sync?: components["schemas"]["SyncScheduleInput"];
-		};
-		/**
-		 * @description Request payload to start a detection over a document.
-		 *
-		 *     Analyzes the document with the pipeline's configuration and returns the
-		 *     detection, which holds the findings for review before redaction.
-		 */
-		CreateWorkspaceDetection: {
-			/**
-			 * Format: uuid
-			 * @description The document to analyze.
-			 */
-			documentId: string;
-			/**
-			 * @description Per-document scope (languages, jurisdictions, document labels).
-			 *
-			 *     Overrides the pipeline's `defaultScope` when present; absent falls back to
-			 *     the pipeline default.
-			 */
-			scope?: components["schemas"]["DocumentContext"];
-		};
-		/** @description Request payload for creating a new workspace invite. */
-		CreateWorkspaceInvite: {
-			/** @description When the invitation expires. */
-			expiresIn: components["schemas"]["InviteExpiration"];
-			/** @description Role the invitee will have if they accept the invitation. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/**
-			 * Format: email
-			 * @description Email address of the person to invite.
-			 */
-			inviteeEmail: string;
-		};
-		/**
-		 * @description Request payload for creating a new pipeline.
-		 *
-		 *     Creates a new pipeline with the specified name and optional description.
-		 *     The definition can be added later via update.
-		 */
-		CreateWorkspacePipeline: {
-			/**
-			 * @description Optional detection + redaction configuration. Defaults to an empty
-			 *     definition that can be filled in via update.
-			 */
-			definition?: components["schemas"]["PipelineDefinition"];
-			/** @description Optional description of the pipeline (max 500 characters). */
-			description?: string;
-			/** @description Pipeline display name (2-128 characters). */
-			displayName: string;
-			/**
-			 * @description Optional per-scope data-retention override for this pipeline. Each unset
-			 *     scope inherits the workspace retention.
-			 */
-			retention?: components["schemas"]["RetentionOverride"];
-			/**
-			 * @description Optional lifecycle status. Defaults to `draft`; pass `enabled` to create a
-			 *     pipeline ready to run without a follow-up update.
-			 */
-			status?: components["schemas"]["PipelineStatus"];
-		};
-		/**
-		 * @description Request payload for creating a new workspace policy.
-		 *
-		 *     The body comes from a template or an inline definition (see [`PolicyBody`]).
-		 *     The body's `name` and `description` drive the stored columns unless
-		 *     overridden here.
-		 */
-		CreateWorkspacePolicy: {
-			/** @description Optional description override. Defaults to the policy's own description. */
-			description?: string;
-			/**
-			 * @description Optional display name override. Defaults to the policy's own name. Ignored
-			 *     for a one-shot (labels) body, whose name is generated.
-			 */
-			displayName?: string;
-		} & (
+		Outcome:
+			| "Ok"
 			| {
-					/** @constant */
-					source: "template";
-					/** @description The built-in policy template to seed from. */
-					template: components["schemas"]["PolicyTemplate"];
+					Error: components["schemas"]["ErrorKind"];
+			  };
+		/**
+		 * @description Coarse category of [`Error`], suitable for matching.
+		 *
+		 *     Deliberately small and `#[non_exhaustive]`: it names the *kind* of
+		 *     failure a caller can branch on (is the input corrupt, the config wrong,
+		 *     a capability missing, an external service at fault?), while the boxed
+		 *     cause carries the detail. Downstream crates convert their richer
+		 *     errors into an [`Error`] at the trait boundary, tagging it with the
+		 *     kind that fits.
+		 *
+		 *     The distinctions worth branching on:
+		 *
+		 *     - [`MalformedInput`] vs [`Configuration`]: bad *content* the caller fed
+		 *       in (a corrupt file) versus a bad *rule* the caller wrote (an invalid
+		 *       regex). One means "fix the document", the other "fix your setup".
+		 *     - [`CapabilityUnavailable`]: the request is well-formed but the
+		 *       component that would serve it is absent, match this to fall back or
+		 *       report "unsupported" rather than "malformed".
+		 *     - [`Provider`] vs [`Transport`]: an external service answered with an
+		 *       error versus was never reached: the first is not retryable, the
+		 *       second often is.
+		 *
+		 *     [`MalformedInput`]: Self::MalformedInput
+		 *     [`Configuration`]: Self::Configuration
+		 *     [`CapabilityUnavailable`]: Self::CapabilityUnavailable
+		 *     [`Provider`]: Self::Provider
+		 *     [`Transport`]: Self::Transport
+		 */
+		ErrorKind:
+			| "malformed_input"
+			| "configuration"
+			| "processing"
+			| "resource_limit"
+			| "capability_unavailable"
+			| "recognition"
+			| "redaction"
+			| "integrity"
+			| "provider"
+			| "transport";
+		/** @description The model a backend called and the billing units the call spent. */
+		ModelUsage: {
+			/** @description Model name the backend called (e.g. `"gpt-4o"`, `"gliner-multi"`). */
+			model: string;
+			/** @description Model version, when the backend reports one. */
+			version?: string;
+			/**
+			 * @description Billing units the call spent (tokens, audio seconds, pages, …), as far as
+			 *     the provider reports them.
+			 */
+			units?: components["schemas"]["Units"];
+		};
+		/**
+		 * @description The billing meters a backend call spent — its cost, across every currency the
+		 *     backend meters in.
+		 *
+		 *     A call reports zero or more [`Meter`]s: an LLM one ([`Tokens`](Meter::Tokens)),
+		 *     a vision model several (tokens *and* [`Images`](Meter::Images)), a backend that
+		 *     bills nothing none. The set is fixed per backend by its
+		 *     [`BackendResponse::units`](super::BackendResponse::units) impl, so the currency a
+		 *     backend bills in never drifts between calls. A sink emits or sums whichever
+		 *     meters are present.
+		 */
+		Units: components["schemas"]["Meter"][];
+		/**
+		 * @description One billing meter a backend call spent, in the currency that meter bills in.
+		 *
+		 *     A backend bills in one or more of these. An LLM reports [`Tokens`](Meter::Tokens);
+		 *     speech-to-text [`Seconds`](Meter::Seconds); document OCR [`Pages`](Meter::Pages);
+		 *     a vision model may report several at once (tokens *and* [`Images`](Meter::Images)).
+		 *     Which meters a backend can produce is fixed by its
+		 *     [`BackendResponse::units`](super::BackendResponse::units) impl, so a given
+		 *     backend always bills in the same currency even though the type admits others.
+		 */
+		Meter:
+			| {
+					tokens: components["schemas"]["TokenCounts"];
 			  }
 			| {
-					/**
-					 * @description The client-authored policy body.
-					 *
-					 *     Boxed to keep the enum small: an inline body is much larger than a
-					 *     template id, and most requests use a template.
-					 */
-					definition: components["schemas"]["PolicyDraft"];
-					/** @constant */
-					source: "inline";
+					/** Format: double */
+					seconds: number;
 			  }
 			| {
-					/**
-					 * @description The built-in labels to detect and erase (e.g. `person_name`,
-					 *     `email_address`).
-					 */
-					labels: string[];
-					/** @constant */
-					source: "labels";
-			  }
-		);
-		/** @description Request payload for creating a new workspace provider. */
-		CreateWorkspaceProvider: {
-			/**
-			 * @description Typed provider configuration (provider tag + its credentials), encrypted at
-			 *     rest. The `provider` tag selects which credential shape is required and
-			 *     which model type the provider has.
-			 */
-			config: components["schemas"]["ProviderConfig"];
-			/** @description Human-readable provider display name. */
-			displayName: string;
-			/**
-			 * @description Whether the provider is enabled. Omit to default to active; set `false` to
-			 *     create it disabled.
-			 */
-			isActive?: boolean;
-		};
-		/** @description Request payload to open a review on a document. */
-		CreateWorkspaceReview: {
-			/** @description The review's title (1-255 characters). */
-			displayName: string;
-		};
-		/** @description Request payload for creating a new workspace webhook. */
-		CreateWorkspaceWebhook: {
-			/** @description Detailed description of the webhook's purpose (max 500 characters). */
-			description: string;
-			/** @description Human-readable name for the webhook (1-128 characters). */
-			displayName: string;
-			/** @description List of event types this webhook should receive. */
-			events: components["schemas"]["WebhookEvent"][];
-			/** @description Optional custom headers to include in webhook requests. */
-			headers?: {
-				[key: string]: string;
-			};
-			/** @description Initial status of the webhook (enabled or disabled). */
-			status?: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: uri
-			 * @description The URL to send webhook payloads to.
-			 */
-			url: string;
-		};
-		/**
-		 * @description Cursor-based pagination query parameters.
-		 *
-		 *     This is the preferred pagination method for API endpoints. It provides:
-		 *     - Consistent performance regardless of page depth
-		 *     - Stable results even when items are added/removed
-		 *     - Efficient "load more" / infinite scroll patterns
-		 */
-		CursorPagination: {
-			/**
-			 * @description Cursor pointing to the last item of the previous page.
-			 *     Obtain this from the `nextCursor` field in the response.
-			 */
-			after?: string;
-			/**
-			 * @description Whether to include the total item count in the response's `total` field.
-			 *     Defaults to `false`, since counting is an extra query; set it to `true`
-			 *     only when the count is actually needed.
-			 * @default false
-			 */
-			includeCount?: boolean;
-			/**
-			 * Format: uint32
-			 * @description The maximum number of records to return (1-100, default: 20).
-			 */
-			limit?: number;
-		};
-		/**
-		 * @description How to detect one caller-authored label.
-		 *
-		 *     Names a label the same request declares in [`custom`]. A
-		 *     matcher for a shipped built-in is rejected: elide already
-		 *     detects those, and two definitions for one label would race in
-		 *     reconciliation.
-		 *
-		 *     [`custom`]: super::Recognition::custom
-		 */
-		CustomMatcher: {
-			/**
-			 * Format: float
-			 * @description Score stamped on every match. Defaults to `0.6`.
-			 *
-			 *     Reconciliation keeps the higher-confidence entity when two
-			 *     detections overlap, so this is what decides whether a
-			 *     custom match beats a built-in one covering the same span.
-			 * @default 0.6000000238418579
-			 */
-			confidence?: number;
-			/**
-			 * @description The label this detects, which the request must declare in
-			 *     [`custom`](super::Recognition::custom).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description Human-readable name, recorded in the audit as the
-			 *     recognizer that found the entity, so a trail distinguishes
-			 *     a caller's matcher from a shipped pattern.
-			 */
-			name: string;
-		} & (
-			| {
-					/** @constant */
-					kind: "pattern";
-					/** @description The expression, in `regex` crate syntax. */
-					pattern: string;
+					/** Format: uint64 */
+					pages: number;
 			  }
 			| {
-					/** @constant */
-					kind: "terms";
-					/** @description The literals to scan for. */
-					terms: string[];
+					/** Format: uint64 */
+					images: number;
 			  }
-		);
+			| {
+					/** Format: uint64 */
+					characters: number;
+			  };
 		/**
-		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
+		 * @description The token counts a model reported.
 		 *
-		 *     Every rendering is an ISO-8601 form, so the output is locale-independent
-		 *     by construction, no localized month names or week markers to configure.
+		 *     Each is optional because providers differ in what they return: some give
+		 *     only a total, some none at all.
 		 */
-		DateGranularity: "year" | "year_month" | "hour";
-		/**
-		 * @description Which written date convention a [`GeneralizeDate`] accepts on *input*.
-		 *
-		 *     This governs only how the entity value is *parsed*; the output mirrors
-		 *     each value's own convention (see [`GeneralizeDate::render`]). The choice
-		 *     is explicit, never inferred from the entity's language: `03/04/1987` is
-		 *     a real date under both conventions (March 4 vs. April 3), so a wrong
-		 *     guess would silently emit a plausible-but-wrong month. The policy
-		 *     author, who knows the corpus's convention, sets it.
-		 */
-		DateStyle: "iso" | "us";
-		/**
-		 * @description A `from`/`to` day range (inclusive), both optional. Flatten it into an
-		 *     endpoint's query struct with `#[serde(flatten)]`, or use it directly when the
-		 *     range is the only parameter.
-		 */
-		DateWindow: {
+		TokenCounts: {
 			/**
-			 * Format: date
-			 * @description First day of the range (inclusive), `YYYY-MM-DD`. Defaults so the range
-			 *     spans the last `DEFAULT_WINDOW_DAYS` days through `to`.
+			 * Format: uint64
+			 * @description Prompt / input tokens.
 			 */
-			from?: string;
+			input?: number;
 			/**
-			 * Format: date
-			 * @description Last day of the range (inclusive), `YYYY-MM-DD`. Defaults to today (UTC).
+			 * Format: uint64
+			 * @description Completion / output tokens.
 			 */
-			to?: string;
+			output?: number;
+			/**
+			 * Format: uint64
+			 * @description Total tokens, sometimes reported even when the split is not.
+			 */
+			total?: number;
+			/**
+			 * Format: uint64
+			 * @description Cached prompt tokens (a prompt-cache hit), which providers bill at a
+			 *     fraction of `input`. Part of, not additional to, `input`.
+			 */
+			cached?: number;
+			/**
+			 * Format: uint64
+			 * @description Reasoning / "thinking" tokens a model spent, billed separately from
+			 *     `output` by the models that expose them.
+			 */
+			reasoning?: number;
 		};
-		/**
-		 * @description A decoded byte range and the raw source it decodes from.
-		 *
-		 *     The `range` is a half-open `[start, end)` span in the decoded text stream.
-		 *     `source` carries the exact raw byte range(s) that span came from for codecs
-		 *     whose decoded text differs from the source (XML/HTML/DOCX entity decoding,
-		 *     JSON escapes); it is empty when the source equals the decoded text.
-		 */
-		DecodedSpan: {
-			/** @description Byte range within the (decoded) text content. */
-			range: components["schemas"]["Range_of_uint"];
-			/**
-			 * @description The exact raw source ranges this decoded span came from. Empty when the
-			 *     source equals the decoded text.
-			 *
-			 *     Usually one range; a reconciled span that fused several source runs (or a
-			 *     span crossing an escape) carries several, kept distinct rather than merged
-			 *     across gaps. Sorted, deduplicated.
-			 */
-			source?: components["schemas"]["SourceRef"][];
-		};
-		/** @description Several detections were fused into one entity. */
-		Deduplication: {
-			/** @description Name of the fusion strategy that combined them. */
-			strategy: string;
-		};
-		/**
-		 * @description Request to delete several documents in one call.
-		 *
-		 *     The `100`-id cap bounds the work one call fans out into: the resolve query and
-		 *     the delete transaction.
-		 */
-		DeleteWorkspaceDocuments: {
-			/**
-			 * @description Ids of the documents to delete. Ids that are unknown, already deleted, or
-			 *     in another workspace are skipped rather than failing the request.
-			 */
-			documentIds: string[];
-		};
-		/**
-		 * @description Request payload to mint a native-app (desktop) session token.
-		 *
-		 *     Called by the frontend after a normal browser (cookie) login when the login
-		 *     was initiated by the desktop app: it exchanges the just-established session for
-		 *     a long-lived `app` token the frontend then hands to the app via the
-		 *     `redirectUri` deep-link. The `redirectUri` must be a registered desktop scheme
-		 *     (e.g. `nvisy://…`), so a token cannot be minted toward a web origin.
-		 */
-		DesktopTokenRequest: {
-			/**
-			 * @description The desktop deep-link the app will receive the token on. Must match a
-			 *     configured desktop redirect scheme.
-			 */
-			redirectUri: string;
-		};
-		/** @description Params of a detection activity (`pipeline.detection.*`). */
-		DetectionActivityParams: {
-			/** @description Id of the detection. */
-			detectionId: components["schemas"]["DetectionId"];
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
-		};
-		/** @description Params of a `pipeline.detection.completed` notification. */
-		DetectionCompletedParams: {
-			/** @description Id of the detection. */
-			detectionId: components["schemas"]["DetectionId"];
-			/** @description Display name of the analyzed document, if known. */
-			inputDocumentName?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
-		};
-		/** @description Params of a `pipeline.detection.failed` notification. */
-		DetectionFailedParams: {
-			/** @description Id of the detection. */
-			detectionId: components["schemas"]["DetectionId"];
-			/** @description Failure reason, if available. */
-			error?: string;
-			/** @description Display name of the analyzed document, if known. */
-			inputDocumentName?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
-		};
-		/** @description Opaque detection identifier (detection_<uuid>). */
-		DetectionId: string;
-		/** @description Structured metadata for a detection. */
-		DetectionMetadata: {
-			/** @description Failure reason recorded when the detection failed. */
-			error?: string;
-			/** @description Free-form labels attached to the detection. */
-			tags?: string[];
-			/**
-			 * @description The engine's full per-recognizer usage report (durations, per-model token
-			 *     counts), stored opaquely for drill-down. Per-model token totals for
-			 *     aggregation live in the `workspace_detection_usage` table; this keeps the
-			 *     detail. Absent when the detection produced no usage.
-			 */
-			usage?: unknown;
-		};
-		/**
-		 * @description The execution status of a detection (one analysis pass of a file).
-		 *
-		 *     Corresponds to the `DETECTION_STATUS` `PostgreSQL` enum. A detection is
-		 *     `Pending` (enqueued, no worker yet), then `Executing` (a worker is actively
-		 *     analyzing), then settles into `Complete` (analysis done, ready to redact)
-		 *     or `Failed`. Redaction is a separate, repeatable action over a complete
-		 *     detection and does not change this status.
-		 */
-		DetectionStatus: "pending" | "executing" | "complete" | "failed";
-		/**
-		 * @description A detection's status change, broadcast on the core-NATS subject
-		 *     [`detection_subject`].
-		 *
-		 *     Fan-out to any watching SSE connections; the detection row in Postgres remains
-		 *     the source of truth, so a missed broadcast is recoverable by re-reading it.
-		 */
-		DetectionStatusEvent: {
-			/**
-			 * Format: uuid
-			 * @description The detection whose status changed.
-			 */
-			detectionId: string;
-			/** @description The detection's new status. */
-			status: components["schemas"]["DetectionStatus"];
-		};
-		/**
-		 * @description Pixel dimensions of an image or any 2-D canvas.
-		 *
-		 *     Converts between normalized `0.0..=1.0` coordinates (what vision
-		 *     models typically emit) and absolute pixel coordinates (what renderers
-		 *     consume). See
-		 *     [`UnitBoundingBox::denormalize`]
-		 *     for the conversion.
-		 *
-		 *     [`UnitBoundingBox::denormalize`]: super::UnitBoundingBox::denormalize
-		 */
-		Dimensions: {
-			/**
-			 * Format: uint32
-			 * @description Height in pixels.
-			 */
-			height: number;
-			/**
-			 * Format: uint32
-			 * @description Width in pixels.
-			 */
-			width: number;
-		};
-		/** @description Sort order direction. */
-		Direction: "ascending" | "descending";
-		/** @description Params of a document activity (`document.*`). */
-		DocumentActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the document.
-			 */
-			documentId: string;
-			/** @description Display name of the document. */
-			documentName: string;
-		};
-		/**
-		 * @description What a caller asserts about the document being processed.
-		 *
-		 *     Everything defaults to empty, so a caller asserting nothing
-		 *     passes [`DocumentContext::default`] and lets the recognizers use
-		 *     their own defaults.
-		 */
-		DocumentContext: {
-			/**
-			 * @description Jurisdictions the caller asserts apply.
-			 *
-			 *     Read by policy predicates that vary by jurisdiction, so a
-			 *     rule can act on a document from one country and not another.
-			 */
-			countries?: components["schemas"]["CountryCode"][];
-			/**
-			 * @description Languages the caller asserts the document is in.
-			 *
-			 *     Recognizers that take a language hint use it; the
-			 *     language-detection enricher fills the gap when this is
-			 *     empty.
-			 * @default []
-			 */
-			languages?: components["schemas"]["Languages"];
-			/**
-			 * @description Free-form request context: document tags, request purpose,
-			 *     output audience. See elide's [`ScopeMetadata`].
-			 */
-			metadata?: components["schemas"]["ScopeMetadata"];
-		};
-		/** @description A SHA-256 content hash as a 64-character hex string. */
-		DocumentHash: string;
-		/**
-		 * @description The kind of a human-facing document.
-		 *
-		 *     Corresponds to the `DOCUMENT_KIND` `PostgreSQL` enum. Machine byproducts
-		 *     (detection audits, review audits, enrichment intermediates) are not
-		 *     documents — they reference blobs directly from their own tables.
-		 */
-		DocumentKind: "original" | "redacted";
-		/**
-		 * Format: uint16
-		 * @description Dots-per-inch resolution for rasterizing vector content.
-		 *
-		 *     Used e.g. for rendering PDF pages to images for OCR.
-		 *
-		 *     PDF coordinates are in points (1 pt = 1/72 in), so
-		 *     [`scale_factor`] gives the multiplier from points to
-		 *     pixels at this resolution.
-		 *
-		 *     [`scale_factor`]: Self::scale_factor
-		 */
-		Dpi: number;
-		/**
-		 * @description Reviewer edits for one document, one list per modality.
-		 *
-		 *     Empty by default: an audit nobody has reviewed carries none.
-		 */
-		EditSet: {
-			/** @description Edits to audio entities. */
-			audio?: components["schemas"]["AudioEdit"][];
-			/** @description Edits to image entities. */
-			image?: components["schemas"]["ImageEdit"][];
-			/** @description Edits to tabular entities. */
-			tabular?: components["schemas"]["TabularEdit"][];
-			/** @description Edits to text entities. */
-			text?: components["schemas"]["TextEdit"][];
-		};
-		/**
-		 * @description Coreference identifier shared by entities that denote the same
-		 *     real-world thing.
-		 *
-		 *     Assigned by a recognizer that performs coreference resolution: an
-		 *     NER model or LLM that recognises "Alice", "she", and "Ms. Smith" as
-		 *     the same person within one detection call. Two entities carrying the
-		 *     same `EntityCoRef` are coreferent: they refer to the same underlying
-		 *     entity even though each is a distinct mention with its own span.
-		 *
-		 *     The identifier is opaque and only meaningful *within* a single
-		 *     detection call: it is the recognizer's local handle for a cluster of
-		 *     mentions, not a global key.
-		 */
-		EntityCoRef: string;
-		/**
-		 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-		 *     that [`Error`] renders to at the response boundary.
-		 *
-		 *     It carries no builder logic — [`Error`] is the type handlers construct and
-		 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-		 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-		 *     (`context` is logged, `status` sets the HTTP status line).
-		 *
-		 *     [`Error`]: crate::response::Error
-		 */
-		ErrorResponse: {
-			/** @description User-friendly error message safe for client display. */
-			message: string;
-			/** @description The error name/type identifier. */
-			name: string;
-		};
-		/**
-		 * @description What to do with an image's EXIF metadata when re-encoding it.
-		 *
-		 *     EXIF mixes privacy-sensitive fields (GPS, device serial, capture timestamp)
-		 *     with benign ones (orientation, colour profile) that a viewer needs to render
-		 *     the image correctly, so the choice is a policy, not a fixed behaviour.
-		 */
-		ExifPolicy: "strip" | "strip_sensitive" | "retain";
-		/** @description The file format an export is rendered as. */
-		ExportFormat: "csv" | "json";
 		/**
 		 * @description Query parameters for an export whose only choice is the output format. Used by
 		 *     endpoints that already scope their data another way (e.g. by path), so the
@@ -16528,109 +20315,373 @@ export interface components {
 			/** @description Output format; defaults to `csv`. */
 			format?: components["schemas"]["ExportFormat"];
 		};
-		/**
-		 * @description Request payload to export a caller-selected set of workspace files to a
-		 *     connection. Each is written as a new provider file, never overwriting a
-		 *     source. Mirrors [`ImportWorkspaceFiles`] on the export side.
-		 */
-		ExportWorkspaceFiles: {
-			/**
-			 * @description The workspace files to export, by id. Files already exported to the
-			 *     connection are exported again (a fresh copy).
-			 */
-			fileIds: string[];
+		ArtifactSet: {
+			parts: (
+				| {
+						id: string[];
+						/** @constant */
+						modality: "text";
+						artifact: components["schemas"]["Tokens"];
+				  }
+				| {
+						id: string[];
+						/** @constant */
+						modality: "image";
+						artifact: components["schemas"]["Layout"];
+				  }
+				| {
+						id: string[];
+						/** @constant */
+						modality: "audio";
+						artifact: components["schemas"]["Transcription"];
+				  }
+				| {
+						id: string[];
+						/** @constant */
+						modality: "tabular";
+						artifact: components["schemas"]["Tokens"];
+				  }
+			)[];
 		};
 		/**
-		 * @description Per-provider availability for the OAuth file services. Each field is `true`
-		 *     only when that provider's OAuth app is configured on the server.
-		 */
-		FileProviders: {
-			/**
-			 * @description Whether Box can be connected. (`box` is a Rust keyword, hence the field
-			 *     name; the wire name is `box`.)
-			 */
-			box: boolean;
-			/** @description Whether Dropbox can be connected. */
-			dropbox: boolean;
-			/** @description Whether Google Drive can be connected. */
-			googleDrive: boolean;
-			/** @description Whether `OneDrive` can be connected. */
-			oneDrive: boolean;
-		};
-		/**
-		 * @description A fully-typed cloud file-service connection configuration: a provider and its
-		 *     settings. Serialized (flat: `{ "provider": ..., "tokens": ..., "root": ... }`)
-		 *     only to persist the config encrypted at rest, never returned in API responses.
-		 */
-		FileServiceConfig: {
-			/** @description Which provider backs this connection. */
-			provider: components["schemas"]["FileServiceProvider"];
-			/**
-			 * @description The folder (id or path) new exports are written into; `None` uses the
-			 *     account root.
-			 */
-			root?: string;
-			/** @description The OAuth token set for this connection. */
-			tokens: components["schemas"]["OAuthTokens"];
-		};
-		/**
-		 * @description A supported cloud file-service provider.
+		 * @description Owning token sequence: the [`Text`](super::Text) modality's enrichment
+		 *     artifact, produced by a tokenizing enricher and read by a context enhancer.
 		 *
-		 *     The serialized form (`snake_case`) is the `provider` tag stored on a connection
-		 *     and used in the API, so every provider name lives in exactly one place.
+		 *     Tokens are sorted by `offset.start` (producers should emit them in order;
+		 *     consumer-side code assumes this). A context enhancer borrows the underlying
+		 *     slice via [`as_slice`](Tokens::as_slice) and walks it by count when scoring an
+		 *     entity's neighbourhood. Empty ([`Default`]) until a tokenizing enricher fills
+		 *     it, the enhancer then tokenizes on demand instead.
 		 */
-		FileServiceProvider: "google_drive" | "dropbox" | "one_drive" | "box";
+		Tokens: components["schemas"]["Token"][];
 		/**
-		 * @description A supported file extension.
-		 * @enum {string}
+		 * @description One token produced by an upstream tokenizer.
+		 *
+		 *     `lemma` falls back to `text` when the producer has no lemmatizer, so callers
+		 *     that want lemma-aware matching can read `token.lemma` uniformly without
+		 *     checking which engine produced the artifact.
 		 */
-		FormatToken:
-			| "csv"
-			| "docx"
-			| "htm"
-			| "html"
-			| "jpeg"
-			| "jpg"
-			| "json"
-			| "log"
-			| "pdf"
-			| "png"
-			| "rtf"
-			| "tif"
-			| "tiff"
-			| "txt"
-			| "wav"
-			| "x-elide-docprops"
-			| "x-elide-exif"
-			| "xlsx"
-			| "xml";
+		Token: {
+			/** @description Surface form as it appears in the source text. */
+			text: string;
+			/** @description Lemma when the producer emitted one; otherwise == [`text`](Self::text). */
+			lemma: string;
+			/**
+			 * @description Byte range this token occupies in the source text. Use this to map back
+			 *     to substrings of the original input.
+			 */
+			offset: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description Producer-asserted stopword flag (e.g. "the", "a", "of" for English).
+			 *     Producers without a stopword list set this to `false`.
+			 */
+			is_stop: boolean;
+			/** @description Producer-asserted punctuation flag. */
+			is_punct: boolean;
+		};
 		/**
-		 * @description A [`Freeform`](Attribution::Freeform) rationale: a policy label and an
-		 *     optional human description, with no formal citation.
+		 * @description An image's recognized text, laid out in space.
+		 *
+		 *     A flat, ordered list of [`LayoutRegion`]s (the recognized text runs in
+		 *     reading order). The flat [`text`], the regions joined by a space, is what a
+		 *     recognizer inspects; [`resolve`] maps a byte range of that text back to the
+		 *     [`ImageLocation`] it occupies, using the regions' boxes. Empty when the
+		 *     backend recognized nothing.
+		 *
+		 *     [`text`]: Self::text
+		 *     [`resolve`]: Self::resolve
 		 */
-		FreeformAttribution: {
-			/** @description Human-readable description (e.g. `"right to erasure"`), when given. */
+		Layout: {
+			/** @description Regions in reading order. */
+			regions: components["schemas"]["LayoutRegion"][];
+			/**
+			 * @description The regions' text joined by [`REGION_SEPARATOR`], cached so recognition
+			 *     and byte-range resolution share one flat string.
+			 */
+			text: string;
+		};
+		/**
+		 * @description One recognized run of image text: its box, the text, and an optional
+		 *     confidence.
+		 *
+		 *     The atom an OCR backend emits — typically a word, but a backend may report a
+		 *     coarser run (a whole line) as one region; the layout treats them uniformly.
+		 */
+		LayoutRegion: {
+			/** @description Bounding region of the text in image coordinates. */
+			region: components["schemas"]["ImageLocation"];
+			/** @description The recognized text of this region. */
+			text: string;
+			/** @description Recognition confidence, when the backend reported one. */
+			confidence?: components["schemas"]["Confidence"];
+		};
+		/**
+		 * @description Timestamped transcript of an audio stream.
+		 *
+		 *     An ordered set of [`TranscriptSegment`]s. The flat
+		 *     [`text`], the segments joined, is what a recognizer
+		 *     inspects; [`resolve`] maps a byte range of that text back
+		 *     to the [`TimeSpan`] it occupies, using the segments' (and their words')
+		 *     timings. Empty when the backend produced nothing (silence, or a no-op
+		 *     backend).
+		 *
+		 *     [`text`]: Self::text
+		 *     [`resolve`]: Self::resolve
+		 */
+		Transcription: {
+			/** @description Segments in stream order. */
+			segments: components["schemas"]["TranscriptSegment"][];
+			/**
+			 * @description The segments' text joined by [`SEGMENT_SEPARATOR`], cached so
+			 *     recognition and byte-range resolution share one flat string. Each
+			 *     segment's text begins at a known offset within it (see
+			 *     [`segment_offsets`]).
+			 *
+			 *     [`segment_offsets`]: Self::segment_offsets
+			 */
+			text: string;
+		};
+		/**
+		 * @description One segment of a [`Transcription`]: a span of audio and the text
+		 *     recognised within it, with optional diarization, language, confidence,
+		 *     and per-word timings.
+		 *
+		 *     `speaker_id` is populated only by backends with diarization;
+		 *     `language` by backends that emit per-segment language detection;
+		 *     `confidence` when the backend reports one; `words` when it emits a
+		 *     word-level breakdown (which is what lets a sub-segment range resolve to
+		 *     a tighter span than the whole segment).
+		 */
+		TranscriptSegment: {
+			/** @description Time span the segment covers within the stream. */
+			span: components["schemas"]["TimeSpan"];
+			/** @description Recognised text for this segment. */
+			text: string;
+			/** @description Diarization speaker label, when the backend assigned one. */
+			speaker_id?: string;
+			/** @description Detected language for this segment, when the backend reported one. */
+			language?: string;
+			/** @description Backend confidence in the segment, when reported. */
+			confidence?: components["schemas"]["Confidence"];
+			/**
+			 * @description Per-word timings within the segment, when the backend emitted them.
+			 *     Empty otherwise; resolution then falls back to the segment span.
+			 * @default []
+			 */
+			words?: components["schemas"]["TranscriptWord"][];
+		};
+		/** @description One word within a [`TranscriptSegment`], with its own time span. */
+		TranscriptWord: {
+			/** @description Time span the word covers within the stream. */
+			span: components["schemas"]["TimeSpan"];
+			/** @description The word text, as it appears in the segment text. */
+			text: string;
+			/** @description Per-word confidence, when reported. */
+			confidence?: components["schemas"]["Confidence"];
+		};
+		/**
+		 * @description Query parameters for listing a workspace's redactions.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint. A
+		 *     redaction has no status of its own, so it narrows by its owning detection and
+		 *     the document that detection analyzed.
+		 */
+		WorkspaceRedactionsQuery: {
+			/**
+			 * Format: uuid
+			 * @description Filter to the redactions produced from a specific detection.
+			 */
+			detectionId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter to the redactions of detections analyzing a specific document.
+			 */
+			documentId?: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceRedactionResultPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceRedactionResult"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Path parameters for a redaction.
+		 *
+		 *     The redaction id is globally unique, so a redaction is addressed by id alone
+		 *     and resolved within the workspace by the query.
+		 */
+		WorkspaceRedactionPathParams: {
+			/** @description Opaque identifier of the redaction. */
+			redactionId: components["schemas"]["RedactionId"];
+		};
+		/**
+		 * @description Request payload for creating a new workspace policy.
+		 *
+		 *     The body comes from a template or an inline definition (see [`PolicyBody`]).
+		 *     The body's `name` and `description` drive the stored columns unless
+		 *     overridden here.
+		 */
+		CreateWorkspacePolicy: {
+			/**
+			 * @description Optional display name override. Defaults to the policy's own name. Ignored
+			 *     for a one-shot (labels) body, whose name is generated.
+			 */
+			displayName?: string;
+			/** @description Optional description override. Defaults to the policy's own description. */
 			description?: string;
-			/** @description The policy's name (e.g. `"gdpr-art-17"`, `"hipaa-safe-harbor"`). */
-			name: string;
-		};
+		} & (
+			| {
+					/** @constant */
+					source: "template";
+					/** @description The built-in policy template to seed from. */
+					template: components["schemas"]["PolicyTemplate"];
+			  }
+			| {
+					/** @constant */
+					source: "inline";
+					/**
+					 * @description The client-authored policy body.
+					 *
+					 *     Boxed to keep the enum small: an inline body is much larger than a
+					 *     template id, and most requests use a template.
+					 */
+					definition: components["schemas"]["PolicyDraft"];
+			  }
+			| {
+					/** @constant */
+					source: "labels";
+					/**
+					 * @description The built-in labels to detect and erase (e.g. `person_name`,
+					 *     `email_address`).
+					 */
+					labels: string[];
+			  }
+		);
 		/**
-		 * @description Typed credentials for Google Cloud Storage.
+		 * @description A regulatory posture this crate ships a [`Template`] for.
 		 *
-		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
-		 *     to persist the credentials encrypted at rest; they are never returned in API
-		 *     responses.
+		 *     Serialises as an internally-tagged object under `kind`,
+		 *     matching the house pattern for option-bearing enums
+		 *     (`Predicate`, `TextRedaction`). A caller
+		 *     wire-picks a template as
+		 *     `{"kind": "hipaa_safe_harbor"}` or, for variants with
+		 *     operator options,
+		 *     `{"kind": "pci_dss_pan", "render": "hmac_sha256"}`.
 		 */
-		GcsCredentials: {
-			/** @description GCS bucket name. */
-			bucket: string;
-			/** @description Custom endpoint URL (for testing with a fake GCS server). */
-			endpoint?: string;
-			/** @description Inline service account key JSON (the file contents, not a path). */
-			serviceAccountKeyJson?: string;
-			/** @description Path to a service account key JSON file on the local filesystem. */
-			serviceAccountPath?: string;
-		};
+		PolicyTemplate:
+			| {
+					/** @constant */
+					kind: "hipaa_deidentification";
+					/**
+					 * @description Which §164.514 method to apply. See [`HipaaDeidMethod`]
+					 *     for the tradeoff.
+					 */
+					method: components["schemas"]["HipaaDeidMethod"];
+					/**
+					 * @description Which §(J) account-identifier labels to remove. Defaults
+					 *     to [`HipaaAccountNumbers::Standard`] (bank account +
+					 *     IBAN + payment card). Pick
+					 *     [`HipaaAccountNumbers::Extended`] to add crypto wallet
+					 *     addresses under the §(R) catch-all reading.
+					 * @default standard
+					 */
+					accounts?: components["schemas"]["HipaaAccountNumbers"];
+			  }
+			| {
+					/** @constant */
+					kind: "gdpr_article9";
+					/**
+					 * @description Which operator to apply to matches. See
+					 *     [`GdprArticle9Treatment`] for the tradeoff.
+					 */
+					treatment: components["schemas"]["GdprArticle9Treatment"];
+					/**
+					 * @description Which sensitive-data labels to cover. Defaults to
+					 *     [`GdprSensitiveScope::Article9`] (nine Article 9(1)
+					 *     categories only). Pick
+					 *     [`GdprSensitiveScope::Article9WithReidHardening`] to add
+					 *     the quasi-identifier set, or
+					 *     [`GdprSensitiveScope::Article9And10`] to also cover
+					 *     Article 10 criminal-justice data.
+					 * @default article9
+					 */
+					scope?: components["schemas"]["GdprSensitiveScope"];
+			  }
+			| {
+					/** @constant */
+					kind: "pci_dss";
+					/**
+					 * @description Which DSS subsection this template addresses. See
+					 *     [`PciDssPart`] for the shipped subsections.
+					 */
+					part: components["schemas"]["PciDssPart"];
+			  }
+			| {
+					/** @constant */
+					kind: "ccpa";
+			  };
+		/**
+		 * @description Which HIPAA §164.514 de-identification method to apply.
+		 *
+		 *     The tradeoff is analytic yield vs. downstream constraint:
+		 *
+		 *     - [`SafeHarbor`](Self::SafeHarbor): strips all eighteen
+		 *       identifier categories. No Data Use Agreement or statistician
+		 *       required, but dates, coarse geography, and ages ≥ 90 all
+		 *       disappear or collapse.
+		 *     - [`LimitedDataSet`](Self::LimitedDataSet): narrower
+		 *       subtraction (§164.514(e)(2)) that keeps dates, town/city,
+		 *       state, ZIP, and ages verbatim. Suitable for research and
+		 *       public-health handoffs *only when* a Data Use Agreement
+		 *       governs the recipient's use.
+		 *     - [`ExpertDetermination`](Self::ExpertDetermination) -
+		 *       starting scaffold for §164.514(b)(1). Same label set as
+		 *       Safe Harbor with pseudonymization as the default terminal
+		 *       (identity-preserving across mentions). **Does not certify
+		 *       de-identification**: a qualified statistician must
+		 *       document that re-identification risk is "very small" under
+		 *       the applicable methodology before the output can be treated
+		 *       as de-identified.
+		 */
+		HipaaDeidMethod:
+			| "safe_harbor"
+			| "limited_data_set"
+			| "expert_determination";
+		/**
+		 * @description Which account-identifier labels §164.514(b)(2)(i)(J) covers.
+		 *
+		 *     The regulation names "account numbers" without enumerating
+		 *     them; HHS OCR's 2012 guidance doesn't narrow it either. In
+		 *     practice, covered entities and de-ID vendors treat bank
+		 *     accounts, IBANs, and payment cards as the core §(J) set -
+		 *     [`Standard`](Self::Standard). Cryptocurrency wallet addresses
+		 *     are the newer case: they identify a specific holder's account
+		 *     by function, and the §(R) catch-all pulls in "any other unique
+		 *     identifying number, characteristic, or code" tied to an
+		 *     individual, which arguably captures them. Deployments where
+		 *     crypto addresses can appear in patient-facing artifacts pick
+		 *     [`Extended`](Self::Extended); deployments where they can't
+		 *     stay on `Standard`.
+		 *
+		 *     The compliant posture for anything account-shaped is
+		 *     "remove"; the split is only about how broadly this template
+		 *     pre-declares the account label scope. A caller who wants
+		 *     broader coverage combines this template's policy with a
+		 *     separate PII scope on the same request.
+		 */
+		HipaaAccountNumbers: "standard" | "extended";
 		/**
 		 * @description Which operator to apply to Article 9 special-category entities.
 		 *
@@ -16680,1373 +20731,6 @@ export interface components {
 			| "article9"
 			| "article9_with_reid_hardening"
 			| "article9_and10";
-		/** @description Request to generate a shareable invite code for a workspace. */
-		GenerateWorkspaceInviteCode: {
-			/** @description When the invite code expires. */
-			expiresIn: components["schemas"]["InviteExpiration"];
-			/** @description Role to assign when someone joins via this invite code. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-		};
-		/** @description Lowercase, dash-separated identifier used in URLs and as account handles. */
-		Handle: string;
-		/** @description Response body for `GET /health/`. */
-		Health: {
-			/** @description Per-component health checks. */
-			checks: components["schemas"]["ComponentHealth"][];
-			/** @description Overall service status. */
-			status: components["schemas"]["HealthStatus"];
-			/** @description RFC 3339 timestamp of when the check was performed. */
-			timestamp: string;
-		};
-		/** @description Operational status of a service component. */
-		HealthStatus: "healthy" | "degraded" | "unhealthy";
-		/**
-		 * @description Which account-identifier labels §164.514(b)(2)(i)(J) covers.
-		 *
-		 *     The regulation names "account numbers" without enumerating
-		 *     them; HHS OCR's 2012 guidance doesn't narrow it either. In
-		 *     practice, covered entities and de-ID vendors treat bank
-		 *     accounts, IBANs, and payment cards as the core §(J) set -
-		 *     [`Standard`](Self::Standard). Cryptocurrency wallet addresses
-		 *     are the newer case: they identify a specific holder's account
-		 *     by function, and the §(R) catch-all pulls in "any other unique
-		 *     identifying number, characteristic, or code" tied to an
-		 *     individual, which arguably captures them. Deployments where
-		 *     crypto addresses can appear in patient-facing artifacts pick
-		 *     [`Extended`](Self::Extended); deployments where they can't
-		 *     stay on `Standard`.
-		 *
-		 *     The compliant posture for anything account-shaped is
-		 *     "remove"; the split is only about how broadly this template
-		 *     pre-declares the account label scope. A caller who wants
-		 *     broader coverage combines this template's policy with a
-		 *     separate PII scope on the same request.
-		 */
-		HipaaAccountNumbers: "standard" | "extended";
-		/**
-		 * @description Which HIPAA §164.514 de-identification method to apply.
-		 *
-		 *     The tradeoff is analytic yield vs. downstream constraint:
-		 *
-		 *     - [`SafeHarbor`](Self::SafeHarbor): strips all eighteen
-		 *       identifier categories. No Data Use Agreement or statistician
-		 *       required, but dates, coarse geography, and ages ≥ 90 all
-		 *       disappear or collapse.
-		 *     - [`LimitedDataSet`](Self::LimitedDataSet): narrower
-		 *       subtraction (§164.514(e)(2)) that keeps dates, town/city,
-		 *       state, ZIP, and ages verbatim. Suitable for research and
-		 *       public-health handoffs *only when* a Data Use Agreement
-		 *       governs the recipient's use.
-		 *     - [`ExpertDetermination`](Self::ExpertDetermination) -
-		 *       starting scaffold for §164.514(b)(1). Same label set as
-		 *       Safe Harbor with pseudonymization as the default terminal
-		 *       (identity-preserving across mentions). **Does not certify
-		 *       de-identification**: a qualified statistician must
-		 *       document that re-identification risk is "very small" under
-		 *       the applicable methodology before the output can be treated
-		 *       as de-identified.
-		 */
-		HipaaDeidMethod:
-			| "safe_harbor"
-			| "limited_data_set"
-			| "expert_determination";
-		/**
-		 * @description The `{workspaceId}` path segment. Named to match the `OpenAPI` parameter and the
-		 *     route definition.
-		 */
-		IdParam: {
-			/**
-			 * Format: uuid
-			 * @description Workspace identifier.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Path parameters for a provider-scoped identity operation: signing in with,
-		 *     re-authenticating with, linking, or unlinking a provider. Named identically to
-		 *     the stored [`IdentityProvider`], so the API and the account's identities name
-		 *     each provider the same way.
-		 */
-		IdentityPathParams: {
-			/** @description The identity provider to act on. */
-			provider: components["schemas"]["IdentityProvider"];
-		};
-		/**
-		 * @description How an account authenticates.
-		 *
-		 *     Corresponds to the `IDENTITY_PROVIDER` `PostgreSQL` enum. [`Password`] is a
-		 *     locally-held Argon2 secret; the rest are external OIDC providers keyed by
-		 *     the provider's subject claim.
-		 *
-		 *     [`Password`]: Self::Password
-		 */
-		IdentityProvider: "password" | "google" | "microsoft";
-		/**
-		 * @description A detection recognition missed.
-		 *
-		 *     Recorded on the report with human provenance, so it is never
-		 *     mistaken for an automatic hit, then redacted under the policy set
-		 *     like any other entity: an added label the policy does not cover
-		 *     is left alone.
-		 *
-		 *     Carries no entity id — the entity does not exist yet, and the
-		 *     engine mints one when the edit is applied, so a client cannot
-		 *     collide with a real detection or shadow an existing entity.
-		 */
-		ImageAdd: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/** @description What the reviewer says this is. */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description Where it sits, in the coordinates of the part it joins.
-			 *
-			 *     Each medium addresses its own way: text a character range
-			 *     over the decoded stream, images a bounding box, audio a time
-			 *     span, tabular a row and column. A DOCX's
-			 *     `word/document.xml` text belongs to the document part
-			 *     itself, not to a nested one.
-			 *
-			 *     Text carries either coordinate kind of [`TextCoord`]: a
-			 *     [`Decoded`] span for a caller with an offset into the
-			 *     decoded stream, or a [`Source`] one for a caller holding
-			 *     only raw file bytes — a reviewer selecting rendered text,
-			 *     say — which the engine reverse-resolves. Source-only is its
-			 *     own kind rather than a decoded span left empty, so such a
-			 *     selection is representable as itself.
-			 *
-			 *     The other three media have no such alternative: their
-			 *     coordinates are the only way in.
-			 *
-			 *     [`TextCoord`]: elide::modality::text::TextCoord
-			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
-			 *     [`Source`]: elide::modality::text::TextCoord::Source
-			 */
-			location: components["schemas"]["ImageLocation"];
-			/**
-			 * @description The part this belongs to, as a path: `["report.docx"]` for
-			 *     the document itself, `["report.docx", "word/media/image1.png"]`
-			 *     for media it embeds. `None` means the request's sole
-			 *     document, which is the common case and saves a caller
-			 *     naming what it already sent.
-			 *
-			 *     Nested media needs this: the report holds an embedded image
-			 *     as its own part, and an addition to one has nowhere to go
-			 *     without naming it. Text usually does not — a source
-			 *     reference already names the part it came from, alongside the
-			 *     raw range.
-			 *
-			 *     `None` is an error when the request carried several
-			 *     documents, since there is then no sole document to mean.
-			 */
-			part?: string[];
-			/** @description The rationale, when one was given. */
-			reason?: string;
-		};
-		/**
-		 * @description One node in an entity's audit DAG: a thing that happened, with its
-		 *     effect on confidence and its tamper-evident links.
-		 *
-		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
-		 *     trail of its life: each recognizer that found it, the deduplication that
-		 *     fused them, any score calibration, and the redaction that hid it. The
-		 *     uniform spine (who, resulting score, when) is the same for every event; the
-		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
-		 *     event happened.
-		 *
-		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
-		 *     recognizer's first detection) has no parents, a normal step has one, and a
-		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
-		 *     [`hash`] folds the
-		 *     payload together with the parents' hashes, so altering any event breaks
-		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
-		 *     reports the first break.
-		 *
-		 *     `entity.confidence` always equals the [`confidence`] of the most recent
-		 *     event. The confidence *flowing in* is not stored: it is the parents'
-		 *     [`confidence`], recovered from the DAG.
-		 *
-		 *     [`AuditLog`]: crate::entity::audit::AuditLog
-		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
-		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
-		 *     [`kind`]: AuditEvent::kind
-		 *     [`parents`]: AuditEvent::parents
-		 *     [`hash`]: AuditEvent::hash
-		 *     [`confidence`]: AuditEvent::confidence
-		 */
-		ImageAuditEvent: {
-			/**
-			 * @description Confidence after this event: the entity's effective confidence once it
-			 *     has happened.
-			 */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
-			 *     [`AuditLog`] when the event is recorded; read it through
-			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
-			 *
-			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
-			 *     forge a self-consistent event outside the recording path.
-			 *
-			 *     [`AuditLog`]: crate::entity::audit::AuditLog
-			 */
-			hash: components["schemas"]["AuditHash"];
-			/** @description Kind of event, with its event-specific detail and its rationale. */
-			kind: components["schemas"]["ImageAuditKind"];
-			/**
-			 * @description The events this one follows, by their hash. Empty for a birth event, one
-			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
-			 *     when the event is recorded; read it through [`parents`](Self::parents).
-			 *
-			 *     Not publicly settable: the links are the tamper-evident structure, so
-			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
-			 *
-			 *     [`AuditLog`]: crate::entity::audit::AuditLog
-			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
-			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
-			 */
-			parents: components["schemas"]["AuditHash"][];
-			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
-			 */
-			source: string;
-			/** @description When the event happened (UTC). */
-			timestamp: string;
-		};
-		/**
-		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
-		 *     rationale for why it happened.
-		 *
-		 *     A thin tagged union: each variant wraps one payload struct (e.g.
-		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
-		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
-		 *     payload:
-		 *
-		 *     ```
-		 *     # use elide_core::entity::audit::AuditKind;
-		 *     # use elide_core::modality::text::Text;
-		 *     # fn show(kind: &AuditKind<Text>) {
-		 *     if let AuditKind::Redaction(redaction) = kind {
-		 *         let _ = &redaction.operator;
-		 *     }
-		 *     # }
-		 *     ```
-		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
-		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
-		 *     matched [`Location`]; the rest carry their own data.
-		 *
-		 *     [`AuditEvent`]: super::AuditEvent
-		 *     [`Pattern`]: AuditKind::Pattern
-		 *     [`Model`]: AuditKind::Model
-		 *     [`Location`]: Modality::Location
-		 */
-		ImageAuditKind:
-			| {
-					detail: components["schemas"]["ImagePattern"];
-					/** @constant */
-					kind: "pattern";
-			  }
-			| {
-					detail: components["schemas"]["ImageModel"];
-					/** @constant */
-					kind: "model";
-			  }
-			| {
-					detail: components["schemas"]["ImageMetadata"];
-					/** @constant */
-					kind: "metadata";
-			  }
-			| {
-					detail: components["schemas"]["Deduplication"];
-					/** @constant */
-					kind: "deduplication";
-			  }
-			| {
-					detail: components["schemas"]["Conflict"];
-					/** @constant */
-					kind: "conflict";
-			  }
-			| {
-					detail: components["schemas"]["Contested"];
-					/** @constant */
-					kind: "contested";
-			  }
-			| {
-					detail: components["schemas"]["Calibration"];
-					/** @constant */
-					kind: "calibration";
-			  }
-			| {
-					detail: components["schemas"]["ImageRefinement"];
-					/** @constant */
-					kind: "refinement";
-			  }
-			| {
-					detail: components["schemas"]["Redaction"];
-					/** @constant */
-					kind: "redaction";
-			  }
-			| {
-					detail: components["schemas"]["Selection"];
-					/** @constant */
-					kind: "selection";
-			  }
-			| {
-					detail: components["schemas"]["ImageManual"];
-					/** @constant */
-					kind: "manual";
-			  };
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
-		 *     tamper-evident DAG.
-		 *
-		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
-		 *     stripped by default, an `AuditLog` is always present and records the
-		 *     entity's *entire* life: each recognizer that found it, the deduplication
-		 *     that fused them, any confidence calibration, and the redaction that hid it.
-		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
-		 *     its location and score.
-		 *
-		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
-		 *     records a birth event (no parents); each later step links to the event it
-		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
-		 *     once: the heads of the trails it combines. This is the true shape of a
-		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
-		 *     The events are stored in the order they were recorded, which is a
-		 *     topological order of the DAG (a parent is always recorded before its
-		 *     children).
-		 *
-		 *     Two chains ride the DAG's edges:
-		 *
-		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
-		 *       effective score after it; the score flowing *in* is its parents'
-		 *       confidence, so [`final_confidence`] and the full history are recoverable;
-		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
-		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
-		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
-		 *       and reports the first break.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`confidence`]: AuditEvent::confidence
-		 *     [`hash`]: AuditEvent::hash
-		 *     [`final_confidence`]: Self::final_confidence
-		 *     [`verify`]: Self::verify
-		 */
-		ImageAuditLog: components["schemas"]["ImageAuditEvent"][];
-		/**
-		 * @description Per-call payload a recognizer inspects for the [`Image`] modality.
-		 *
-		 *     Carries the encoded bytes plus the pixel [`Dimensions`], which a
-		 *     recognizer that emits unit-square boxes needs to scale them into pixel
-		 *     coordinates. An optional filename aids diagnostics and encoding
-		 *     inference.
-		 *
-		 *     [`Image`]: super::Image
-		 */
-		ImageData: {
-			/** @description Pixel dimensions of the encoded image. */
-			dimensions: components["schemas"]["Dimensions"];
-			/** @description Original filename, when known. */
-			filename?: string;
-		};
-		/**
-		 * @description One change to an analyzed document.
-		 *
-		 *     `Add` carries no id because the entity does not exist yet; the
-		 *     engine mints one when the edit is applied, so a client cannot
-		 *     collide with a real detection or shadow an existing entity.
-		 */
-		ImageEdit:
-			| ({
-					/** @constant */
-					op: "add";
-			  } & components["schemas"]["ImageAdd"])
-			| ({
-					/** @constant */
-					op: "retag";
-			  } & components["schemas"]["ImageRetag"])
-			| ({
-					/** @constant */
-					op: "suppress";
-			  } & components["schemas"]["Suppress"]);
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its audit trail. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
-		 *     [`audit`]: Entity::audit
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		ImageEntity: {
-			/**
-			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
-			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
-			 *     [`Manual`] event on this trail, not a separate flag.
-			 *
-			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
-			 */
-			audit: components["schemas"]["ImageAuditLog"];
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["ImageLocation"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself),
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
-			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
-		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs; it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from, provenance a
-		 *     review consumer can resolve back to the document.
-		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 */
-		ImageHint: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["ImageData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["ImageLocation"];
-		};
-		/**
-		 * @description Region within image content.
-		 *
-		 *     An axis-aligned [`BoundingBox`] in pixel coordinates locates the
-		 *     region; an optional [`Polygon`] captures a rotated or quadrilateral
-		 *     shape when the source produced one (OCR engines that emit 4-point
-		 *     polygons), and an optional page number addresses multi-page documents.
-		 */
-		ImageLocation: {
-			/** @description Axis-aligned bounding box of the region, in pixel coordinates. */
-			bounding_box: components["schemas"]["BoundingBox"];
-			/**
-			 * Format: uint32
-			 * @description 1-based page number, for multi-page documents like PDFs.
-			 */
-			page?: number;
-			/**
-			 * @description Polygon vertices when the region is rotated or quadrilateral.
-			 *     Axis-aligned-only sources leave this unset.
-			 */
-			polygon?: components["schemas"]["Polygon"];
-		};
-		/**
-		 * @description A human override, outside automatic detection: an entity a reviewer added by
-		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's, so the trail records *why* (an
-		 *     [`Attribution`], when supplied). *Who* made the override is the event's
-		 *     [`source`], not a payload field.
-		 *
-		 *     [`source`]: super::AuditEvent::source
-		 */
-		ImageManual: {
-			/**
-			 * @description The reviewer's rationale, when supplied (e.g. a freeform
-			 *     `"false positive"`, or a cited authority). `None` for an unexplained
-			 *     override.
-			 */
-			attribution?: components["schemas"]["Attribution"];
-			/**
-			 * @description Which human decision this records: including a missed entity, or
-			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
-			 *     separate flag to keep in sync.
-			 *
-			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
-			 */
-			intent: components["schemas"]["ManualIntent"];
-			/** @description Where the override applies, in modality-native coordinates. */
-			location: components["schemas"]["ImageLocation"];
-		};
-		/**
-		 * @description Detail of a metadata-field detection: a document's out-of-band field
-		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
-		 *     redaction subject at `location`, with its source in `metadata`.
-		 *
-		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
-		 *     out of free content — it is a named field that is simply present. There is
-		 *     nothing probabilistic to weigh, so the entity carries it as its own event
-		 *     kind rather than pretending a pattern fired.
-		 */
-		ImageMetadata: {
-			/** @description The field's location (its key). */
-			location: components["schemas"]["ImageLocation"];
-			/** @description Source metadata (which reader surfaced the field). */
-			metadata: components["schemas"]["MetadataEvent"];
-		};
-		/**
-		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
-		 *     metadata in `model`.
-		 */
-		ImageModel: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["ImageLocation"];
-			/** @description Model metadata (name, version, contextual flag). */
-			model: components["schemas"]["ModelEvent"];
-		};
-		/**
-		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
-		 *     `location`, with the pattern metadata in `pattern`.
-		 */
-		ImagePattern: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["ImageLocation"];
-			/** @description Pattern metadata (name, regex, validator, contextual flag). */
-			pattern: components["schemas"]["PatternEvent"];
-		};
-		/** @description Operator spec a `redact` image rule carries. */
-		ImageRedaction:
-			| {
-					/** @constant */
-					kind: "erase";
-			  }
-			| {
-					/** @constant */
-					kind: "keep";
-			  }
-			| {
-					/** @constant */
-					kind: "blur";
-					/**
-					 * Format: float
-					 * @description Standard deviation of the Gaussian kernel, in pixels.
-					 *     Larger is blurrier (and harder to reverse).
-					 * @default 16
-					 */
-					sigma?: number;
-			  }
-			| {
-					/**
-					 * Format: uint32
-					 * @description Side length of each mosaic block, in pixels. Larger
-					 *     blocks are coarser (and harder to reverse).
-					 * @default 16
-					 */
-					block_size?: number;
-					/** @constant */
-					kind: "pixelate";
-			  }
-			| {
-					/**
-					 * @description Fill color the codec rasterises over the region.
-					 * @default {
-					 *       "b": 0,
-					 *       "g": 0,
-					 *       "r": 0
-					 *     }
-					 */
-					color?: components["schemas"]["Color"];
-					/** @constant */
-					kind: "blackbox";
-			  };
-		/** @description A context keyword near the entity lifted its confidence. */
-		ImageRefinement: {
-			/**
-			 * @description The located [`Hint`] the keyword fired from, when the match came from an
-			 *     out-of-band hint (a column header, a key) rather than the in-text word
-			 *     window. `None` for an in-text-window match.
-			 *
-			 *     [`Hint`]: crate::modality::Hint
-			 */
-			hint?: components["schemas"]["ImageHint"];
-			/** @description Keyword that fired the boost. */
-			keyword: string;
-			/**
-			 * @description Where the boosting keyword sits in the medium. For a hint match this
-			 *     mirrors the hint's own location; for an in-text-window match it is the
-			 *     keyword resolved through the modality's [`locate`]. `None` when the
-			 *     keyword's stream range could not be placed.
-			 *
-			 *     [`locate`]: crate::modality::TextRecognizable::locate
-			 */
-			location?: components["schemas"]["ImageLocation"];
-		};
-		/**
-		 * @description Correct what an existing detection *is* or *covers*, then redact
-		 *     it under the policy set as corrected.
-		 *
-		 *     A reviewer fixing recognition's mistake rather than overriding
-		 *     its consequence. Retagging into a label the policy does not cover
-		 *     leaves the entity alone, exactly as if it had been detected that
-		 *     way — which is why it is auditable rather than a mutable field.
-		 */
-		ImageRetag: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/**
-			 * Format: uuid
-			 * @description The entity being corrected.
-			 */
-			id: string;
-			/** @description The corrected label, when recognition got it wrong. */
-			label?: components["schemas"]["LabelRef"];
-			/**
-			 * @description The corrected location, when the span clipped the value or
-			 *     ran past it.
-			 */
-			location?: components["schemas"]["ImageLocation"];
-			/** @description The rationale, when one was given. */
-			reason?: string;
-		};
-		/**
-		 * @description Request payload to import a caller-selected set of files from a file-service
-		 *     connection (the provider picker returns id + name per file).
-		 */
-		ImportWorkspaceFiles: {
-			/** @description The files to import. Already-imported files are skipped. */
-			files: components["schemas"]["PickedFile"][];
-		};
-		/**
-		 * @description A fully-typed inference connection configuration, across every inference kind.
-		 *
-		 *     Inference is a family: a language model for chat today, and other model kinds
-		 *     (e.g. named-entity recognition) as they are added. Each kind owns its own
-		 *     config with its own `provider` tag, and this enum is untagged, so the flat
-		 *     payload's `provider` remains the sole discriminator — an inference kind is
-		 *     added as a new variant with no change to the wire format or storage.
-		 */
-		InferenceConfig: components["schemas"]["LlmConfig"];
-		/** @description Params of an invite activity (`invite.*`). */
-		InviteActivityParams: {
-			/**
-			 * @description Email the invite was addressed to, when it recorded one. `None` keeps an
-			 *     absent address distinct from a blank one.
-			 */
-			email?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the invite.
-			 */
-			inviteId: string;
-		};
-		/** @description Path parameters for joining via invite code. */
-		InviteCodePathParams: {
-			/** @description The invite code to use for joining the workspace. */
-			inviteCode: string;
-		};
-		/** @description Expiration options for invite codes. */
-		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
-		/**
-		 * @description Preview of an invite with workspace details for display before joining.
-		 *
-		 *     This is a public-facing response that shows workspace information
-		 *     to help users decide whether to join via an invite code.
-		 */
-		InvitePreview: {
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was created.
-			 */
-			createdAt: string;
-			/** @description Description of the workspace. */
-			description?: string;
-			/** @description Display name of the workspace. */
-			displayName: string;
-			/**
-			 * Format: date-time
-			 * @description When the invite expires.
-			 */
-			expiresAt: string;
-			/** @description Role the user will have if they join. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/** @description Fields available for sorting workspace invites. */
-		InviteSortField: "email" | "date";
-		/**
-		 * @description The current status of a workspace invitation.
-		 *
-		 *     Corresponds to the `INVITE_STATUS` `PostgreSQL` enum and tracks the lifecycle
-		 *     of an invitation from creation to resolution.
-		 */
-		InviteStatus:
-			| "pending"
-			| "accepted"
-			| "declined"
-			| "canceled"
-			| "expired"
-			| "revoked";
-		/**
-		 * @description Kind of sensitive information: a stable [`id`], per-language
-		 *     [`LabelLocale`]s, an optional [`category`], and zero or more tags.
-		 *
-		 *     # Identity
-		 *
-		 *     Labels are identified by [`id`], a stable lowercase `snake_case`
-		 *     string (`"phone_number"`), never localized, and the catalog key that a
-		 *     [`LabelRef`] resolves through. Selectors match by id. Derived equality
-		 *     is *structural*: two labels with the same id but different
-		 *     localizations or tags are not `==`; compare [`id`] for identity.
-		 *
-		 *     # Localization
-		 *
-		 *     The display name and description are localized per [`LanguageTag`].
-		 *     English (`"en"`) is required at construction and is the fallback when a
-		 *     requested locale is absent, so [`localization`] always returns some
-		 *     text, NER and LLM read the analysis language's name and description to
-		 *     prompt the model, keyed by the stable id.
-		 *
-		 *     # Category and tags
-		 *
-		 *     [`category`] is the single coarse group a label belongs to (`financial`,
-		 *     `health`, `identity`, …), for organizing detected entities by kind. Built-in
-		 *     labels ship with one; a custom label has none unless set.
-		 *
-		 *     [`tags`] is a free-form list of *cross-cutting* markers a policy selector
-		 *     matches against, sensitivity flags a label may carry several of (`pii`,
-		 *     `phi`, `pci`, `sad`, `secret`). Distinct from the category: a label has at
-		 *     most one category but any number of tags. Custom labels can ship with zero
-		 *     of either.
-		 *
-		 *     [`id`]: Label::id
-		 *     [`localization`]: Label::localization
-		 *     [`category`]: Label::category
-		 *     [`tags`]: Label::tags
-		 */
-		Label: {
-			category?: components["schemas"]["Category"];
-			id: string;
-			localizations: components["schemas"]["LocalizedText"];
-			tags: string[];
-		};
-		/**
-		 * @description Registry of [`Label`]s, keyed by id.
-		 *
-		 *     Holds the authoritative definitions (localized names + descriptions)
-		 *     for a run.
-		 *     A [`LabelRef`] carried on a detection or entity is resolved back to
-		 *     its full [`Label`] with [`get`].
-		 *
-		 *     [`get`]: LabelCatalog::get
-		 */
-		LabelCatalog: {
-			[key: string]: components["schemas"]["Label"];
-		};
-		/**
-		 * @description One entry inside a [`RuleDispatch::Table`]: the label to match
-		 *     plus the per-modality operators to run.
-		 *
-		 *     Kept as a named struct rather than a `(LabelRef, ModalityRedactions)`
-		 *     tuple so the wire JSON reads `{"label": "email", "action": {…}}`
-		 *     instead of a positional pair.
-		 */
-		LabelEntry: {
-			/** @description Per-modality operators to run for matching entities. */
-			action: components["schemas"]["ModalityRedactions"];
-			/** @description Label the entry matches on. */
-			label: components["schemas"]["LabelRef"];
-		};
-		/**
-		 * @description A label's human-facing text in one language: a display name and an
-		 *     optional fuller description.
-		 *
-		 *     The `name` is a short, natural-language phrase (`"phone number"`), the
-		 *     label a zero-shot NER model like GLiNER matches on, and the primary
-		 *     text an LLM prompt shows. The `description` is optional extra guidance
-		 *     for backends that consume it (GLiNER-2.0's bi-encoder, an LLM); leave
-		 *     it `None` when the name alone is clear.
-		 */
-		LabelLocale: {
-			/**
-			 * @description Optional fuller description, for description-capable backends
-			 *     (GLiNER-2.0, LLM). `None` when the name suffices.
-			 */
-			description?: string;
-			/**
-			 * @description Short natural-language display name (e.g. `"phone number"`). What a
-			 *     zero-shot NER model matches on and an LLM prompt surfaces.
-			 */
-			name: string;
-		};
-		/**
-		 * @description Lightweight reference to a [`Label`], carrying only its id.
-		 *
-		 *     This is what detections and entities hold: cloning is cheap (short
-		 *     ids inline into the [`HipStr`]), and the full [`Label`], with its
-		 *     localized names and descriptions, is resolved on demand from a
-		 *     [`LabelCatalog`].
-		 *
-		 *     [`Label`]: crate::entity::Label
-		 *     [`LabelCatalog`]: crate::entity::LabelCatalog
-		 */
-		LabelRef: string;
-		/**
-		 * @description A named set of labels a [`Policy`] detects.
-		 *
-		 *     Scopes live on the policy that declares them and are visible
-		 *     only to that policy's own rules. Two policies that both declare
-		 *     `hipaa_18` with different labelsets stay independent: nothing is
-		 *     stamped onto the shared label catalog, so there is no request-
-		 *     wide namespace one policy could use to reach into another's.
-		 *
-		 *     Templates ship one scope per canonical label list
-		 *     (`"hipaa_safe_harbor"`, `"gdpr_article_9"`, `"ccpa_personal_information"`).
-		 *     A policy may declare several: the union is what it detects, and
-		 *     a rule can target one by name.
-		 *
-		 *     **Unknown scope names error at request validation**, not at
-		 *     apply time. A typo doesn't silently underfire.
-		 *
-		 *     [`Policy`]: super::Policy
-		 */
-		LabelScope: {
-			/**
-			 * @description Why this set exists: the authority that defines it.
-			 *
-			 *     A scope usually maps to one regulatory category (HIPAA's
-			 *     eighteen identifiers, GDPR Article 9(1)'s nine special
-			 *     categories), so this is where that mapping is recorded as
-			 *     data rather than prose.
-			 */
-			attribution?: components["schemas"]["Attribution"];
-			/** @description Optional description for reviewers. */
-			description?: string;
-			/**
-			 * @description The labels this scope covers, by ref.
-			 *
-			 *     A label the current build doesn't emit (a modality-gated
-			 *     one, say) is simply never detected; rules keyed off the
-			 *     scope still fire on whatever labels *are* present.
-			 */
-			labels: components["schemas"]["LabelRef"][];
-			/**
-			 * @description Stable name a [`Predicate::LabelInScope`] references.
-			 *
-			 *     Free-form; a policy layer picks the vocabulary. Recommend
-			 *     snake_case identifiers (`hipaa_safe_harbor`,
-			 *     `gdpr_article_9`): they read cleanly in audit provenance.
-			 *
-			 *     [`Predicate::LabelInScope`]: crate::policy::Predicate::LabelInScope
-			 */
-			name: string;
-		};
-		/**
-		 * @description Single language detection result.
-		 *
-		 *     Carries the language plus an optional confidence and an optional
-		 *     byte-offset [`LanguageSpan`]. Backends that don't expose confidence
-		 *     leave it `None`; single-language detectors that don't track per-region
-		 *     information leave `span` as `None`. The `provenance` field records
-		 *     whether the answer came from a detector or was asserted by the caller.
-		 */
-		Language: {
-			/** @description Optional confidence score. `None` when not exposed. */
-			confidence?: components["schemas"]["Confidence"];
-			/** @description Language. */
-			language: components["schemas"]["LanguageTag"];
-			/** @description How this language was obtained: detected or caller-asserted. */
-			provenance: components["schemas"]["LanguageProvenance"];
-			/**
-			 * @description Byte-offset range this detection applies to, when known. `None`
-			 *     means the whole text.
-			 */
-			span?: components["schemas"]["LanguageSpan"];
-		};
-		/**
-		 * @description How a [`Language`]'s language was obtained.
-		 *
-		 *     Lets consumers distinguish "a detector ran and got this answer" from
-		 *     "the caller asserted this language". An assertion may still carry an
-		 *     optional confidence, so this is independent of the confidence field.
-		 */
-		LanguageProvenance: "detected" | "asserted";
-		/**
-		 * @description Byte-offset range within the analyzed text.
-		 *
-		 *     Attached to a [`Language`] when the detector knows the span
-		 *     its answer covers (mixed-language input produces multiple detections,
-		 *     each with a distinct span). Single-language detections from
-		 *     non-segmenting backends, and caller-asserted answers, typically leave
-		 *     the span as `None`.
-		 */
-		LanguageSpan: {
-			/**
-			 * Format: uint
-			 * @description Byte offset of the span end in the original text.
-			 */
-			end: number;
-			/**
-			 * Format: uint
-			 * @description Byte offset of the span start in the original text.
-			 */
-			start: number;
-		};
-		/**
-		 * @description Well-formed [BCP 47] language tag, such as `en`, `en-US`, or
-		 *     `zh-Hant-HK`.
-		 *
-		 *     Wraps [`oxilangtag::LanguageTag`] over a [`HipStr`] backing store, so
-		 *     short tags (the overwhelming common case) stay inline without a heap
-		 *     allocation. Parsing validates the tag's structure up front; the
-		 *     newtype therefore guarantees that any `LanguageTag` value in the
-		 *     model is syntactically valid.
-		 *
-		 *     Used to record the language a recognizer is scoped to, or the
-		 *     detected language of a span of content.
-		 *
-		 *     [BCP 47]: https://www.rfc-editor.org/info/bcp47
-		 */
-		LanguageTag: string;
-		/**
-		 * @description List of [`Language`]s resolved for one text scan.
-		 *
-		 *     Built by a detector (one entry per detected region) or by the caller
-		 *     asserting languages. Carried on a [`RecognizerContext`] so every
-		 *     recognizer and the context enhancer can consult the call's languages.
-		 *
-		 *     [`RecognizerContext`]: crate::recognition::RecognizerContext
-		 */
-		Languages: components["schemas"]["Language"][];
-		/**
-		 * @description An image's recognized text, laid out in space.
-		 *
-		 *     An ordered set of [`LayoutBlock`]s (the recognized text regions). The flat
-		 *     [`text`], the blocks joined, is what a recognizer
-		 *     inspects; [`resolve`] maps a byte range of that text back
-		 *     to the [`ImageLocation`] it occupies, using the blocks' (and their
-		 *     words') bounding boxes. Empty when the backend recognized nothing.
-		 *
-		 *     [`text`]: Self::text
-		 *     [`resolve`]: Self::resolve
-		 */
-		Layout: {
-			/** @description Blocks in reading order. */
-			blocks: components["schemas"]["LayoutBlock"][];
-			/**
-			 * @description The blocks' text joined by [`BLOCK_SEPARATOR`], cached so recognition
-			 *     and byte-range resolution share one flat string.
-			 */
-			text: string;
-		};
-		/**
-		 * @description One recognized region of an image: its bounding box and text, optionally
-		 *     broken into per-word boxes.
-		 */
-		LayoutBlock: {
-			/** @description Bounding region of the block in image coordinates. */
-			region: components["schemas"]["ImageLocation"];
-			/** @description Recognized text for this block. */
-			text: string;
-			/**
-			 * @description Per-word boxes within the block, when the backend emitted them.
-			 *     Empty otherwise; resolution then falls back to the block region.
-			 * @default []
-			 */
-			words?: components["schemas"]["LayoutWord"][];
-		};
-		/** @description One word within a [`LayoutBlock`], with its own bounding box. */
-		LayoutWord: {
-			/** @description Per-word confidence, when reported. */
-			confidence?: components["schemas"]["Confidence"];
-			/** @description Bounding region of the word in image coordinates. */
-			region: components["schemas"]["ImageLocation"];
-			/** @description The word text, as it appears in the block text. */
-			text: string;
-		};
-		/**
-		 * @description What a redacted output leaks about the original it replaced.
-		 *
-		 *     Variants are ordered from most-leaky to least-leaky, so `Recoverable
-		 *     < Partial < Irrecoverable`. Surfaced through
-		 *     [`Operator::leak_profile`] for policy authoring and audit reporting.
-		 *
-		 *     [`Operator::leak_profile`]: crate::redaction::Operator::leak_profile
-		 */
-		LeakProfile: "recoverable" | "partial" | "irrecoverable";
-		/** @description Query parameters for listing documents. */
-		ListWorkspaceDocuments: {
-			/**
-			 * @description Filter by file extension. Each entry expands to its format's full
-			 *     extension set (so `jpg` also matches `jpeg`).
-			 */
-			formats?: components["schemas"]["FormatToken"][];
-			/**
-			 * @description Filter to documents whose content is exactly this SHA-256. Lets a client
-			 *     check whether identical content already exists in the workspace before
-			 *     uploading it.
-			 */
-			hash?: components["schemas"]["DocumentHash"];
-			/** @description Filter by modality (`text`, `tabular`, `image`, `audio`). */
-			modality?: components["schemas"]["ModalityToken"][];
-			/** @description Search by document name (case-insensitive, partial match). */
-			search?: string;
-		};
-		/** @description Query parameters for listing workspace invites. */
-		ListWorkspaceInvites: {
-			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["Direction"];
-			/** @description Filter by invited role. */
-			role?: components["schemas"]["WorkspaceRole"];
-			/** @description Sort by field. */
-			sortBy?: components["schemas"]["InviteSortField"];
-		};
-		/** @description Query parameters for listing workspace members. */
-		ListWorkspaceMembers: {
-			/** @description Sort order (asc or desc). */
-			order?: components["schemas"]["Direction"];
-			/** @description Filter by workspace role. */
-			role?: components["schemas"]["WorkspaceRole"];
-			/** @description Sort by field. */
-			sortBy?: components["schemas"]["MemberSortField"];
-		};
-		/**
-		 * @description A fully-typed LLM inference connection configuration.
-		 *
-		 *     The `provider` tag selects the variant and thereby the credential shape, so
-		 *     an `OpenAI` connection cannot carry Anthropic credentials. The key-bearing
-		 *     variants hold an [`AuthenticatedProvider`], which masks the key in `Debug`;
-		 *     serialization exists only to persist the config encrypted at rest, never to
-		 *     return it in API responses.
-		 */
-		LlmConfig:
-			| ({
-					/** @constant */
-					provider: "openai";
-			  } & components["schemas"]["AuthenticatedProvider"])
-			| ({
-					/** @constant */
-					provider: "ollama";
-			  } & components["schemas"]["UnauthenticatedProvider"])
-			| ({
-					/** @constant */
-					provider: "anthropic";
-			  } & components["schemas"]["AuthenticatedProvider"]);
-		/**
-		 * @description A value localized per [`LanguageTag`], with an English-first fallback.
-		 *
-		 *     The reusable mechanism behind any text that varies by language: a
-		 *     [`Label`]'s display name and description, a redaction operator's bucket
-		 *     label, and so on. English (`"en"`) is the conventional anchor,
-		 *     constructors seed it, and [`resolve`] falls back to it (then to any
-		 *     entry) when a requested locale is absent, so a caller that supplied
-		 *     English always gets *some* value.
-		 *
-		 *     Generic over the stored value `T`, so it carries a bare `HipStr`
-		 *     (a bucket label) or a richer struct (a label's name-plus-description)
-		 *     equally. It is a thin wrapper over a `HashMap<LanguageTag, T>`; the
-		 *     added value is the fallback policy in [`resolve`], kept in one place
-		 *     rather than reimplemented at each use site.
-		 *
-		 *     [`Label`]: crate::entity::Label
-		 *     [`resolve`]: LocalizedText::resolve
-		 */
-		LocalizedText: {
-			[key: string]: components["schemas"]["LabelLocale"];
-		};
-		/** @description Request payload for login. */
-		Login: {
-			/** @description Email address or username of the account. */
-			identifier: string;
-			/** @description Password of the account. */
-			password: string;
-			/**
-			 * @description Whether to remember this device for extended session. Defaults to false.
-			 * @default false
-			 */
-			rememberMe?: boolean;
-		};
-		/**
-		 * @description Which human decision a [`Manual`] event records, the reviewer actions on a
-		 *     finding: [`Flag`](ManualIntent::Flag) a miss, [`Suppress`](ManualIntent::Suppress)
-		 *     a false positive, or [`Amend`](ManualIntent::Amend) an existing finding.
-		 */
-		ManualIntent: "flag" | "suppress" | "amend";
-		/** @description Params of a member activity (`member.*`). */
-		MemberActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the member's account.
-			 */
-			memberId: string;
-		};
-		/** @description Params of a `member.joined` notification. */
-		MemberJoinedParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the member's account.
-			 */
-			memberId: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the workspace the member joined.
-			 */
-			workspaceId: string;
-		};
-		/** @description Fields available for sorting workspace members. */
-		MemberSortField: "name" | "date";
-		/** @description Source detail of a metadata-field detection, carried by [`Metadata`]. */
-		MetadataEvent: {
-			/** @description The reader that surfaced the field (e.g. `"exif"`, `"docprops"`). */
-			source: string;
-		};
-		/**
-		 * @description Per-modality operator specs carried by a `redact` rule.
-		 *
-		 *     A single rule can name an operator for every modality the
-		 *     workspace supports. At apply time the redaction phase picks the
-		 *     operator matching the entity's modality (engine reads the right
-		 *     field directly via `redactions.text.as_ref()` etc.); modalities
-		 *     the rule didn't cover fall through to the deployment-wide
-		 *     default, and entities with no operator from either source are
-		 *     skipped.
-		 */
-		ModalityRedactions: {
-			/** @description Operator for audio-modality entities. */
-			audio?: components["schemas"]["AudioRedaction"];
-			/** @description Operator for image-modality entities. */
-			image?: components["schemas"]["ImageRedaction"];
-			/** @description Operator for tabular-modality entities. */
-			tabular?: components["schemas"]["TabularRedaction"];
-			/** @description Operator for text-modality entities. */
-			text?: components["schemas"]["TextRedaction"];
-		};
-		/**
-		 * @description A supported document modality.
-		 * @enum {string}
-		 */
-		ModalityToken: "audio" | "image" | "metadata" | "tabular" | "text";
-		/** @description Metadata of a model/NER recognition, carried by [`Model`]. */
-		ModelEvent: {
-			/** @description Whether contextual analysis adjusted the score for this match. */
-			contextual: boolean;
-			/** @description Model name (e.g. `"spacy-en-core-web-lg"`, `"gpt-4"`). */
-			name: string;
-			/** @description Model version string, when known. */
-			version?: string;
-		};
-		/**
-		 * @description The model a model-backed recognizer or enricher called, and its token cost.
-		 *
-		 *     Absent from a pure-CPU component (a pattern recognizer, a language enricher).
-		 */
-		ModelUsage: {
-			/** @description Model name the backend called (e.g. `"gpt-4o"`, `"gliner-multi"`). */
-			model: string;
-			/** @description Tokens the call spent, as far as the provider reports them. */
-			tokens?: components["schemas"]["TokenCounts"];
-			/** @description Model version, when the backend reports one. */
-			version?: string;
-		};
-		/**
-		 * @description Defines the type of notification event sent to a user.
-		 *
-		 *     Corresponds to the `NOTIFICATION_EVENT` `PostgreSQL` enum and is used for
-		 *     member, connection-sync, detection, redaction, and system notifications.
-		 *     The values mirror the [`WebhookEvent`] naming for the events the two
-		 *     channels share.
-		 *
-		 *     [`WebhookEvent`]: super::WebhookEvent
-		 */
-		NotificationEvent:
-			| "member.joined"
-			| "connection.sync.completed"
-			| "connection.sync.failed"
-			| "pipeline.detection.completed"
-			| "pipeline.redaction.created"
-			| "pipeline.detection.failed"
-			| "review.assigned"
-			| "comment.mentioned";
-		/**
-		 * @description The typed payload of a notification, tagged by `type` with its params under
-		 *     `data` (the same `{type, data}` envelope the activity log and outbox event use).
-		 *
-		 *     Each variant is one notification type carrying its own params struct. The
-		 *     `type` values match `NotificationEvent`, so the same key drives the member's
-		 *     per-event preferences.
-		 */
-		NotificationPayload:
-			| {
-					data: components["schemas"]["MemberJoinedParams"];
-					/** @constant */
-					type: "member.joined";
-			  }
-			| {
-					data: components["schemas"]["ConnectionSyncCompletedParams"];
-					/** @constant */
-					type: "connection.sync.completed";
-			  }
-			| {
-					data: components["schemas"]["ConnectionSyncFailedParams"];
-					/** @constant */
-					type: "connection.sync.failed";
-			  }
-			| {
-					data: components["schemas"]["DetectionCompletedParams"];
-					/** @constant */
-					type: "pipeline.detection.completed";
-			  }
-			| {
-					data: components["schemas"]["RedactionCreatedParams"];
-					/** @constant */
-					type: "pipeline.redaction.created";
-			  }
-			| {
-					data: components["schemas"]["DetectionFailedParams"];
-					/** @constant */
-					type: "pipeline.detection.failed";
-			  }
-			| {
-					data: components["schemas"]["ReviewAssignedParams"];
-					/** @constant */
-					type: "review.assigned";
-			  }
-			| {
-					data: components["schemas"]["CommentMentionedParams"];
-					/** @constant */
-					type: "comment.mentioned";
-			  };
-		/**
-		 * @description Path parameters for the OAuth start endpoint: which cloud file provider to
-		 *     begin authorizing. The provider is the crate's [`FileServiceProvider`], so the API and
-		 *     stored config name each provider identically.
-		 */
-		OAuthStartPathParams: {
-			/** @description The cloud file provider to connect. */
-			provider: components["schemas"]["FileServiceProvider"];
-		};
-		/** @description The response to a successful authorization start: where to send the user. */
-		OAuthStartResponse: {
-			/** @description The provider authorize URL the client should redirect the user to. */
-			authorizeUrl: string;
-		};
-		/**
-		 * @description A persisted OAuth token set. Stored encrypted with the rest of a
-		 *     connection's config; never returned in API responses. The tokens are masked
-		 *     in [`Debug`] so a connection config's derived `Debug` cannot leak them.
-		 */
-		OAuthTokens: {
-			/** @description The current access token, sent as a bearer credential. */
-			access_token: string;
-			/**
-			 * Format: int64
-			 * @description Unix seconds at which the access token expires, if known.
-			 */
-			expires_at?: number;
-			/**
-			 * @description The refresh token, used to mint a new access token when it expires.
-			 *     Providers may omit it on refresh, so it is retained across refreshes.
-			 */
-			refresh_token?: string;
-		};
-		/** @description Optional query parameters for starting a sign-in, link, or reauth. */
-		OidcStartQuery: {
-			/**
-			 * @description A step-up re-authentication proof. Required to start a *link* (adding a
-			 *     provider is a credential-adding action, so a live session alone is not
-			 *     enough); ignored for sign-in and reauth.
-			 */
-			reauthProof?: string;
-			/**
-			 * @description Frontend URL to return to once done. Carried through the flow and used to
-			 *     build the callback's redirect.
-			 */
-			redirectUri?: string;
-		};
-		/** @description The response to a successful sign-in start: where to send the user. */
-		OidcStartResponse: {
-			/** @description The provider authorize URL the client should redirect the user to. */
-			authorizeUrl: string;
-		};
-		/**
-		 * @description Identifies a redaction operator, for the redaction audit a higher
-		 *     layer assembles.
-		 *
-		 *     As with [`RecognizerId`], the version is part of the identity so the
-		 *     audit trail records which build of the operator ran. The version is
-		 *     opaque text; the core attaches no ordering semantics to it.
-		 *
-		 *     [`RecognizerId`]: crate::recognition::RecognizerId
-		 */
-		OperatorId: {
-			/** @description Stable operator name (e.g. `"mask"`, `"aes-gcm-encrypt"`). */
-			name: string;
-			/** @description Operator's version at the time it was applied. */
-			version: string;
-		};
-		/** @description Metadata of a pattern/dictionary recognition, carried by [`Pattern`]. */
-		PatternEvent: {
-			/**
-			 * @description Whether contextual analysis (keyword co-occurrence) adjusted the score
-			 *     for this match.
-			 */
-			contextual: boolean;
-			/** @description Name of the pattern that matched (e.g. `"ssn"`, `"email"`). */
-			name: string;
-			/** @description Literal regex source that matched, when exposed. */
-			regex?: string;
-			/** @description Name of the validator that confirmed the match (e.g. `"luhn"`). */
-			validator?: string;
-		};
 		/**
 		 * @description Which PCI DSS subsection this template addresses.
 		 *
@@ -18101,161 +20785,6 @@ export interface components {
 			| "truncate_last_four"
 			| "hmac_sha256"
 			| "hmac_sha512";
-		/** @description One file the user selected in the provider's picker. */
-		PickedFile: {
-			/** @description The provider's file identifier (used to fetch the bytes). */
-			id: string;
-			/** @description The file's display name, as the picker reported it. */
-			name: string;
-		};
-		/** @description Params of a pipeline activity (`pipeline.*`, non-run). */
-		PipelineActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the pipeline.
-			 */
-			pipelineId: string;
-		};
-		/**
-		 * @description A pipeline's detection + governance intent.
-		 *
-		 *     Holds what a pipeline author decides — the default scope and the policies to
-		 *     apply. Recognition is entirely server-wide: the built-in pattern set plus the
-		 *     deployment's NER/LLM lineups and enrichment backends live in the engine
-		 *     config, not here. Stored as JSON in the pipeline's `definition` column but
-		 *     validated against this schema at the API boundary.
-		 *
-		 *     The label catalog is not part of this: the policies own the label vocabulary,
-		 *     and the engine derives the detection catalog from them at run time.
-		 *
-		 *     The split:
-		 *
-		 *     - `default_scope` — optional pipeline-wide scope a document may override.
-		 *     - `policy_ids` — references to the workspace's policies, resolved at run
-		 *       time.
-		 */
-		PipelineDefinition: {
-			/**
-			 * @description Optional pipeline-wide scope (languages, jurisdictions, document labels).
-			 *
-			 *     A document's own scope overrides this at detect time; absent here means
-			 *     the document must assert its own.
-			 */
-			defaultScope?: components["schemas"]["DocumentContext"];
-			/**
-			 * @description Ids of workspace policies applied at redaction.
-			 *
-			 *     Stored relationally in the `workspace_pipeline_policies` join table, not the JSON
-			 *     definition; surfaced here so the API exposes one coherent object.
-			 */
-			policyIds?: string[];
-		};
-		/**
-		 * @description The lifecycle status of a pipeline definition.
-		 *
-		 *     Corresponds to the `PIPELINE_STATUS` `PostgreSQL` enum and tracks whether a
-		 *     pipeline is being configured, enabled and ready to run, or disabled.
-		 */
-		PipelineStatus: "draft" | "enabled" | "disabled";
-		/**
-		 * @description How a pipeline run was initiated.
-		 *
-		 *     Corresponds to the `PIPELINE_TRIGGER_TYPE` `PostgreSQL` enum: a run is either
-		 *     started directly by a user or automatically by the system (for example, a
-		 *     file upload that the pipeline auto-redacts).
-		 */
-		PipelineTriggerType: "user" | "system";
-		/**
-		 * @description Point in a 2-D coordinate space.
-		 *
-		 *     The coordinate basis is left to the consumer: pixel coordinates for a
-		 *     raster image, normalized `0.0..=1.0` coordinates for a
-		 *     resolution-independent region, or page units for a document. The
-		 *     model only requires the two scalars.
-		 */
-		Point: {
-			/**
-			 * Format: double
-			 * @description Horizontal coordinate.
-			 */
-			x: number;
-			/**
-			 * Format: double
-			 * @description Vertical coordinate.
-			 */
-			y: number;
-		};
-		/**
-		 * @description A named governance policy.
-		 *
-		 *     Identity is the UUID; `name` is display-only.
-		 */
-		Policy: {
-			/** @description Optional description for reviewers. */
-			description?: string;
-			/**
-			 * @description Per-policy catch-all, applied to any detected entity in
-			 *     the policy's vocabulary that no rule claimed. Fires when no
-			 *     rule in this policy matched. Presence halts the chain; absence falls through
-			 *     to the next policy. [`Option`] enforces "at most one
-			 *     fallback per policy" at the type level.
-			 */
-			fallback?: components["schemas"]["ModalityRedactions"];
-			/**
-			 * Format: uuid
-			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
-			 *     customer-supplied so re-submissions carry the same id.
-			 */
-			id: string;
-			/**
-			 * @description Human-readable name. Display-only. Does not key anything.
-			 *
-			 *     Names the policy in a redaction event's [`Attribution`]
-			 *     when a rule that fired carried no [`Attribution::Cited`]
-			 *     attribution to render.
-			 *
-			 *     [`Attribution`]: elide_core::entity::audit::Attribution
-			 *     [`Attribution::Cited`]: elide_core::entity::audit::Attribution::Cited
-			 */
-			name: string;
-			/** @description Ordered rules. First match wins within this policy. */
-			rules?: components["schemas"]["PolicyRule"][];
-			/**
-			 * @description What this policy detects: one or more named, attributed
-			 *     label sets.
-			 *
-			 *     The union of every scope is what this policy acts on. A
-			 *     label no scope names is never detected, so no rule can fire
-			 *     on it and the policy is inert with respect to it — whether
-			 *     the label is one elide ships or one the request introduced.
-			 *
-			 *     Detecting more than the rules act on is deliberate: scope a
-			 *     whole regulatory category, write rules for the labels
-			 *     needing special treatment, and let [`fallback`] sweep the
-			 *     rest.
-			 *
-			 *     [`fallback`]: Self::fallback
-			 */
-			scopes?: components["schemas"]["LabelScope"][];
-			/**
-			 * @description The shipped template this policy was built from, when it
-			 *     was.
-			 *
-			 *     Provenance, not fidelity: callers are expected to mutate a
-			 *     template's policy before submitting, so this records where
-			 *     the policy came from and says nothing about whether it
-			 *     still matches. `None` means hand-authored.
-			 */
-			template?: components["schemas"]["TemplateOrigin"];
-		};
-		/** @description Params of a policy activity (`policy.*`). */
-		PolicyActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the policy.
-			 */
-			policyId: string;
-		};
 		/**
 		 * @description A client-authored policy body: the parts of a policy definition a caller may
 		 *     set, without the fields the server owns.
@@ -18267,26 +20796,67 @@ export interface components {
 		 *     builds the engine definition.
 		 */
 		PolicyDraft: {
-			/** @description Optional description for reviewers. */
-			description?: string;
-			/** @description Per-policy catch-all, fired when no rule matched. */
-			fallback?: components["schemas"]["ModalityRedactions"];
 			/** @description Human-readable name. Display-only. */
 			name: string;
-			/** @description Ordered rules. First match wins within this policy. */
-			rules?: components["schemas"]["PolicyRule"][];
+			/** @description Optional description for reviewers. */
+			description?: string;
 			/** @description What this policy detects: named, attributed label sets. */
 			scopes?: components["schemas"]["LabelScope"][];
+			/** @description Ordered rules. First match wins within this policy. */
+			rules?: components["schemas"]["PolicyRule"][];
+			/** @description Per-policy catch-all, fired when no rule matched. */
+			fallback?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
-		 * @description The kind of a redaction policy.
+		 * @description A named set of labels a [`Policy`] detects.
 		 *
-		 *     Corresponds to the `POLICY_KIND` `PostgreSQL` enum. An authored policy is a
-		 *     normal, editable policy created from a template or an inline definition. A
-		 *     one-shot policy is minted inline from a bare label list (the ad-hoc redact
-		 *     flow): it is content-addressed and deduplicated, and immutable once minted.
+		 *     Scopes live on the policy that declares them and are visible
+		 *     only to that policy's own rules. Two policies that both declare
+		 *     `hipaa_18` with different labelsets stay independent: nothing is
+		 *     stamped onto the shared label catalog, so there is no request-
+		 *     wide namespace one policy could use to reach into another's.
+		 *
+		 *     Templates ship one scope per canonical label list
+		 *     (`"hipaa_safe_harbor"`, `"gdpr_article_9"`, `"ccpa_personal_information"`).
+		 *     A policy may declare several: the union is what it detects, and
+		 *     a rule can target one by name.
+		 *
+		 *     **Unknown scope names error at request validation**, not at
+		 *     apply time. A typo doesn't silently underfire.
+		 *
+		 *     [`Policy`]: super::Policy
 		 */
-		PolicyKind: "authored" | "oneshot";
+		LabelScope: {
+			/**
+			 * @description Stable name a [`Predicate::LabelInScope`] references.
+			 *
+			 *     Free-form; a policy layer picks the vocabulary. Recommend
+			 *     snake_case identifiers (`hipaa_safe_harbor`,
+			 *     `gdpr_article_9`): they read cleanly in audit provenance.
+			 *
+			 *     [`Predicate::LabelInScope`]: crate::policy::Predicate::LabelInScope
+			 */
+			name: string;
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * @description Why this set exists: the authority that defines it.
+			 *
+			 *     A scope usually maps to one regulatory category (HIPAA's
+			 *     eighteen identifiers, GDPR Article 9(1)'s nine special
+			 *     categories), so this is where that mapping is recorded as
+			 *     data rather than prose.
+			 */
+			attribution?: components["schemas"]["Attribution"];
+			/**
+			 * @description The labels this scope covers, by ref.
+			 *
+			 *     A label the current build doesn't emit (a modality-gated
+			 *     one, say) is simply never detected; rules keyed off the
+			 *     scope still fire on whatever labels *are* present.
+			 */
+			labels: components["schemas"]["LabelRef"][];
+		};
 		/**
 		 * @description One rule inside a [`Policy`]. Identity is the UUID;
 		 *     `name` / `description` are display-only. `dispatch` picks the
@@ -18295,23 +20865,6 @@ export interface components {
 		 *     [`Policy`]: super::Policy
 		 */
 		PolicyRule: {
-			/**
-			 * @description Why this rule exists: the authority it answers to.
-			 *
-			 *     The engine renders it into the redaction event's
-			 *     [`Attribution`] verbatim, so a reviewer sees the provision
-			 *     the rule answers to. `None` falls back to a freeform
-			 *     attribution under the enclosing policy's name and
-			 *     description — the rule itself is not named in the trail.
-			 *
-			 *     Optional so ad-hoc and hand-authored rules stay cheap to
-			 *     write; the shipped templates set it on every rule.
-			 *
-			 *     [`Attribution`]: elide_core::entity::audit::Attribution
-			 */
-			attribution?: components["schemas"]["Attribution"];
-			/** @description Optional description for reviewers. */
-			description?: string;
 			/**
 			 * Format: uuid
 			 * @description Stable identifier. UUIDv7 recommended. Every attachment a
@@ -18326,8 +20879,33 @@ export interface components {
 			id: string;
 			/** @description Human-readable name. Display-only. */
 			name: string;
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * @description Why this rule exists: the authority it answers to.
+			 *
+			 *     The engine renders it into the redaction event's
+			 *     [`Attribution`] verbatim, so a reviewer sees the provision
+			 *     the rule answers to. `None` falls back to a freeform
+			 *     attribution under the enclosing policy's name and
+			 *     description — the rule itself is not named in the trail.
+			 *
+			 *     Optional so ad-hoc and hand-authored rules stay cheap to
+			 *     write; the shipped templates set it on every rule.
+			 *
+			 *     [`Attribution`]: elide::entity::audit::Attribution
+			 */
+			attribution?: components["schemas"]["Attribution"];
 		} & (
 			| {
+					/** @constant */
+					kind: "predicated";
+					/**
+					 * @description Entity-level predicate that decides whether the rule
+					 *     fires on a given recognised entity. Composable; see
+					 *     [`Predicate`] for the full grammar.
+					 */
+					predicate: components["schemas"]["Predicate"];
 					/**
 					 * @description Per-modality redaction operators applied when the
 					 *     predicate matches. Modalities the rule doesn't cover
@@ -18342,14 +20920,6 @@ export interface components {
 					 *     balanced without changing the wire form.
 					 */
 					action: components["schemas"]["ModalityRedactions"];
-					/** @constant */
-					kind: "predicated";
-					/**
-					 * @description Entity-level predicate that decides whether the rule
-					 *     fires on a given recognised entity. Composable; see
-					 *     [`Predicate`] for the full grammar.
-					 */
-					predicate: components["schemas"]["Predicate"];
 			  }
 			| {
 					/** @constant */
@@ -18358,80 +20928,6 @@ export interface components {
 					operators: components["schemas"]["LabelEntry"][];
 			  }
 		);
-		/**
-		 * @description A regulatory posture this crate ships a [`Template`] for.
-		 *
-		 *     Serialises as an internally-tagged object under `kind`,
-		 *     matching the house pattern for option-bearing enums
-		 *     (`Predicate`, `TextRedaction`). A caller
-		 *     wire-picks a template as
-		 *     `{"kind": "hipaa_safe_harbor"}` or, for variants with
-		 *     operator options,
-		 *     `{"kind": "pci_dss_pan", "render": "hmac_sha256"}`.
-		 */
-		PolicyTemplate:
-			| {
-					/**
-					 * @description Which §(J) account-identifier labels to remove. Defaults
-					 *     to [`HipaaAccountNumbers::Standard`] (bank account +
-					 *     IBAN + payment card). Pick
-					 *     [`HipaaAccountNumbers::Extended`] to add crypto wallet
-					 *     addresses under the §(R) catch-all reading.
-					 * @default standard
-					 */
-					accounts?: components["schemas"]["HipaaAccountNumbers"];
-					/** @constant */
-					kind: "hipaa_deidentification";
-					/**
-					 * @description Which §164.514 method to apply. See [`HipaaDeidMethod`]
-					 *     for the tradeoff.
-					 */
-					method: components["schemas"]["HipaaDeidMethod"];
-			  }
-			| {
-					/** @constant */
-					kind: "gdpr_article9";
-					/**
-					 * @description Which sensitive-data labels to cover. Defaults to
-					 *     [`GdprSensitiveScope::Article9`] (nine Article 9(1)
-					 *     categories only). Pick
-					 *     [`GdprSensitiveScope::Article9WithReidHardening`] to add
-					 *     the quasi-identifier set, or
-					 *     [`GdprSensitiveScope::Article9And10`] to also cover
-					 *     Article 10 criminal-justice data.
-					 * @default article9
-					 */
-					scope?: components["schemas"]["GdprSensitiveScope"];
-					/**
-					 * @description Which operator to apply to matches. See
-					 *     [`GdprArticle9Treatment`] for the tradeoff.
-					 */
-					treatment: components["schemas"]["GdprArticle9Treatment"];
-			  }
-			| {
-					/** @constant */
-					kind: "pci_dss";
-					/**
-					 * @description Which DSS subsection this template addresses. See
-					 *     [`PciDssPart`] for the shipped subsections.
-					 */
-					part: components["schemas"]["PciDssPart"];
-			  }
-			| {
-					/** @constant */
-					kind: "ccpa";
-			  };
-		/**
-		 * @description Closed polygon, given by its ordered vertices.
-		 *
-		 *     A richer location than a [`BoundingBox`] for detections whose extent
-		 *     is not rectangular: rotated text, a region traced by a vision model, a
-		 *     signature. The boundary is implicitly closed, so the last vertex
-		 *     connects back to the first.
-		 *
-		 *     [`BoundingBox`]: super::BoundingBox
-		 */
-		Polygon: components["schemas"]["Point"][];
 		/**
 		 * @description Predicate over a recognised entity. The wire format uses an
 		 *     internally tagged enum so authors write
@@ -18467,22 +20963,22 @@ export interface components {
 					scope: string;
 			  }
 			| {
-					/** @description Cluster id to match. */
-					coref: string;
 					/** @constant */
 					kind: "coRef";
+					/** @description Cluster id to match. */
+					coref: string;
 			  }
 			| {
-					/** @description Conjunction members. */
-					all: components["schemas"]["Predicate"][];
 					/** @constant */
 					kind: "all";
+					/** @description Conjunction members. */
+					all: components["schemas"]["Predicate"][];
 			  }
 			| {
-					/** @description Disjunction members. */
-					any: components["schemas"]["Predicate"][];
 					/** @constant */
 					kind: "any";
+					/** @description Disjunction members. */
+					any: components["schemas"]["Predicate"][];
 			  }
 			| {
 					/** @constant */
@@ -18490,649 +20986,196 @@ export interface components {
 					/** @description Negated predicate. */
 					not: components["schemas"]["Predicate"];
 			  };
-		/** @description Params of a provider activity (`provider.*`). */
-		ProviderActivityParams: {
-			/** @description Id of the provider. */
-			providerId: components["schemas"]["ProviderId"];
-			/** @description Display name of the provider. */
-			providerName: string;
+		/**
+		 * Format: float
+		 * @description Minimum-confidence cutoff in the closed range `0.0..=1.0`.
+		 *
+		 *     A [`Confidence`] at or above the threshold *passes*; below it is
+		 *     filtered out. Kept a separate type from [`Confidence`] so a cutoff
+		 *     can never be passed where a score is expected, or vice versa.
+		 *
+		 *     [`Confidence`]: crate::primitive::Confidence
+		 */
+		ConfidenceThreshold: number;
+		/**
+		 * @description Per-modality operator specs carried by a `redact` rule.
+		 *
+		 *     A single rule can name an operator for every modality the
+		 *     workspace supports. At apply time the redaction phase picks the
+		 *     operator matching the entity's modality (engine reads the right
+		 *     field directly via `redactions.text.as_ref()` etc.); modalities
+		 *     the rule didn't cover fall through to the deployment-wide
+		 *     default, and entities with no operator from either source are
+		 *     skipped.
+		 */
+		ModalityRedactions: {
+			/** @description Operator for text-modality entities. */
+			text?: components["schemas"]["TextRedaction"];
+			/** @description Operator for tabular-modality entities. */
+			tabular?: components["schemas"]["TabularRedaction"];
+			/** @description Operator for image-modality entities. */
+			image?: components["schemas"]["ImageRedaction"];
+			/** @description Operator for audio-modality entities. */
+			audio?: components["schemas"]["AudioRedaction"];
 		};
-		/**
-		 * @description A fully-typed inference-provider configuration.
-		 *
-		 *     Untagged: the inner config's `provider` tag is the sole discriminator, so the
-		 *     stored/wire form is flat. A new inference kind is added as a variant of
-		 *     [`InferenceConfig`] with no change here.
-		 */
-		ProviderConfig: components["schemas"]["InferenceConfig"];
-		/** @description Opaque prov identifier (prov_<uuid>). */
-		ProviderId: string;
-		/**
-		 * @description The inference model type backing a workspace provider.
-		 *
-		 *     Corresponds to the `PROVIDER_TYPE` `PostgreSQL` enum. A workspace provider is
-		 *     an inference service the platform calls; this says which kind of model it
-		 *     is — a language model for chat, or a named-entity-recognition model for
-		 *     extraction. The concrete vendor (the `provider` column, e.g. `openai`) is
-		 *     orthogonal and stays open; this type is a stable, closed set used to find a
-		 *     workspace's provider of a given type without decrypting its config.
-		 */
-		ProviderType: "llm" | "ner";
-		/**
-		 * @description Public view of an account, returned when looking up someone other than the
-		 *     authenticated caller. Carries only the fields safe to share with a
-		 *     workspace peer; private details (email, account flags) are omitted
-		 *     and remain available solely through the caller's own `/account/` view.
-		 */
-		PublicAccount: {
-			/** @description Serve path of the account's avatar, when set. */
-			avatarUrl?: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the account was created.
-			 */
-			createdAt: string;
-			/** @description Display name of the account holder, when set. */
-			displayName?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the account.
-			 */
-			id: string;
-			/** @description Public handle of the account. Display-only. */
-			username: components["schemas"]["Handle"];
-		};
-		Range_of_uint: {
-			/** Format: uint */
-			end: number;
-			/** Format: uint */
-			start: number;
-		};
-		/**
-		 * @description Policy for rendering a document's pages to images.
-		 *
-		 *     [`Auto`] is the default: use the text layer where it exists (redact by
-		 *     deleting glyphs) and render only where it is absent. [`Always`] renders
-		 *     every page regardless of the text layer, for documents whose text is
-		 *     missing, garbled, or a watermark. [`Never`] relies on the text layer only.
-		 *
-		 *     Serializes with an internal `kind` tag (`{"kind": "auto"}`,
-		 *     `{"kind": "always", "dpi": 300}`, `{"kind": "never"}`).
-		 *
-		 *     [`Auto`]: RasterMode::Auto
-		 *     [`Always`]: RasterMode::Always
-		 *     [`Never`]: RasterMode::Never
-		 */
-		RasterMode:
+		/** @description Operator spec a `redact` text rule carries. */
+		TextRedaction:
 			| {
 					/** @constant */
-					kind: "auto";
-			  }
-			| {
-					/** @description Resolution to render pages at; [`Dpi::OCR`] (300) is typical. */
-					dpi: components["schemas"]["Dpi"];
-					/** @constant */
-					kind: "always";
+					kind: "erase";
 			  }
 			| {
 					/** @constant */
-					kind: "never";
-			  };
-		/**
-		 * @description How a workspace's document pages are rasterised to images for OCR during
-		 *     detection.
-		 *
-		 *     A workspace-level policy over the engine's per-run raster mode: `Auto` lets
-		 *     the engine decide from the text layer, `Always` renders every page (for
-		 *     documents with unreliable text layers — scans, watermarks), and `Never`
-		 *     relies on the text layer only.
-		 */
-		RasterPolicy: "auto" | "always" | "never";
-		/**
-		 * @description Labels a request introduces, and how to detect them.
-		 *
-		 *     The two halves are independent, and only one pairing is an
-		 *     error.
-		 *
-		 *     A label with no matcher is legitimate: it joins the catalog, a
-		 *     policy may scope it, and a reviewer may add entities under it
-		 *     through [`Edit::Add`]. Nothing detects it automatically — there
-		 *     is no matcher to look for it — which is the point when the
-		 *     label marks something only a human can recognise.
-		 *
-		 *     A matcher with no label is refused, since it would detect into
-		 *     a vocabulary the catalog never held.
-		 *
-		 *     [`Edit::Add`]: https://docs.rs/elide-review
-		 */
-		Recognition: {
-			/**
-			 * @description Label schemas elide does not ship.
-			 *
-			 *     Only for labels outside the shipped set: one whose id
-			 *     collides with a builtin is refused, since it would shadow
-			 *     elide's own definition.
-			 */
-			custom?: components["schemas"]["Label"][];
-			/**
-			 * @description How to detect the labels [`custom`] introduces.
-			 *
-			 *     Each names a label this request declares. Compiled fresh
-			 *     per request, so a request introducing none costs nothing.
-			 *
-			 *     [`custom`]: Self::custom
-			 */
-			matchers?: components["schemas"]["CustomMatcher"][];
-		};
-		/** @description The engine's registered recognizers, grouped by kind. */
-		RecognizerCatalog: {
-			/** @description LLM recognizers. */
-			llm: components["schemas"]["RegisteredRecognizer"][];
-			/** @description NER (named-entity recognition) recognizers. */
-			ner: components["schemas"]["RegisteredRecognizer"][];
-		};
-		/**
-		 * @description Identifies a recognizer (name + version).
-		 *
-		 *     Pairs a stable name with a free-form version string so the audit
-		 *     trail records not just *which* recognizer fired but *which build* of
-		 *     it: a rerun against an updated ruleset or model is then
-		 *     distinguishable from the original. The version is opaque text (a
-		 *     semver, a checkpoint hash, a ruleset date); the core attaches no
-		 *     ordering or comparison semantics to it.
-		 */
-		RecognizerId: {
-			/** @description Stable, human-readable recognizer name (e.g. `"us-ssn-pattern"`). */
-			name: string;
-			/** @description Recognizer's version at the time it ran. */
-			version: string;
-		};
-		/**
-		 * @description Request payload to redact a detection.
-		 *
-		 *     The reviewer's edits layer over the detection's analysis before redaction:
-		 *     suppress a false positive, retag a detection, or add one the analysis missed.
-		 *     Omit `edits` to redact with the policy decisions exactly as detected. Each
-		 *     redact request produces a new redaction.
-		 */
-		RedactWorkspaceDetection: {
-			/**
-			 * @description Reviewer edits to apply before redaction, grouped by modality. Omit to
-			 *     redact with the policy decisions exactly as detected.
-			 */
-			edits?: components["schemas"]["EditSet"];
-		};
-		/** @description An operator hid the entity. */
-		Redaction: {
-			/**
-			 * @description The author-supplied policy rationale, when the operator carried an
-			 *     [`Attribution`]; `None` otherwise.
-			 */
-			attribution?: components["schemas"]["Attribution"];
-			/** @description Identifier of the key needed to reverse it, if reversible. */
-			key_id?: string;
-			/**
-			 * @description How much the output leaks about the original, when the operator claimed a
-			 *     profile; `None` when it made no claim.
-			 */
-			leak_profile?: components["schemas"]["LeakProfile"];
-			/**
-			 * @description Which selection rule chose this operator: the automatic "why" (matched a
-			 *     label, a tag, a predicate, or the fallback).
-			 */
-			matched_by: components["schemas"]["RuleMatch"];
-			/** @description Which operator (name + version) ran. */
-			operator: components["schemas"]["OperatorId"];
-			/**
-			 * @description BLAKE3 digest of the original text the operator hid, when the redaction
-			 *     layer recorded it. Proves *what* was redacted without storing the
-			 *     plaintext; `None` when the operator did not capture it.
-			 */
-			span_hash?: components["schemas"]["AuditHash"];
-			/**
-			 * Format: uint32
-			 * @description Byte length of the original text the operator hid, paired with
-			 *     [`span_hash`](Self::span_hash). `None` when not captured.
-			 */
-			span_length?: number;
-		};
-		/** @description Params of a redaction activity (`pipeline.redaction.*`). */
-		RedactionActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent when the detection was ad-hoc.
-			 */
-			pipelineId?: string;
-			/** @description Id of the redaction. */
-			redactionId: components["schemas"]["RedactionId"];
-		};
-		/** @description Params of a `pipeline.redaction.created` notification. */
-		RedactionCreatedParams: {
-			/** @description Id of the detection the redaction was produced from. */
-			detectionId: components["schemas"]["DetectionId"];
-			/** @description Display name of the redacted document, if known. */
-			inputDocumentName?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
-			/** @description Id of the redaction. */
-			redactionId: components["schemas"]["RedactionId"];
-		};
-		/** @description Opaque redaction identifier (redaction_<uuid>). */
-		RedactionId: string;
-		/**
-		 * @description Public view of one recognizer in the engine's NER or LLM
-		 *     lineup.
-		 *
-		 *     Carries the name a request's allowlist picks by, an optional
-		 *     human-readable description, and a provider slug identifying
-		 *     the backend kind. Connection details and (future)
-		 *     credentials stay in the private `NerConfig` / `LlmConfig`.
-		 *
-		 *     Owned rather than borrowing from the engine so callers can
-		 *     carry the value past the borrow that produced it. Cloning is
-		 *     cheap: [`HipStr`] shares the backing string via an `Arc`
-		 *     header.
-		 */
-		RegisteredRecognizer: {
-			/**
-			 * @description Recognizer name: the identifier a request's allowlist
-			 *     picks by.
-			 */
-			name: string;
-			/**
-			 * @description Provider slug. NER: `"bento"`, `"mock"`. LLM: `"openai"`,
-			 *     `"anthropic"`, `"gemini"`, `"ollama"`, `"mock"`.
-			 *
-			 *     Owned so the type deserializes from a runtime buffer: a
-			 *     `&'static str` field would make the derive emit
-			 *     `Deserialize<'static>` only, which compiles against string
-			 *     literals but not against an owned `String` or a reader -
-			 *     the shapes a host actually decodes from. Borrowing a
-			 *     `&'static str` into a [`HipStr`] does not allocate, so
-			 *     engine-side construction stays free.
-			 */
-			provider: string;
-			/**
-			 * @description The groupings this component belongs to, as the deployment
-			 *     tagged it.
-			 *
-			 *     What a request's selection and the engine's availability
-			 *     match on besides the name, so a caller listing components
-			 *     can see which families it may ask for.
-			 */
-			tags?: string[];
-		};
-		/** @description Request payload to rename a review (set its title). */
-		RenameWorkspaceReview: {
-			/**
-			 * @description The new title (1-255 characters). Omitting the field leaves the current
-			 *     title unchanged.
-			 */
-			displayName?: string;
-		};
-		/** @description Request to respond to a workspace invitation. */
-		ReplyWorkspaceInvite: {
-			/** @description Whether to accept or decline the invitation. */
-			acceptInvite: boolean;
-		};
-		Report: {
-			parts: (
-				| {
-						entities: components["schemas"]["TextEntity"][];
-						id: string[];
-						/** @constant */
-						modality: "text";
-				  }
-				| {
-						entities: components["schemas"]["ImageEntity"][];
-						id: string[];
-						/** @constant */
-						modality: "image";
-				  }
-				| {
-						entities: components["schemas"]["AudioEntity"][];
-						id: string[];
-						/** @constant */
-						modality: "audio";
-				  }
-				| {
-						entities: components["schemas"]["TabularEntity"][];
-						id: string[];
-						/** @constant */
-						modality: "tabular";
-				  }
-			)[];
-			usage?: components["schemas"]["UsageReport"];
-		};
-		/**
-		 * @description How long a class of data is retained.
-		 *
-		 *     Wire shape is internally tagged on `mode`: `{ "mode": "persistent" }`,
-		 *     `{ "mode": "ephemeral" }`, `{ "mode": "fixed", "days": 30 }`.
-		 */
-		Retention:
-			| {
-					/** @constant */
-					mode: "persistent";
+					kind: "keep";
 			  }
 			| {
 					/** @constant */
-					mode: "ephemeral";
-			  }
-			| {
+					kind: "mask";
 					/**
-					 * Format: uint32
-					 * @description Number of days to retain data.
+					 * @description The character that replaces masked positions.
+					 * @default *
 					 */
-					days: number;
+					mask_char?: string;
+					/**
+					 * Format: uint
+					 * @description Characters to leave unmasked at the start of the value.
+					 *     `0` (the default) masks from the start.
+					 */
+					keep_prefix?: number;
+					/**
+					 * Format: uint
+					 * @description Characters to leave unmasked at the end of the value.
+					 *     `0` (the default) masks through to the end.
+					 */
+					keep_suffix?: number;
+			  }
+			| {
 					/** @constant */
-					mode: "fixed";
+					kind: "replace";
+					/**
+					 * @description Template string. Default `[{label}]`.
+					 * @default [{label}]
+					 */
+					template?: string;
+			  }
+			| {
+					/** @constant */
+					kind: "hash";
+					/**
+					 * @description SHA-256 (default) or SHA-512.
+					 * @default sha256
+					 */
+					algorithm?: components["schemas"]["Sha2Algorithm"];
+					/** @description Salt prepended to the value before hashing. */
+					salt?: string;
+			  }
+			| {
+					/** @constant */
+					kind: "fake";
+					/**
+					 * @description BCP-47 tag used when the entity carries no language of
+					 *     its own. Defaults to English (`"en"`).
+					 */
+					default_language?: components["schemas"]["LanguageTag"];
+					/**
+					 * Format: uint64
+					 * @description Seed mixed into per-entity RNG state. Two runs with the
+					 *     same seed and the same input entities produce the same
+					 *     surrogates. Defaults to `0`.
+					 */
+					seed?: number;
+					/**
+					 * @description Template used for entity labels outside the built-in
+					 *     PII catalogue (which `Fake` can't generate for).
+					 *     Supports the same `{label}` / `{value}` / `{coref}`
+					 *     placeholders as [`Replace`]. Defaults to `[{label}]`.
+					 *
+					 *     [`Replace`]: TextRedaction::Replace
+					 * @default [{label}]
+					 */
+					fallback_template?: string;
+			  }
+			| {
+					/** @constant */
+					kind: "pseudonymize";
+			  }
+			| {
+					/** @constant */
+					kind: "encrypt";
+			  }
+			| {
+					/** @constant */
+					kind: "hmac_hash";
+					/**
+					 * @description HMAC-SHA-256 (default) or HMAC-SHA-512.
+					 * @default sha256
+					 */
+					algorithm?: components["schemas"]["Sha2Algorithm"];
+			  }
+			| {
+					/** @constant */
+					kind: "truncate";
+					/**
+					 * Format: uint
+					 * @description Characters to keep at the start of the value.
+					 */
+					keep_prefix?: number;
+					/**
+					 * Format: uint
+					 * @description Characters to keep at the end of the value.
+					 */
+					keep_suffix?: number;
+			  }
+			| {
+					/** @constant */
+					kind: "clamp";
+					/**
+					 * Format: double
+					 * @description Threshold at or above which values collapse to
+					 *     `ceiling_bucket`. `None` disables the ceiling.
+					 */
+					ceiling?: number;
+					/**
+					 * @description Bucket label for values at or above `ceiling`. Required
+					 *     when `ceiling` is set; ignored otherwise.
+					 */
+					ceiling_bucket?: components["schemas"]["ClampBucket"];
+					/**
+					 * Format: double
+					 * @description Threshold at or below which values collapse to
+					 *     `floor_bucket`. `None` disables the floor.
+					 */
+					floor?: number;
+					/**
+					 * @description Bucket label for values at or below `floor`. Required
+					 *     when `floor` is set; ignored otherwise.
+					 */
+					floor_bucket?: components["schemas"]["ClampBucket"];
+					/**
+					 * @description Operator that runs when the entity value isn't a
+					 *     finite number. `None` erases (elide's default).
+					 */
+					fallback?: components["schemas"]["TerminalFallback"];
+			  }
+			| {
+					/** @constant */
+					kind: "generalize_date";
+					/**
+					 * @description Coarseness of the output. Default `Year`.
+					 * @default year
+					 */
+					granularity?: components["schemas"]["DateGranularity"];
+					/**
+					 * @description Which input convention to accept. Default `Iso`.
+					 * @default iso
+					 */
+					style?: components["schemas"]["DateStyle"];
+					/**
+					 * @description Operator that runs when the entity value isn't a
+					 *     parseable date. `None` erases (elide's default).
+					 */
+					fallback?: components["schemas"]["TerminalFallback"];
 			  };
-		/**
-		 * @description A pipeline's optional per-scope override of the workspace retention. A `None`
-		 *     field inherits the workspace value for that scope.
-		 *
-		 *     Only scopes a pipeline actually produces are overridable — original documents
-		 *     are ingested, not produced by a pipeline, so they have no per-pipeline
-		 *     override and always follow the workspace baseline.
-		 */
-		RetentionOverride: {
-			/** @description Overrides audit-blob retention when set. */
-			auditLogs?: components["schemas"]["Retention"];
-			/** @description Overrides enrichment-intermediate retention when set. */
-			intermediates?: components["schemas"]["Retention"];
-			/** @description Overrides redacted-document retention when set. */
-			redactedDocuments?: components["schemas"]["Retention"];
-		};
-		/**
-		 * @description Retention for every scope. Missing fields default to [`Retention::Ephemeral`],
-		 *     so an empty settings blob deletes each class of data as soon as it has been
-		 *     processed.
-		 */
-		RetentionSettings: {
-			/**
-			 * @description Retention for audit blobs.
-			 * @default {
-			 *       "mode": "ephemeral"
-			 *     }
-			 */
-			auditLogs?: components["schemas"]["Retention"];
-			/**
-			 * @description Retention for enrichment intermediates (OCR layout, transcript).
-			 * @default {
-			 *       "mode": "ephemeral"
-			 *     }
-			 */
-			intermediates?: components["schemas"]["Retention"];
-			/**
-			 * @description Retention for uploaded/imported source documents.
-			 * @default {
-			 *       "mode": "ephemeral"
-			 *     }
-			 */
-			originalDocuments?: components["schemas"]["Retention"];
-			/**
-			 * @description Retention for generated redacted documents.
-			 * @default {
-			 *       "mode": "ephemeral"
-			 *     }
-			 */
-			redactedDocuments?: components["schemas"]["Retention"];
-		};
-		/**
-		 * @description Params of a review activity (`review.opened`, `review.reopened`,
-		 *     `review.renamed`, `review.deleted`, `review.verified`, `review.assigned`,
-		 *     `review.unassigned`).
-		 */
-		ReviewActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the reviewer assigned or unassigned; omitted for the events that carry
-			 *     no reviewer.
-			 */
-			assigneeId?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the document under review.
-			 */
-			documentId: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the review.
-			 */
-			reviewId: string;
-		};
-		/**
-		 * @description Params of a `review.assigned` notification, sent to the reviewer a review was
-		 *     assigned to.
-		 */
-		ReviewAssignedParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the document to review.
-			 */
-			documentId: string;
-			/** @description Display name of the document to review, when it still exists. */
-			documentName?: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the review.
-			 */
-			reviewId: string;
-		};
-		/** @description Params of a review-comment activity (`review.comment.created`). */
-		ReviewCommentActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the comment.
-			 */
-			commentId: string;
-			/**
-			 * Format: uuid
-			 * @description Id of the review the comment is in.
-			 */
-			reviewId: string;
-		};
-		/**
-		 * @description The kind of a non-message entry in a review's timeline.
-		 *
-		 *     Corresponds to the `REVIEW_EVENT_KIND` `PostgreSQL` enum. A review's stream
-		 *     interleaves comments (messages) with these events: the lifecycle (opened,
-		 *     renamed, verified, reopened) and the sign-off workflow (detections and
-		 *     redactions referenced, assignment changes).
-		 */
-		ReviewEventKind:
-			| "review.opened"
-			| "review.renamed"
-			| "detection.linked"
-			| "redaction.linked"
-			| "assigned"
-			| "unassigned"
-			| "verified"
-			| "reopened";
-		/**
-		 * @description The review state of a file thread (a file thread is the review of its
-		 *     file). `None` on the thread means a workspace thread, which has no review.
-		 *
-		 *     Corresponds to the `REVIEW_STATUS` `PostgreSQL` enum. It is derived from the
-		 *     review's events, never set by a user: a detection makes it `NeedsReview`, a
-		 *     redaction `InReview`, and verification `Resolved`; a later detection reopens
-		 *     it to `NeedsReview`.
-		 */
-		ReviewStatus: "needs_review" | "in_review" | "resolved";
-		/**
-		 * @description A serializable summary of *which selection rule* bound an operator to an
-		 *     entity, the automatic "why" behind a redaction.
-		 *
-		 *     The anonymizer selects an operator by walking an ordered rule list and
-		 *     taking the first match. That decision is recorded on the [`Redaction`]
-		 *     event as a `RuleMatch` so an audit can see *why* this operator ran
-		 *     ("matched label EMAIL_ADDRESS", "carried tag financial", "the fallback").
-		 *
-		 *     This is a summary, not the live rule: a predicate rule can't carry its
-		 *     closure into provenance, so [`Predicate`] records only that a predicate
-		 *     matched, not which one.
-		 *
-		 *     [`Redaction`]: crate::entity::audit::AuditKind::Redaction
-		 *     [`Predicate`]: RuleMatch::Predicate
-		 */
-		RuleMatch:
-			| {
-					label: components["schemas"]["LabelRef"];
-			  }
-			| {
-					tag: string;
-			  }
-			| "predicate"
-			| "fallback";
-		/**
-		 * @description Typed credentials for S3-compatible provider.
-		 *
-		 *     Secret fields are masked in the [`Debug`] output. Serialization exists only
-		 *     to persist the credentials encrypted at rest; they are never returned in API
-		 *     responses.
-		 */
-		S3Credentials: {
-			/** @description Access key ID for static credentials. */
-			accessKeyId?: string;
-			/** @description S3 bucket name. */
-			bucket: string;
-			/**
-			 * @description Endpoint URL (e.g. `http://localhost:9000` for `MinIO`).
-			 *     Required for non-AWS S3-compatible services.
-			 */
-			endpoint?: string;
-			/**
-			 * @description AWS region (defaults to `us-east-1`).
-			 * @default us-east-1
-			 */
-			region?: string;
-			/** @description Secret access key for static credentials. */
-			secretAccessKey?: string;
-			/** @description Session token for temporary credentials. */
-			sessionToken?: string;
-		};
-		/**
-		 * @description Caller-asserted scope shared across every payload of one analysis.
-		 *
-		 *     Built once with the `with_*` chain and passed by reference to the
-		 *     analyzer, which borrows it into a fresh [`RecognizerContext`] per
-		 *     payload. It holds only what the *caller* asserts about the analysis as a
-		 *     whole, languages, jurisdictions, document labels, the target catalog, a
-		 *     correlation id, none of which depends on the medium, so one [`Scope`]
-		 *     drives a text, image, or audio analysis alike.
-		 *
-		 *     Per-medium regions (caller-supplied inclusions and exclusions, which are
-		 *     `M::Location`-typed) live in [`Annotations`], attached to the analyzer
-		 *     of that modality. The per-payload working state (NLP artifacts, detected
-		 *     languages) lives on the context, not here.
-		 *
-		 *     [`RecognizerContext`]: super::RecognizerContext
-		 *     [`Annotations`]: super::annotation::Annotations
-		 *     Free-form, caller-asserted request context: the *document* it is about and
-		 *     the *request* driving it.
-		 *
-		 *     Three axes of opaque classification strings elide neither ships nor
-		 *     interprets, a downstream policy layer chooses what `"medical"` or
-		 *     `"fraud_detection"` or `"auditor"` mean. They are read in two places: a
-		 *     recognizer may bias its detection on them (the LLM prompt lists them so the
-		 *     model attends to the right terms), and a scope-aware operator predicate may
-		 *     branch on them at selection time (redact the same document differently per
-		 *     [`audience`]).
-		 *
-		 *     - [`tags`] classify the *document* (`"medical"`, `"gdpr-request"`).
-		 *     - [`purpose`] is why the request exists (`"fraud_detection"`).
-		 *     - [`audience`] is who the redacted output is for (`"support_agent"`,
-		 *       `"auditor"`), the axis PCI-style "same document, two masks" branches on.
-		 *
-		 *     [`tags`]: Self::tags
-		 *     [`purpose`]: Self::purpose
-		 *     [`audience`]: Self::audience
-		 */
-		ScopeMetadata: {
-			/**
-			 * @description Who the redacted output is for (e.g. `"support_agent"`, `"auditor"`).
-			 *     The axis a per-audience redaction branches on: one detected document,
-			 *     selected differently per audience. May hold several.
-			 * @default []
-			 */
-			audience?: string[];
-			/**
-			 * @description The caller-asserted business purpose driving this request (e.g.
-			 *     `"fraud_detection"`, `"gdpr_erasure_request"`). A scope-aware operator
-			 *     predicate may skip or swap a rule based on it; a recognizer may bias
-			 *     detection on it. `None` when the caller asserts no purpose.
-			 */
-			purpose?: string;
-			/**
-			 * @description Document-level classification tags (e.g. `"medical"`,
-			 *     `"gdpr-request"`). Recognizers may use these to bias their behavior
-			 *     for domain-specific terms; those that don't ignore the field.
-			 *
-			 *     Named `tags`, not `labels`, to keep "label" reserved for the entity
-			 *     taxonomy ([`LabelRef`]/[`LabelCatalog`]): these classify the
-			 *     *document*, whereas the scope's catalog names the entity *types* to
-			 *     emit.
-			 *
-			 *     [`LabelRef`]: crate::entity::LabelRef
-			 *     [`LabelCatalog`]: crate::entity::LabelCatalog
-			 * @default []
-			 */
-			tags?: string[];
-		};
-		/**
-		 * @description An operator was *picked* to hide the entity, the redaction decision,
-		 *     recorded before it is applied so it can be reviewed (and the entity edited)
-		 *     first. The [`Redaction`] event that follows records the operator actually
-		 *     run.
-		 */
-		Selection: {
-			/**
-			 * @description The author-supplied policy rationale, when the matched rule carried an
-			 *     [`Attribution`]; `None` otherwise.
-			 */
-			attribution?: components["schemas"]["Attribution"];
-			/**
-			 * @description Which selection rule chose this operator: the automatic "why" (matched a
-			 *     label, a tag, a predicate, or the fallback).
-			 */
-			matched_by: components["schemas"]["RuleMatch"];
-			/**
-			 * @description Identity (name + version) of the operator picked. Its *config* is not
-			 *     recorded; it lives in the policy that will run it, so apply re-resolves
-			 *     the configured operator rather than reading it here.
-			 */
-			operator: components["schemas"]["OperatorId"];
-		};
-		/**
-		 * @description A password set or change.
-		 *
-		 *     When the account already has a password, `current_password` is required and
-		 *     verified before the change is applied, so a hijacked session or CSRF cannot
-		 *     silently reset it (and lock out the real owner). When the account has no
-		 *     password yet (an SSO-only account setting its first one), there is nothing to
-		 *     re-authenticate against, so a fresh step-up `reauth_proof` is required instead
-		 *     — a live session alone must not mint a durable new credential.
-		 */
-		SetPassword: {
-			/**
-			 * @description The account's current password. Required when the account already has a
-			 *     password; omitted when setting a first password on an account that has
-			 *     none (supply `reauth_proof` instead).
-			 */
-			currentPassword?: string;
-			/** @description The new password (will be hashed before storage). */
-			newPassword: string;
-			/**
-			 * @description A step-up re-authentication proof (from the OIDC reauth endpoint).
-			 *     Required when *setting a first password* on an account that has none;
-			 *     ignored when changing an existing password.
-			 */
-			reauthProof?: string;
-		};
 		/**
 		 * @description Which SHA-2 variant a hashing operator uses.
 		 *
@@ -19144,780 +21187,35 @@ export interface components {
 		 *     [`HmacHash`]: super::HmacHash
 		 */
 		Sha2Algorithm: "sha256" | "sha512";
-		/** @description Request payload for signup. */
-		Signup: {
-			/** @description Optional display name of the account. */
-			displayName?: string;
-			/**
-			 * Format: email
-			 * @description Email address of the account.
-			 */
-			emailAddress: string;
-			/** @description Password of the account. */
-			password: string;
-			/**
-			 * @description Whether to remember the device for extended session. Defaults to false.
-			 * @default false
-			 */
-			rememberMe?: boolean;
-			/** @description Public account handle, unique across all accounts. */
-			username: components["schemas"]["Handle"];
-		};
 		/**
-		 * @description A reference back to the original source: a byte range, and, for a container
-		 *     whose body spans several files, which part that range indexes.
+		 * @description Text a [`TextRedaction::Clamp`] emits for out-of-range values.
 		 *
-		 *     [`TextLocation`]'s `range` indexes the *decoded* text stream a codec hands
-		 *     the pipeline (entities resolved, container parts concatenated). A `SourceRef`
-		 *     is the *exact raw* byte range the decoded range came from, accounting for XML
-		 *     escapes where `&amp;` (5 raw bytes) decodes to `&` (1). `part` names the
-		 *     container file the range is in (`word/header1.xml`) for a multi-file body
-		 *     like DOCX, and is `None` for a single-file source (XML, HTML). It lets a
-		 *     consumer point back at the untouched source bytes.
+		 *     Three forms, deserialized untagged so callers can pick the
+		 *     terser one for the case at hand:
 		 *
-		 *     [`TextLocation`]: super::TextLocation
+		 *     - **Plain string** (`"90 or older"`): English-only shorthand.
+		 *     - **Localized map** (`{"en": "90 or older", "fr": "90 ou plus"}`):
+		 *       one entry per language the deployment ships; missing locales
+		 *       fall back to English at render time.
+		 *     - **Format template** (`{"format": "{n} or older"}`): the
+		 *       engine substitutes `{n}` for the threshold, so a ceiling of
+		 *       `90` renders `"90 or older"` without the caller repeating the
+		 *       number. Same rendering in every language.
+		 *
+		 *     Round-trips through serde as whichever form the caller wrote.
 		 */
-		SourceRef: {
-			/**
-			 * @description The container part the range indexes, for a multi-file body; `None` for a
-			 *     single-file source.
-			 */
-			part?: string;
-			/** @description The raw source byte range. */
-			range: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description A source-only coordinate: raw byte range(s) with no decoded span.
-		 *
-		 *     The counterpart to [`DecodedSpan`] for content the pipeline never decoded (a
-		 *     reviewer selecting rendered text). A named struct rather than a bare `Vec`
-		 *     variant so the coordinate serializes as a map, which an internally tagged
-		 *     enum can inject its `kind` tag into.
-		 */
-		SourceSpan: {
-			/**
-			 * @description The raw byte range(s) the selection sits in. Sorted, deduplicated,
-			 *     non-empty by construction.
-			 */
-			source: components["schemas"]["SourceRef"][];
-		};
-		/** @description Request payload for starting a cloud file-service OAuth authorization. */
-		StartFileServiceOAuth: {
-			/** @description Human-readable name for the connection to be created on success. */
-			displayName: string;
-			/**
-			 * @description Where to scope the sync: a folder id (Drive, `OneDrive`, Box) or a folder
-			 *     path (Dropbox). Omit to use the account root.
-			 */
-			root?: string;
-		};
-		/**
-		 * @description A fully-typed object-store connection configuration.
-		 *
-		 *     The `provider` tag selects the variant and thereby the credential shape, so
-		 *     an S3 connection cannot carry Azure credentials. Each variant carries a
-		 *     shared optional `root_path` and a nested `credentials` object, giving a wire
-		 *     shape like
-		 *     `{ "provider": "s3", "rootPath": "in/", "credentials": { "bucket": "b", "accessKeyId": "..." } }`.
-		 *
-		 *     Secrets are masked in [`Debug`]; serialization exists only to persist the
-		 *     config encrypted at rest, never to return it in API responses.
-		 */
-		StorageConfig:
+		ClampBucket:
+			| string
 			| {
-					/** @description S3 credentials. */
-					credentials: components["schemas"]["S3Credentials"];
-					/** @constant */
-					provider: "s3";
-					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
-					rootPath?: string;
-			  }
-			| {
-					/** @description Azure credentials. */
-					credentials: components["schemas"]["AzureCredentials"];
-					/** @constant */
-					provider: "azure";
-					/** @description Optional root prefix within the container; keys resolve relative to it. */
-					rootPath?: string;
-			  }
-			| {
-					/** @description GCS credentials. */
-					credentials: components["schemas"]["GcsCredentials"];
-					/** @constant */
-					provider: "gcs";
-					/** @description Optional root prefix within the bucket; keys resolve relative to it. */
-					rootPath?: string;
-			  };
-		/**
-		 * @description Leave this entity alone: a reviewer calling it a false positive.
-		 *
-		 *     It keeps its place and its provenance; the redaction pass skips
-		 *     it. Recorded as a `Manual` event, so *who* decided and *why* is
-		 *     auditable rather than the detection silently disappearing.
-		 */
-		Suppress: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/**
-			 * Format: uuid
-			 * @description The entity to leave alone.
-			 */
-			id: string;
-			/** @description The rationale, when one was given. */
-			reason?: string;
-		};
-		/**
-		 * @description What a whole-listing import does with a file whose source object no longer
-		 *     exists.
-		 *
-		 *     Corresponds to the `SYNC_DELETION_POLICY` `PostgreSQL` enum. Only
-		 *     whole-listing import reconciles deletions (it compares the full source
-		 *     listing against what was imported), so this applies to object-store import
-		 *     alone; picker-driven file-service import transfers only the files the user
-		 *     selected and never reconciles. Deletion is opt-in per connection: the
-		 *     default `Ignore` keeps imports strictly additive so a transient listing
-		 *     error or a misconfigured root path can never remove files.
-		 */
-		SyncDeletionPolicy: "ignore" | "delete";
-		/**
-		 * @description The direction a connection syncs data.
-		 *
-		 *     Corresponds to the `SYNC_MODE` `PostgreSQL` enum: `Import` fetches objects
-		 *     from the connection into the workspace; `Export` pushes workspace files
-		 *     out.
-		 *
-		 *     A scheduled `Import` is an object-store concept: it enumerates the source
-		 *     and pulls the whole listing on a timer. A file service is not enumerated on
-		 *     a timer — its import is picker-driven and request-time — so only `Export`
-		 *     is scheduled for a file service.
-		 */
-		SyncMode: "import" | "export";
-		/**
-		 * @description Scheduled-sync configuration for a schedulable connection.
-		 *
-		 *     Accepted only for providers that can sync on a timer (object stores); rejected
-		 *     for others — a file service transfers on demand (picker import, per-file
-		 *     export), and an LLM does not transfer at all. Omit for on-demand only.
-		 */
-		SyncScheduleInput: {
-			/**
-			 * @description How an import reconciles files whose source object was deleted.
-			 * @default ignore
-			 */
-			deletionPolicy?: components["schemas"]["SyncDeletionPolicy"];
-			/** @description Cron expression for scheduled imports; omit for manual-only. */
-			scheduleCron?: string;
-			/**
-			 * @description Whether the connection imports data in or exports data out. Required: the
-			 *     caller states the direction explicitly rather than defaulting to one.
-			 */
-			syncMode: components["schemas"]["SyncMode"];
-		};
-		/**
-		 * @description Defines the execution status of a connection sync run.
-		 *
-		 *     Corresponds to the `SYNC_STATUS` `PostgreSQL` enum and tracks the state of an
-		 *     individual synchronization run.
-		 */
-		SyncStatus: "pending" | "running" | "completed" | "failed" | "cancelled";
-		/**
-		 * @description How a connection sync run was initiated.
-		 *
-		 *     Corresponds to the `SYNC_TRIGGER_TYPE` `PostgreSQL` enum. The axis is who
-		 *     initiated the run: the connection's own schedule, or anything else — a
-		 *     user, the SDK, an external automation (Zapier and the like). The latter is
-		 *     `OnDemand`, which covers every non-scheduled trigger, not only a human
-		 *     click.
-		 */
-		SyncTriggerType: "on_demand" | "scheduled";
-		/**
-		 * @description A detection recognition missed.
-		 *
-		 *     Recorded on the report with human provenance, so it is never
-		 *     mistaken for an automatic hit, then redacted under the policy set
-		 *     like any other entity: an added label the policy does not cover
-		 *     is left alone.
-		 *
-		 *     Carries no entity id — the entity does not exist yet, and the
-		 *     engine mints one when the edit is applied, so a client cannot
-		 *     collide with a real detection or shadow an existing entity.
-		 */
-		TabularAdd: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/** @description What the reviewer says this is. */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description Where it sits, in the coordinates of the part it joins.
-			 *
-			 *     Each medium addresses its own way: text a character range
-			 *     over the decoded stream, images a bounding box, audio a time
-			 *     span, tabular a row and column. A DOCX's
-			 *     `word/document.xml` text belongs to the document part
-			 *     itself, not to a nested one.
-			 *
-			 *     Text carries either coordinate kind of [`TextCoord`]: a
-			 *     [`Decoded`] span for a caller with an offset into the
-			 *     decoded stream, or a [`Source`] one for a caller holding
-			 *     only raw file bytes — a reviewer selecting rendered text,
-			 *     say — which the engine reverse-resolves. Source-only is its
-			 *     own kind rather than a decoded span left empty, so such a
-			 *     selection is representable as itself.
-			 *
-			 *     The other three media have no such alternative: their
-			 *     coordinates are the only way in.
-			 *
-			 *     [`TextCoord`]: elide::modality::text::TextCoord
-			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
-			 *     [`Source`]: elide::modality::text::TextCoord::Source
-			 */
-			location: components["schemas"]["TabularLocation"];
-			/**
-			 * @description The part this belongs to, as a path: `["report.docx"]` for
-			 *     the document itself, `["report.docx", "word/media/image1.png"]`
-			 *     for media it embeds. `None` means the request's sole
-			 *     document, which is the common case and saves a caller
-			 *     naming what it already sent.
-			 *
-			 *     Nested media needs this: the report holds an embedded image
-			 *     as its own part, and an addition to one has nowhere to go
-			 *     without naming it. Text usually does not — a source
-			 *     reference already names the part it came from, alongside the
-			 *     raw range.
-			 *
-			 *     `None` is an error when the request carried several
-			 *     documents, since there is then no sole document to mean.
-			 */
-			part?: string[];
-			/** @description The rationale, when one was given. */
-			reason?: string;
-		};
-		/**
-		 * @description One node in an entity's audit DAG: a thing that happened, with its
-		 *     effect on confidence and its tamper-evident links.
-		 *
-		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
-		 *     trail of its life: each recognizer that found it, the deduplication that
-		 *     fused them, any score calibration, and the redaction that hid it. The
-		 *     uniform spine (who, resulting score, when) is the same for every event; the
-		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
-		 *     event happened.
-		 *
-		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
-		 *     recognizer's first detection) has no parents, a normal step has one, and a
-		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
-		 *     [`hash`] folds the
-		 *     payload together with the parents' hashes, so altering any event breaks
-		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
-		 *     reports the first break.
-		 *
-		 *     `entity.confidence` always equals the [`confidence`] of the most recent
-		 *     event. The confidence *flowing in* is not stored: it is the parents'
-		 *     [`confidence`], recovered from the DAG.
-		 *
-		 *     [`AuditLog`]: crate::entity::audit::AuditLog
-		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
-		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
-		 *     [`kind`]: AuditEvent::kind
-		 *     [`parents`]: AuditEvent::parents
-		 *     [`hash`]: AuditEvent::hash
-		 *     [`confidence`]: AuditEvent::confidence
-		 */
-		TabularAuditEvent: {
-			/**
-			 * @description Confidence after this event: the entity's effective confidence once it
-			 *     has happened.
-			 */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
-			 *     [`AuditLog`] when the event is recorded; read it through
-			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
-			 *
-			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
-			 *     forge a self-consistent event outside the recording path.
-			 *
-			 *     [`AuditLog`]: crate::entity::audit::AuditLog
-			 */
-			hash: components["schemas"]["AuditHash"];
-			/** @description Kind of event, with its event-specific detail and its rationale. */
-			kind: components["schemas"]["TabularAuditKind"];
-			/**
-			 * @description The events this one follows, by their hash. Empty for a birth event, one
-			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
-			 *     when the event is recorded; read it through [`parents`](Self::parents).
-			 *
-			 *     Not publicly settable: the links are the tamper-evident structure, so
-			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
-			 *
-			 *     [`AuditLog`]: crate::entity::audit::AuditLog
-			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
-			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
-			 */
-			parents: components["schemas"]["AuditHash"][];
-			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
-			 */
-			source: string;
-			/** @description When the event happened (UTC). */
-			timestamp: string;
-		};
-		/**
-		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
-		 *     rationale for why it happened.
-		 *
-		 *     A thin tagged union: each variant wraps one payload struct (e.g.
-		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
-		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
-		 *     payload:
-		 *
-		 *     ```
-		 *     # use elide_core::entity::audit::AuditKind;
-		 *     # use elide_core::modality::text::Text;
-		 *     # fn show(kind: &AuditKind<Text>) {
-		 *     if let AuditKind::Redaction(redaction) = kind {
-		 *         let _ = &redaction.operator;
-		 *     }
-		 *     # }
-		 *     ```
-		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
-		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
-		 *     matched [`Location`]; the rest carry their own data.
-		 *
-		 *     [`AuditEvent`]: super::AuditEvent
-		 *     [`Pattern`]: AuditKind::Pattern
-		 *     [`Model`]: AuditKind::Model
-		 *     [`Location`]: Modality::Location
-		 */
-		TabularAuditKind:
-			| {
-					detail: components["schemas"]["TabularPattern"];
-					/** @constant */
-					kind: "pattern";
-			  }
-			| {
-					detail: components["schemas"]["TabularModel"];
-					/** @constant */
-					kind: "model";
-			  }
-			| {
-					detail: components["schemas"]["TabularMetadata"];
-					/** @constant */
-					kind: "metadata";
-			  }
-			| {
-					detail: components["schemas"]["Deduplication"];
-					/** @constant */
-					kind: "deduplication";
-			  }
-			| {
-					detail: components["schemas"]["Conflict"];
-					/** @constant */
-					kind: "conflict";
-			  }
-			| {
-					detail: components["schemas"]["Contested"];
-					/** @constant */
-					kind: "contested";
-			  }
-			| {
-					detail: components["schemas"]["Calibration"];
-					/** @constant */
-					kind: "calibration";
-			  }
-			| {
-					detail: components["schemas"]["TabularRefinement"];
-					/** @constant */
-					kind: "refinement";
-			  }
-			| {
-					detail: components["schemas"]["Redaction"];
-					/** @constant */
-					kind: "redaction";
-			  }
-			| {
-					detail: components["schemas"]["Selection"];
-					/** @constant */
-					kind: "selection";
-			  }
-			| {
-					detail: components["schemas"]["TabularManual"];
-					/** @constant */
-					kind: "manual";
-			  };
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
-		 *     tamper-evident DAG.
-		 *
-		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
-		 *     stripped by default, an `AuditLog` is always present and records the
-		 *     entity's *entire* life: each recognizer that found it, the deduplication
-		 *     that fused them, any confidence calibration, and the redaction that hid it.
-		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
-		 *     its location and score.
-		 *
-		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
-		 *     records a birth event (no parents); each later step links to the event it
-		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
-		 *     once: the heads of the trails it combines. This is the true shape of a
-		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
-		 *     The events are stored in the order they were recorded, which is a
-		 *     topological order of the DAG (a parent is always recorded before its
-		 *     children).
-		 *
-		 *     Two chains ride the DAG's edges:
-		 *
-		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
-		 *       effective score after it; the score flowing *in* is its parents'
-		 *       confidence, so [`final_confidence`] and the full history are recoverable;
-		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
-		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
-		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
-		 *       and reports the first break.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`confidence`]: AuditEvent::confidence
-		 *     [`hash`]: AuditEvent::hash
-		 *     [`final_confidence`]: Self::final_confidence
-		 *     [`verify`]: Self::verify
-		 */
-		TabularAuditLog: components["schemas"]["TabularAuditEvent"][];
-		/**
-		 * @description One change to an analyzed document.
-		 *
-		 *     `Add` carries no id because the entity does not exist yet; the
-		 *     engine mints one when the edit is applied, so a client cannot
-		 *     collide with a real detection or shadow an existing entity.
-		 */
-		TabularEdit:
-			| ({
-					/** @constant */
-					op: "add";
-			  } & components["schemas"]["TabularAdd"])
-			| ({
-					/** @constant */
-					op: "retag";
-			  } & components["schemas"]["TabularRetag"])
-			| ({
-					/** @constant */
-					op: "suppress";
-			  } & components["schemas"]["Suppress"]);
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its audit trail. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
-		 *     [`audit`]: Entity::audit
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		TabularEntity: {
-			/**
-			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
-			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
-			 *     [`Manual`] event on this trail, not a separate flag.
-			 *
-			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
-			 */
-			audit: components["schemas"]["TabularAuditLog"];
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["TabularLocation"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself),
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
-			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
-		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs; it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from, provenance a
-		 *     review consumer can resolve back to the document.
-		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 */
-		TabularHint: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["TextData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["TabularLocation"];
-		};
-		/**
-		 * @description Cell-addressed location within tabular content.
-		 *
-		 *     Identifies a cell by zero-based [`row_index`] and
-		 *     [`column_index`], optionally narrowed to a byte
-		 *     range within the cell text for an entity that spans only part of the
-		 *     cell. [`sheet_name`] scopes the cell to one sheet of
-		 *     a multi-sheet workbook; [`column_name`] is a
-		 *     human-readable header carried for provenance.
-		 *
-		 *     Overlap and ordering treat the sheet, cell, and byte range as
-		 *     coordinates. The column name is redundant with the column index, so it
-		 *     is carried but excluded from comparison.
-		 *
-		 *     [`row_index`]: Self::row_index
-		 *     [`column_index`]: Self::column_index
-		 *     [`sheet_name`]: Self::sheet_name
-		 *     [`column_name`]: Self::column_name
-		 */
-		TabularLocation: {
-			/**
-			 * Format: uint32
-			 * @description Zero-based column index of the cell.
-			 */
-			column_index: number;
-			/** @description Header label of the column, when known. */
-			column_name?: string;
-			/**
-			 * Format: uint
-			 * @description Byte offset within the cell text where the entity ends (exclusive).
-			 *     Unset means the whole cell.
-			 */
-			end_offset?: number;
-			/**
-			 * Format: uint32
-			 * @description Zero-based row index of the cell.
-			 */
-			row_index: number;
-			/** @description Sheet name within a multi-sheet workbook, when known. */
-			sheet_name?: string;
-			/**
-			 * Format: uint
-			 * @description Byte offset within the cell text where the entity starts. Unset
-			 *     means the whole cell.
-			 */
-			start_offset?: number;
-		};
-		/**
-		 * @description A human override, outside automatic detection: an entity a reviewer added by
-		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's, so the trail records *why* (an
-		 *     [`Attribution`], when supplied). *Who* made the override is the event's
-		 *     [`source`], not a payload field.
-		 *
-		 *     [`source`]: super::AuditEvent::source
-		 */
-		TabularManual: {
-			/**
-			 * @description The reviewer's rationale, when supplied (e.g. a freeform
-			 *     `"false positive"`, or a cited authority). `None` for an unexplained
-			 *     override.
-			 */
-			attribution?: components["schemas"]["Attribution"];
-			/**
-			 * @description Which human decision this records: including a missed entity, or
-			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
-			 *     separate flag to keep in sync.
-			 *
-			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
-			 */
-			intent: components["schemas"]["ManualIntent"];
-			/** @description Where the override applies, in modality-native coordinates. */
-			location: components["schemas"]["TabularLocation"];
-		};
-		/**
-		 * @description Detail of a metadata-field detection: a document's out-of-band field
-		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
-		 *     redaction subject at `location`, with its source in `metadata`.
-		 *
-		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
-		 *     out of free content — it is a named field that is simply present. There is
-		 *     nothing probabilistic to weigh, so the entity carries it as its own event
-		 *     kind rather than pretending a pattern fired.
-		 */
-		TabularMetadata: {
-			/** @description The field's location (its key). */
-			location: components["schemas"]["TabularLocation"];
-			/** @description Source metadata (which reader surfaced the field). */
-			metadata: components["schemas"]["MetadataEvent"];
-		};
-		/**
-		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
-		 *     metadata in `model`.
-		 */
-		TabularModel: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["TabularLocation"];
-			/** @description Model metadata (name, version, contextual flag). */
-			model: components["schemas"]["ModelEvent"];
-		};
-		/**
-		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
-		 *     `location`, with the pattern metadata in `pattern`.
-		 */
-		TabularPattern: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["TabularLocation"];
-			/** @description Pattern metadata (name, regex, validator, contextual flag). */
-			pattern: components["schemas"]["PatternEvent"];
-		};
-		/** @description Operator spec a `redact` tabular rule carries. */
-		TabularRedaction:
-			| {
-					/** @constant */
-					kind: "cell";
 					/**
-					 * @description The text operator to apply. Reuses the full text
-					 *     vocabulary (Erase, Keep, Mask, Replace, Hash,
-					 *     Pseudonymize, Encrypt).
+					 * @description The template string. `{n}` is substituted; other text
+					 *     is literal.
 					 */
-					spec: components["schemas"]["TextRedaction"];
+					format: string;
 			  }
 			| {
-					/** @constant */
-					kind: "drop_row";
-			  }
-			| {
-					/** @constant */
-					kind: "drop_column";
+					[key: string]: string;
 			  };
-		/** @description A context keyword near the entity lifted its confidence. */
-		TabularRefinement: {
-			/**
-			 * @description The located [`Hint`] the keyword fired from, when the match came from an
-			 *     out-of-band hint (a column header, a key) rather than the in-text word
-			 *     window. `None` for an in-text-window match.
-			 *
-			 *     [`Hint`]: crate::modality::Hint
-			 */
-			hint?: components["schemas"]["TabularHint"];
-			/** @description Keyword that fired the boost. */
-			keyword: string;
-			/**
-			 * @description Where the boosting keyword sits in the medium. For a hint match this
-			 *     mirrors the hint's own location; for an in-text-window match it is the
-			 *     keyword resolved through the modality's [`locate`]. `None` when the
-			 *     keyword's stream range could not be placed.
-			 *
-			 *     [`locate`]: crate::modality::TextRecognizable::locate
-			 */
-			location?: components["schemas"]["TabularLocation"];
-		};
-		/**
-		 * @description Correct what an existing detection *is* or *covers*, then redact
-		 *     it under the policy set as corrected.
-		 *
-		 *     A reviewer fixing recognition's mistake rather than overriding
-		 *     its consequence. Retagging into a label the policy does not cover
-		 *     leaves the entity alone, exactly as if it had been detected that
-		 *     way — which is why it is auditable rather than a mutable field.
-		 */
-		TabularRetag: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/**
-			 * Format: uuid
-			 * @description The entity being corrected.
-			 */
-			id: string;
-			/** @description The corrected label, when recognition got it wrong. */
-			label?: components["schemas"]["LabelRef"];
-			/**
-			 * @description The corrected location, when the span clipped the value or
-			 *     ran past it.
-			 */
-			location?: components["schemas"]["TabularLocation"];
-			/** @description The rationale, when one was given. */
-			reason?: string;
-		};
-		/**
-		 * @description The template a [`Policy`] was built from.
-		 *
-		 *     Records **provenance, not fidelity**. Templates are plain data
-		 *     and callers are expected to mutate the returned policy before
-		 *     submitting it (swapping an operator, widening a scope), so this
-		 *     says "built from `hipaa_deid_safe_harbor` v1.0.0" and nothing
-		 *     about whether the policy still matches what that template
-		 *     ships. A reviewer who needs that rebuilds the template and
-		 *     diffs.
-		 *
-		 *     `None` on a policy means hand-authored, not "unknown template".
-		 *
-		 *     Both fields are needed: a policy built from v1 of a template
-		 *     can differ materially from one built from v2 (a widened label
-		 *     set, a changed operator), and an audit that records only the id
-		 *     cannot tell the two apart.
-		 *
-		 *     [`Policy`]: super::Policy
-		 */
-		TemplateOrigin: {
-			/**
-			 * @description The template's machine key: `"hipaa_deid_safe_harbor"`,
-			 *     `"pci_dss_pan_hmac_sha256"`. Stable across version bumps.
-			 */
-			id: string;
-			/**
-			 * @description The template's own semver version, distinct from the
-			 *     crate's release version. A shipped template bumps this when
-			 *     its labelset or operator dispatch changes.
-			 */
-			version: string;
-		};
 		/**
 		 * @description Fallback operator that runs when a declinable primary
 		 *     ([`TextRedaction::Clamp`], [`TextRedaction::GeneralizeDate`])
@@ -19955,6 +21253,13 @@ export interface components {
 					template?: string;
 			  }
 			| {
+					/** @constant */
+					kind: "mask";
+					/**
+					 * @description The character that replaces masked positions.
+					 * @default *
+					 */
+					mask_char?: string;
 					/**
 					 * Format: uint
 					 * @description Characters to leave unmasked at the start of the value.
@@ -19965,514 +21270,47 @@ export interface components {
 					 * @description Characters to leave unmasked at the end of the value.
 					 */
 					keep_suffix?: number;
+			  };
+		/**
+		 * @description The coarseness a [`GeneralizeDate`] reduces a date/timestamp to.
+		 *
+		 *     Every rendering is an ISO-8601 form, so the output is locale-independent
+		 *     by construction, no localized month names or week markers to configure.
+		 */
+		DateGranularity: "year" | "year_month" | "hour";
+		/**
+		 * @description Which written date convention a [`GeneralizeDate`] accepts on *input*.
+		 *
+		 *     This governs only how the entity value is *parsed*; the output mirrors
+		 *     each value's own convention (see [`GeneralizeDate::render`]). The choice
+		 *     is explicit, never inferred from the entity's language: `03/04/1987` is
+		 *     a real date under both conventions (March 4 vs. April 3), so a wrong
+		 *     guess would silently emit a plausible-but-wrong month. The policy
+		 *     author, who knows the corpus's convention, sets it.
+		 */
+		DateStyle: "iso" | "us";
+		/** @description Operator spec a `redact` tabular rule carries. */
+		TabularRedaction:
+			| {
 					/** @constant */
-					kind: "mask";
+					kind: "cell";
 					/**
-					 * @description The character that replaces masked positions.
-					 * @default *
+					 * @description The text operator to apply. Reuses the full text
+					 *     vocabulary (Erase, Keep, Mask, Replace, Hash,
+					 *     Pseudonymize, Encrypt).
 					 */
-					mask_char?: string;
+					spec: components["schemas"]["TextRedaction"];
+			  }
+			| {
+					/** @constant */
+					kind: "drop_row";
+			  }
+			| {
+					/** @constant */
+					kind: "drop_column";
 			  };
-		/** @description Request payload for testing a webhook. */
-		TestWorkspaceWebhook: {
-			/**
-			 * @description Optional custom payload to send in the test request.
-			 *     If not provided, a default test payload will be used.
-			 */
-			payload?: unknown;
-		};
-		/**
-		 * @description A detection recognition missed.
-		 *
-		 *     Recorded on the report with human provenance, so it is never
-		 *     mistaken for an automatic hit, then redacted under the policy set
-		 *     like any other entity: an added label the policy does not cover
-		 *     is left alone.
-		 *
-		 *     Carries no entity id — the entity does not exist yet, and the
-		 *     engine mints one when the edit is applied, so a client cannot
-		 *     collide with a real detection or shadow an existing entity.
-		 */
-		TextAdd: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
-			/** @description What the reviewer says this is. */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description Where it sits, in the coordinates of the part it joins.
-			 *
-			 *     Each medium addresses its own way: text a character range
-			 *     over the decoded stream, images a bounding box, audio a time
-			 *     span, tabular a row and column. A DOCX's
-			 *     `word/document.xml` text belongs to the document part
-			 *     itself, not to a nested one.
-			 *
-			 *     Text carries either coordinate kind of [`TextCoord`]: a
-			 *     [`Decoded`] span for a caller with an offset into the
-			 *     decoded stream, or a [`Source`] one for a caller holding
-			 *     only raw file bytes — a reviewer selecting rendered text,
-			 *     say — which the engine reverse-resolves. Source-only is its
-			 *     own kind rather than a decoded span left empty, so such a
-			 *     selection is representable as itself.
-			 *
-			 *     The other three media have no such alternative: their
-			 *     coordinates are the only way in.
-			 *
-			 *     [`TextCoord`]: elide::modality::text::TextCoord
-			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
-			 *     [`Source`]: elide::modality::text::TextCoord::Source
-			 */
-			location: components["schemas"]["TextLocation"];
-			/**
-			 * @description The part this belongs to, as a path: `["report.docx"]` for
-			 *     the document itself, `["report.docx", "word/media/image1.png"]`
-			 *     for media it embeds. `None` means the request's sole
-			 *     document, which is the common case and saves a caller
-			 *     naming what it already sent.
-			 *
-			 *     Nested media needs this: the report holds an embedded image
-			 *     as its own part, and an addition to one has nowhere to go
-			 *     without naming it. Text usually does not — a source
-			 *     reference already names the part it came from, alongside the
-			 *     raw range.
-			 *
-			 *     `None` is an error when the request carried several
-			 *     documents, since there is then no sole document to mean.
-			 */
-			part?: string[];
-			/** @description The rationale, when one was given. */
-			reason?: string;
-		};
-		/**
-		 * @description One node in an entity's audit DAG: a thing that happened, with its
-		 *     effect on confidence and its tamper-evident links.
-		 *
-		 *     Events are recorded on an entity's [`AuditLog`], forming the full audit
-		 *     trail of its life: each recognizer that found it, the deduplication that
-		 *     fused them, any score calibration, and the redaction that hid it. The
-		 *     uniform spine (who, resulting score, when) is the same for every event; the
-		 *     [`kind`] carries the event-specific detail *and* the explanation of why the
-		 *     event happened.
-		 *
-		 *     Each event links to its [`parents`] by their [`hash`]: a birth event (a
-		 *     recognizer's first detection) has no parents, a normal step has one, and a
-		 *     [fusion](crate::entity::audit::AuditLog::record_fusion) has several. Its own
-		 *     [`hash`] folds the
-		 *     payload together with the parents' hashes, so altering any event breaks
-		 *     every event downstream of it: [`AuditLog::verify`] walks the DAG and
-		 *     reports the first break.
-		 *
-		 *     `entity.confidence` always equals the [`confidence`] of the most recent
-		 *     event. The confidence *flowing in* is not stored: it is the parents'
-		 *     [`confidence`], recovered from the DAG.
-		 *
-		 *     [`AuditLog`]: crate::entity::audit::AuditLog
-		 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
-		 *     [`AuditLog::verify`]: crate::entity::audit::AuditLog::verify
-		 *     [`kind`]: AuditEvent::kind
-		 *     [`parents`]: AuditEvent::parents
-		 *     [`hash`]: AuditEvent::hash
-		 *     [`confidence`]: AuditEvent::confidence
-		 */
-		TextAuditEvent: {
-			/**
-			 * @description Confidence after this event: the entity's effective confidence once it
-			 *     has happened.
-			 */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description This event's hash, over its payload and its parents' hashes. Assigned by
-			 *     [`AuditLog`] when the event is recorded; read it through
-			 *     [`hash`](Self::hash). Recomputing it is how the DAG is verified.
-			 *
-			 *     Not publicly settable: only [`AuditLog`] assigns it, so a caller cannot
-			 *     forge a self-consistent event outside the recording path.
-			 *
-			 *     [`AuditLog`]: crate::entity::audit::AuditLog
-			 */
-			hash: components["schemas"]["AuditHash"];
-			/** @description Kind of event, with its event-specific detail and its rationale. */
-			kind: components["schemas"]["TextAuditKind"];
-			/**
-			 * @description The events this one follows, by their hash. Empty for a birth event, one
-			 *     entry for a normal step, several for a fusion. Assigned by [`AuditLog`]
-			 *     when the event is recorded; read it through [`parents`](Self::parents).
-			 *
-			 *     Not publicly settable: the links are the tamper-evident structure, so
-			 *     only [`AuditLog::record`] / [`AuditLog::record_fusion`] assign them.
-			 *
-			 *     [`AuditLog`]: crate::entity::audit::AuditLog
-			 *     [`AuditLog::record`]: crate::entity::audit::AuditLog::record
-			 *     [`AuditLog::record_fusion`]: crate::entity::audit::AuditLog::record_fusion
-			 */
-			parents: components["schemas"]["AuditHash"][];
-			/**
-			 * @description Who produced this event: a recognizer name, a deduplication strategy,
-			 *     an operator, or whatever acted.
-			 */
-			source: string;
-			/** @description When the event happened (UTC). */
-			timestamp: string;
-		};
-		/**
-		 * @description Kind of an [`AuditEvent`], carrying its event-specific detail and the
-		 *     rationale for why it happened.
-		 *
-		 *     A thin tagged union: each variant wraps one payload struct (e.g.
-		 *     [`Redaction`], [`Selection`], [`Manual`]) that owns that kind's fields, its
-		 *     docs, and how it folds into the audit hash. Match on a variant to reach its
-		 *     payload:
-		 *
-		 *     ```
-		 *     # use elide_core::entity::audit::AuditKind;
-		 *     # use elide_core::modality::text::Text;
-		 *     # fn show(kind: &AuditKind<Text>) {
-		 *     if let AuditKind::Redaction(redaction) = kind {
-		 *         let _ = &redaction.operator;
-		 *     }
-		 *     # }
-		 *     ```
-		 *
-		 *     `#[non_exhaustive]`: new event kinds (verification, annotation, …) can be
-		 *     added compatibly. The recognition kinds ([`Pattern`], [`Model`]) carry the
-		 *     matched [`Location`]; the rest carry their own data.
-		 *
-		 *     [`AuditEvent`]: super::AuditEvent
-		 *     [`Pattern`]: AuditKind::Pattern
-		 *     [`Model`]: AuditKind::Model
-		 *     [`Location`]: Modality::Location
-		 */
-		TextAuditKind:
-			| {
-					detail: components["schemas"]["TextPattern"];
-					/** @constant */
-					kind: "pattern";
-			  }
-			| {
-					detail: components["schemas"]["TextModel"];
-					/** @constant */
-					kind: "model";
-			  }
-			| {
-					detail: components["schemas"]["TextMetadata"];
-					/** @constant */
-					kind: "metadata";
-			  }
-			| {
-					detail: components["schemas"]["Deduplication"];
-					/** @constant */
-					kind: "deduplication";
-			  }
-			| {
-					detail: components["schemas"]["Conflict"];
-					/** @constant */
-					kind: "conflict";
-			  }
-			| {
-					detail: components["schemas"]["Contested"];
-					/** @constant */
-					kind: "contested";
-			  }
-			| {
-					detail: components["schemas"]["Calibration"];
-					/** @constant */
-					kind: "calibration";
-			  }
-			| {
-					detail: components["schemas"]["TextRefinement"];
-					/** @constant */
-					kind: "refinement";
-			  }
-			| {
-					detail: components["schemas"]["Redaction"];
-					/** @constant */
-					kind: "redaction";
-			  }
-			| {
-					detail: components["schemas"]["Selection"];
-					/** @constant */
-					kind: "selection";
-			  }
-			| {
-					detail: components["schemas"]["TextManual"];
-					/** @constant */
-					kind: "manual";
-			  };
-		/**
-		 * @description Full audit trail of an [`Entity`]: every [`AuditEvent`] in its life, as a
-		 *     tamper-evident DAG.
-		 *
-		 *     Where Presidio keeps a shallow, optional, per-stage explanation that is
-		 *     stripped by default, an `AuditLog` is always present and records the
-		 *     entity's *entire* life: each recognizer that found it, the deduplication
-		 *     that fused them, any confidence calibration, and the redaction that hid it.
-		 *     Nothing is collapsed: every recognizer keeps its own recognition event with
-		 *     its location and score.
-		 *
-		 *     The events form a **directed acyclic graph**, not a flat list. A recognizer
-		 *     records a birth event (no parents); each later step links to the event it
-		 *     follows; and a [fusion](Self::record_fusion) links to *several* parents at
-		 *     once: the heads of the trails it combines. This is the true shape of a
-		 *     deduplicated entity: two recognizers are siblings, then a fusion joins them.
-		 *     The events are stored in the order they were recorded, which is a
-		 *     topological order of the DAG (a parent is always recorded before its
-		 *     children).
-		 *
-		 *     Two chains ride the DAG's edges:
-		 *
-		 *     - a **confidence chain**, where each event's [`confidence`] is the entity's
-		 *       effective score after it; the score flowing *in* is its parents'
-		 *       confidence, so [`final_confidence`] and the full history are recoverable;
-		 *     - a **hash chain**, where each event's [`hash`] folds its payload together
-		 *       with its parents' hashes, so any edit, reorder, insertion, or deletion of
-		 *       an earlier event breaks every event downstream. [`verify`] walks the DAG
-		 *       and reports the first break.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 *     [`confidence`]: AuditEvent::confidence
-		 *     [`hash`]: AuditEvent::hash
-		 *     [`final_confidence`]: Self::final_confidence
-		 *     [`verify`]: Self::verify
-		 */
-		TextAuditLog: components["schemas"]["TextAuditEvent"][];
-		/**
-		 * @description The coordinate of a [`TextLocation`]: a decoded byte range, or a source-only
-		 *     reference.
-		 *
-		 *     The distinction is whether a decoded range exists at all. A recognizer over
-		 *     decoded text produces a [`Decoded`](Self::Decoded) span (with the raw source
-		 *     it decodes from, when the codec's decoded text differs from the source). A
-		 *     reviewer marking rendered text has no decoded range, only where the selection
-		 *     sits in the raw bytes, a [`Source`](Self::Source).
-		 */
-		TextCoord:
-			| ({
-					/** @constant */
-					kind: "decoded";
-			  } & components["schemas"]["DecodedSpan"])
-			| ({
-					/** @constant */
-					kind: "source";
-			  } & components["schemas"]["SourceSpan"]);
-		/**
-		 * @description Run of text.
-		 *
-		 *     Either the payload a text recognizer inspects, or the value sliced out
-		 *     at an entity's location for an operator.
-		 *
-		 *     Held as a [`HipStr`] so short values inline and longer ones share a
-		 *     refcounted buffer, making cheap clones when one payload is passed to
-		 *     several recognizers.
-		 */
-		TextData: string;
-		/**
-		 * @description One change to an analyzed document.
-		 *
-		 *     `Add` carries no id because the entity does not exist yet; the
-		 *     engine mints one when the edit is applied, so a client cannot
-		 *     collide with a real detection or shadow an existing entity.
-		 */
-		TextEdit:
-			| ({
-					/** @constant */
-					op: "add";
-			  } & components["schemas"]["TextAdd"])
-			| ({
-					/** @constant */
-					op: "retag";
-			  } & components["schemas"]["TextRetag"])
-			| ({
-					/** @constant */
-					op: "suppress";
-			  } & components["schemas"]["Suppress"]);
-		/**
-		 * @description Detected piece of sensitive information within some medium.
-		 *
-		 *     Generic over the [`Modality`] `M`, which is what makes the model
-		 *     multimodal: a text pipeline yields `Entity<Text>`, an audio pipeline
-		 *     `Entity<Audio>`, and so on. The entity's location is the modality's
-		 *     [`Location`] type, `M::Location`.
-		 *
-		 *     # Birth and fusion
-		 *
-		 *     A recognizer emits an entity directly, carrying a single recognition
-		 *     [`AuditEvent`] (its own finding) in the entity's [`audit`] trail. When
-		 *     several recognizers find the same thing, a fusion step (in
-		 *     `elide`) combines their entities into one: the survivor's
-		 *     [`location`] and [`confidence`] are the *fused* values, and every
-		 *     contributing recognition event, plus a deduplication event, is
-		 *     retained in its audit trail. The entity therefore carries its full
-		 *     audit trail with it.
-		 *
-		 *     [`Location`]: Modality::Location
-		 *     [`AuditEvent`]: crate::entity::audit::AuditEvent
-		 *     [`audit`]: Entity::audit
-		 *     [`location`]: Entity::location
-		 *     [`confidence`]: Entity::confidence
-		 */
-		TextEntity: {
-			/**
-			 * @description Tamper-evident audit trail: every contributing detection, the fusion
-			 *     event if any, and the redaction that hid it, as a hash-linked DAG. It is
-			 *     also the single source of truth for whether a reviewer
-			 *     [suppressed](Self::is_suppressed) the entity, a suppression is a
-			 *     [`Manual`] event on this trail, not a separate flag.
-			 *
-			 *     [`Manual`]: crate::entity::audit::AuditKind::Manual
-			 */
-			audit: components["schemas"]["TextAuditLog"];
-			/** @description Effective confidence in `0.0..=1.0` (fused, if applicable). */
-			confidence: components["schemas"]["Confidence"];
-			/**
-			 * @description Coreference identifier, if a recognizer resolved this entity as one
-			 *     mention of a cluster. Entities sharing an [`EntityCoRef`] denote the
-			 *     same real-world thing.
-			 */
-			coref?: components["schemas"]["EntityCoRef"];
-			/**
-			 * Format: uuid
-			 * @description Stable unique identity for this entity (time-ordered UUIDv7), minted
-			 *     when the entity is assembled.
-			 */
-			id: string;
-			/**
-			 * @description What kind of sensitive information this is (resolved via a
-			 *     [`LabelCatalog`]).
-			 */
-			label: components["schemas"]["LabelRef"];
-			/**
-			 * @description The language of this entity's surrounding text, when a recognizer
-			 *     resolved one. `None` when unknown or language-agnostic.
-			 */
-			language?: string;
-			/**
-			 * @description Location of the entity within the medium (fused, if it came from more
-			 *     than one detection).
-			 */
-			location: components["schemas"]["TextLocation"];
-			/**
-			 * @description Byte range of the match in the *recognized text* it was found in (the
-			 *     OCR layout text, the audio transcript, or the text payload itself),
-			 *     the stable key back into that enrichment artifact, where the rich
-			 *     context lives (which OCR block, which speaker) that the geometric
-			 *     [`location`] cannot hold. `None` for entities not found via text
-			 *     recognition (e.g. a VLM box). An audit key, not a coordinate: redaction
-			 *     uses [`location`]; an audit uses this with the artifact.
-			 *
-			 *     [`location`]: Entity::location
-			 */
-			recognized_range?: components["schemas"]["Range_of_uint"];
-		};
-		/**
-		 * @description Located, typed piece of context a recognizer may treat as in-context
-		 *     for a nearby value.
-		 *
-		 *     Out-of-band by nature: a hint is *not* a sub-span of the value it
-		 *     informs; it lives elsewhere in the source (a table's column header, a
-		 *     JSON object key, a log field name). So `location` points at where the
-		 *     hint text actually sits, and `data` is the hint text itself. Carrying
-		 *     the location (rather than a bare string) lets a confidence boost record
-		 *     *which* hint lifted a score and *where* it came from, provenance a
-		 *     review consumer can resolve back to the document.
-		 *
-		 *     Mirrors [`Entity`]'s `location` + `data` shape, so the same
-		 *     serialization and lifting patterns apply.
-		 *
-		 *     [`Entity`]: crate::entity::Entity
-		 */
-		TextHint: {
-			/** @description The hint text itself (a column header, a field name). */
-			data: components["schemas"]["TextData"];
-			/** @description Where the hint text sits in the source (the header cell, the key). */
-			location: components["schemas"]["TextLocation"];
-		};
-		/**
-		 * @description Where an entity sits in text: a [coordinate](TextCoord) (a decoded byte range,
-		 *     or a source-only reference) plus an optional page number.
-		 *
-		 *     The coordinate is either a [`Decoded`](TextCoord::Decoded) byte range in the
-		 *     pipeline's text stream, or a [`Source`](TextCoord::Source)-only reference for
-		 *     content with no decoded range (a reviewer selecting rendered text). The page
-		 *     is orthogonal to the coordinate kind, so it sits alongside rather than inside.
-		 *
-		 *     Ordering and overlap consider only the coordinate; the page is carried for
-		 *     codecs that page their text but does not affect comparison.
-		 */
-		TextLocation: {
-			/** @description The coordinate: a decoded range, or a source-only reference. */
-			coord: components["schemas"]["TextCoord"];
-			/**
-			 * Format: uint32
-			 * @description 1-based page number, when known. Orthogonal to the coordinate kind.
-			 */
-			page?: number;
-		};
-		/**
-		 * @description A human override, outside automatic detection: an entity a reviewer added by
-		 *     hand, or a detected one they marked to ignore. Its provenance is a person's
-		 *     decision, not a recognizer's, so the trail records *why* (an
-		 *     [`Attribution`], when supplied). *Who* made the override is the event's
-		 *     [`source`], not a payload field.
-		 *
-		 *     [`source`]: super::AuditEvent::source
-		 */
-		TextManual: {
-			/**
-			 * @description The reviewer's rationale, when supplied (e.g. a freeform
-			 *     `"false positive"`, or a cited authority). `None` for an unexplained
-			 *     override.
-			 */
-			attribution?: components["schemas"]["Attribution"];
-			/**
-			 * @description Which human decision this records: including a missed entity, or
-			 *     suppressing a detected one. This is the authority on whether the entity
-			 *     is redacted, [`AuditLog::is_suppressed`] reads it, so there is no
-			 *     separate flag to keep in sync.
-			 *
-			 *     [`AuditLog::is_suppressed`]: crate::entity::audit::AuditLog::is_suppressed
-			 */
-			intent: components["schemas"]["ManualIntent"];
-			/** @description Where the override applies, in modality-native coordinates. */
-			location: components["schemas"]["TextLocation"];
-		};
-		/**
-		 * @description Detail of a metadata-field detection: a document's out-of-band field
-		 *     (an EXIF tag, a file timestamp, a document property) was surfaced as a
-		 *     redaction subject at `location`, with its source in `metadata`.
-		 *
-		 *     Distinct from [`Pattern`]/[`Model`] because a metadata field is not *matched*
-		 *     out of free content — it is a named field that is simply present. There is
-		 *     nothing probabilistic to weigh, so the entity carries it as its own event
-		 *     kind rather than pretending a pattern fired.
-		 */
-		TextMetadata: {
-			/** @description The field's location (its key). */
-			location: components["schemas"]["TextLocation"];
-			/** @description Source metadata (which reader surfaced the field). */
-			metadata: components["schemas"]["MetadataEvent"];
-		};
-		/**
-		 * @description Detail of a model/NER recognition: a model matched at `location`, with its
-		 *     metadata in `model`.
-		 */
-		TextModel: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["TextLocation"];
-			/** @description Model metadata (name, version, contextual flag). */
-			model: components["schemas"]["ModelEvent"];
-		};
-		/**
-		 * @description Detail of a pattern/dictionary recognition: a recognizer matched at
-		 *     `location`, with the pattern metadata in `pattern`.
-		 */
-		TextPattern: {
-			/** @description Where the recognizer matched. */
-			location: components["schemas"]["TextLocation"];
-			/** @description Pattern metadata (name, regex, validator, contextual flag). */
-			pattern: components["schemas"]["PatternEvent"];
-		};
-		/** @description Operator spec a `redact` text rule carries. */
-		TextRedaction:
+		/** @description Operator spec a `redact` image rule carries. */
+		ImageRedaction:
 			| {
 					/** @constant */
 					kind: "erase";
@@ -20482,368 +21320,795 @@ export interface components {
 					kind: "keep";
 			  }
 			| {
-					/**
-					 * Format: uint
-					 * @description Characters to leave unmasked at the start of the value.
-					 *     `0` (the default) masks from the start.
-					 */
-					keep_prefix?: number;
-					/**
-					 * Format: uint
-					 * @description Characters to leave unmasked at the end of the value.
-					 *     `0` (the default) masks through to the end.
-					 */
-					keep_suffix?: number;
 					/** @constant */
-					kind: "mask";
+					kind: "blur";
 					/**
-					 * @description The character that replaces masked positions.
-					 * @default *
+					 * Format: float
+					 * @description Standard deviation of the Gaussian kernel, in pixels.
+					 *     Larger is blurrier (and harder to reverse).
+					 * @default 16
 					 */
-					mask_char?: string;
+					sigma?: number;
 			  }
 			| {
 					/** @constant */
-					kind: "replace";
+					kind: "pixelate";
 					/**
-					 * @description Template string. Default `[{label}]`.
-					 * @default [{label}]
+					 * Format: uint32
+					 * @description Side length of each mosaic block, in pixels. Larger
+					 *     blocks are coarser (and harder to reverse).
+					 * @default 16
 					 */
-					template?: string;
-			  }
-			| {
-					/**
-					 * @description SHA-256 (default) or SHA-512.
-					 * @default sha256
-					 */
-					algorithm?: components["schemas"]["Sha2Algorithm"];
-					/** @constant */
-					kind: "hash";
-					/** @description Salt prepended to the value before hashing. */
-					salt?: string;
-			  }
-			| {
-					/**
-					 * @description BCP-47 tag used when the entity carries no language of
-					 *     its own. Defaults to English (`"en"`).
-					 */
-					default_language?: components["schemas"]["LanguageTag"];
-					/**
-					 * @description Template used for entity labels outside the built-in
-					 *     PII catalogue (which `Fake` can't generate for).
-					 *     Supports the same `{label}` / `{value}` / `{coref}`
-					 *     placeholders as [`Replace`]. Defaults to `[{label}]`.
-					 *
-					 *     [`Replace`]: TextRedaction::Replace
-					 * @default [{label}]
-					 */
-					fallback_template?: string;
-					/** @constant */
-					kind: "fake";
-					/**
-					 * Format: uint64
-					 * @description Seed mixed into per-entity RNG state. Two runs with the
-					 *     same seed and the same input entities produce the same
-					 *     surrogates. Defaults to `0`.
-					 */
-					seed?: number;
+					block_size?: number;
 			  }
 			| {
 					/** @constant */
-					kind: "pseudonymize";
-			  }
-			| {
-					/** @constant */
-					kind: "encrypt";
-			  }
-			| {
+					kind: "blackbox";
 					/**
-					 * @description HMAC-SHA-256 (default) or HMAC-SHA-512.
-					 * @default sha256
+					 * @description Fill color the codec rasterises over the region.
+					 * @default {
+					 *       "r": 0,
+					 *       "g": 0,
+					 *       "b": 0
+					 *     }
 					 */
-					algorithm?: components["schemas"]["Sha2Algorithm"];
-					/** @constant */
-					kind: "hmac_hash";
-			  }
-			| {
-					/**
-					 * Format: uint
-					 * @description Characters to keep at the start of the value.
-					 */
-					keep_prefix?: number;
-					/**
-					 * Format: uint
-					 * @description Characters to keep at the end of the value.
-					 */
-					keep_suffix?: number;
-					/** @constant */
-					kind: "truncate";
-			  }
-			| {
-					/**
-					 * Format: double
-					 * @description Threshold at or above which values collapse to
-					 *     `ceiling_bucket`. `None` disables the ceiling.
-					 */
-					ceiling?: number;
-					/**
-					 * @description Bucket label for values at or above `ceiling`. Required
-					 *     when `ceiling` is set; ignored otherwise.
-					 */
-					ceiling_bucket?: components["schemas"]["ClampBucket"];
-					/**
-					 * @description Operator that runs when the entity value isn't a
-					 *     finite number. `None` erases (elide's default).
-					 */
-					fallback?: components["schemas"]["TerminalFallback"];
-					/**
-					 * Format: double
-					 * @description Threshold at or below which values collapse to
-					 *     `floor_bucket`. `None` disables the floor.
-					 */
-					floor?: number;
-					/**
-					 * @description Bucket label for values at or below `floor`. Required
-					 *     when `floor` is set; ignored otherwise.
-					 */
-					floor_bucket?: components["schemas"]["ClampBucket"];
-					/** @constant */
-					kind: "clamp";
-			  }
-			| {
-					/**
-					 * @description Operator that runs when the entity value isn't a
-					 *     parseable date. `None` erases (elide's default).
-					 */
-					fallback?: components["schemas"]["TerminalFallback"];
-					/**
-					 * @description Coarseness of the output. Default `Year`.
-					 * @default year
-					 */
-					granularity?: components["schemas"]["DateGranularity"];
-					/** @constant */
-					kind: "generalize_date";
-					/**
-					 * @description Which input convention to accept. Default `Iso`.
-					 * @default iso
-					 */
-					style?: components["schemas"]["DateStyle"];
+					color?: components["schemas"]["Color"];
 			  };
-		/** @description A context keyword near the entity lifted its confidence. */
-		TextRefinement: {
-			/**
-			 * @description The located [`Hint`] the keyword fired from, when the match came from an
-			 *     out-of-band hint (a column header, a key) rather than the in-text word
-			 *     window. `None` for an in-text-window match.
-			 *
-			 *     [`Hint`]: crate::modality::Hint
-			 */
-			hint?: components["schemas"]["TextHint"];
-			/** @description Keyword that fired the boost. */
-			keyword: string;
-			/**
-			 * @description Where the boosting keyword sits in the medium. For a hint match this
-			 *     mirrors the hint's own location; for an in-text-window match it is the
-			 *     keyword resolved through the modality's [`locate`]. `None` when the
-			 *     keyword's stream range could not be placed.
-			 *
-			 *     [`locate`]: crate::modality::TextRecognizable::locate
-			 */
-			location?: components["schemas"]["TextLocation"];
-		};
 		/**
-		 * @description Correct what an existing detection *is* or *covers*, then redact
-		 *     it under the policy set as corrected.
+		 * @description Color as 8-bit RGB.
 		 *
-		 *     A reviewer fixing recognition's mistake rather than overriding
-		 *     its consequence. Retagging into a label the policy does not cover
-		 *     leaves the entity alone, exactly as if it had been detected that
-		 *     way — which is why it is auditable rather than a mutable field.
+		 *     Used by visual redaction (a solid-fill block over an image region) and
+		 *     any other rendering instruction that needs a color.
 		 */
-		TextRetag: {
-			/** @description Who made it, when the caller said. */
-			actor?: string;
+		Color: {
+			/**
+			 * Format: uint8
+			 * @description Red channel.
+			 */
+			r: number;
+			/**
+			 * Format: uint8
+			 * @description Green channel.
+			 */
+			g: number;
+			/**
+			 * Format: uint8
+			 * @description Blue channel.
+			 */
+			b: number;
+		};
+		/** @description Operator spec a `redact` audio rule carries. */
+		AudioRedaction:
+			| {
+					/** @constant */
+					kind: "erase";
+			  }
+			| {
+					/** @constant */
+					kind: "keep";
+			  }
+			| {
+					/** @constant */
+					kind: "silence";
+			  }
+			| {
+					/** @constant */
+					kind: "beep";
+					/**
+					 * Format: float
+					 * @description Tone frequency in Hertz. Default 1 kHz, the broadcast
+					 *     convention.
+					 * @default 1000
+					 */
+					hz?: number;
+					/**
+					 * Format: float
+					 * @description Peak amplitude in `0.0..=1.0` of full scale. Default 0.5:
+					 *     audible but not painful, and never clips.
+					 * @default 0.5
+					 */
+					amplitude?: number;
+					/**
+					 * @description Tone shape. Default sine.
+					 * @default sine
+					 */
+					waveform?: components["schemas"]["Waveform"];
+			  };
+		/** @description Shape of a synthesized tone. */
+		Waveform: "sine" | "square";
+		/**
+		 * @description One entry inside a [`RuleDispatch::Table`]: the label to match
+		 *     plus the per-modality operators to run.
+		 *
+		 *     Kept as a named struct rather than a `(LabelRef, ModalityRedactions)`
+		 *     tuple so the wire JSON reads `{"label": "email", "action": {…}}`
+		 *     instead of a positional pair.
+		 */
+		LabelEntry: {
+			/** @description Label the entry matches on. */
+			label: components["schemas"]["LabelRef"];
+			/** @description Per-modality operators to run for matching entities. */
+			action: components["schemas"]["ModalityRedactions"];
+		};
+		/** @description Response type for a workspace policy. */
+		WorkspacePolicy: {
 			/**
 			 * Format: uuid
-			 * @description The entity being corrected.
+			 * @description Unique identifier of the policy.
 			 */
 			id: string;
-			/** @description The corrected label, when recognition got it wrong. */
-			label?: components["schemas"]["LabelRef"];
 			/**
-			 * @description The corrected location, when the span clipped the value or
-			 *     ran past it.
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
 			 */
-			location?: components["schemas"]["TextLocation"];
-			/** @description The rationale, when one was given. */
-			reason?: string;
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Account that created this policy. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Human-readable policy display name. */
+			displayName: string;
+			/** @description Policy description. */
+			description?: string;
+			/** @description The structured policy body consumed by the engine (the current version). */
+			definition: components["schemas"]["Policy"];
+			/**
+			 * Format: int32
+			 * @description The current version number of the policy's definition.
+			 */
+			versionNumber: number;
+			/**
+			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
+			 *     content-addressed, deduplicated, and immutable; an authored policy is a
+			 *     normal, editable policy.
+			 */
+			kind: components["schemas"]["PolicyKind"];
+			/**
+			 * Format: date-time
+			 * @description When the policy was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the policy was last updated.
+			 */
+			updatedAt: string;
 		};
 		/**
-		 * @description Half-open `[start, end)` stream interval, measured in microseconds.
+		 * @description A named governance policy.
 		 *
-		 *     The coordinate a time-addressed medium (audio, video) uses to locate a
-		 *     region: a transcribed segment, a redacted span. Microsecond precision
-		 *     is finer than both word-level speech timings and per-sample audio
-		 *     resolution, so a span never loses precision being carried as a
-		 *     `TimeSpan`; the endpoints are non-negative offsets by construction.
-		 *
-		 *     Half-open like a byte range: `[start, end)`, so two intervals that
-		 *     merely touch (`a.end == b.start`) do not [`overlap`].
-		 *
-		 *     [`from_millis`] and [`as_millis`] bridge the millisecond-based APIs
-		 *     that surround it (audio durations, provider timings reported in ms).
-		 *
-		 *     [`overlap`]: Self::overlaps
-		 *     [`from_millis`]: Self::from_millis
-		 *     [`as_millis`]: Self::start_millis
+		 *     Identity is the UUID; `name` is display-only.
 		 */
-		TimeSpan: {
+		Policy: {
 			/**
-			 * Format: uint64
-			 * @description Microseconds from the start of the stream where the interval ends
-			 *     (exclusive).
+			 * Format: uuid
+			 * @description Stable identifier. UUIDv7 recommended (time-ordered);
+			 *     customer-supplied so re-submissions carry the same id.
 			 */
-			end_us: number;
+			id: string;
 			/**
-			 * Format: uint64
-			 * @description Microseconds from the start of the stream where the interval begins.
+			 * @description Human-readable name. Display-only. Does not key anything.
+			 *
+			 *     Names the policy in a redaction event's [`Attribution`]
+			 *     when a rule that fired carried no [`Attribution::Cited`]
+			 *     attribution to render.
+			 *
+			 *     [`Attribution`]: elide::entity::audit::Attribution
+			 *     [`Attribution::Cited`]: elide::entity::audit::Attribution::Cited
 			 */
-			start_us: number;
+			name: string;
+			/** @description Optional description for reviewers. */
+			description?: string;
+			/**
+			 * @description The shipped template this policy was built from, when it
+			 *     was.
+			 *
+			 *     Provenance, not fidelity: callers are expected to mutate a
+			 *     template's policy before submitting, so this records where
+			 *     the policy came from and says nothing about whether it
+			 *     still matches. `None` means hand-authored.
+			 */
+			template?: components["schemas"]["TemplateOrigin"];
+			/**
+			 * @description What this policy detects: one or more named, attributed
+			 *     label sets.
+			 *
+			 *     The union of every scope is what this policy acts on. A
+			 *     label no scope names is never detected, so no rule can fire
+			 *     on it and the policy is inert with respect to it — whether
+			 *     the label is one elide ships or one the request introduced.
+			 *
+			 *     Detecting more than the rules act on is deliberate: scope a
+			 *     whole regulatory category, write rules for the labels
+			 *     needing special treatment, and let [`fallback`] sweep the
+			 *     rest.
+			 *
+			 *     [`fallback`]: Self::fallback
+			 */
+			scopes?: components["schemas"]["LabelScope"][];
+			/** @description Ordered rules. First match wins within this policy. */
+			rules?: components["schemas"]["PolicyRule"][];
+			/**
+			 * @description Per-policy catch-all, applied to any detected entity in
+			 *     the policy's vocabulary that no rule claimed. Fires when no
+			 *     rule in this policy matched. Presence halts the chain; absence falls through
+			 *     to the next policy. [`Option`] enforces "at most one
+			 *     fallback per policy" at the type level.
+			 */
+			fallback?: components["schemas"]["ModalityRedactions"];
 		};
 		/**
-		 * @description One token produced by an upstream tokenizer.
+		 * @description The template a [`Policy`] was built from.
 		 *
-		 *     `lemma` falls back to `text` when the producer has no lemmatizer, so callers
-		 *     that want lemma-aware matching can read `token.lemma` uniformly without
-		 *     checking which engine produced the artifact.
+		 *     Records **provenance, not fidelity**. Templates are plain data
+		 *     and callers are expected to mutate the returned policy before
+		 *     submitting it (swapping an operator, widening a scope), so this
+		 *     says "built from `hipaa_deid_safe_harbor` v1.0.0" and nothing
+		 *     about whether the policy still matches what that template
+		 *     ships. A reviewer who needs that rebuilds the template and
+		 *     diffs.
+		 *
+		 *     `None` on a policy means hand-authored, not "unknown template".
+		 *
+		 *     Both fields are needed: a policy built from v1 of a template
+		 *     can differ materially from one built from v2 (a widened label
+		 *     set, a changed operator), and an audit that records only the id
+		 *     cannot tell the two apart.
+		 *
+		 *     [`Policy`]: super::Policy
 		 */
-		Token: {
-			/** @description Producer-asserted punctuation flag. */
-			is_punct: boolean;
+		TemplateOrigin: {
 			/**
-			 * @description Producer-asserted stopword flag (e.g. "the", "a", "of" for English).
-			 *     Producers without a stopword list set this to `false`.
+			 * @description The template's machine key: `"hipaa_deid_safe_harbor"`,
+			 *     `"pci_dss_pan_hmac_sha256"`. Stable across version bumps.
 			 */
-			is_stop: boolean;
-			/** @description Lemma when the producer emitted one; otherwise == [`text`](Self::text). */
-			lemma: string;
+			id: string;
 			/**
-			 * @description Byte range this token occupies in the source text. Use this to map back
-			 *     to substrings of the original input.
+			 * @description The template's own semver version, distinct from the
+			 *     crate's release version. A shipped template bumps this when
+			 *     its labelset or operator dispatch changes.
 			 */
-			offset: components["schemas"]["Range_of_uint"];
-			/** @description Surface form as it appears in the source text. */
-			text: string;
+			version: string;
 		};
 		/**
-		 * @description The token counts a model reported.
+		 * @description The kind of a redaction policy.
 		 *
-		 *     Each is optional because providers differ in what they return: some give
-		 *     only a total, some none at all.
+		 *     Corresponds to the `POLICY_KIND` `PostgreSQL` enum. An authored policy is a
+		 *     normal, editable policy created from a template or an inline definition. A
+		 *     one-shot policy is minted inline from a bare label list (the ad-hoc redact
+		 *     flow): it is content-addressed and deduplicated, and immutable once minted.
 		 */
-		TokenCounts: {
+		PolicyKind: "authored" | "oneshot";
+		/**
+		 * @description Query parameters for listing policies.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
+		WorkspacePoliciesQuery: {
+			/** @description Narrow the list to a single policy kind (`authored` or `oneshot`). */
+			kind?: components["schemas"]["PolicyKind"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspacePolicySummaryPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspacePolicySummary"][];
 			/**
-			 * Format: uint64
-			 * @description Prompt / input tokens.
-			 */
-			input?: number;
-			/**
-			 * Format: uint64
-			 * @description Completion / output tokens.
-			 */
-			output?: number;
-			/**
-			 * Format: uint64
-			 * @description Total tokens, may be reported even when the input/output split is not.
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
 			 */
 			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Lightweight policy view for lists.
+		 *
+		 *     Carries only the metadata, without loading the policy body, so a page of
+		 *     policies stays small. The full [`WorkspacePolicy`] (with its `definition`) is
+		 *     returned by the single-policy endpoint.
+		 */
+		WorkspacePolicySummary: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the policy.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Account that created this policy. */
+			createdBy: components["schemas"]["AccountRef"];
+			/** @description Human-readable policy display name. */
+			displayName: string;
+			/** @description Policy description. */
+			description?: string;
+			/**
+			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
+			 *     content-addressed, deduplicated, and immutable; an authored policy is a
+			 *     normal, editable policy.
+			 */
+			kind: components["schemas"]["PolicyKind"];
+			/**
+			 * Format: date-time
+			 * @description When the policy was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the policy was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description Path parameters for policy operations.
+		 *
+		 *     The workspace is resolved by the [`WorkspaceContext`] extractor from the
+		 *     `{workspaceId}` path segment.
+		 *
+		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
+		 */
+		WorkspacePolicyPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the policy.
+			 */
+			policyId: string;
+		};
+		/**
+		 * @description Request payload for updating an existing workspace policy.
+		 *
+		 *     Replacing the `definition` replaces the whole policy body. The policy's
+		 *     template origin is server-owned and preserved across updates — it is not
+		 *     settable here.
+		 */
+		UpdateWorkspacePolicy: {
+			/** @description Human-readable policy display name. */
+			displayName?: string;
+			/** @description Policy description. */
+			description?: string;
+			/** @description New policy body (replaces the stored definition). */
+			definition?: components["schemas"]["PolicyDraft"];
+		};
+		/**
+		 * @description Registry of [`Label`]s, keyed by id.
+		 *
+		 *     Holds the authoritative definitions (localized names + descriptions)
+		 *     for a run.
+		 *     A [`LabelRef`] carried on a detection or entity is resolved back to
+		 *     its full [`Label`] with [`get`].
+		 *
+		 *     [`get`]: LabelCatalog::get
+		 */
+		LabelCatalog: {
+			[key: string]: components["schemas"]["Label"];
+		};
+		/** @description The engine's registered recognizers, grouped by kind. */
+		RecognizerCatalog: {
+			/** @description NER (named-entity recognition) recognizers. */
+			ner: components["schemas"]["RegisteredRecognizer"][];
+			/** @description LLM recognizers. */
+			llm: components["schemas"]["RegisteredRecognizer"][];
+		};
+		/**
+		 * @description Public view of one recognizer in the engine's NER or LLM
+		 *     lineup.
+		 *
+		 *     Carries the name a request's allowlist picks by, an optional
+		 *     human-readable description, and a provider slug identifying
+		 *     the backend kind. Connection details and (future)
+		 *     credentials stay in the private `NerConfig` / `LlmConfig`.
+		 *
+		 *     Owned rather than borrowing from the engine so callers can
+		 *     carry the value past the borrow that produced it. Cloning is
+		 *     cheap: [`HipStr`] shares the backing string via an `Arc`
+		 *     header.
+		 */
+		RegisteredRecognizer: {
+			/**
+			 * @description Recognizer name: the identifier a request's allowlist
+			 *     picks by.
+			 */
+			name: string;
+			/**
+			 * @description The groupings this component belongs to, as the deployment
+			 *     tagged it.
+			 *
+			 *     What a request's selection and the engine's availability
+			 *     match on besides the name, so a caller listing components
+			 *     can see which families it may ask for.
+			 */
+			tags?: string[];
+			/**
+			 * @description Provider slug. NER: `"bento"`, `"mock"`. LLM: `"openai"`,
+			 *     `"anthropic"`, `"gemini"`, `"ollama"`, `"mock"`.
+			 *
+			 *     Owned so the type deserializes from a runtime buffer: a
+			 *     `&'static str` field would make the derive emit
+			 *     `Deserialize<'static>` only, which compiles against string
+			 *     literals but not against an owned `String` or a reader -
+			 *     the shapes a host actually decodes from. Borrowing a
+			 *     `&'static str` into a [`HipStr`] does not allocate, so
+			 *     engine-side construction stays free.
+			 */
+			provider: string;
+		};
+		/**
+		 * @description Which connector families and providers this deployment can create.
+		 *
+		 *     Lets a client render the connect UI without probing: a file-service provider
+		 *     is only offered when the host has configured its OAuth app, whereas
+		 *     object-store and inference connections carry their own credentials and are
+		 *     always available.
+		 */
+		ConnectorCapabilities: {
+			/** @description Availability of each OAuth file-service provider. */
+			fileServices: components["schemas"]["FileProviders"];
+			/**
+			 * @description Whether object-store connections can be created. Currently always `true` —
+			 *     they carry their own credentials, so nothing gates them server-side — but
+			 *     clients should read the field rather than assume it.
+			 */
+			objectStores: boolean;
+			/**
+			 * @description Whether inference connections can be created. Currently always `true`, for
+			 *     the same reason as object stores.
+			 */
+			inference: boolean;
+		};
+		/**
+		 * @description Per-provider availability for the OAuth file services. Each field is `true`
+		 *     only when that provider's OAuth app is configured on the server.
+		 */
+		FileProviders: {
+			/** @description Whether Google Drive can be connected. */
+			googleDrive: boolean;
+			/** @description Whether Dropbox can be connected. */
+			dropbox: boolean;
+			/** @description Whether `OneDrive` can be connected. */
+			oneDrive: boolean;
+			/**
+			 * @description Whether Box can be connected. (`box` is a Rust keyword, hence the field
+			 *     name; the wire name is `box`.)
+			 */
+			box: boolean;
+		};
+		/** @description Request to create a new API token. */
+		CreateAccountApiToken: {
+			/** @description Human-readable display name for the API token (1-100 characters). */
+			displayName: string;
+			/** @description When the token expires. */
+			expiresIn: components["schemas"]["TokenExpiration"];
 		};
 		/** @description Expiration options for API tokens. */
 		TokenExpiration: "never" | "in7Days" | "in30Days" | "in90Days" | "in1Year";
-		/**
-		 * @description Owning token sequence: the [`Text`](super::Text) modality's enrichment
-		 *     artifact, produced by a tokenizing enricher and read by a context enhancer.
-		 *
-		 *     Tokens are sorted by `offset.start` (producers should emit them in order;
-		 *     consumer-side code assumes this). A context enhancer borrows the underlying
-		 *     slice via [`as_slice`](Tokens::as_slice) and walks it by count when scoring an
-		 *     entity's neighbourhood. Empty ([`Default`]) until a tokenizing enricher fills
-		 *     it, the enhancer then tokenizes on demand instead.
-		 */
-		Tokens: components["schemas"]["Token"][];
-		/**
-		 * @description One segment of a [`Transcription`]: a span of audio and the text
-		 *     recognised within it, with optional diarization, language, confidence,
-		 *     and per-word timings.
-		 *
-		 *     `speaker_id` is populated only by backends with diarization;
-		 *     `language` by backends that emit per-segment language detection;
-		 *     `confidence` when the backend reports one; `words` when it emits a
-		 *     word-level breakdown (which is what lets a sub-segment range resolve to
-		 *     a tighter span than the whole segment).
-		 */
-		TranscriptSegment: {
-			/** @description Backend confidence in the segment, when reported. */
-			confidence?: components["schemas"]["Confidence"];
-			/** @description Detected language for this segment, when the backend reported one. */
-			language?: string;
-			/** @description Time span the segment covers within the stream. */
-			span: components["schemas"]["TimeSpan"];
-			/** @description Diarization speaker label, when the backend assigned one. */
-			speaker_id?: string;
-			/** @description Recognised text for this segment. */
-			text: string;
+		/** @description API token with JWT token string (only returned on creation). */
+		AccountApiTokenWithJwt: {
 			/**
-			 * @description Per-word timings within the segment, when the backend emitted them.
-			 *     Empty otherwise; resolution then falls back to the segment span.
-			 * @default []
+			 * Format: uuid
+			 * @description Unique identifier for the token.
 			 */
-			words?: components["schemas"]["TranscriptWord"][];
-		};
-		/** @description One word within a [`TranscriptSegment`], with its own time span. */
-		TranscriptWord: {
-			/** @description Per-word confidence, when reported. */
-			confidence?: components["schemas"]["Confidence"];
-			/** @description Time span the word covers within the stream. */
-			span: components["schemas"]["TimeSpan"];
-			/** @description The word text, as it appears in the segment text. */
-			text: string;
+			id: string;
+			/** @description Human-readable display name for the API token. */
+			displayName: string;
+			/** @description Type of token (web, mobile, api, etc.). */
+			sessionType: components["schemas"]["ApiTokenType"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp of token creation.
+			 */
+			issuedAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the token expires (omitted = never expires).
+			 */
+			expiredAt?: string;
+			/** @description The JWT token string (only shown once on creation). */
+			token: string;
 		};
 		/**
-		 * @description Timestamped transcript of an audio stream.
+		 * @description The type of API token, for authentication and tracking.
 		 *
-		 *     An ordered set of [`TranscriptSegment`]s. The flat
-		 *     [`text`], the segments joined, is what a recognizer
-		 *     inspects; [`resolve`] maps a byte range of that text back
-		 *     to the [`TimeSpan`] it occupies, using the segments' (and their words')
-		 *     timings. Empty when the backend produced nothing (silence, or a no-op
-		 *     backend).
-		 *
-		 *     [`text`]: Self::text
-		 *     [`resolve`]: Self::resolve
+		 *     Corresponds to the `API_TOKEN_TYPE` `PostgreSQL` enum and categorizes tokens
+		 *     by the client type they authenticate.
 		 */
-		Transcription: {
-			/** @description Segments in stream order. */
-			segments: components["schemas"]["TranscriptSegment"][];
+		ApiTokenType: "web" | "api" | "app";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		AccountApiTokenPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["AccountApiToken"][];
 			/**
-			 * @description The segments' text joined by [`SEGMENT_SEPARATOR`], cached so
-			 *     recognition and byte-range resolution share one flat string. Each
-			 *     segment's text begins at a known offset within it (see
-			 *     [`segment_offsets`]).
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/** @description API token response structure. */
+		AccountApiToken: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier for the token.
+			 */
+			id: string;
+			/** @description Human-readable display name for the API token. */
+			displayName: string;
+			/** @description Type of token (web, api, etc.). */
+			sessionType: components["schemas"]["ApiTokenType"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp of token creation.
+			 */
+			issuedAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the token expires (None = never expires).
+			 */
+			expiredAt?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of most recent token activity.
+			 */
+			lastUsedAt?: string;
+			/**
+			 * @description Whether this token is the one the current request authenticated with.
 			 *
-			 *     [`segment_offsets`]: Self::segment_offsets
+			 *     Lets a client single out the active session in the list. Defaults to
+			 *     `false`; the listing handler sets it for the matching token.
 			 */
-			text: string;
+			current: boolean;
 		};
 		/**
-		 * @description Configuration for a provider reached without an API key (Ollama), addressed
-		 *     by a caller-supplied base URL. Carries no secret, so it derives [`Debug`].
+		 * @description Path parameters for API token operations.
+		 *
+		 *     Since token IDs are globally unique UUIDs, account context is verified
+		 *     by comparing with the authenticated user's account ID.
 		 */
-		UnauthenticatedProvider: {
-			/** @description Base URL of the server (e.g. `http://localhost:11434`). */
-			baseUrl: string;
-			/** @description Default model to use when a request does not specify one. Optional. */
-			defaultModel?: string;
+		AccountApiTokenPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the API token.
+			 */
+			tokenId: string;
+		};
+		/** @description Request to update an existing API token. */
+		UpdateAccountApiToken: {
+			/** @description Updated display name for the API token (1-100 characters). */
+			displayName?: string;
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		AccountNotificationPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["AccountNotification"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Response type for an account notification.
+		 *
+		 *     The typed payload is nested under `payload`, so a notification is
+		 *     `{ id, payload: { notifyType, <params...> }, readAt, ... }`.
+		 */
+		AccountNotification: {
+			/**
+			 * Format: uuid
+			 * @description Unique notification identifier.
+			 */
+			id: string;
+			/**
+			 * @description The notification type and its typed params, absent when the stored params
+			 *     do not decode into their `notifyType`.
+			 */
+			payload?: components["schemas"]["NotificationPayload"];
+			/**
+			 * Format: date-time
+			 * @description When the notification was read; absent means unread.
+			 */
+			readAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the notification was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the notification expires.
+			 */
+			expiresAt?: string;
+		};
+		/**
+		 * @description The typed payload of a notification, tagged by `type` with its params under
+		 *     `data` (the same `{type, data}` envelope the activity log and outbox event use).
+		 *
+		 *     Each variant is one notification type carrying its own params struct. The
+		 *     `type` values match `NotificationEvent`, so the same key drives the member's
+		 *     per-event preferences.
+		 */
+		NotificationPayload:
+			| {
+					/** @constant */
+					type: "member.joined";
+					data: components["schemas"]["MemberJoinedParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.sync.completed";
+					data: components["schemas"]["ConnectionSyncCompletedParams"];
+			  }
+			| {
+					/** @constant */
+					type: "connection.sync.failed";
+					data: components["schemas"]["ConnectionSyncFailedParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.detection.completed";
+					data: components["schemas"]["DetectionCompletedParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.redaction.created";
+					data: components["schemas"]["RedactionCreatedParams"];
+			  }
+			| {
+					/** @constant */
+					type: "pipeline.detection.failed";
+					data: components["schemas"]["DetectionFailedParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.assigned";
+					data: components["schemas"]["ReviewAssignedParams"];
+			  }
+			| {
+					/** @constant */
+					type: "comment.mentioned";
+					data: components["schemas"]["CommentMentionedParams"];
+			  };
+		/** @description Params of a `member.joined` notification. */
+		MemberJoinedParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the workspace the member joined.
+			 */
+			workspaceId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the member's account.
+			 */
+			memberId: string;
+		};
+		/** @description Params of a `connection.sync.completed` notification. */
+		ConnectionSyncCompletedParams: {
+			/** @description Id of the connection that synced. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Display name of the connection that synced. */
+			connectionName: string;
+			/**
+			 * Format: int64
+			 * @description Number of records synced, if known.
+			 */
+			recordsSynced?: number;
+		};
+		/** @description Params of a `connection.sync.failed` notification. */
+		ConnectionSyncFailedParams: {
+			/** @description Id of the connection that failed to sync. */
+			connectionId: components["schemas"]["ConnectionId"];
+			/** @description Display name of the connection that failed to sync. */
+			connectionName: string;
+			/** @description Failure reason, if available. */
+			error?: string;
+		};
+		/** @description Params of a `pipeline.detection.completed` notification. */
+		DetectionCompletedParams: {
+			/** @description Id of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
+			/** @description Display name of the analyzed document, if known. */
+			inputDocumentName?: string;
+		};
+		/** @description Params of a `pipeline.redaction.created` notification. */
+		RedactionCreatedParams: {
+			/** @description Id of the redaction. */
+			redactionId: components["schemas"]["RedactionId"];
+			/** @description Id of the detection the redaction was produced from. */
+			detectionId: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
+			/** @description Display name of the redacted document, if known. */
+			inputDocumentName?: string;
+		};
+		/** @description Params of a `pipeline.detection.failed` notification. */
+		DetectionFailedParams: {
+			/** @description Id of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
+			 */
+			pipelineId?: string;
+			/** @description Display name of the analyzed document, if known. */
+			inputDocumentName?: string;
+			/** @description Failure reason, if available. */
+			error?: string;
+		};
+		/**
+		 * @description Params of a `review.assigned` notification, sent to the reviewer a review was
+		 *     assigned to.
+		 */
+		ReviewAssignedParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the review.
+			 */
+			reviewId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the document to review.
+			 */
+			documentId: string;
+			/** @description Display name of the document to review, when it still exists. */
+			documentName?: string;
+		};
+		/** @description Params of a `comment.mentioned` notification, sent to a mentioned account. */
+		CommentMentionedParams: {
+			/**
+			 * Format: uuid
+			 * @description Id of the comment the account was mentioned in.
+			 */
+			commentId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the review the comment is in.
+			 */
+			reviewId: string;
+			/**
+			 * Format: uuid
+			 * @description Id of the account that wrote the comment (the mentioner).
+			 */
+			authorId: string;
+		};
+		/** @description Response type for unread notifications status. */
+		AccountUnreadStatus: {
+			/**
+			 * Format: int64
+			 * @description Number of unread notifications.
+			 */
+			unreadCount: number;
 		};
 		/**
 		 * @description An account's current unread-notification count, broadcast on the account's
@@ -20860,203 +22125,282 @@ export interface components {
 			 */
 			unreadCount: number;
 		};
+		/** @description Response type for a mark-all-read action. */
+		AccountMarkedReadStatus: {
+			/**
+			 * Format: int64
+			 * @description Number of notifications the request marked as read.
+			 */
+			markedRead: number;
+		};
 		/**
-		 * @description Request payload to update an account's profile.
+		 * @description Path parameters for notification operations.
 		 *
-		 *     Credentials are not profile fields — a password and any linked providers are
-		 *     managed through the account's identities (see the identity endpoints), never
-		 *     here.
+		 *     The notification id is globally unique; account ownership is enforced in the
+		 *     query, so a notification of another account resolves to a not-found result.
 		 */
-		UpdateAccount: {
-			/** @description New display name (2-32 characters). */
-			displayName?: string;
+		AccountNotificationPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the notification.
+			 */
+			notificationId: string;
+		};
+		/** @description Request payload for creating a new workspace invite. */
+		CreateWorkspaceInvite: {
 			/**
 			 * Format: email
-			 * @description New email address (must be valid email format).
+			 * @description Email address of the person to invite.
 			 */
-			emailAddress?: string;
-			/** @description New account handle. */
-			username?: components["schemas"]["Handle"];
+			inviteeEmail: string;
+			/** @description Role the invitee will have if they accept the invitation. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description When the invitation expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
 		};
-		/** @description Request to update an existing API token. */
-		UpdateAccountApiToken: {
-			/** @description Updated display name for the API token (1-100 characters). */
-			displayName?: string;
+		/** @description Expiration options for invite codes. */
+		InviteExpiration: "in24Hours" | "in7Days" | "in30Days";
+		/**
+		 * @description Acknowledgement returned after sending a workspace invitation.
+		 *
+		 *     The response is deliberately uniform: it carries no invite identifier or
+		 *     status, so it is identical whether or not the address belonged to a known
+		 *     account and cannot be used to probe for account existence.
+		 */
+		WorkspaceInviteSent: {
+			/** @description Human-readable confirmation message. */
+			detail: string;
+		};
+		/** @description Query parameters for listing workspace invites. */
+		ListWorkspaceInvites: {
+			/** @description Filter by invited role. */
+			role?: components["schemas"]["WorkspaceRole"];
+			/** @description Sort by field. */
+			sortBy?: components["schemas"]["InviteSortField"];
+			/** @description Sort order (asc or desc). */
+			order?: components["schemas"]["Direction"];
+		};
+		/** @description Fields available for sorting workspace invites. */
+		InviteSortField: "email" | "date";
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceInvitePage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceInvite"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
 		};
 		/**
-		 * @description Request payload to update an existing workspace.
+		 * @description Workspace invite with complete information.
 		 *
-		 *     All fields are optional; only provided fields will be updated. The handle is
-		 *     immutable and set at creation, so it cannot be changed here.
+		 *     This response includes all the essential information about an
+		 *     invitation, including the unique invite ID that can be used to track or cancel
+		 *     the invitation later.
 		 */
-		UpdateWorkspace: {
-			/** @description New description for the workspace (max 500 characters). */
-			description?: string;
-			/** @description New display name for the workspace (2-32 characters). */
-			displayName?: string;
+		WorkspaceInvite: {
 			/**
-			 * @description Replacement workspace settings (approval requirement, data-retention
-			 *     rules). When omitted, settings are left unchanged.
+			 * Format: uuid
+			 * @description Unique identifier of the invitation.
 			 */
-			settings?: components["schemas"]["WorkspaceSettings"];
-		};
-		/** @description Request payload to edit a comment's body. */
-		UpdateWorkspaceComment: {
-			/** @description The new comment text (1-10000 characters). */
-			body: string;
-		};
-		/** @description Request payload for updating an existing workspace connection. */
-		UpdateWorkspaceConnection: {
+			inviteId: string;
 			/**
-			 * @description Typed provider configuration. If provided, fully replaces the stored
-			 *     config (and, with it, the provider). Omit to leave it unchanged.
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
 			 */
-			config?: components["schemas"]["ConnectionConfig"];
-			/** @description Human-readable connection display name. */
-			displayName?: string;
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Email address of the invitee (omitted for open invite codes). */
+			inviteeEmail?: string;
+			/** @description Role the invitee will have if they accept. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
 			/**
-			 * @description Whether the connection is enabled. `false` disables it (pausing scheduled
-			 *     syncs and rejecting manual ones); omit to leave unchanged.
+			 * @description Current status of the invitation.
+			 *
+			 *     For a single-use open code, `accepted` means the code has been consumed;
+			 *     `pending` (and unexpired) means it is still active.
 			 */
-			isActive?: boolean;
+			inviteStatus: components["schemas"]["InviteStatus"];
 			/**
-			 * @description Scheduled-sync configuration. Accepted only for schedulable providers
-			 *     (object stores); rejected for others. Omit to leave unchanged.
+			 * Format: date-time
+			 * @description When the invitation expires.
 			 */
-			sync?: components["schemas"]["SyncScheduleInput"];
-		};
-		/** @description Request to update document metadata. */
-		UpdateWorkspaceDocument: {
-			/** @description New display name for the document. */
-			displayName?: string;
-			/** @description Updated metadata. */
-			metadata?: unknown;
-		};
-		/** @description Request to update a member's role. */
-		UpdateWorkspaceMember: {
-			/** @description New role for the member. */
-			role: components["schemas"]["WorkspaceRole"];
-		};
-		/** @description Request payload for updating notification settings. */
-		UpdateWorkspaceNotificationSettings: {
-			/** @description Notification events to receive in-app. */
-			notificationEventsApp?: components["schemas"]["NotificationEvent"][];
-			/** @description Notification events to receive via email. */
-			notificationEventsEmail?: components["schemas"]["NotificationEvent"][];
-			/** @description Whether to send email notifications. */
-			notifyViaEmail?: boolean;
+			expiresAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitee responded (accepted or declined), if they have. For a
+			 *     consumed single-use code, this is when it was used.
+			 */
+			respondedAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation was last updated.
+			 */
+			updatedAt: string;
 		};
 		/**
-		 * @description Request payload to update an existing pipeline.
+		 * @description The current status of a workspace invitation.
 		 *
-		 *     All fields are optional; only provided fields will be updated. Supplying a
-		 *     `definition` replaces the whole detection + redaction configuration.
+		 *     Corresponds to the `INVITE_STATUS` `PostgreSQL` enum and tracks the lifecycle
+		 *     of an invitation from creation to resolution.
 		 */
-		UpdateWorkspacePipeline: {
-			/** @description New detection + redaction configuration (replaces the whole definition). */
-			definition?: components["schemas"]["PipelineDefinition"];
-			/** @description New description for the pipeline (max 500 characters). */
-			description?: string;
-			/** @description New display name for the pipeline (2-128 characters). */
-			displayName?: string;
-			/**
-			 * @description Replacement per-scope data-retention override. When omitted, the
-			 *     pipeline's retention override is left unchanged.
-			 */
-			retention?: components["schemas"]["RetentionOverride"];
-			/** @description New status for the pipeline. */
-			status?: components["schemas"]["PipelineStatus"];
+		InviteStatus:
+			| "pending"
+			| "accepted"
+			| "declined"
+			| "canceled"
+			| "expired"
+			| "revoked";
+		/** @description Request to generate a shareable invite code for a workspace. */
+		GenerateWorkspaceInviteCode: {
+			/** @description Role to assign when someone joins via this invite code. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/** @description When the invite code expires. */
+			expiresIn: components["schemas"]["InviteExpiration"];
 		};
 		/**
-		 * @description Request payload for updating an existing workspace policy.
+		 * @description Response for a freshly generated shareable invite code: the full invite plus
+		 *     its raw, show-once code.
 		 *
-		 *     Replacing the `definition` replaces the whole policy body. The policy's
-		 *     template origin is server-owned and preserved across updates — it is not
-		 *     settable here.
+		 *     The `inviteCode` is a single-use bearer secret returned **only here**, never
+		 *     from the list or any other endpoint — treat it like the webhook signing
+		 *     secret and store it at once. The flattened invite fields (notably `inviteId`
+		 *     and `inviteStatus`) let a client correlate this code to its listing row and
+		 *     track its lifecycle: once redeemed the code is consumed, and the row's
+		 *     `inviteStatus` becomes `accepted` (with `respondedAt` set) — so a client can
+		 *     tell an active code from a spent one without ever re-fetching the secret.
 		 */
-		UpdateWorkspacePolicy: {
-			/** @description New policy body (replaces the stored definition). */
-			definition?: components["schemas"]["PolicyDraft"];
-			/** @description Policy description. */
-			description?: string;
-			/** @description Human-readable policy display name. */
-			displayName?: string;
-		};
-		/** @description Request payload for updating an existing workspace provider. */
-		UpdateWorkspaceProvider: {
+		WorkspaceInviteCode: {
+			/** @description The generated invite code to share. Shown once and never returned again. */
+			inviteCode: string;
 			/**
-			 * @description Typed provider configuration. If provided, fully replaces the stored config
-			 *     (and, with it, the provider). Omit to leave it unchanged.
+			 * Format: uuid
+			 * @description Unique identifier of the invitation.
 			 */
-			config?: components["schemas"]["ProviderConfig"];
-			/** @description Human-readable provider display name. */
-			displayName?: string;
-			/** @description Whether the provider is enabled. Omit to leave unchanged. */
-			isActive?: boolean;
+			inviteId: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Email address of the invitee (omitted for open invite codes). */
+			inviteeEmail?: string;
+			/** @description Role the invitee will have if they accept. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * @description Current status of the invitation.
+			 *
+			 *     For a single-use open code, `accepted` means the code has been consumed;
+			 *     `pending` (and unexpired) means it is still active.
+			 */
+			inviteStatus: components["schemas"]["InviteStatus"];
+			/**
+			 * Format: date-time
+			 * @description When the invitation expires.
+			 */
+			expiresAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitee responded (accepted or declined), if they have. For a
+			 *     consumed single-use code, this is when it was used.
+			 */
+			respondedAt?: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invitation was last updated.
+			 */
+			updatedAt: string;
 		};
-		/** @description Request payload for updating an existing workspace webhook. */
-		UpdateWorkspaceWebhook: {
-			/** @description Updated description of the webhook's purpose (max 500 characters). */
+		/** @description Path parameters for invite operations. */
+		WorkspaceInvitePathParams: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the invite.
+			 */
+			inviteId: string;
+		};
+		/** @description Request to respond to a workspace invitation. */
+		ReplyWorkspaceInvite: {
+			/** @description Whether to accept or decline the invitation. */
+			acceptInvite: boolean;
+		};
+		/** @description Path parameters for joining via invite code. */
+		InviteCodePathParams: {
+			/** @description The invite code to use for joining the workspace. */
+			inviteCode: string;
+		};
+		/**
+		 * @description Preview of an invite with workspace details for display before joining.
+		 *
+		 *     This is a public-facing response that shows workspace information
+		 *     to help users decide whether to join via an invite code.
+		 */
+		InvitePreview: {
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Display name of the workspace. */
+			displayName: string;
+			/** @description Description of the workspace. */
 			description?: string;
-			/** @description Updated human-readable name for the webhook (1-128 characters). */
-			displayName?: string;
-			/** @description Updated list of event types this webhook should receive. */
-			events?: components["schemas"]["WebhookEvent"][];
-			/** @description Updated custom headers to include in webhook requests. */
+			/** @description Role the user will have if they join. */
+			invitedRole: components["schemas"]["WorkspaceRole"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when the workspace was created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the invite expires.
+			 */
+			expiresAt: string;
+		};
+		/** @description Request payload for creating a new workspace webhook. */
+		CreateWorkspaceWebhook: {
+			/** @description Human-readable name for the webhook (1-128 characters). */
+			displayName: string;
+			/** @description Detailed description of the webhook's purpose (max 500 characters). */
+			description: string;
+			/**
+			 * Format: uri
+			 * @description The URL to send webhook payloads to.
+			 */
+			url: string;
+			/** @description List of event types this webhook should receive. */
+			events: components["schemas"]["WebhookEvent"][];
+			/** @description Optional custom headers to include in webhook requests. */
 			headers?: {
 				[key: string]: string;
 			};
-			/**
-			 * @description Updated status (enabled or disabled). Ignored while the webhook is
-			 *     system-suspended.
-			 */
+			/** @description Initial status of the webhook (enabled or disabled). */
 			status?: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: uri
-			 * @description Updated URL to send webhook payloads to.
-			 */
-			url?: string;
-		};
-		/**
-		 * @description One recognizer's or enricher's resource usage for one payload.
-		 *
-		 *     `id` and `duration` are always present; `count` (entities or spans found,
-		 *     artifacts produced) and `model` are present only where they mean
-		 *     something. `duration` serializes as a whole number of milliseconds.
-		 */
-		Usage: {
-			/**
-			 * Format: uint64
-			 * @description Entities or spans found (recognizer) or artifacts produced (enricher);
-			 *     `None` when a count is not meaningful for the component.
-			 */
-			count?: number;
-			/**
-			 * Format: uint64
-			 * @description Wall-clock execution time. Serialized as integer milliseconds.
-			 */
-			duration: number;
-			/** @description Which recognizer / enricher this describes. */
-			id: components["schemas"]["RecognizerId"];
-			/** @description Model / token detail; `None` for a pure-CPU component. */
-			model?: components["schemas"]["ModelUsage"];
-		};
-		/**
-		 * @description Every recognizer/enricher's [`Usage`] across a whole document analysis, in
-		 *     the order the components ran (the body first, then each part).
-		 */
-		UsageReport: {
-			/** @description The per-component usage entries, each self-identifying via its `id`. */
-			entries: components["schemas"]["Usage"][];
-		};
-		/** @description Shape of a synthesized tone. */
-		Waveform: "sine" | "square";
-		/** @description Params of a webhook activity (`webhook.*`). */
-		WebhookActivityParams: {
-			/** @description Id of the webhook. */
-			webhookId: components["schemas"]["WebhookId"];
-			/** @description Display name of the webhook. */
-			webhookName: string;
 		};
 		/**
 		 * @description The types of events that can trigger webhook delivery.
@@ -21096,8 +22440,6 @@ export interface components {
 			| "policy.created"
 			| "policy.updated"
 			| "policy.deleted";
-		/** @description Opaque whk identifier (whk_<uuid>). */
-		WebhookId: string;
 		/**
 		 * @description The operational status of a workspace webhook.
 		 *
@@ -21106,1709 +22448,6 @@ export interface components {
 		 *     fails repeatedly, and the user can re-enable it.
 		 */
 		WebhookStatus: "enabled" | "disabled" | "suspended";
-		/** @description Workspace response. */
-		Workspace: {
-			/** @description Serve path of the workspace's avatar (logo), when set. */
-			avatarUrl?: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this workspace. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Description of the workspace. */
-			description?: string;
-			/** @description Display name of the workspace. */
-			displayName: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			handle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			id: string;
-			/** @description Role of the member in the workspace. */
-			memberRole: components["schemas"]["WorkspaceRole"];
-			/**
-			 * @description Workspace settings (raster policy, data-retention rules, upload cap).
-			 *
-			 *     `maxUploadBytes` is resolved to the effective per-file limit — the smaller
-			 *     of the workspace's own cap and the server-wide hard limit — so a client
-			 *     always reads a concrete number to enforce.
-			 */
-			settings: components["schemas"]["WorkspaceSettings"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the workspace was last updated.
-			 */
-			updatedAt: string;
-		};
-		/**
-		 * @description Response type for a workspace activity.
-		 *
-		 *     The typed payload is nested under `payload`, so an activity is
-		 *     `{ id, workspaceHandle, performedBy, payload: { activityType, <params...> }, createdAt }`.
-		 */
-		WorkspaceActivity: {
-			/**
-			 * Format: date-time
-			 * @description When the activity occurred.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique activity identifier.
-			 */
-			id: string;
-			/**
-			 * @description The activity type and its typed params, absent when the stored params do
-			 *     not decode into their `activityType`.
-			 */
-			payload?: components["schemas"]["ActivityPayload"];
-			/** @description Account that performed the activity. */
-			performedBy: components["schemas"]["AccountRef"];
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description The export-only query parameter: the output format. Kept separate from the
-		 *     shared filter and window so each is extracted on its own (see
-		 *     [`WorkspaceActivityFilterQuery`] for why flattening is avoided).
-		 */
-		WorkspaceActivityExportOptions: {
-			/** @description Output format; defaults to `csv`. */
-			format?: components["schemas"]["ExportFormat"];
-		};
-		/**
-		 * @description The activity-specific filter parameters: which activity types to keep and
-		 *     whose activities to keep.
-		 *
-		 *     This is its own query struct so an endpoint composes it alongside the shared
-		 *     [`CursorPagination`] and [`DateWindow`] as separate query extractors, rather
-		 *     than `#[serde(flatten)]`ing them into one struct: the query extractor
-		 *     (`serde_html_form`) mis-handles flattened sub-structs — a flattened pagination
-		 *     struct fails to deserialize even a bare `?limit=` — so each concern is
-		 *     extracted on its own.
-		 *
-		 *     [`CursorPagination`]: crate::handler::request::CursorPagination
-		 */
-		WorkspaceActivityFilterQuery: {
-			/**
-			 * Format: uuid
-			 * @description Account id whose activities to keep. Omit for any actor.
-			 */
-			actor?: string;
-			/**
-			 * @description Keep only these activity types (e.g. `document.created`). Repeat the `type`
-			 *     parameter for several; omit for no type constraint.
-			 */
-			type?: components["schemas"]["ActivityType"][];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceActivityPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceActivity"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Params of a workspace-scoped activity (`workspace.*`). */
-		WorkspaceActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the workspace acted on.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Aggregate analytics for a workspace: what it stores, how its detections fare, and
-		 *     the inference tokens they spent.
-		 */
-		WorkspaceAnalytics: {
-			/** @description Detection health: volume, status mix, and durations. */
-			detections: components["schemas"]["WorkspaceDetectionAnalytics"];
-			/** @description Stored-file totals and their per-kind breakdown. */
-			storage: components["schemas"]["WorkspaceStorageAnalytics"];
-			/** @description Inference token usage: workspace totals and a per-model breakdown. */
-			usage: components["schemas"]["WorkspaceUsageAnalytics"];
-		};
-		/** @description Response type for a comment: one message within a review's discussion. */
-		WorkspaceComment: {
-			/** @description Account that wrote the message. */
-			author: components["schemas"]["AccountRef"];
-			/** @description The message text. */
-			body: string;
-			/**
-			 * Format: date-time
-			 * @description When the comment was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the comment.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description Review this message belongs to.
-			 */
-			reviewId: string;
-			/**
-			 * Format: date-time
-			 * @description When the comment was last updated.
-			 */
-			updatedAt: string;
-		};
-		/** @description Path parameters addressing one comment by its id. */
-		WorkspaceCommentPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the comment.
-			 */
-			commentId: string;
-		};
-		/**
-		 * @description Response type for a workspace connection.
-		 *
-		 *     Note: The encrypted connection data is never exposed in API responses.
-		 *     Only metadata about the connection is returned.
-		 */
-		WorkspaceConnection: {
-			/** @description Capability category of the connection (object store, file service). */
-			connectionType: components["schemas"]["ConnectionType"];
-			/**
-			 * Format: date-time
-			 * @description When the connection was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this connection. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Human-readable connection display name. */
-			displayName: string;
-			/** @description Opaque identifier of the connection. */
-			id: components["schemas"]["ConnectionId"];
-			/** @description Whether the connection is enabled. */
-			isActive: boolean;
-			/**
-			 * Format: date-time
-			 * @description When the connection last synced successfully, if ever. Independent of
-			 *     `sync`: a connection with no schedule still records its on-demand syncs.
-			 */
-			lastSyncedAt?: string;
-			/** @description Provider identifier (`s3`, `azure`, `gcs`, `google_drive`, `dropbox`, ...). */
-			provider: string;
-			/**
-			 * @description Scheduled-sync configuration; present only for connections that sync on a
-			 *     timer. Its absence does not mean the connection cannot sync — a file
-			 *     service and an unscheduled object store both transfer on demand.
-			 */
-			sync?: components["schemas"]["WorkspaceSyncSchedule"];
-			/**
-			 * Format: date-time
-			 * @description When the connection was last updated.
-			 */
-			updatedAt: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceConnectionPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceConnection"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Path parameters for connection operations.
-		 *
-		 *     The workspace is resolved separately from the `{workspaceId}` segment by
-		 *     the [`WorkspaceContext`] extractor.
-		 *
-		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
-		 */
-		WorkspaceConnectionPathParams: {
-			/** @description Opaque identifier of the connection. */
-			connectionId: components["schemas"]["ConnectionId"];
-		};
-		/** @description A connection sync (import or export). */
-		WorkspaceConnectionSync: {
-			/**
-			 * Format: int32
-			 * @description 1-based attempt number; scheduled syncs may be retried on failure.
-			 */
-			attempt: number;
-			/**
-			 * Format: date-time
-			 * @description When the sync finished, if it has.
-			 */
-			completedAt?: string;
-			/** @description The connection this sync belongs to. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/** @description Failure reason when the sync failed; omitted otherwise. */
-			errorMessage?: string;
-			/**
-			 * Format: uuid
-			 * @description Unique sync identifier.
-			 */
-			id: string;
-			/**
-			 * Format: int64
-			 * @description Number of objects transferred so far.
-			 */
-			recordsSynced: number;
-			/**
-			 * Format: date-time
-			 * @description When the sync started.
-			 */
-			startedAt: string;
-			/** @description Current status of the sync. */
-			status: components["schemas"]["SyncStatus"];
-			/** @description How the sync was triggered. */
-			triggerType: components["schemas"]["SyncTriggerType"];
-			/** @description Account that triggered the sync. */
-			triggeredBy: components["schemas"]["AccountRef"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceConnectionSyncPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceConnectionSync"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for a specific connection sync. */
-		WorkspaceConnectionSyncPathParams: {
-			/** @description Opaque identifier of the connection. */
-			connectionId: components["schemas"]["ConnectionId"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the sync run.
-			 */
-			syncId: string;
-		};
-		/** @description Result of a connection reachability check. */
-		WorkspaceConnectionVerification: {
-			/** @description Failure reason when not reachable; omitted on success. */
-			error?: string;
-			/** @description Whether the backing store was reachable with the stored credentials. */
-			reachable: boolean;
-		};
-		/** @description Query parameters for listing connections. */
-		WorkspaceConnectionsQuery: {
-			/**
-			 * @description Filter by provider (`s3`, `azure`, `gcs`). Repeatable; a connection
-			 *     matches if it uses any of the given providers. Empty means no filter.
-			 * @default []
-			 */
-			provider?: string[];
-		};
-		/**
-		 * @description Result of a bulk document deletion.
-		 *
-		 *     The deletion is idempotent: `deleted` holds the ids that resolved to live
-		 *     documents in the workspace and were removed, and `skipped` holds the requested
-		 *     ids that did not — unknown, already deleted, in another workspace, or held by
-		 *     an in-progress detection that still needs the document.
-		 */
-		WorkspaceDeletedDocuments: {
-			/** @description Ids that were deleted. */
-			deleted: string[];
-			/**
-			 * @description Requested ids that were skipped: unknown, already deleted, in another
-			 *     workspace, or held by an in-progress detection.
-			 */
-			skipped: string[];
-		};
-		/**
-		 * @description Response type for a detection.
-		 *
-		 *     A detection is addressed by its own opaque id; the owning pipeline and
-		 *     workspace handles are carried for context. Redacted outputs are not here — a
-		 *     detection produces many redactions, each fetched from its `redactions`
-		 *     endpoint.
-		 */
-		WorkspaceDetection: {
-			/**
-			 * Format: date-time
-			 * @description When the detection completed analysis.
-			 */
-			completedAt?: string;
-			/** @description Human-readable failure reason, present only when the detection `failed`. */
-			error?: string;
-			/** @description Opaque identifier of the detection. */
-			id: components["schemas"]["DetectionId"];
-			/**
-			 * Format: uuid
-			 * @description Source document this detection analyzes.
-			 */
-			inputDocumentId: string;
-			/**
-			 * @description Display name of the source document, for showing the detection without a
-			 *     separate file lookup. `None` if the file was removed (e.g. by retention).
-			 */
-			inputDocumentName?: string;
-			/** @description Non-encrypted metadata for filtering/display. */
-			metadata: components["schemas"]["DetectionMetadata"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline this detection belongs to; absent for an
-			 *     ad-hoc detection.
-			 */
-			pipelineId?: string;
-			/**
-			 * Format: date-time
-			 * @description When the detection started.
-			 */
-			startedAt: string;
-			/**
-			 * @description Current detection status.
-			 *
-			 *     The detections are available to fetch from the detection's `analysis`
-			 *     endpoint once this reaches `complete`.
-			 */
-			status: components["schemas"]["DetectionStatus"];
-			/** @description How the detection was triggered. */
-			triggerType: components["schemas"]["PipelineTriggerType"];
-			/** @description Account that triggered the detection. */
-			triggeredBy: components["schemas"]["AccountRef"];
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/** @description Detection health for a workspace. */
-		WorkspaceDetectionAnalytics: {
-			/**
-			 * Format: int64
-			 * @description Mean completed-detection duration in milliseconds; omitted until a
-			 *     detection completes.
-			 */
-			avgDurationMs?: number;
-			/**
-			 * @description Per-status breakdown, one entry per detection status (zero-filled), in a
-			 *     stable order.
-			 */
-			byStatus: components["schemas"]["WorkspaceDetectionStatusEntry"][];
-			/**
-			 * Format: double
-			 * @description Failed / (completed + failed). Omitted when no detection has reached a
-			 *     terminal state (genuinely no signal, not zero).
-			 */
-			errorRate?: number;
-			/**
-			 * Format: int64
-			 * @description 95th-percentile completed-detection duration in milliseconds; omitted until
-			 *     a detection completes.
-			 */
-			p95DurationMs?: number;
-			/**
-			 * Format: int64
-			 * @description Total number of detections.
-			 */
-			total: number;
-		};
-		/** @description A single day of detection activity. */
-		WorkspaceDetectionDayEntry: {
-			/**
-			 * Format: int64
-			 * @description Mean completed-detection duration (milliseconds) this day; omitted if none completed.
-			 */
-			avgDurationMs?: number;
-			/**
-			 * Format: date
-			 * @description The day (`YYYY-MM-DD`, UTC).
-			 */
-			date: string;
-			/**
-			 * Format: int64
-			 * @description Detections started this day (`0` on a quiet day).
-			 */
-			detections: number;
-			/**
-			 * Format: double
-			 * @description Failed / (completed + failed) for this day; omitted when no detection
-			 *     reached a terminal state that day.
-			 */
-			errorRate?: number;
-			/**
-			 * Format: int64
-			 * @description Input/prompt tokens spent by this day's detections; omitted when none used a model.
-			 */
-			inputTokens?: number;
-			/**
-			 * Format: int64
-			 * @description Output/completion tokens spent this day; omitted when none used a model.
-			 */
-			outputTokens?: number;
-			/**
-			 * Format: int64
-			 * @description 95th-percentile completed-detection duration (milliseconds) this day; omitted if none.
-			 */
-			p95DurationMs?: number;
-			/**
-			 * Format: int64
-			 * @description Reported total tokens this day; omitted when none used a model.
-			 */
-			totalTokens?: number;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceDetectionPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceDetection"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for detection operations. */
-		WorkspaceDetectionPathParams: {
-			/** @description Opaque identifier of the detection. */
-			detectionId: components["schemas"]["DetectionId"];
-		};
-		/** @description One status's share of a workspace's detections. */
-		WorkspaceDetectionStatusEntry: {
-			/**
-			 * Format: int64
-			 * @description Number of detections in this status.
-			 */
-			count: number;
-			/** @description The detection status. */
-			status: components["schemas"]["DetectionStatus"];
-		};
-		/**
-		 * @description A workspace's daily detection activity over a window: one point per day, dense
-		 *     (quiet days included with `detections: 0`), ready to plot as a continuous
-		 *     series.
-		 */
-		WorkspaceDetectionTimeSeries: {
-			/** @description One entry per day in the requested window, oldest first. */
-			points: components["schemas"]["WorkspaceDetectionDayEntry"][];
-		};
-		/**
-		 * @description Query parameters for listing detections across a workspace.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint.
-		 */
-		WorkspaceDetectionsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the source document the detection analyzes.
-			 */
-			documentId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the owning pipeline.
-			 */
-			pipelineId?: string;
-			/** @description Filter by detection status. */
-			status?: components["schemas"]["DetectionStatus"];
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the detection.
-			 */
-			triggeredBy?: string;
-		};
-		/** @description Represents a document in responses. */
-		WorkspaceDocument: {
-			/**
-			 * Format: date-time
-			 * @description Creation timestamp.
-			 */
-			createdAt: string;
-			/** @description Display name. */
-			displayName: string;
-			/** @description File extension (without dot). Owned by the document. */
-			extension: string;
-			/**
-			 * @description Lowercase hex-encoded SHA-256 of the document's plaintext content. Resolved
-			 *     from the backing blob.
-			 */
-			hash: string;
-			/**
-			 * Format: uuid
-			 * @description Unique document identifier.
-			 */
-			id: string;
-			/** @description The document's role (original or redacted). */
-			kind: components["schemas"]["DocumentKind"];
-			/** @description Original filename when uploaded. */
-			originalFilename: string;
-			/**
-			 * Format: int64
-			 * @description Size in bytes. Resolved from the backing blob.
-			 */
-			size: number;
-			/**
-			 * Format: date-time
-			 * @description Last update timestamp.
-			 */
-			updatedAt: string;
-			/** @description Account that uploaded/created the document. */
-			uploadedBy: components["schemas"]["AccountRef"];
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceDocumentPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceDocument"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for document operations within a workspace context. */
-		WorkspaceDocumentPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the document.
-			 */
-			documentId: string;
-		};
-		/**
-		 * @description Workspace invite with complete information.
-		 *
-		 *     This response includes all the essential information about an
-		 *     invitation, including the unique invite ID that can be used to track or cancel
-		 *     the invitation later.
-		 */
-		WorkspaceInvite: {
-			/**
-			 * Format: date-time
-			 * @description When the invitation was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation expires.
-			 */
-			expiresAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invitation.
-			 */
-			inviteId: string;
-			/**
-			 * @description Current status of the invitation.
-			 *
-			 *     For a single-use open code, `accepted` means the code has been consumed;
-			 *     `pending` (and unexpired) means it is still active.
-			 */
-			inviteStatus: components["schemas"]["InviteStatus"];
-			/** @description Role the invitee will have if they accept. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description Email address of the invitee (omitted for open invite codes). */
-			inviteeEmail?: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitee responded (accepted or declined), if they have. For a
-			 *     consumed single-use code, this is when it was used.
-			 */
-			respondedAt?: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation was last updated.
-			 */
-			updatedAt: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Response for a freshly generated shareable invite code: the full invite plus
-		 *     its raw, show-once code.
-		 *
-		 *     The `inviteCode` is a single-use bearer secret returned **only here**, never
-		 *     from the list or any other endpoint — treat it like the webhook signing
-		 *     secret and store it at once. The flattened invite fields (notably `inviteId`
-		 *     and `inviteStatus`) let a client correlate this code to its listing row and
-		 *     track its lifecycle: once redeemed the code is consumed, and the row's
-		 *     `inviteStatus` becomes `accepted` (with `respondedAt` set) — so a client can
-		 *     tell an active code from a spent one without ever re-fetching the secret.
-		 */
-		WorkspaceInviteCode: {
-			/**
-			 * Format: date-time
-			 * @description When the invitation was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation expires.
-			 */
-			expiresAt: string;
-			/** @description The generated invite code to share. Shown once and never returned again. */
-			inviteCode: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invitation.
-			 */
-			inviteId: string;
-			/**
-			 * @description Current status of the invitation.
-			 *
-			 *     For a single-use open code, `accepted` means the code has been consumed;
-			 *     `pending` (and unexpired) means it is still active.
-			 */
-			inviteStatus: components["schemas"]["InviteStatus"];
-			/** @description Role the invitee will have if they accept. */
-			invitedRole: components["schemas"]["WorkspaceRole"];
-			/** @description Email address of the invitee (omitted for open invite codes). */
-			inviteeEmail?: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitee responded (accepted or declined), if they have. For a
-			 *     consumed single-use code, this is when it was used.
-			 */
-			respondedAt?: string;
-			/**
-			 * Format: date-time
-			 * @description When the invitation was last updated.
-			 */
-			updatedAt: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceInvitePage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceInvite"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for invite operations. */
-		WorkspaceInvitePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the invite.
-			 */
-			inviteId: string;
-		};
-		/**
-		 * @description Acknowledgement returned after sending a workspace invitation.
-		 *
-		 *     The response is deliberately uniform: it carries no invite identifier or
-		 *     status, so it is identical whether or not the address belonged to a known
-		 *     account and cannot be used to probe for account existence.
-		 */
-		WorkspaceInviteSent: {
-			/** @description Human-readable confirmation message. */
-			detail: string;
-		};
-		/** @description Represents a workspace member. */
-		WorkspaceMember: {
-			/** @description Serve path of the member's avatar, when set. */
-			avatarUrl?: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the member joined the workspace.
-			 */
-			createdAt: string;
-			/** @description Display name of the member, when set. */
-			displayName?: string;
-			/** @description Email address of the member. */
-			emailAddress: string;
-			/**
-			 * Format: uuid
-			 * @description Account id of the member — the durable reference used to address the
-			 *     account (e.g. as a review `assignee`), stable across handle changes.
-			 */
-			id: string;
-			/** @description Role of the member in the workspace. */
-			memberRole: components["schemas"]["WorkspaceRole"];
-			/** @description Handle of the member's account. */
-			username: components["schemas"]["Handle"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceMemberPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceMember"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters for workspace member operations. */
-		WorkspaceMemberPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the member's account.
-			 */
-			accountId: string;
-		};
-		/** @description One model's token usage across a workspace's detections. */
-		WorkspaceModelUsageEntry: {
-			/**
-			 * Format: int64
-			 * @description Input/prompt tokens summed for this model (`0` if never reported).
-			 */
-			inputTokens: number;
-			/** @description The model. */
-			model: string;
-			/**
-			 * Format: int64
-			 * @description Output/completion tokens summed for this model (`0` if never reported).
-			 */
-			outputTokens: number;
-			/**
-			 * Format: int64
-			 * @description Reported total tokens summed for this model (`0` if never reported).
-			 */
-			totalTokens: number;
-		};
-		/** @description Response for notification settings within a workspace. */
-		WorkspaceNotificationSettings: {
-			/** @description Notification events to receive in-app. */
-			notificationEventsApp: components["schemas"]["NotificationEvent"][];
-			/** @description Notification events to receive via email. */
-			notificationEventsEmail: components["schemas"]["NotificationEvent"][];
-			/** @description Whether to send email notifications. */
-			notifyViaEmail: boolean;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspacePage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["Workspace"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description A short-lived provider OAuth access token for a browser file picker.
-		 *
-		 *     Carries only the access token and its expiry — never the refresh token, which
-		 *     stays server-side. The token is minted from the connection's stored
-		 *     credentials and is short-lived (the provider's access-token lifetime), so the
-		 *     browser holds a narrow, expiring credential rather than a durable one.
-		 */
-		WorkspacePickerToken: {
-			/** @description The provider OAuth access token to hand to the browser picker. */
-			accessToken: string;
-			/**
-			 * Format: int64
-			 * @description Unix seconds at which the access token expires, if the provider reports
-			 *     it. `None` means the provider did not return an expiry.
-			 */
-			expiresAt?: number;
-		};
-		/**
-		 * @description Body for minting a browser file-picker token.
-		 *
-		 *     The `OneDrive` v8 picker requests a token per resource (it names the resource in
-		 *     each `authenticate` command); the caller passes that `resource` so the server
-		 *     mints a token scoped to exactly it. Ignored by providers whose picker takes a
-		 *     single provider token (Google Drive, Box); omit it for those.
-		 */
-		WorkspacePickerTokenRequest: {
-			/**
-			 * @description The resource the picker asked for (its `authenticate` command's
-			 *     `resource`), e.g. `https://contoso-my.sharepoint.com`. Optional; when
-			 *     absent the server uses the connection's default picker resource.
-			 */
-			resource?: string;
-		};
-		/** @description `WorkspacePipeline` response. */
-		WorkspacePipeline: {
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this pipeline. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Detection + redaction configuration. */
-			definition: components["schemas"]["PipelineDefinition"];
-			/** @description `WorkspacePipeline` description. */
-			description?: string;
-			/** @description `WorkspacePipeline` display name. */
-			displayName: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline.
-			 */
-			id: string;
-			/** @description Per-scope data-retention override, when the pipeline sets one. */
-			retention?: components["schemas"]["RetentionOverride"];
-			/** @description `WorkspacePipeline` lifecycle status. */
-			status: components["schemas"]["PipelineStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was last updated.
-			 */
-			updatedAt: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Query parameters for listing a single pipeline's detections.
-		 *
-		 *     The pipeline is fixed by the route, so it narrows only by status, file,
-		 *     trigger account, and trigger type.
-		 */
-		WorkspacePipelineDetectionsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the source document the detection analyzes.
-			 */
-			documentId?: string;
-			/** @description Filter by detection status. */
-			status?: components["schemas"]["DetectionStatus"];
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the detection.
-			 */
-			triggeredBy?: string;
-		};
-		/** @description Query parameters for filtering pipelines. */
-		WorkspacePipelineFilter: {
-			/** @description Search by pipeline name (trigram similarity). */
-			search?: string;
-			/** @description Filter by pipeline status. */
-			status?: components["schemas"]["PipelineStatus"];
-		};
-		/** @description Path parameters for pipeline operations. */
-		WorkspacePipelinePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the pipeline.
-			 */
-			pipelineId: string;
-		};
-		/** @description Summary response for pipeline (used in lists). */
-		WorkspacePipelineSummary: {
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this pipeline. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description `WorkspacePipeline` description. */
-			description?: string;
-			/** @description `WorkspacePipeline` display name. */
-			displayName: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline.
-			 */
-			id: string;
-			/** @description `WorkspacePipeline` lifecycle status. */
-			status: components["schemas"]["PipelineStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was last updated.
-			 */
-			updatedAt: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspacePipelineSummaryPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspacePipelineSummary"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Query parameters for listing policies.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint.
-		 */
-		WorkspacePoliciesQuery: {
-			/** @description Narrow the list to a single policy kind (`authored` or `oneshot`). */
-			kind?: components["schemas"]["PolicyKind"];
-		};
-		/** @description Response type for a workspace policy. */
-		WorkspacePolicy: {
-			/**
-			 * Format: date-time
-			 * @description When the policy was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this policy. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description The structured policy body consumed by the engine (the current version). */
-			definition: components["schemas"]["Policy"];
-			/** @description Policy description. */
-			description?: string;
-			/** @description Human-readable policy display name. */
-			displayName: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the policy.
-			 */
-			id: string;
-			/**
-			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
-			 *     content-addressed, deduplicated, and immutable; an authored policy is a
-			 *     normal, editable policy.
-			 */
-			kind: components["schemas"]["PolicyKind"];
-			/**
-			 * Format: date-time
-			 * @description When the policy was last updated.
-			 */
-			updatedAt: string;
-			/**
-			 * Format: int32
-			 * @description The current version number of the policy's definition.
-			 */
-			versionNumber: number;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Path parameters for policy operations.
-		 *
-		 *     The workspace is resolved by the [`WorkspaceContext`] extractor from the
-		 *     `{workspaceId}` path segment.
-		 *
-		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
-		 */
-		WorkspacePolicyPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the policy.
-			 */
-			policyId: string;
-		};
-		/**
-		 * @description Lightweight policy view for lists.
-		 *
-		 *     Carries only the metadata, without loading the policy body, so a page of
-		 *     policies stays small. The full [`WorkspacePolicy`] (with its `definition`) is
-		 *     returned by the single-policy endpoint.
-		 */
-		WorkspacePolicySummary: {
-			/**
-			 * Format: date-time
-			 * @description When the policy was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this policy. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Policy description. */
-			description?: string;
-			/** @description Human-readable policy display name. */
-			displayName: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the policy.
-			 */
-			id: string;
-			/**
-			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
-			 *     content-addressed, deduplicated, and immutable; an authored policy is a
-			 *     normal, editable policy.
-			 */
-			kind: components["schemas"]["PolicyKind"];
-			/**
-			 * Format: date-time
-			 * @description When the policy was last updated.
-			 */
-			updatedAt: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspacePolicySummaryPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspacePolicySummary"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Response type for a workspace inference provider.
-		 *
-		 *     Note: The encrypted provider data is never exposed in API responses. Only
-		 *     metadata about the provider is returned.
-		 */
-		WorkspaceProvider: {
-			/**
-			 * Format: date-time
-			 * @description When the provider was created.
-			 */
-			createdAt: string;
-			/** @description Account that created this provider. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Human-readable provider display name. */
-			displayName: string;
-			/** @description Opaque identifier of the provider. */
-			id: components["schemas"]["ProviderId"];
-			/** @description Whether the provider is enabled. */
-			isActive: boolean;
-			/** @description Provider identifier (`openai`, `ollama`, `anthropic`, ...). */
-			provider: string;
-			/** @description Inference model type of the provider (llm, ner). */
-			providerType: components["schemas"]["ProviderType"];
-			/**
-			 * Format: date-time
-			 * @description When the provider was last updated.
-			 */
-			updatedAt: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceProviderPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceProvider"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Path parameters for provider operations.
-		 *
-		 *     The workspace is resolved separately from the `{workspaceId}` segment by the
-		 *     [`WorkspaceContext`] extractor.
-		 *
-		 *     [`WorkspaceContext`]: crate::extract::WorkspaceContext
-		 */
-		WorkspaceProviderPathParams: {
-			/** @description Opaque identifier of the provider. */
-			providerId: components["schemas"]["ProviderId"];
-		};
-		/** @description Query parameters for listing providers. */
-		WorkspaceProvidersQuery: {
-			/**
-			 * @description Filter by provider (`openai`, `ollama`, `anthropic`). Repeatable; a
-			 *     provider matches if it uses any of the given providers. Empty means no
-			 *     filter.
-			 * @default []
-			 */
-			provider?: string[];
-		};
-		/**
-		 * @description Path parameters for a redaction.
-		 *
-		 *     The redaction id is globally unique, so a redaction is addressed by id alone
-		 *     and resolved within the workspace by the query.
-		 */
-		WorkspaceRedactionPathParams: {
-			/** @description Opaque identifier of the redaction. */
-			redactionId: components["schemas"]["RedactionId"];
-		};
-		/**
-		 * @description Response type for a redaction.
-		 *
-		 *     A redaction is one redact pass over a detection, produced with a specific set
-		 *     of reviewer edits. It owns the redacted output document (downloadable through
-		 *     the normal file endpoints) and a review audit recording what was redacted and
-		 *     why (fetched from the redaction's `review` endpoint).
-		 *
-		 *     Named `WorkspaceRedactionResult` rather than `Redaction` because the engine's audit
-		 *     schema already carries a `Redaction` (an audit event), and the two must not
-		 *     collide in the generated `OpenAPI`.
-		 */
-		WorkspaceRedactionResult: {
-			/**
-			 * Format: date-time
-			 * @description When the redaction was created.
-			 */
-			createdAt: string;
-			/** @description The detection this redaction was produced from. */
-			detectionId: components["schemas"]["DetectionId"];
-			/** @description Opaque identifier of the redaction. */
-			id: components["schemas"]["RedactionId"];
-			/**
-			 * Format: uuid
-			 * @description Redacted output document this redaction produced. `None` only if the file
-			 *     was removed (e.g. by retention).
-			 */
-			outputDocumentId?: string;
-			/** @description Account that requested the redaction. */
-			requestedBy: components["schemas"]["AccountRef"];
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceRedactionResultPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceRedactionResult"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Query parameters for listing a workspace's redactions.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint. A
-		 *     redaction has no status of its own, so it narrows by its owning detection and
-		 *     the document that detection analyzed.
-		 */
-		WorkspaceRedactionsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter to the redactions produced from a specific detection.
-			 */
-			detectionId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter to the redactions of detections analyzing a specific document.
-			 */
-			documentId?: string;
-		};
-		/**
-		 * @description Response type for a review: a named discussion on a document with a manual
-		 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-		 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
-		 *     stream is a [`WorkspaceReviewEntry`] timeline.
-		 */
-		WorkspaceReview: {
-			/** @description The reviewers assigned to this review (empty when unassigned). */
-			assignees: components["schemas"]["AccountRef"][];
-			/** @description Account that opened the review. */
-			author: components["schemas"]["AccountRef"];
-			/**
-			 * Format: date-time
-			 * @description When the review was created.
-			 */
-			createdAt: string;
-			/** @description The review's title. */
-			displayName: string;
-			/**
-			 * Format: uuid
-			 * @description Document under review.
-			 */
-			documentId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the review.
-			 */
-			id: string;
-			/** @description The review's current status. */
-			reviewStatus: components["schemas"]["ReviewStatus"];
-			/**
-			 * Format: date-time
-			 * @description When the review was last updated.
-			 */
-			updatedAt: string;
-		};
-		/** @description Path parameters addressing a reviewer assignment on a review. */
-		WorkspaceReviewAssigneePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Account id of the reviewer to assign or unassign.
-			 */
-			accountId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the review.
-			 */
-			reviewId: string;
-		};
-		/** @description Path parameters addressing a review-to-detection link. */
-		WorkspaceReviewDetectionPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the detection to reference.
-			 */
-			detectionId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the review.
-			 */
-			reviewId: string;
-		};
-		/**
-		 * @description One entry in a review's timeline: either a message or a lifecycle event, tagged
-		 *     so a client renders them interleaved in order.
-		 */
-		WorkspaceReviewEntry:
-			| ({
-					/** @constant */
-					type: "comment";
-			  } & components["schemas"]["WorkspaceComment"])
-			| ({
-					/** @constant */
-					type: "event";
-			  } & components["schemas"]["WorkspaceReviewEvent"]);
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceReviewEntryPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceReviewEntry"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description One non-message entry in a review timeline (opened, renamed, a detection or
-		 *     redaction linked, an assignment change, verified, or reopened).
-		 */
-		WorkspaceReviewEvent: {
-			/** @description Account that performed the action; `None` if that account was removed. */
-			actor?: components["schemas"]["AccountRef"];
-			/**
-			 * Format: date-time
-			 * @description When the event happened.
-			 */
-			createdAt: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the event.
-			 */
-			id: string;
-			/** @description What happened. */
-			kind: components["schemas"]["ReviewEventKind"];
-			/**
-			 * @description Event-specific detail (the new name, a linked id, an assignee); `None` when
-			 *     none.
-			 */
-			target?: unknown;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceReviewEventPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceReviewEvent"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceReviewPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceReview"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-		};
-		/** @description Path parameters addressing one review by its id. */
-		WorkspaceReviewPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the review.
-			 */
-			reviewId: string;
-		};
-		/** @description Path parameters addressing a review-to-redaction link. */
-		WorkspaceReviewRedactionPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the redaction to reference.
-			 */
-			redactionId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the review.
-			 */
-			reviewId: string;
-		};
-		/**
-		 * @description Query parameters for listing a workspace's reviews (the review queue).
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint. Accounts
-		 *     are addressed by id.
-		 */
-		WorkspaceReviewsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter by the assigned reviewer (account id).
-			 */
-			assignee?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the review's opening author (account id).
-			 */
-			author?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter to the reviews of a specific document.
-			 */
-			documentId?: string;
-			/** @description Filter by review status. */
-			reviewStatus?: components["schemas"]["ReviewStatus"];
-		};
-		/**
-		 * @description The role and permission level of a workspace member.
-		 *
-		 *     Corresponds to the `WORKSPACE_ROLE` `PostgreSQL` enum and provides
-		 *     hierarchical access control for workspace members with clearly defined
-		 *     capabilities.
-		 */
-		WorkspaceRole: "owner" | "admin" | "editor" | "reviewer";
-		/** @description Typed workspace settings, the JSON stored in the `workspaces.settings` column. */
-		WorkspaceSettings: {
-			/**
-			 * Format: uint64
-			 * @description A soft per-file upload cap in bytes: an upload larger than this is
-			 *     rejected for this workspace. `None` imposes no workspace-specific cap.
-			 *
-			 *     The server-wide hard limit still applies regardless; the effective cap is
-			 *     the smaller of the two.
-			 */
-			maxUploadBytes?: number;
-			/**
-			 * @description How document pages are rasterised for OCR during detection.
-			 * @default auto
-			 */
-			raster?: components["schemas"]["RasterPolicy"];
-			/**
-			 * @description Data-retention rules for the workspace.
-			 * @default {
-			 *       "auditLogs": {
-			 *         "mode": "ephemeral"
-			 *       },
-			 *       "intermediates": {
-			 *         "mode": "ephemeral"
-			 *       },
-			 *       "originalDocuments": {
-			 *         "mode": "ephemeral"
-			 *       },
-			 *       "redactedDocuments": {
-			 *         "mode": "ephemeral"
-			 *       }
-			 *     }
-			 */
-			retention?: components["schemas"]["RetentionSettings"];
-		};
-		/** @description Storage totals across a workspace's live files. */
-		WorkspaceStorageAnalytics: {
-			/**
-			 * @description Per-kind breakdown, one entry per document `kind` (zero-filled), in a
-			 *     stable order.
-			 */
-			byKind: components["schemas"]["WorkspaceStorageKindEntry"][];
-			/**
-			 * Format: int64
-			 * @description Number of live files.
-			 */
-			fileCount: number;
-			/**
-			 * Format: int64
-			 * @description Total bytes of all live files.
-			 */
-			totalBytes: number;
-		};
-		/** @description One document `kind`'s share of a workspace's storage. */
-		WorkspaceStorageKindEntry: {
-			/**
-			 * Format: int64
-			 * @description Number of live documents of this kind.
-			 */
-			fileCount: number;
-			/** @description The document kind. */
-			kind: components["schemas"]["DocumentKind"];
-			/**
-			 * Format: int64
-			 * @description Total bytes of live documents of this kind.
-			 */
-			totalBytes: number;
-		};
-		/**
-		 * @description A connection's scheduled-sync configuration (its cron config), present only
-		 *     for connections that sync on a timer. A connection can transfer on demand
-		 *     without this — it is purely the schedule, not a capability marker. When the
-		 *     connection last synced is on [`WorkspaceConnection`] itself, since a connection with no
-		 *     schedule still syncs.
-		 */
-		WorkspaceSyncSchedule: {
-			/** @description How an import reconciles files whose source object was deleted. */
-			deletionPolicy: components["schemas"]["SyncDeletionPolicy"];
-			/** @description Cron expression for scheduled imports, if configured. */
-			scheduleCron?: string;
-			/** @description Whether the connection imports data in or exports data out. */
-			syncMode: components["schemas"]["SyncMode"];
-		};
-		/** @description Query parameters for listing all syncs across a workspace. */
-		WorkspaceSyncsQuery: {
-			/**
-			 * @description Filter by connection provider (`s3`, `azure`, `gcs`). Repeatable; a sync
-			 *     matches if its connection uses any of the given providers. Empty means no
-			 *     provider filter.
-			 * @default []
-			 */
-			provider?: string[];
-			/** @description Filter by sync status. */
-			status?: components["schemas"]["SyncStatus"];
-		};
-		/** @description Inference token usage across a workspace's detections. */
-		WorkspaceUsageAnalytics: {
-			/** @description Per-model breakdown, one entry per model used, in a stable order. */
-			byModel: components["schemas"]["WorkspaceModelUsageEntry"][];
-			/**
-			 * Format: int64
-			 * @description Total input/prompt tokens across all models.
-			 */
-			inputTokens: number;
-			/**
-			 * Format: int64
-			 * @description Total output/completion tokens across all models.
-			 */
-			outputTokens: number;
-			/**
-			 * Format: int64
-			 * @description Total tokens as reported across all models (not necessarily input +
-			 *     output).
-			 */
-			totalTokens: number;
-		};
-		/** @description Workspace webhook response. */
-		WorkspaceWebhook: {
-			/**
-			 * Format: int32
-			 * @description Consecutive failed deliveries since the last success.
-			 */
-			consecutiveFailures: number;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was first created.
-			 */
-			createdAt: string;
-			/** @description Account that created this webhook. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Detailed description of the webhook's purpose. */
-			description: string;
-			/** @description Human-readable name for the webhook. */
-			displayName: string;
-			/** @description List of event types this webhook receives. */
-			events: components["schemas"]["WebhookEvent"][];
-			/** @description Custom headers included in webhook requests. */
-			headers: {
-				[key: string]: string;
-			};
-			/** @description Opaque identifier of the webhook. */
-			id: components["schemas"]["WebhookId"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent failed delivery.
-			 */
-			lastFailureAt?: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent successful delivery.
-			 */
-			lastSuccessAt?: string;
-			/** @description Current status of the webhook. */
-			status: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was last modified.
-			 */
-			updatedAt: string;
-			/** @description The URL to send webhook payloads to. */
-			url: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-		};
 		/**
 		 * @description Webhook creation response that includes the secret (visible only once).
 		 *
@@ -22817,40 +22456,56 @@ export interface components {
 		 *     again. Store it securely.
 		 */
 		WorkspaceWebhookCreated: {
+			/** @description Opaque identifier of the webhook. */
+			id: components["schemas"]["WebhookId"];
 			/**
-			 * Format: int32
-			 * @description Consecutive failed deliveries since the last success.
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
 			 */
-			consecutiveFailures: number;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was first created.
-			 */
-			createdAt: string;
-			/** @description Account that created this webhook. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description Detailed description of the webhook's purpose. */
-			description: string;
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
 			/** @description Human-readable name for the webhook. */
 			displayName: string;
+			/** @description Detailed description of the webhook's purpose. */
+			description: string;
+			/** @description The URL to send webhook payloads to. */
+			url: string;
 			/** @description List of event types this webhook receives. */
 			events: components["schemas"]["WebhookEvent"][];
 			/** @description Custom headers included in webhook requests. */
 			headers: {
 				[key: string]: string;
 			};
-			/** @description Opaque identifier of the webhook. */
-			id: components["schemas"]["WebhookId"];
+			/** @description Current status of the webhook. */
+			status: components["schemas"]["WebhookStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp of the most recent successful delivery.
+			 */
+			lastSuccessAt?: string;
 			/**
 			 * Format: date-time
 			 * @description Timestamp of the most recent failed delivery.
 			 */
 			lastFailureAt?: string;
 			/**
-			 * Format: date-time
-			 * @description Timestamp of the most recent successful delivery.
+			 * Format: int32
+			 * @description Consecutive failed deliveries since the last success.
 			 */
-			lastSuccessAt?: string;
+			consecutiveFailures: number;
+			/** @description Account that created this webhook. */
+			createdBy: components["schemas"]["AccountRef"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when this webhook was first created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when this webhook was last modified.
+			 */
+			updatedAt: string;
 			/**
 			 * @description HMAC-SHA256 signing secret for webhook verification.
 			 *
@@ -22858,22 +22513,6 @@ export interface components {
 			 *     Store it securely as it cannot be retrieved again.
 			 */
 			secret: string;
-			/** @description Current status of the webhook. */
-			status: components["schemas"]["WebhookStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when this webhook was last modified.
-			 */
-			updatedAt: string;
-			/** @description The URL to send webhook payloads to. */
-			url: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -22885,31 +22524,318 @@ export interface components {
 		WorkspaceWebhookPage: {
 			/** @description Items in this page. */
 			items: components["schemas"]["WorkspaceWebhook"][];
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
 			/**
 			 * Format: int64
 			 * @description Total count of items matching the query (if requested).
 			 */
 			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/** @description Workspace webhook response. */
+		WorkspaceWebhook: {
+			/** @description Opaque identifier of the webhook. */
+			id: components["schemas"]["WebhookId"];
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Human-readable name for the webhook. */
+			displayName: string;
+			/** @description Detailed description of the webhook's purpose. */
+			description: string;
+			/** @description The URL to send webhook payloads to. */
+			url: string;
+			/** @description List of event types this webhook receives. */
+			events: components["schemas"]["WebhookEvent"][];
+			/** @description Custom headers included in webhook requests. */
+			headers: {
+				[key: string]: string;
+			};
+			/** @description Current status of the webhook. */
+			status: components["schemas"]["WebhookStatus"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp of the most recent successful delivery.
+			 */
+			lastSuccessAt?: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp of the most recent failed delivery.
+			 */
+			lastFailureAt?: string;
+			/**
+			 * Format: int32
+			 * @description Consecutive failed deliveries since the last success.
+			 */
+			consecutiveFailures: number;
+			/** @description Account that created this webhook. */
+			createdBy: components["schemas"]["AccountRef"];
+			/**
+			 * Format: date-time
+			 * @description Timestamp when this webhook was first created.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Timestamp when this webhook was last modified.
+			 */
+			updatedAt: string;
 		};
 		/** @description Path parameters for webhook operations. */
 		WorkspaceWebhookPathParams: {
 			/** @description Opaque identifier of the webhook. */
 			webhookId: components["schemas"]["WebhookId"];
 		};
+		/** @description Request payload for updating an existing workspace webhook. */
+		UpdateWorkspaceWebhook: {
+			/** @description Updated human-readable name for the webhook (1-128 characters). */
+			displayName?: string;
+			/** @description Updated description of the webhook's purpose (max 500 characters). */
+			description?: string;
+			/**
+			 * Format: uri
+			 * @description Updated URL to send webhook payloads to.
+			 */
+			url?: string;
+			/** @description Updated list of event types this webhook should receive. */
+			events?: components["schemas"]["WebhookEvent"][];
+			/** @description Updated custom headers to include in webhook requests. */
+			headers?: {
+				[key: string]: string;
+			};
+			/**
+			 * @description Updated status (enabled or disabled). Ignored while the webhook is
+			 *     system-suspended.
+			 */
+			status?: components["schemas"]["WebhookStatus"];
+		};
+		/** @description Request payload for testing a webhook. */
+		TestWorkspaceWebhook: {
+			/**
+			 * @description Optional custom payload to send in the test request.
+			 *     If not provided, a default test payload will be used.
+			 */
+			payload?: unknown;
+		};
 		/** @description Result of a webhook delivery attempt. */
 		WorkspaceWebhookResult: {
-			/**
-			 * Format: int64
-			 * @description Time taken to receive a response in milliseconds.
-			 */
-			responseTimeMs: number;
 			/**
 			 * Format: uint16
 			 * @description HTTP status code returned by the webhook endpoint.
 			 */
 			statusCode: number;
+			/**
+			 * Format: int64
+			 * @description Time taken to receive a response in milliseconds.
+			 */
+			responseTimeMs: number;
+		};
+		/** @description The account's sign-in methods. */
+		AccountIdentities: {
+			/** @description Every identity the account can sign in with. */
+			identities: components["schemas"]["AccountIdentity"][];
+		};
+		/**
+		 * @description One of an account's sign-in methods, for the identities listing.
+		 *
+		 *     Never exposes the credential itself (a password hash or a provider subject),
+		 *     only which methods exist and metadata about them.
+		 */
+		AccountIdentity: {
+			/** @description The authentication method: `password` or an OIDC provider. */
+			provider: components["schemas"]["IdentityProvider"];
+			/** @description The email the provider asserted at link time, for a linked provider. */
+			providerEmail?: string;
+			/**
+			 * Format: date-time
+			 * @description When the identity was created (the password set, or the provider linked).
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the identity was last updated.
+			 */
+			updatedAt: string;
+		};
+		/**
+		 * @description How an account authenticates.
+		 *
+		 *     Corresponds to the `IDENTITY_PROVIDER` `PostgreSQL` enum. [`Password`] is a
+		 *     locally-held Argon2 secret; the rest are external OIDC providers keyed by
+		 *     the provider's subject claim.
+		 *
+		 *     [`Password`]: Self::Password
+		 */
+		IdentityProvider: "password" | "google" | "microsoft";
+		/**
+		 * @description A password set or change.
+		 *
+		 *     When the account already has a password, `current_password` is required and
+		 *     verified before the change is applied, so a hijacked session or CSRF cannot
+		 *     silently reset it (and lock out the real owner). When the account has no
+		 *     password yet (an SSO-only account setting its first one), there is nothing to
+		 *     re-authenticate against, so a fresh step-up `reauth_proof` is required instead
+		 *     — a live session alone must not mint a durable new credential.
+		 */
+		SetPassword: {
+			/**
+			 * @description The account's current password. Required when the account already has a
+			 *     password; omitted when setting a first password on an account that has
+			 *     none (supply `reauth_proof` instead).
+			 */
+			currentPassword?: string;
+			/**
+			 * @description A step-up re-authentication proof (from the OIDC reauth endpoint).
+			 *     Required when *setting a first password* on an account that has none;
+			 *     ignored when changing an existing password.
+			 */
+			reauthProof?: string;
+			/** @description The new password (will be hashed before storage). */
+			newPassword: string;
+		};
+		/**
+		 * @description Path parameters for a provider-scoped identity operation: signing in with,
+		 *     re-authenticating with, linking, or unlinking a provider. Named identically to
+		 *     the stored [`IdentityProvider`], so the API and the account's identities name
+		 *     each provider the same way.
+		 */
+		IdentityPathParams: {
+			/** @description The identity provider to act on. */
+			provider: components["schemas"]["IdentityProvider"];
+		};
+		/** @description Optional query parameters for starting a sign-in, link, or reauth. */
+		OidcStartQuery: {
+			/**
+			 * @description Frontend URL to return to once done. Carried through the flow and used to
+			 *     build the callback's redirect.
+			 */
+			redirectUri?: string;
+			/**
+			 * @description A step-up re-authentication proof. Required to start a *link* (adding a
+			 *     provider is a credential-adding action, so a live session alone is not
+			 *     enough); ignored for sign-in and reauth.
+			 */
+			reauthProof?: string;
+		};
+		/** @description The response to a successful sign-in start: where to send the user. */
+		OidcStartResponse: {
+			/** @description The provider authorize URL the client should redirect the user to. */
+			authorizeUrl: string;
+		};
+		/**
+		 * @description Request payload to mint a native-app (desktop) session token.
+		 *
+		 *     Called by the frontend after a normal browser (cookie) login when the login
+		 *     was initiated by the desktop app: it exchanges the just-established session for
+		 *     a long-lived `app` token the frontend then hands to the app via the
+		 *     `redirectUri` deep-link. The `redirectUri` must be a registered desktop scheme
+		 *     (e.g. `nvisy://…`), so a token cannot be minted toward a web origin.
+		 */
+		DesktopTokenRequest: {
+			/**
+			 * @description The desktop deep-link the app will receive the token on. Must match a
+			 *     configured desktop redirect scheme.
+			 */
+			redirectUri: string;
+		};
+		/**
+		 * @description The result of minting a native-app (desktop) session token.
+		 *
+		 *     The frontend hands `apiToken` to the desktop app via the `redirectUri`
+		 *     deep-link (`{redirectUri}?token={apiToken}`); the app stores it and sends it as
+		 *     an `Authorization: Bearer` credential. Browser web sessions use cookies
+		 *     instead and return no token.
+		 */
+		AccountDesktopToken: {
+			/** @description The signed `app` JWT to send as a Bearer token. */
+			apiToken: string;
+			/** @description The desktop deep-link the token should be delivered on, echoed back. */
+			redirectUri: string;
+		};
+		/** @description Request payload for login. */
+		Login: {
+			/** @description Email address or username of the account. */
+			identifier: string;
+			/** @description Password of the account. */
+			password: string;
+			/**
+			 * @description Whether to remember this device for extended session. Defaults to false.
+			 * @default false
+			 */
+			rememberMe?: boolean;
+		};
+		/** @description Request payload for signup. */
+		Signup: {
+			/** @description Public account handle, unique across all accounts. */
+			username: components["schemas"]["Handle"];
+			/** @description Optional display name of the account. */
+			displayName?: string;
+			/**
+			 * Format: email
+			 * @description Email address of the account.
+			 */
+			emailAddress: string;
+			/** @description Password of the account. */
+			password: string;
+			/**
+			 * @description Whether to remember the device for extended session. Defaults to false.
+			 * @default false
+			 */
+			rememberMe?: boolean;
+		};
+		/**
+		 * @description The sign-in methods this deployment offers.
+		 *
+		 *     Lets a client render the login screen without probing: one ordered list of
+		 *     the identity providers a person can sign in with — `password`, plus exactly
+		 *     the OIDC providers (`google`, `microsoft`, ...) whose apps are configured on
+		 *     the server. This is pre-authentication reference data, so the endpoint is
+		 *     unauthenticated.
+		 */
+		AuthCapabilities: {
+			/**
+			 * @description The available sign-in methods, in the order a client should present them:
+			 *     `password` first, then each configured OIDC provider.
+			 */
+			methods: components["schemas"]["IdentityProvider"][];
+		};
+		/** @description Response body for `GET /health/`. */
+		Health: {
+			/** @description Overall service status. */
+			status: components["schemas"]["HealthStatus"];
+			/** @description Per-component health checks. */
+			checks: components["schemas"]["ComponentHealth"][];
+			/** @description RFC 3339 timestamp of when the check was performed. */
+			timestamp: string;
+		};
+		/** @description Operational status of a service component. */
+		HealthStatus: "healthy" | "degraded" | "unhealthy";
+		/** @description Health of a single service component. */
+		ComponentHealth: {
+			/** @description Component name (e.g. `"postgres"`, `"nats"`). */
+			name: string;
+			/** @description Status of this component. */
+			status: components["schemas"]["HealthStatus"];
+		};
+		/**
+		 * @description Path parameters for a public avatar route: the owner id and the avatar's
+		 *     content-hash version.
+		 *
+		 *     Each version is a distinct stored object, so an unknown version simply does
+		 *     not resolve — the version needs no separate validation.
+		 */
+		AvatarPathParams: {
+			/**
+			 * Format: uuid
+			 * @description Opaque id of the avatar's owner.
+			 */
+			id: string;
+			/** @description Content-hash version segment identifying the exact stored object. */
+			version: string;
 		};
 	};
 	responses: never;
