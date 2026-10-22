@@ -8,6 +8,32 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.59.0] - 2026-10-22
+
+### Changed
+
+- Regenerated the API schema against the restructured platform handlers
+- **Breaking:** audit geometry datatypes renamed to their f64 variants —
+  `BoundingBox`, `Point`, and `Polygon` now alias `BoundingBoxF64`,
+  `PointF64`, and `PolygonF64`
+- **Breaking:** removed audit datatypes `Dimensions`, `TextData`, `ImageData`,
+  and `AudioData` — the `data` field was dropped from the per-modality `*Hint`
+  schemas, so these types no longer exist in the spec
+- **Breaking:** scope language datatypes restructured — `Language` →
+  `LanguageClaim`, `Languages` → `LanguageClaims` (`LanguageClaim[]`),
+  `LanguageProvenance` → `LanguageSource` (now also carries the detection
+  confidence), and `LanguageSpan` → `RangeOfUint` (a byte-offset range); the
+  claims now hang off `DocumentContext` rather than `ScopeMetadata`
+- **Breaking:** artifact OCR layout flattened — `LayoutBlock` and `LayoutWord`
+  are replaced by a single `LayoutRegion`
+- **Breaking:** removed analytics datatypes `UsageReport` (an `Audit` now
+  carries a bare `Usage[]`) and `RecognizerId` (gone from the spec)
+
+### Added
+
+- Analytics datatypes `Outcome`, `ErrorKind`, `Units`, and `Meter`, newly
+  reachable through the meter-based per-call `Usage` model
+
 ## [0.58.0] - 2026-09-20
 
 ### Changed
