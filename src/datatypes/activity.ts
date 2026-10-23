@@ -2,6 +2,7 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
+// Activity-log resources.
 export type WorkspaceActivity = Schemas["WorkspaceActivity"];
 export type WorkspaceActivityPage = Schemas["WorkspaceActivityPage"];
 // The kind of an activity, usable as a list/export filter.

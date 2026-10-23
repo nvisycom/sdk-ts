@@ -12,6 +12,7 @@ export type CreateWorkspaceWebhook = Schemas["CreateWorkspaceWebhook"];
 export type UpdateWorkspaceWebhook = Schemas["UpdateWorkspaceWebhook"];
 export type TestWorkspaceWebhook = Schemas["TestWorkspaceWebhook"];
 export type WorkspaceWebhookResult = Schemas["WorkspaceWebhookResult"];
+export type WorkspaceWebhookPage = Schemas["WorkspaceWebhookPage"];
+// Delivery status and the subscribable event set.
 export type WebhookStatus = Schemas["WebhookStatus"];
 export type WebhookEvent = Schemas["WebhookEvent"];
-export type WorkspaceWebhookPage = Schemas["WorkspaceWebhookPage"];

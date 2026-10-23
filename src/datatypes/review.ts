@@ -14,6 +14,9 @@ export type WorkspaceReviewsQuery = Schemas["WorkspaceReviewsQuery"];
 
 // Review timeline: comments interleaved with lifecycle events.
 export type WorkspaceReviewEvent = Schemas["WorkspaceReviewEvent"];
+// The kind of a non-message timeline event (opened, renamed, linked, assigned,
+// verified, reopened). The discriminant on `WorkspaceReviewEvent.kind`.
+export type ReviewEventKind = Schemas["ReviewEventKind"];
 export type WorkspaceReviewEventPage = Schemas["WorkspaceReviewEventPage"];
 export type WorkspaceReviewEntry = Schemas["WorkspaceReviewEntry"];
 export type WorkspaceReviewEntryPage = Schemas["WorkspaceReviewEntryPage"];

@@ -2,6 +2,7 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
+// Workspace resources.
 export type Workspace = Schemas["Workspace"];
 export type CreateWorkspace = Schemas["CreateWorkspace"];
 export type UpdateWorkspace = Schemas["UpdateWorkspace"];
