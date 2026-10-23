@@ -17213,45 +17213,59 @@ export interface components {
 		 */
 		LabelRef: string;
 		/**
-		 * @description Where an entity sits in text: a [coordinate](TextCoord) (a decoded byte range,
-		 *     or a source-only reference) plus an optional page number.
+		 * @description Where an entity sits in text.
 		 *
-		 *     The coordinate is either a [`Decoded`](TextCoord::Decoded) byte range in the
-		 *     pipeline's text stream, or a [`Source`](TextCoord::Source)-only reference for
-		 *     content with no decoded range (a reviewer selecting rendered text). The page
-		 *     is orthogonal to the coordinate kind, so it sits alongside rather than inside.
+		 *     Two orthogonal facts:
 		 *
-		 *     Ordering and overlap consider only the coordinate; the page is carried for
-		 *     codecs that page their text but does not affect comparison.
+		 *     - [`span`](Self::span): the byte range of the match in the decoded detection
+		 *       text. Present for every entity a recognizer found over text; `None` only
+		 *       for a selection with no decoded text (a reviewer marking the rendered
+		 *       medium). This is the coordinate detection, reconciliation, and redaction
+		 *       work in.
+		 *     - [`anchors`](Self::anchors): where that text *physically* lives, so a
+		 *       consumer can edit the original bytes or paint a highlight — zero or more
+		 *       [`TextAnchor`]s. **Empty means the span is its own location** (plain text,
+		 *       CSV: the decoded text *is* the source). A codec whose decoded text differs
+		 *       from its raw bytes (OOXML, JSON escapes) attaches [`Bytes`](TextAnchor::Bytes)
+		 *       anchors; a rendering codec (PDF) attaches [`Rendered`](TextAnchor::Rendered)
+		 *       anchors, one per line the span wraps across.
+		 *
+		 *     Ordering, overlap, and union are defined on the `span`; the anchors ride
+		 *     along (concatenated on union) but do not change comparison beyond equality.
 		 */
 		TextLocation: {
-			/** @description The coordinate: a decoded range, or a source-only reference. */
-			coord: components["schemas"]["TextCoord"];
 			/**
-			 * Format: uint32
-			 * @description 1-based page number, when known. Orthogonal to the coordinate kind.
+			 * @description The match's byte range in the decoded text, or `None` for a selection
+			 *     with no decoded text (a reviewer marking the rendered medium).
 			 */
-			page?: number;
+			span?: components["schemas"]["Range_of_uint"];
+			/**
+			 * @description Where the text physically lives. Empty when the span is its own source
+			 *     (plain text); otherwise raw-byte and/or rendered-page anchors.
+			 */
+			anchors?: components["schemas"]["TextAnchor"][];
 		};
 		/**
-		 * @description The coordinate of a [`TextLocation`]: a decoded byte range, or a source-only
-		 *     reference.
-		 *
-		 *     The distinction is whether a decoded range exists at all. A recognizer over
-		 *     decoded text produces a [`Decoded`](Self::Decoded) span (with the raw source
-		 *     it decodes from, when the codec's decoded text differs from the source). A
-		 *     reviewer marking rendered text has no decoded range, only where the selection
-		 *     sits in the raw bytes, a [`Source`](Self::Source).
+		 * @description Where a span's text physically lives: raw source bytes, or a rendered-page
+		 *     region. A location may carry several (a span wrapping two lines of a PDF, or
+		 *     drawn from several raw runs of an OOXML part).
 		 */
-		TextCoord:
+		TextAnchor:
 			| ({
 					/** @constant */
-					kind: "decoded";
-			  } & components["schemas"]["DecodedSpan"])
-			| ({
+					kind: "bytes";
+			  } & components["schemas"]["SourceRef"])
+			| {
 					/** @constant */
-					kind: "source";
-			  } & components["schemas"]["SourceSpan"]);
+					kind: "rendered";
+					/**
+					 * Format: uint32
+					 * @description 1-based page number.
+					 */
+					page: number;
+					/** @description The region in page-normalized `0.0..=1.0` coordinates (top-left). */
+					rect: components["schemas"]["UnitBoundingBox"];
+			  };
 		/**
 		 * @description A reference back to the original source: a byte range, and, for a container
 		 *     whose body spans several files, which part that range indexes.
@@ -17276,40 +17290,42 @@ export interface components {
 			part?: string;
 		};
 		/**
-		 * @description A decoded byte range and the raw source it decodes from.
+		 * @description Axis-aligned bounding box in normalized `0.0..=1.0` coordinates, top-left
+		 *     origin: `(0, 0)` is the top-left corner of the medium and `(1, 1)` the
+		 *     bottom-right, with `y` increasing downward.
 		 *
-		 *     The `range` is a half-open `[start, end)` span in the decoded text stream.
-		 *     `source` carries the exact raw byte range(s) that span came from for codecs
-		 *     whose decoded text differs from the source (XML/HTML/DOCX entity decoding,
-		 *     JSON escapes); it is empty when the source equals the decoded text.
-		 */
-		DecodedSpan: {
-			/** @description Byte range within the (decoded) text content. */
-			range: components["schemas"]["Range_of_uint"];
-			/**
-			 * @description The exact raw source ranges this decoded span came from. Empty when the
-			 *     source equals the decoded text.
-			 *
-			 *     Usually one range; a reconciled span that fused several source runs (or a
-			 *     span crossing an escape) carries several, kept distinct rather than merged
-			 *     across gaps. Sorted, deduplicated.
-			 */
-			source?: components["schemas"]["SourceRef"][];
-		};
-		/**
-		 * @description A source-only coordinate: raw byte range(s) with no decoded span.
+		 *     It names a position *within* a rendered medium without knowing its pixel
+		 *     size, so one value serves a viewer at any zoom: a highlight over a PDF page,
+		 *     a region a vision-language model reports, a box on an image. The producer
+		 *     divides device coordinates by the medium's dimensions; the consumer
+		 *     multiplies back by whatever size it renders at.
 		 *
-		 *     The counterpart to [`DecodedSpan`] for content the pipeline never decoded (a
-		 *     reviewer selecting rendered text). A named struct rather than a bare `Vec`
-		 *     variant so the coordinate serializes as a map, which an internally tagged
-		 *     enum can inject its `kind` tag into.
+		 *     Stored and serialized as the flat `{ x, y, width, height }` a renderer wants
+		 *     (`x`/`y` the top-left origin, both in fractions). Field values are not clamped
+		 *     to `0.0..=1.0`: the type carries the *intent* of unit-square coordinates, not
+		 *     a hard invariant, and a box may legitimately sit slightly outside the medium.
 		 */
-		SourceSpan: {
+		UnitBoundingBox: {
 			/**
-			 * @description The raw byte range(s) the selection sits in. Sorted, deduplicated,
-			 *     non-empty by construction.
+			 * Format: double
+			 * @description Left edge, as a fraction of the medium width (top-left origin).
 			 */
-			source: components["schemas"]["SourceRef"][];
+			x: number;
+			/**
+			 * Format: double
+			 * @description Top edge, as a fraction of the medium height (`y` increases downward).
+			 */
+			y: number;
+			/**
+			 * Format: double
+			 * @description Width, as a fraction of the medium width.
+			 */
+			width: number;
+			/**
+			 * Format: double
+			 * @description Height, as a fraction of the medium height.
+			 */
+			height: number;
 		};
 		/**
 		 * @description A detection recognition missed.
@@ -17335,20 +17351,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text carries either coordinate kind of [`TextCoord`]: a
-			 *     [`Decoded`] span for a caller with an offset into the
-			 *     decoded stream, or a [`Source`] one for a caller holding
-			 *     only raw file bytes — a reviewer selecting rendered text,
-			 *     say — which the engine reverse-resolves. Source-only is its
-			 *     own kind rather than a decoded span left empty, so such a
-			 *     selection is representable as itself.
+			 *     Text splits that into two orthogonal facts: a
+			 *     [`span`] over the decoded stream, and zero or more
+			 *     [`anchors`] saying where that text physically lives. A
+			 *     caller with a decoded offset sets the span; one holding only
+			 *     raw file bytes — a reviewer selecting rendered text, say —
+			 *     leaves it `None` and anchors the selection instead, which
+			 *     the engine reverse-resolves. So such a selection is
+			 *     representable as itself rather than as an empty span.
 			 *
 			 *     The other three media have no such alternative: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`TextCoord`]: elide::modality::text::TextCoord
-			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
-			 *     [`Source`]: elide::modality::text::TextCoord::Source
+			 *     [`span`]: elide::modality::text::TextLocation::span
+			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
 			 */
 			location: components["schemas"]["TextLocation"];
 			/**
@@ -17509,20 +17525,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text carries either coordinate kind of [`TextCoord`]: a
-			 *     [`Decoded`] span for a caller with an offset into the
-			 *     decoded stream, or a [`Source`] one for a caller holding
-			 *     only raw file bytes — a reviewer selecting rendered text,
-			 *     say — which the engine reverse-resolves. Source-only is its
-			 *     own kind rather than a decoded span left empty, so such a
-			 *     selection is representable as itself.
+			 *     Text splits that into two orthogonal facts: a
+			 *     [`span`] over the decoded stream, and zero or more
+			 *     [`anchors`] saying where that text physically lives. A
+			 *     caller with a decoded offset sets the span; one holding only
+			 *     raw file bytes — a reviewer selecting rendered text, say —
+			 *     leaves it `None` and anchors the selection instead, which
+			 *     the engine reverse-resolves. So such a selection is
+			 *     representable as itself rather than as an empty span.
 			 *
 			 *     The other three media have no such alternative: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`TextCoord`]: elide::modality::text::TextCoord
-			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
-			 *     [`Source`]: elide::modality::text::TextCoord::Source
+			 *     [`span`]: elide::modality::text::TextLocation::span
+			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
 			 */
 			location: components["schemas"]["TabularLocation"];
 			/**
@@ -17659,20 +17675,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text carries either coordinate kind of [`TextCoord`]: a
-			 *     [`Decoded`] span for a caller with an offset into the
-			 *     decoded stream, or a [`Source`] one for a caller holding
-			 *     only raw file bytes — a reviewer selecting rendered text,
-			 *     say — which the engine reverse-resolves. Source-only is its
-			 *     own kind rather than a decoded span left empty, so such a
-			 *     selection is representable as itself.
+			 *     Text splits that into two orthogonal facts: a
+			 *     [`span`] over the decoded stream, and zero or more
+			 *     [`anchors`] saying where that text physically lives. A
+			 *     caller with a decoded offset sets the span; one holding only
+			 *     raw file bytes — a reviewer selecting rendered text, say —
+			 *     leaves it `None` and anchors the selection instead, which
+			 *     the engine reverse-resolves. So such a selection is
+			 *     representable as itself rather than as an empty span.
 			 *
 			 *     The other three media have no such alternative: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`TextCoord`]: elide::modality::text::TextCoord
-			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
-			 *     [`Source`]: elide::modality::text::TextCoord::Source
+			 *     [`span`]: elide::modality::text::TextLocation::span
+			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
 			 */
 			location: components["schemas"]["ImageLocation"];
 			/**
@@ -17817,20 +17833,20 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text carries either coordinate kind of [`TextCoord`]: a
-			 *     [`Decoded`] span for a caller with an offset into the
-			 *     decoded stream, or a [`Source`] one for a caller holding
-			 *     only raw file bytes — a reviewer selecting rendered text,
-			 *     say — which the engine reverse-resolves. Source-only is its
-			 *     own kind rather than a decoded span left empty, so such a
-			 *     selection is representable as itself.
+			 *     Text splits that into two orthogonal facts: a
+			 *     [`span`] over the decoded stream, and zero or more
+			 *     [`anchors`] saying where that text physically lives. A
+			 *     caller with a decoded offset sets the span; one holding only
+			 *     raw file bytes — a reviewer selecting rendered text, say —
+			 *     leaves it `None` and anchors the selection instead, which
+			 *     the engine reverse-resolves. So such a selection is
+			 *     representable as itself rather than as an empty span.
 			 *
 			 *     The other three media have no such alternative: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`TextCoord`]: elide::modality::text::TextCoord
-			 *     [`Decoded`]: elide::modality::text::TextCoord::Decoded
-			 *     [`Source`]: elide::modality::text::TextCoord::Source
+			 *     [`span`]: elide::modality::text::TextLocation::span
+			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
 			 */
 			location: components["schemas"]["AudioLocation"];
 			/**

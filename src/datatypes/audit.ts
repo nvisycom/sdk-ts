@@ -71,10 +71,11 @@ export type TextAuditKind = Schemas["TextAuditKind"];
 export type TextAuditLog = Schemas["TextAuditLog"];
 export type TextHint = Schemas["TextHint"];
 export type TextLocation = Schemas["TextLocation"];
-// A text location's coordinate: a decoded byte range, or a source-only reference.
-export type TextCoord = Schemas["TextCoord"];
-export type DecodedSpan = Schemas["DecodedSpan"];
-export type SourceSpan = Schemas["SourceSpan"];
+// Where a text span physically lives: raw source bytes (`kind: "bytes"`), or a
+// region on a rendered page (`kind: "rendered"`, a `UnitBoundingBox` in
+// page-normalized `0.0..=1.0` coordinates).
+export type TextAnchor = Schemas["TextAnchor"];
+export type UnitBoundingBox = Schemas["UnitBoundingBox"];
 export type TextModel = Schemas["TextModel"];
 export type TextPattern = Schemas["TextPattern"];
 export type TextManual = Schemas["TextManual"];
