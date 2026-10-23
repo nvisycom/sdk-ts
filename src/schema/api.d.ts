@@ -4185,8 +4185,8 @@ export interface paths {
 					workspaceId: string;
 					/** @description Unique identifier of the review. */
 					reviewId: string;
-					/** @description Unique identifier of the detection to reference. */
-					detectionId: string;
+					/** @description Opaque identifier of the detection to reference. */
+					detectionId: components["schemas"]["DetectionId"];
 				};
 				cookie?: never;
 			};
@@ -4293,8 +4293,8 @@ export interface paths {
 					workspaceId: string;
 					/** @description Unique identifier of the review. */
 					reviewId: string;
-					/** @description Unique identifier of the redaction to reference. */
-					redactionId: string;
+					/** @description Opaque identifier of the redaction to reference. */
+					redactionId: components["schemas"]["RedactionId"];
 				};
 				cookie?: never;
 			};
@@ -9635,7 +9635,7 @@ export interface paths {
 					 */
 					includeCount?: boolean;
 					/** @description Filter to the redactions produced from a specific detection. */
-					detectionId?: string;
+					detectionId?: components["schemas"]["DetectionId"];
 					/** @description Filter to the redactions of detections analyzing a specific document. */
 					documentId?: string;
 				};
@@ -10557,7 +10557,7 @@ export interface paths {
 		};
 		/**
 		 * List connectors
-		 * @description Returns which connector families and providers this deployment can create: each OAuth file-service provider is available only when its app is configured on the server, while object-store and inference connections carry their own credentials and are always available. Use it to render the connect UI without probing.
+		 * @description Returns which connector families and providers this deployment can create: each OAuth file-service provider is available only when its app is configured on the server, while object-store and inference connections carry their own credentials and are always available. The inference section also reports whether a local Ollama backend can be used (self-hosted deployments only). Use it to render the connect UI without probing.
 		 */
 		get: {
 			parameters: {
@@ -15398,13 +15398,15 @@ export interface components {
 			reviewStatus?: components["schemas"]["ReviewStatus"];
 		};
 		/**
-		 * @description The review state of a file thread (a file thread is the review of its
-		 *     file). `None` on the thread means a workspace thread, which has no review.
+		 * @description The lifecycle state of a review (a reviewer-opened discussion thread on a
+		 *     document).
 		 *
-		 *     Corresponds to the `REVIEW_STATUS` `PostgreSQL` enum. It is derived from the
-		 *     review's events, never set by a user: a detection makes it `NeedsReview`, a
-		 *     redaction `InReview`, and verification `Resolved`; a later detection reopens
-		 *     it to `NeedsReview`.
+		 *     Corresponds to the `REVIEW_STATUS` `PostgreSQL` enum. The state is driven by
+		 *     assignment and explicit sign-off, not derived from linked artifacts: a review
+		 *     opens at `NeedsReview`; gaining its first assignee moves it to `InReview`, and
+		 *     removing the last assignee returns it to `NeedsReview`; verifying it sets
+		 *     `Resolved`, and reopening a resolved review returns it to `NeedsReview`.
+		 *     Assigning or unassigning a resolved review leaves it `Resolved`.
 		 */
 		ReviewStatus: "needs_review" | "in_review" | "resolved";
 		/**
@@ -15650,11 +15652,8 @@ export interface components {
 			 * @description Unique identifier of the review.
 			 */
 			reviewId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the detection to reference.
-			 */
-			detectionId: string;
+			/** @description Opaque identifier of the detection to reference. */
+			detectionId: components["schemas"]["DetectionId"];
 		};
 		/** @description Path parameters addressing a review-to-redaction link. */
 		WorkspaceReviewRedactionPathParams: {
@@ -15663,11 +15662,8 @@ export interface components {
 			 * @description Unique identifier of the review.
 			 */
 			reviewId: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the redaction to reference.
-			 */
-			redactionId: string;
+			/** @description Opaque identifier of the redaction to reference. */
+			redactionId: components["schemas"]["RedactionId"];
 		};
 		/** @description Request payload for creating a new workspace connection. */
 		CreateWorkspaceConnection: {
@@ -16571,8 +16567,9 @@ export interface components {
 		 *     Holds what a pipeline author decides — the default scope and the policies to
 		 *     apply. Recognition is entirely server-wide: the built-in pattern set plus the
 		 *     deployment's NER/LLM lineups and enrichment backends live in the engine
-		 *     config, not here. Stored as JSON in the pipeline's `definition` column but
-		 *     validated against this schema at the API boundary.
+		 *     config, not here. This is the API wire shape (camelCase, schema-validated at
+		 *     the boundary); persistence is the domain `PipelineDefinitionInput`'s job,
+		 *     which this converts to and from.
 		 *
 		 *     The label catalog is not part of this: the policies own the label vocabulary,
 		 *     and the engine derives the detection catalog from them at run time.
@@ -20539,11 +20536,8 @@ export interface components {
 		 *     the document that detection analyzed.
 		 */
 		WorkspaceRedactionsQuery: {
-			/**
-			 * Format: uuid
-			 * @description Filter to the redactions produced from a specific detection.
-			 */
-			detectionId?: string;
+			/** @description Filter to the redactions produced from a specific detection. */
+			detectionId?: components["schemas"]["DetectionId"];
 			/**
 			 * Format: uuid
 			 * @description Filter to the redactions of detections analyzing a specific document.
@@ -21811,11 +21805,8 @@ export interface components {
 			 *     clients should read the field rather than assume it.
 			 */
 			objectStores: boolean;
-			/**
-			 * @description Whether inference connections can be created. Currently always `true`, for
-			 *     the same reason as object stores.
-			 */
-			inference: boolean;
+			/** @description Which inference providers this deployment can connect to. */
+			inference: components["schemas"]["InferenceCapabilities"];
 		};
 		/**
 		 * @description Per-provider availability for the OAuth file services. Each field is `true`
@@ -21833,6 +21824,29 @@ export interface components {
 			 *     name; the wire name is `box`.)
 			 */
 			box: boolean;
+		};
+		/**
+		 * @description What inference providers this deployment can connect to.
+		 *
+		 *     Inference providers carry their own credentials, so creating one is always
+		 *     available. A local-only backend such as Ollama is different: it is reached at
+		 *     a loopback URL, which only a self-hosted deployment's endpoint policy admits —
+		 *     a cloud deployment rejects a loopback endpoint at connection time — so
+		 *     `ollama` reports whether this deployment can use it at all.
+		 */
+		InferenceCapabilities: {
+			/**
+			 * @description Whether inference providers can be created. Currently always `true` — they
+			 *     carry their own credentials, so nothing gates them server-side.
+			 */
+			available: boolean;
+			/**
+			 * @description Whether a local Ollama backend can be used, for both the `@assistant`
+			 *     reviewer and LLM-driven detection. `true` only on a self-hosted
+			 *     (`permissive`) deployment, whose endpoint policy admits a loopback URL;
+			 *     a cloud (`strict`) deployment reports `false`.
+			 */
+			ollama: boolean;
 		};
 		/** @description Request to create a new API token. */
 		CreateAccountApiToken: {
