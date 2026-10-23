@@ -14994,7 +14994,7 @@ export interface components {
 			/** @description Display name of the connection. */
 			connectionName: string;
 		};
-		/** @description Opaque conn identifier (conn_<uuid>). */
+		/** @description Opaque connection identifier (connection_<uuid>). */
 		ConnectionId: string;
 		/** @description Params of a provider activity (`provider.*`). */
 		ProviderActivityParams: {
@@ -15003,7 +15003,7 @@ export interface components {
 			/** @description Display name of the provider. */
 			providerName: string;
 		};
-		/** @description Opaque prov identifier (prov_<uuid>). */
+		/** @description Opaque provider identifier (provider_<uuid>). */
 		ProviderId: string;
 		/** @description Params of a webhook activity (`webhook.*`). */
 		WebhookActivityParams: {
@@ -15012,7 +15012,7 @@ export interface components {
 			/** @description Display name of the webhook. */
 			webhookName: string;
 		};
-		/** @description Opaque whk identifier (whk_<uuid>). */
+		/** @description Opaque webhook identifier (webhook_<uuid>). */
 		WebhookId: string;
 		/** @description Params of a document activity (`document.*`). */
 		DocumentActivityParams: {

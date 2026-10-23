@@ -2,7 +2,7 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
-/** Opaque conn identifier (conn_<uuid>). */
+/** Opaque connection identifier (connection_<uuid>). */
 export type ConnectionId = Schemas["ConnectionId"];
 
 // Connection resources and sync operations.

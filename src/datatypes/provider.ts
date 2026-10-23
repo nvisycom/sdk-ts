@@ -4,7 +4,7 @@ type Schemas = components["schemas"];
 
 // Workspace inference providers: the LLM / NER services a workspace can call.
 
-/** Opaque prov identifier (prov_<uuid>). */
+/** Opaque provider identifier (provider_<uuid>). */
 export type ProviderId = Schemas["ProviderId"];
 
 // Provider resources.

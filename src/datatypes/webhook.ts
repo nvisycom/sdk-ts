@@ -2,7 +2,7 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
-/** Opaque whk identifier (whk_<uuid>). */
+/** Opaque webhook identifier (webhook_<uuid>). */
 export type WebhookId = Schemas["WebhookId"];
 
 // Webhook resources and delivery.
