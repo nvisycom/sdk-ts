@@ -70,11 +70,13 @@ export type TextAuditEvent = Schemas["TextAuditEvent"];
 export type TextAuditKind = Schemas["TextAuditKind"];
 export type TextAuditLog = Schemas["TextAuditLog"];
 export type TextHint = Schemas["TextHint"];
+// A text location is either `Detected` (pipeline-found, always a decoded `span`,
+// optionally with raw-byte refs or rendered-page rects) or `Marked` (a reviewer
+// selection with no decoded span, just source refs or rendered rects). Rendered
+// regions are `UnitBoundingBox`es in page-normalized `0.0..=1.0` coordinates.
 export type TextLocation = Schemas["TextLocation"];
-// Where a text span physically lives: raw source bytes (`kind: "bytes"`), or a
-// region on a rendered page (`kind: "rendered"`, a `UnitBoundingBox` in
-// page-normalized `0.0..=1.0` coordinates).
-export type TextAnchor = Schemas["TextAnchor"];
+export type Detected = Schemas["Detected"];
+export type Marked = Schemas["Marked"];
 export type UnitBoundingBox = Schemas["UnitBoundingBox"];
 export type TextModel = Schemas["TextModel"];
 export type TextPattern = Schemas["TextPattern"];

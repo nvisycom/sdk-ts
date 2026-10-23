@@ -17215,56 +17215,61 @@ export interface components {
 		/**
 		 * @description Where an entity sits in text.
 		 *
-		 *     Two orthogonal facts:
+		 *     Two independent facts, one per level:
 		 *
-		 *     - [`span`](Self::span): the byte range of the match in the decoded detection
-		 *       text. Present for every entity a recognizer found over text; `None` only
-		 *       for a selection with no decoded text (a reviewer marking the rendered
-		 *       medium). This is the coordinate detection, reconciliation, and redaction
-		 *       work in.
-		 *     - [`anchors`](Self::anchors): where that text *physically* lives, so a
-		 *       consumer can edit the original bytes or paint a highlight — zero or more
-		 *       [`TextAnchor`]s. **Empty means the span is its own location** (plain text,
-		 *       CSV: the decoded text *is* the source). A codec whose decoded text differs
-		 *       from its raw bytes (OOXML, JSON escapes) attaches [`Bytes`](TextAnchor::Bytes)
-		 *       anchors; a rendering codec (PDF) attaches [`Rendered`](TextAnchor::Rendered)
-		 *       anchors, one per line the span wraps across.
+		 *     - **Is there a decoded span?** A [`Detected`] location was found by a
+		 *       recognizer over the decoded detection text and always carries a byte span;
+		 *       a [`Marked`] location is a reviewer's selection on a medium with no decoded
+		 *       text (a PDF region, or a specific container part) and has none.
+		 *     - **Where does the text physically live?** Each level's variant says: the span
+		 *       is its own source (plain text, [`Detected::Inline`]), raw bytes elsewhere
+		 *       (OOXML/JSON escapes, the `Source` variants), or a rendered-page region (PDF,
+		 *       the `Rendered` variants).
 		 *
-		 *     Ordering, overlap, and union are defined on the `span`; the anchors ride
-		 *     along (concatenated on union) but do not change comparison beyond equality.
+		 *     A reviewer marking plain text gives a byte range, so it is a
+		 *     [`Detected::Inline`], not a `Marked` — which is why [`Marked`] has no inline
+		 *     variant, and a location naming nothing is unrepresentable.
+		 *
+		 *     Ordering, overlap, and union are defined on the decoded span (a [`Marked`]
+		 *     location has none, so it never range-dedups); the physical anchor rides along.
 		 */
-		TextLocation: {
-			/**
-			 * @description The match's byte range in the decoded text, or `None` for a selection
-			 *     with no decoded text (a reviewer marking the rendered medium).
-			 */
-			span?: components["schemas"]["Range_of_uint"];
-			/**
-			 * @description Where the text physically lives. Empty when the span is its own source
-			 *     (plain text); otherwise raw-byte and/or rendered-page anchors.
-			 */
-			anchors?: components["schemas"]["TextAnchor"][];
-		};
+		TextLocation:
+			| components["schemas"]["Detected"]
+			| components["schemas"]["Marked"];
 		/**
-		 * @description Where a span's text physically lives: raw source bytes, or a rendered-page
-		 *     region. A location may carry several (a span wrapping two lines of a PDF, or
-		 *     drawn from several raw runs of an OOXML part).
+		 * @description A location the pipeline detected over decoded text: always a byte span, plus
+		 *     where that text physically lives.
 		 */
-		TextAnchor:
-			| ({
+		Detected:
+			| {
 					/** @constant */
-					kind: "bytes";
-			  } & components["schemas"]["SourceRef"])
+					kind: "inline";
+					/** @description The match's byte range in the decoded text. */
+					span: components["schemas"]["Range_of_uint"];
+			  }
+			| {
+					/** @constant */
+					kind: "source";
+					/** @description The match's byte range in the decoded text. */
+					span: components["schemas"]["Range_of_uint"];
+					/** @description The raw-byte references, normalized (sorted, deduplicated). Non-empty. */
+					refs: components["schemas"]["SourceRef"][];
+			  }
 			| {
 					/** @constant */
 					kind: "rendered";
+					/** @description The match's byte range in the decoded (page-local) text. */
+					span: components["schemas"]["Range_of_uint"];
 					/**
 					 * Format: uint32
 					 * @description 1-based page number.
 					 */
 					page: number;
-					/** @description The region in page-normalized `0.0..=1.0` coordinates (top-left). */
-					rect: components["schemas"]["UnitBoundingBox"];
+					/**
+					 * @description The regions in page-normalized `0.0..=1.0` coordinates (top-left), one
+					 *     per line the span wraps across. Non-empty.
+					 */
+					rects: components["schemas"]["UnitBoundingBox"][];
 			  };
 		/**
 		 * @description A reference back to the original source: a byte range, and, for a container
@@ -17328,6 +17333,29 @@ export interface components {
 			height: number;
 		};
 		/**
+		 * @description A reviewer's mark with no decoded span: the physical anchor is the whole
+		 *     location. (A mark on plain text gives a byte range, so it is a
+		 *     [`Detected::Inline`], not a `Marked` — hence no inline variant here.)
+		 */
+		Marked:
+			| {
+					/** @constant */
+					kind: "source";
+					/** @description The raw-byte references, normalized. Non-empty. */
+					refs: components["schemas"]["SourceRef"][];
+			  }
+			| {
+					/** @constant */
+					kind: "rendered";
+					/**
+					 * Format: uint32
+					 * @description 1-based page number.
+					 */
+					page: number;
+					/** @description The regions in page-normalized coordinates. Non-empty. */
+					rects: components["schemas"]["UnitBoundingBox"][];
+			  };
+		/**
 		 * @description A detection recognition missed.
 		 *
 		 *     Recorded on the report with human provenance, so it is never
@@ -17351,20 +17379,22 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text splits that into two orthogonal facts: a
-			 *     [`span`] over the decoded stream, and zero or more
-			 *     [`anchors`] saying where that text physically lives. A
-			 *     caller with a decoded offset sets the span; one holding only
-			 *     raw file bytes — a reviewer selecting rendered text, say —
-			 *     leaves it `None` and anchors the selection instead, which
-			 *     the engine reverse-resolves. So such a selection is
-			 *     representable as itself rather than as an empty span.
+			 *     Text makes that a choice between two shapes. A caller with a
+			 *     decoded offset sends a [`Detected`] location, which always
+			 *     carries a span; one holding only raw file bytes or a
+			 *     rendered region — a reviewer selecting text in a PDF, say —
+			 *     sends a [`Marked`] one, which carries no span and is
+			 *     reverse-resolved by the engine. A location carrying neither a
+			 *     span nor an anchor is unrepresentable, so there is no
+			 *     names-nothing case to handle — a zero-length span is still a
+			 *     span, and still reports [`is_empty`].
 			 *
-			 *     The other three media have no such alternative: their
+			 *     The other three media have no such choice: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`span`]: elide::modality::text::TextLocation::span
-			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
+			 *     [`Detected`]: elide::modality::text::Detected
+			 *     [`Marked`]: elide::modality::text::Marked
+			 *     [`is_empty`]: elide::modality::text::TextLocation::is_empty
 			 */
 			location: components["schemas"]["TextLocation"];
 			/**
@@ -17525,20 +17555,22 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text splits that into two orthogonal facts: a
-			 *     [`span`] over the decoded stream, and zero or more
-			 *     [`anchors`] saying where that text physically lives. A
-			 *     caller with a decoded offset sets the span; one holding only
-			 *     raw file bytes — a reviewer selecting rendered text, say —
-			 *     leaves it `None` and anchors the selection instead, which
-			 *     the engine reverse-resolves. So such a selection is
-			 *     representable as itself rather than as an empty span.
+			 *     Text makes that a choice between two shapes. A caller with a
+			 *     decoded offset sends a [`Detected`] location, which always
+			 *     carries a span; one holding only raw file bytes or a
+			 *     rendered region — a reviewer selecting text in a PDF, say —
+			 *     sends a [`Marked`] one, which carries no span and is
+			 *     reverse-resolved by the engine. A location carrying neither a
+			 *     span nor an anchor is unrepresentable, so there is no
+			 *     names-nothing case to handle — a zero-length span is still a
+			 *     span, and still reports [`is_empty`].
 			 *
-			 *     The other three media have no such alternative: their
+			 *     The other three media have no such choice: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`span`]: elide::modality::text::TextLocation::span
-			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
+			 *     [`Detected`]: elide::modality::text::Detected
+			 *     [`Marked`]: elide::modality::text::Marked
+			 *     [`is_empty`]: elide::modality::text::TextLocation::is_empty
 			 */
 			location: components["schemas"]["TabularLocation"];
 			/**
@@ -17675,20 +17707,22 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text splits that into two orthogonal facts: a
-			 *     [`span`] over the decoded stream, and zero or more
-			 *     [`anchors`] saying where that text physically lives. A
-			 *     caller with a decoded offset sets the span; one holding only
-			 *     raw file bytes — a reviewer selecting rendered text, say —
-			 *     leaves it `None` and anchors the selection instead, which
-			 *     the engine reverse-resolves. So such a selection is
-			 *     representable as itself rather than as an empty span.
+			 *     Text makes that a choice between two shapes. A caller with a
+			 *     decoded offset sends a [`Detected`] location, which always
+			 *     carries a span; one holding only raw file bytes or a
+			 *     rendered region — a reviewer selecting text in a PDF, say —
+			 *     sends a [`Marked`] one, which carries no span and is
+			 *     reverse-resolved by the engine. A location carrying neither a
+			 *     span nor an anchor is unrepresentable, so there is no
+			 *     names-nothing case to handle — a zero-length span is still a
+			 *     span, and still reports [`is_empty`].
 			 *
-			 *     The other three media have no such alternative: their
+			 *     The other three media have no such choice: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`span`]: elide::modality::text::TextLocation::span
-			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
+			 *     [`Detected`]: elide::modality::text::Detected
+			 *     [`Marked`]: elide::modality::text::Marked
+			 *     [`is_empty`]: elide::modality::text::TextLocation::is_empty
 			 */
 			location: components["schemas"]["ImageLocation"];
 			/**
@@ -17833,20 +17867,22 @@ export interface components {
 			 *     `word/document.xml` text belongs to the document part
 			 *     itself, not to a nested one.
 			 *
-			 *     Text splits that into two orthogonal facts: a
-			 *     [`span`] over the decoded stream, and zero or more
-			 *     [`anchors`] saying where that text physically lives. A
-			 *     caller with a decoded offset sets the span; one holding only
-			 *     raw file bytes — a reviewer selecting rendered text, say —
-			 *     leaves it `None` and anchors the selection instead, which
-			 *     the engine reverse-resolves. So such a selection is
-			 *     representable as itself rather than as an empty span.
+			 *     Text makes that a choice between two shapes. A caller with a
+			 *     decoded offset sends a [`Detected`] location, which always
+			 *     carries a span; one holding only raw file bytes or a
+			 *     rendered region — a reviewer selecting text in a PDF, say —
+			 *     sends a [`Marked`] one, which carries no span and is
+			 *     reverse-resolved by the engine. A location carrying neither a
+			 *     span nor an anchor is unrepresentable, so there is no
+			 *     names-nothing case to handle — a zero-length span is still a
+			 *     span, and still reports [`is_empty`].
 			 *
-			 *     The other three media have no such alternative: their
+			 *     The other three media have no such choice: their
 			 *     coordinates are the only way in.
 			 *
-			 *     [`span`]: elide::modality::text::TextLocation::span
-			 *     [`anchors`]: elide::modality::text::TextLocation::anchors
+			 *     [`Detected`]: elide::modality::text::Detected
+			 *     [`Marked`]: elide::modality::text::Marked
+			 *     [`is_empty`]: elide::modality::text::TextLocation::is_empty
 			 */
 			location: components["schemas"]["AudioLocation"];
 			/**
