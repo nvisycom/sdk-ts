@@ -8,6 +8,33 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.61.0] - 2026-10-23
+
+### Changed
+
+- Regenerated the API schema against the current platform spec
+- **Breaking:** `ConnectorCapabilities.inference` is now an
+  `InferenceCapabilities` object (`{ available, ollama }`) instead of a bare
+  `boolean`. `available` reports whether inference connections can be created
+  (always `true`); `ollama` reports whether a local Ollama backend can be used
+  — `true` only on a self-hosted deployment whose endpoint policy admits a
+  loopback URL, `false` on cloud
+- The `detectionId` / `redactionId` path and query params are now typed as the
+  opaque `DetectionId` / `RedactionId` aliases instead of bare uuid strings
+  (no runtime shape change; both aliases were already exported)
+
+### Added
+
+- Datatype `InferenceCapabilities`, re-exported from `datatypes/capabilities`
+  alongside the sibling `FileProviders`
+
+### Documentation
+
+- Refined schema descriptions for `ReviewStatus` (its lifecycle is driven by
+  assignment and explicit sign-off, not derived from linked artifacts),
+  `PipelineDefinition` (clarified as the API wire shape vs. the persisted
+  domain type), and the connectors-list endpoint
+
 ## [0.60.0] - 2026-10-23
 
 ### Changed
