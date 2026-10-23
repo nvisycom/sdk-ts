@@ -8,6 +8,36 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-10-23
+
+### Changed
+
+- Regenerated the API schema against the restructured platform handlers
+- **Breaking:** the text-location model is now a discriminated union
+  `TextLocation = Detected | Marked` instead of the former
+  `{ span?, anchors? }`. `Detected` is a pipeline-found location (always a
+  decoded `span`, as `inline` / `source` with refs / `rendered` with page
+  rects); `Marked` is a reviewer selection with no decoded span. The audit
+  datatypes `TextCoord`, `DecodedSpan`, `SourceSpan`, and `TextAnchor` are
+  removed; `Detected`, `Marked`, and `UnitBoundingBox` are added
+
+### Added
+
+- Datatype `ReviewEventKind` (the discriminant on `WorkspaceReviewEvent.kind`),
+  previously reachable but not re-exported
+
+### Documentation
+
+- Every re-exported datatype alias now carries a JSDoc comment sourced from the
+  schema description, so the types document themselves on hover (the generated
+  schema's descriptions do not forward through a bare `type X = Schemas["Y"]`
+  alias)
+
+### Internal
+
+- Renamed `LICENSE.txt` to the conventional extensionless `LICENSE`
+- Tidied the datatype re-export grouping (consistent section headers and order)
+
 ## [0.59.0] - 2026-10-22
 
 ### Changed
