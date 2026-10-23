@@ -12,8 +12,8 @@ export type ExportFormat = Schemas["ExportFormat"];
  */
 export type ExportQuery = Schemas["ExportQuery"];
 /**
- * A `from`/`to` day range (inclusive), both optional. Flatten it into an
- * endpoint's query struct with `#[serde(flatten)]`, or use it directly when
- * the range is the only parameter.
+ * A `from`/`to` day range (inclusive), both optional. Pass its fields
+ * directly, or spread a `DateWindow` into an endpoint's query object, when a
+ * date range narrows the request.
  */
 export type DateWindow = Schemas["DateWindow"];

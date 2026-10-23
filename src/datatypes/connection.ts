@@ -100,9 +100,10 @@ export type FileServiceProvider = Schemas["FileServiceProvider"];
 export type FileServiceConfig = Schemas["FileServiceConfig"];
 /**
  * A persisted OAuth token set. Stored encrypted with the rest of a
- * connection's config; never returned in API responses. The tokens are
- * masked in `Debug` so a connection config's derived `Debug` cannot leak
- * them.
+ * connection's config and never returned in API responses. Note this is the
+ * raw `access_token` / `refresh_token` shape: the TypeScript type does not mask
+ * the fields (the backend masks them in its logs), so a client must redact
+ * them before logging or serializing an `OAuthTokens` value itself.
  */
 export type OAuthTokens = Schemas["OAuthTokens"];
 /** Request payload for starting a cloud file-service OAuth authorization. */
