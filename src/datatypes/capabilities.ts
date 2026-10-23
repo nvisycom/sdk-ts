@@ -23,6 +23,14 @@ export type ConnectorCapabilities = Schemas["ConnectorCapabilities"];
  * `true` only when that provider's OAuth app is configured on the server.
  */
 export type FileProviders = Schemas["FileProviders"];
+/**
+ * What inference providers this deployment can connect to. Inference
+ * providers carry their own credentials, so creating one is always
+ * available; a local-only backend such as Ollama is reached at a loopback
+ * URL that only a self-hosted deployment admits, so `ollama` reports whether
+ * this deployment can use it at all.
+ */
+export type InferenceCapabilities = Schemas["InferenceCapabilities"];
 
 /** The sign-in methods this deployment offers. */
 export type AuthCapabilities = Schemas["AuthCapabilities"];
