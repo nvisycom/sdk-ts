@@ -66,7 +66,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release notes and version history.
 
 ## License
 
-MIT License, see [LICENSE.txt](LICENSE.txt)
+MIT License, see [LICENSE](LICENSE)
 
 ## Support
 

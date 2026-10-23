@@ -12,14 +12,14 @@ on:
       - "src/**"
       - "package.json"
       - "package-lock.json"
-      - "LICENSE.txt"
+      - "LICENSE"
       - ".github/workflows/security.yml"
   pull_request:
     paths:
       - "src/**"
       - "package.json"
       - "package-lock.json"
-      - "LICENSE.txt"
+      - "LICENSE"
       - ".github/workflows/security.yml"
   schedule:
     # Weekly, so newly disclosed advisories surface without a push.
