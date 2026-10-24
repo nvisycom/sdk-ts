@@ -2,6 +2,7 @@ import type { ApiClient } from "@/client.js";
 import type {
 	CreateWorkspacePolicy,
 	CursorPagination,
+	PromoteWorkspacePolicy,
 	UpdateWorkspacePolicy,
 	WorkspacePoliciesQuery,
 	WorkspacePolicy,
@@ -110,5 +111,30 @@ export class Policies {
 		await this.#api.DELETE("/workspaces/{workspaceId}/policies/{policyId}", {
 			params: { path: { workspaceId, policyId } },
 		});
+	}
+
+	/**
+	 * Promote a derived (ad-hoc) policy to an authored one: clears its content
+	 * hash and makes it editable and attachable to pipelines, keeping its id and
+	 * current definition.
+	 * @param workspaceId - Workspace id
+	 * @param policyId - Policy id
+	 * @param promotion - Promotion request (optional replacement `displayName`)
+	 * @returns Promise that resolves with the promoted policy
+	 * @throws {ApiError} if the request fails
+	 */
+	async promotePolicy(
+		workspaceId: string,
+		policyId: string,
+		promotion: PromoteWorkspacePolicy = {},
+	): Promise<WorkspacePolicy> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceId}/policies/{policyId}/promote",
+			{
+				params: { path: { workspaceId, policyId } },
+				body: promotion,
+			},
+		);
+		return data!;
 	}
 }

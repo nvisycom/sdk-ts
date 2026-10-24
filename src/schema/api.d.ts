@@ -2662,9 +2662,10 @@ export interface paths {
 			};
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				201: {
@@ -2803,9 +2804,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
@@ -2987,9 +2989,10 @@ export interface paths {
 			};
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
@@ -3109,7 +3112,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Post a comment
-		 * @description Posts a comment (message) in a review. @username mentions notify those members. Requires the Review permission. Returns 409 if the review is resolved.
+		 * @description Posts a comment (message) in a review. @username mentions notify those members. Requires the Review permission. Returns 409 if the review is approved.
 		 */
 		post: {
 			parameters: {
@@ -3499,7 +3502,7 @@ export interface paths {
 		};
 		/**
 		 * List a review's timeline
-		 * @description Returns the review's timeline — comments and lifecycle events (opened, renamed, linked, assigned, verified, reopened) interleaved, oldest first, with cursor pagination. Requires ViewReviews.
+		 * @description Returns the review's timeline — comments and lifecycle events (opened, renamed, redetected, assigned, unassigned, submitted, changes requested, approved, reopened) interleaved, oldest first, with cursor pagination. Requires ViewReviews.
 		 */
 		get: {
 			parameters: {
@@ -3620,7 +3623,7 @@ export interface paths {
 		};
 		/**
 		 * List a review's events
-		 * @description Returns a review's activity events only (links, assignment, verification, reopen), oldest first. Requires ViewReviews.
+		 * @description Returns a review's activity events only (re-detection, assignment, submission, change requests, approvals, reopen), oldest first. Requires ViewReviews.
 		 */
 		get: {
 			parameters: {
@@ -3732,7 +3735,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/reviews/{reviewId}/verify": {
+	"/workspaces/{workspaceId}/reviews/{reviewId}/submit": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3742,8 +3745,8 @@ export interface paths {
 		get?: never;
 		put?: never;
 		/**
-		 * Verify a review
-		 * @description Verifies a review, moving it to `resolved`. 409 if already resolved. Requires Review.
+		 * Submit a review
+		 * @description Submits (or resubmits) a review for review, moving it to `in_review`. 409 unless it is a draft or has changes requested. Requires Review.
 		 */
 		post: {
 			parameters: {
@@ -3760,9 +3763,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
@@ -3857,7 +3861,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/reviews/{reviewId}/reopen": {
+	"/workspaces/{workspaceId}/reviews/{reviewId}/request-changes": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -3867,8 +3871,8 @@ export interface paths {
 		get?: never;
 		put?: never;
 		/**
-		 * Reopen a review
-		 * @description Reopens a resolved review back to `needs_review`. Requires Review.
+		 * Request changes on a review
+		 * @description Requests changes on a review, moving it to `changes_requested` and clearing any accumulated approvals. 409 unless it is awaiting a decision. Requires Review.
 		 */
 		post: {
 			parameters: {
@@ -3885,9 +3889,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
@@ -3955,6 +3960,319 @@ export interface paths {
 						"application/json": components["schemas"]["ErrorResponse"];
 					};
 				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/reviews/{reviewId}/approve": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Approve a review
+		 * @description Records the caller's approval and, optionally, the approved output redaction. The review reaches `approved` once the workspace's required approvals are in, otherwise `partially_approved`. 409 unless it is awaiting a decision; 403 if the author approves their own review where the workspace forbids it. Requires Review.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
+				};
+				cookie?: never;
+			};
+			/** @description Request payload to approve a review. */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["ApproveWorkspaceReview"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceReview"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/reviews/{reviewId}/reopen": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Reopen a review
+		 * @description Reopens an approved review back to `in_review`, clearing its approvals and approved output. 409 unless it is approved. Requires Review.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Unique identifier of the review. */
+					reviewId: string;
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/**
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
+				 *     stream is a [`WorkspaceReviewEntry`] timeline.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceReview"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
 			};
 		};
 		delete?: never;
@@ -3974,7 +4292,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Assign a reviewer
-		 * @description Assigns a workspace member as a reviewer of a review (idempotent). The first assignee moves a needs-review review to in-review. Requires AssignReviews.
+		 * @description Assigns a workspace member as a reviewer of a review (idempotent). Assignment is metadata (who is responsible) and does not change the review's status. Requires AssignReviews.
 		 */
 		post: {
 			parameters: {
@@ -3993,9 +4311,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
@@ -4067,7 +4386,7 @@ export interface paths {
 		};
 		/**
 		 * Unassign a reviewer
-		 * @description Removes a reviewer from a review. Removing the last assignee returns an in-review review to needs-review. Requires AssignReviews.
+		 * @description Removes a reviewer from a review. Assignment is metadata and does not change the review's status. Requires AssignReviews.
 		 */
 		delete: {
 			parameters: {
@@ -4086,9 +4405,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
@@ -4173,8 +4493,8 @@ export interface paths {
 		get?: never;
 		put?: never;
 		/**
-		 * Reference a detection from a review
-		 * @description Links a detection to a review (idempotent). Requires Review.
+		 * Point a review at a detection
+		 * @description Points a review at the detection it is currently reviewing (idempotent). Re-detecting a document repoints the review. Requires Review.
 		 */
 		post: {
 			parameters: {
@@ -4193,9 +4513,10 @@ export interface paths {
 			requestBody?: never;
 			responses: {
 				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+				 * @description Response type for a review: a named discussion on a document with an explicit
+				 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+				 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+				 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 				 *     stream is a [`WorkspaceReviewEntry`] timeline.
 				 */
 				200: {
@@ -4217,101 +4538,12 @@ export interface paths {
 				 *
 				 *     [`Error`]: crate::response::Error
 				 */
-				401: {
+				400: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/reviews/{reviewId}/redactions/{redactionId}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Reference a redaction from a review
-		 * @description Links a redaction to a review (idempotent). Requires Review.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Unique identifier of the review. */
-					reviewId: string;
-					/** @description Opaque identifier of the redaction to reference. */
-					redactionId: components["schemas"]["RedactionId"];
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Response type for a review: a named discussion on a document with a manual
-				 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-				 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
-				 *     stream is a [`WorkspaceReviewEntry`] timeline.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceReview"];
 					};
 				};
 				/**
@@ -8181,6 +8413,8 @@ export interface paths {
 					status?: components["schemas"]["DetectionStatus"];
 					/** @description Filter by the source document the detection analyzes. */
 					documentId?: string;
+					/** @description Filter to detections that ran against a specific policy (any version). */
+					policyId?: string;
 					/** @description Filter by the account that triggered the detection. */
 					triggeredBy?: string;
 					/** @description Filter by how the detection was initiated (user vs system). */
@@ -8486,6 +8720,8 @@ export interface paths {
 					documentId?: string;
 					/** @description Filter by the owning pipeline. */
 					pipelineId?: string;
+					/** @description Filter to detections that ran against a specific policy (any version). */
+					policyId?: string;
 					/** @description Filter by the account that triggered the detection. */
 					triggeredBy?: string;
 					/** @description Filter by how the detection was initiated (user vs system). */
@@ -8593,7 +8829,7 @@ export interface paths {
 			 * @description Request payload to start an ad-hoc detection over a document, naming its
 			 *     policies directly rather than through a pipeline.
 			 *
-			 *     Analyzes the document against the given policies (authored or one-shot) and
+			 *     Analyzes the document against the given policies (authored or derived) and
 			 *     returns the detection holding the findings for review before redaction.
 			 */
 			requestBody: {
@@ -8841,7 +9077,166 @@ export interface paths {
 		delete?: never;
 		options?: never;
 		head?: never;
-		patch?: never;
+		/**
+		 * Edit a detection
+		 * @description Sets the detection's accumulated reviewer edits (suppress a false positive, retag a detection, or add one the analysis missed), or clears them when `edits` is omitted. The edits are validated against the detection's analysis before being stored (400 on an unknown target or modality mismatch), persist on the detection, and are layered over its base analysis at redact time so they survive between redactions. Pass the `editSetRev` you last read; a stale value is rejected with 409. Requires RunRedactions.
+		 */
+		patch: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload to set a detection's accumulated reviewer edits.
+			 *
+			 *     The edits (suppress a false positive, retag a detection, add one the analysis
+			 *     missed) persist on the detection and are layered over its base analysis at redact
+			 *     time, so they survive between redactions. Omit `edits` to clear them.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["EditWorkspaceDetection"];
+				};
+			};
+			responses: {
+				/**
+				 * @description Response type for a detection.
+				 *
+				 *     A detection is addressed by its own opaque id; the owning pipeline and
+				 *     workspace handles are carried for context. Redacted outputs are not here — a
+				 *     detection produces many redactions, each fetched from its `redactions`
+				 *     endpoint.
+				 */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceDetection"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				409: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
 		trace?: never;
 	};
 	"/workspaces/{workspaceId}/detections/{detectionId}/events": {
@@ -9061,7 +9456,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Redact a detection
-		 * @description Applies the pipeline's policies to the detection's stored analysis — with any reviewer `edits` layered on first (suppress a false positive, retag a detection, or add one the analysis missed) — and produces a new redaction: a redacted document plus a review audit recording what was redacted. A detection can be redacted more than once. An edit targeting a detection not in the analysis, or a set that contradicts itself, is rejected (400).
+		 * @description Applies the pipeline's policies to the detection's stored analysis — with the detection's accumulated reviewer edits layered on first (set via the edit endpoint) — and produces a new redaction: a redacted document plus a review audit recording what was redacted. A detection can be redacted more than once. Requires RunRedactions.
 		 */
 		post: {
 			parameters: {
@@ -9075,19 +9470,7 @@ export interface paths {
 				};
 				cookie?: never;
 			};
-			/**
-			 * @description Request payload to redact a detection.
-			 *
-			 *     The reviewer's edits layer over the detection's analysis before redaction:
-			 *     suppress a false positive, retag a detection, or add one the analysis missed.
-			 *     Omit `edits` to redact with the policy decisions exactly as detected. Each
-			 *     redact request produces a new redaction.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["RedactWorkspaceDetection"];
-				};
-			};
+			requestBody?: never;
 			responses: {
 				/**
 				 * @description Response type for a redaction.
@@ -9202,24 +9585,6 @@ export interface paths {
 					};
 					content: {
 						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
 					};
 				};
 			};
@@ -9892,7 +10257,7 @@ export interface paths {
 		};
 		/**
 		 * List policies
-		 * @description Returns the workspace's policies. The optional `kind` query parameter narrows to a single kind (`authored` or `oneshot`).
+		 * @description Returns the workspace's policies. The optional `kind` query parameter narrows to a single kind (`authored` or `derived`).
 		 */
 		get: {
 			parameters: {
@@ -9910,7 +10275,7 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
-					/** @description Narrow the list to a single policy kind (`authored` or `oneshot`). */
+					/** @description Narrow the list to a single policy kind (`authored` or `derived`). */
 					kind?: components["schemas"]["PolicyKind"];
 				};
 				header?: never;
@@ -9980,7 +10345,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Create policy
-		 * @description Creates a structured redaction policy for the workspace. A labels body creates (or reuses) a one-shot policy and returns 200 when an identical one already exists; a template or inline body always creates a new policy and returns 201.
+		 * @description Creates a structured redaction policy for the workspace. A labels body creates (or reuses) a derived policy and returns 200 when an identical one already exists; a template or inline body always creates a new policy and returns 201.
 		 */
 		post: {
 			parameters: {
@@ -10421,6 +10786,155 @@ export interface paths {
 				};
 			};
 		};
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/policies/{policyId}/promote": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Promote policy
+		 * @description Promotes a derived (ad-hoc) policy to an authored one: clears its content hash and makes it editable and attachable to pipelines, keeping its id and current definition. An optional `displayName` replaces the policy's generated name. Returns 400 if the policy is already authored.
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Id of the policy. */
+					policyId: string;
+				};
+				cookie?: never;
+			};
+			/**
+			 * @description Request payload for promoting a derived policy to an authored one.
+			 *
+			 *     A derived policy carries a neutral, generated name, so promotion optionally
+			 *     takes a human-readable title to replace it. Omitting it keeps the generated
+			 *     name. The whole body is optional: a bare `POST` promotes without renaming.
+			 */
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["PromoteWorkspacePolicy"];
+				};
+			};
+			responses: {
+				/** @description Response type for a workspace policy. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspacePolicy"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/** @description Expected request with `Content-Type: application/json` */
+				415: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+				/** @description Failed to deserialize the JSON body into the target type */
+				422: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"text/plain": string;
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
 	"/capabilities/labels": {
@@ -14335,6 +14849,14 @@ export interface components {
 			 */
 			retention?: components["schemas"]["RetentionSettings"];
 			/**
+			 * @description The review approval policy (who may approve, how many approvals are needed).
+			 * @default {
+			 *       "authorCanApprove": true,
+			 *       "minApprovals": 1
+			 *     }
+			 */
+			review?: components["schemas"]["ReviewSettings"];
+			/**
 			 * Format: uint64
 			 * @description A soft per-file upload cap in bytes: an upload larger than this is
 			 *     rejected for this workspace. `None` imposes no workspace-specific cap.
@@ -14413,6 +14935,30 @@ export interface components {
 					 */
 					days: number;
 			  };
+		/**
+		 * @description A workspace's review approval policy: who may approve and how many approvals a
+		 *     review needs before it is signed off.
+		 *
+		 *     The defaults reproduce the minimal behaviour — a single approver, the author
+		 *     allowed — so a workspace that configures nothing behaves as if reviews are a
+		 *     plain single sign-off.
+		 */
+		ReviewSettings: {
+			/**
+			 * @description Whether the author of a review may cast an approval on it. `false` gives
+			 *     lightweight separation-of-duties (someone other than the author must approve).
+			 * @default true
+			 */
+			authorCanApprove?: boolean;
+			/**
+			 * Format: uint32
+			 * @description How many distinct reviewers must approve before a review reaches `approved`.
+			 *     `1` is a single sign-off; `2` or more is a multi-party rule, which makes the
+			 *     `partially_approved` state reachable. Clamped to at least 1 when read.
+			 * @default 1
+			 */
+			minApprovals?: number;
+		};
 		/** @description Workspace response. */
 		Workspace: {
 			/**
@@ -14652,7 +15198,9 @@ export interface components {
 			| "review.renamed"
 			| "review.deleted"
 			| "review.comment.created"
-			| "review.verified"
+			| "review.submitted"
+			| "review.changes_requested"
+			| "review.approved"
 			| "review.assigned"
 			| "review.unassigned"
 			| "pipeline.created"
@@ -14895,7 +15443,17 @@ export interface components {
 			  }
 			| {
 					/** @constant */
-					type: "review.verified";
+					type: "review.submitted";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.changes_requested";
+					data: components["schemas"]["ReviewActivityParams"];
+			  }
+			| {
+					/** @constant */
+					type: "review.approved";
 					data: components["schemas"]["ReviewActivityParams"];
 			  }
 			| {
@@ -15402,13 +15960,20 @@ export interface components {
 		 *     document).
 		 *
 		 *     Corresponds to the `REVIEW_STATUS` `PostgreSQL` enum. The state is driven by
-		 *     assignment and explicit sign-off, not derived from linked artifacts: a review
-		 *     opens at `NeedsReview`; gaining its first assignee moves it to `InReview`, and
-		 *     removing the last assignee returns it to `NeedsReview`; verifying it sets
-		 *     `Resolved`, and reopening a resolved review returns it to `NeedsReview`.
-		 *     Assigning or unassigning a resolved review leaves it `Resolved`.
+		 *     explicit reviewer decisions, not by assignment: a review opens at `Draft`;
+		 *     `submit` moves it to `InReview`; a reviewer can `request-changes`
+		 *     (`ChangesRequested`, from which `resubmit` returns it to `InReview`) or
+		 *     `approve`. An approval reaches `Approved` once the workspace's required number
+		 *     of distinct approvals is met, and rests at `PartiallyApproved` in between
+		 *     (only reachable when two or more approvals are required). Reopening an
+		 *     `Approved` review returns it to `InReview`.
 		 */
-		ReviewStatus: "needs_review" | "in_review" | "resolved";
+		ReviewStatus:
+			| "draft"
+			| "in_review"
+			| "changes_requested"
+			| "partially_approved"
+			| "approved";
 		/**
 		 * @description Generic paginated response wrapper.
 		 *
@@ -15428,9 +15993,10 @@ export interface components {
 			nextCursor?: string;
 		};
 		/**
-		 * @description Response type for a review: a named discussion on a document with a manual
-		 *     sign-off lifecycle (0..N per document), opened explicitly. It carries a
-		 *     `reviewStatus`, a `displayName`, and its `assignees` (0..N reviewers); its
+		 * @description Response type for a review: a named discussion on a document with an explicit
+		 *     approval lifecycle (0..N per document, concurrent per audience), opened explicitly. It
+		 *     carries a `reviewStatus`, a `displayName`, its `assignees` (0..N reviewers), the
+		 *     `detectionId` it is currently reviewing, and the `redactionId` it approved; its
 		 *     stream is a [`WorkspaceReviewEntry`] timeline.
 		 */
 		WorkspaceReview: {
@@ -15444,6 +16010,16 @@ export interface components {
 			 * @description Document under review.
 			 */
 			documentId: string;
+			/**
+			 * Format: uuid
+			 * @description The detection the review is currently reviewing, if any.
+			 */
+			detectionId?: string;
+			/**
+			 * Format: uuid
+			 * @description The approved redaction output, set once the review is approved.
+			 */
+			redactionId?: string;
 			/** @description The review's title. */
 			displayName: string;
 			/** @description Account that opened the review. */
@@ -15475,6 +16051,11 @@ export interface components {
 		CreateWorkspaceReview: {
 			/** @description The review's title (1-255 characters). */
 			displayName: string;
+			/**
+			 * @description The detection the review opens against (its subject); omit to open a draft
+			 *     with no detection yet.
+			 */
+			detectionId?: components["schemas"]["DetectionId"];
 		};
 		/** @description Path parameters addressing one review by its id. */
 		WorkspaceReviewPathParams: {
@@ -15577,21 +16158,22 @@ export interface components {
 		 *
 		 *     Corresponds to the `REVIEW_EVENT_KIND` `PostgreSQL` enum. A review's stream
 		 *     interleaves comments (messages) with these events: the lifecycle (opened,
-		 *     renamed, verified, reopened) and the sign-off workflow (detections and
-		 *     redactions referenced, assignment changes).
+		 *     renamed, submitted, changes requested, approved, reopened), re-detection, and
+		 *     assignment changes.
 		 */
 		ReviewEventKind:
 			| "review.opened"
 			| "review.renamed"
-			| "detection.linked"
-			| "redaction.linked"
-			| "assigned"
-			| "unassigned"
-			| "verified"
-			| "reopened";
+			| "review.redetected"
+			| "review.assigned"
+			| "review.unassigned"
+			| "review.submitted"
+			| "review.changes_requested"
+			| "review.approved"
+			| "review.reopened";
 		/**
-		 * @description One non-message entry in a review timeline (opened, renamed, a detection or
-		 *     redaction linked, an assignment change, verified, or reopened).
+		 * @description One non-message entry in a review timeline (opened, renamed, redetected, an
+		 *     assignment change, submitted, changes requested, approved, or reopened).
 		 */
 		WorkspaceReviewEvent: {
 			/**
@@ -15632,6 +16214,14 @@ export interface components {
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
 			nextCursor?: string;
 		};
+		/** @description Request payload to approve a review. */
+		ApproveWorkspaceReview: {
+			/**
+			 * @description The approved redaction to record as the review's output. Omit to approve
+			 *     without (yet) binding an output.
+			 */
+			redactionId?: components["schemas"]["RedactionId"];
+		};
 		/** @description Path parameters addressing a reviewer assignment on a review. */
 		WorkspaceReviewAssigneePathParams: {
 			/**
@@ -15654,16 +16244,6 @@ export interface components {
 			reviewId: string;
 			/** @description Opaque identifier of the detection to reference. */
 			detectionId: components["schemas"]["DetectionId"];
-		};
-		/** @description Path parameters addressing a review-to-redaction link. */
-		WorkspaceReviewRedactionPathParams: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the review.
-			 */
-			reviewId: string;
-			/** @description Opaque identifier of the redaction to reference. */
-			redactionId: components["schemas"]["RedactionId"];
 		};
 		/** @description Request payload for creating a new workspace connection. */
 		CreateWorkspaceConnection: {
@@ -17004,6 +17584,17 @@ export interface components {
 			/** @description Non-encrypted metadata for filtering/display. */
 			metadata: components["schemas"]["DetectionMetadata"];
 			/**
+			 * @description The accumulated reviewer edits applied over the base analysis at redact time,
+			 *     so a client can display and revise them. Absent when the detection has none.
+			 */
+			edits?: components["schemas"]["EditSet"];
+			/**
+			 * Format: int32
+			 * @description Optimistic-concurrency version of `edits`; echo it back on an edit PATCH so a
+			 *     stale write is rejected rather than overwriting a concurrent edit.
+			 */
+			editSetRev: number;
+			/**
 			 * Format: date-time
 			 * @description When the detection started.
 			 */
@@ -17036,131 +17627,6 @@ export interface components {
 			 *     keeps the raw detail. Absent when the detection made no model calls.
 			 */
 			usage?: unknown;
-		};
-		/**
-		 * @description Query parameters for listing a single pipeline's detections.
-		 *
-		 *     The pipeline is fixed by the route, so it narrows only by status, file,
-		 *     trigger account, and trigger type.
-		 */
-		WorkspacePipelineDetectionsQuery: {
-			/** @description Filter by detection status. */
-			status?: components["schemas"]["DetectionStatus"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the source document the detection analyzes.
-			 */
-			documentId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the detection.
-			 */
-			triggeredBy?: string;
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspaceDetectionPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceDetection"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-		};
-		/**
-		 * @description Request payload to start an ad-hoc detection over a document, naming its
-		 *     policies directly rather than through a pipeline.
-		 *
-		 *     Analyzes the document against the given policies (authored or one-shot) and
-		 *     returns the detection holding the findings for review before redaction.
-		 */
-		CreateAdhocWorkspaceDetection: {
-			/**
-			 * Format: uuid
-			 * @description The document to analyze.
-			 */
-			documentId: string;
-			/** @description The policies to run against, by id. At least one is required. */
-			policyIds: string[];
-			/** @description Per-document scope (languages, jurisdictions, document labels). */
-			scope?: components["schemas"]["DocumentContext"];
-			/**
-			 * @description Retention override for the outputs this detection produces. Absent falls
-			 *     back to the workspace retention baseline.
-			 */
-			retentionOverride?: components["schemas"]["RetentionOverride"];
-		};
-		/**
-		 * @description Query parameters for listing detections across a workspace.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint.
-		 */
-		WorkspaceDetectionsQuery: {
-			/** @description Filter by detection status. */
-			status?: components["schemas"]["DetectionStatus"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the source document the detection analyzes.
-			 */
-			documentId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the owning pipeline.
-			 */
-			pipelineId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the detection.
-			 */
-			triggeredBy?: string;
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
-		};
-		/** @description Path parameters for detection operations. */
-		WorkspaceDetectionPathParams: {
-			/** @description Opaque identifier of the detection. */
-			detectionId: components["schemas"]["DetectionId"];
-		};
-		/**
-		 * @description A detection's status change, broadcast on the core-NATS subject
-		 *     [`detection_subject`].
-		 *
-		 *     Fan-out to any watching SSE connections; the detection row in Postgres remains
-		 *     the source of truth, so a missed broadcast is recoverable by re-reading it.
-		 */
-		DetectionStatusEvent: {
-			/**
-			 * Format: uuid
-			 * @description The detection whose status changed.
-			 */
-			detectionId: string;
-			/** @description The detection's new status. */
-			status: components["schemas"]["DetectionStatus"];
-		};
-		/**
-		 * @description Request payload to redact a detection.
-		 *
-		 *     The reviewer's edits layer over the detection's analysis before redaction:
-		 *     suppress a false positive, retag a detection, or add one the analysis missed.
-		 *     Omit `edits` to redact with the policy decisions exactly as detected. Each
-		 *     redact request produces a new redaction.
-		 */
-		RedactWorkspaceDetection: {
-			/**
-			 * @description Reviewer edits to apply before redaction, grouped by modality. Omit to
-			 *     redact with the policy decisions exactly as detected.
-			 */
-			edits?: components["schemas"]["EditSet"];
 		};
 		/**
 		 * @description Reviewer edits for one document, one list per modality.
@@ -17930,6 +18396,148 @@ export interface components {
 			reason?: string;
 			/** @description Who made it, when the caller said. */
 			actor?: string;
+		};
+		/**
+		 * @description Query parameters for listing a single pipeline's detections.
+		 *
+		 *     The pipeline is fixed by the route, so it narrows only by status, file, policy,
+		 *     trigger account, and trigger type.
+		 */
+		WorkspacePipelineDetectionsQuery: {
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the source document the detection analyzes.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter to detections that ran against a specific policy (any version).
+			 */
+			policyId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+		};
+		/**
+		 * @description Generic paginated response wrapper.
+		 *
+		 *     Provides a consistent structure for all paginated API responses with
+		 *     cursor-based pagination support. When `next_cursor` is present, there
+		 *     are more items to fetch.
+		 */
+		WorkspaceDetectionPage: {
+			/** @description Items in this page. */
+			items: components["schemas"]["WorkspaceDetection"][];
+			/**
+			 * Format: int64
+			 * @description Total count of items matching the query (if requested).
+			 */
+			total?: number;
+			/** @description Cursor to fetch the next page. Present only when more items exist. */
+			nextCursor?: string;
+		};
+		/**
+		 * @description Request payload to start an ad-hoc detection over a document, naming its
+		 *     policies directly rather than through a pipeline.
+		 *
+		 *     Analyzes the document against the given policies (authored or derived) and
+		 *     returns the detection holding the findings for review before redaction.
+		 */
+		CreateAdhocWorkspaceDetection: {
+			/**
+			 * Format: uuid
+			 * @description The document to analyze.
+			 */
+			documentId: string;
+			/** @description The policies to run against, by id. At least one is required. */
+			policyIds: string[];
+			/** @description Per-document scope (languages, jurisdictions, document labels). */
+			scope?: components["schemas"]["DocumentContext"];
+			/**
+			 * @description Retention override for the outputs this detection produces. Absent falls
+			 *     back to the workspace retention baseline.
+			 */
+			retentionOverride?: components["schemas"]["RetentionOverride"];
+		};
+		/**
+		 * @description Query parameters for listing detections across a workspace.
+		 *
+		 *     Every field is an optional filter; unset fields impose no constraint.
+		 */
+		WorkspaceDetectionsQuery: {
+			/** @description Filter by detection status. */
+			status?: components["schemas"]["DetectionStatus"];
+			/**
+			 * Format: uuid
+			 * @description Filter by the source document the detection analyzes.
+			 */
+			documentId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the owning pipeline.
+			 */
+			pipelineId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter to detections that ran against a specific policy (any version).
+			 */
+			policyId?: string;
+			/**
+			 * Format: uuid
+			 * @description Filter by the account that triggered the detection.
+			 */
+			triggeredBy?: string;
+			/** @description Filter by how the detection was initiated (user vs system). */
+			triggerType?: components["schemas"]["PipelineTriggerType"];
+		};
+		/** @description Path parameters for detection operations. */
+		WorkspaceDetectionPathParams: {
+			/** @description Opaque identifier of the detection. */
+			detectionId: components["schemas"]["DetectionId"];
+		};
+		/**
+		 * @description Request payload to set a detection's accumulated reviewer edits.
+		 *
+		 *     The edits (suppress a false positive, retag a detection, add one the analysis
+		 *     missed) persist on the detection and are layered over its base analysis at redact
+		 *     time, so they survive between redactions. Omit `edits` to clear them.
+		 */
+		EditWorkspaceDetection: {
+			/**
+			 * Format: int32
+			 * @description The `editSetRev` the client last read for this detection. The write is applied
+			 *     only if it still matches, so a concurrent edit is not silently overwritten; a
+			 *     stale value is rejected with 409. Defaults to 0 (a detection with no edits yet).
+			 * @default 0
+			 */
+			editSetRev?: number;
+			/**
+			 * @description The reviewer edits to persist, grouped by modality. Omit to clear the
+			 *     detection's stored edits.
+			 */
+			edits?: components["schemas"]["EditSet"];
+		};
+		/**
+		 * @description A detection's status change, broadcast on the core-NATS subject
+		 *     [`detection_subject`].
+		 *
+		 *     Fan-out to any watching SSE connections; the detection row in Postgres remains
+		 *     the source of truth, so a missed broadcast is recoverable by re-reading it.
+		 */
+		DetectionStatusEvent: {
+			/**
+			 * Format: uuid
+			 * @description The detection whose status changed.
+			 */
+			detectionId: string;
+			/** @description The detection's new status. */
+			status: components["schemas"]["DetectionStatus"];
 		};
 		/**
 		 * @description Response type for a redaction.
@@ -20582,7 +21190,7 @@ export interface components {
 		CreateWorkspacePolicy: {
 			/**
 			 * @description Optional display name override. Defaults to the policy's own name. Ignored
-			 *     for a one-shot (labels) body, whose name is generated.
+			 *     for a derived (labels) body, whose name is generated.
 			 */
 			displayName?: string;
 			/** @description Optional description override. Defaults to the policy's own description. */
@@ -21504,7 +22112,7 @@ export interface components {
 			 */
 			versionNumber: number;
 			/**
-			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
+			 * @description How the policy came to exist. A derived policy (minted from labels) is
 			 *     content-addressed, deduplicated, and immutable; an authored policy is a
 			 *     normal, editable policy.
 			 */
@@ -21621,17 +22229,19 @@ export interface components {
 		 *
 		 *     Corresponds to the `POLICY_KIND` `PostgreSQL` enum. An authored policy is a
 		 *     normal, editable policy created from a template or an inline definition. A
-		 *     one-shot policy is minted inline from a bare label list (the ad-hoc redact
+		 *     derived policy is minted inline from a bare label list (the ad-hoc redact
 		 *     flow): it is content-addressed and deduplicated, and immutable once minted.
+		 *     A derived policy can be promoted to an authored one, which clears its
+		 *     content hash and makes it editable and attachable to pipelines.
 		 */
-		PolicyKind: "authored" | "oneshot";
+		PolicyKind: "authored" | "derived";
 		/**
 		 * @description Query parameters for listing policies.
 		 *
 		 *     Every field is an optional filter; unset fields impose no constraint.
 		 */
 		WorkspacePoliciesQuery: {
-			/** @description Narrow the list to a single policy kind (`authored` or `oneshot`). */
+			/** @description Narrow the list to a single policy kind (`authored` or `derived`). */
 			kind?: components["schemas"]["PolicyKind"];
 		};
 		/**
@@ -21679,7 +22289,7 @@ export interface components {
 			/** @description Policy description. */
 			description?: string;
 			/**
-			 * @description How the policy came to exist. A one-shot policy (minted from labels) is
+			 * @description How the policy came to exist. A derived policy (minted from labels) is
 			 *     content-addressed, deduplicated, and immutable; an authored policy is a
 			 *     normal, editable policy.
 			 */
@@ -21724,6 +22334,17 @@ export interface components {
 			description?: string;
 			/** @description New policy body (replaces the stored definition). */
 			definition?: components["schemas"]["PolicyDraft"];
+		};
+		/**
+		 * @description Request payload for promoting a derived policy to an authored one.
+		 *
+		 *     A derived policy carries a neutral, generated name, so promotion optionally
+		 *     takes a human-readable title to replace it. Omitting it keeps the generated
+		 *     name. The whole body is optional: a bare `POST` promotes without renaming.
+		 */
+		PromoteWorkspacePolicy: {
+			/** @description Optional human-readable display name for the promoted policy. */
+			displayName?: string;
 		};
 		/**
 		 * @description Registry of [`Label`]s, keyed by id.
@@ -22493,7 +23114,9 @@ export interface components {
 			| "review.opened"
 			| "review.renamed"
 			| "review.reopened"
-			| "review.verified"
+			| "review.submitted"
+			| "review.changes_requested"
+			| "review.approved"
 			| "review.assigned"
 			| "review.unassigned"
 			| "pipeline.created"

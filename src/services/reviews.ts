@@ -1,5 +1,6 @@
 import type { ApiClient } from "@/client.js";
 import type {
+	ApproveWorkspaceReview,
 	CreateWorkspaceComment,
 	CreateWorkspaceReview,
 	CursorPagination,
@@ -14,8 +15,9 @@ import type {
 } from "@/datatypes/index.js";
 
 /**
- * Service for document reviews: assigning a document to a reviewer and tracking
- * the review through its lifecycle, with a timeline of events.
+ * Service for document reviews: opening a review on a document and driving it
+ * through its approval lifecycle (submit, request changes, approve, reopen)
+ * with assignees, comments, and a timeline of events.
  */
 export class Reviews {
 	#api: ApiClient;
@@ -186,18 +188,18 @@ export class Reviews {
 	}
 
 	/**
-	 * Verify (resolve) a review.
+	 * Submit (or resubmit) a review for review, moving it to `in_review`.
 	 * @param workspaceId - Workspace id
 	 * @param reviewId - Review ID
 	 * @returns Promise that resolves with the updated review
 	 * @throws {ApiError} if the request fails
 	 */
-	async verifyReview(
+	async submitReview(
 		workspaceId: string,
 		reviewId: string,
 	): Promise<WorkspaceReview> {
 		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/reviews/{reviewId}/verify",
+			"/workspaces/{workspaceId}/reviews/{reviewId}/submit",
 			{
 				params: { path: { workspaceId, reviewId } },
 			},
@@ -206,7 +208,52 @@ export class Reviews {
 	}
 
 	/**
-	 * Reopen a resolved review.
+	 * Request changes on a review, moving it to `changes_requested`.
+	 * @param workspaceId - Workspace id
+	 * @param reviewId - Review ID
+	 * @returns Promise that resolves with the updated review
+	 * @throws {ApiError} if the request fails
+	 */
+	async requestChanges(
+		workspaceId: string,
+		reviewId: string,
+	): Promise<WorkspaceReview> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceId}/reviews/{reviewId}/request-changes",
+			{
+				params: { path: { workspaceId, reviewId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Approve a review, optionally recording the approved redaction as its
+	 * output. Reaches `approved` once the workspace's required number of
+	 * distinct approvals is met.
+	 * @param workspaceId - Workspace id
+	 * @param reviewId - Review ID
+	 * @param approval - Approval request (optional approved `redactionId`)
+	 * @returns Promise that resolves with the updated review
+	 * @throws {ApiError} if the request fails
+	 */
+	async approveReview(
+		workspaceId: string,
+		reviewId: string,
+		approval: ApproveWorkspaceReview = {},
+	): Promise<WorkspaceReview> {
+		const { data } = await this.#api.POST(
+			"/workspaces/{workspaceId}/reviews/{reviewId}/approve",
+			{
+				params: { path: { workspaceId, reviewId } },
+				body: approval,
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Reopen an approved review, returning it to `in_review`.
 	 * @param workspaceId - Workspace id
 	 * @param reviewId - Review ID
 	 * @returns Promise that resolves with the updated review
@@ -345,28 +392,6 @@ export class Reviews {
 			"/workspaces/{workspaceId}/reviews/{reviewId}/detections/{detectionId}",
 			{
 				params: { path: { workspaceId, reviewId, detectionId } },
-			},
-		);
-		return data!;
-	}
-
-	/**
-	 * Link a redaction to a review (idempotent).
-	 * @param workspaceId - Workspace id
-	 * @param reviewId - Review ID
-	 * @param redactionId - Redaction ID
-	 * @returns Promise that resolves with the updated review
-	 * @throws {ApiError} if the request fails
-	 */
-	async linkRedaction(
-		workspaceId: string,
-		reviewId: string,
-		redactionId: string,
-	): Promise<WorkspaceReview> {
-		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/reviews/{reviewId}/redactions/{redactionId}",
-			{
-				params: { path: { workspaceId, reviewId, redactionId } },
 			},
 		);
 		return data!;
