@@ -22,7 +22,7 @@ async function main() {
 	const workspaces = await client.workspaces.listWorkspaces({ limit: 10 });
 	console.log(`\nWorkspaces (${workspaces.items.length}):`);
 	for (const workspace of workspaces.items) {
-		console.log(`  - ${workspace.displayName} (${workspace.slug})`);
+		console.log(`  - ${workspace.displayName} (${workspace.id})`);
 	}
 
 	const workspace = workspaces.items[0];
@@ -31,26 +31,31 @@ async function main() {
 		return;
 	}
 
-	// List pipelines in the first workspace.
-	const pipelines = await client.pipelines.listPipelines(workspace.slug, {
+	// List the policies available in the first workspace.
+	const policies = await client.policies.listPolicies(workspace.id, {
 		limit: 10,
 	});
-	console.log(`\nPipelines in ${workspace.slug} (${pipelines.items.length}):`);
-	for (const pipeline of pipelines.items) {
-		console.log(`  - ${pipeline.displayName} (${pipeline.slug})`);
+	console.log(
+		`\nPolicies in ${workspace.displayName} (${policies.items.length}):`,
+	);
+	for (const policy of policies.items) {
+		console.log(`  - ${policy.displayName} (${policy.id})`);
 	}
 
-	// Trigger a pipeline run for an uploaded file.
-	const pipeline = pipelines.items[0];
-	const fileId = process.env.NVISY_FILE_ID;
-	if (pipeline && fileId) {
-		const run = await client.runs.createRun(workspace.slug, pipeline.slug, {
-			fileId,
+	// Start a detection over a document, running the first policy against it.
+	const policy = policies.items[0];
+	const documentId = process.env.NVISY_DOCUMENT_ID;
+	if (policy && documentId) {
+		const detection = await client.detections.createDetection(workspace.id, {
+			documentId,
+			policyIds: [policy.id],
 		});
-		console.log(`\nStarted run ${run.id} (status: ${run.status})`);
+		console.log(
+			`\nStarted detection ${detection.id} (status: ${detection.status})`,
+		);
 	} else {
 		console.log(
-			"\nSet NVISY_FILE_ID (an uploaded file) to trigger a pipeline run.",
+			"\nSet NVISY_DOCUMENT_ID (an uploaded document) to start a detection.",
 		);
 	}
 }

@@ -1,8 +1,8 @@
 # Nvisy SDK client
 
 A minimal script showing how to use the [`@nvisy/sdk`](../../README.md) client:
-construct it with an API token, call services, page through results, trigger a
-pipeline run, and handle `NvisyApiError`.
+construct it with an API token, call services, page through results, start a
+detection, and handle `NvisyApiError`.
 
 ## Run
 
@@ -13,5 +13,5 @@ npm start
 ```
 
 It prints the authenticated account, lists workspaces and the first
-workspace's pipelines, and (if you set `NVISY_FILE_ID`) triggers a pipeline
-run.
+workspace's policies, and (if you set `NVISY_DOCUMENT_ID`) starts a detection
+over that document with the first policy.
