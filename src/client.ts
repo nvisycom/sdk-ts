@@ -29,7 +29,6 @@ import {
 	Invites,
 	Members,
 	Notifications,
-	Pipelines,
 	Policies,
 	Providers,
 	Redactions,
@@ -245,13 +244,6 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for managing pipelines.
-	 */
-	get pipelines(): Pipelines {
-		return new Pipelines(this.#api);
-	}
-
-	/**
 	 * Service for managing policies.
 	 */
 	get policies(): Policies {
@@ -295,7 +287,7 @@ export class Nvisy {
 	}
 
 	/**
-	 * Service for pipeline detections and their redactions.
+	 * Service for detections and the redactions produced from them.
 	 */
 	get detections(): Detections {
 		return new Detections(this.#api);

@@ -5,28 +5,22 @@ type Schemas = components["schemas"];
 /** Opaque detection identifier (detection_<uuid>). */
 export type DetectionId = Schemas["DetectionId"];
 
-// Detection resources (one analysis pass of a document through a pipeline).
+// Detection resources (one analysis pass of a document against policies).
 /** Response type for a detection. */
 export type WorkspaceDetection = Schemas["WorkspaceDetection"];
 /** Structured metadata for a detection. */
 export type DetectionMetadata = Schemas["DetectionMetadata"];
-/** Request payload to start a detection over a document. */
-export type CreateWorkspaceDetection = Schemas["CreateWorkspaceDetection"];
 /**
- * Request payload to start an ad-hoc detection over a document, naming its
- * policies directly rather than through a pipeline.
+ * Request payload to start a detection over a document, naming the policies
+ * to run against it by id.
  */
-export type CreateAdhocWorkspaceDetection =
-	Schemas["CreateAdhocWorkspaceDetection"];
+export type CreateWorkspaceDetection = Schemas["CreateWorkspaceDetection"];
 /** The execution status of a detection (one analysis pass of a file). */
 export type DetectionStatus = Schemas["DetectionStatus"];
 /** Generic paginated response wrapper. */
 export type WorkspaceDetectionPage = Schemas["WorkspaceDetectionPage"];
 /** Query parameters for listing detections across a workspace. */
 export type WorkspaceDetectionsQuery = Schemas["WorkspaceDetectionsQuery"];
-/** Query parameters for listing a single pipeline's detections. */
-export type WorkspacePipelineDetectionsQuery =
-	Schemas["WorkspacePipelineDetectionsQuery"];
 /**
  * A detection's status change, broadcast on the core-NATS subject
  * `detection_subject`.

@@ -40,11 +40,11 @@ export type ConnectionSyncCompletedParams =
 	Schemas["ConnectionSyncCompletedParams"];
 /** Params of a `connection.sync.failed` notification. */
 export type ConnectionSyncFailedParams = Schemas["ConnectionSyncFailedParams"];
-/** Params of a `pipeline.detection.completed` notification. */
+/** Params of a `detection.completed` notification. */
 export type DetectionCompletedParams = Schemas["DetectionCompletedParams"];
-/** Params of a `pipeline.detection.failed` notification. */
+/** Params of a `detection.failed` notification. */
 export type DetectionFailedParams = Schemas["DetectionFailedParams"];
-/** Params of a `pipeline.redaction.created` notification. */
+/** Params of a `redaction.created` notification. */
 export type RedactionCreatedParams = Schemas["RedactionCreatedParams"];
 /**
  * Params of a `review.assigned` notification, sent to the reviewer a review

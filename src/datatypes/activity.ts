@@ -39,11 +39,9 @@ export type MemberActivityParams = Schemas["MemberActivityParams"];
 export type InviteActivityParams = Schemas["InviteActivityParams"];
 /** Params of a connection activity (`connection.*`). */
 export type ConnectionActivityParams = Schemas["ConnectionActivityParams"];
-/** Params of a pipeline activity (`pipeline.*`, non-run). */
-export type PipelineActivityParams = Schemas["PipelineActivityParams"];
-/** Params of a detection activity (`pipeline.detection.*`). */
+/** Params of a detection activity (`detection.*`). */
 export type DetectionActivityParams = Schemas["DetectionActivityParams"];
-/** Params of a redaction activity (`pipeline.redaction.*`). */
+/** Params of a redaction activity (`redaction.*`). */
 export type RedactionActivityParams = Schemas["RedactionActivityParams"];
 /** Params of a policy activity (`policy.*`). */
 export type PolicyActivityParams = Schemas["PolicyActivityParams"];
