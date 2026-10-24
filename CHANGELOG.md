@@ -8,6 +8,38 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-10-24
+
+### Removed
+
+- **Breaking:** the pipeline resource. Removed the `Pipelines` service and the
+  `Nvisy.pipelines` getter, along with the datatypes `WorkspacePipeline`,
+  `CreateWorkspacePipeline`, `UpdateWorkspacePipeline`, `PipelineDefinition`,
+  `PipelineStatus`, `PipelineTriggerType`, `WorkspacePipelineSummary`,
+  `WorkspacePipelineSummaryPage`, and `WorkspacePipelineFilter`
+- **Breaking:** `Detections.listPipelineDetections` and
+  `Detections.createAdhocDetection`, plus the `CreateAdhocWorkspaceDetection`
+  and `WorkspacePipelineDetectionsQuery` datatypes
+- The `PipelineActivityParams` datatype
+
+### Changed
+
+- Regenerated the API schema against the current platform spec
+- **Breaking:** `Detections.createDetection` now posts to
+  `/workspaces/{id}/detections` and takes `(workspaceId, detection)`;
+  `CreateWorkspaceDetection` carries `documentId`, `policyIds`, and optional
+  `scope` / `retentionOverride` (the former ad-hoc shape, now the only way to
+  start a detection)
+- `WorkspaceDetectionsQuery` filters by `policyId` instead of `pipelineId`
+- Activity and notification event names drop the `pipeline.` prefix
+  (`detection.*`, `redaction.*`); `RetentionOverride` is now a detection's
+  per-scope retention override
+
+### Documentation
+
+- Updated the `sdk-client` example to start a detection via
+  `Detections.createDetection` instead of the removed pipeline/run workflow
+
 ## [0.62.0] - 2026-10-24
 
 ### Changed
