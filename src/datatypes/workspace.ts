@@ -40,3 +40,11 @@ export type RetentionSettings = Schemas["RetentionSettings"];
  * `None` field inherits the workspace value for that scope.
  */
 export type RetentionOverride = Schemas["RetentionOverride"];
+
+// Review approval policy: who may approve and how many approvals are needed.
+/**
+ * The review approval policy: whether a review's author may approve it
+ * (`authorCanApprove`) and how many distinct reviewers must approve before a
+ * review reaches `approved` (`minApprovals`).
+ */
+export type ReviewSettings = Schemas["ReviewSettings"];

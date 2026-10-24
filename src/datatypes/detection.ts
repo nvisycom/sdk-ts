@@ -33,11 +33,20 @@ export type WorkspacePipelineDetectionsQuery =
  */
 export type DetectionStatusEvent = Schemas["DetectionStatusEvent"];
 
-// Redaction resources (applying a detection's redactions to produce output).
+// Reviewer edits accumulated on a detection, layered over its analysis at
+// redact time.
+/**
+ * Request payload to set a detection's accumulated reviewer edits (suppress a
+ * false positive, retag a detection, or add one the analysis missed), or
+ * clear them when `edits` is omitted. Pass the `editSetRev` last read; a stale
+ * value is rejected with 409.
+ */
+export type EditWorkspaceDetection = Schemas["EditWorkspaceDetection"];
+
+// Redaction resources (applying a detection's stored analysis plus edits to
+// produce output).
 /** Opaque redaction identifier (redaction_<uuid>). */
 export type RedactionId = Schemas["RedactionId"];
-/** Request payload to redact a detection. */
-export type RedactWorkspaceDetection = Schemas["RedactWorkspaceDetection"];
 /** Response type for a redaction. */
 export type WorkspaceRedactionResult = Schemas["WorkspaceRedactionResult"];
 /** Generic paginated response wrapper. */

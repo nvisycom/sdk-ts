@@ -6,8 +6,8 @@ import type {
 	CreateWorkspaceDetection,
 	CursorPagination,
 	DetectionStatusEvent,
+	EditWorkspaceDetection,
 	ExportQuery,
-	RedactWorkspaceDetection,
 	WorkspaceDetection,
 	WorkspaceDetectionPage,
 	WorkspaceDetectionsQuery,
@@ -132,6 +132,34 @@ export class Detections {
 			"/workspaces/{workspaceId}/detections/{detectionId}",
 			{
 				params: { path: { workspaceId, detectionId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Set a detection's accumulated reviewer edits (suppress a false positive,
+	 * retag a detection, or add one the analysis missed), or clear them by
+	 * omitting `edits`. The edits persist on the detection and are layered over
+	 * its analysis at redact time. Pass the `editSetRev` you last read; a stale
+	 * value is rejected with 409.
+	 * @param workspaceId - Workspace id
+	 * @param detectionId - Detection ID
+	 * @param edits - The expected `editSetRev` and the reviewer edits to
+	 *   persist; omit `edits` to clear the detection's stored edits
+	 * @returns Promise that resolves with the updated detection
+	 * @throws {ApiError} if the request fails
+	 */
+	async editDetection(
+		workspaceId: string,
+		detectionId: string,
+		edits: EditWorkspaceDetection,
+	): Promise<WorkspaceDetection> {
+		const { data } = await this.#api.PATCH(
+			"/workspaces/{workspaceId}/detections/{detectionId}",
+			{
+				params: { path: { workspaceId, detectionId } },
+				body: edits,
 			},
 		);
 		return data!;
@@ -283,23 +311,23 @@ export class Detections {
 	}
 
 	/**
-	 * Redact a detection, producing a redaction result
+	 * Redact a detection, producing a redaction result. Applies the pipeline's
+	 * policies to the detection's stored analysis, with the detection's
+	 * accumulated reviewer edits (set via {@link editDetection}) layered on
+	 * first. A detection can be redacted more than once.
 	 * @param workspaceId - Workspace id
 	 * @param detectionId - Detection ID
-	 * @param redaction - Redaction request (optional reviewer edits)
 	 * @returns Promise that resolves with the created redaction result
 	 * @throws {ApiError} if the request fails
 	 */
 	async createRedaction(
 		workspaceId: string,
 		detectionId: string,
-		redaction: RedactWorkspaceDetection,
 	): Promise<WorkspaceRedactionResult> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceId}/detections/{detectionId}/redactions",
 			{
 				params: { path: { workspaceId, detectionId } },
-				body: redaction,
 			},
 		);
 		return data!;

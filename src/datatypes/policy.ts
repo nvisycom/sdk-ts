@@ -25,6 +25,12 @@ export type CreateWorkspacePolicy = Schemas["CreateWorkspacePolicy"];
 /** Request payload for updating an existing workspace policy. */
 export type UpdateWorkspacePolicy = Schemas["UpdateWorkspacePolicy"];
 /**
+ * Request payload to promote a derived (ad-hoc) policy to an authored one.
+ * A `displayName` (1-255 characters) is required and replaces the policy's
+ * generated hash name.
+ */
+export type PromoteWorkspacePolicy = Schemas["PromoteWorkspacePolicy"];
+/**
  * One rule inside a `Policy`. Identity is the UUID; `name` / `description`
  * are display-only. `dispatch` picks the selection strategy.
  */
