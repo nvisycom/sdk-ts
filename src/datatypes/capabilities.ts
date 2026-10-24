@@ -2,8 +2,8 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
-// Deployment capabilities: the built-in vocabularies a workspace's policies and
-// pipelines can target, plus what connectors and auth methods are available.
+// Deployment capabilities: the built-in vocabularies a workspace's policies
+// can target, plus what connectors and auth methods are available.
 // Read-only; served by the `/capabilities/*` endpoints.
 
 /** Registry of `Label`s, keyed by id. */

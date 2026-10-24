@@ -2,7 +2,6 @@ import type { ApiClient } from "@/client.js";
 import type {
 	ArtifactSet,
 	Audit,
-	CreateAdhocWorkspaceDetection,
 	CreateWorkspaceDetection,
 	CursorPagination,
 	DetectionStatusEvent,
@@ -11,7 +10,6 @@ import type {
 	WorkspaceDetection,
 	WorkspaceDetectionPage,
 	WorkspaceDetectionsQuery,
-	WorkspacePipelineDetectionsQuery,
 	WorkspaceRedactionResult,
 	WorkspaceRedactionResultPage,
 } from "@/datatypes/index.js";
@@ -19,8 +17,8 @@ import { NvisyError } from "@/errors.js";
 import { parseSseStream } from "@/services/sse.js";
 
 /**
- * Service for pipeline detections (one analysis pass of a file) and the
- * redactions produced from them.
+ * Service for detections (one analysis pass of a document against policies)
+ * and the redactions produced from them.
  */
 export class Detections {
 	#api: ApiClient;
@@ -32,8 +30,8 @@ export class Detections {
 	/**
 	 * List all detections in a workspace
 	 * @param workspaceId - Workspace id
-	 * @param query - Optional pagination and filters (status, fileId,
-	 *   pipelineId, triggerType, triggeredBy, limit, after)
+	 * @param query - Optional pagination and filters (status, documentId,
+	 *   policyId, triggeredBy, limit, after)
 	 * @returns Promise that resolves with a paginated list of detections
 	 * @throws {ApiError} if the request fails
 	 */
@@ -51,61 +49,17 @@ export class Detections {
 	}
 
 	/**
-	 * List detections for a specific pipeline
+	 * Start a new detection over a document, naming the policies to run against
+	 * it by id.
 	 * @param workspaceId - Workspace id
-	 * @param pipelineId - Pipeline id
-	 * @param query - Optional pagination and filters (status, fileId,
-	 *   triggerType, triggeredBy, limit, after)
-	 * @returns Promise that resolves with a paginated list of detections
-	 * @throws {ApiError} if the request fails
-	 */
-	async listPipelineDetections(
-		workspaceId: string,
-		pipelineId: string,
-		query?: CursorPagination & WorkspacePipelineDetectionsQuery,
-	): Promise<WorkspaceDetectionPage> {
-		const { data } = await this.#api.GET(
-			"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections",
-			{
-				params: { path: { workspaceId, pipelineId }, query },
-			},
-		);
-		return data!;
-	}
-
-	/**
-	 * Start a new detection over a file for a pipeline
-	 * @param workspaceId - Workspace id
-	 * @param pipelineId - Pipeline id
-	 * @param detection - Detection creation request
+	 * @param detection - Detection creation request (`documentId`, `policyIds`,
+	 *   optional `scope` and `retentionOverride`)
 	 * @returns Promise that resolves with the created detection
 	 * @throws {ApiError} if the request fails
 	 */
 	async createDetection(
 		workspaceId: string,
-		pipelineId: string,
 		detection: CreateWorkspaceDetection,
-	): Promise<WorkspaceDetection> {
-		const { data } = await this.#api.POST(
-			"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections",
-			{
-				params: { path: { workspaceId, pipelineId } },
-				body: detection,
-			},
-		);
-		return data!;
-	}
-
-	/**
-	 * Start an ad-hoc detection over a document without a saved pipeline.
-	 * @param workspaceId - Workspace id
-	 * @param detection - Ad-hoc detection creation request
-	 * @returns Promise that resolves with the created detection
-	 * @throws {ApiError} if the request fails
-	 */
-	async createAdhocDetection(
-		workspaceId: string,
-		detection: CreateAdhocWorkspaceDetection,
 	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceId}/detections",
@@ -311,10 +265,10 @@ export class Detections {
 	}
 
 	/**
-	 * Redact a detection, producing a redaction result. Applies the pipeline's
-	 * policies to the detection's stored analysis, with the detection's
-	 * accumulated reviewer edits (set via {@link editDetection}) layered on
-	 * first. A detection can be redacted more than once.
+	 * Redact a detection, producing a redaction result. Applies the detection's
+	 * policies to its stored analysis, with the detection's accumulated reviewer
+	 * edits (set via {@link editDetection}) layered on first. A detection can be
+	 * redacted more than once.
 	 * @param workspaceId - Workspace id
 	 * @param detectionId - Detection ID
 	 * @returns Promise that resolves with the created redaction result

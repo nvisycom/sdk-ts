@@ -26,7 +26,7 @@ export type WorkspaceSettings = Schemas["WorkspaceSettings"];
  */
 export type RasterPolicy = Schemas["RasterPolicy"];
 
-// Retention: shared rule, workspace defaults, pipeline override.
+// Retention: shared rule, workspace defaults, per-detection override.
 /** How long a class of data is retained. */
 export type Retention = Schemas["Retention"];
 /**
@@ -36,7 +36,7 @@ export type Retention = Schemas["Retention"];
  */
 export type RetentionSettings = Schemas["RetentionSettings"];
 /**
- * A pipeline's optional per-scope override of the workspace retention. A
+ * A detection's optional per-scope override of the workspace retention. A
  * `None` field inherits the workspace value for that scope.
  */
 export type RetentionOverride = Schemas["RetentionOverride"];

@@ -7851,7 +7851,7 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/pipelines": {
+	"/workspaces/{workspaceId}/detections": {
 		parameters: {
 			query?: never;
 			header?: never;
@@ -7859,539 +7859,8 @@ export interface paths {
 			cookie?: never;
 		};
 		/**
-		 * List pipelines
-		 * @description Returns all pipelines in the workspace with optional filtering by status and name search.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string;
-					/**
-					 * @description Whether to include the total item count in the response's `total` field.
-					 *     Defaults to `false`, since counting is an extra query; set it to `true`
-					 *     only when the count is actually needed.
-					 */
-					includeCount?: boolean;
-					/** @description Filter by pipeline status. */
-					status?: components["schemas"]["PipelineStatus"];
-					/** @description Search by pipeline name (trigram similarity). */
-					search?: string;
-				};
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *     Provides a consistent structure for all paginated API responses with
-				 *     cursor-based pagination support. When `next_cursor` is present, there
-				 *     are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspacePipelineSummaryPage"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create pipeline
-		 * @description Creates a new pipeline in the workspace. The creator is set as the owner.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			/**
-			 * @description Request payload for creating a new pipeline.
-			 *
-			 *     Creates a new pipeline with the specified name and optional description.
-			 *     The definition can be added later via update.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateWorkspacePipeline"];
-				};
-			};
-			responses: {
-				/** @description `WorkspacePipeline` response. */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspacePipeline"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/pipelines/{pipelineId}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get pipeline
-		 * @description Returns a pipeline by its id.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Id of the pipeline. */
-					pipelineId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description `WorkspacePipeline` response. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspacePipeline"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		/**
-		 * Delete pipeline
-		 * @description Soft-deletes a pipeline. Data is retained for potential recovery.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Id of the pipeline. */
-					pipelineId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description no content */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		/**
-		 * Update pipeline
-		 * @description Updates an existing pipeline. Only provided fields are updated.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-					/** @description Id of the pipeline. */
-					pipelineId: string;
-				};
-				cookie?: never;
-			};
-			/**
-			 * @description Request payload to update an existing pipeline.
-			 *
-			 *     All fields are optional; only provided fields will be updated. Supplying a
-			 *     `definition` replaces the whole detection + redaction configuration.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UpdateWorkspacePipeline"];
-				};
-			};
-			responses: {
-				/** @description `WorkspacePipeline` response. */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspacePipeline"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/workspaces/{workspaceId}/pipelines/{pipelineId}/detections": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List pipeline detections
-		 * @description Returns detections for a specific pipeline, most recent first, with optional status, document, trigger-account, and trigger-type filters.
+		 * List workspace detections
+		 * @description Returns all detections across the workspace, most recent first, with optional status, document, policy, and trigger-account filters.
 		 */
 		get: {
 			parameters: {
@@ -8417,15 +7886,11 @@ export interface paths {
 					policyId?: string;
 					/** @description Filter by the account that triggered the detection. */
 					triggeredBy?: string;
-					/** @description Filter by how the detection was initiated (user vs system). */
-					triggerType?: components["schemas"]["PipelineTriggerType"];
 				};
 				header?: never;
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Id of the pipeline. */
-					pipelineId: string;
 				};
 				cookie?: never;
 			};
@@ -8508,7 +7973,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Start a detection
-		 * @description Starts analysis for a document and returns 202 with the detection in the `pending` state; the analysis runs in the background. Watch the detection's status via the SSE stream at `.../detections/{detectionId}/events` (or re-read the detection) and fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
+		 * @description Starts analysis for a document against an explicit list of policies and returns 202 with the detection in the `pending` state; the analysis runs in the background. Watch the detection's status via the SSE stream at `.../detections/{detectionId}/events` (or re-read the detection) and fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
 		 */
 		post: {
 			parameters: {
@@ -8517,16 +7982,15 @@ export interface paths {
 				path: {
 					/** @description Workspace identifier. */
 					workspaceId: string;
-					/** @description Id of the pipeline. */
-					pipelineId: string;
 				};
 				cookie?: never;
 			};
 			/**
-			 * @description Request payload to start a detection over a document.
+			 * @description Request payload to start a detection over a document, naming the policies to run
+			 *     against.
 			 *
-			 *     Analyzes the document with the pipeline's configuration and returns the
-			 *     detection, which holds the findings for review before redaction.
+			 *     Analyzes the document against the given policies (authored or derived) and returns
+			 *     the detection, which holds the findings for review before redaction.
 			 */
 			requestBody: {
 				content: {
@@ -8537,10 +8001,9 @@ export interface paths {
 				/**
 				 * @description Response type for a detection.
 				 *
-				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace handles are carried for context. Redacted outputs are not here — a
-				 *     detection produces many redactions, each fetched from its `redactions`
-				 *     endpoint.
+				 *     A detection is addressed by its own opaque id; the workspace handle is carried
+				 *     for context. Redacted outputs are not here — a detection produces many
+				 *     redactions, each fetched from its `redactions` endpoint.
 				 */
 				200: {
 					headers: {
@@ -8553,10 +8016,9 @@ export interface paths {
 				/**
 				 * @description Response type for a detection.
 				 *
-				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace handles are carried for context. Redacted outputs are not here — a
-				 *     detection produces many redactions, each fetched from its `redactions`
-				 *     endpoint.
+				 *     A detection is addressed by its own opaque id; the workspace handle is carried
+				 *     for context. Redacted outputs are not here — a detection produces many
+				 *     redactions, each fetched from its `redactions` endpoint.
 				 */
 				202: {
 					headers: {
@@ -8687,291 +8149,6 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
-	"/workspaces/{workspaceId}/detections": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List workspace detections
-		 * @description Returns all detections across the workspace, most recent first, with optional status, document, pipeline, trigger-account, and trigger-type filters.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					/** @description The maximum number of records to return (1-100, default: 20). */
-					limit?: number;
-					/**
-					 * @description Cursor pointing to the last item of the previous page.
-					 *     Obtain this from the `nextCursor` field in the response.
-					 */
-					after?: string;
-					/**
-					 * @description Whether to include the total item count in the response's `total` field.
-					 *     Defaults to `false`, since counting is an extra query; set it to `true`
-					 *     only when the count is actually needed.
-					 */
-					includeCount?: boolean;
-					/** @description Filter by detection status. */
-					status?: components["schemas"]["DetectionStatus"];
-					/** @description Filter by the source document the detection analyzes. */
-					documentId?: string;
-					/** @description Filter by the owning pipeline. */
-					pipelineId?: string;
-					/** @description Filter to detections that ran against a specific policy (any version). */
-					policyId?: string;
-					/** @description Filter by the account that triggered the detection. */
-					triggeredBy?: string;
-					/** @description Filter by how the detection was initiated (user vs system). */
-					triggerType?: components["schemas"]["PipelineTriggerType"];
-				};
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/**
-				 * @description Generic paginated response wrapper.
-				 *
-				 *     Provides a consistent structure for all paginated API responses with
-				 *     cursor-based pagination support. When `next_cursor` is present, there
-				 *     are more items to fetch.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceDetectionPage"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Start an ad-hoc detection
-		 * @description Starts a detection over a document against an explicit list of policies, with no pipeline. Returns 202 with the pending detection; fetch the findings from `.../detections/{detectionId}/analysis/` once it reaches `complete`. A repeated Idempotency-Key returns the existing detection.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					/** @description Workspace identifier. */
-					workspaceId: string;
-				};
-				cookie?: never;
-			};
-			/**
-			 * @description Request payload to start an ad-hoc detection over a document, naming its
-			 *     policies directly rather than through a pipeline.
-			 *
-			 *     Analyzes the document against the given policies (authored or derived) and
-			 *     returns the detection holding the findings for review before redaction.
-			 */
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateAdhocWorkspaceDetection"];
-				};
-			};
-			responses: {
-				/**
-				 * @description Response type for a detection.
-				 *
-				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace handles are carried for context. Redacted outputs are not here — a
-				 *     detection produces many redactions, each fetched from its `redactions`
-				 *     endpoint.
-				 */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceDetection"];
-					};
-				};
-				/**
-				 * @description Response type for a detection.
-				 *
-				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace handles are carried for context. Redacted outputs are not here — a
-				 *     detection produces many redactions, each fetched from its `redactions`
-				 *     endpoint.
-				 */
-				202: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["WorkspaceDetection"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/**
-				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
-				 *     that [`Error`] renders to at the response boundary.
-				 *
-				 *     It carries no builder logic — [`Error`] is the type handlers construct and
-				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
-				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
-				 *     (`context` is logged, `status` sets the HTTP status line).
-				 *
-				 *     [`Error`]: crate::response::Error
-				 */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ErrorResponse"];
-					};
-				};
-				/** @description Expected request with `Content-Type: application/json` */
-				415: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-				/** @description Failed to deserialize the JSON body into the target type */
-				422: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"text/plain": string;
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
 	"/workspaces/{workspaceId}/detections/{detectionId}": {
 		parameters: {
 			query?: never;
@@ -9000,10 +8177,9 @@ export interface paths {
 				/**
 				 * @description Response type for a detection.
 				 *
-				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace handles are carried for context. Redacted outputs are not here — a
-				 *     detection produces many redactions, each fetched from its `redactions`
-				 *     endpoint.
+				 *     A detection is addressed by its own opaque id; the workspace handle is carried
+				 *     for context. Redacted outputs are not here — a detection produces many
+				 *     redactions, each fetched from its `redactions` endpoint.
 				 */
 				200: {
 					headers: {
@@ -9109,10 +8285,9 @@ export interface paths {
 				/**
 				 * @description Response type for a detection.
 				 *
-				 *     A detection is addressed by its own opaque id; the owning pipeline and
-				 *     workspace handles are carried for context. Redacted outputs are not here — a
-				 *     detection produces many redactions, each fetched from its `redactions`
-				 *     endpoint.
+				 *     A detection is addressed by its own opaque id; the workspace handle is carried
+				 *     for context. Redacted outputs are not here — a detection produces many
+				 *     redactions, each fetched from its `redactions` endpoint.
 				 */
 				200: {
 					headers: {
@@ -9456,7 +8631,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Redact a detection
-		 * @description Applies the pipeline's policies to the detection's stored analysis — with the detection's accumulated reviewer edits layered on first (set via the edit endpoint) — and produces a new redaction: a redacted document plus a review audit recording what was redacted. A detection can be redacted more than once. Requires RunRedactions.
+		 * @description Applies the detection's policies to its stored analysis — with the detection's accumulated reviewer edits layered on first (set via the edit endpoint) — and produces a new redaction: a redacted document plus a review audit recording what was redacted. A detection can be redacted more than once. Requires RunRedactions.
 		 */
 		post: {
 			parameters: {
@@ -10799,7 +9974,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Promote policy
-		 * @description Promotes a derived (ad-hoc) policy to an authored one: clears its content hash and makes it editable and attachable to pipelines, keeping its id and current definition. A `displayName` is required and replaces the policy's generated hash name. Returns 400 if the policy is already authored.
+		 * @description Promotes a derived (ad-hoc) policy to an authored one: clears its content hash and makes it an editable, reusable policy selectable for detections, keeping its id and current definition. A `displayName` is required and replaces the policy's generated hash name. Returns 400 if the policy is already authored.
 		 */
 		post: {
 			parameters: {
@@ -15122,9 +14297,9 @@ export interface components {
 			| "member.joined"
 			| "connection.sync.completed"
 			| "connection.sync.failed"
-			| "pipeline.detection.completed"
-			| "pipeline.redaction.created"
-			| "pipeline.detection.failed"
+			| "detection.completed"
+			| "redaction.created"
+			| "detection.failed"
 			| "review.assigned"
 			| "comment.mentioned";
 		/** @description Request payload for updating notification settings. */
@@ -15203,13 +14378,10 @@ export interface components {
 			| "review.approved"
 			| "review.assigned"
 			| "review.unassigned"
-			| "pipeline.created"
-			| "pipeline.updated"
-			| "pipeline.deleted"
-			| "pipeline.detection.started"
-			| "pipeline.detection.completed"
-			| "pipeline.detection.failed"
-			| "pipeline.redaction.created"
+			| "detection.started"
+			| "detection.completed"
+			| "detection.failed"
+			| "redaction.created"
 			| "policy.created"
 			| "policy.updated"
 			| "policy.deleted";
@@ -15468,37 +14640,22 @@ export interface components {
 			  }
 			| {
 					/** @constant */
-					type: "pipeline.created";
-					data: components["schemas"]["PipelineActivityParams"];
-			  }
-			| {
-					/** @constant */
-					type: "pipeline.updated";
-					data: components["schemas"]["PipelineActivityParams"];
-			  }
-			| {
-					/** @constant */
-					type: "pipeline.deleted";
-					data: components["schemas"]["PipelineActivityParams"];
-			  }
-			| {
-					/** @constant */
-					type: "pipeline.detection.started";
+					type: "detection.started";
 					data: components["schemas"]["DetectionActivityParams"];
 			  }
 			| {
 					/** @constant */
-					type: "pipeline.detection.completed";
+					type: "detection.completed";
 					data: components["schemas"]["DetectionActivityParams"];
 			  }
 			| {
 					/** @constant */
-					type: "pipeline.detection.failed";
+					type: "detection.failed";
 					data: components["schemas"]["DetectionActivityParams"];
 			  }
 			| {
 					/** @constant */
-					type: "pipeline.redaction.created";
+					type: "redaction.created";
 					data: components["schemas"]["RedactionActivityParams"];
 			  }
 			| {
@@ -15618,33 +14775,15 @@ export interface components {
 			 */
 			reviewId: string;
 		};
-		/** @description Params of a pipeline activity (`pipeline.*`, non-run). */
-		PipelineActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the pipeline.
-			 */
-			pipelineId: string;
-		};
-		/** @description Params of a detection activity (`pipeline.detection.*`). */
+		/** @description Params of a detection activity (`detection.*`). */
 		DetectionActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
 			/** @description Id of the detection. */
 			detectionId: components["schemas"]["DetectionId"];
 		};
 		/** @description Opaque detection identifier (detection_<uuid>). */
 		DetectionId: string;
-		/** @description Params of a redaction activity (`pipeline.redaction.*`). */
+		/** @description Params of a redaction activity (`redaction.*`). */
 		RedactionActivityParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent when the detection was ad-hoc.
-			 */
-			pipelineId?: string;
 			/** @description Id of the redaction. */
 			redactionId: components["schemas"]["RedactionId"];
 		};
@@ -17109,66 +16248,27 @@ export interface components {
 			metadata?: unknown;
 		};
 		/**
-		 * @description Request payload for creating a new pipeline.
+		 * @description Request payload to start a detection over a document, naming the policies to run
+		 *     against.
 		 *
-		 *     Creates a new pipeline with the specified name and optional description.
-		 *     The definition can be added later via update.
+		 *     Analyzes the document against the given policies (authored or derived) and returns
+		 *     the detection, which holds the findings for review before redaction.
 		 */
-		CreateWorkspacePipeline: {
-			/** @description Pipeline display name (2-128 characters). */
-			displayName: string;
-			/** @description Optional description of the pipeline (max 500 characters). */
-			description?: string;
+		CreateWorkspaceDetection: {
 			/**
-			 * @description Optional detection + redaction configuration. Defaults to an empty
-			 *     definition that can be filled in via update.
+			 * Format: uuid
+			 * @description The document to analyze.
 			 */
-			definition?: components["schemas"]["PipelineDefinition"];
+			documentId: string;
+			/** @description The policies to run against, by id. At least one is required. */
+			policyIds: string[];
+			/** @description Per-document scope (languages, jurisdictions, document labels). */
+			scope?: components["schemas"]["DocumentContext"];
 			/**
-			 * @description Optional lifecycle status. Defaults to `draft`; pass `enabled` to create a
-			 *     pipeline ready to run without a follow-up update.
+			 * @description Retention override for the outputs this detection produces. Absent falls
+			 *     back to the workspace retention baseline.
 			 */
-			status?: components["schemas"]["PipelineStatus"];
-			/**
-			 * @description Optional per-scope data-retention override for this pipeline. Each unset
-			 *     scope inherits the workspace retention.
-			 */
-			retention?: components["schemas"]["RetentionOverride"];
-		};
-		/**
-		 * @description A pipeline's detection + governance intent.
-		 *
-		 *     Holds what a pipeline author decides — the default scope and the policies to
-		 *     apply. Recognition is entirely server-wide: the built-in pattern set plus the
-		 *     deployment's NER/LLM lineups and enrichment backends live in the engine
-		 *     config, not here. This is the API wire shape (camelCase, schema-validated at
-		 *     the boundary); persistence is the domain `PipelineDefinitionInput`'s job,
-		 *     which this converts to and from.
-		 *
-		 *     The label catalog is not part of this: the policies own the label vocabulary,
-		 *     and the engine derives the detection catalog from them at run time.
-		 *
-		 *     The split:
-		 *
-		 *     - `default_scope` — optional pipeline-wide scope a document may override.
-		 *     - `policy_ids` — references to the workspace's policies, resolved at run
-		 *       time.
-		 */
-		PipelineDefinition: {
-			/**
-			 * @description Optional pipeline-wide scope (languages, jurisdictions, document labels).
-			 *
-			 *     A document's own scope overrides this at detect time; absent here means
-			 *     the document must assert its own.
-			 */
-			defaultScope?: components["schemas"]["DocumentContext"];
-			/**
-			 * @description Ids of workspace policies applied at redaction.
-			 *
-			 *     Stored relationally in the `workspace_pipeline_policies` join table, not the JSON
-			 *     definition; surfaced here so the API exposes one coherent object.
-			 */
-			policyIds?: string[];
+			retentionOverride?: components["schemas"]["RetentionOverride"];
 		};
 		/**
 		 * @description What a caller asserts about the document being processed.
@@ -17362,19 +16462,11 @@ export interface components {
 			audience?: string[];
 		};
 		/**
-		 * @description The lifecycle status of a pipeline definition.
-		 *
-		 *     Corresponds to the `PIPELINE_STATUS` `PostgreSQL` enum and tracks whether a
-		 *     pipeline is being configured, enabled and ready to run, or disabled.
-		 */
-		PipelineStatus: "draft" | "enabled" | "disabled";
-		/**
-		 * @description A pipeline's optional per-scope override of the workspace retention. A `None`
+		 * @description A detection's optional per-scope override of the workspace retention. A `None`
 		 *     field inherits the workspace value for that scope.
 		 *
-		 *     Only scopes a pipeline actually produces are overridable — original documents
-		 *     are ingested, not produced by a pipeline, so they have no per-pipeline
-		 *     override and always follow the workspace baseline.
+		 *     Only scopes that are produced are overridable — original documents are ingested,
+		 *     not produced, so they have no override and always follow the workspace baseline.
 		 */
 		RetentionOverride: {
 			/** @description Overrides redacted-document retention when set. */
@@ -17384,167 +16476,16 @@ export interface components {
 			/** @description Overrides enrichment-intermediate retention when set. */
 			intermediates?: components["schemas"]["Retention"];
 		};
-		/** @description `WorkspacePipeline` response. */
-		WorkspacePipeline: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/** @description Account that created this pipeline. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description `WorkspacePipeline` display name. */
-			displayName: string;
-			/** @description `WorkspacePipeline` description. */
-			description?: string;
-			/** @description `WorkspacePipeline` lifecycle status. */
-			status: components["schemas"]["PipelineStatus"];
-			/** @description Detection + redaction configuration. */
-			definition: components["schemas"]["PipelineDefinition"];
-			/** @description Per-scope data-retention override, when the pipeline sets one. */
-			retention?: components["schemas"]["RetentionOverride"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was last updated.
-			 */
-			updatedAt: string;
-		};
-		/** @description Query parameters for filtering pipelines. */
-		WorkspacePipelineFilter: {
-			/** @description Filter by pipeline status. */
-			status?: components["schemas"]["PipelineStatus"];
-			/** @description Search by pipeline name (trigram similarity). */
-			search?: string;
-		};
-		/**
-		 * @description Generic paginated response wrapper.
-		 *
-		 *     Provides a consistent structure for all paginated API responses with
-		 *     cursor-based pagination support. When `next_cursor` is present, there
-		 *     are more items to fetch.
-		 */
-		WorkspacePipelineSummaryPage: {
-			/** @description Items in this page. */
-			items: components["schemas"]["WorkspacePipelineSummary"][];
-			/**
-			 * Format: int64
-			 * @description Total count of items matching the query (if requested).
-			 */
-			total?: number;
-			/** @description Cursor to fetch the next page. Present only when more items exist. */
-			nextCursor?: string;
-		};
-		/** @description Summary response for pipeline (used in lists). */
-		WorkspacePipelineSummary: {
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline.
-			 */
-			id: string;
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the workspace.
-			 */
-			workspaceId: string;
-			/** @description URL-safe workspace handle. Display-only. */
-			workspaceHandle: components["schemas"]["Handle"];
-			/** @description Account that created this pipeline. */
-			createdBy: components["schemas"]["AccountRef"];
-			/** @description `WorkspacePipeline` display name. */
-			displayName: string;
-			/** @description `WorkspacePipeline` description. */
-			description?: string;
-			/** @description `WorkspacePipeline` lifecycle status. */
-			status: components["schemas"]["PipelineStatus"];
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was created.
-			 */
-			createdAt: string;
-			/**
-			 * Format: date-time
-			 * @description Timestamp when the pipeline was last updated.
-			 */
-			updatedAt: string;
-		};
-		/** @description Path parameters for pipeline operations. */
-		WorkspacePipelinePathParams: {
-			/**
-			 * Format: uuid
-			 * @description Id of the pipeline.
-			 */
-			pipelineId: string;
-		};
-		/**
-		 * @description Request payload to update an existing pipeline.
-		 *
-		 *     All fields are optional; only provided fields will be updated. Supplying a
-		 *     `definition` replaces the whole detection + redaction configuration.
-		 */
-		UpdateWorkspacePipeline: {
-			/** @description New display name for the pipeline (2-128 characters). */
-			displayName?: string;
-			/** @description New description for the pipeline (max 500 characters). */
-			description?: string;
-			/** @description New status for the pipeline. */
-			status?: components["schemas"]["PipelineStatus"];
-			/** @description New detection + redaction configuration (replaces the whole definition). */
-			definition?: components["schemas"]["PipelineDefinition"];
-			/**
-			 * @description Replacement per-scope data-retention override. When omitted, the
-			 *     pipeline's retention override is left unchanged.
-			 */
-			retention?: components["schemas"]["RetentionOverride"];
-		};
-		/**
-		 * @description Request payload to start a detection over a document.
-		 *
-		 *     Analyzes the document with the pipeline's configuration and returns the
-		 *     detection, which holds the findings for review before redaction.
-		 */
-		CreateWorkspaceDetection: {
-			/**
-			 * Format: uuid
-			 * @description The document to analyze.
-			 */
-			documentId: string;
-			/**
-			 * @description Per-document scope (languages, jurisdictions, document labels).
-			 *
-			 *     Overrides the pipeline's `defaultScope` when present; absent falls back to
-			 *     the pipeline default.
-			 */
-			scope?: components["schemas"]["DocumentContext"];
-		};
 		/**
 		 * @description Response type for a detection.
 		 *
-		 *     A detection is addressed by its own opaque id; the owning pipeline and
-		 *     workspace handles are carried for context. Redacted outputs are not here — a
-		 *     detection produces many redactions, each fetched from its `redactions`
-		 *     endpoint.
+		 *     A detection is addressed by its own opaque id; the workspace handle is carried
+		 *     for context. Redacted outputs are not here — a detection produces many
+		 *     redactions, each fetched from its `redactions` endpoint.
 		 */
 		WorkspaceDetection: {
 			/** @description Opaque identifier of the detection. */
 			id: components["schemas"]["DetectionId"];
-			/**
-			 * Format: uuid
-			 * @description Unique identifier of the pipeline this detection belongs to; absent for an
-			 *     ad-hoc detection.
-			 */
-			pipelineId?: string;
 			/**
 			 * Format: uuid
 			 * @description Unique identifier of the workspace.
@@ -17564,8 +16505,6 @@ export interface components {
 			inputDocumentName?: string;
 			/** @description Account that triggered the detection. */
 			triggeredBy: components["schemas"]["AccountRef"];
-			/** @description How the detection was triggered. */
-			triggerType: components["schemas"]["PipelineTriggerType"];
 			/**
 			 * @description Current detection status.
 			 *
@@ -17599,14 +16538,6 @@ export interface components {
 			 */
 			completedAt?: string;
 		};
-		/**
-		 * @description How a pipeline run was initiated.
-		 *
-		 *     Corresponds to the `PIPELINE_TRIGGER_TYPE` `PostgreSQL` enum: a run is either
-		 *     started directly by a user or automatically by the system (for example, a
-		 *     file upload that the pipeline auto-redacts).
-		 */
-		PipelineTriggerType: "user" | "system";
 		/** @description Structured metadata for a detection. */
 		DetectionMetadata: {
 			/** @description Free-form labels attached to the detection. */
@@ -18392,12 +17323,11 @@ export interface components {
 			actor?: string;
 		};
 		/**
-		 * @description Query parameters for listing a single pipeline's detections.
+		 * @description Query parameters for listing detections across a workspace.
 		 *
-		 *     The pipeline is fixed by the route, so it narrows only by status, file, policy,
-		 *     trigger account, and trigger type.
+		 *     Every field is an optional filter; unset fields impose no constraint.
 		 */
-		WorkspacePipelineDetectionsQuery: {
+		WorkspaceDetectionsQuery: {
 			/** @description Filter by detection status. */
 			status?: components["schemas"]["DetectionStatus"];
 			/**
@@ -18415,8 +17345,6 @@ export interface components {
 			 * @description Filter by the account that triggered the detection.
 			 */
 			triggeredBy?: string;
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
 		};
 		/**
 		 * @description Generic paginated response wrapper.
@@ -18435,60 +17363,6 @@ export interface components {
 			total?: number;
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
 			nextCursor?: string;
-		};
-		/**
-		 * @description Request payload to start an ad-hoc detection over a document, naming its
-		 *     policies directly rather than through a pipeline.
-		 *
-		 *     Analyzes the document against the given policies (authored or derived) and
-		 *     returns the detection holding the findings for review before redaction.
-		 */
-		CreateAdhocWorkspaceDetection: {
-			/**
-			 * Format: uuid
-			 * @description The document to analyze.
-			 */
-			documentId: string;
-			/** @description The policies to run against, by id. At least one is required. */
-			policyIds: string[];
-			/** @description Per-document scope (languages, jurisdictions, document labels). */
-			scope?: components["schemas"]["DocumentContext"];
-			/**
-			 * @description Retention override for the outputs this detection produces. Absent falls
-			 *     back to the workspace retention baseline.
-			 */
-			retentionOverride?: components["schemas"]["RetentionOverride"];
-		};
-		/**
-		 * @description Query parameters for listing detections across a workspace.
-		 *
-		 *     Every field is an optional filter; unset fields impose no constraint.
-		 */
-		WorkspaceDetectionsQuery: {
-			/** @description Filter by detection status. */
-			status?: components["schemas"]["DetectionStatus"];
-			/**
-			 * Format: uuid
-			 * @description Filter by the source document the detection analyzes.
-			 */
-			documentId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the owning pipeline.
-			 */
-			pipelineId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter to detections that ran against a specific policy (any version).
-			 */
-			policyId?: string;
-			/**
-			 * Format: uuid
-			 * @description Filter by the account that triggered the detection.
-			 */
-			triggeredBy?: string;
-			/** @description Filter by how the detection was initiated (user vs system). */
-			triggerType?: components["schemas"]["PipelineTriggerType"];
 		};
 		/** @description Path parameters for detection operations. */
 		WorkspaceDetectionPathParams: {
@@ -22227,7 +21101,8 @@ export interface components {
 		 *     derived policy is minted inline from a bare label list (the ad-hoc redact
 		 *     flow): it is content-addressed and deduplicated, and immutable once minted.
 		 *     A derived policy can be promoted to an authored one, which clears its
-		 *     content hash and makes it editable and attachable to pipelines.
+		 *     content hash and makes it an editable, reusable policy selectable for
+		 *     detections.
 		 */
 		PolicyKind: "authored" | "derived";
 		/**
@@ -22651,17 +21526,17 @@ export interface components {
 			  }
 			| {
 					/** @constant */
-					type: "pipeline.detection.completed";
+					type: "detection.completed";
 					data: components["schemas"]["DetectionCompletedParams"];
 			  }
 			| {
 					/** @constant */
-					type: "pipeline.redaction.created";
+					type: "redaction.created";
 					data: components["schemas"]["RedactionCreatedParams"];
 			  }
 			| {
 					/** @constant */
-					type: "pipeline.detection.failed";
+					type: "detection.failed";
 					data: components["schemas"]["DetectionFailedParams"];
 			  }
 			| {
@@ -22708,41 +21583,26 @@ export interface components {
 			/** @description Failure reason, if available. */
 			error?: string;
 		};
-		/** @description Params of a `pipeline.detection.completed` notification. */
+		/** @description Params of a `detection.completed` notification. */
 		DetectionCompletedParams: {
 			/** @description Id of the detection. */
 			detectionId: components["schemas"]["DetectionId"];
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
 			/** @description Display name of the analyzed document, if known. */
 			inputDocumentName?: string;
 		};
-		/** @description Params of a `pipeline.redaction.created` notification. */
+		/** @description Params of a `redaction.created` notification. */
 		RedactionCreatedParams: {
 			/** @description Id of the redaction. */
 			redactionId: components["schemas"]["RedactionId"];
 			/** @description Id of the detection the redaction was produced from. */
 			detectionId: components["schemas"]["DetectionId"];
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
 			/** @description Display name of the redacted document, if known. */
 			inputDocumentName?: string;
 		};
-		/** @description Params of a `pipeline.detection.failed` notification. */
+		/** @description Params of a `detection.failed` notification. */
 		DetectionFailedParams: {
 			/** @description Id of the detection. */
 			detectionId: components["schemas"]["DetectionId"];
-			/**
-			 * Format: uuid
-			 * @description Id of the owning pipeline; absent for an ad-hoc detection.
-			 */
-			pipelineId?: string;
 			/** @description Display name of the analyzed document, if known. */
 			inputDocumentName?: string;
 			/** @description Failure reason, if available. */
@@ -23114,13 +21974,10 @@ export interface components {
 			| "review.approved"
 			| "review.assigned"
 			| "review.unassigned"
-			| "pipeline.created"
-			| "pipeline.updated"
-			| "pipeline.deleted"
-			| "pipeline.detection.started"
-			| "pipeline.detection.completed"
-			| "pipeline.detection.failed"
-			| "pipeline.redaction.created"
+			| "detection.started"
+			| "detection.completed"
+			| "detection.failed"
+			| "redaction.created"
 			| "policy.created"
 			| "policy.updated"
 			| "policy.deleted";

@@ -17,7 +17,6 @@ export type * from "@/datatypes/invite.js";
 export type * from "@/datatypes/member.js";
 export type * from "@/datatypes/notification.js";
 export type * from "@/datatypes/pagination.js";
-export type * from "@/datatypes/pipeline.js";
 export type * from "@/datatypes/policy.js";
 export type * from "@/datatypes/provider.js";
 export type * from "@/datatypes/review.js";

@@ -115,9 +115,9 @@ export class Policies {
 
 	/**
 	 * Promote a derived (ad-hoc) policy to an authored one: clears its content
-	 * hash and makes it editable and attachable to pipelines, keeping its id and
-	 * current definition. A display name is required, replacing the policy's
-	 * generated hash name.
+	 * hash and makes it an editable, reusable policy selectable for detections,
+	 * keeping its id and current definition. A display name is required,
+	 * replacing the policy's generated hash name.
 	 * @param workspaceId - Workspace id
 	 * @param policyId - Policy id
 	 * @param promotion - Promotion request (required `displayName`, 1-255 chars)

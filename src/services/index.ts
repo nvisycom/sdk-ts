@@ -12,7 +12,6 @@ export { GuestCapabilities } from "@/services/guest-capabilities.js";
 export { Invites } from "@/services/invites.js";
 export { Members } from "@/services/members.js";
 export { Notifications } from "@/services/notifications.js";
-export { Pipelines } from "@/services/pipelines.js";
 export { Policies } from "@/services/policies.js";
 export { Providers } from "@/services/providers.js";
 export { Redactions } from "@/services/redactions.js";

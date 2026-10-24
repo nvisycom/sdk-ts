@@ -108,7 +108,6 @@ describe("Nvisy", () => {
 			expect(nvisy.invites).toBeDefined();
 			expect(nvisy.members).toBeDefined();
 			expect(nvisy.notifications).toBeDefined();
-			expect(nvisy.pipelines).toBeDefined();
 			expect(nvisy.policies).toBeDefined();
 			expect(nvisy.providers).toBeDefined();
 			expect(nvisy.detections).toBeDefined();
