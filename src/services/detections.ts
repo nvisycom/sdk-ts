@@ -139,21 +139,21 @@ export class Detections {
 
 	/**
 	 * Set a detection's accumulated reviewer edits (suppress a false positive,
-	 * retag a detection, or add one the analysis missed), or clear them when
-	 * `edits` is omitted. The edits persist on the detection and are layered
-	 * over its analysis at redact time. Pass the `editSetRev` last read; a
-	 * stale value is rejected with 409.
+	 * retag a detection, or add one the analysis missed), or clear them by
+	 * omitting `edits`. The edits persist on the detection and are layered over
+	 * its analysis at redact time. Pass the `editSetRev` you last read; a stale
+	 * value is rejected with 409.
 	 * @param workspaceId - Workspace id
 	 * @param detectionId - Detection ID
-	 * @param edits - The reviewer edits to persist (with the expected
-	 *   `editSetRev`), or empty to clear them
+	 * @param edits - The expected `editSetRev` and the reviewer edits to
+	 *   persist; omit `edits` to clear the detection's stored edits
 	 * @returns Promise that resolves with the updated detection
 	 * @throws {ApiError} if the request fails
 	 */
 	async editDetection(
 		workspaceId: string,
 		detectionId: string,
-		edits: EditWorkspaceDetection = {},
+		edits: EditWorkspaceDetection,
 	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceId}/detections/{detectionId}",

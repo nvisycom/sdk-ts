@@ -10799,7 +10799,7 @@ export interface paths {
 		put?: never;
 		/**
 		 * Promote policy
-		 * @description Promotes a derived (ad-hoc) policy to an authored one: clears its content hash and makes it editable and attachable to pipelines, keeping its id and current definition. An optional `displayName` replaces the policy's generated name. Returns 400 if the policy is already authored.
+		 * @description Promotes a derived (ad-hoc) policy to an authored one: clears its content hash and makes it editable and attachable to pipelines, keeping its id and current definition. A `displayName` is required and replaces the policy's generated hash name. Returns 400 if the policy is already authored.
 		 */
 		post: {
 			parameters: {
@@ -10816,9 +10816,9 @@ export interface paths {
 			/**
 			 * @description Request payload for promoting a derived policy to an authored one.
 			 *
-			 *     A derived policy carries a neutral, generated name, so promotion optionally
-			 *     takes a human-readable title to replace it. Omitting it keeps the generated
-			 *     name. The whole body is optional: a bare `POST` promotes without renaming.
+			 *     A derived policy carries a neutral, generated hash name, so promotion requires a
+			 *     human-readable title to replace it — the server never synthesizes one (that would
+			 *     store unlocalizable prose; the client names it in the user's language).
 			 */
 			requestBody: {
 				content: {
@@ -16010,16 +16010,10 @@ export interface components {
 			 * @description Document under review.
 			 */
 			documentId: string;
-			/**
-			 * Format: uuid
-			 * @description The detection the review is currently reviewing, if any.
-			 */
-			detectionId?: string;
-			/**
-			 * Format: uuid
-			 * @description The approved redaction output, set once the review is approved.
-			 */
-			redactionId?: string;
+			/** @description The detection the review is currently reviewing, if any. */
+			detectionId?: components["schemas"]["DetectionId"];
+			/** @description The approved redaction output, set once the review is approved. */
+			redactionId?: components["schemas"]["RedactionId"];
 			/** @description The review's title. */
 			displayName: string;
 			/** @description Account that opened the review. */
@@ -18511,12 +18505,13 @@ export interface components {
 		EditWorkspaceDetection: {
 			/**
 			 * Format: int32
-			 * @description The `editSetRev` the client last read for this detection. The write is applied
-			 *     only if it still matches, so a concurrent edit is not silently overwritten; a
-			 *     stale value is rejected with 409. Defaults to 0 (a detection with no edits yet).
-			 * @default 0
+			 * @description The `editSetRev` the client last read for this detection. Required, so the
+			 *     guard is honest: the write is applied only if it still matches (a concurrent
+			 *     edit is not silently overwritten, and a caller cannot skip the check by
+			 *     omitting the field); a stale value is rejected with 409. A never-edited
+			 *     detection is at rev 0.
 			 */
-			editSetRev?: number;
+			editSetRev: number;
 			/**
 			 * @description The reviewer edits to persist, grouped by modality. Omit to clear the
 			 *     detection's stored edits.
@@ -22338,13 +22333,13 @@ export interface components {
 		/**
 		 * @description Request payload for promoting a derived policy to an authored one.
 		 *
-		 *     A derived policy carries a neutral, generated name, so promotion optionally
-		 *     takes a human-readable title to replace it. Omitting it keeps the generated
-		 *     name. The whole body is optional: a bare `POST` promotes without renaming.
+		 *     A derived policy carries a neutral, generated hash name, so promotion requires a
+		 *     human-readable title to replace it — the server never synthesizes one (that would
+		 *     store unlocalizable prose; the client names it in the user's language).
 		 */
 		PromoteWorkspacePolicy: {
-			/** @description Optional human-readable display name for the promoted policy. */
-			displayName?: string;
+			/** @description Human-readable display name for the promoted policy (1-255 characters). */
+			displayName: string;
 		};
 		/**
 		 * @description Registry of [`Label`]s, keyed by id.

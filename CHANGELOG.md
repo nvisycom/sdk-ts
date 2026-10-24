@@ -8,6 +8,49 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-10-24
+
+### Changed
+
+- Regenerated the API schema against the current platform spec
+- **Breaking:** redesigned the review lifecycle around explicit approval.
+  `ReviewStatus` is now `draft | in_review | changes_requested |
+  partially_approved | approved` (was `needs_review | in_review | resolved`),
+  driven by reviewer decisions rather than by assignment
+- **Breaking:** `Reviews.verifyReview` is replaced by `Reviews.submitReview`
+  (`POST .../submit`); added `Reviews.requestChanges` (`POST
+  .../request-changes`) and `Reviews.approveReview` (`POST .../approve`, with
+  an optional approved `redactionId`)
+- **Breaking:** removed `Reviews.linkRedaction` — the review-to-redaction link
+  endpoint is gone; the approved redaction is recorded via `approveReview`
+  instead
+- **Breaking:** split reviewer edits out of the redact call. The datatype
+  `RedactWorkspaceDetection` is renamed `EditWorkspaceDetection`, reviewer
+  edits are set via the new `Detections.editDetection` (`PATCH
+  /detections/{id}`) with a required `editSetRev` for optimistic concurrency,
+  and `Detections.createRedaction` no longer takes a body (it applies the
+  detection's stored analysis with its accumulated edits layered on)
+- **Breaking:** `Policies.promotePolicy` (`POST /policies/{id}/promote`)
+  requires a `displayName` (1-255 characters), which replaces the policy's
+  generated hash name
+- The review response fields `detectionId` and `redactionId` are now typed as
+  the opaque `DetectionId` / `RedactionId` instead of bare uuid strings
+
+### Added
+
+- Service methods `Reviews.submitReview`, `Reviews.requestChanges`,
+  `Reviews.approveReview`, `Detections.editDetection`, and
+  `Policies.promotePolicy`
+- Datatypes `ApproveWorkspaceReview`, `EditWorkspaceDetection`,
+  `PromoteWorkspacePolicy`, and `ReviewSettings` (the `WorkspaceSettings.review`
+  approval policy: `authorCanApprove`, `minApprovals`)
+
+### Internal
+
+- Raised the Biome `files.maxSize` to 4 MiB so the formatter processes the
+  generated schema, which has grown past Biome's default 1 MiB cap (it was
+  being silently skipped, leaving the generator's space indentation)
+
 ## [0.61.0] - 2026-10-23
 
 ### Changed

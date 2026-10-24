@@ -116,17 +116,18 @@ export class Policies {
 	/**
 	 * Promote a derived (ad-hoc) policy to an authored one: clears its content
 	 * hash and makes it editable and attachable to pipelines, keeping its id and
-	 * current definition.
+	 * current definition. A display name is required, replacing the policy's
+	 * generated hash name.
 	 * @param workspaceId - Workspace id
 	 * @param policyId - Policy id
-	 * @param promotion - Promotion request (optional replacement `displayName`)
+	 * @param promotion - Promotion request (required `displayName`, 1-255 chars)
 	 * @returns Promise that resolves with the promoted policy
 	 * @throws {ApiError} if the request fails
 	 */
 	async promotePolicy(
 		workspaceId: string,
 		policyId: string,
-		promotion: PromoteWorkspacePolicy = {},
+		promotion: PromoteWorkspacePolicy,
 	): Promise<WorkspacePolicy> {
 		const { data } = await this.#api.POST(
 			"/workspaces/{workspaceId}/policies/{policyId}/promote",
