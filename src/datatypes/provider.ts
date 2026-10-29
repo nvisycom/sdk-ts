@@ -28,4 +28,6 @@ export type ProviderConfig = Schemas["ProviderConfig"];
  * A fully-typed inference connection configuration, across every inference
  * kind.
  */
-export type InferenceConfig = Schemas["InferenceConfig"];
+export type AssistantConfig = Schemas["AssistantConfig"];
+/** A fully-typed inference connection configuration. */
+export type InferenceConfig = AssistantConfig;

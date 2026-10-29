@@ -17,8 +17,13 @@ export type DetectionMetadata = Schemas["DetectionMetadata"];
 export type CreateWorkspaceDetection = Schemas["CreateWorkspaceDetection"];
 /** The execution status of a detection (one analysis pass of a file). */
 export type DetectionStatus = Schemas["DetectionStatus"];
-/** Generic paginated response wrapper. */
-export type WorkspaceDetectionPage = Schemas["WorkspaceDetectionPage"];
+/** Compact detection list item. */
+export type WorkspaceDetectionSummary = Schemas["WorkspaceDetectionSummary"];
+/** Paginated detection summaries. */
+export type WorkspaceDetectionSummaryPage =
+	Schemas["WorkspaceDetectionSummaryPage"];
+/** Paginated detection summaries. */
+export type WorkspaceDetectionPage = WorkspaceDetectionSummaryPage;
 /** Query parameters for listing detections across a workspace. */
 export type WorkspaceDetectionsQuery = Schemas["WorkspaceDetectionsQuery"];
 /**

@@ -7074,12 +7074,14 @@ export interface paths {
 		};
 		/**
 		 * List documents
-		 * @description Lists documents in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages. Pass `hash` (a hex SHA-256) to find documents with identical content — a non-empty result means the document already exists, so an upload can be skipped.
+		 * @description Lists documents in a workspace with cursor-based pagination. Use the `after` parameter with the `nextCursor` value from the response to fetch subsequent pages. Use `kind=original` or `kind=redacted` to filter by role, and `search` to find a display name or original filename. Pass `hash` (a hex SHA-256) to find documents with identical content — a non-empty result means the document already exists, so an upload can be skipped.
 		 */
 		get: {
 			parameters: {
 				query?: {
-					/** @description Search by document name (case-insensitive, partial match). */
+					/** @description Filter by document role (`original` or `redacted`). Omit to include both. */
+					kind?: components["schemas"]["DocumentKind"];
+					/** @description Search the display name or original filename (case-insensitive). */
 					search?: string;
 					/**
 					 * @description Filter by file extension. Each entry expands to its format's full
@@ -7464,13 +7466,13 @@ export interface paths {
 			};
 			requestBody?: never;
 			responses: {
-				/** @description Represents a document in responses. */
+				/** @description Full document metadata, returned by the read and update endpoints. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspaceDocument"];
+						"application/json": components["schemas"]["WorkspaceDocumentDetails"];
 					};
 				};
 				/**
@@ -7622,7 +7624,7 @@ export interface paths {
 		head?: never;
 		/**
 		 * Update document
-		 * @description Updates document metadata such as display name, tags, or metadata.
+		 * @description Updates the display name or replaces custom metadata; returns the updated metadata.
 		 */
 		patch: {
 			parameters: {
@@ -7643,13 +7645,13 @@ export interface paths {
 				};
 			};
 			responses: {
-				/** @description Represents a document in responses. */
+				/** @description Full document metadata, returned by the read and update endpoints. */
 				200: {
 					headers: {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspaceDocument"];
+						"application/json": components["schemas"]["WorkspaceDocumentDetails"];
 					};
 				};
 				/**
@@ -7860,7 +7862,7 @@ export interface paths {
 		};
 		/**
 		 * List workspace detections
-		 * @description Returns all detections across the workspace, most recent first, with optional status, document, policy, and trigger-account filters.
+		 * @description Returns all detections across the workspace, most recent first, with optional status, document, policy, trigger-account, and input filename search filters. Returns compact summaries and artifact indicators; fetch an individual detection for full metadata and reviewer edits.
 		 */
 		get: {
 			parameters: {
@@ -7878,6 +7880,8 @@ export interface paths {
 					 *     only when the count is actually needed.
 					 */
 					includeCount?: boolean;
+					/** @description Case-insensitive substring search of the input display name or original filename. */
+					search?: string;
 					/** @description Filter by detection status. */
 					status?: components["schemas"]["DetectionStatus"];
 					/** @description Filter by the source document the detection analyzes. */
@@ -7908,7 +7912,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["WorkspaceDetectionPage"];
+						"application/json": components["schemas"]["WorkspaceDetectionSummaryPage"];
 					};
 				};
 				/**
@@ -8412,6 +8416,107 @@ export interface paths {
 				};
 			};
 		};
+		trace?: never;
+	};
+	"/workspaces/{workspaceId}/detections/{detectionId}/artifacts": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Get detection artifacts
+		 * @description Returns the input file, intermediate availability, and live redacted output file metadata for one detection. Deleted input files are null; deleted or reclaimed outputs are omitted. No file content is embedded.
+		 */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					/** @description Workspace identifier. */
+					workspaceId: string;
+					/** @description Opaque identifier of the detection. */
+					detectionId: components["schemas"]["DetectionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description File and intermediate metadata belonging to a single detection run. */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["WorkspaceDetectionArtifacts"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+				/**
+				 * @description The serialized shape of an HTTP error: the inert wire/OpenAPI-schema view
+				 *     that [`Error`] renders to at the response boundary.
+				 *
+				 *     It carries no builder logic — [`Error`] is the type handlers construct and
+				 *     thread through `Result`, and it builds an `ErrorResponse` directly in its
+				 *     `IntoResponse` impl. `context` and `status` are not part of the JSON body
+				 *     (`context` is logged, `status` sets the HTTP status line).
+				 *
+				 *     [`Error`]: crate::response::Error
+				 */
+				404: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["ErrorResponse"];
+					};
+				};
+			};
+		};
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
 		trace?: never;
 	};
 	"/workspaces/{workspaceId}/detections/{detectionId}/events": {
@@ -15793,9 +15898,9 @@ export interface components {
 		 *
 		 *     Untagged: the inner config's `provider` tag is the sole discriminator, so the
 		 *     stored/wire form is flat. A new inference kind is added as a variant of
-		 *     [`InferenceConfig`] with no change here.
+		 *     [`AssistantConfig`] with no change here.
 		 */
-		ProviderConfig: components["schemas"]["InferenceConfig"];
+		ProviderConfig: components["schemas"]["AssistantConfig"];
 		/**
 		 * @description A fully-typed inference connection configuration, across every inference kind.
 		 *
@@ -15805,9 +15910,9 @@ export interface components {
 		 *     payload's `provider` remains the sole discriminator — an inference kind is
 		 *     added as a new variant with no change to the wire format or storage.
 		 */
-		InferenceConfig: components["schemas"]["LlmConfig"];
+		AssistantConfig: components["schemas"]["LlmConfig"];
 		/**
-		 * @description A fully-typed LLM inference connection configuration.
+		 * @description A fully-typed LLM connection configuration.
 		 *
 		 *     The `provider` tag selects the variant and thereby the credential shape, so
 		 *     an `OpenAI` connection cannot carry Anthropic credentials. The key-bearing
@@ -16145,7 +16250,9 @@ export interface components {
 		};
 		/** @description Query parameters for listing documents. */
 		ListWorkspaceDocuments: {
-			/** @description Search by document name (case-insensitive, partial match). */
+			/** @description Filter by document role (`original` or `redacted`). Omit to include both. */
+			kind?: components["schemas"]["DocumentKind"];
+			/** @description Search the display name or original filename (case-insensitive). */
 			search?: string;
 			/**
 			 * @description Filter by file extension. Each entry expands to its format's full
@@ -16239,6 +16346,53 @@ export interface components {
 			 *     workspace, or held by an in-progress detection.
 			 */
 			skipped: string[];
+		};
+		/** @description Full document metadata, returned by the read and update endpoints. */
+		WorkspaceDocumentDetails: {
+			/**
+			 * Format: uuid
+			 * @description Unique document identifier.
+			 */
+			id: string;
+			/**
+			 * Format: uuid
+			 * @description Unique identifier of the workspace.
+			 */
+			workspaceId: string;
+			/** @description URL-safe workspace handle. Display-only. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/** @description Display name. */
+			displayName: string;
+			/** @description Original filename when uploaded. */
+			originalFilename: string;
+			/** @description File extension (without dot). Owned by the document. */
+			extension: string;
+			/**
+			 * Format: int64
+			 * @description Size in bytes. Resolved from the backing blob.
+			 */
+			size: number;
+			/**
+			 * @description Lowercase hex-encoded SHA-256 of the document's plaintext content. Resolved
+			 *     from the backing blob.
+			 */
+			hash: string;
+			/** @description The document's role (original or redacted). */
+			kind: components["schemas"]["DocumentKind"];
+			/** @description Account that uploaded/created the document. */
+			uploadedBy: components["schemas"]["AccountRef"];
+			/**
+			 * Format: date-time
+			 * @description Creation timestamp.
+			 */
+			createdAt: string;
+			/**
+			 * Format: date-time
+			 * @description Last update timestamp.
+			 */
+			updatedAt: string;
+			/** @description Custom metadata stored on the document. */
+			metadata: unknown;
 		};
 		/** @description Request to update document metadata. */
 		UpdateWorkspaceDocument: {
@@ -17328,6 +17482,8 @@ export interface components {
 		 *     Every field is an optional filter; unset fields impose no constraint.
 		 */
 		WorkspaceDetectionsQuery: {
+			/** @description Case-insensitive substring search of the input display name or original filename. */
+			search?: string;
 			/** @description Filter by detection status. */
 			status?: components["schemas"]["DetectionStatus"];
 			/**
@@ -17353,9 +17509,9 @@ export interface components {
 		 *     cursor-based pagination support. When `next_cursor` is present, there
 		 *     are more items to fetch.
 		 */
-		WorkspaceDetectionPage: {
+		WorkspaceDetectionSummaryPage: {
 			/** @description Items in this page. */
-			items: components["schemas"]["WorkspaceDetection"][];
+			items: components["schemas"]["WorkspaceDetectionSummary"][];
 			/**
 			 * Format: int64
 			 * @description Total count of items matching the query (if requested).
@@ -17363,6 +17519,51 @@ export interface components {
 			total?: number;
 			/** @description Cursor to fetch the next page. Present only when more items exist. */
 			nextCursor?: string;
+		};
+		/**
+		 * @description Compact detection list item. Full metadata and reviewer edits are available
+		 *     from the individual detection endpoint.
+		 */
+		WorkspaceDetectionSummary: {
+			/** @description Detection identifier. */
+			id: components["schemas"]["DetectionId"];
+			/**
+			 * Format: uuid
+			 * @description Owning workspace.
+			 */
+			workspaceId: string;
+			/** @description Workspace handle for display. */
+			workspaceHandle: components["schemas"]["Handle"];
+			/**
+			 * Format: uuid
+			 * @description Input document identifier.
+			 */
+			inputDocumentId: string;
+			/** @description Input display name, omitted if the document was deleted. */
+			inputDocumentName?: string;
+			/** @description Account that started the detection. */
+			triggeredBy: components["schemas"]["AccountRef"];
+			/** @description Current execution status. */
+			status: components["schemas"]["DetectionStatus"];
+			/** @description Failure reason when present. */
+			error?: string;
+			/**
+			 * Format: date-time
+			 * @description When the detection started.
+			 */
+			startedAt: string;
+			/**
+			 * Format: date-time
+			 * @description When analysis finished.
+			 */
+			completedAt?: string;
+			/** @description Whether intermediate bytes are retained. */
+			hasIntermediate: boolean;
+			/**
+			 * Format: int64
+			 * @description Number of live redacted output files in the artifacts view.
+			 */
+			redactedOutputCount: number;
 		};
 		/** @description Path parameters for detection operations. */
 		WorkspaceDetectionPathParams: {
@@ -17391,6 +17592,49 @@ export interface components {
 			 *     detection's stored edits.
 			 */
 			edits?: components["schemas"]["EditSet"];
+		};
+		/** @description File and intermediate metadata belonging to a single detection run. */
+		WorkspaceDetectionArtifacts: {
+			/** @description Input document metadata, or null if the document was deleted. */
+			input?: components["schemas"]["DetectionArtifactInput"];
+			/** @description Intermediate artifact availability; no artifact content is embedded. */
+			intermediate: components["schemas"]["DetectionArtifactIntermediate"];
+			/** @description Live redacted output documents, newest first. */
+			redactedOutputs: components["schemas"]["DetectionArtifactOutput"][];
+		};
+		/** @description The detection's input file. */
+		DetectionArtifactInput: {
+			/**
+			 * Format: uuid
+			 * @description Document identifier used by the document endpoints.
+			 */
+			id: string;
+			/** @description Display name. */
+			displayName: string;
+		};
+		/** @description Availability of the detection's intermediate artifact. */
+		DetectionArtifactIntermediate: {
+			/** @description True while the intermediate's bytes are retained. */
+			available: boolean;
+		};
+		/** @description A redacted file produced from the detection. */
+		DetectionArtifactOutput: {
+			/** @description The redaction pass that produced this file. */
+			redactionId: components["schemas"]["RedactionId"];
+			/**
+			 * Format: uuid
+			 * @description Document identifier used by the document endpoints.
+			 */
+			documentId: string;
+			/** @description Display name. */
+			displayName: string;
+			/** @description File extension without a dot. */
+			extension: string;
+			/**
+			 * Format: int64
+			 * @description Plaintext size in bytes.
+			 */
+			size: number;
 		};
 		/**
 		 * @description A detection's status change, broadcast on the core-NATS subject
