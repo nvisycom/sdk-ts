@@ -2,6 +2,17 @@ import type { components } from "@/schema/api.js";
 
 type Schemas = components["schemas"];
 
+/** File and intermediate metadata belonging to a single detection run. */
+export type WorkspaceDetectionArtifacts =
+	Schemas["WorkspaceDetectionArtifacts"];
+/** The detection's input file metadata. */
+export type DetectionArtifactInput = Schemas["DetectionArtifactInput"];
+/** Availability of a detection's intermediate artifact. */
+export type DetectionArtifactIntermediate =
+	Schemas["DetectionArtifactIntermediate"];
+/** Metadata for a redacted file produced from a detection. */
+export type DetectionArtifactOutput = Schemas["DetectionArtifactOutput"];
+
 // Enrichment intermediates a detection produces, returned by
 // `detections.getIntermediates()`: OCR layout for images, transcript for audio,
 // and token sequences for text.

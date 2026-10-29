@@ -5,6 +5,8 @@ type Schemas = components["schemas"];
 // Document resources.
 /** Represents a document in responses. */
 export type WorkspaceDocument = Schemas["WorkspaceDocument"];
+/** Full document metadata returned by the read and update endpoints. */
+export type WorkspaceDocumentDetails = Schemas["WorkspaceDocumentDetails"];
 /** Request to update document metadata. */
 export type UpdateWorkspaceDocument = Schemas["UpdateWorkspaceDocument"];
 /** Query parameters for listing documents. */
