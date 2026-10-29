@@ -5,6 +5,7 @@ import type {
 	UpdateWorkspaceDocument,
 	WorkspaceDeletedDocuments,
 	WorkspaceDocument,
+	WorkspaceDocumentDetails,
 	WorkspaceDocumentPage,
 } from "@/datatypes/index.js";
 
@@ -83,7 +84,7 @@ export class Documents {
 	async getDocument(
 		workspaceId: string,
 		documentId: string,
-	): Promise<WorkspaceDocument> {
+	): Promise<WorkspaceDocumentDetails> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceId}/documents/{documentId}",
 			{
@@ -126,7 +127,7 @@ export class Documents {
 		workspaceId: string,
 		documentId: string,
 		updates: UpdateWorkspaceDocument,
-	): Promise<WorkspaceDocument> {
+	): Promise<WorkspaceDocumentDetails> {
 		const { data } = await this.#api.PATCH(
 			"/workspaces/{workspaceId}/documents/{documentId}",
 			{

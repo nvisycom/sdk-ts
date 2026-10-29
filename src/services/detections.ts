@@ -8,6 +8,7 @@ import type {
 	EditWorkspaceDetection,
 	ExportQuery,
 	WorkspaceDetection,
+	WorkspaceDetectionArtifacts,
 	WorkspaceDetectionPage,
 	WorkspaceDetectionsQuery,
 	WorkspaceRedactionResult,
@@ -84,6 +85,26 @@ export class Detections {
 	): Promise<WorkspaceDetection> {
 		const { data } = await this.#api.GET(
 			"/workspaces/{workspaceId}/detections/{detectionId}",
+			{
+				params: { path: { workspaceId, detectionId } },
+			},
+		);
+		return data!;
+	}
+
+	/**
+	 * Get a detection's input file, intermediate availability, and redacted output metadata.
+	 * @param workspaceId - Workspace id
+	 * @param detectionId - Detection ID
+	 * @returns Promise that resolves with the detection artifact metadata
+	 * @throws {ApiError} if the request fails
+	 */
+	async getArtifacts(
+		workspaceId: string,
+		detectionId: string,
+	): Promise<WorkspaceDetectionArtifacts> {
+		const { data } = await this.#api.GET(
+			"/workspaces/{workspaceId}/detections/{detectionId}/artifacts",
 			{
 				params: { path: { workspaceId, detectionId } },
 			},
